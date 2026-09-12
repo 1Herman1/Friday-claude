@@ -109,13 +109,12 @@ export default function AddressSuggest({
   // Выбор предложения
   const handleSelectItem = useCallback(
     (suggestion: AddressSuggestion) => {
-      onChange(suggestion.value)
       onSelect(suggestion)
       setSuggestions([])
       setIsOpen(false)
       setActiveIndex(-1)
     },
-    [onChange, onSelect]
+    [onSelect]
   )
 
   // Клик по пункту списка

@@ -172,6 +172,71 @@ describe.skipIf(!hasTestDb)('Доставка в заказе: цена, гор�
       expect(res.statusCode).toBe(400)
       expect(res.json().error).toMatch(/улицу и дом/i)
     })
+
+    it('addressType apartment без номера квартиры не принимается', async () => {
+      const res = await checkout({
+        deliveryMethod: 'simba_courier',
+        deliveryAddress: {
+          city: 'Москва',
+          street: 'ул. Ленина',
+          house: '12',
+          addressType: 'apartment',
+        },
+        deliveryCost: COURIER_PRICE,
+      })
+
+      expect(res.statusCode).toBe(400)
+      expect(res.json().error).toMatch(/номер квартиры|выберите.*Частный дом/i)
+    })
+
+    it('addressType apartment с номером квартиры принимается', async () => {
+      const prisma = getTestPrisma()
+
+      const res = await checkout({
+        deliveryMethod: 'simba_courier',
+        deliveryAddress: {
+          city: 'Москва',
+          street: 'ул. Ленина',
+          house: '12',
+          apartment: '42',
+          entrance: '1',
+          floor: '3',
+          intercom: '4201',
+          addressType: 'apartment',
+        },
+        deliveryCost: COURIER_PRICE,
+      })
+
+      expect(res.statusCode).toBe(201)
+      const order = await prisma.order.findFirstOrThrow()
+      const addr = order.deliveryAddress as Record<string, unknown>
+      expect(addr.apartment).toBe('42')
+      expect(addr.entrance).toBe('1')
+      expect(addr.floor).toBe('3')
+      expect(addr.intercom).toBe('4201')
+      expect(addr.addressType).toBe('apartment')
+    })
+
+    it('addressType house без apartment принимается', async () => {
+      const prisma = getTestPrisma()
+
+      const res = await checkout({
+        deliveryMethod: 'simba_courier',
+        deliveryAddress: {
+          city: 'Москва',
+          street: 'ул. Ленина',
+          house: '12',
+          addressType: 'house',
+        },
+        deliveryCost: COURIER_PRICE,
+      })
+
+      expect(res.statusCode).toBe(201)
+      const order = await prisma.order.findFirstOrThrow()
+      const addr = order.deliveryAddress as Record<string, unknown>
+      expect(addr.addressType).toBe('house')
+      expect(addr.apartment).toBeUndefined()
+    })
   })
 
   describe('пункт выдачи должен быть своей службы', () => {

@@ -19,6 +19,10 @@ const deliveryAddressSchema = z.object({
   street: z.string().trim().optional(),
   house: z.string().trim().optional(),
   apartment: z.string().optional(),
+  entrance: z.string().max(20).optional(),
+  floor: z.string().max(10).optional(),
+  intercom: z.string().max(30).optional(),
+  addressType: z.enum(['apartment', 'house']).optional(),
   postalCode: z.string().optional(),
   lat: z.number().min(-90).max(90).optional(),
   lon: z.number().min(-180).max(180).optional(),
@@ -87,6 +91,16 @@ const createOrderSchema = z
           message: 'Для доставки курьером укажите улицу и дом',
           path: ['deliveryAddress'],
         })
+      }
+      // Если выбран тип квартира, обязательно укажите номер квартиры
+      if (data.deliveryAddress?.addressType === 'apartment') {
+        if (!data.deliveryAddress?.apartment?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Укажите номер квартиры или выберите «Частный дом»',
+            path: ['deliveryAddress', 'apartment'],
+          })
+        }
       }
     }
 

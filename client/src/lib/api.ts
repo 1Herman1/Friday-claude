@@ -382,7 +382,7 @@ export const ordersApi = {
   create: (data: {
     cartId: string
     deliveryMethod: 'simba_courier' | 'cdek' | 'yandex' | 'ozon' | 'pickup'
-    deliveryAddress?: { city: string; street?: string; house?: string; apartment?: string; postalCode?: string; lat?: number; lon?: number }
+    deliveryAddress?: { city: string; street?: string; house?: string; apartment?: string; entrance?: string; floor?: string; intercom?: string; addressType?: 'apartment' | 'house'; postalCode?: string; lat?: number; lon?: number }
     deliveryPoint?: PickupPoint
     comment?: string
     hasSpecialPackaging?: boolean

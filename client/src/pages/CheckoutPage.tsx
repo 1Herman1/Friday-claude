@@ -20,19 +20,19 @@ const inDelay = (ms: number) => ({ '--in-delay': `${ms}ms` }) as React.CSSProper
     картинку на каждом рендере, и её нельзя было бы проверить скриншотом.
     dx/dy — разлёт от центра галочки, rot — доворот к концу полёта. */
 const CONFETTI = [
-  { dx: -78, dy: -34, rot: -140, delay: 0,   color: 'bg-primary' },
+  { dx: -78, dy: -34, rot: -140, delay: 0,   color: 'bg-amber-400' },
   { dx: -54, dy: -58, rot: 96,   delay: 40,  color: 'bg-amber-300' },
   { dx: -22, dy: -70, rot: -64,  delay: 20,  color: 'bg-success' },
-  { dx: 16,  dy: -74, rot: 128,  delay: 60,  color: 'bg-primary-soft' },
+  { dx: 16,  dy: -74, rot: 128,  delay: 60,  color: 'bg-ink' },
   { dx: 48,  dy: -60, rot: -108, delay: 30,  color: 'bg-amber-500' },
-  { dx: 74,  dy: -30, rot: 72,   delay: 70,  color: 'bg-primary' },
+  { dx: 74,  dy: -30, rot: 72,   delay: 70,  color: 'bg-amber-400' },
   { dx: 86,  dy: 10,  rot: -152, delay: 50,  color: 'bg-amber-300' },
   { dx: 66,  dy: 46,  rot: 116,  delay: 90,  color: 'bg-success' },
-  { dx: 30,  dy: 68,  rot: -88,  delay: 110, color: 'bg-primary-soft' },
+  { dx: 30,  dy: 68,  rot: -88,  delay: 110, color: 'bg-ink' },
   { dx: -10, dy: 74,  rot: 144,  delay: 80,  color: 'bg-amber-500' },
-  { dx: -46, dy: 62,  rot: -120, delay: 120, color: 'bg-primary' },
+  { dx: -46, dy: 62,  rot: -120, delay: 120, color: 'bg-amber-400' },
   { dx: -74, dy: 28,  rot: 84,   delay: 100, color: 'bg-amber-300' },
-  { dx: -90, dy: -6,  rot: -100, delay: 140, color: 'bg-primary-soft' },
+  { dx: -90, dy: -6,  rot: -100, delay: 140, color: 'bg-ink' },
   { dx: 92,  dy: -12, rot: 132,  delay: 130, color: 'bg-success' },
 ]
 
@@ -158,6 +158,10 @@ export default function CheckoutPage() {
     street: '',
     house: '',
     apartment: '',
+    entrance: '',
+    floor: '',
+    intercom: '',
+    addressType: 'apartment' as 'apartment' | 'house',
     comment: '',
     postalCode: '',
     lat: 0,
@@ -342,6 +346,10 @@ export default function CheckoutPage() {
           street: address.street,
           house: address.house,
           apartment: address.apartment || undefined,
+          entrance: address.entrance || undefined,
+          floor: address.floor || undefined,
+          intercom: address.intercom || undefined,
+          addressType: address.addressType || undefined,
           postalCode: address.postalCode || undefined,
           lat: address.lat || undefined,
           lon: address.lon || undefined,
@@ -520,9 +528,9 @@ export default function CheckoutPage() {
                 onClick={() => i < stepIndex && setStep(s.key)}
                 className={`flex items-center gap-2 ${i < stepIndex ? 'cursor-pointer' : 'cursor-default'}`}>
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-100 ease ${
-                  i < stepIndex ? 'bg-primary text-white' :
-                  i === stepIndex ? 'bg-primary text-white' :
-                  'bg-primary-tint text-navy-500'
+                  i < stepIndex ? 'bg-amber-400 text-navy-900' :
+                  i === stepIndex ? 'bg-amber-400 text-navy-900' :
+                  'bg-white border border-line text-navy-500'
                 }`}>
                   {i < stepIndex ? <CheckIcon className="w-4 h-4" /> : i + 1}
                 </div>
@@ -531,7 +539,7 @@ export default function CheckoutPage() {
                 }`}>{s.label}</span>
               </button>
               {i < STEPS.length - 1 && (
-                <div className={`flex-1 h-0.5 mx-2 ${i < stepIndex ? 'bg-green-300' : 'bg-blue-100'}`} />
+                <div className={`flex-1 h-0.5 mx-2 ${i < stepIndex ? 'bg-amber-400' : 'bg-line'}`} />
               )}
             </div>
           ))}
@@ -600,8 +608,8 @@ export default function CheckoutPage() {
                         className={`flex items-center gap-4 p-4 rounded-xl border transition-[border-color,background-color] text-left ${
                           isDisabled ? 'border-line bg-blue-50 cursor-not-allowed' :
                           active
-                            ? 'border-primary-soft bg-primary-tint'
-                            : 'border-line bg-white hover:border-primary-soft'
+                            ? 'border-ink bg-white'
+                            : 'border-line bg-white hover:border-navy-300'
                         }`}>
                         {PROVIDER_ICONS[opt.provider] ? <span className="text-2xl">{PROVIDER_ICONS[opt.provider]}</span> : null}
                         {/* Недоступная служба — приглушённые токены, а не opacity на всей
@@ -613,7 +621,7 @@ export default function CheckoutPage() {
                           </span>
                           {isDisabled && <span className="block text-xs text-navy-500">{opt.error}</span>}
                           {description && <span className="block text-xs text-navy-500">{description}</span>}
-                          {days && <span className={`block text-xs mt-0.5 ${isDisabled ? 'text-navy-400' : 'text-primary-hover'}`}>{days}</span>}
+                          {days && <span className={`block text-xs mt-0.5 ${isDisabled ? 'text-navy-400' : 'text-navy-500'}`}>{days}</span>}
                         </div>
                         {selectable && (
                           <span className="flex-shrink-0 text-right text-sm font-bold tabular-nums text-navy-900">
@@ -625,7 +633,7 @@ export default function CheckoutPage() {
                           </span>
                         )}
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                          active ? 'border-primary-soft bg-primary-soft' : 'border-line'
+                          active ? 'border-ink bg-ink' : 'border-line'
                         }`}>
                           {active && <div className="w-2 h-2 rounded-full bg-white" />}
                         </div>
@@ -669,66 +677,150 @@ export default function CheckoutPage() {
                           onSelect={(suggestion: AddressSuggestion) => {
                             setAddress(a => ({
                               ...a,
-                              street: suggestion.street || '',
-                              house: suggestion.house || '',
-                              postalCode: suggestion.postalCode || '',
-                              lat: suggestion.lat || 0,
-                              lon: suggestion.lon || 0,
+                              street: suggestion.street || suggestion.value || a.street,
+                              house: suggestion.house || a.house,
+                              postalCode: suggestion.postalCode || a.postalCode,
+                              lat: suggestion.lat || a.lat,
+                              lon: suggestion.lon || a.lon,
                             }))
                           }}
                           error={validationErrors.deliveryStreet && touched.deliveryStreet ? validationErrors.deliveryStreet : undefined}
                         />
                       ) : (
-                        <>
+                        <div>
+                          <input
+                            type="text"
+                            placeholder="Улица"
+                            aria-label="Улица"
+                            aria-invalid={!!validationErrors.deliveryStreet && touched.deliveryStreet}
+                            value={address.street}
+                            onChange={e => setAddress(a => ({ ...a, street: e.target.value }))}
+                            onBlur={() => setTouched(t => ({ ...t, deliveryStreet: true }))}
+                            className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
+                              validationErrors.deliveryStreet && touched.deliveryStreet
+                                ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
+                                : 'border-line focus:border-line focus:ring-blue-100'
+                            }`}
+                          />
+                          {validationErrors.deliveryStreet && touched.deliveryStreet && (
+                            <p className="text-xs text-destructive mt-1">{validationErrors.deliveryStreet}</p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Дом — в обеих ветках suggest и без */}
+                      <div>
+                        <label htmlFor="delivery-house" className="block text-sm font-medium text-navy-900 mb-1">
+                          Дом
+                        </label>
+                        <input
+                          id="delivery-house"
+                          type="text"
+                          placeholder="Дом"
+                          aria-label="Дом"
+                          required
+                          aria-invalid={!!validationErrors.deliveryHouse && touched.deliveryHouse}
+                          value={address.house}
+                          onChange={e => setAddress(a => ({ ...a, house: e.target.value }))}
+                          onBlur={() => setTouched(t => ({ ...t, deliveryHouse: true }))}
+                          className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
+                            validationErrors.deliveryHouse && touched.deliveryHouse
+                              ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
+                              : 'border-line focus:border-line focus:ring-blue-100'
+                          }`}
+                        />
+                        {validationErrors.deliveryHouse && touched.deliveryHouse && (
+                          <p className="text-xs text-destructive mt-1">{validationErrors.deliveryHouse}</p>
+                        )}
+                      </div>
+
+                      {/* Переключатель: Квартира / Частный дом */}
+                      <div className="flex gap-2" role="radiogroup" aria-label="Тип адреса">
+                        <button
+                          type="button"
+                          onClick={() => setAddress(a => ({ ...a, addressType: 'apartment' }))}
+                          className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors border ${
+                            address.addressType === 'apartment'
+                              ? 'bg-ink text-white border-ink'
+                              : 'bg-white text-navy-700 border-line'
+                          }`}
+                          role="radio"
+                          aria-checked={address.addressType === 'apartment'}
+                        >
+                          Квартира
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setAddress(a => ({ ...a, addressType: 'house' }))}
+                          className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors border ${
+                            address.addressType === 'house'
+                              ? 'bg-ink text-white border-ink'
+                              : 'bg-white text-navy-700 border-line'
+                          }`}
+                          role="radio"
+                          aria-checked={address.addressType === 'house'}
+                        >
+                          Частный дом
+                        </button>
+                      </div>
+
+                      {/* Поля для квартиры */}
+                      {address.addressType === 'apartment' && (
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                           <div>
+                            <label htmlFor="delivery-apartment" className="block text-sm font-medium text-navy-900 mb-1">
+                              Квартира
+                            </label>
                             <input
-                              type="text"
-                              placeholder="Улица"
-                              aria-label="Улица"
-                              aria-invalid={!!validationErrors.deliveryStreet && touched.deliveryStreet}
-                              value={address.street}
-                              onChange={e => setAddress(a => ({ ...a, street: e.target.value }))}
-                              onBlur={() => setTouched(t => ({ ...t, deliveryStreet: true }))}
-                              className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
-                                validationErrors.deliveryStreet && touched.deliveryStreet
-                                  ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
-                                  : 'border-line focus:border-line focus:ring-blue-100'
-                              }`}
-                            />
-                            {validationErrors.deliveryStreet && touched.deliveryStreet && (
-                              <p className="text-xs text-destructive mt-1">{validationErrors.deliveryStreet}</p>
-                            )}
-                          </div>
-                          <div className="grid grid-cols-2 gap-3">
-                            <div>
-                              <input
-                                type="text"
-                                placeholder="Дом"
-                                aria-label="Дом"
-                                aria-invalid={!!validationErrors.deliveryHouse && touched.deliveryHouse}
-                                value={address.house}
-                                onChange={e => setAddress(a => ({ ...a, house: e.target.value }))}
-                                onBlur={() => setTouched(t => ({ ...t, deliveryHouse: true }))}
-                                className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
-                                  validationErrors.deliveryHouse && touched.deliveryHouse
-                                    ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
-                                    : 'border-line focus:border-line focus:ring-blue-100'
-                                }`}
-                              />
-                              {validationErrors.deliveryHouse && touched.deliveryHouse && (
-                                <p className="text-xs text-destructive mt-1">{validationErrors.deliveryHouse}</p>
-                              )}
-                            </div>
-                            <input
+                              id="delivery-apartment"
                               type="text"
                               placeholder="Квартира"
-                              aria-label="Квартира"
+                              required
                               value={address.apartment}
                               onChange={e => setAddress(a => ({ ...a, apartment: e.target.value }))}
                               className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
                             />
                           </div>
-                        </>
+                          <div>
+                            <label htmlFor="delivery-entrance" className="block text-sm font-medium text-navy-900 mb-1">
+                              Подъезд
+                            </label>
+                            <input
+                              id="delivery-entrance"
+                              type="text"
+                              placeholder="Подъезд"
+                              value={address.entrance}
+                              onChange={e => setAddress(a => ({ ...a, entrance: e.target.value }))}
+                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                            />
+                          </div>
+                          <div>
+                            <label htmlFor="delivery-floor" className="block text-sm font-medium text-navy-900 mb-1">
+                              Этаж
+                            </label>
+                            <input
+                              id="delivery-floor"
+                              type="text"
+                              placeholder="Этаж"
+                              value={address.floor}
+                              onChange={e => setAddress(a => ({ ...a, floor: e.target.value }))}
+                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                            />
+                          </div>
+                          <div>
+                            <label htmlFor="delivery-intercom" className="block text-sm font-medium text-navy-900 mb-1">
+                              Домофон
+                            </label>
+                            <input
+                              id="delivery-intercom"
+                              type="text"
+                              placeholder="Домофон"
+                              value={address.intercom}
+                              onChange={e => setAddress(a => ({ ...a, intercom: e.target.value }))}
+                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                            />
+                          </div>
+                        </div>
                       )}
 
                       <textarea
@@ -889,8 +981,8 @@ export default function CheckoutPage() {
                           isDisabled
                             ? 'border-line bg-blue-50 opacity-60 cursor-not-allowed'
                             : payment === opt.key
-                              ? 'border-primary-soft bg-primary-tint'
-                              : 'border-line bg-white hover:border-primary-soft'
+                              ? 'border-ink bg-white'
+                              : 'border-line bg-white hover:border-navy-300'
                         }`}>
                         <div className="flex-1">
                           <p className="font-semibold text-navy-900 text-sm">{opt.title}</p>
@@ -901,7 +993,7 @@ export default function CheckoutPage() {
                           )}
                         </div>
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                          payment === opt.key ? 'border-primary-soft bg-primary-soft' : 'border-line'
+                          payment === opt.key ? 'border-ink bg-ink' : 'border-line'
                         }`}>
                           {payment === opt.key && <div className="w-2 h-2 rounded-full bg-white" />}
                         </div>
@@ -1005,7 +1097,7 @@ export default function CheckoutPage() {
                 <h2 className="font-bold text-navy-900 mb-4">Проверьте заказ</h2>
 
                 {/* Краткая сводка */}
-                <div className="flex flex-col gap-3 mb-4 p-4 bg-primary-tint rounded-xl">
+                <div className="flex flex-col gap-3 mb-4 p-4 bg-white border border-line rounded-xl">
                   <div className="flex justify-between text-sm">
                     <span className="text-navy-500">Доставка</span>
                     <span className="font-medium text-navy-900">
@@ -1099,7 +1191,7 @@ export default function CheckoutPage() {
                 )}
                 <p className="text-center text-xs text-navy-500 mt-3">
                   Нажимая кнопку, вы соглашаетесь с{' '}
-                  <Link to="/offer" className="text-navy-700 hover:text-primary-hover transition-colors duration-100 ease">условиями оферты</Link>
+                  <Link to="/offer" className="text-navy-700 hover:text-navy-500 transition-colors duration-100 ease">условиями оферты</Link>
                 </p>
               </div>
             )}
