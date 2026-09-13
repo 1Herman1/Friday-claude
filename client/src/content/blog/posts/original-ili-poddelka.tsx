@@ -9,7 +9,6 @@ const post: BlogPost = {
   date: '2026-07-26',
   readingMinutes: 5,
   status: 'published',
-  cover: '/blog/original-ili-poddelka.webp',
   metaTitle: 'Как отличить оригинал корма от подделки — Симба',
   metaDescription: 'Подделки премиальных кормов — реальная проблема рынка. На что смотреть на упаковке и в документах, чтобы не купить фейк.',
   body: () => (

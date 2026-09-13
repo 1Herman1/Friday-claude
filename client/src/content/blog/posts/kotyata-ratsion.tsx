@@ -9,7 +9,6 @@ const post: BlogPost = {
   date: '2026-08-23',
   readingMinutes: 8,
   status: 'published',
-  cover: '/blog/kotyata-ratsion.webp',
   metaTitle: 'Чем кормить котёнка по возрасту — Симба',
   metaDescription: 'Рацион котёнка по месяцам: когда начинать прикорм, сколько раз кормить и когда переходить на взрослый корм. Конкретные рекомендации.',
   body: () => (

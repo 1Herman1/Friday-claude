@@ -9,7 +9,6 @@ const post: BlogPost = {
   date: '2026-08-30',
   readingMinutes: 7,
   status: 'published',
-  cover: '/blog/monge-lineyki.webp',
   metaTitle: 'Monge: обзор всех линеек корма — Симба',
   metaDescription: 'Monge — итальянский корм для кошек и собак: сухие, влажные и ветеринарные линейки. Разбираем состав и помогаем подобрать линейку.',
   body: () => (

@@ -9,7 +9,6 @@ const post: BlogPost = {
   date: '2026-08-16',
   readingMinutes: 8,
   status: 'published',
-  cover: '/blog/shchenki-ratsion.webp',
   metaTitle: 'Чем кормить щенка по месяцам — Симба',
   metaDescription: 'Рацион щенка по месяцам с учётом размера породы: сколько раз кормить, когда переводить на сухой корм и как не перекормить.',
   body: () => (

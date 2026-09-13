@@ -9,7 +9,6 @@ const post: BlogPost = {
   date: '2026-07-19',
   readingMinutes: 7,
   status: 'published',
-  cover: '/blog/koshki-allergiya.webp',
   metaTitle: 'Корм для кошек при аллергии — Симба',
   metaDescription: 'Пищевая аллергия у кошек: как распознать симптомы, отличить от непереносимости и какой гипоаллергенный монобелковый корм выбрать вместе с ветеринаром.',
   body: () => (

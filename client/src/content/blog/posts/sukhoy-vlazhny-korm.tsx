@@ -9,7 +9,6 @@ const post: BlogPost = {
   date: '2026-07-12',
   readingMinutes: 6,
   status: 'published',
-  cover: '/blog/sukhoy-vlazhny-korm.webp',
   metaTitle: 'Сухой или влажный корм: что лучше — Симба',
   metaDescription: 'В чём разница между сухим и влажным кормом, что выбрать и как правильно совмещать. Пропорции, плюсы и минусы каждого.',
   body: () => (

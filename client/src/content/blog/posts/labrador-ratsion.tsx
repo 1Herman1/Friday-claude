@@ -9,7 +9,6 @@ const post: BlogPost = {
   date: '2026-08-02',
   readingMinutes: 7,
   status: 'published',
-  cover: '/blog/labrador-ratsion.webp',
   metaTitle: 'Чем кормить лабрадора: рацион — Симба',
   metaDescription: 'Лабрадор склонен к перееданию и проблемам с суставами. Рассказываем, чем кормить по возрасту и как не допустить лишнего веса.',
   body: () => (
