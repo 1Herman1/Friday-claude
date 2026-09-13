@@ -6,7 +6,7 @@ const post: BlogPost = {
   title: 'Как перевести кошку на новый корм за 7–10 дней',
   excerpt: 'Пошаговая схема перехода кошки на новый корм за 7–10 дней без расстройства ЖКТ.',
   categories: ['Питание', 'Кошки'],
-  date: '2026-06-25',
+  date: '2026-08-09',
   readingMinutes: 6,
   status: 'published',
   cover: '/blog/smena-korma-koshke.webp',

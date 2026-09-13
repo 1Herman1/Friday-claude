@@ -6,9 +6,10 @@ const post: BlogPost = {
   title: 'Farmina или Monge: что выбрать для кошки и собаки',
   excerpt: 'Сравниваем два итальянских корма: состав, линейки, цены и для каких питомцев они подходят.',
   categories: ['Сравнения кормов'],
-  date: '2026-07-15',
+  date: '2026-09-13',
   readingMinutes: 8,
   status: 'published',
+  cover: '/blog/farmina-vs-monge.webp',
   metaTitle: 'Farmina или Monge: сравнение кормов — Симба',
   metaDescription: 'Сравниваем Farmina и Monge: состав, линейки, цены и для каких питомцев подходят. Помогаем выбрать корм и подобрать линейку в каталоге.',
   body: () => (

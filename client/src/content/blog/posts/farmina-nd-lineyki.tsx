@@ -6,9 +6,10 @@ const post: BlogPost = {
   title: 'Корма Farmina N&D: обзор линеек',
   excerpt: 'Разбираем линейки Farmina N&D для кошек и собак: состав, отличия между вариантами и как выбрать подходящий.',
   categories: ['Сравнения кормов', 'Ветдиеты'],
-  date: '2026-07-11',
+  date: '2026-09-06',
   readingMinutes: 7,
   status: 'published',
+  cover: '/blog/farmina-nd-lineyki.webp',
   metaTitle: 'Farmina N&D: обзор всех линеек корма — Симба',
   metaDescription: 'Линейки Farmina N&D для кошек и собак: беззерновые, низкозерновые и ветеринарные. Разбираем состав и подсказываем, какая подойдёт питомцу.',
   body: () => (
