@@ -24,7 +24,6 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
   const [mounted, setMounted] = useState(open)
   const [shown, setShown] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
-  const closeBtnRef = useRef<HTMLButtonElement>(null)
   const returnFocusRef = useRef<HTMLElement | null>(null)
 
   // Mount/exit логика как в SearchModal
@@ -35,7 +34,8 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
       // rAF перед включением классов
       const raf = requestAnimationFrame(() => {
         setShown(true)
-        closeBtnRef.current?.focus({ preventScroll: true })
+        // Фокус на контейнер, а не на кнопку закрытия: иначе глобальный *:focus-visible рисовал кольцо на круглой кнопке при каждом открытии мышью. Клавиатурный Tab по-прежнему подсвечивает кнопку.
+        dialogRef.current?.focus({ preventScroll: true })
       })
       return () => cancelAnimationFrame(raf)
     }
@@ -69,13 +69,11 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
 
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
+      const onDialog = document.activeElement === dialogRef.current
+      if (event.shiftKey && (onDialog || document.activeElement === first)) {
+        event.preventDefault(); last.focus()
+      } else if (!event.shiftKey && (onDialog || document.activeElement === last)) {
+        event.preventDefault(); first.focus()
       }
     }
 
@@ -105,10 +103,12 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
+        tabIndex={-1}
         className={`absolute top-0 bottom-[calc(64px+env(safe-area-inset-bottom))] sm:bottom-0 right-0 flex flex-col
                     w-full sm:w-[420px] max-w-full
                     bg-white shadow-xl sm:border-l sm:border-line sm:rounded-l-card sm:overflow-hidden
                     rounded-b-card sm:rounded-b-none
+                    outline-none
                     transition-[transform,opacity] ease-drawer
                     ${shown ? 'translate-x-0 opacity-100 duration-300' : 'translate-x-full opacity-0 duration-200'}`}
       >
@@ -120,11 +120,10 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
             {titleSuffix && <span className="ml-2 text-base font-normal text-navy-400">{titleSuffix}</span>}
           </h2>
           <button
-            ref={closeBtnRef}
             type="button"
             onClick={onClose}
             aria-label={`Закрыть ${title === 'Корзина' ? 'корзину' : 'избранное'}`}
-            className="btn-press w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full text-navy-500 hover:bg-primary-tint ml-auto"
+            className="btn-press w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full text-navy-500 hover:bg-black/5 ml-auto"
           >
             <CloseIcon className="w-5 h-5" />
           </button>

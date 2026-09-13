@@ -4,7 +4,7 @@ import { productsApi, type Product, type ProductVariant } from '../lib/api'
 import { useCart } from '../context/CartContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { formatPrice } from '../lib/format'
-import { HeartIcon, HeartSolidIcon } from '../components/icons'
+import { HeartIcon, HeartSolidIcon, CheckIcon } from '../components/icons'
 import { isSellable } from '@simba/shared'
 import { apiErrorMessage } from '../lib/api-error'
 import { useDeliveryOptions, etaLabel } from '../hooks/useDeliveryOptions'
@@ -93,8 +93,6 @@ export default function ProductPage() {
   const discount = selectedVariant.oldPrice
     ? Math.round((1 - selectedVariant.price / selectedVariant.oldPrice) * 100)
     : null
-
-  const pricePerKg = Math.round(selectedVariant.price / selectedVariant.weight)
 
   return (
     <div className="min-h-[100dvh] bg-blue-50">
@@ -200,19 +198,22 @@ export default function ProductPage() {
             <div>
               <p className="text-sm text-navy-500 mb-2">Вес упаковки:</p>
               <div className="flex flex-wrap gap-2">
-                {product.variants.map(v => (
-                  <button
-                    key={v.id}
-                    onClick={() => setSelectedVariant(v)}
-                    className={`btn-press flex flex-col items-center px-4 py-2 rounded-xl border ${
-                      selectedVariant.id === v.id
-                        ? 'bg-ink border-ink text-white font-semibold'
-                        : 'bg-white border-line text-navy-700 [@media(hover:hover)]:hover:border-ink'
-                    }`}>
-                    <span className="font-bold text-navy-900">{v.weight} кг</span>
-                    <span className="text-xs text-navy-400">{(Math.round(v.price / v.weight) / 100).toLocaleString('ru-RU')} ₽/кг</span>
-                  </button>
-                ))}
+                {product.variants.map(v => {
+                  const selected = selectedVariant.id === v.id
+                  return (
+                    <button
+                      key={v.id}
+                      onClick={() => setSelectedVariant(v)}
+                      className={`btn-press flex flex-col items-center px-4 py-2 rounded-xl border ${
+                        selected
+                          ? 'bg-ink border-ink text-white font-semibold'
+                          : 'bg-white border-line text-navy-700 [@media(hover:hover)]:hover:border-ink'
+                      }`}>
+                      <span className={`font-bold ${selected ? 'text-white' : 'text-navy-900'}`}>{v.weight} кг</span>
+                      <span className={`text-xs ${selected ? 'text-white/70' : 'text-navy-500'}`}>{(Math.round(v.price / v.weight) / 100).toLocaleString('ru-RU')} ₽/кг</span>
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
@@ -297,22 +298,22 @@ export default function ProductPage() {
               <button
                 onClick={handleAddToCart}
                 disabled={!selectedVariant || !isSellable(selectedVariant, quantity)}
-                className={`flex-1 py-3 ${
- error
- ? 'bg-white text-destructive border border-destructive'
- : added
- ? 'bg-green-100 text-green-700'
- : !selectedVariant || !isSellable(selectedVariant, quantity)
- ? 'bg-blue-50 text-navy-400 border border-line cursor-not-allowed'
- : 'btn-primary'
- }`}>
+                className={`flex-1 py-3 rounded-pill min-h-[2.75rem] border font-semibold text-[13px] ${
+                  error
+                    ? 'bg-white text-destructive border-destructive'
+                    : added
+                      ? 'bg-white border-line text-navy-900'
+                      : !selectedVariant || !isSellable(selectedVariant, quantity)
+                        ? 'bg-blue-50 text-navy-400 border-line cursor-not-allowed'
+                        : 'btn-primary border-transparent'
+                }`}>
                 {error
                   ? error
                   : added
-                  ? 'Добавлено в корзину'
-                  : !selectedVariant || !isSellable(selectedVariant, quantity)
-                  ? 'Недостаточно товара'
-                  : 'Добавить в корзину'}
+                    ? <span className="inline-flex items-center justify-center gap-1.5"><CheckIcon className="w-4 h-4 text-success" />Добавлено в корзину</span>
+                    : !selectedVariant || !isSellable(selectedVariant, quantity)
+                      ? 'Недостаточно товара'
+                      : 'Добавить в корзину'}
               </button>
 
               {/* В избранное */}

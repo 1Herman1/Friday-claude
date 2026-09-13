@@ -4,7 +4,8 @@ import { useMetaTags } from '../hooks/useMetaTags'
 import { useSiteText } from '../context/SiteTextsContext'
 import { type BlogCategory } from '../content/blog'
 import { useBlogPosts } from '../hooks/useBlog'
-import { ArrowLeftIcon, ArrowRightIcon, ImagePlaceholderIcon } from '../components/icons'
+import { ArrowLeftIcon, ArrowRightIcon } from '../components/icons'
+import BlogCoverFallback from '../components/BlogCoverFallback'
 
 const CATEGORIES: BlogCategory[] = ['Сравнения кормов', 'Питание', 'Здоровье', 'Кошки', 'Собаки', 'Ветдиеты']
 
@@ -83,15 +84,13 @@ export default function BlogPage() {
               <Link
                 key={post.slug}
                 to={`/blog/${post.slug}`}
-                className="bg-white border border-line rounded-card overflow-hidden transition-[transform] duration-100 ease hover:border-navy-300 hover:shadow-card hover:-translate-y-0.5"
+                className="bg-white border border-line rounded-card overflow-hidden transition-[transform,box-shadow,border-color] duration-100 ease hover:border-navy-300 hover:shadow-card hover:-translate-y-0.5"
               >
                 {/* Обложка */}
                 {post.cover ? (
                   <img src={post.cover} alt={post.title} className="w-full aspect-[16/10] object-cover" />
                 ) : (
-                  <div className="w-full aspect-[16/10] bg-blue-50 flex items-center justify-center text-navy-300">
-                    <ImagePlaceholderIcon className="w-12 h-12" />
-                  </div>
+                  <BlogCoverFallback />
                 )}
 
                 {/* Контент */}

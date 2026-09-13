@@ -189,7 +189,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <button
           onClick={handleAddToCart}
           disabled={unavailable}
-          className={`w-full py-2 rounded-[30px] ${
+          className={`w-full py-2 rounded-pill ${
             error
               ? 'bg-white border border-destructive text-destructive'
               : added

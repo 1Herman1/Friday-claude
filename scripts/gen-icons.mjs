@@ -56,6 +56,7 @@ const MAP = {
   ChatIcon: 'chat-bubble',
   CalendarIcon: 'calendar',
   HomeIcon: 'home-simple',
+  TelegramPlaneOutlineIcon: 'telegram',
 }
 
 const KEBAB = {

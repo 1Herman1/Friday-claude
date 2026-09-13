@@ -2,7 +2,8 @@ import { useParams, Link } from 'react-router-dom'
 import { useMetaTags } from '../hooks/useMetaTags'
 import { useBlogPosts, useBlogPost } from '../hooks/useBlog'
 import { renderMarkdown } from '../lib/markdown'
-import { ArrowLeftIcon, ImagePlaceholderIcon } from '../components/icons'
+import { ArrowLeftIcon } from '../components/icons'
+import BlogCoverFallback from '../components/BlogCoverFallback'
 import NotFoundPage from './NotFoundPage'
 
 export default function BlogPostPage() {
@@ -71,7 +72,7 @@ export default function BlogPostPage() {
       </Link>
 
       {/* Категории */}
-      <p className="text-xs uppercase tracking-wide text-primary-hover font-semibold mb-3">{post.categories.join(' · ')}</p>
+      <p className="text-xs uppercase tracking-wide text-navy-500 font-semibold mb-3">{post.categories.join(' · ')}</p>
 
       {/* Заголовок */}
       <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-4">{post.title}</h1>
@@ -89,9 +90,7 @@ export default function BlogPostPage() {
       {post.cover ? (
         <img src={post.cover} alt={post.title} className="w-full aspect-[16/9] object-cover rounded-card mb-10" />
       ) : (
-        <div className="w-full aspect-[16/9] bg-primary-tint flex items-center justify-center text-primary-soft rounded-card mb-10">
-          <ImagePlaceholderIcon className="w-12 h-12" />
-        </div>
+        <BlogCoverFallback className="aspect-[16/9] bg-white border border-line rounded-card mb-10" />
       )}
 
       {/* Тело статьи */}
@@ -118,21 +117,19 @@ export default function BlogPostPage() {
               <Link
                 key={relatedPost.slug}
                 to={`/blog/${relatedPost.slug}`}
-                className="bg-white border border-line rounded-card overflow-hidden transition-[transform] duration-100 ease hover:border-primary-soft hover:shadow-card hover:-translate-y-0.5"
+                className="bg-white border border-line rounded-card overflow-hidden transition-[transform,box-shadow,border-color] duration-100 ease hover:border-navy-300 hover:shadow-card hover:-translate-y-0.5"
               >
                 {/* Обложка */}
                 {relatedPost.cover ? (
                   <img src={relatedPost.cover} alt={relatedPost.title} className="w-full aspect-[16/10] object-cover" />
                 ) : (
-                  <div className="w-full aspect-[21/9] bg-primary-tint flex items-center justify-center text-primary-soft">
-                    <ImagePlaceholderIcon className="w-12 h-12" />
-                  </div>
+                  <BlogCoverFallback />
                 )}
 
                 {/* Контент */}
                 <div className="p-5">
                   {/* Категории */}
-                  <p className="text-xs uppercase tracking-wide text-primary-hover font-semibold mb-2">
+                  <p className="text-xs uppercase tracking-wide text-navy-500 font-semibold mb-2">
                     {relatedPost.categories.join(' · ')}
                   </p>
 

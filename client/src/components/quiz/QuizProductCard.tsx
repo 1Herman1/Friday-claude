@@ -5,6 +5,9 @@ import type { QuizProductCard as QuizProductCardType } from '../../lib/api'
 import { formatPrice } from '../../lib/format'
 import { CheckIcon } from '../icons'
 
+const ADDED_CLASS = 'rounded-pill min-h-[2.75rem] bg-white border border-line text-navy-900 font-semibold text-[13px]'
+const OUTLINE_CLASS = 'rounded-pill min-h-[2.75rem] bg-white border border-ink text-ink font-semibold text-[13px] [@media(hover:hover)]:hover:bg-ink [@media(hover:hover)]:hover:text-white transition-colors'
+
 interface QuizProductCardProps {
   product: QuizProductCardType
   variant?: 'main' | 'alt'
@@ -122,14 +125,12 @@ export default function QuizProductCard({
             onClick={handleAddToCart}
             disabled={isAdding}
             className={`relative z-10 w-full py-3 duration-100 ease disabled:opacity-50 disabled:cursor-not-allowed ${
- isMain
- ? 'btn-primary'
- : added ? 'rounded-[30px] min-h-[2.75rem] bg-white border border-line text-navy-900' : 'rounded-[30px] min-h-[2.75rem] bg-white border border-ink text-ink font-semibold text-[13px] [@media(hover:hover)]:hover:bg-ink [@media(hover:hover)]:hover:text-white transition-colors'
- }`}
+              added ? ADDED_CLASS : isMain ? 'btn-primary border border-transparent' : OUTLINE_CLASS
+            }`}
           >
             {added ? (
-              <span className="flex items-center justify-center gap-2">
-                <CheckIcon className="ico-draw w-4 h-4" />
+              <span className="inline-flex items-center justify-center gap-1.5">
+                <CheckIcon className="ico-draw w-4 h-4 text-success" />
                 В корзине
               </span>
             ) : (

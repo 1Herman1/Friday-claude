@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
-import { ImagePlaceholderIcon } from '../icons'
+import BlogCoverFallback from '../BlogCoverFallback'
 import { type BlogCategory } from '../../content/blog'
 import { useBlogPosts } from '../../hooks/useBlog'
 import { useReveal } from '../../hooks/useReveal'
@@ -102,9 +102,7 @@ export default function BlogSection() {
                 {post.cover ? (
                   <img src={post.cover} alt={post.title} loading="lazy" className="w-full aspect-[16/10] object-cover" />
                 ) : (
-                  <div className="w-full aspect-[16/10] bg-blue-50 flex items-center justify-center text-navy-300">
-                    <ImagePlaceholderIcon className="w-12 h-12" />
-                  </div>
+                  <BlogCoverFallback />
                 )}
 
                 <div className="p-5">

@@ -412,3 +412,11 @@ export function HomeIcon({ className = '' }: IconProps) {
     </svg>
   )
 }
+
+export function TelegramPlaneOutlineIcon({ className = '' }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className={`${base} ${className}`}>
+      <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.75" d="M21 5L2 12.5l7 1M21 5l-2.5 15L9 13.5M21 5L9 13.5m0 0V19l3.249-3.277" />
+    </svg>
+  )
+}

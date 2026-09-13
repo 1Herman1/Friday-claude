@@ -70,6 +70,7 @@ const config: Config = {
       borderRadius: {
         card: '14px',
         banner: '24px',
+        pill: '30px', // CTA/outline кнопки — 30px по решению владельца (MASTER «Радиусы — исключения»)
       },
       boxShadow: {
         card: '0 2px 8px rgba(22, 35, 60, 0.06)',

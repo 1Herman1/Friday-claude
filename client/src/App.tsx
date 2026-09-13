@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { initButtonSpotlight } from './lib/button-spotlight'
 import { initButtonPress } from './lib/button-press'
 import ScrollToTop from './components/ScrollToTop'
 import HashScroll from './components/HashScroll'
@@ -35,10 +34,8 @@ import DrawerRoute from './pages/DrawerRoute'
 
 export default function App() {
   useEffect(() => {
-    const disposeSpotlight = initButtonSpotlight()
     const disposePress = initButtonPress()
     return () => {
-      disposeSpotlight()
       disposePress()
     }
   }, [])

@@ -5,7 +5,7 @@ import { useFavorites } from '../../context/FavoritesContext'
 import { useDrawer } from '../../context/DrawerContext'
 import { CONTACTS } from '../../lib/contacts'
 import { useCategoryTree, findNode } from '../../hooks/useCategoryTree'
-import { HeartIcon, CartBagIcon, UserIcon, TelegramPlaneIcon, SearchIcon, PhoneIcon } from '../icons'
+import { HeartIcon, CartBagIcon, UserIcon, TelegramPlaneOutlineIcon, SearchIcon, PhoneIcon } from '../icons'
 import SearchModal from './SearchModal'
 
 /** Корни меню зафиксированы (виды животных), подменю берётся из дерева категорий
@@ -146,17 +146,15 @@ export default function Header() {
 
           {/* Справа — иконки */}
           <div className="flex items-center gap-1 lg:gap-3 ml-auto">
-            {/* Telegram */}
+            {/* Telegram — та же 44px-обёртка, что у соседей; контурный самолётик */}
             <a
               href={CONTACTS.telegram}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Написать в Telegram"
-              className="btn-press w-11 h-11 inline-flex items-center justify-center rounded-xl"
+              className="btn-press header-pill-icon w-11 h-11 inline-flex items-center justify-center rounded-xl text-white"
             >
-              <span className="header-tg-badge w-8 h-8 rounded-full inline-flex items-center justify-center shadow-sm">
-                <TelegramPlaneIcon className="w-[16px] h-[14px]" />
-              </span>
+              <TelegramPlaneOutlineIcon className="header-ico-telegram w-[22px] h-[22px]" />
             </a>
 
             {/* Поиск */}
@@ -258,7 +256,7 @@ export default function Header() {
               aria-label="Написать в Telegram"
               className="btn-press header-pill-icon text-white w-11 h-11 flex items-center justify-center rounded-xl"
             >
-              <TelegramPlaneIcon className="w-[18px] h-[16px]" />
+              <TelegramPlaneOutlineIcon className="w-[22px] h-[22px]" />
             </a>
             <button
               type="button"

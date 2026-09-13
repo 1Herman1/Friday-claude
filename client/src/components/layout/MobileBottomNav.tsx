@@ -27,7 +27,7 @@ export default function MobileBottomNav() {
 
   return (
     <nav
-      className="md:hidden fixed left-4 right-4 bottom-[10px] z-[70] rounded-full h-14 bg-[rgb(119_119_119_/_0.5)] supports-[backdrop-filter]:backdrop-blur-[8px] drop-shadow-sm"
+      className={`bottom-nav-rim md:hidden fixed left-4 right-4 bottom-[10px] z-[70] isolate rounded-full h-14 bg-[rgb(119_119_119_/_0.5)] supports-[backdrop-filter]:backdrop-blur-[8px] drop-shadow-sm ${drawer ? 'is-paused' : ''}`}
       style={{ marginBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="flex h-full items-center justify-around px-2">

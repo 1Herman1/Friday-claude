@@ -218,7 +218,7 @@ export default function SearchModal({ open, onClose }: Props) {
               placeholder="Найти корм, лакомства, игрушки…"
               className="w-full h-12 sm:h-14 pl-12 pr-12 text-base rounded-xl
                          bg-blue-50 border border-line text-navy-900 placeholder-navy-400
-                         focus:bg-white focus:outline-none focus:border-primary-soft focus:ring-2 focus:ring-primary-tint
+                         focus:bg-white focus:outline-none focus:border-ink focus:ring-2 focus:ring-ink
                          transition-[background-color,border-color,box-shadow] duration-150 ease-smooth"
               value={value}
               onChange={e => setValue(e.target.value)}
@@ -243,7 +243,7 @@ export default function SearchModal({ open, onClose }: Props) {
             onClick={onClose}
             aria-label="Закрыть поиск"
             className="btn-press w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-full
-                       text-navy-500 hover:bg-primary-tint"
+                       text-navy-500 hover:bg-black/5"
           >
             <CloseIcon className="w-5 h-5" />
           </button>
@@ -333,7 +333,7 @@ export default function SearchModal({ open, onClose }: Props) {
                     type="button"
                     onClick={() => handleCategoryClick(link.href)}
                     className="btn-press inline-flex items-center min-h-11 px-4 rounded-full border border-line
-                             text-sm font-medium text-navy-700 hover:border-primary-soft hover:bg-primary-tint"
+                             text-sm font-medium text-navy-700 hover:border-ink hover:bg-white"
                   >
                     {link.label}
                   </button>
