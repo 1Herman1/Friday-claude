@@ -10,7 +10,8 @@ import SearchModal from './SearchModal'
 
 /** Корни меню зафиксированы (виды животных), подменю берётся из дерева категорий
     в админке; если у корня нет детей — остаётся встроенный список. */
-const ROOT_SLUGS: Record<string, string[]> = { dogs: ['dogs-food', 'treats'], cats: ['cats-food'] }
+const FOOD_ROOT: Record<string, string> = { dogs: 'dogs-food', cats: 'cats-food' }
+const TREATS_CHILD: Record<string, string> = { dogs: 'treats-dogs', cats: 'treats-cats' }
 
 const categories = [
   {
@@ -49,8 +50,28 @@ export default function Header() {
   const tree = useCategoryTree()
   const menu = categories.map((cat) => {
     if (!cat.key) return cat
-    const kids = (ROOT_SLUGS[cat.key] ?? []).flatMap((slug) => findNode(tree, slug)?.children ?? [])
-    return kids.length ? { ...cat, subcategories: kids.map((k) => ({ label: k.name, href: `/catalog?category=${k.slug}` })) } : cat
+
+    const foodRoot = findNode(tree, FOOD_ROOT[cat.key])
+    const foodChildren = foodRoot?.children ?? []
+
+    if (foodChildren.length === 0) {
+      // Если нет детей — используем встроенный список
+      return cat
+    }
+
+    // Строим подменю: детей корня + фиксированные пункты
+    const subcategories = [
+      ...foodChildren.map((k) => ({ label: k.name, href: `/catalog?category=${k.slug}` })),
+      { label: 'Лечебное питание', href: `/catalog?category=${FOOD_ROOT[cat.key]}&purpose=medical` },
+    ]
+
+    // Добавляем Лакомства, если существует нужная подкатегория
+    const treatsChildSlug = TREATS_CHILD[cat.key]
+    const treatsNode = findNode(tree, treatsChildSlug)
+    const treatsHref = treatsNode ? `/catalog?category=${treatsChildSlug}` : '/catalog?category=treats'
+    subcategories.push({ label: 'Лакомства', href: treatsHref })
+
+    return { ...cat, subcategories }
   })
   const contactsRef = useRef<HTMLDivElement>(null)
 

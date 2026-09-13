@@ -1,10 +1,10 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { calcOrderTotals, LOYALTY_TIERS } from '@simba/shared'
+import { calcOrderTotals, LOYALTY_TIERS, type PromoRule } from '@simba/shared'
 import { LOYALTY_STYLE, LOYALTY_CURRENT_MARK } from '../../lib/loyalty-style'
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
-import { cartApi, type CartItem } from '../../lib/api'
+import { cartApi, promoApi, type CartItem } from '../../lib/api'
 import { formatPrice, formatBonuses, pluralize } from '../../lib/format'
 import { PawIcon, TrashIcon, ArrowLeftIcon } from '../icons'
 import SideDrawer from './SideDrawer'
@@ -22,7 +22,16 @@ export default function CartDrawer({ open, onClose }: Props) {
   const [items, setItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState(false)
   const [promoCode, setPromoCode] = useState('')
-  const [promoApplied, setPromoApplied] = useState(false)
+  const [promo, setPromo] = useState<(PromoRule & { code: string }) | null>(() => {
+    try {
+      const stored = sessionStorage.getItem('promo')
+      return stored ? JSON.parse(stored) : null
+    } catch {
+      return null
+    }
+  })
+  const [promoError, setPromoError] = useState('')
+  const [promoLoading, setPromoLoading] = useState(false)
   const [removingId, setRemovingId] = useState<string | null>(null)
   const [togglingId, setTogglingId] = useState<string | null>(null)
   const [toggleErrorId, setToggleErrorId] = useState<string | null>(null)
@@ -97,7 +106,7 @@ export default function CartDrawer({ open, onClose }: Props) {
       price: item.productVariant.price,
       quantity: item.quantity,
     })),
-    promoCode: promoApplied ? 'SIMBA10' : undefined,
+    promo,
     availableBonus: 0,
   })
   const promoDiscount = totals.promoDiscount
@@ -110,11 +119,43 @@ export default function CartDrawer({ open, onClose }: Props) {
   const deliveryProgress = freeFrom == null ? 0 : Math.min(100, (subtotal / freeFrom) * 100)
   const bonusEarned = totals.bonusEarned
 
-  const handlePromo = () => {
-    if (promoCode.toLowerCase() === 'simba10') {
-      setPromoApplied(true)
-      sessionStorage.setItem('promoCode', promoCode.toUpperCase())
+  const handlePromo = async () => {
+    if (!promoCode.trim()) {
+      setPromoError('Введите код промокода')
+      return
     }
+
+    setPromoLoading(true)
+    setPromoError('')
+
+    try {
+      const res = await promoApi.validate(promoCode.trim(), subtotal)
+
+      if (!res.data.valid) {
+        setPromoError(res.data.reason)
+        return
+      }
+
+      const promoData = {
+        code: res.data.code,
+        type: res.data.type,
+        value: res.data.value,
+        minSubtotal: res.data.minSubtotal,
+      }
+      setPromo(promoData)
+      sessionStorage.setItem('promo', JSON.stringify(promoData))
+      setPromoCode('')
+    } catch (e) {
+      const fromBody = (e as { response?: { data?: { reason?: string } } })?.response?.data?.reason
+      setPromoError(fromBody || 'Не удалось проверить промокод')
+    } finally {
+      setPromoLoading(false)
+    }
+  }
+
+  const handleRemovePromo = () => {
+    setPromo(null)
+    sessionStorage.removeItem('promo')
   }
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
@@ -325,33 +366,35 @@ export default function CartDrawer({ open, onClose }: Props) {
 
         {/* Промокод и бонусы */}
         <div className="px-4 pb-4 flex flex-col gap-3">
-          {!promoApplied ? (
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={promoCode}
-                onChange={e => setPromoCode(e.target.value)}
-                placeholder="Промокод"
-                aria-label="Промокод"
-                className="flex-1 px-3 py-2 rounded-xl border border-line text-sm focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
-              />
-              <button
-                onClick={handlePromo}
-                type="button"
-                className="btn-press px-4 min-h-[2.75rem] bg-blue-100 text-navy-700 rounded-xl text-sm font-medium hover:bg-blue-200 flex items-center justify-center"
-              >
-                Применить
-              </button>
+          {!promo ? (
+            <div>
+              <div className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={promoCode}
+                  onChange={e => setPromoCode(e.target.value)}
+                  onKeyPress={e => e.key === 'Enter' && handlePromo()}
+                  placeholder="Промокод"
+                  aria-label="Промокод"
+                  disabled={promoLoading}
+                  className="flex-1 px-3 py-2 rounded-xl border border-line text-sm focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100 disabled:opacity-50"
+                />
+                <button
+                  onClick={handlePromo}
+                  disabled={promoLoading}
+                  type="button"
+                  className="btn-press px-4 min-h-[2.75rem] bg-blue-100 text-navy-700 rounded-xl text-sm font-medium hover:bg-blue-200 disabled:opacity-50 flex items-center justify-center"
+                >
+                  {promoLoading ? '...' : 'Применить'}
+                </button>
+              </div>
+              {promoError && <p className="text-red-600 text-xs">{promoError}</p>}
             </div>
           ) : (
             <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-              <span className="text-success text-sm font-medium">Промокод применён</span>
+              <span className="text-success text-sm font-medium">Промокод {promo.code}</span>
               <button
-                onClick={() => {
-                  setPromoApplied(false)
-                  setPromoCode('')
-                  sessionStorage.removeItem('promoCode')
-                }}
+                onClick={handleRemovePromo}
                 className="ml-auto text-navy-300 hover:text-navy-500 text-xs"
               >
                 Отменить
@@ -402,9 +445,9 @@ export default function CartDrawer({ open, onClose }: Props) {
               <span className="text-success">−{formatPrice(discount)}</span>
             </div>
           )}
-          {promoApplied && (
+          {promo && (
             <div className="flex justify-between">
-              <span className="text-navy-500">Промокод SIMBA10</span>
+              <span className="text-navy-500">Промокод {promo.code}</span>
               <span className="text-success">−{formatPrice(promoDiscount)}</span>
             </div>
           )}

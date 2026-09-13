@@ -172,4 +172,184 @@ describe.skipIf(!hasTestDb)('Admin users (интеграционные)', () => 
     expect(users[0].id).toBe(user2.id)
     expect(users[1].id).toBe(user1.id)
   })
+
+  it('search на type=registered находит по email', async () => {
+    const prisma = getTestPrisma()
+    const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+
+    const registered = await prisma.user.create({
+      data: { name: 'Search Me', email: 'searchme@example.com' },
+    })
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/admin/users?type=registered&search=searchme@',
+      headers: authHeader(app, admin.id, 'super_admin'),
+    })
+
+    expect(res.statusCode).toBe(200)
+    const data = res.json() as any
+    const ids = data.items.map((u: any) => u.id)
+
+    expect(ids).toContain(registered.id)
+  })
+
+  it('segment=noOrders фильтрует пользователей без заказов', async () => {
+    const prisma = getTestPrisma()
+    const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+
+    const withOrder = await prisma.user.create({
+      data: {
+        name: 'With Order',
+        email: 'with@test.com',
+        orders: {
+          create: {
+            status: 'new',
+            deliveryMethod: 'pickup',
+            subtotal: 10000,
+            total: 10000,
+          },
+        },
+      },
+    })
+
+    const noOrder = await prisma.user.create({
+      data: { name: 'No Order', email: 'noorder@test.com' },
+    })
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/admin/users?type=registered&segment=noOrders',
+      headers: authHeader(app, admin.id, 'super_admin'),
+    })
+
+    expect(res.statusCode).toBe(200)
+    const data = res.json() as any
+    const ids = data.items.map((u: any) => u.id)
+
+    expect(ids).toContain(noOrder.id)
+    expect(ids).not.toContain(withOrder.id)
+  })
+
+  it('PUT /:id/active false блокирует пользователя, он не может войти', async () => {
+    const prisma = getTestPrisma()
+    const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+    const user = await createUser({ name: 'User', email: 'user@test.com' })
+    const userToken = app.jwt.sign({ userId: user.id, role: user.role }, { expiresIn: '7d' })
+
+    const res = await app.inject({
+      method: 'PUT',
+      url: `/api/admin/users/${user.id}/active`,
+      headers: authHeader(app, admin.id, 'super_admin'),
+      payload: { isActive: false },
+    })
+
+    expect(res.statusCode).toBe(200)
+
+    // Now user tries to call GET /api/auth/me with their token — should get 401 USER_BLOCKED
+    const meRes = await app.inject({
+      method: 'GET',
+      url: '/api/auth/me',
+      headers: { Authorization: `Bearer ${userToken}` },
+    })
+
+    expect(meRes.statusCode).toBe(401)
+    const meData = meRes.json() as any
+    expect(meData.code).toBe('USER_BLOCKED')
+  })
+
+  it('POST /:id/bonus увеличивает баланс и создаёт запись с типом admin_adjust', async () => {
+    const prisma = getTestPrisma()
+    const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+    const user = await createUser({ name: 'User', email: 'user@test.com', bonusPoints: 0 })
+
+    const res = await app.inject({
+      method: 'POST',
+      url: `/api/admin/users/${user.id}/bonus`,
+      headers: authHeader(app, admin.id, 'super_admin'),
+      payload: { amount: 100, comment: 'Test bonus' },
+    })
+
+    expect(res.statusCode).toBe(200)
+    const data = res.json() as any
+    expect(data.balanceAfter).toBe(100)
+
+    // Check that transaction was created
+    const tx = await prisma.bonusTransaction.findFirst({
+      where: { userId: user.id, type: 'admin_adjust' },
+    })
+    expect(tx).toBeDefined()
+    expect(tx?.amount).toBe(100)
+    expect(tx?.comment).toContain('Test bonus')
+  })
+
+  it('POST /:id/bonus с отрицательной суммой требует достаточных бонусов', async () => {
+    const prisma = getTestPrisma()
+    const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+    const user = await createUser({ name: 'User', email: 'user@test.com', bonusPoints: 100 })
+
+    const res = await app.inject({
+      method: 'POST',
+      url: `/api/admin/users/${user.id}/bonus`,
+      headers: authHeader(app, admin.id, 'super_admin'),
+      payload: { amount: -999, comment: 'Too much' },
+    })
+
+    expect(res.statusCode).toBe(409)
+    const data = res.json() as any
+    expect(data.error).toContain('Недостаточно')
+  })
+
+  it('GET /:id возвращает stats.paidTotal только для paid заказов', async () => {
+    const prisma = getTestPrisma()
+    const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+    const user = await createUser({ name: 'User', email: 'user@test.com' })
+
+    // Paid order
+    await prisma.order.create({
+      data: {
+        userId: user.id,
+        status: 'delivered',
+        paymentStatus: 'paid',
+        deliveryMethod: 'pickup',
+        subtotal: 5000,
+        total: 5000,
+      },
+    })
+
+    // Unpaid order
+    await prisma.order.create({
+      data: {
+        userId: user.id,
+        status: 'new',
+        paymentStatus: 'pending',
+        deliveryMethod: 'pickup',
+        subtotal: 3000,
+        total: 3000,
+      },
+    })
+
+    // Cancelled paid order (should not count)
+    await prisma.order.create({
+      data: {
+        userId: user.id,
+        status: 'cancelled',
+        paymentStatus: 'paid',
+        deliveryMethod: 'pickup',
+        subtotal: 2000,
+        total: 2000,
+      },
+    })
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/api/admin/users/${user.id}`,
+      headers: authHeader(app, admin.id, 'super_admin'),
+    })
+
+    expect(res.statusCode).toBe(200)
+    const data = res.json() as any
+    expect(data.stats.paidTotal).toBe(5000) // Only the paid non-cancelled order
+    expect(data.stats.ordersCount).toBe(3) // All orders
+  })
 })

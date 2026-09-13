@@ -96,7 +96,7 @@ jobs:
               npm run build --workspace=client
             VITE_API_URL=http://147.45.157.11 npm run build --workspace=admin
 
-            echo "==> Applying migrations and reloading in one step (no old-code/new-schema window)"
+            echo "==> Applying migrations (old code keeps running on the new schema until reload: only additive migrations are safe here)"
             (cd server && npx prisma migrate deploy)
 
             echo "==> Backfilling data the code expects (idempotent, admin edits win)"
@@ -105,6 +105,8 @@ jobs:
             (cd server && npx tsx src/scripts/backfill-brand-identity.ts --apply)
             (cd server && npx tsx src/scripts/backfill-banners.ts --apply)
             (cd server && npx tsx src/scripts/backfill-species.ts --apply --only-unknown)
+            (cd server && npx tsx src/scripts/backfill-brand-logos.ts --apply)
+            (cd server && npx tsx src/scripts/seed-promo-codes.ts --apply)
             (cd server && npx tsx src/scripts/import-blog.ts)
 
             echo "==> МойСклад token probe (statuses only, no values)"

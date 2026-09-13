@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { calcOrderTotals, type DeliveryKind, type DeliveryOptionKey, type PickupPoint, type AddressSuggestion, deliveryKindOf } from '@simba/shared'
+import { calcOrderTotals, type DeliveryKind, type DeliveryOptionKey, type PickupPoint, type AddressSuggestion, type PromoRule, deliveryKindOf } from '@simba/shared'
 import { useCart } from '../context/CartContext'
 import { cartApi, authApi, ordersApi, deliveryApi, type CartItem, type DeliveryQuote } from '../lib/api'
 import { apiErrorMessage } from '../lib/api-error'
@@ -241,7 +241,19 @@ export default function CheckoutPage() {
 
   const selectedQuote = quotes.find(q => q.key === option)
   const deliveryCost = selectedQuote?.price ?? 0
-  const promoCode = sessionStorage.getItem('promoCode') ?? undefined
+
+  // Читаем промокод из sessionStorage
+  const readPromo = (): (PromoRule & { code: string }) | null => {
+    try {
+      const stored = sessionStorage.getItem('promo')
+      return stored ? JSON.parse(stored) : null
+    } catch {
+      return null
+    }
+  }
+
+  const promo = readPromo()
+  const promoCode = promo?.code
 
   // Валидация полей шага доставки
   const validateDeliveryStep = (): boolean => {
@@ -305,7 +317,7 @@ export default function CheckoutPage() {
 
   const totals = calcOrderTotals({
     items: cartItems.map(i => ({ price: i.productVariant.price, quantity: i.quantity })),
-    promoCode,
+    promo,
     bonusRequested: bonusSpend ? userBonusPoints : 0,
     availableBonus: userBonusPoints,
     deliveryCost,
@@ -324,7 +336,7 @@ export default function CheckoutPage() {
     setPlacingOrder(true)
     setOrderError(null)
     try {
-      const promoCode = sessionStorage.getItem('promoCode') ?? undefined
+      const promoData = readPromo()
       const cartRes = await cartApi.get()
 
       // Служба доставки берётся напрямую из котировки
@@ -335,7 +347,7 @@ export default function CheckoutPage() {
         deliveryMethod,
         comment: address.comment || undefined,
         bonusUsed: bonusUsedScoins,
-        promoCode,
+        promoCode: promoData?.code,
         deliveryCost,
         paymentMethod: payment,
       }
@@ -380,11 +392,18 @@ export default function CheckoutPage() {
       setOrderCreatedAt(res.data.createdAt)
       setOrderPlaced(true)
       await clearCart()
-      sessionStorage.removeItem('promoCode')
+      sessionStorage.removeItem('promo')
     } catch (err: unknown) {
-      const message = (err as { response?: { data?: { error?: string } } })?.response?.data?.error
+      const errCode = (err as { response?: { data?: { code?: string } } })?.response?.data?.code
+      const errMessage = (err as { response?: { data?: { error?: string } } })?.response?.data?.error
         ?? 'Не удалось оформить заказ. Попробуйте ещё раз.'
-      setOrderError(message)
+
+      // Если ошибка в промокоде — удалить его и показать ошибку сервера
+      if (errCode === 'PROMO_INVALID') {
+        sessionStorage.removeItem('promo')
+      }
+
+      setOrderError(errMessage)
     } finally {
       setPlacingOrder(false)
     }
@@ -1012,7 +1031,7 @@ export default function CheckoutPage() {
                   // Расчитаем максимально доступно в этом заказе
                   const totalsWithMaxBonus = calcOrderTotals({
                     items: cartItems.map(i => ({ price: i.productVariant.price, quantity: i.quantity })),
-                    promoCode,
+                    promo,
                     bonusRequested: userBonusPoints,
                     availableBonus: userBonusPoints,
                     deliveryCost,

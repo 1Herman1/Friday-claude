@@ -8,7 +8,7 @@ const createSchema = z.object({
   name: z.string().min(1),
   slug: slugSchema,
   description: z.string().optional(),
-  image: z.string().url().optional(),
+  image: z.string().max(500).optional(),
   parentId: z.string().uuid().optional(),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),

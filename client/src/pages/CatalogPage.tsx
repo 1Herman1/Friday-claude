@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { brandsApi, categoriesApi, type SortValue } from '../lib/api'
 import { useScrollDirection } from '../hooks/useScrollDirection'
+import { useCategoryTree, findNode } from '../hooks/useCategoryTree'
 import CatalogSearch from '../components/catalog/CatalogSearch'
 import CatalogTags, { CATALOG_TAGS, catalogTagLabel, tagFitsSpecies } from '../components/catalog/CatalogTags'
 import CatalogGrid from '../components/catalog/CatalogGrid'
@@ -113,19 +114,9 @@ function CatalogHeader({
   onSortChange: (value: string) => void
 }) {
   const [brandName, setBrandName] = useState('')
-  const [categoryName, setCategoryName] = useState('')
+  const tree = useCategoryTree()
 
-  useEffect(() => {
-    if (!category) {
-      setCategoryName('')
-      return
-    }
-    // Иначе в заголовке висел служебный слаг вроде «pharmacy».
-    categoriesApi
-      .tree()
-      .then((res) => setCategoryName(res.data.find((c) => c.slug === category)?.name || ''))
-      .catch(() => setCategoryName(''))
-  }, [category])
+  const categoryName = category ? findNode(tree, category)?.name : ''
 
   useEffect(() => {
     if (!brand) {

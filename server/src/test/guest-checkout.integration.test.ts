@@ -105,6 +105,9 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     expect(await prisma.cartItem.count({ where: { cartId: guest.cartId } })).toBe(0)
     const fresh = await prisma.productVariant.findUniqueOrThrow({ where: { id: guest.variant.id } })
     expect(fresh.stock).toBe(9)
+
+    // Заказ помечен как гостевой
+    expect(order.guestCheckout).toBe(true)
   })
 
   it('гость не может списать бонусы по чужому email: 400 и заказа нет', async () => {

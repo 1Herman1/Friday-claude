@@ -1,6 +1,23 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { productsApi, categoriesApi, brandsApi, type Category, type Brand } from '../../lib/api'
+import { productsApi, categoriesApi, brandsApi, type CategoryNode, type Brand } from '../../lib/api'
+
+interface FlatCategory {
+  id: string
+  name: string
+  depth: number
+}
+
+const flattenCategories = (categories: CategoryNode[], depth = 0): FlatCategory[] => {
+  let result: FlatCategory[] = []
+  for (const cat of categories) {
+    result.push({ id: cat.id, name: cat.name, depth })
+    if (cat.children?.length > 0) {
+      result = result.concat(flattenCategories(cat.children, depth + 1))
+    }
+  }
+  return result
+}
 
 interface VariantDraft {
   id?: string
@@ -20,7 +37,7 @@ export default function ProductFormPage() {
 
   const [loading, setLoading] = useState(isEdit)
   const [saving, setSaving] = useState(false)
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<FlatCategory[]>([])
   const [brands, setBrands] = useState<Brand[]>([])
 
   const [name, setName] = useState('')
@@ -42,10 +59,18 @@ export default function ProductFormPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [variants, setVariants] = useState<VariantDraft[]>([emptyVariant()])
   const [error, setError] = useState('')
+  const [showAboutTab, setShowAboutTab] = useState(true)
+  const [showSpecsTab, setShowSpecsTab] = useState(true)
+  const [showReviewsTab, setShowReviewsTab] = useState(true)
+  const [isActive, setIsActive] = useState(true)
+  const [hiddenManually, setHiddenManually] = useState(false)
+  const [togglingVisibility, setTogglingVisibility] = useState(false)
+  const [visibilityMessage, setVisibilityMessage] = useState('')
+  const [loadError, setLoadError] = useState('')
 
   useEffect(() => {
     Promise.all([categoriesApi.list(), brandsApi.list()])
-      .then(([c, b]) => { setCategories(c.data.items); setBrands(b.data) })
+      .then(([c, b]) => { setCategories(flattenCategories(c.data.items)); setBrands(b.data) })
   }, [])
 
   useEffect(() => {
@@ -68,6 +93,11 @@ export default function ProductFormPage() {
         setIngredients(p.ingredients ?? '')
         setSeoTitle(p.seoTitle ?? '')
         setSeoDescription(p.seoDescription ?? '')
+        setShowAboutTab(p.showAboutTab !== false)
+        setShowSpecsTab(p.showSpecsTab !== false)
+        setShowReviewsTab(p.showReviewsTab !== false)
+        setIsActive(p.isActive)
+        setHiddenManually(p.hiddenManually)
         setSelectedCategories(p.categories.map(c => c.categoryId))
         setVariants(p.variants.map(v => ({
           id: v.id,
@@ -78,7 +108,7 @@ export default function ProductFormPage() {
           sku: v.sku ?? '',
         })))
       })
-      .catch(() => {})
+      .catch(() => setLoadError('Не удалось загрузить товар'))
       .finally(() => setLoading(false))
   }, [id, isEdit])
 
@@ -103,6 +133,23 @@ export default function ProductFormPage() {
     setSelectedCategories(prev =>
       prev.includes(catId) ? prev.filter(c => c !== catId) : [...prev, catId]
     )
+
+  const handleToggleVisibility = async (newIsActive: boolean) => {
+    if (!isEdit) return
+    setTogglingVisibility(true)
+    setVisibilityMessage('')
+    try {
+      await productsApi.setVisibility(id!, newIsActive)
+      setIsActive(newIsActive)
+      setHiddenManually(!newIsActive)
+      setVisibilityMessage(newIsActive ? 'Товар опубликован' : 'Товар скрыт')
+      setTimeout(() => setVisibilityMessage(''), 2000)
+    } catch (e) {
+      setError('Ошибка при изменении видимости')
+    } finally {
+      setTogglingVisibility(false)
+    }
+  }
 
   const handleSave = async () => {
     setError('')
@@ -132,6 +179,9 @@ export default function ProductFormPage() {
         ingredients: ingredients || undefined,
         seoTitle: seoTitle || undefined,
         seoDescription: seoDescription || undefined,
+        showAboutTab,
+        showSpecsTab,
+        showReviewsTab,
         categoryIds: selectedCategories,
         variants: variants.map(v => ({
           weight: parseFloat(v.weight),
@@ -162,15 +212,49 @@ export default function ProductFormPage() {
     )
   }
 
+  if (loadError) {
+    return (
+      <div className="max-w-3xl">
+        <button onClick={() => navigate('/products')} className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm mb-5">
+          Назад к товарам
+        </button>
+        <div className="px-4 py-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl">
+          {loadError}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="max-w-3xl">
       <button onClick={() => navigate('/products')} className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm mb-5">
         Назад к товарам
       </button>
 
-      <h1 className="text-xl font-bold text-gray-900 mb-6">
-        {isEdit ? 'Редактировать товар' : 'Новый товар'}
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-xl font-bold text-gray-900">
+          {isEdit ? 'Редактировать товар' : 'Новый товар'}
+        </h1>
+        {isEdit && (
+          <div className="flex items-center gap-3">
+            <span className={`text-xs px-3 py-1.5 rounded-full font-medium ${
+              isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+            }`}>
+              {isActive ? 'Активен' : 'Скрыт'}
+            </span>
+            <button
+              onClick={() => handleToggleVisibility(!isActive)}
+              disabled={togglingVisibility}
+              className="px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors disabled:opacity-50"
+            >
+              {togglingVisibility ? '...' : isActive ? 'Скрыть с сайта' : 'Показать на сайте'}
+            </button>
+            {visibilityMessage && (
+              <span className="text-xs text-green-600 font-medium">{visibilityMessage}</span>
+            )}
+          </div>
+        )}
+      </div>
 
       {error && (
         <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl">
@@ -194,11 +278,6 @@ export default function ProductFormPage() {
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-mono focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Описание</label>
-              <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 resize-none" />
-            </div>
-            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Бренд</label>
               <select value={brandId} onChange={e => setBrandId(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400">
@@ -211,6 +290,63 @@ export default function ProductFormPage() {
               <textarea value={images} onChange={e => setImages(e.target.value)} rows={2} placeholder="https://..."
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-mono focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 resize-none" />
             </div>
+          </div>
+        </div>
+
+        {/* About tab */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <h2 className="font-semibold text-gray-900 mb-1">Вкладка „О товаре"</h2>
+          <p className="text-xs text-gray-500 mb-4">Показывается на странице товара во вкладке „О товаре": описание, белки/жиры/клетчатка/зола и состав</p>
+          <div className="space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Описание</label>
+              <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 resize-none" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                { label: 'Белок %', value: protein, set: setProtein },
+                { label: 'Жир %', value: fat, set: setFat },
+                { label: 'Клетчатка %', value: fiber, set: setFiber },
+                { label: 'Зола %', value: ash, set: setAsh },
+              ].map(f => (
+                <div key={f.label}>
+                  <label className="block text-xs text-gray-500 mb-1">{f.label}</label>
+                  <input type="number" step="0.1" value={f.value} onChange={e => f.set(e.target.value)}
+                    className="w-full px-2 py-1.5 rounded border border-gray-200 text-sm focus:outline-none focus:border-blue-400" />
+                </div>
+              ))}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Состав</label>
+              <textarea value={ingredients} onChange={e => setIngredients(e.target.value)} rows={2}
+                placeholder="Курица, рис, морковь..."
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400 resize-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* Specs tab */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <h2 className="font-semibold text-gray-900 mb-1">Вкладка „Характеристики"</h2>
+          <p className="text-xs text-gray-500 mb-4">Вкладка „Характеристики" показывает бренд и те же четыре показателя; отдельных полей пока нет</p>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showAboutTab} onChange={e => setShowAboutTab(e.target.checked)}
+                className="w-4 h-4 rounded accent-blue-600" />
+              <span className="text-sm text-gray-700">Показывать вкладку „О товаре"</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showSpecsTab} onChange={e => setShowSpecsTab(e.target.checked)}
+                className="w-4 h-4 rounded accent-blue-600" />
+              <span className="text-sm text-gray-700">Показывать вкладку „Характеристики"</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showReviewsTab} onChange={e => setShowReviewsTab(e.target.checked)}
+                className="w-4 h-4 rounded accent-blue-600" />
+              <span className="text-sm text-gray-700">Показывать вкладку „Отзывы"</span>
+            </label>
+            <p className="text-xs text-gray-500 mt-2">Отзывы общие для всех товаров, управляются в разделе „Отзывы"</p>
           </div>
         </div>
 
@@ -261,30 +397,6 @@ export default function ProductFormPage() {
           </div>
         </div>
 
-        {/* Nutrition */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-900 mb-4">Состав и питательность</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
-            {[
-              { label: 'Белок %', value: protein, set: setProtein },
-              { label: 'Жир %', value: fat, set: setFat },
-              { label: 'Клетчатка %', value: fiber, set: setFiber },
-              { label: 'Зола %', value: ash, set: setAsh },
-            ].map(f => (
-              <div key={f.label}>
-                <label className="block text-xs text-gray-500 mb-1">{f.label}</label>
-                <input type="number" step="0.1" value={f.value} onChange={e => f.set(e.target.value)}
-                  className="w-full px-2 py-1.5 rounded border border-gray-200 text-sm focus:outline-none focus:border-blue-400" />
-              </div>
-            ))}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Состав</label>
-            <textarea value={ingredients} onChange={e => setIngredients(e.target.value)} rows={2}
-              placeholder="Курица, рис, морковь..."
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400 resize-none" />
-          </div>
-        </div>
 
         {/* Tags */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
@@ -320,7 +432,7 @@ export default function ProductFormPage() {
                       : 'border-gray-200 text-gray-600 hover:border-gray-300'
                   }`}
                 >
-                  {cat.name}
+                  {'— '.repeat(cat.depth)}{cat.name}
                 </button>
               ))}
             </div>

@@ -22,6 +22,27 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const bannersAdminRoute: FastifyPluginAsync = async (app) => {
   const guard = { preHandler: [app.authenticate, checkRole(['super_admin', 'products_manager'])] }
 
+  // Helper: проверяет конфликт при добавлении/редактировании баннера О нас
+  const aboutConflict = async (
+    prisma: typeof app.prisma,
+    id: string | null,
+    next: { page?: string; position?: string; isActive?: boolean },
+  ): Promise<boolean> => {
+    if (next.page !== 'about' || next.position !== 'main_slider' || next.isActive !== true) {
+      return false
+    }
+
+    const count = await prisma.banner.count({
+      where: {
+        page: 'about',
+        position: 'main_slider',
+        isActive: true,
+        ...(id ? { id: { not: id } } : {}),
+      },
+    })
+    return count > 0
+  }
+
   // Загрузка изображения баннера
   // Сообщения по-русски: их читает администратор магазина в админке, а не
   // разработчик в журнале. Причину «хранилище не настроено» отдаём отдельно —
@@ -61,9 +82,33 @@ const bannersAdminRoute: FastifyPluginAsync = async (app) => {
     return reply.send(banners)
   })
 
+  app.put('/reorder', guard, async (request, reply) => {
+    const parsed = z.object({ ids: z.array(z.string().uuid()).min(1) }).safeParse(request.body)
+    if (!parsed.success) return reply.status(400).send({ error: parsed.error.errors[0].message })
+
+    try {
+      const { ids } = parsed.data
+      await app.prisma.$transaction(
+        ids.map((id, i) => app.prisma.banner.update({ where: { id }, data: { sortOrder: i + 1 } })),
+      )
+      return reply.send({ ok: true })
+    } catch (err: unknown) {
+      if ((err as { code?: string })?.code === 'P2025') {
+        return reply.status(404).send({ error: 'Баннер не найден' })
+      }
+      throw err
+    }
+  })
+
   app.post('/', guard, async (request, reply) => {
     const parsed = schema.safeParse(request.body)
     if (!parsed.success) return reply.status(400).send({ error: parsed.error.errors[0].message })
+
+    const conflict = await aboutConflict(app.prisma, null, parsed.data)
+    if (conflict) {
+      return reply.status(409).send({ error: 'Баннер «О нас» может быть только один. Сначала отключите или удалите текущий.' })
+    }
+
     const banner = await app.prisma.banner.create({ data: parsed.data })
     return reply.status(201).send(banner)
   })
@@ -72,6 +117,19 @@ const bannersAdminRoute: FastifyPluginAsync = async (app) => {
     const parsed = schema.partial().safeParse(request.body)
     if (!parsed.success) return reply.status(400).send({ error: parsed.error.errors[0].message })
     const { id } = request.params
+
+    // Merge с существующей записью для проверки конфликта
+    const existing = await app.prisma.banner.findUnique({ where: { id }, select: { page: true, position: true, isActive: true } })
+    if (!existing) {
+      return reply.status(404).send({ error: 'Баннер не найден' })
+    }
+
+    const next = { page: parsed.data.page ?? existing.page, position: parsed.data.position ?? existing.position, isActive: parsed.data.isActive ?? existing.isActive }
+    const conflict = await aboutConflict(app.prisma, id, next)
+    if (conflict) {
+      return reply.status(409).send({ error: 'Баннер «О нас» может быть только один. Сначала отключите или удалите текущий.' })
+    }
+
     try {
       const banner = await app.prisma.banner.update({ where: { id }, data: parsed.data })
       return reply.send(banner)
@@ -85,8 +143,15 @@ const bannersAdminRoute: FastifyPluginAsync = async (app) => {
 
   app.delete<{ Params: { id: string } }>('/:id', guard, async (request, reply) => {
     const { id } = request.params
-    await app.prisma.banner.delete({ where: { id } })
-    return reply.send({ success: true })
+    try {
+      await app.prisma.banner.delete({ where: { id } })
+      return reply.send({ success: true })
+    } catch (err: unknown) {
+      if ((err as { code?: string })?.code === 'P2025') {
+        return reply.status(404).send({ error: 'Баннер не найден' })
+      }
+      throw err
+    }
   })
 }
 

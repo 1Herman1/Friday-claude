@@ -28,6 +28,29 @@ export interface ProductFilters {
 /** Ветеринарные линейки, представленные в каталоге. */
 const MEDICAL_LINES = ['Vet Life', 'VetSolution', 'Prescription Diet']
 
+/** Получить все id категории и её потомков (BFS). Возвращает null если категория не найдена. */
+async function categoryIdsWithDescendants(prisma: PrismaClient, slug: string): Promise<string[] | null> {
+  const root = await prisma.category.findUnique({
+    where: { slug },
+    select: { id: true },
+  })
+  if (!root) return null
+
+  const ids = [root.id]
+  let frontier = [root.id]
+
+  while (frontier.length > 0) {
+    const children = await prisma.category.findMany({
+      where: { parentId: { in: frontier }, isActive: true },
+      select: { id: true },
+    })
+    frontier = children.map((c) => c.id)
+    ids.push(...frontier)
+  }
+
+  return ids
+}
+
 /** Поля карточки в выдаче каталога. Общие для обычной ветки и сортировки по цене —
     иначе две ветки незаметно разъедутся по форме ответа. */
 const productListSelect = {
@@ -67,10 +90,13 @@ export async function getProducts(prisma: PrismaClient, filters: ProductFilters)
   }
 
   if (filters.categorySlug) {
+    const categoryIds = await categoryIdsWithDescendants(prisma, filters.categorySlug)
+    if (categoryIds === null) {
+      // Категория не найдена — вернуть пустой результат, как раньше
+      return { items: [], total: 0, page, totalPages: 0 }
+    }
     where.categories = {
-      some: {
-        category: { slug: filters.categorySlug, isActive: true },
-      },
+      some: { categoryId: { in: categoryIds } },
     }
   }
 

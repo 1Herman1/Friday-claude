@@ -1,41 +1,72 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { productsApi, type Product } from '../../lib/api'
+import { productsApi, type AdminProductRow } from '../../lib/api'
 import { formatPrice } from '../../lib/format'
 
+const STATUSES = [
+  { value: 'all', label: 'Все' },
+  { value: 'active', label: 'Активные' },
+  { value: 'hidden', label: 'Скрытые' },
+]
+
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<AdminProductRow[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
+  const [status, setStatus] = useState('all')
   const [loading, setLoading] = useState(true)
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [togglingId, setTogglingId] = useState<string | null>(null)
+  const [error, setError] = useState('')
 
-  const load = (p = page, s = search) => {
+  const load = (p = page, s = search, st = status) => {
     setLoading(true)
-    const params: Record<string, unknown> = { page: p, limit: 20 }
+    const params: Record<string, unknown> = { page: p, limit: 20, status: st }
     if (s) params.search = s
-    productsApi.list(params)
+    productsApi.adminList(params)
       .then(r => { setProducts(r.data.items); setTotal(r.data.total) })
       .finally(() => setLoading(false))
   }
 
   useEffect(() => {
-    const t = setTimeout(() => load(1, search), 300)
-    setPage(1)
+    const t = setTimeout(() => load(page, search, status), 300)
     return () => clearTimeout(t)
-  }, [search])
+  }, [page, search, status])
 
-  useEffect(() => { load(page, search) }, [page])
+  const handleSearchChange = (value: string) => {
+    setSearch(value)
+    setPage(1)
+  }
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Удалить "${name}"?`)) return
-    setDeletingId(id)
+  const handleStatusChange = (value: string) => {
+    setStatus(value)
+    setPage(1)
+  }
+
+  const toggleActive = async (product: AdminProductRow) => {
+    setTogglingId(product.id)
+    setError('')
+    try {
+      await productsApi.setVisibility(product.id, !product.isActive)
+      setProducts(prev => prev.map(p =>
+        p.id === product.id ? { ...p, isActive: !p.isActive, hiddenManually: p.isActive } : p
+      ))
+    } catch (e: any) {
+      setError(e?.response?.data?.error ?? 'Ошибка при изменении статуса')
+    } finally { setTogglingId(null) }
+  }
+
+  const handleHide = async (id: string, name: string) => {
+    if (!confirm(`Скрыть "${name}" с сайта? Синхронизация его не вернёт, показать можно кнопкой статуса.`)) return
+    setTogglingId(id)
+    setError('')
     try {
       await productsApi.delete(id)
       setProducts(prev => prev.filter(p => p.id !== id))
       setTotal(t => t - 1)
-    } finally { setDeletingId(null) }
+    } catch (e: any) {
+      setError(e?.response?.data?.error ?? 'Ошибка при удалении товара')
+    } finally { setTogglingId(null) }
   }
 
   const totalPages = Math.ceil(total / 20)
@@ -54,11 +85,34 @@ export default function ProductsPage() {
         </div>
       </div>
 
+      {error && (
+        <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl">
+          {error}
+        </div>
+      )}
+
+      {/* Status filter */}
+      <div className="flex gap-2 mb-4 flex-wrap">
+        {STATUSES.map(s => (
+          <button
+            key={s.value}
+            onClick={() => handleStatusChange(s.value)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              status === s.value
+                ? 'bg-blue-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
       <div className="mb-4">
         <input
           type="text"
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={e => handleSearchChange(e.target.value)}
           placeholder="Поиск по названию..."
           className="w-full max-w-sm px-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
         />
@@ -97,11 +151,19 @@ export default function ProductsPage() {
                         : '—'}
                     </td>
                     <td className="px-5 py-3">
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                        p.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
-                      }`}>
-                        {p.isActive ? 'Активен' : 'Скрыт'}
-                      </span>
+                      <div className="flex flex-col gap-1">
+                        <button
+                          onClick={() => toggleActive(p)}
+                          disabled={togglingId === p.id}
+                          className={`text-xs px-2 py-0.5 rounded-full font-medium cursor-pointer disabled:opacity-40 transition-colors ${
+                            p.isActive ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                          }`}>
+                          {togglingId === p.id ? '...' : p.isActive ? 'Активен' : 'Скрыт'}
+                        </button>
+                        {p.hiddenManually && (
+                          <p className="text-xs text-gray-400">скрыт вручную</p>
+                        )}
+                      </div>
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
@@ -109,11 +171,11 @@ export default function ProductsPage() {
                           Редактировать
                         </Link>
                         <button
-                          onClick={() => handleDelete(p.id, p.name)}
-                          disabled={deletingId === p.id}
+                          onClick={() => handleHide(p.id, p.name)}
+                          disabled={togglingId === p.id}
                           className="text-red-500 hover:underline text-xs font-medium disabled:opacity-40"
                         >
-                          {deletingId === p.id ? '...' : 'Удалить'}
+                          {togglingId === p.id ? '...' : 'Скрыть'}
                         </button>
                       </div>
                     </td>

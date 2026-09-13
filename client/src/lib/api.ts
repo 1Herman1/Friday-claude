@@ -265,10 +265,6 @@ export const productsApi = {
 
   bySlug: (slug: string) =>
     api.get<Product>(`/api/products/${slug}`),
-
-  /** @deprecated роута нет, удалить в Wave 2 */
-  related: (slug: string) =>
-    api.get<Product[]>(`/api/products/${slug}/related`),
 }
 
 // ─── Категории ───────────────────────────────────────────────────────────────

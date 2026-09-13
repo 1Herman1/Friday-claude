@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { siteUrl } from '../lib/media'
 
 const nav = [
   { label: 'Дашборд', path: '/', icon: (
@@ -180,7 +181,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </h1>
 
           <a
-            href={import.meta.env.VITE_CLIENT_URL || 'http://localhost:5173'}
+            href={siteUrl()}
             target="_blank"
             rel="noreferrer"
             className="hidden lg:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors"

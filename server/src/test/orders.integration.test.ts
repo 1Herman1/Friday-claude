@@ -3,7 +3,7 @@ import type { FastifyInstance } from 'fastify'
 import { calcOrderTotals } from '@simba/shared'
 import { InsufficientBonusError } from '../services/bonus.service.js'
 import { hasTestDb, skipReason, getTestPrisma, resetDb, closeTestPrisma } from './setup'
-import { createUser, createProductWithVariant, createCart, authHeader, seedDeliveryOptions } from './factories'
+import { createUser, createProductWithVariant, createCart, authHeader, seedDeliveryOptions, createPromoCode } from './factories'
 
 describe.skipIf(!hasTestDb)('Оформление заказа (интеграционные)', () => {
   let app: FastifyInstance
@@ -175,10 +175,11 @@ describe.skipIf(!hasTestDb)('Оформление заказа (интеграц
     const { variant } = await createProductWithVariant({ price, stock: 10 })
     const user = await createUser({ bonusPoints: 500 })
     const cart = await createCart(user.id, [{ variantId: variant.id, quantity }])
+    const promo = await createPromoCode({ code: 'SIMBA10', type: 'percent', value: 10 })
 
     const expected = calcOrderTotals({
       items: [{ price, quantity }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       bonusRequested: 300,
       availableBonus: 500,
       deliveryCost: 0,
@@ -197,11 +198,72 @@ describe.skipIf(!hasTestDb)('Оформление заказа (интеграц
     expect(order.total).toBe(expected.total)
     expect(order.bonusUsed).toBe(expected.bonusUsed)
     expect(order.bonusEarned).toBe(expected.bonusEarned)
+    expect(order.discount).toBe(expected.promoDiscount)
+    expect(order.promoCode).toBe('SIMBA10')
 
     // Баланс = стартовые 500 минус списанное. Начисление сюда не входит:
     // bonusEarned попадёт на баланс только когда заказ отметят оплаченным.
     const freshUser = await prisma.user.findUniqueOrThrow({ where: { id: user.id } })
     expect(freshUser.bonusPoints).toBe(500 - expected.bonusUsed)
+
+    // Счётчик использований промокода должен быть инкрементирован
+    const freshPromo = await prisma.promoCode.findUniqueOrThrow({ where: { id: promo.id } })
+    expect(freshPromo.usedCount).toBe(1)
+  })
+
+  it('неизвестный промокод вызывает ошибку 400 и заказ не создаётся', async () => {
+    const prisma = getTestPrisma()
+    const { variant } = await createProductWithVariant({ price: 100000, stock: 10 })
+    const user = await createUser({ bonusPoints: 0 })
+    const cart = await createCart(user.id, [{ variantId: variant.id, quantity: 1 }])
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/orders',
+      headers: authHeader(app, user.id),
+      payload: pickupOrder(cart.id, { promoCode: 'NONEXISTENT' }),
+    })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.json().code).toBe('PROMO_INVALID')
+    expect(res.json().error).toMatch(/Промокод не найден/i)
+    expect(await prisma.order.count()).toBe(0)
+  })
+
+  it('превышение лимита использований промокода вызывает ошибку', async () => {
+    const prisma = getTestPrisma()
+    const { variant } = await createProductWithVariant({ price: 100000, stock: 100 })
+    const user1 = await createUser({ bonusPoints: 0 })
+    const user2 = await createUser({ bonusPoints: 0 })
+    const promo = await createPromoCode({ code: 'LIMITED', type: 'percent', value: 10, maxUses: 1 })
+
+    const cart1 = await createCart(user1.id, [{ variantId: variant.id, quantity: 1 }])
+    const res1 = await app.inject({
+      method: 'POST',
+      url: '/api/orders',
+      headers: authHeader(app, user1.id),
+      payload: pickupOrder(cart1.id, { promoCode: 'LIMITED' }),
+    })
+    expect(res1.statusCode).toBe(201)
+    expect(await prisma.promoCode.findUniqueOrThrow({ where: { id: promo.id } })).toMatchObject({
+      usedCount: 1,
+    })
+
+    const cart2 = await createCart(user2.id, [{ variantId: variant.id, quantity: 1 }])
+    const res2 = await app.inject({
+      method: 'POST',
+      url: '/api/orders',
+      headers: authHeader(app, user2.id),
+      payload: pickupOrder(cart2.id, { promoCode: 'LIMITED' }),
+    })
+    expect(res2.statusCode).toBe(400)
+    expect(res2.json().code).toBe('PROMO_INVALID')
+    expect(res2.json().error).toMatch(/Лимит использований/i)
+
+    // usedCount должен остаться 1 (вторая попытка не инкрементировала)
+    expect(await prisma.promoCode.findUniqueOrThrow({ where: { id: promo.id } })).toMatchObject({
+      usedCount: 1,
+    })
   })
 
   it('корзина очищается после успеха и остаётся нетронутой при недостатке товара', async () => {

@@ -711,7 +711,7 @@ export async function getQuizSession(prisma: Prisma.TransactionClient, sessionId
 
   const productIds = session.resultProductIds
   const products = await prisma.product.findMany({
-    where: { id: { in: productIds } },
+    where: { id: { in: productIds }, isActive: true },
     select: {
       id: true,
       name: true,

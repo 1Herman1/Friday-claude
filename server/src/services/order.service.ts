@@ -4,6 +4,7 @@ import { getQuoteForMethod } from './delivery/delivery.service.js'
 import { computeDeliveryExpense } from './delivery/delivery-expense.js'
 import type { DeliveryAddress as DeliveryServiceAddress, DeliveryMethod } from './delivery/types.js'
 import { applyBonusChange, settleOnCancelComponents } from './bonus.service.js'
+import { PromoCodeError, checkPromoCode, consumePromoCode } from './promo.service.js'
 
 
 /** Prisma принимает в Json только объект с индексной сигнатурой, интерфейс
@@ -46,6 +47,7 @@ export type CreateOrderData = {
   expectedDeliveryCost?: number
   paymentMethod?: 'card' | 'cash_on_delivery'
   contact?: ContactInfo
+  guestCheckout?: boolean
 }
 
 export type CreateOrderActor = {
@@ -292,13 +294,29 @@ export async function createOrder(
       select: { bonusPoints: true },
     })
 
-    const { subtotal, bonusUsed, total, bonusEarned } = calcOrderTotals({
+    // Вычисляем subtotal перед проверкой промокода
+    const subtotalRaw = cart.items.reduce((sum, item) => {
+      const price = item.isSubscription ? Math.round(item.productVariant.price * 0.93) : item.productVariant.price
+      return sum + price * item.quantity
+    }, 0)
+
+    // Проверяем и применяем промокод, если задан
+    let promo = null
+    if (data.promoCode) {
+      const check = await checkPromoCode(tx, data.promoCode, subtotalRaw, actor.customerUserId)
+      if (!check.ok) {
+        throw new PromoCodeError(check.reason)
+      }
+      promo = check.promo
+    }
+
+    const { subtotal, bonusUsed, total, bonusEarned, promoDiscount } = calcOrderTotals({
       items: cart.items.map((item) => ({
         price: item.productVariant.price,
         quantity: item.quantity,
         isSubscription: item.isSubscription,
       })),
-      promoCode: data.promoCode,
+      promo: promo ? { type: promo.type, value: promo.value, minSubtotal: promo.minSubtotal } : null,
       bonusRequested: data.bonusUsed,
       availableBonus: currentUser?.bonusPoints ?? 0,
       deliveryCost: serverDeliveryCost,
@@ -328,11 +346,15 @@ export async function createOrder(
         total,
         bonusUsed,
         bonusEarned,
+        discount: promoDiscount,
+        promoCode: promo?.code ?? null,
+        promoCodeId: promo?.id ?? null,
         deliveryCost: serverDeliveryCost,
         paymentMethod: data.paymentMethod ?? 'card',
         contactName: data.contact?.name,
         contactEmail: data.contact?.email,
         contactPhone: data.contact?.phone,
+        guestCheckout: data.guestCheckout ?? false,
       },
     })
 
@@ -459,6 +481,13 @@ export async function createOrder(
 
     if (cleared.count === 0) {
       throw new DuplicateOrderError()
+    }
+
+    // Инкрементируем счётчик использований промокода
+    if (promo) {
+      if (!(await consumePromoCode(tx, promo.id))) {
+        throw new PromoCodeError('Лимит использований промокода исчерпан')
+      }
     }
 
     return orderWithItems

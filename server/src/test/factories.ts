@@ -118,6 +118,33 @@ export function authHeader(
   return { authorization: `Bearer ${token}` }
 }
 
+export async function createPromoCode(opts: {
+  code?: string
+  type?: 'percent' | 'fixed'
+  value?: number
+  minSubtotal?: number | null
+  startsAt?: Date | null
+  endsAt?: Date | null
+  maxUses?: number | null
+  perUserLimit?: number | null
+  isActive?: boolean
+} = {}) {
+  const prisma = getTestPrisma()
+  return prisma.promoCode.create({
+    data: {
+      code: opts.code ?? 'TEST' + Math.random().toString(36).substring(7).toUpperCase(),
+      type: opts.type ?? 'percent',
+      value: opts.value ?? 10,
+      minSubtotal: opts.minSubtotal ?? null,
+      startsAt: opts.startsAt ?? null,
+      endsAt: opts.endsAt ?? null,
+      maxUses: opts.maxUses ?? null,
+      perUserLimit: opts.perUserLimit ?? null,
+      isActive: opts.isActive ?? true,
+    },
+  })
+}
+
 export async function seedDeliveryOptions() {
   const prisma = getTestPrisma()
   // Вставить или обновить стандартные опции доставки

@@ -8,6 +8,7 @@ import { HeartIcon, HeartSolidIcon } from '../components/icons'
 import { isSellable } from '@simba/shared'
 import { apiErrorMessage } from '../lib/api-error'
 import { useDeliveryOptions, etaLabel } from '../hooks/useDeliveryOptions'
+import ProductReviews from '../components/product/ProductReviews'
 
 export default function ProductPage() {
   const deliveryOptions = useDeliveryOptions()
@@ -32,15 +33,28 @@ export default function ProductPage() {
     productsApi.bySlug(slug)
       .then(res => {
         setProduct(res.data)
+        setRelated(res.data.related ?? [])
         const firstSellable = res.data.variants.find(v => isSellable(v))
         setSelectedVariant(firstSellable ?? res.data.variants[0] ?? null)
       })
       .catch(() => setProduct(null))
       .finally(() => setLoading(false))
-    productsApi.related(slug)
-      .then(res => setRelated(res.data))
-      .catch(() => setRelated([]))
   }, [slug])
+
+  const availableTabs = useMemo(() => {
+    if (!product) return []
+    return [
+      { key: 'about' as const, label: 'О товаре', enabled: product.showAboutTab !== false },
+      { key: 'specs' as const, label: 'Характеристики', enabled: product.showSpecsTab !== false },
+      { key: 'reviews' as const, label: 'Отзывы', enabled: product.showReviewsTab !== false },
+    ].filter(t => t.enabled)
+  }, [product?.showAboutTab, product?.showSpecsTab, product?.showReviewsTab])
+
+  useEffect(() => {
+    if (availableTabs.length > 0 && !availableTabs.some(t => t.key === activeTab)) {
+      setActiveTab(availableTabs[0].key)
+    }
+  }, [availableTabs, activeTab])
 
   const handleAddToCart = async () => {
     if (!selectedVariant) return
@@ -348,81 +362,74 @@ export default function ProductPage() {
         </div>
 
         {/* Табы */}
-        <div className="bg-white rounded-2xl overflow-hidden mb-8">
-          <div className="flex border-b border-line">
-            {[
-              { key: 'about', label: 'О товаре' },
-              { key: 'specs', label: 'Характеристики' },
-              { key: 'reviews', label: 'Отзывы' },
-            ].map(tab => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key as 'about' | 'specs' | 'reviews')}
-                className={`btn-press px-6 py-4 text-sm font-medium border-b-2 ${
-                  activeTab === tab.key
-                    ? 'border-ink text-navy-900'
-                    : 'border-transparent text-navy-500 hover:text-navy-700'
-                }`}>
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="p-6">
-            {activeTab === 'about' && (
-              <div className="prose max-w-none">
-                <div className="text-navy-700 leading-relaxed whitespace-pre-line text-sm">{product.description}</div>
-                {(product.protein || product.fat) && (
-                  <div className="mt-6 grid grid-cols-4 gap-4">
-                    {[
-                      { label: 'Белки', value: product.protein, unit: '%' },
-                      { label: 'Жиры', value: product.fat, unit: '%' },
-                      { label: 'Клетчатка', value: product.fiber, unit: '%' },
-                      { label: 'Зола', value: product.ash, unit: '%' },
-                    ].map(n => n.value && (
-                      <div key={n.label} className="bg-blue-50 rounded-xl p-3 text-center">
-                        <p className="text-2xl font-black text-blue-300">{n.value}</p>
-                        <p className="text-xs text-navy-400">{n.label} {n.unit}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {product.ingredients && (
-                  <div className="mt-4">
-                    <p className="font-semibold text-navy-900 mb-1 text-sm">Состав:</p>
-                    <p className="text-navy-500 text-sm">{product.ingredients}</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'specs' && (
-              <div className="divide-y divide-line">
-                {[
-                  product.brand && { label: 'Бренд', value: product.brand.name },
-                  { label: 'Белки', value: product.protein ? `${product.protein}%` : null },
-                  { label: 'Жиры', value: product.fat ? `${product.fat}%` : null },
-                  { label: 'Клетчатка', value: product.fiber ? `${product.fiber}%` : null },
-                  { label: 'Зола', value: product.ash ? `${product.ash}%` : null },
-                ].filter((s): s is { label: string; value: string } => !!s && !!s.value).map(spec => (
-                  <div key={spec.label} className="flex py-3">
-                    <span className="text-navy-400 text-sm w-48 flex-shrink-0">{spec.label}</span>
-                    <span className="text-navy-900 text-sm font-medium">{spec.value}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {activeTab === 'reviews' && (
-              <div className="text-center py-10">
-                <p className="text-navy-400 mb-4">Отзывы пока не добавлены</p>
-                <button className="btn-primary px-6 py-2.5">
-                  Написать первый отзыв
+        {availableTabs.length > 0 && (
+          <div className="bg-white rounded-2xl overflow-hidden mb-8">
+            <div className="flex border-b border-line">
+              {availableTabs.map(tab => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`btn-press px-6 py-4 text-sm font-medium border-b-2 ${
+                    activeTab === tab.key
+                      ? 'border-ink text-navy-900'
+                      : 'border-transparent text-navy-500 hover:text-navy-700'
+                  }`}>
+                  {tab.label}
                 </button>
-              </div>
-            )}
+              ))}
+            </div>
+
+            <div className="p-6">
+              {activeTab === 'about' && (
+                <div className="prose max-w-none">
+                  <div className="text-navy-700 leading-relaxed whitespace-pre-line text-sm">{product.description}</div>
+                  {(product.protein || product.fat) && (
+                    <div className="mt-6 grid grid-cols-4 gap-4">
+                      {[
+                        { label: 'Белки', value: product.protein, unit: '%' },
+                        { label: 'Жиры', value: product.fat, unit: '%' },
+                        { label: 'Клетчатка', value: product.fiber, unit: '%' },
+                        { label: 'Зола', value: product.ash, unit: '%' },
+                      ].map(n => n.value && (
+                        <div key={n.label} className="bg-blue-50 rounded-xl p-3 text-center">
+                          <p className="text-2xl font-black text-blue-300">{n.value}</p>
+                          <p className="text-xs text-navy-400">{n.label} {n.unit}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {product.ingredients && (
+                    <div className="mt-4">
+                      <p className="font-semibold text-navy-900 mb-1 text-sm">Состав:</p>
+                      <p className="text-navy-500 text-sm">{product.ingredients}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'specs' && (
+                <div className="divide-y divide-line">
+                  {[
+                    product.brand && { label: 'Бренд', value: product.brand.name },
+                    { label: 'Белки', value: product.protein ? `${product.protein}%` : null },
+                    { label: 'Жиры', value: product.fat ? `${product.fat}%` : null },
+                    { label: 'Клетчатка', value: product.fiber ? `${product.fiber}%` : null },
+                    { label: 'Зола', value: product.ash ? `${product.ash}%` : null },
+                  ].filter((s): s is { label: string; value: string } => !!s && !!s.value).map(spec => (
+                    <div key={spec.label} className="flex py-3">
+                      <span className="text-navy-400 text-sm w-48 flex-shrink-0">{spec.label}</span>
+                      <span className="text-navy-900 text-sm font-medium">{spec.value}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {activeTab === 'reviews' && (
+                <ProductReviews productId={product.id} />
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {related.length > 0 && (
           <div className="mb-8">

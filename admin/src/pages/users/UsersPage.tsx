@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { usersApi, type User } from '../../lib/api'
 import { LOYALTY_TIERS } from '@simba/shared'
 
@@ -25,6 +26,21 @@ const ROLE_STYLE: Record<string, string> = {
 
 type TabType = 'registered' | 'guests' | 'all'
 type SortType = 'lastSeen' | 'created' | 'orders'
+type SegmentType = '' | 'hasOrders' | 'noOrders' | 'inactive30d' | 'bonus1000plus'
+
+const TAB_LABELS: Record<TabType, string> = {
+  registered: 'Пользователи',
+  guests: 'Гости с действиями',
+  all: 'Все',
+}
+
+const SEGMENT_LABELS: Record<SegmentType, string> = {
+  '': 'Все',
+  hasOrders: 'С заказами',
+  noOrders: 'Без заказов',
+  inactive30d: 'Неактивны 30 дней',
+  bonus1000plus: 'Бонусов ≥ 1000',
+}
 
 const SORT_LABELS: Record<SortType, string> = {
   lastSeen: 'По активности',
@@ -42,24 +58,47 @@ export default function UsersPage() {
   const [resetPasswordId, setResetPasswordId] = useState<string | null>(null)
   const [resetPasswordValue, setResetPasswordValue] = useState('')
   const [resetMessage, setResetMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [error, setError] = useState('')
   const [tab, setTab] = useState<TabType>('all')
   const [sort, setSort] = useState<SortType>('lastSeen')
+  const [segment, setSegment] = useState<SegmentType>('')
 
-  const load = (p = page, s = search, t = tab, so = sort) => {
+  const load = (p = page, s = search, t = tab, so = sort, seg = segment) => {
     setLoading(true)
+    setError('')
     const params: Record<string, unknown> = { page: p, limit: 20, type: t, sort: so }
     if (s) params.search = s
+    if (seg) params.segment = seg
     usersApi.list(params)
       .then(r => { setUsers(r.data.items); setTotal(r.data.total) })
+      .catch(() => setError('Не удалось загрузить пользователей'))
       .finally(() => setLoading(false))
   }
 
   useEffect(() => {
-    const t = setTimeout(() => { setPage(1); load(1, search, tab, sort) }, 300)
+    const t = setTimeout(() => load(page, search, tab, sort, segment), 300)
     return () => clearTimeout(t)
-  }, [search, tab, sort])
+  }, [page, search, tab, sort, segment])
 
-  useEffect(() => { load(page, search, tab, sort) }, [page])
+  const handleTabChange = (t: TabType) => {
+    setTab(t)
+    setPage(1)
+  }
+
+  const handleSegmentChange = (s: SegmentType) => {
+    setSegment(s)
+    setPage(1)
+  }
+
+  const handleSortChange = (s: SortType) => {
+    setSort(s)
+    setPage(1)
+  }
+
+  const handleSearchChange = (s: string) => {
+    setSearch(s)
+    setPage(1)
+  }
 
   const handleRoleChange = async (userId: string, role: string) => {
     setUpdatingId(userId)
@@ -95,13 +134,12 @@ export default function UsersPage() {
   }
 
   const totalPages = Math.ceil(total / 20)
-  const tabLabel = { registered: 'Пользователи', guests: 'Гости с действиями', all: 'Все' }[tab]
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-gray-900">
-          {tabLabel} <span className="text-gray-400 font-normal text-base">({total})</span>
+          {TAB_LABELS[tab]} <span className="text-gray-400 font-normal text-base">({total})</span>
         </h1>
       </div>
 
@@ -110,32 +148,53 @@ export default function UsersPage() {
         {(['registered', 'guests', 'all'] as TabType[]).map(t => (
           <button
             key={t}
-            onClick={() => { setTab(t); setPage(1) }}
+            onClick={() => handleTabChange(t)}
             className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
               tab === t
                 ? 'bg-blue-600 text-white'
                 : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
             }`}
           >
-            {tabLabel === { registered: 'Пользователи', guests: 'Гости с действиями', all: 'Все' }[t]
-              ? { registered: 'Пользователи', guests: 'Гости с действиями', all: 'Все' }[t]
-              : 'Tab'}
+            {TAB_LABELS[t]}
           </button>
         ))}
       </div>
+
+      {/* Segment filters */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {(['', 'hasOrders', 'noOrders', 'inactive30d', 'bonus1000plus'] as SegmentType[]).map(s => (
+          <button
+            key={s}
+            onClick={() => handleSegmentChange(s)}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              segment === s
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            {SEGMENT_LABELS[s]}
+          </button>
+        ))}
+      </div>
+
+      {error && (
+        <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl">
+          {error}
+        </div>
+      )}
 
       {/* Search and Sort */}
       <div className="flex gap-4 mb-4">
         <input
           type="text"
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={e => handleSearchChange(e.target.value)}
           placeholder="Поиск по имени, email, телефону..."
           className="flex-1 px-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
         />
         <select
           value={sort}
-          onChange={e => setSort(e.target.value as SortType)}
+          onChange={e => handleSortChange(e.target.value as SortType)}
           className="px-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
         >
           {(Object.entries(SORT_LABELS) as [SortType, string][]).map(([key, label]) => (
@@ -172,21 +231,36 @@ export default function UsersPage() {
                 {users.map(user => (
                   <tr key={user.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                     <td className="px-5 py-3">
-                      <p className="font-medium text-gray-900">{user.name || '—'}</p>
+                      <Link to={`/users/${user.id}`} className="font-medium text-blue-600 hover:text-blue-700">
+                        {user.name || '—'}
+                      </Link>
                       <p className="text-xs text-gray-400 font-mono">{user.id.slice(-8)}</p>
-                      {user.isGuest && (
-                        <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded inline-block mt-1">
-                          гость
-                        </span>
-                      )}
+                      <div className="flex gap-1 mt-1">
+                        {user.isGuest && (
+                          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                            гость
+                          </span>
+                        )}
+                        {!user.isActive && (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                            заблокирован
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-5 py-3 text-gray-600">
                       <p>{user.email || '—'}</p>
                       <p className="text-xs text-gray-400">{user.phone || ''}</p>
                     </td>
                     <td className="px-5 py-3 text-sm text-gray-600">
-                      {new Date(user.lastSeenAt).toLocaleDateString('ru-RU')}
-                      <p className="text-xs text-gray-400">{new Date(user.lastSeenAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</p>
+                      {user.lastSeenAt ? (
+                        <>
+                          {new Date(user.lastSeenAt).toLocaleDateString('ru-RU')}
+                          <p className="text-xs text-gray-400">{new Date(user.lastSeenAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</p>
+                        </>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="px-5 py-3 text-gray-700 font-medium">{user.cartItems}</td>
                     <td className="px-5 py-3 text-gray-700 font-medium">{user._count?.favorites ?? 0}</td>

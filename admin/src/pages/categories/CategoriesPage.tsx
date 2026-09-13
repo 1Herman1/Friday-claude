@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { categoriesApi, type CategoryNode, type Category } from '../../lib/api'
+import { categoriesApi, bannersApi, type CategoryNode, type Category } from '../../lib/api'
+import { ImageField } from '../../components/ImageField'
 
 function autoSlug(n: string) {
   return n.toLowerCase().replace(/[а-яё]/g, (c: string) => ({
@@ -205,12 +206,15 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<EditingNode | null>(null)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
 
   const loadCategories = () => {
     setLoading(true)
+    setError('')
     categoriesApi.list()
       .then(r => setCategories(r.data.items))
+      .catch(() => setError('Не удалось загрузить категории'))
       .finally(() => setLoading(false))
   }
 
@@ -233,6 +237,21 @@ export default function CategoriesPage() {
     setError('')
   }
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !editing) return
+
+    setUploading(true)
+    try {
+      const res = await bannersApi.uploadImage(file)
+      setField('image', res.data.url)
+    } catch (err: any) {
+      alert(err?.response?.data?.error || 'Ошибка загрузки картинки')
+    } finally {
+      setUploading(false)
+    }
+  }
+
   const handleSave = async () => {
     if (!editing?.data.name) {
       setError('Введите название')
@@ -248,6 +267,7 @@ export default function CategoriesPage() {
       name: editing.data.name,
       slug,
       description: editing.data.description,
+      image: editing.data.image,
       seoTitle: editing.data.seoTitle,
       seoDescription: editing.data.seoDescription,
       parentId: editing.data.parentId,
@@ -352,6 +372,39 @@ export default function CategoriesPage() {
     return result
   })()
 
+  const getValidParents = (nodeId: string): CategoryNode[] => {
+    const getAllAncestorIds = (id: string): Set<string> => {
+      const ancestors = new Set<string>()
+      const find = (nodeId: string) => {
+        const parent = allNodes.find(n => n.children.some(c => c.id === nodeId))
+        if (parent) {
+          ancestors.add(parent.id)
+          find(parent.id)
+        }
+      }
+      find(id)
+      return ancestors
+    }
+
+    const ancestorIds = getAllAncestorIds(nodeId)
+    const traverse = (nodes: CategoryNode[]): CategoryNode[] => {
+      return nodes.filter(n => n.id !== nodeId && !ancestorIds.has(n.id))
+        .map(n => ({
+          ...n,
+          children: traverse(n.children),
+        }))
+    }
+    return traverse(allNodes)
+  }
+
+  const flatParents = (editing?.id ? getValidParents(editing.id) : allNodes).flatMap(n => {
+    const flatten = (node: CategoryNode, depth: number): Array<CategoryNode & { depth: number }> => [
+      { ...node, depth },
+      ...node.children.flatMap(c => flatten(c, depth + 1))
+    ]
+    return flatten(n, 0)
+  })
+
   return (
     <div className="max-w-6xl">
       <div className="flex items-center justify-between mb-6">
@@ -420,6 +473,44 @@ export default function CategoriesPage() {
                   value={editing.data.seoDescription ?? ''}
                   onChange={e => setField('seoDescription', e.target.value)}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Родитель</label>
+                <select
+                  value={editing.data.parentId ?? ''}
+                  onChange={e => setField('parentId', e.target.value || undefined)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400"
+                >
+                  <option value="">Корень</option>
+                  {flatParents.map(p => (
+                    <option key={p.id} value={p.id}>
+                      {'  '.repeat(p.depth)}{p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Порядок</label>
+                <input
+                  type="number"
+                  value={editing.data.sortOrder ?? 0}
+                  onChange={e => setField('sortOrder', parseInt(e.target.value, 10))}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400"
+                />
+              </div>
+
+              <div>
+                <ImageField
+                  label="Картинка"
+                  hint="квадрат ≥ 600 px"
+                  placeholder="/categories/dogs.png"
+                  value={editing.data.image ?? ''}
+                  onChange={v => setField('image', v)}
+                  onFile={handleImageUpload}
+                  uploading={uploading}
                 />
               </div>
             </div>

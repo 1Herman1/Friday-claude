@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { brandsApi, type Brand } from '../../lib/api'
+import { imageSrc, siteUrl } from '../../lib/media'
+import { ImageField } from '../../components/ImageField'
 
 const empty = (): Partial<Brand> => ({ name: '', slug: '', logo: '', accentColor: '', logoFit: null, description: '' })
 
@@ -18,10 +20,16 @@ export default function BrandsPage() {
   const [editId, setEditId] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [uploading, setUploading] = useState(false)
+  const [brokenLogos, setBrokenLogos] = useState<Set<string>>(new Set())
 
   const load = () => {
     setLoading(true)
-    brandsApi.list().then(r => setBrands(r.data)).finally(() => setLoading(false))
+    setError('')
+    brandsApi.list()
+      .then(r => setBrands(r.data))
+      .catch(() => setError('Не удалось загрузить бренды'))
+      .finally(() => setLoading(false))
   }
 
   useEffect(() => { load() }, [])
@@ -35,11 +43,17 @@ export default function BrandsPage() {
     if (!form?.slug) { setError('Введите slug'); return }
     setSaving(true); setError('')
     try {
+      const data = {
+        ...form,
+        logo: form.logo || null,
+        accentColor: form.accentColor || null,
+        logoFit: form.logoFit || null,
+      }
       if (editId) {
-        const res = await brandsApi.update(editId, form)
+        const res = await brandsApi.update(editId, data)
         setBrands(prev => prev.map(b => b.id === editId ? res.data : b))
       } else {
-        const res = await brandsApi.create(form)
+        const res = await brandsApi.create(data)
         setBrands(prev => [...prev, res.data])
       }
       closeForm()
@@ -60,6 +74,29 @@ export default function BrandsPage() {
 
   const setField = (field: keyof Brand, value: unknown) =>
     setForm(prev => prev ? { ...prev, [field]: value } : prev)
+
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.currentTarget.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setError('')
+    try {
+      const res = await brandsApi.uploadImage(file)
+      setField('logo', res.data.url)
+    } catch (e) {
+      const fromBody = (e as { response?: { data?: { error?: unknown } } })?.response?.data?.error
+      setError(typeof fromBody === 'string' && fromBody ? fromBody : 'Не удалось загрузить картинку')
+    } finally {
+      setUploading(false)
+      e.currentTarget.value = ''
+    }
+  }
+
+  const logoPreview = (b: Brand) => {
+    if (b.logo) return imageSrc(b.logo)
+    return `${siteUrl()}/brands/${b.slug}.png`
+  }
 
   return (
     <div className="max-w-3xl">
@@ -88,24 +125,36 @@ export default function BrandsPage() {
               <input value={form.slug ?? ''} onChange={e => setField('slug', e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-mono focus:outline-none focus:border-blue-400" />
             </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Логотип (URL)</label>
-              <input value={form.logo ?? ''} onChange={e => setField('logo', e.target.value)} placeholder="https://..."
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400" />
+            <div className="md:col-span-2">
+              <ImageField
+                label="Логотип"
+                hint="PNG/SVG на прозрачном фоне, файл или путь"
+                placeholder="/brands/farmina.png"
+                value={form.logo ?? ''}
+                onChange={(v) => setField('logo', v)}
+                onFile={handleImageSelect}
+                uploading={uploading}
+              />
             </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Фирменный цвет (hex)</label>
-              <input value={form.accentColor ?? ''} onChange={e => setField('accentColor', e.target.value || null)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-mono focus:outline-none focus:border-blue-400" />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Вписывание логотипа</label>
-              <select value={form.logoFit ?? ''} onChange={e => setField('logoFit', e.target.value || null)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400">
-                <option value="">mid (по умолчанию)</option>
-                <option value="wide">wide</option>
-                <option value="mark">mark</option>
-              </select>
+            <div className="md:col-span-2 grid md:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Фирменный цвет</label>
+                <div className="flex gap-2">
+                  <input type="color" value={form.accentColor ?? '#C4D3E0'} onChange={e => setField('accentColor', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-line cursor-pointer" />
+                  <input value={form.accentColor ?? ''} onChange={e => setField('accentColor', e.target.value)} placeholder="#RRGGBB"
+                    className="flex-1 px-3 py-2 rounded-lg border border-line text-sm font-mono focus:outline-none focus:border-primary" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Вписывание логотипа</label>
+                <select value={form.logoFit ?? ''} onChange={e => setField('logoFit', e.target.value as 'wide' | 'mid' | 'mark' | null || null)}
+                  className="w-full px-3 py-2 rounded-lg border border-line text-sm focus:outline-none focus:border-primary">
+                  <option value="">Средний (mid, по умолчанию)</option>
+                  <option value="wide">Широкий (wide)</option>
+                  <option value="mark">Знак (mark)</option>
+                </select>
+              </div>
             </div>
             <div>
               <label className="block text-xs text-gray-500 mb-1">Описание</label>
@@ -131,37 +180,41 @@ export default function BrandsPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-gray-500 text-xs border-b border-gray-100 bg-gray-50">
+              <tr className="text-left text-navy-500 text-xs border-b border-line bg-blue-50">
                 <th className="px-5 py-3 font-medium">Бренд</th>
                 <th className="px-5 py-3 font-medium">Slug</th>
+                <th className="px-5 py-3 font-medium">Цвет</th>
                 <th className="px-5 py-3 font-medium">Товаров</th>
                 <th className="px-5 py-3 font-medium"></th>
               </tr>
             </thead>
             <tbody>
               {brands.map(b => (
-                <tr key={b.id} className="border-b border-gray-50 hover:bg-gray-50">
+                <tr key={b.id} className="border-b border-line hover:bg-blue-50">
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
-                      {b.logo
-                        ? <img src={b.logo} alt={b.name} className="w-8 h-8 object-contain rounded" />
-                        : <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">?</div>
+                      {brokenLogos.has(b.id)
+                        ? <div className="w-8 h-8 bg-blue-50 rounded flex items-center justify-center text-xs text-navy-500">?</div>
+                        : <img src={logoPreview(b)} alt={b.name} className="w-8 h-8 object-contain rounded" onError={() => setBrokenLogos(prev => new Set([...prev, b.id]))} />
                       }
-                      <span className="font-medium text-gray-900">{b.name}</span>
+                      <span className="font-medium text-navy-900">{b.name}</span>
                     </div>
                   </td>
-                  <td className="px-5 py-3 text-gray-500 font-mono text-xs">{b.slug}</td>
-                  <td className="px-5 py-3 text-gray-600">{b._count?.products ?? 0}</td>
+                  <td className="px-5 py-3 text-navy-500 font-mono text-xs">{b.slug}</td>
+                  <td className="px-5 py-3">
+                    <div className="w-4 h-4 rounded" style={{ background: b.accentColor ?? '#C4D3E0' }} />
+                  </td>
+                  <td className="px-5 py-3 text-navy-600">{b._count?.products ?? 0}</td>
                   <td className="px-5 py-3">
                     <div className="flex gap-3">
-                      <button onClick={() => openEdit(b)} className="text-blue-600 hover:underline text-xs font-medium">Изменить</button>
-                      <button onClick={() => handleDelete(b.id, b.name)} className="text-red-500 hover:underline text-xs">Удалить</button>
+                      <button onClick={() => openEdit(b)} className="text-primary-hover hover:underline text-xs font-medium">Изменить</button>
+                      <button onClick={() => handleDelete(b.id, b.name)} className="text-destructive hover:underline text-xs">Удалить</button>
                     </div>
                   </td>
                 </tr>
               ))}
               {brands.length === 0 && (
-                <tr><td colSpan={4} className="px-5 py-12 text-center text-gray-400">Брендов пока нет</td></tr>
+                <tr><td colSpan={5} className="px-5 py-12 text-center text-navy-500">Брендов пока нет</td></tr>
               )}
             </tbody>
           </table>

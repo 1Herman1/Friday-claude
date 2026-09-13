@@ -42,6 +42,10 @@ const verifyOtp: FastifyPluginAsync = async (app) => {
       where: { email: normalizedEmail },
     })
 
+    if (user && !user.isActive) {
+      return reply.status(403).send({ error: 'Аккаунт заблокирован. Напишите нам в Telegram.' })
+    }
+
     if (!user) {
       const current = otpAttempts.get(normalizedEmail)
       otpAttempts.set(normalizedEmail, {

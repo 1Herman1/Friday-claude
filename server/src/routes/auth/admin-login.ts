@@ -46,7 +46,7 @@ const adminLogin: FastifyPluginAsync = async (app) => {
     const isPasswordValid = await bcrypt.compare(password, passwordHashToCompare)
 
     // Проверяем все условия, но всё равно потратили время на bcrypt.compare
-    if (!user || user.role === 'customer' || !user.passwordHash || !isPasswordValid) {
+    if (!user || user.role === 'customer' || !user.passwordHash || !isPasswordValid || !user.isActive) {
       // Увеличиваем счётчик неудачных попыток
       const current = adminLoginAttempts.get(clientIp)
       adminLoginAttempts.set(clientIp, {

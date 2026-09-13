@@ -9,6 +9,7 @@ import {
   DeliveryCostMismatchError,
   InsufficientBonusError,
 } from '../../services/order.service'
+import { PromoCodeError } from '../../services/promo.service'
 import { findOrCreateCustomerByEmail } from '../../services/customer.service'
 import { pickupPointSchema } from '../../services/delivery/pickup-point.schema'
 
@@ -43,7 +44,7 @@ const createOrderSchema = z
     comment: z.string().optional(),
     hasSpecialPackaging: z.boolean().default(false),
     bonusUsed: z.number().int().min(0).default(0),
-    promoCode: z.string().optional(),
+    promoCode: z.string().trim().max(40).optional(),
     deliveryCost: z.number().int().min(0).default(0),
     paymentMethod: z.enum(['card', 'cash_on_delivery']).default('card'),
     contact: contactSchema.optional(),
@@ -213,6 +214,7 @@ const orderRoutes: FastifyPluginAsync = async (app) => {
           ...result.data,
           expectedDeliveryCost: result.data.deliveryCost,
           paymentMethod: result.data.paymentMethod,
+          guestCheckout: isGuest,
         }
       )
 
@@ -231,6 +233,9 @@ const orderRoutes: FastifyPluginAsync = async (app) => {
     } catch (err) {
       if (err instanceof DuplicateOrderError) {
         return reply.status(409).send({ error: err.message, code: 'DUPLICATE_ORDER' })
+      }
+      if (err instanceof PromoCodeError) {
+        return reply.status(400).send({ error: err.reason, code: 'PROMO_INVALID' })
       }
       if (err instanceof DeliveryCostMismatchError) {
         return reply.status(409).send({

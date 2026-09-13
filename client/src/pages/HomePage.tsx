@@ -6,6 +6,7 @@ import AdvantagesSection from '../components/home/AdvantagesSection'
 import PopularProducts from '../components/PopularProducts'
 import BrandsSection from '../components/home/BrandsSection'
 import AboutSection from '../components/home/AboutSection'
+import ReviewsSection from '../components/home/ReviewsSection'
 import FaqSection from '../components/home/FaqSection'
 import TrustSection from '../components/home/TrustSection'
 import BlogSection from '../components/home/BlogSection'
@@ -42,6 +43,7 @@ export default function HomePage() {
       {/* Без <Reveal>: у секции собственный каскад .reveal-group */}
       <BrandsSection />
       <AboutSection />
+      <Reveal><ReviewsSection /></Reveal>
       <Reveal><FaqSection /></Reveal>
       <Reveal><TrustSection /></Reveal>
       {/* Без <Reveal>: у секции собственный каскад .reveal-group */}

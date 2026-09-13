@@ -5,7 +5,7 @@ import { formatPrice } from '../lib/format'
 import SyncStatusBadge from '../components/SyncStatusBadge'
 
 const STATUS_LABEL: Record<string, { label: string; color: string }> = {
-  pending:    { label: 'Новый',       color: 'bg-amber-100 text-amber-700' },
+  new:        { label: 'Новый',       color: 'bg-amber-100 text-amber-700' },
   confirmed:  { label: 'Подтверждён', color: 'bg-blue-100 text-blue-700' },
   in_transit: { label: 'Доставка',    color: 'bg-purple-100 text-purple-700' },
   delivered:  { label: 'Доставлен',   color: 'bg-green-100 text-green-700' },
@@ -24,8 +24,10 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
 
 function SimpleBarChart({
   data,
+  period,
 }: {
   data: Array<{ date: string; orders: number; visits: number }>
+  period: 'today' | 'week' | 'month' | 'year'
 }) {
   if (!data || data.length === 0) return null
 
@@ -33,27 +35,38 @@ function SimpleBarChart({
   const maxVisits = Math.max(...data.map(d => d.visits), 1)
   const max = Math.max(maxOrders, maxVisits)
 
+  const formatDate = (dateStr: string) => {
+    if (period === 'year') {
+      // YYYY-MM-01 → MM.YYYY
+      return dateStr.slice(5, 7) + '.' + dateStr.slice(0, 4)
+    }
+    // YYYY-MM-DD → DD.MM
+    return dateStr.slice(8, 10) + '.' + dateStr.slice(5, 7)
+  }
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5">
       <h3 className="font-semibold text-gray-900 mb-4">Заказы и посещения</h3>
-      <div className="flex gap-6">
-        {data.map((item, idx) => (
-          <div key={idx} className="flex flex-col items-center gap-2">
-            <div className="flex items-end gap-1 h-40">
-              <div
-                className="w-3 bg-blue-500 rounded-t"
-                style={{ height: `${(item.orders / max) * 100}%` }}
-                title={`Заказы: ${item.orders}`}
-              />
-              <div
-                className="w-3 bg-purple-500 rounded-t"
-                style={{ height: `${(item.visits / max) * 100}%` }}
-                title={`Посещения: ${item.visits}`}
-              />
+      <div className="overflow-x-auto">
+        <div className="flex gap-6 min-w-min pb-4">
+          {data.map((item, idx) => (
+            <div key={idx} className="flex flex-col items-center gap-2">
+              <div className="flex items-end gap-1 h-40">
+                <div
+                  className="w-3 bg-blue-500 rounded-t"
+                  style={{ height: `${(item.orders / max) * 100}%` }}
+                  title={`Заказы: ${item.orders}`}
+                />
+                <div
+                  className="w-3 bg-purple-500 rounded-t"
+                  style={{ height: `${(item.visits / max) * 100}%` }}
+                  title={`Посещения: ${item.visits}`}
+                />
+              </div>
+              <p className="text-xs text-gray-500">{formatDate(item.date)}</p>
             </div>
-            <p className="text-xs text-gray-500">{item.date}</p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <div className="flex gap-4 justify-center mt-4 text-xs">
         <div className="flex items-center gap-2">
@@ -73,12 +86,15 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [syncStatus, setSyncStatus] = useState<SyncStatusResponse | null>(null)
   const [loading, setLoading] = useState(true)
-  const [period, setPeriod] = useState<'week' | 'month' | 'year'>('month')
+  const [period, setPeriod] = useState<'today' | 'week' | 'month' | 'year'>('month')
+  const [userType, setUserType] = useState<'all' | 'registered' | 'guest'>('all')
 
-  const loadStats = (p: 'week' | 'month' | 'year' = period) => {
+  const loadStats = (p?: 'today' | 'week' | 'month' | 'year', u?: 'all' | 'registered' | 'guest') => {
+    const pVal = p ?? period
+    const uVal = u ?? userType
     setLoading(true)
     Promise.all([
-      dashboardApi.stats(p).then(r => setStats(r.data)),
+      dashboardApi.stats({ period: pVal, userType: uVal }).then(r => setStats(r.data)),
       syncApi.status().then(r => setSyncStatus(r.data)),
     ]).finally(() => setLoading(false))
   }
@@ -87,9 +103,14 @@ export default function DashboardPage() {
     loadStats()
   }, [])
 
-  const handlePeriodChange = (p: 'week' | 'month' | 'year') => {
+  const handlePeriodChange = (p: 'today' | 'week' | 'month' | 'year') => {
     setPeriod(p)
-    loadStats(p)
+    loadStats(p, userType)
+  }
+
+  const handleUserTypeChange = (u: 'all' | 'registered' | 'guest') => {
+    setUserType(u)
+    loadStats(period, u)
   }
 
   if (loading) {
@@ -101,6 +122,10 @@ export default function DashboardPage() {
   }
 
   if (!stats) return <p className="text-gray-500">Не удалось загрузить статистику</p>
+
+  const cardBreakdown = stats.ordersTodayBreakdown
+    ? `Картой: ${stats.ordersTodayBreakdown.paidCard.count} · Наличными: ${stats.ordersTodayBreakdown.paidCash.count} · Не оплачено: ${stats.ordersTodayBreakdown.unpaid.count}`
+    : undefined
 
   return (
     <div>
@@ -114,20 +139,43 @@ export default function DashboardPage() {
       )}
 
       {/* Period Tabs */}
-      <div className="flex gap-2 mb-6">
-        {(['week', 'month', 'year'] as const).map(p => (
-          <button
-            key={p}
-            onClick={() => handlePeriodChange(p)}
-            className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-              period === p
-                ? 'bg-blue-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            {p === 'week' ? 'Неделя' : p === 'month' ? 'Месяц' : 'Год'}
-          </button>
-        ))}
+      <div className="mb-6">
+        <div className="flex gap-2 mb-2">
+          {(['today', 'week', 'month', 'year'] as const).map(p => (
+            <button
+              key={p}
+              onClick={() => handlePeriodChange(p)}
+              className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                period === p
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              {p === 'today' ? 'Сегодня' : p === 'week' ? '7 дней' : p === 'month' ? '30 дней' : 'Год'}
+            </button>
+          ))}
+        </div>
+
+        {/* User Type Tabs */}
+        <div className="flex gap-2 mb-2">
+          {(['all', 'registered', 'guest'] as const).map(u => (
+            <button
+              key={u}
+              onClick={() => handleUserTypeChange(u)}
+              className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                userType === u
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              {u === 'all' ? 'Все' : u === 'registered' ? 'Пользователи' : 'Гости'}
+            </button>
+          ))}
+        </div>
+
+        <p className="text-xs text-gray-500 mt-2">
+          Фильтр влияет на заказы, выручку и новых пользователей; посещения и подборы считаются по всем
+        </p>
       </div>
 
       {/* Today Cards */}
@@ -135,17 +183,17 @@ export default function DashboardPage() {
         <StatCard
           label="Заказы сегодня"
           value={String(stats.ordersToday)}
-          sub={`За месяц: ${stats.ordersMonth}`}
+          sub={cardBreakdown}
         />
         <StatCard
           label="Выручка сегодня"
           value={formatPrice(stats.revenueToday)}
-          sub={`За месяц: ${formatPrice(stats.revenueMonth)}`}
+          sub={`оплаченные заказы · за 30 дней: ${formatPrice(stats.revenueMonth)}`}
         />
         <StatCard
-          label="Всего пользователей"
+          label="Пользователей"
           value={String(stats.totalUsers)}
-          sub={`Новых сегодня: ${stats.newUsersToday}`}
+          sub={`новых сегодня: ${stats.newUsersToday}`}
         />
         <StatCard
           label="Товаров в каталоге"
@@ -169,11 +217,7 @@ export default function DashboardPage() {
             value={String(stats.period.newUsers)}
           />
           <StatCard
-            label="Активные гости"
-            value={String(stats.period.activeGuests)}
-          />
-          <StatCard
-            label="Посещения"
+            label="Посетители"
             value={String(stats.period.visits)}
           />
           <StatCard
@@ -186,7 +230,7 @@ export default function DashboardPage() {
       {/* Chart */}
       {stats.series && stats.series.length > 0 && (
         <div className="mb-8">
-          <SimpleBarChart data={stats.series} />
+          <SimpleBarChart data={stats.series} period={period} />
         </div>
       )}
 

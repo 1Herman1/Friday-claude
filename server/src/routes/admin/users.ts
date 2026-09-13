@@ -1,7 +1,10 @@
 import { FastifyPluginAsync } from 'fastify'
 import { z } from 'zod'
 import * as bcrypt from 'bcryptjs'
+import { Prisma, UserRole } from '@prisma/client'
 import { checkRole } from '../../middleware/check-role'
+import { GUEST_USER_WHERE, REGISTERED_USER_WHERE, isGuestUser } from '../../lib/user-type'
+import { applyBonusChange, InsufficientBonusError } from '../../services/bonus.service'
 
 const usersAdminRoute: FastifyPluginAsync = async (app) => {
   const guard = { preHandler: [app.authenticate, checkRole(['super_admin'])] }
@@ -17,45 +20,70 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
         role?: string
         type?: string
         sort?: string
+        segment?: string
       }
       const page = Math.max(1, parseInt(q.page ?? '1'))
       const limit = Math.min(100, Math.max(1, parseInt(q.limit ?? '20')))
       const skip = (page - 1) * limit
       const type = q.type ?? 'registered'
       const sort = q.sort ?? 'created'
+      const segment = q.segment ?? ''
 
-      const where: Record<string, unknown> = {}
-      if (q.role) where.role = q.role
-      if (q.search) {
-        where.OR = [
-          { name: { contains: q.search, mode: 'insensitive' } },
-          { email: { contains: q.search, mode: 'insensitive' } },
-          { phone: { contains: q.search } },
-        ]
-      }
+      // Build where clause with type, search, role, and segment filters
+      const whereParts: Prisma.UserWhereInput[] = []
 
-      // Filter by type: registered, guests, or all
+      // Type filter
       if (type === 'registered') {
-        // Has email or phone or passwordHash
-        where.OR = [{ email: { not: null } }, { phone: { not: null } }, { passwordHash: { not: null } }]
+        whereParts.push(REGISTERED_USER_WHERE)
       } else if (type === 'guests') {
-        // No email, phone, or passwordHash AND has at least one interaction
-        where.AND = [
-          { email: null },
-          { phone: null },
-          { passwordHash: null },
-          {
-            OR: [
-              { orders: { some: {} } },
-              { cart: { is: { items: { some: {} } } } },
-              { favorites: { some: {} } },
-              { quizSessions: { some: {} } },
-            ],
-          },
-        ]
+        whereParts.push(GUEST_USER_WHERE)
+        whereParts.push({
+          OR: [
+            { orders: { some: {} } },
+            { cart: { is: { items: { some: {} } } } },
+            { favorites: { some: {} } },
+            { quizSessions: { some: {} } },
+          ],
+        })
       }
 
-      const orderBy: any =
+      // Role filter
+      if (q.role) {
+        whereParts.push({ role: { equals: q.role } } as Prisma.UserWhereInput)
+      }
+
+      // Search filter (name, email, phone)
+      if (q.search) {
+        whereParts.push({
+          OR: [
+            { name: { contains: q.search, mode: 'insensitive' } },
+            { email: { contains: q.search, mode: 'insensitive' } },
+            { phone: { contains: q.search } },
+          ],
+        })
+      }
+
+      // Segment filter
+      if (segment === 'hasOrders') {
+        whereParts.push({ orders: { some: {} } })
+      } else if (segment === 'noOrders') {
+        whereParts.push({ orders: { none: {} } })
+      } else if (segment === 'inactive30d') {
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000)
+        whereParts.push({
+          OR: [
+            { lastSeenAt: null },
+            { lastSeenAt: { lt: thirtyDaysAgo } },
+          ],
+        })
+      } else if (segment === 'bonus1000plus') {
+        whereParts.push({ bonusPoints: { gte: 1000 } })
+      }
+
+      // Combine all filters with AND
+      const where = whereParts.length > 0 ? { AND: whereParts } : {}
+
+      const orderBy: Prisma.UserOrderByWithRelationInput =
         sort === 'lastSeen'
           ? { lastSeenAt: 'desc' }
           : sort === 'orders'
@@ -78,6 +106,8 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
             bonusLevel: true,
             createdAt: true,
             lastSeenAt: true,
+            isActive: true,
+            passwordHash: true,
             _count: { select: { orders: true, favorites: true, quizSessions: true } },
             cart: { select: { items: { select: { id: true } } } },
           },
@@ -85,7 +115,7 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
         app.prisma.user.count({ where }),
       ])
 
-      const formattedItems = items.map((u: any) => ({
+      const formattedItems = items.map((u) => ({
         id: u.id,
         name: u.name,
         email: u.email,
@@ -95,12 +125,194 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
         bonusLevel: u.bonusLevel,
         createdAt: u.createdAt,
         lastSeenAt: u.lastSeenAt,
-        isGuest: !u.email && !u.phone,
+        isGuest: isGuestUser(u),
+        isActive: u.isActive,
         cartItems: u.cart?.items?.length ?? 0,
         _count: u._count,
       }))
 
       return reply.send({ items: formattedItems, total, page, totalPages: Math.ceil(total / limit) })
+    }
+  )
+
+  app.get<{ Params: { id: string } }>(
+    '/:id',
+    guard,
+    async (request, reply) => {
+      const { id } = request.params
+
+      const [user, orders, stats, bonusTransactions, addresses, pets, subscriptions] = await Promise.all([
+        app.prisma.user.findUnique({
+          where: { id },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            passwordHash: true,
+            role: true,
+            bonusPoints: true,
+            bonusLevel: true,
+            isActive: true,
+            welcomeBonusGranted: true,
+            createdAt: true,
+            lastSeenAt: true,
+            _count: { select: { orders: true, favorites: true, quizSessions: true } },
+            cart: { select: { items: { select: { id: true } } } },
+          },
+        }),
+        app.prisma.order.findMany({
+          where: { userId: id },
+          orderBy: { createdAt: 'desc' },
+          take: 50,
+          select: {
+            id: true,
+            status: true,
+            paymentStatus: true,
+            paymentMethod: true,
+            total: true,
+            discount: true,
+            promoCode: true,
+            guestCheckout: true,
+            createdAt: true,
+            items: { select: { id: true } },
+          },
+        }),
+        app.prisma.order.aggregate({
+          where: { userId: id, paymentStatus: 'paid', status: { not: 'cancelled' } },
+          _sum: { total: true },
+          _count: true,
+        }),
+        app.prisma.bonusTransaction.findMany({
+          where: { userId: id },
+          orderBy: { createdAt: 'desc' },
+          take: 100,
+        }),
+        app.prisma.address.findMany({
+          where: { userId: id },
+        }),
+        app.prisma.pet.findMany({
+          where: { userId: id },
+        }),
+        app.prisma.subscription.findMany({
+          where: { userId: id },
+          include: {
+            product: { select: { name: true, slug: true } },
+            productVariant: { select: { weight: true } },
+          },
+        }),
+      ])
+
+      if (!user) {
+        return reply.status(404).send({ error: 'Пользователь не найден' })
+      }
+
+      const { passwordHash: _ph, ...userWithoutHash } = user
+      const userResponse = {
+        ...userWithoutHash,
+        isGuest: isGuestUser(user),
+      }
+
+      return reply.send({
+        user: userResponse,
+        stats: {
+          ordersCount: user._count.orders,
+          paidOrdersCount: stats._count,
+          paidTotal: stats._sum.total ?? 0,
+          favoritesCount: user._count.favorites,
+          quizSessions: user._count.quizSessions,
+          cartItems: user.cart?.items?.length ?? 0,
+        },
+        orders,
+        bonusTransactions,
+        addresses,
+        pets,
+        subscriptions,
+      })
+    }
+  )
+
+  app.put<{ Params: { id: string } }>(
+    '/:id/active',
+    guard,
+    async (request, reply) => {
+      const { id } = request.params
+      const bodySchema = z.object({
+        isActive: z.boolean(),
+      })
+
+      const result = bodySchema.safeParse(request.body)
+      if (!result.success) {
+        return reply.status(400).send({ error: result.error.errors[0].message })
+      }
+
+      const { isActive } = result.data
+
+      // Don't allow admin to block themselves
+      const { userId } = request.user as { userId: string; role: string }
+      if (id === userId && !isActive) {
+        return reply.status(400).send({ error: 'Нельзя заблокировать себя' })
+      }
+
+      try {
+        const user = await app.prisma.user.update({
+          where: { id },
+          data: { isActive },
+          select: { id: true, isActive: true },
+        })
+        return reply.send(user)
+      } catch (err: unknown) {
+        if ((err as { code?: string })?.code === 'P2025') {
+          return reply.status(404).send({ error: 'Пользователь не найден' })
+        }
+        throw err
+      }
+    }
+  )
+
+  app.post<{ Params: { id: string } }>(
+    '/:id/bonus',
+    guard,
+    async (request, reply) => {
+      const { id } = request.params
+      const bodySchema = z.object({
+        amount: z
+          .number()
+          .int()
+          .min(-100000)
+          .max(100000)
+          .refine(a => a !== 0, 'Сумма не может быть нулём'),
+        comment: z.string().trim().min(1, 'Укажите причину').max(200),
+      })
+
+      const result = bodySchema.safeParse(request.body)
+      if (!result.success) {
+        return reply.status(400).send({ error: result.error.errors[0].message })
+      }
+
+      const { amount, comment } = result.data
+
+      try {
+        const { balanceAfter, bonusLevel } = await app.prisma.$transaction(async (tx) => {
+          return applyBonusChange(tx, {
+            userId: id,
+            amount,
+            type: 'admin_adjust',
+            comment: `Админ: ${comment}`,
+            requireSufficient: amount < 0,
+          })
+        })
+
+        return reply.send({ balanceAfter, bonusLevel })
+      } catch (err: unknown) {
+        if (err instanceof InsufficientBonusError) {
+          return reply.status(409).send({ error: err.message })
+        }
+        if ((err as { code?: string })?.code === 'P2025') {
+          return reply.status(404).send({ error: 'Пользователь не найден' })
+        }
+        throw err
+      }
     }
   )
 
@@ -113,12 +325,12 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
     try {
       const user = await app.prisma.user.update({
         where: { id },
-        data: { role: role as any },
+        data: { role: role as UserRole },
         select: { id: true, name: true, email: true, phone: true, role: true, bonusPoints: true, bonusLevel: true, createdAt: true },
       })
       return reply.send(user)
-    } catch (err: any) {
-      if (err?.code === 'P2025') {
+    } catch (err: unknown) {
+      if ((err as { code?: string })?.code === 'P2025') {
         return reply.status(404).send({ error: 'Пользователь не найден' })
       }
       throw err
@@ -148,8 +360,8 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
           data: { passwordHash },
         })
         return reply.send({ message: 'Пароль успешно сброшен' })
-      } catch (err: any) {
-        if (err?.code === 'P2025') {
+      } catch (err: unknown) {
+        if ((err as { code?: string })?.code === 'P2025') {
           return reply.status(404).send({ error: 'Пользователь не найден' })
         }
         throw err

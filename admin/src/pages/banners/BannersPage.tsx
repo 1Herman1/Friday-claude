@@ -3,11 +3,23 @@ import { bannersApi, type Banner } from '../../lib/api'
 import { imageSrc } from '../../lib/media'
 import { ImageField } from '../../components/ImageField'
 
+const BANNER_TYPES = [
+  { key: 'promo', label: 'Акции (главная)', page: 'home', position: 'main_slider', hint: 'Карусель на главной, любое количество' },
+  { key: 'about', label: 'О нас', page: 'about', position: 'main_slider', hint: 'Одна картинка в секции «О нас» на главной и на странице «О нас»' },
+  { key: 'other', label: 'Другое', hint: 'Страница и позиция вручную' },
+] as const
+
 const PAGE_LABELS: Record<string, string> = { home: 'Главная', catalog: 'Каталог', about: 'О нас', other: 'Другое' }
 const POSITION_LABELS: Record<string, string> = {
   main_slider: 'Главный слайдер',
   promo_strip: 'Промо-полоса',
   sidebar: 'Сайдбар',
+}
+
+const typeOf = (b: Banner): string => {
+  if (b.page === 'home' && b.position === 'main_slider') return 'promo'
+  if (b.page === 'about' && b.position === 'main_slider') return 'about'
+  return 'other'
 }
 
 const empty = (): Partial<Banner> => ({
@@ -35,12 +47,21 @@ export default function BannersPage() {
 
   const load = () => {
     setLoading(true)
-    bannersApi.list().then(r => setBanners(r.data)).finally(() => setLoading(false))
+    setError('')
+    bannersApi.list()
+      .then(r => setBanners(r.data))
+      .catch(() => setError('Не удалось загрузить баннеры'))
+      .finally(() => setLoading(false))
   }
 
   useEffect(() => { load() }, [])
 
-  const openCreate = () => { setEditId(null); setForm(empty()); setError('') }
+  const openCreate = (type: string = 'promo') => {
+    setEditId(null)
+    const t = BANNER_TYPES.find(x => x.key === type)
+    setForm({ ...empty(), ...(t && t.key !== 'other' ? { page: t.page, position: t.position } : {}) })
+    setError('')
+  }
   const openEdit = (b: Banner) => { setEditId(b.id); setForm({ ...b }); setError('') }
   const closeForm = () => { setForm(null); setEditId(null) }
 
@@ -65,13 +86,38 @@ export default function BannersPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Удалить баннер?')) return
-    await bannersApi.delete(id)
-    setBanners(prev => prev.filter(b => b.id !== id))
+    try {
+      await bannersApi.delete(id)
+      setBanners(prev => prev.filter(b => b.id !== id))
+    } catch (e: any) {
+      setError(e?.response?.data?.error ?? 'Ошибка при удалении баннера')
+    }
   }
 
   const toggleActive = async (b: Banner) => {
-    const res = await bannersApi.update(b.id, { isActive: !b.isActive })
-    setBanners(prev => prev.map(x => x.id === b.id ? res.data : x))
+    try {
+      const res = await bannersApi.update(b.id, { isActive: !b.isActive })
+      setBanners(prev => prev.map(x => x.id === b.id ? res.data : x))
+    } catch (e: any) {
+      setError(e?.response?.data?.error ?? 'Ошибка при изменении баннера')
+    }
+  }
+
+  const moveInSection = async (b: Banner, direction: 'up' | 'down') => {
+    const section = banners.filter(x => x.page === b.page && x.position === b.position).sort((a, b) => a.sortOrder - b.sortOrder)
+    const idx = section.findIndex(x => x.id === b.id)
+    if ((direction === 'up' && idx === 0) || (direction === 'down' && idx === section.length - 1)) return
+
+    const newIdx = direction === 'up' ? idx - 1 : idx + 1
+    const ids = section.map(x => x.id)
+    ;[ids[idx], ids[newIdx]] = [ids[newIdx], ids[idx]]
+
+    try {
+      await bannersApi.reorder(ids)
+      load()
+    } catch (e: any) {
+      setError(e?.response?.data?.error ?? 'Ошибка при перемещении баннера')
+    }
   }
 
   const setField = (field: keyof Banner, value: unknown) =>
@@ -104,10 +150,16 @@ export default function BannersPage() {
     <div className="max-w-4xl">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-gray-900">Баннеры и акции</h1>
-        <button onClick={openCreate} className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">
-          + Добавить баннер
+        <button onClick={() => openCreate('promo')} className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">
+          + Добавить акцию
         </button>
       </div>
+
+      {error && !form && (
+        <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl">
+          {error}
+        </div>
+      )}
 
       {form !== null && (
         <div className="bg-white rounded-xl border border-gray-200 p-5 mb-5">
@@ -172,24 +224,38 @@ export default function BannersPage() {
               </label>
             </div>
             <div>
-              <label className="block text-xs text-gray-500 mb-1">Страница</label>
-              <select value={form.page ?? 'home'} onChange={e => setField('page', e.target.value)}
+              <label className="block text-xs text-gray-500 mb-1">Тип баннера</label>
+              <select value={typeOf(form as Banner)} onChange={e => {
+                const t = BANNER_TYPES.find(x => x.key === e.target.value)
+                if (t && t.key !== 'other') {
+                  setField('page', t.page)
+                  setField('position', t.position)
+                }
+              }}
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400">
-                {Object.entries(PAGE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                {BANNER_TYPES.map(t => <option key={t.key} value={t.key}>{t.label}</option>)}
               </select>
+              <p className="text-xs text-gray-500 mt-1">{BANNER_TYPES.find(x => x.key === typeOf(form as Banner))?.hint}</p>
             </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Позиция</label>
-              <select value={form.position ?? 'main_slider'} onChange={e => setField('position', e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400">
-                {Object.entries(POSITION_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Порядок</label>
-              <input type="number" value={form.sortOrder ?? 0} onChange={e => setField('sortOrder', parseInt(e.target.value))}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400" />
-            </div>
+
+            {typeOf(form as Banner) === 'other' && (
+              <>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Страница</label>
+                  <select value={form.page ?? 'home'} onChange={e => setField('page', e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400">
+                    {Object.entries(PAGE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Позиция</label>
+                  <select value={form.position ?? 'main_slider'} onChange={e => setField('position', e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400">
+                    {Object.entries(POSITION_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                  </select>
+                </div>
+              </>
+            )}
             <div className="flex items-end">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={form.isActive ?? true} onChange={e => setField('isActive', e.target.checked)}
@@ -208,65 +274,182 @@ export default function BannersPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        {loading ? (
-          <div className="flex justify-center py-12">
-            <div className="animate-spin w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full" />
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-gray-500 text-xs border-b border-gray-100 bg-gray-50">
-                  <th className="px-5 py-3 font-medium">Баннер</th>
-                  <th className="px-5 py-3 font-medium">Страница</th>
-                  <th className="px-5 py-3 font-medium">Позиция</th>
-                  <th className="px-5 py-3 font-medium">Порядок</th>
-                  <th className="px-5 py-3 font-medium">Статус</th>
-                  <th className="px-5 py-3 font-medium"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {banners.map(b => (
-                  <tr key={b.id} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="px-5 py-3">
-                      <div className="flex items-center gap-3">
-                        <img src={b.image} alt={b.title} className="w-12 h-8 object-cover rounded bg-gray-100"
-                          onError={e => (e.currentTarget.style.display = 'none')} />
-                        <div>
-                          <p className="font-medium text-gray-900">{b.title}</p>
-                          {b.subtitle && <p className="text-xs text-gray-500">{b.subtitle}</p>}
-                          {b.link && <p className="text-xs text-gray-400">{b.link}</p>}
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <div className="animate-spin w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full" />
+        </div>
+      ) : (
+        <>
+          {/* Акции (главная) */}
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-5">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h2 className="font-semibold text-gray-900">Акции (главная)</h2>
+                <p className="text-xs text-gray-500">Карусель на главной, любое количество</p>
+              </div>
+              <button onClick={() => openCreate('promo')} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700">
+                + Добавить акцию
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <tbody>
+                  {banners.filter(b => b.page === 'home' && b.position === 'main_slider').sort((a, b) => a.sortOrder - b.sortOrder).map((b, idx, arr) => (
+                    <tr key={b.id} className="border-b border-gray-50 hover:bg-gray-50 last:border-b-0">
+                      <td className="px-4 py-3 w-full">
+                        <div className="flex items-center gap-3">
+                          <img src={imageSrc(b.image)} alt={b.title} className="w-12 h-8 object-cover rounded bg-gray-100"
+                            onError={e => (e.currentTarget.style.display = 'none')} />
+                          <div>
+                            <p className="font-medium text-gray-900">{b.title}</p>
+                            {b.subtitle && <p className="text-xs text-gray-500">{b.subtitle}</p>}
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-5 py-3 text-gray-600">{PAGE_LABELS[b.page]}</td>
-                    <td className="px-5 py-3 text-gray-600">{POSITION_LABELS[b.position]}</td>
-                    <td className="px-5 py-3 text-gray-600">{b.sortOrder}</td>
-                    <td className="px-5 py-3">
-                      <button onClick={() => toggleActive(b)}
-                        className={`text-xs px-2 py-0.5 rounded-full font-medium transition-colors ${
-                          b.isActive ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                        }`}>
-                        {b.isActive ? 'Активен' : 'Скрыт'}
-                      </button>
-                    </td>
-                    <td className="px-5 py-3">
-                      <div className="flex gap-3">
-                        <button onClick={() => openEdit(b)} className="text-blue-600 hover:underline text-xs font-medium">Изменить</button>
-                        <button onClick={() => handleDelete(b.id)} className="text-red-500 hover:underline text-xs">Удалить</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {banners.length === 0 && (
-                  <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400">Баннеров пока нет</td></tr>
-                )}
-              </tbody>
-            </table>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <button onClick={() => toggleActive(b)}
+                          className={`text-xs px-2 py-0.5 rounded-full font-medium transition-colors ${
+                            b.isActive ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                          }`}>
+                          {b.isActive ? 'Активен' : 'Скрыт'}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex gap-1">
+                          <button onClick={() => moveInSection(b, 'up')} disabled={idx === 0}
+                            className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
+                            aria-label="Переместить вверх">
+                            ↑
+                          </button>
+                          <button onClick={() => moveInSection(b, 'down')} disabled={idx === arr.length - 1}
+                            className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
+                            aria-label="Переместить вниз">
+                            ↓
+                          </button>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex gap-3">
+                          <button onClick={() => openEdit(b)} className="text-blue-600 hover:underline text-xs font-medium">Изменить</button>
+                          <button onClick={() => handleDelete(b.id)} className="text-red-500 hover:underline text-xs">Удалить</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {banners.filter(b => b.page === 'home' && b.position === 'main_slider').length === 0 && (
+                    <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400 text-sm">Акций пока нет</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        )}
-      </div>
+
+          {/* О нас */}
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-5">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h2 className="font-semibold text-gray-900">О нас</h2>
+                <p className="text-xs text-gray-500">Одна картинка на главной и на странице «О нас»</p>
+              </div>
+              {!banners.some(b => b.page === 'about' && b.position === 'main_slider' && b.isActive) && (
+                <button onClick={() => openCreate('about')} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700">
+                  + Добавить баннер «О нас»
+                </button>
+              )}
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <tbody>
+                  {banners.filter(b => b.page === 'about' && b.position === 'main_slider').sort((a, b) => a.sortOrder - b.sortOrder).map((b) => (
+                    <tr key={b.id} className="border-b border-gray-50 hover:bg-gray-50 last:border-b-0">
+                      <td className="px-4 py-3 w-full">
+                        <div className="flex items-center gap-3">
+                          <img src={imageSrc(b.image)} alt={b.title} className="w-12 h-8 object-cover rounded bg-gray-100"
+                            onError={e => (e.currentTarget.style.display = 'none')} />
+                          <div>
+                            <p className="font-medium text-gray-900">{b.title}</p>
+                            {b.subtitle && <p className="text-xs text-gray-500">{b.subtitle}</p>}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <button onClick={() => toggleActive(b)}
+                          className={`text-xs px-2 py-0.5 rounded-full font-medium transition-colors ${
+                            b.isActive ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                          }`}>
+                          {b.isActive ? 'Активен' : 'Скрыт'}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {b.isActive && <span className="text-xs text-gray-500">Чтобы заменить картинку — нажмите «Изменить»</span>}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex gap-3">
+                          <button onClick={() => openEdit(b)} className="text-blue-600 hover:underline text-xs font-medium">Изменить</button>
+                          <button onClick={() => handleDelete(b.id)} className="text-red-500 hover:underline text-xs">Удалить</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {banners.filter(b => b.page === 'about' && b.position === 'main_slider').length === 0 && (
+                    <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400 text-sm">Баннера пока нет</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Другое */}
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h2 className="font-semibold text-gray-900">Другое</h2>
+                <p className="text-xs text-gray-500">Баннеры на других страницах и позициях</p>
+              </div>
+              <button onClick={() => openCreate('other')} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700">
+                + Добавить баннер
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <tbody>
+                  {banners.filter(b => !(b.page === 'home' && b.position === 'main_slider') && !(b.page === 'about' && b.position === 'main_slider')).sort((a, b) => a.sortOrder - b.sortOrder).map((b) => (
+                    <tr key={b.id} className="border-b border-gray-50 hover:bg-gray-50 last:border-b-0">
+                      <td className="px-4 py-3 w-full">
+                        <div className="flex items-center gap-3">
+                          <img src={imageSrc(b.image)} alt={b.title} className="w-12 h-8 object-cover rounded bg-gray-100"
+                            onError={e => (e.currentTarget.style.display = 'none')} />
+                          <div>
+                            <p className="font-medium text-gray-900">{b.title}</p>
+                            <p className="text-xs text-gray-500">{PAGE_LABELS[b.page]} — {POSITION_LABELS[b.position]}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <button onClick={() => toggleActive(b)}
+                          className={`text-xs px-2 py-0.5 rounded-full font-medium transition-colors ${
+                            b.isActive ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                          }`}>
+                          {b.isActive ? 'Активен' : 'Скрыт'}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex gap-3">
+                          <button onClick={() => openEdit(b)} className="text-blue-600 hover:underline text-xs font-medium">Изменить</button>
+                          <button onClick={() => handleDelete(b.id)} className="text-red-500 hover:underline text-xs">Удалить</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {banners.filter(b => !(b.page === 'home' && b.position === 'main_slider') && !(b.page === 'about' && b.position === 'main_slider')).length === 0 && (
+                    <tr><td colSpan={3} className="px-4 py-8 text-center text-gray-400 text-sm">Баннеров пока нет</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

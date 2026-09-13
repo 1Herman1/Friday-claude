@@ -7,7 +7,7 @@
  * пересчёты доставки — и 429 посреди чекаута.
  */
 
-type Bucket = 'quotes' | 'suggest' | 'pickup-points' | 'visits'
+type Bucket = 'quotes' | 'suggest' | 'pickup-points' | 'visits' | 'promo'
 
 const WINDOW_MS = 5 * 60 * 1000
 
@@ -18,6 +18,8 @@ const LIMITS: Record<Bucket, number> = {
   'pickup-points': 30,
   /// Один пинг в сутки на браузер; лимит лишь против злоупотреблений.
   visits: 60,
+  /// подбор промокодов перебором
+  promo: 30,
 }
 
 const buckets: Record<Bucket, Map<string, { count: number; resetAt: number }>> = {
@@ -25,6 +27,7 @@ const buckets: Record<Bucket, Map<string, { count: number; resetAt: number }>> =
   suggest: new Map(),
   'pickup-points': new Map(),
   visits: new Map(),
+  promo: new Map(),
 }
 
 let lastSweepAt = Date.now()

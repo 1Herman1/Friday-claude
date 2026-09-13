@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 import { checkRole } from '../../middleware/check-role'
 import { QUIZ_TAGS } from '../../lib/quiz-tags'
 
@@ -16,7 +17,7 @@ const createSchema = z.object({
   slug: z.string().min(1),
   description: z.string().min(1),
   brandId: z.string().uuid().optional(),
-  images: z.array(z.string().url()).default([]),
+  images: z.array(z.string().max(500)).default([]),
   isGrainFree: z.boolean().default(false),
   isHypoallergenic: z.boolean().default(false),
   isWeightControl: z.boolean().default(false),
@@ -30,6 +31,9 @@ const createSchema = z.object({
   seoDescription: z.string().optional(),
   categoryIds: z.array(z.string().uuid()).default([]),
   quizTags: z.array(z.enum(QUIZ_TAGS)).default([]),
+  showAboutTab: z.boolean().default(true),
+  showSpecsTab: z.boolean().default(true),
+  showReviewsTab: z.boolean().default(true),
   variants: z.array(variantSchema).min(1),
 })
 
@@ -37,6 +41,61 @@ const updateSchema = createSchema.partial()
 
 export default async function adminCrudRoute(app: FastifyInstance) {
   const adminGuard = { preHandler: [app.authenticate, checkRole(['super_admin', 'products_manager'])] }
+
+  app.get<{ Querystring: { search?: string; status?: string; page?: string; limit?: string } }>('/', adminGuard, async (request, reply) => {
+    const querySchema = z.object({
+      search: z.string().max(100).optional(),
+      status: z.enum(['all', 'active', 'hidden']).default('all'),
+      page: z.coerce.number().int().min(1).default(1),
+      limit: z.coerce.number().int().min(1).max(100).default(20),
+    })
+
+    const parsed = querySchema.safeParse(request.query)
+    if (!parsed.success) {
+      return reply.status(400).send({ error: parsed.error.errors[0].message })
+    }
+
+    const { search, status, page, limit } = parsed.data
+
+    const where: Prisma.ProductWhereInput = {}
+
+    if (search) {
+      where.name = { contains: search, mode: 'insensitive' }
+    }
+
+    if (status === 'active') {
+      where.isActive = true
+    } else if (status === 'hidden') {
+      where.isActive = false
+    }
+
+    const items = await app.prisma.product.findMany({
+      where,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        isActive: true,
+        hiddenManually: true,
+        updatedAt: true,
+        brand: { select: { name: true } },
+        variants: { select: { price: true, isActive: true } },
+      },
+      orderBy: [{ isActive: 'desc' }, { updatedAt: 'desc' }],
+      skip: (page - 1) * limit,
+      take: limit,
+    })
+
+    const total = await app.prisma.product.count({ where })
+    const totalPages = Math.ceil(total / limit)
+
+    return reply.send({
+      items,
+      total,
+      page,
+      totalPages,
+    })
+  })
 
   app.get<{ Params: { id: string } }>('/:id', adminGuard, async (request, reply) => {
     const { id } = request.params
@@ -118,6 +177,35 @@ export default async function adminCrudRoute(app: FastifyInstance) {
     return reply.send(product)
   })
 
+  app.put<{ Params: { id: string } }>('/:id/visibility', adminGuard, async (request, reply) => {
+    const visibilitySchema = z.object({
+      isActive: z.boolean(),
+    })
+
+    const parsed = visibilitySchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.status(400).send({ error: parsed.error.errors[0].message })
+    }
+
+    const { id } = request.params
+    const { isActive } = parsed.data
+
+    const product = await app.prisma.product.findUnique({ where: { id } })
+    if (!product) {
+      return reply.status(404).send({ error: 'Товар не найден' })
+    }
+
+    const updated = await app.prisma.product.update({
+      where: { id },
+      data: {
+        isActive,
+        hiddenManually: !isActive,
+      },
+    })
+
+    return reply.send(updated)
+  })
+
   app.delete<{ Params: { id: string } }>('/:id', adminGuard, async (request, reply) => {
     const { id } = request.params
 
@@ -128,7 +216,7 @@ export default async function adminCrudRoute(app: FastifyInstance) {
 
     await app.prisma.product.update({
       where: { id },
-      data: { isActive: false },
+      data: { isActive: false, hiddenManually: true },
     })
 
     return reply.send({ success: true })

@@ -1,6 +1,15 @@
+export type PromoRule = { type: 'percent' | 'fixed'; value: number; minSubtotal?: number | null }
+
+export function calcPromoDiscount(subtotal: number, promo?: PromoRule | null): number {
+  if (!promo) return 0
+  if (promo.minSubtotal != null && subtotal < promo.minSubtotal) return 0
+  const raw = promo.type === 'percent' ? Math.round((subtotal * promo.value) / 100) : promo.value
+  return Math.max(0, Math.min(raw, subtotal))
+}
+
 export type OrderCalcInput = {
   items: { price: number; quantity: number; isSubscription?: boolean }[]
-  promoCode?: string
+  promo?: PromoRule | null
   bonusRequested?: number
   availableBonus: number
   deliveryCost?: number
@@ -19,8 +28,7 @@ export function calcOrderTotals(input: OrderCalcInput): OrderTotals {
     const price = item.isSubscription ? Math.round(item.price * 0.93) : item.price
     return sum + price * item.quantity
   }, 0)
-  const promoDiscount =
-    input.promoCode === 'SIMBA10' ? Math.round(subtotal * 0.1) : 0
+  const promoDiscount = calcPromoDiscount(subtotal, input.promo)
 
   const delivery = input.deliveryCost ?? 0
   const payableBeforeBonus = Math.max(0, subtotal - promoDiscount + delivery)

@@ -135,7 +135,7 @@ export async function runMoyskladSync(opts: {
     })
     // В предпросмотре — сколько товаров СТАНЕТ видно, то есть только скрытые сейчас.
     const hiddenIds = await prisma.product.findMany({
-      where: { id: { in: Array.from(wouldActivate) }, isActive: false },
+      where: { id: { in: Array.from(wouldActivate) }, isActive: false, hiddenManually: false },
       select: { id: true },
     })
     report.productsActivated = hiddenIds.length
@@ -227,10 +227,12 @@ export async function runMoyskladSync(opts: {
 
   // Активация товаров. Считаем только те, что были скрыты: иначе отчёт каждые
   // полчаса рапортует «активировано 520» и настоящее событие в нём потеряется.
+  // Скрытые вручную из админки синхронизация не возвращает — иначе ручное
+  // скрытие жило бы полчаса.
   if (productActivations.size > 0) {
     const ids = Array.from(productActivations)
     const activated = await prisma.product.updateMany({
-      where: { id: { in: ids }, isActive: false },
+      where: { id: { in: ids }, isActive: false, hiddenManually: false },
       data: { isActive: true },
     })
 

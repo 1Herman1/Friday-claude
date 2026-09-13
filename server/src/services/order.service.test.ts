@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { calcOrderTotals } from './order.service'
+import { calcOrderTotals } from '@simba/shared'
 
 // Цены и total — в копейках. bonusUsed / bonusEarned (scoins) — в рублях.
 
@@ -22,27 +22,16 @@ describe('calcOrderTotals', () => {
     })
   })
 
-  it('применяет промокод SIMBA10 как 10% от subtotal', () => {
+  it('применяет промокод как 10% от subtotal', () => {
     const r = calcOrderTotals({
       items: [{ price: 99900, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       availableBonus: 0,
     })
 
     expect(r.promoDiscount).toBe(9990)
     expect(r.total).toBe(89910)
     expect(r.bonusEarned).toBe(44)
-  })
-
-  it('игнорирует неизвестный промокод', () => {
-    const r = calcOrderTotals({
-      items: [{ price: 100000, quantity: 1 }],
-      promoCode: 'HALYAVA',
-      availableBonus: 0,
-    })
-
-    expect(r.promoDiscount).toBe(0)
-    expect(r.total).toBe(100000)
   })
 
   it('не даёт списать больше бонусов, чем на балансе', () => {
@@ -59,7 +48,7 @@ describe('calcOrderTotals', () => {
   it('обрезает списание половиной чека', () => {
     const r = calcOrderTotals({
       items: [{ price: 100000, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       bonusRequested: 5000,
       availableBonus: 5000,
     })
@@ -109,7 +98,7 @@ describe('calcOrderTotals', () => {
   it('промокод + доставка: кэшбэк только от товаров', () => {
     const r = calcOrderTotals({
       items: [{ price: 100000, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       deliveryCost: 30000,
       availableBonus: 0,
     })
@@ -122,7 +111,7 @@ describe('calcOrderTotals', () => {
   it('промокод + бонусы + доставка: все три компонента одновременно', () => {
     const r = calcOrderTotals({
       items: [{ price: 100000, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       deliveryCost: 30000,
       bonusRequested: 500,
       availableBonus: 500,
@@ -148,7 +137,7 @@ describe('calcOrderTotals — границы округления', () => {
     // subtotal 1005 -> 1005 * 0.1 = 100.5 ровно -> Math.round -> 101
     const r = calcOrderTotals({
       items: [{ price: 1005, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       availableBonus: 0,
     })
 
@@ -160,7 +149,7 @@ describe('calcOrderTotals — границы округления', () => {
     // 999995 * 0.1 = 99999.5 -> 100000
     const r = calcOrderTotals({
       items: [{ price: 999995, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       availableBonus: 0,
     })
 
@@ -171,7 +160,7 @@ describe('calcOrderTotals — границы округления', () => {
   it('промо-скидка на минимальной половине копейки: 25 коп -> 3 коп', () => {
     const r = calcOrderTotals({
       items: [{ price: 25, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       availableBonus: 0,
     })
 
@@ -216,7 +205,7 @@ describe('calcOrderTotals — границы округления', () => {
     // subtotal 1005: promo 101 (вверх), goodsPaid 904 -> floor(9.04 * 0.05) = 0
     const r = calcOrderTotals({
       items: [{ price: 1005, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       availableBonus: 0,
     })
 
@@ -239,7 +228,7 @@ describe('calcOrderTotals — границы округления', () => {
   it('нулевой заказ не даёт ни скидки, ни кэшбэка', () => {
     const r = calcOrderTotals({
       items: [],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       bonusRequested: 100,
       availableBonus: 100,
     })
@@ -274,7 +263,7 @@ describe('calcOrderTotals — копейка не теряется и не по�
       name: 'промо с округлением вверх на .5',
       input: {
         items: [{ price: 1005, quantity: 1 }],
-        promoCode: 'SIMBA10',
+        promo: { type: 'percent', value: 10 },
         availableBonus: 0,
       },
     },
@@ -282,7 +271,7 @@ describe('calcOrderTotals — копейка не теряется и не по�
       name: 'промо с округлением вниз',
       input: {
         items: [{ price: 1004, quantity: 1 }],
-        promoCode: 'SIMBA10',
+        promo: { type: 'percent', value: 10 },
         availableBonus: 0,
       },
     },
@@ -298,7 +287,7 @@ describe('calcOrderTotals — копейка не теряется и не по�
       name: 'промо + бонусы + доставка',
       input: {
         items: [{ price: 100000, quantity: 1 }],
-        promoCode: 'SIMBA10',
+        promo: { type: 'percent', value: 10 },
         deliveryCost: 30000,
         bonusRequested: 500,
         availableBonus: 500,
@@ -308,7 +297,7 @@ describe('calcOrderTotals — копейка не теряется и не по�
       name: 'бонусы обрезаются лимитом половины чека',
       input: {
         items: [{ price: 100000, quantity: 1 }],
-        promoCode: 'SIMBA10',
+        promo: { type: 'percent', value: 10 },
         bonusRequested: 5000,
         availableBonus: 5000,
       },
@@ -329,7 +318,7 @@ describe('calcOrderTotals — копейка не теряется и не по�
           { price: 333, quantity: 3 },
           { price: 777, quantity: 2 },
         ],
-        promoCode: 'SIMBA10',
+        promo: { type: 'percent', value: 10 },
         bonusRequested: 5,
         availableBonus: 5,
         deliveryCost: 199,
@@ -547,7 +536,7 @@ describe('правила бонусной программы', () => {
   it('промокод 10% + доставка: начисление от товаров после скидки', () => {
     const r = calcOrderTotals({
       items: [{ price: 1000000, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       deliveryCost: 50000,
       bonusRequested: 0,
       availableBonus: 0,
@@ -562,7 +551,7 @@ describe('правила бонусной программы', () => {
   it('промокод + запрос ровно в лимит', () => {
     const r = calcOrderTotals({
       items: [{ price: 1000000, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       deliveryCost: 50000,
       bonusRequested: 4750,
       availableBonus: 10000,
@@ -578,7 +567,7 @@ describe('правила бонусной программы', () => {
   it('промокод + запрос на 1 больше лимита', () => {
     const r = calcOrderTotals({
       items: [{ price: 1000000, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       deliveryCost: 50000,
       bonusRequested: 4751,
       availableBonus: 10000,
@@ -593,7 +582,7 @@ describe('правила бонусной программы', () => {
   it('лимит считается от чека (с доставкой), не от суммы ДО промокода', () => {
     const r = calcOrderTotals({
       items: [{ price: 1000000, quantity: 1 }],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       deliveryCost: 50000,
       bonusRequested: 5250,
       availableBonus: 10000,
@@ -609,7 +598,7 @@ describe('правила бонусной программы', () => {
   it('пустой заказ с промокодом: всё нули', () => {
     const r = calcOrderTotals({
       items: [],
-      promoCode: 'SIMBA10',
+      promo: { type: 'percent', value: 10 },
       bonusRequested: 100,
       availableBonus: 100,
     })
