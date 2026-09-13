@@ -19,6 +19,10 @@ import quizRoutes from './routes/quiz/index'
 import deliveryRoutes from './routes/delivery/index'
 import blogRoutes from './routes/blog/index'
 import blogAdminRoutes from './routes/blog/admin'
+import reviewsRoutes from './routes/reviews/index'
+import reviewsAdminRoutes from './routes/reviews/admin'
+import promoRoutes from './routes/promo/index'
+import promoCodesAdminRoutes from './routes/admin/promo-codes'
 import siteTextsRoutes from './routes/site-texts/index'
 import siteTextsAdminRoutes from './routes/site-texts/admin'
 import visitsRoutes from './routes/visits'
@@ -91,6 +95,10 @@ export async function buildApp(opts: { logger?: boolean } = {}) {
   await app.register(deliveryRoutes, { prefix: '/api/delivery' })
   await app.register(blogRoutes, { prefix: '/api/blog' })
   await app.register(blogAdminRoutes, { prefix: '/api/admin/blog' })
+  await app.register(reviewsRoutes, { prefix: '/api/reviews' })
+  await app.register(reviewsAdminRoutes, { prefix: '/api/admin/reviews' })
+  await app.register(promoRoutes, { prefix: '/api/promo' })
+  await app.register(promoCodesAdminRoutes, { prefix: '/api/admin/promo-codes' })
   await app.register(siteTextsRoutes, { prefix: '/api/site-texts' })
   await app.register(siteTextsAdminRoutes, { prefix: '/api/admin/site-texts' })
   await app.register(visitsRoutes, { prefix: '/api/visits' })

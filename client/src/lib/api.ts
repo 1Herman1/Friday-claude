@@ -129,6 +129,10 @@ export interface Product {
   ingredients: string | null
   variants: ProductVariant[]
   categories: { category: { id: string; name: string; slug: string } }[]
+  showAboutTab?: boolean
+  showSpecsTab?: boolean
+  showReviewsTab?: boolean
+  related?: Product[]
 }
 
 export interface CartItem {
@@ -175,6 +179,24 @@ export interface User {
   bonusLevel: 'newcomer' | 'active' | 'premium'
   role: string
   isGuest?: boolean
+}
+
+export interface Review {
+  id: string
+  authorName: string
+  rating: number
+  text: string
+  photo: string | null
+  createdAt: string
+  status: 'pending' | 'approved' | 'rejected'
+  mine: boolean
+}
+
+export interface PromoRule {
+  code: string
+  type: 'percent' | 'fixed'
+  value: number
+  minSubtotal: number | null
 }
 
 /// Службы доставки на витрине. Решение владельца: только 4 способа.
@@ -244,6 +266,7 @@ export const productsApi = {
   bySlug: (slug: string) =>
     api.get<Product>(`/api/products/${slug}`),
 
+  /** @deprecated роута нет, удалить в Wave 2 */
   related: (slug: string) =>
     api.get<Product[]>(`/api/products/${slug}/related`),
 }
@@ -324,6 +347,37 @@ export const bannersApi = {
 export const brandsApi = {
   list: () =>
     api.get<Brand[]>('/api/brands'),
+}
+
+// ─── Отзывы ──────────────────────────────────────────────────────────────────
+
+export const reviewsApi = {
+  list: (params?: { page?: number; limit?: number }) =>
+    api.get<{ items: Review[]; total: number; page: number; totalPages: number }>('/api/reviews', { params }),
+
+  create: (data: { rating: number; text: string; authorName?: string; photo?: string; productId?: string }) =>
+    api.post<Review>('/api/reviews', data),
+
+  remove: (id: string) =>
+    api.delete(`/api/reviews/${id}`),
+
+  upload: (file: File) => {
+    const form = new FormData()
+    form.append('file', file)
+    return api.post<{ key: string; url: string }>('/api/reviews/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
+}
+
+// ─── Промокоды ───────────────────────────────────────────────────────────────
+
+export const promoApi = {
+  validate: (code: string, subtotal: number) =>
+    api.post<
+      | ({ valid: true } & PromoRule & { discount: number })
+      | { valid: false; reason: string }
+    >('/api/promo/validate', { code, subtotal }),
 }
 
 // ─── Избранное ───────────────────────────────────────────────────────────────

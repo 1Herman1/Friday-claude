@@ -89,6 +89,8 @@ const TABLES = [
   'site_texts',
   'blog_posts',
   'site_visits',
+  'reviews',
+  'promo_codes',
 ]
 
 export async function resetDb() {

@@ -10,6 +10,9 @@ import ProductsPage from './pages/products/ProductsPage'
 import ProductFormPage from './pages/products/ProductFormPage'
 import ImportPage from './pages/products/ImportPage'
 import UsersPage from './pages/users/UsersPage'
+import UserDetailPage from './pages/users/UserDetailPage'
+import ReviewsPage from './pages/reviews/ReviewsPage'
+import PromoCodesPage from './pages/promo/PromoCodesPage'
 import CategoriesPage from './pages/categories/CategoriesPage'
 import BrandsPage from './pages/brands/BrandsPage'
 import BannersPage from './pages/banners/BannersPage'
@@ -73,6 +76,9 @@ export default function App() {
               <Route path="/import" element={<ImportPage />} />
               <Route path="/sync" element={<SyncPage />} />
               <Route path="/users" element={<UsersPage />} />
+              <Route path="/users/:id" element={<UserDetailPage />} />
+              <Route path="/reviews" element={<ReviewsPage />} />
+              <Route path="/promo-codes" element={<PromoCodesPage />} />
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/brands" element={<BrandsPage />} />
               <Route path="/banners" element={<BannersPage />} />

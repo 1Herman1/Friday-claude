@@ -142,6 +142,17 @@ enum QuizSpecies {
   dog
 }
 
+enum ReviewStatus {
+  pending
+  approved
+  rejected
+}
+
+enum PromoType {
+  percent
+  fixed
+}
+
 // ─── МОДЕЛИ ──────────────────────────────────────────────────────────────────
 
 /// Пользователи системы — покупатели и сотрудники магазина
@@ -174,6 +185,7 @@ model User {
   favorites         Favorite[]
   bonusTransactions BonusTransaction[]
   quizSessions      QuizSession[]
+  reviews           Review[]
 
   @@index([email])
   @@index([phone])
@@ -264,9 +276,9 @@ model Category {
 
 /// Бренды производителей — Royal Canin, Hill's и другие
 model Brand {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
-  slug        String   @unique
+  slug        String        @unique
   logo        String?
   /// Фирменный цвет бренда в hex (#0F70B5 у Farmina) — заливка плитки на главной.
   /// В БД, а не в компоненте: hex вне палитры проекта ловит design-lint.mjs.
@@ -276,7 +288,7 @@ model Brand {
   /// null означает mid — то же поведение по умолчанию, что и на клиенте сейчас.
   logoFit     BrandLogoFit?
   description String?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime      @default(now())
 
   products Product[]
 
@@ -286,15 +298,15 @@ model Brand {
 
 /// Товары каталога. isActive = false скрывает товар без удаления из БД
 model Product {
-  id               String   @id @default(uuid())
+  id               String         @id @default(uuid())
   name             String
-  slug             String   @unique
+  slug             String         @unique
   description      String
   brandId          String?
   images           String[]
-  isGrainFree      Boolean  @default(false)
-  isHypoallergenic Boolean  @default(false)
-  isWeightControl  Boolean  @default(false)
+  isGrainFree      Boolean        @default(false)
+  isHypoallergenic Boolean        @default(false)
+  isWeightControl  Boolean        @default(false)
   protein          Float?
   fat              Float?
   fiber            Float?
@@ -302,18 +314,24 @@ model Product {
   ingredients      String?
   seoTitle         String?
   seoDescription   String?
-  isActive         Boolean  @default(true)
+  isActive         Boolean        @default(true)
+  /// Скрыт вручную из админки. Синхронизация МойСклад НЕ возвращает isActive=true таким товарам.
+  hiddenManually   Boolean        @default(false)
+  /// Какие вкладки показывать на странице товара
+  showAboutTab     Boolean        @default(true)
+  showSpecsTab     Boolean        @default(true)
+  showReviewsTab   Boolean        @default(true)
   /// Вид животного, которому подходит товар. По умолчанию unknown, чтобы
   /// неразмеченный товар не получил ложный вид. Дублирует тег species:* в
   /// quizTags намеренно: тег обслуживает подбор, поле — фильтр каталога.
   species          ProductSpecies @default(unknown)
   /// Теги для квиза-подборщика. Закрытый словарь — server/src/lib/quiz-tags.ts. Пустой массив = товар в подборе не участвует.
-  quizTags         String[]             @default([])
+  quizTags         String[]       @default([])
   /// Теги, выведенные автоматически из фильтров/категорий/названия (backfill-quiz-tags.ts).
   /// Ручные quizTags приоритетнее: при совпадении пространства имён выигрывают они.
-  autoQuizTags     String[]             @default([])
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  autoQuizTags     String[]       @default([])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   brand         Brand?               @relation(fields: [brandId], references: [id])
   categories    ProductCategory[]
@@ -324,6 +342,7 @@ model Product {
   comparisons   ComparisonProduct[]
   subscriptions Subscription[]
   favorites     Favorite[]
+  reviews       Review[]
   isFeatured    Boolean              @default(false)
 
   @@index([slug])
@@ -450,15 +469,15 @@ model Cart {
 
 /// Позиция в корзине — конкретный вариант товара и количество
 model CartItem {
-  id                      String   @id @default(uuid())
-  cartId                  String
-  productVariantId        String
-  productId               String
-  quantity                Int
-  isSubscription          Boolean  @default(false)
+  id                       String   @id @default(uuid())
+  cartId                   String
+  productVariantId         String
+  productId                String
+  quantity                 Int
+  isSubscription           Boolean  @default(false)
   subscriptionIntervalDays Int?
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
 
   cart           Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
   productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
@@ -507,17 +526,27 @@ model Order {
   contactName         String?
   contactEmail        String?
   contactPhone        String?
+  /// Заказ оформлен без входа (JWT type=guest). Для дашборда: «гости» vs «пользователи».
+  guestCheckout       Boolean        @default(false)
+  /// Снапшот кода на момент заказа — остаётся, даже если промокод удалили
+  promoCode           String?
+  promoCodeId         String?
+  /// Скидка по промокоду, копейки
+  discount            Int            @default(0)
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 
   user              User               @relation(fields: [userId], references: [id])
   items             OrderItem[]
   bonusTransactions BonusTransaction[]
+  promo             PromoCode?         @relation(fields: [promoCodeId], references: [id], onDelete: SetNull)
 
   @@index([userId])
   @@index([status])
   @@index([paymentStatus])
   @@index([createdAt])
+  @@index([promoCodeId])
+  @@index([guestCheckout])
   @@map("orders")
 }
 
@@ -571,7 +600,7 @@ model OrderItem {
 
 /// Автоматические заказы — пользователь получает корм каждые N дней
 model Subscription {
-  id               String   @id @default(uuid())
+  id               String          @id @default(uuid())
   userId           String
   productVariantId String
   productId        String
@@ -581,10 +610,10 @@ model Subscription {
   deliveryMethod   DeliveryMethod?
   deliveryAddress  Json?
   deliveryPoint    Json?
-  isPaused         Boolean  @default(false)
-  isActive         Boolean  @default(true)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  isPaused         Boolean         @default(false)
+  isActive         Boolean         @default(true)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 
   user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
@@ -672,26 +701,26 @@ model QuizSession {
 
 /// Рекламные баннеры — управляются из админки
 model Banner {
-  id         String         @id @default(uuid())
-  title      String
-  subtitle   String?
+  id          String         @id @default(uuid())
+  title       String
+  subtitle    String?
   /// Картинка для компьютера. Широкая — слайд на десктопе низкий и длинный.
-  image      String
+  image       String
   /// Отдельная картинка для телефона. Тот же файл там либо обрезается по бокам,
   /// либо становится нечитаемо мелким, поэтому формат второй, а не тот же.
   /// Пусто — показываем десктопную.
   imageMobile String?
   /// Готовый баннер с уже нарисованным текстом (как в Тильде) поверх себя ничего
   /// не терпит. Флаг решает, накладывать ли заголовок, подпись и кнопку.
-  showText   Boolean        @default(true)
-  link       String?
-  buttonText String?
-  page       BannerPage
-  position   BannerPosition
-  isActive   Boolean        @default(true)
-  sortOrder  Int            @default(0)
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
+  showText    Boolean        @default(true)
+  link        String?
+  buttonText  String?
+  page        BannerPage
+  position    BannerPosition
+  isActive    Boolean        @default(true)
+  sortOrder   Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   @@index([page, position])
   @@index([isActive])
@@ -748,23 +777,23 @@ model SyncRun {
 /// страницы и расчёт сервера жили порознь и разошлись.
 model DeliveryOption {
   /// Ключ варианта из shared DeliveryOptionKey: simba_courier, cdek_pvz, …
-  key       String  @id
+  key       String   @id
   title     String
   subtitle  String?
   /// В копейках, как все цены проекта.
-  price     Int     @default(0)
+  price     Int      @default(0)
   /// Расход магазина на этот способ, копейки. Для служб с API не нужен —
   /// расход по заказу считается у службы; для своего курьера и самовывоза
   /// это единственный источник цифры.
-  expense   Int     @default(0)
+  expense   Int      @default(0)
   /// Минимальное время доставки в днях (включительно)
   etaMin    Int?
   /// Максимальное время доставки в днях (включительно)
   etaMax    Int?
   /// Минимальная сумма заказа в копейках, с которой доставка становится бесплатной (null = не бесплатная)
   freeFrom  Int?
-  isActive  Boolean @default(true)
-  sortOrder Int     @default(0)
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
   updatedAt DateTime @updatedAt
 
   @@map("delivery_options")
@@ -792,34 +821,82 @@ model SiteText {
 
 /// Записи блога — статьи с поддержкой категорий и SEO
 model BlogPost {
-  id               String     @id @default(uuid())
+  id              String     @id @default(uuid())
   /// URL-friendly идентификатор статьи
-  slug             String     @unique
-  title            String
+  slug            String     @unique
+  title           String
   /// Краткое описание — используется в списке статей и в meta description
-  subtitle         String?
+  subtitle        String?
   /// Тело статьи в формате markdown
-  body             String     @default("")
+  body            String     @default("")
   /// Категории статьи (строки, массив)
-  categories       String[]   @default([])
+  categories      String[]   @default([])
   /// Дата публикации статьи
-  date             DateTime
+  date            DateTime
   /// Примерное время чтения в минутах (рассчитывается на клиенте либо задаётся вручную)
-  readingMinutes   Int        @default(0)
+  readingMinutes  Int        @default(0)
   /// Статус публикации: draft или published
-  status           BlogStatus @default(draft)
+  status          BlogStatus @default(draft)
   /// Обложка статьи (путь или URL)
-  cover            String?
+  cover           String?
   /// Заголовок для SEO (если пусто, используется title)
-  metaTitle        String?
+  metaTitle       String?
   /// Описание для SEO (если пусто, используется subtitle)
-  metaDescription  String?
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  metaDescription String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 
   @@index([status])
   @@index([date(sort: Desc)])
   @@map("blog_posts")
+}
+
+// ─── ОТЗЫВЫ И ПРОМОКОДЫ ──────────────────────────────────────────────────────
+
+model Review {
+  id         String       @id @default(uuid())
+  authorName String
+  /// 1..5, CHECK в миграции
+  rating     Int
+  text       String
+  /// /api/media/<key> из saveFile
+  photo      String?
+  status     ReviewStatus @default(pending)
+  userId     String?
+  /// Задел на отзывы к конкретному товару; в показе сейчас не используется
+  productId  String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  product    Product?     @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt(sort: Desc)])
+  @@index([userId])
+  @@index([productId])
+  @@map("reviews")
+}
+
+model PromoCode {
+  id           String    @id @default(uuid())
+  /// Хранится в верхнем регистре
+  code         String    @unique
+  type         PromoType
+  /// percent: 1..100; fixed: копейки
+  value        Int
+  minSubtotal  Int?
+  startsAt     DateTime?
+  endsAt       DateTime?
+  maxUses      Int?
+  usedCount    Int       @default(0)
+  perUserLimit Int?
+  isActive     Boolean   @default(true)
+  comment      String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  orders       Order[]
+
+  @@index([isActive])
+  @@map("promo_codes")
 }
 
 // ─── АНАЛИТИКА ───────────────────────────────────────────────────────────────

@@ -24,15 +24,20 @@ api.interceptors.response.use(
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export interface Bucket {
+  count: number
+  sum: number
+}
+
 export interface PeriodData {
   from: string
   to: string
   orders: number
   revenue: number
   newUsers: number
-  activeGuests: number
   visits: number
   quizSessions: number
+  activeGuests?: number
 }
 
 export interface ChartSeries {
@@ -53,6 +58,8 @@ export interface DashboardStats {
   recentOrders: Order[]
   period?: PeriodData
   series?: ChartSeries[]
+  ordersTodayBreakdown: { paidCard: Bucket; paidCash: Bucket; unpaid: Bucket; refunded: Bucket }
+  filters?: { period?: string; userType?: string }
 }
 
 export interface ProductVariant {
@@ -73,6 +80,10 @@ export interface Product {
   brand?: { id: string; name: string; slug: string } | null
   images: string[]
   isActive: boolean
+  hiddenManually: boolean
+  showAboutTab: boolean
+  showSpecsTab: boolean
+  showReviewsTab: boolean
   isGrainFree: boolean
   isHypoallergenic: boolean
   isWeightControl: boolean
@@ -87,6 +98,17 @@ export interface Product {
   variants: ProductVariant[]
   categories: { categoryId: string }[]
   createdAt: string
+}
+
+export interface AdminProductRow {
+  id: string
+  name: string
+  slug: string
+  isActive: boolean
+  hiddenManually: boolean
+  brand: { name: string } | null
+  variants: { price: number }[]
+  updatedAt: string
 }
 
 export interface Category {
@@ -129,7 +151,7 @@ export interface Banner {
   showText: boolean
   link?: string
   buttonText?: string
-  page: 'home' | 'catalog' | 'other'
+  page: 'home' | 'catalog' | 'about' | 'other'
   position: 'main_slider' | 'promo_strip' | 'sidebar'
   isActive: boolean
   sortOrder: number
@@ -201,6 +223,9 @@ export interface Order {
   total: number
   bonusUsed: number
   bonusEarned: number
+  paymentMethod?: string
+  guestCheckout?: boolean
+  discount?: number
   promoCode?: string
   paymentStatus: string
   createdAt: string
@@ -219,8 +244,19 @@ export interface User {
   createdAt: string
   lastSeenAt: string
   isGuest: boolean
+  isActive: boolean
   cartItems: number
   _count?: { orders: number; favorites: number; quizSessions: number }
+}
+
+export interface UserDetail {
+  user: User & { isGuest: boolean }
+  stats: { ordersCount: number; paidOrdersCount: number; paidTotal: number; favoritesCount: number; quizSessions: number; cartItems: number }
+  orders: Order[]
+  bonusTransactions: Array<{ type: string; amount: number; balanceAfter: number; comment: string | null; createdAt: string }>
+  addresses: Array<{ id: string; label: string; city: string; street: string; house: string; apartment?: string; postalCode: string }>
+  pets: Array<{ id: string; name: string; species: string; breed?: string; birthDate?: string }>
+  subscriptions: Array<{ id: string; productId: string; product: { name: string }; variantId: string; variant: { weight: number } }>
 }
 
 export interface Paginated<T> {
@@ -228,6 +264,38 @@ export interface Paginated<T> {
   total: number
   page: number
   totalPages: number
+}
+
+export interface Review {
+  id: string
+  authorName: string
+  rating: number
+  text: string
+  photo: string | null
+  status: 'pending' | 'approved' | 'rejected'
+  userId: string | null
+  productId: string | null
+  createdAt: string
+  user?: { name: string; email: string } | null
+  product?: { name: string; slug: string } | null
+}
+
+export interface PromoCode {
+  id: string
+  code: string
+  type: 'percent' | 'fixed'
+  value: number
+  minSubtotal: number | null
+  startsAt: string | null
+  endsAt: string | null
+  maxUses: number | null
+  usedCount: number
+  perUserLimit: number | null
+  isActive: boolean
+  comment: string | null
+  createdAt: string
+  status: 'active' | 'scheduled' | 'expired' | 'exhausted' | 'disabled'
+  _count?: { orders: number }
 }
 
 // ─── API methods ──────────────────────────────────────────────────────────────
@@ -244,19 +312,23 @@ export const authApi = {
 }
 
 export const dashboardApi = {
-  stats: (period?: 'week' | 'month' | 'year') => {
-    const params = period ? { period } : {}
-    return api.get<DashboardStats>('/api/admin/dashboard', { params })
+  stats: (params?: 'week' | 'month' | 'year' | { period?: 'today' | 'week' | 'month' | 'year'; userType?: 'all' | 'registered' | 'guest' }) => {
+    const queryParams = typeof params === 'string' ? { period: params } : params
+    return api.get<DashboardStats>('/api/admin/dashboard', { params: queryParams })
   },
 }
 
 export const productsApi = {
   list: (params?: Record<string, unknown>) =>
     api.get<Paginated<Product>>('/api/products/list', { params }),
+  adminList: (params?: Record<string, unknown>) =>
+    api.get<Paginated<AdminProductRow>>('/api/admin/products', { params }),
   byId: (id: string) => api.get<Product>(`/api/admin/products/${id}`),
   create: (data: unknown) => api.post<Product>('/api/admin/products', data),
   update: (id: string, data: unknown) => api.put<Product>(`/api/admin/products/${id}`, data),
   delete: (id: string) => api.delete(`/api/admin/products/${id}`),
+  setVisibility: (id: string, isActive: boolean) =>
+    api.put<Product>(`/api/admin/products/${id}/visibility`, { isActive }),
   importCsv: (file: File) => {
     const form = new FormData()
     form.append('file', file)
@@ -288,6 +360,13 @@ export const brandsApi = {
   create: (data: unknown) => api.post<Brand>('/api/admin/brands', data),
   update: (id: string, data: unknown) => api.put<Brand>(`/api/admin/brands/${id}`, data),
   delete: (id: string) => api.delete(`/api/admin/brands/${id}`),
+  uploadImage: (file: File) => {
+    const form = new FormData()
+    form.append('file', file)
+    return api.post<{ key: string; url: string }>('/api/admin/brands/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
 }
 
 export const ordersApi = {
@@ -305,10 +384,15 @@ export const ordersApi = {
 export const usersApi = {
   list: (params?: Record<string, unknown>) =>
     api.get<Paginated<User>>('/api/admin/users', { params }),
+  byId: (id: string) => api.get<UserDetail>(`/api/admin/users/${id}`),
   updateRole: (id: string, role: string) =>
     api.put(`/api/admin/users/${id}/role`, { role }),
   resetPassword: (id: string, newPassword: string) =>
     api.put(`/api/admin/users/${id}/password`, { newPassword }),
+  setActive: (id: string, isActive: boolean) =>
+    api.put(`/api/admin/users/${id}/active`, { isActive }),
+  adjustBonus: (id: string, amount: number, comment: string) =>
+    api.post<{ balanceAfter: number; bonusLevel: string }>(`/api/admin/users/${id}/bonus`, { amount, comment }),
 }
 
 export const bannersApi = {
@@ -316,6 +400,7 @@ export const bannersApi = {
   create: (data: unknown) => api.post<Banner>('/api/admin/banners', data),
   update: (id: string, data: unknown) => api.put<Banner>(`/api/admin/banners/${id}`, data),
   delete: (id: string) => api.delete(`/api/admin/banners/${id}`),
+  reorder: (ids: string[]) => api.put('/api/admin/banners/reorder', { ids }),
   uploadImage: (file: File) => {
     const form = new FormData()
     form.append('file', file)
@@ -410,4 +495,27 @@ export const syncApi = {
   status: () => api.get<SyncStatusResponse>('/api/admin/sync/moysklad'),
   run: (dryRun: boolean) => api.post<{ runId: string }>('/api/admin/sync/moysklad', { dryRun }),
   get: (id: string) => api.get<SyncRun>(`/api/admin/sync/moysklad/${id}`),
+}
+
+export const reviewsApi = {
+  list: (params?: { status?: string; search?: string; page?: number; limit?: number }) =>
+    api.get<Paginated<Review>>('/api/admin/reviews', { params }),
+  create: (data: unknown) => api.post<Review>('/api/admin/reviews', data),
+  update: (id: string, data: unknown) => api.put<Review>(`/api/admin/reviews/${id}`, data),
+  delete: (id: string) => api.delete(`/api/admin/reviews/${id}`),
+  uploadImage: (file: File) => {
+    const form = new FormData()
+    form.append('file', file)
+    return api.post<{ key: string; url: string }>('/api/admin/reviews/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
+}
+
+export const promoApi = {
+  list: () => api.get<PromoCode[]>('/api/admin/promo-codes'),
+  create: (data: unknown) => api.post<PromoCode>('/api/admin/promo-codes', data),
+  update: (id: string, data: unknown) => api.put<PromoCode>(`/api/admin/promo-codes/${id}`, data),
+  setActive: (id: string, isActive: boolean) => api.put<PromoCode>(`/api/admin/promo-codes/${id}/active`, { isActive }),
+  delete: (id: string) => api.delete(`/api/admin/promo-codes/${id}`),
 }

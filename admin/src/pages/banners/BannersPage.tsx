@@ -1,21 +1,7 @@
 import { useEffect, useState } from 'react'
 import { bannersApi, type Banner } from '../../lib/api'
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000'
-
-/**
- * Адрес картинки для показа В АДМИНКЕ.
- *
- * В базе путь хранится так, как его понимает витрина: загруженные файлы —
- * /api/media/..., старые — /pets/... Админка живёт на своём адресе, поэтому
- * без приставки браузер искал бы их у себя и не находил: предпросмотр оставался
- * пустым, а подпись «Предпросмотр» висела над пустотой.
- */
-function imageSrc(path: string): string {
-  if (/^https?:\/\//.test(path)) return path
-  if (path.startsWith('/api/')) return API_BASE + path
-  return path
-}
+import { imageSrc } from '../../lib/media'
+import { ImageField } from '../../components/ImageField'
 
 const PAGE_LABELS: Record<string, string> = { home: 'Главная', catalog: 'Каталог', about: 'О нас', other: 'Другое' }
 const POSITION_LABELS: Record<string, string> = {
@@ -285,47 +271,3 @@ export default function BannersPage() {
   )
 }
 
-/** Адрес картинки можно и вписать руками, и загрузить файлом: файлы из
-    client/public/banners/ лежат в репозитории и не требуют хранилища, а
-    загруженные — наоборот. Раньше было только второе, и путь из папки вписать
-    было некуда. */
-function ImageField({
-  label, hint, placeholder, value, onChange, onFile, uploading,
-}: {
-  label: string
-  hint: string
-  placeholder: string
-  value: string
-  onChange: (value: string) => void
-  onFile: (e: React.ChangeEvent<HTMLInputElement>) => void
-  uploading: boolean
-}) {
-  return (
-    <div>
-      <label className="block text-xs text-gray-500 mb-1">{label}</label>
-      <input
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400"
-      />
-      <div className="flex items-center gap-3 mt-2">
-        {/* Родной выбор файла спрятан: браузер рисует в нём английские
-            «Choose File» и «No file chosen», а админка русская. */}
-        <label className="px-3 py-2 rounded-lg bg-blue-50 text-blue-700 text-sm font-medium cursor-pointer hover:bg-blue-100">
-          Загрузить файл
-          <input type="file" accept="image/*" onChange={onFile} disabled={uploading} className="sr-only" />
-        </label>
-        <span className="text-xs text-gray-500">{uploading ? 'Загружаем…' : hint}</span>
-      </div>
-      {value && (
-        <img
-          src={imageSrc(value)}
-          alt=""
-          className="mt-2 h-20 rounded-lg object-cover bg-gray-50"
-          onError={(e) => { e.currentTarget.style.display = 'none' }}
-        />
-      )}
-    </div>
-  )
-}
