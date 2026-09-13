@@ -32,5 +32,13 @@ fi
 
 git pull origin "$BRANCH" --ff-only 2>/dev/null || true
 
+# MCP-сервер иконок лежит вне npm workspaces, поэтому корневой npm install его
+# зависимости не ставит. В свежем контейнере он падал с ERR_MODULE_NOT_FOUND, и
+# Claude Code показывал его как «сервер не подключился».
+if [ -f tools/icon-mcp-server/package.json ] && [ ! -d tools/icon-mcp-server/node_modules ]; then
+  (cd tools/icon-mcp-server && npm install --no-audit --no-fund >/dev/null 2>&1) \
+    || echo "session-start: не удалось поставить зависимости icon-mcp-server" >&2
+fi
+
 # Память прошлых сессий: stdout SessionStart попадает прямо в контекст Claude.
 "$CLAUDE_PROJECT_DIR/.claude/scripts/archive-read.sh" 2>/dev/null || true
