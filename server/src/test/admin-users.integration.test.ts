@@ -352,4 +352,169 @@ describe.skipIf(!hasTestDb)('Admin users (интеграционные)', () => 
     expect(data.stats.paidTotal).toBe(5000) // Only the paid non-cancelled order
     expect(data.stats.ordersCount).toBe(3) // All orders
   })
+
+  describe('чистка гостей', () => {
+    it('GET /guests/stale возвращает количество старых гостей', async () => {
+      const prisma = getTestPrisma()
+      const fortyDaysAgo = new Date(Date.now() - 40 * 86400000)
+      const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+
+      // Создаём 2 старых гостей без заказов/избранного/подборов
+      for (let i = 0; i < 2; i++) {
+        await prisma.user.create({
+          data: {
+            email: null,
+            phone: null,
+            passwordHash: null,
+            name: `Старый гость ${i + 1}`,
+            createdAt: fortyDaysAgo,
+          },
+        })
+      }
+
+      // Свежий гость
+      await prisma.user.create({
+        data: {
+          email: null,
+          phone: null,
+          passwordHash: null,
+          name: 'Свежий гость',
+        },
+      })
+
+      const res = await app.inject({
+        method: 'GET',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+
+      expect(res.statusCode).toBe(200)
+      const data = res.json()
+      expect(data.days).toBe(30)
+      expect(data.count).toBe(2)
+    })
+
+    it('DELETE /guests/stale удаляет старых гостей, оставляя свежих и тех с заказами', async () => {
+      const prisma = getTestPrisma()
+      const fortyDaysAgo = new Date(Date.now() - 40 * 86400000)
+      const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+
+      // 2 старых гостей без взаимодействий
+      const staleGuest1 = await prisma.user.create({
+        data: {
+          email: null,
+          phone: null,
+          passwordHash: null,
+          name: 'Старый гость 1',
+          createdAt: fortyDaysAgo,
+        },
+      })
+
+      const staleGuest2 = await prisma.user.create({
+        data: {
+          email: null,
+          phone: null,
+          passwordHash: null,
+          name: 'Старый гость 2',
+          createdAt: fortyDaysAgo,
+        },
+      })
+
+      // Старый гость с заказом
+      const staleGuestWithOrder = await prisma.user.create({
+        data: {
+          email: null,
+          phone: null,
+          passwordHash: null,
+          name: 'Старый гость с заказом',
+          createdAt: fortyDaysAgo,
+        },
+      })
+
+      // Создаём заказ для этого гостя
+      await prisma.order.create({
+        data: {
+          userId: staleGuestWithOrder.id,
+          status: 'new',
+          paymentStatus: 'pending',
+          deliveryMethod: 'simba_courier',
+          subtotal: 10000,
+          total: 10000,
+        },
+      })
+
+      // Свежий гость
+      const freshGuest = await prisma.user.create({
+        data: {
+          email: null,
+          phone: null,
+          passwordHash: null,
+          name: 'Свежий гость',
+        },
+      })
+
+      // Выполняем удаление
+      const res = await app.inject({
+        method: 'DELETE',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+
+      expect(res.statusCode).toBe(200)
+      const data = res.json()
+      expect(data.days).toBe(30)
+      expect(data.deleted).toBe(2)
+
+      // Проверяем, что старые гости удалены
+      const deletedGuest1 = await prisma.user.findUnique({ where: { id: staleGuest1.id } })
+      expect(deletedGuest1).toBeNull()
+
+      const deletedGuest2 = await prisma.user.findUnique({ where: { id: staleGuest2.id } })
+      expect(deletedGuest2).toBeNull()
+
+      // Проверяем, что гость с заказом и свежий гость всё ещё существуют
+      const stillExistsWithOrder = await prisma.user.findUnique({ where: { id: staleGuestWithOrder.id } })
+      expect(stillExistsWithOrder).not.toBeNull()
+
+      const stillExistsFresh = await prisma.user.findUnique({ where: { id: freshGuest.id } })
+      expect(stillExistsFresh).not.toBeNull()
+    })
+
+    it('DELETE /guests/stale удаляет батчами по 500', async () => {
+      const prisma = getTestPrisma()
+      const fortyDaysAgo = new Date(Date.now() - 40 * 86400000)
+      const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+
+      // Создаём 550 старых гостей (проверяем батчинг)
+      const ids: string[] = []
+      for (let i = 0; i < 550; i++) {
+        const user = await prisma.user.create({
+          data: {
+            email: null,
+            phone: null,
+            passwordHash: null,
+            name: `Старый гость ${i}`,
+            createdAt: fortyDaysAgo,
+          },
+        })
+        ids.push(user.id)
+      }
+
+      const res = await app.inject({
+        method: 'DELETE',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+
+      expect(res.statusCode).toBe(200)
+      const data = res.json()
+      expect(data.deleted).toBe(550)
+
+      // Проверяем, что все удалены
+      const remaining = await prisma.user.count({
+        where: { id: { in: ids } },
+      })
+      expect(remaining).toBe(0)
+    })
+  })
 })

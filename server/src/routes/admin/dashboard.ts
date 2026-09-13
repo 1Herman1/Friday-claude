@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { Prisma } from '@prisma/client'
 import { checkRole } from '../../middleware/check-role'
 import { GUEST_USER_WHERE, REGISTERED_USER_WHERE } from '../../lib/user-type'
+import { mskDayStart, mskDateKey, mskDayAsDate } from '../../lib/msk-time'
 
 const dashboardRoute: FastifyPluginAsync = async (app) => {
   const guard = { preHandler: [app.authenticate, checkRole(['super_admin', 'orders_manager', 'products_manager'])] }
@@ -20,31 +21,25 @@ const dashboardRoute: FastifyPluginAsync = async (app) => {
     const { period: periodType, userType } = parsed.data
 
     const now = new Date()
-    const dayStartUtc = (d: Date) => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))
-    const todayStart = dayStartUtc(now)
+    // Сутки магазина — московские (UTC+3). Все граница периода и графики считаются в них.
+    // Historical SiteVisit до этого изменения — UTC дни (одна граница переброса, приемлемо).
+    const todayStart = mskDayStart(now)
     const periodEnd = now
 
-    // Calculate period boundaries
+    // Calculate period boundaries (subtract milliseconds, not setDate)
     let periodStart: Date
     if (periodType === 'today') {
       periodStart = todayStart
     } else if (periodType === 'week') {
-      const sevenDaysAgo = new Date(todayStart)
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6)
-      periodStart = sevenDaysAgo
+      periodStart = new Date(todayStart.getTime() - 6 * 864e5)
     } else if (periodType === 'month') {
-      const thirtyDaysAgo = new Date(todayStart)
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29)
-      periodStart = thirtyDaysAgo
+      periodStart = new Date(todayStart.getTime() - 29 * 864e5)
     } else {
       // year
-      const year364DaysAgo = new Date(todayStart)
-      year364DaysAgo.setDate(year364DaysAgo.getDate() - 364)
-      periodStart = year364DaysAgo
+      periodStart = new Date(todayStart.getTime() - 364 * 864e5)
     }
 
-    const monthStart = new Date(todayStart)
-    monthStart.setDate(monthStart.getDate() - 29)
+    const monthStart = new Date(todayStart.getTime() - 29 * 864e5)
 
     // Filters
     const orderTypeWhere: Prisma.OrderWhereInput =
@@ -110,7 +105,7 @@ const dashboardRoute: FastifyPluginAsync = async (app) => {
         },
       }),
       app.prisma.siteVisit.aggregate({
-        where: { day: { gte: periodStart, lte: periodEnd } },
+        where: { day: { gte: mskDayAsDate(periodStart), lte: mskDayAsDate(periodEnd) } },
         _sum: { count: true },
       }),
       app.prisma.quizSession.count({
@@ -155,11 +150,12 @@ const dashboardRoute: FastifyPluginAsync = async (app) => {
     }
 
     // Build series data with raw SQL
+    // "createdAt" хранится в UTC; смещаем на +3 часа перед date_trunc чтобы считать дни и месяцы по московскому времени
     const bucket = periodType === 'year' ? 'month' : 'day'
     const rawRows = await app.prisma.$queryRaw<
       Array<{ bucket: Date; orders: number; revenue: number }>
     >`
-      SELECT date_trunc(${Prisma.raw(`'${bucket}'`)}, "createdAt") AS bucket,
+      SELECT date_trunc(${Prisma.raw(`'${bucket}'`)}, "createdAt" + interval '3 hours') AS bucket,
              COUNT(*)::int AS orders,
              COALESCE(SUM(CASE WHEN "paymentStatus" = 'paid' THEN total ELSE 0 END), 0)::int AS revenue
       FROM "orders"
@@ -168,14 +164,14 @@ const dashboardRoute: FastifyPluginAsync = async (app) => {
       GROUP BY 1
       ORDER BY 1
     `
-    // "createdAt" уже TIMESTAMP(3) в UTC; AT TIME ZONE преобразует в timestamptz, дальше date_trunc считает в SESSION timezone (может сдвинуть на день)
 
     // Query visits separately and group by bucket
+    // SiteVisit.day now stores Moscow dates (UTC midnight), so filter with Date type
     const visitRows = await app.prisma.siteVisit.findMany({
-      where: { day: { gte: periodStart, lte: periodEnd } },
+      where: { day: { gte: mskDayAsDate(periodStart), lte: mskDayAsDate(periodEnd) } },
     })
 
-    // Convert raw bucket dates to strings for mapping
+    // Convert raw bucket dates to strings for mapping (they are already shifted to Moscow time)
     const seriesMap = new Map<string, { orders: number; revenue: number; visits: number }>()
     for (const row of rawRows) {
       const bucketStr = row.bucket.toISOString().slice(0, 10)
@@ -186,7 +182,7 @@ const dashboardRoute: FastifyPluginAsync = async (app) => {
       })
     }
 
-    // Add visits, grouped by bucket
+    // Add visits, grouped by bucket (SiteVisit.day is Moscow date as UTC midnight, no shift needed)
     const visitMap = new Map<string, number>()
     for (const visit of visitRows) {
       const visitDate = visit.day.toISOString().slice(0, 10)
@@ -206,18 +202,23 @@ const dashboardRoute: FastifyPluginAsync = async (app) => {
       }
     }
 
-    // Generate all buckets in the period and fill gaps
+    // Generate all buckets in the period and fill gaps using Moscow date keys
     const series: Array<{ date: string; orders: number; revenue: number; visits: number }> = []
 
     if (periodType === 'year') {
-      // Monthly buckets: generate explicitly to avoid day-of-month overflow
-      let y = periodStart.getUTCFullYear()
-      let m = periodStart.getUTCMonth()
-      const endYear = periodEnd.getUTCFullYear()
-      const endMonth = periodEnd.getUTCMonth()
+      // Monthly buckets: generate using Moscow month keys
+      const startKey = mskDateKey(periodStart)
+      const endKey = mskDateKey(periodEnd)
+      const startYear = parseInt(startKey.slice(0, 4))
+      const startMonth = parseInt(startKey.slice(5, 7))
+      const endYear = parseInt(endKey.slice(0, 4))
+      const endMonth = parseInt(endKey.slice(5, 7))
+
+      let y = startYear
+      let m = startMonth
 
       while (y < endYear || (y === endYear && m <= endMonth)) {
-        const bucketKey = `${String(y).padStart(4, '0')}-${String(m + 1).padStart(2, '0')}-01`
+        const bucketKey = `${String(y).padStart(4, '0')}-${String(m).padStart(2, '0')}-01`
         series.push({
           date: bucketKey,
           orders: seriesMap.get(bucketKey)?.orders ?? 0,
@@ -225,18 +226,18 @@ const dashboardRoute: FastifyPluginAsync = async (app) => {
           visits: seriesMap.get(bucketKey)?.visits ?? 0,
         })
         m++
-        if (m > 11) {
-          m = 0
+        if (m > 12) {
+          m = 1
           y++
         }
       }
     } else {
-      // Daily buckets
+      // Daily buckets using Moscow date keys
       let current = periodStart
       const endDate = periodEnd
 
       while (current <= endDate) {
-        const dateStr = current.toISOString().slice(0, 10)
+        const dateStr = mskDateKey(current)
         const data = seriesMap.get(dateStr)
         series.push({
           date: dateStr,
@@ -244,7 +245,7 @@ const dashboardRoute: FastifyPluginAsync = async (app) => {
           revenue: data?.revenue ?? 0,
           visits: data?.visits ?? 0,
         })
-        current.setDate(current.getDate() + 1)
+        current = new Date(current.getTime() + 864e5)
       }
     }
 

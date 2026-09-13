@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { GUEST_USER_WHERE } from '../lib/user-type'
+import { staleGuestWhere } from '../lib/user-type'
 
 // Чистка гостевых аккаунтов без взаимодействий старше N дней.
 // По умолчанию только показывает список. Удаляет с флагом --apply.
@@ -11,20 +11,8 @@ const daysStr = process.argv.find(arg => arg.startsWith('--days='))?.split('=')[
 const days = daysStr ? parseInt(daysStr) : 30
 
 async function main() {
-  const threshold = new Date(Date.now() - days * 86400000)
-
   const found = await prisma.user.findMany({
-    where: {
-      ...GUEST_USER_WHERE,
-      createdAt: { lt: threshold },
-      orders: { none: {} },
-      favorites: { none: {} },
-      quizSessions: { none: {} },
-      OR: [
-        { cart: null },
-        { cart: { is: { items: { none: {} } } } },
-      ],
-    },
+    where: staleGuestWhere(days),
     select: {
       id: true,
       createdAt: true,

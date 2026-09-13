@@ -62,6 +62,10 @@ export default function UsersPage() {
   const [tab, setTab] = useState<TabType>('all')
   const [sort, setSort] = useState<SortType>('lastSeen')
   const [segment, setSegment] = useState<SegmentType>('')
+  const [staleGuestsCount, setStaleGuestsCount] = useState(0)
+  const [cleanupLoading, setCleanupLoading] = useState(false)
+  const [cleanupMessage, setCleanupMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const staleGuestsDays = 30
 
   const load = (p = page, s = search, t = tab, so = sort, seg = segment) => {
     setLoading(true)
@@ -75,10 +79,42 @@ export default function UsersPage() {
       .finally(() => setLoading(false))
   }
 
+  const loadStaleGuestsCount = () => {
+    usersApi.staleGuestsCount(staleGuestsDays)
+      .then(r => setStaleGuestsCount(r.data.count))
+      .catch(() => setError('Не удалось загрузить количество старых гостей'))
+  }
+
+  const handleCleanupStaleGuests = async () => {
+    if (!confirm(`Удалить ${staleGuestsCount} гостевых записей? Это технические строки без действий, восстановить нельзя.`)) {
+      return
+    }
+
+    setCleanupLoading(true)
+    setCleanupMessage(null)
+    try {
+      const result = await usersApi.cleanupStaleGuests(staleGuestsDays)
+      setCleanupMessage({ type: 'success', text: `Удалено: ${result.data.deleted}` })
+      loadStaleGuestsCount()
+      load(1, search, tab, sort, segment)
+    } catch (err: any) {
+      const errorText = err.response?.data?.error || 'Ошибка при удалении'
+      setCleanupMessage({ type: 'error', text: errorText })
+    } finally {
+      setCleanupLoading(false)
+    }
+  }
+
   useEffect(() => {
     const t = setTimeout(() => load(page, search, tab, sort, segment), 300)
     return () => clearTimeout(t)
   }, [page, search, tab, sort, segment])
+
+  useEffect(() => {
+    if (tab === 'guests' || tab === 'all') {
+      loadStaleGuestsCount()
+    }
+  }, [tab])
 
   const handleTabChange = (t: TabType) => {
     setTab(t)
@@ -180,6 +216,34 @@ export default function UsersPage() {
       {error && (
         <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl">
           {error}
+        </div>
+      )}
+
+      {/* Stale guests cleanup panel */}
+      {(tab === 'guests' || tab === 'all') && (
+        <div className="mb-4 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
+          <div className="text-sm text-blue-900">
+            Гостевые записи старше {staleGuestsDays} дней без корзины, заказов, избранного и подборов: <span className="font-semibold">{staleGuestsCount}</span>
+          </div>
+          <button
+            onClick={handleCleanupStaleGuests}
+            disabled={staleGuestsCount === 0 || cleanupLoading}
+            className="ml-4 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+          >
+            {cleanupLoading ? 'Удаление...' : 'Очистить'}
+          </button>
+        </div>
+      )}
+
+      {cleanupMessage && (
+        <div
+          className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium ${
+            cleanupMessage.type === 'success'
+              ? 'bg-green-50 text-green-700 border border-green-200'
+              : 'bg-red-50 text-red-700 border border-red-200'
+          }`}
+        >
+          {cleanupMessage.text}
         </div>
       )}
 

@@ -393,6 +393,10 @@ export const usersApi = {
     api.put(`/api/admin/users/${id}/active`, { isActive }),
   adjustBonus: (id: string, amount: number, comment: string) =>
     api.post<{ balanceAfter: number; bonusLevel: string }>(`/api/admin/users/${id}/bonus`, { amount, comment }),
+  staleGuestsCount: (days: number) =>
+    api.get<{ days: number; count: number }>('/api/admin/users/guests/stale', { params: { days } }),
+  cleanupStaleGuests: (days: number) =>
+    api.delete<{ days: number; deleted: number }>('/api/admin/users/guests/stale', { params: { days } }),
 }
 
 export const bannersApi = {

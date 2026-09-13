@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import type { FastifyInstance } from 'fastify'
 import { hasTestDb, getTestPrisma, resetDb, closeTestPrisma } from './setup'
 import { createUser, authHeader } from './factories'
+import { mskDayAsDate, mskDayStart, mskDateKey } from '../lib/msk-time'
 
 describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', () => {
   let app: FastifyInstance
@@ -26,12 +27,10 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     const prisma = getTestPrisma()
     const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
 
-    // Create orders on different days this week
+    // Create orders on different Moscow days
     const now = new Date()
-    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
-
-    const yesterday = new Date(today)
-    yesterday.setDate(yesterday.getDate() - 1)
+    const todayMskStart = mskDayStart(now)
+    const yesterdayMskStart = new Date(todayMskStart.getTime() - 864e5)
 
     await prisma.order.create({
       data: {
@@ -41,7 +40,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         subtotal: 10000,
         total: 10000,
         paymentStatus: 'paid',
-        createdAt: today,
+        createdAt: todayMskStart,
       },
     })
 
@@ -53,7 +52,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         subtotal: 5000,
         total: 5000,
         paymentStatus: 'paid',
-        createdAt: yesterday,
+        createdAt: yesterdayMskStart,
       },
     })
 
@@ -104,9 +103,9 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     const prisma = getTestPrisma()
     const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
 
-    // Create orders in different months
-    const jan = new Date(Date.UTC(new Date().getUTCFullYear(), 0, 15))
-    const jun = new Date(Date.UTC(new Date().getUTCFullYear(), 5, 15))
+    // Create orders in different Moscow months
+    const jan = mskDayStart(new Date(Date.UTC(new Date().getUTCFullYear(), 0, 15)))
+    const jun = mskDayStart(new Date(Date.UTC(new Date().getUTCFullYear(), 5, 15)))
 
     await prisma.order.create({
       data: {
@@ -172,7 +171,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
 
     const now = new Date()
-    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+    const today = mskDayAsDate(now)
 
     await prisma.siteVisit.create({
       data: {
@@ -190,11 +189,11 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     expect(res.statusCode).toBe(200)
     const data = res.json() as any
 
-    expect(data.period.visits).toBeGreaterThanOrEqual(0)
-    const todayVisits = data.series.find((s: any) => s.date === today.toISOString().split('T')[0])
-    if (todayVisits) {
-      expect(todayVisits.visits).toBe(42)
-    }
+    expect(data.period.visits).toBe(42)
+    const todayKey = mskDateKey(now)
+    const todayVisits = data.series.find((s: any) => s.date === todayKey)
+    expect(todayVisits).toBeDefined()
+    expect(todayVisits.visits).toBe(42)
   })
 
   it('дефолтный period = month', async () => {
@@ -249,7 +248,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     })
 
     const now = new Date()
-    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+    const todayMskStart = mskDayStart(now)
 
     // Заказ от зарегистрированного пользователя
     await prisma.order.create({
@@ -261,7 +260,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         total: 10000,
         paymentStatus: 'paid',
         guestCheckout: false,
-        createdAt: today,
+        createdAt: todayMskStart,
       },
     })
 
@@ -275,7 +274,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         total: 5000,
         paymentStatus: 'paid',
         guestCheckout: true,
-        createdAt: today,
+        createdAt: todayMskStart,
       },
     })
 
@@ -304,7 +303,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     })
 
     const now = new Date()
-    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+    const todayMskStart = mskDayStart(now)
 
     await prisma.order.create({
       data: {
@@ -315,7 +314,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         total: 10000,
         paymentStatus: 'paid',
         guestCheckout: false,
-        createdAt: today,
+        createdAt: todayMskStart,
       },
     })
 
@@ -328,7 +327,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         total: 5000,
         paymentStatus: 'paid',
         guestCheckout: true,
-        createdAt: today,
+        createdAt: todayMskStart,
       },
     })
 
@@ -351,7 +350,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
 
     const now = new Date()
-    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+    const todayMskStart = mskDayStart(now)
 
     await prisma.order.create({
       data: {
@@ -362,7 +361,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         total: 5000,
         paymentMethod: 'cash_on_delivery',
         paymentStatus: 'paid',
-        createdAt: today,
+        createdAt: todayMskStart,
       },
     })
 
@@ -385,7 +384,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
 
     const now = new Date()
-    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+    const todayMskStart = mskDayStart(now)
 
     // Оплаченный заказ
     await prisma.order.create({
@@ -396,7 +395,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         subtotal: 10000,
         total: 10000,
         paymentStatus: 'paid',
-        createdAt: today,
+        createdAt: todayMskStart,
       },
     })
 
@@ -409,7 +408,7 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
         subtotal: 5000,
         total: 5000,
         paymentStatus: 'pending',
-        createdAt: today,
+        createdAt: todayMskStart,
       },
     })
 
@@ -426,5 +425,39 @@ describe.skipIf(!hasTestDb)('Admin dashboard (интеграционные)', ()
     expect(data.period.orders).toBe(2)
     // Но revenue только из оплаченных
     expect(data.period.revenue).toBe(10000)
+  })
+
+  it('ордер созданный в 22:30 UTC вчера (уже сегодня в Москве) считается в сегодня', async () => {
+    const prisma = getTestPrisma()
+    const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
+
+    // Ордер создан в начале московского дня: mskDayStart(now) + 1 минута
+    // это попадает за UTC полночь вчера, но уже в московское сегодня
+    const now = new Date()
+    const orderCreatedAt = new Date(mskDayStart(now).getTime() + 60_000)
+
+    await prisma.order.create({
+      data: {
+        userId: admin.id,
+        status: 'new',
+        deliveryMethod: 'pickup',
+        subtotal: 7500,
+        total: 7500,
+        paymentStatus: 'paid',
+        createdAt: orderCreatedAt,
+      },
+    })
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/admin/dashboard?period=today',
+      headers: authHeader(app, admin.id, 'super_admin'),
+    })
+
+    expect(res.statusCode).toBe(200)
+    const data = res.json() as any
+
+    expect(data.ordersToday).toBe(1)
+    expect(data.revenueToday).toBe(7500)
   })
 })

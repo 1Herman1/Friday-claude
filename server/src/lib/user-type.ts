@@ -8,3 +8,19 @@ export const REGISTERED_USER_WHERE: Prisma.UserWhereInput = {
 export function isGuestUser(u: { email: string | null; phone: string | null; passwordHash: string | null }): boolean {
   return !u.email && !u.phone && !u.passwordHash
 }
+
+/** Предикат для поиска старых гостевых записей без взаимодействий (заказов, избранного, подборов) и без товаров в корзине. */
+export function staleGuestWhere(days: number): Prisma.UserWhereInput {
+  const threshold = new Date(Date.now() - days * 86400000)
+  return {
+    ...GUEST_USER_WHERE,
+    createdAt: { lt: threshold },
+    orders: { none: {} },
+    favorites: { none: {} },
+    quizSessions: { none: {} },
+    OR: [
+      { cart: null },
+      { cart: { is: { items: { none: {} } } } },
+    ],
+  }
+}

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import * as bcrypt from 'bcryptjs'
 import { Prisma, UserRole } from '@prisma/client'
 import { checkRole } from '../../middleware/check-role'
-import { GUEST_USER_WHERE, REGISTERED_USER_WHERE, isGuestUser } from '../../lib/user-type'
+import { GUEST_USER_WHERE, REGISTERED_USER_WHERE, isGuestUser, staleGuestWhere } from '../../lib/user-type'
 import { applyBonusChange, InsufficientBonusError } from '../../services/bonus.service'
 
 const usersAdminRoute: FastifyPluginAsync = async (app) => {
@@ -132,6 +132,51 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
       }))
 
       return reply.send({ items: formattedItems, total, page, totalPages: Math.ceil(total / limit) })
+    }
+  )
+
+  // Получить количество старых гостевых записей
+  app.get(
+    '/guests/stale',
+    guard,
+    async (request, reply) => {
+      const q = request.query as { days?: string }
+      const daysSchema = z.number().int().min(7).max(365).default(30)
+      const days = daysSchema.parse(q.days ? parseInt(q.days) : 30)
+
+      const count = await app.prisma.user.count({
+        where: staleGuestWhere(days),
+      })
+
+      return reply.send({ days, count })
+    }
+  )
+
+  // Удалить старые гостевые записи
+  app.delete(
+    '/guests/stale',
+    guard,
+    async (request, reply) => {
+      const q = request.query as { days?: string }
+      const daysSchema = z.number().int().min(7).max(365).default(30)
+      const days = daysSchema.parse(q.days ? parseInt(q.days) : 30)
+
+      const ids = await app.prisma.user.findMany({
+        where: staleGuestWhere(days),
+        select: { id: true },
+      })
+
+      let deleted = 0
+      const batchSize = 500
+      for (let i = 0; i < ids.length; i += batchSize) {
+        const batch = ids.slice(i, i + batchSize).map(u => u.id)
+        const result = await app.prisma.user.deleteMany({
+          where: { id: { in: batch } },
+        })
+        deleted += result.count
+      }
+
+      return reply.send({ days, deleted })
     }
   )
 
