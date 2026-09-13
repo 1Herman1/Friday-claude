@@ -114,9 +114,15 @@ enum PaymentStatus {
   refunded
 }
 
+enum BlogStatus {
+  draft
+  published
+}
+
 enum BannerPage {
   home
   catalog
+  about
   other
 }
 
@@ -152,6 +158,8 @@ model User {
   /// 300 бонусов выдаются один раз за всю жизнь аккаунта: при первом входе (welcome) либо по факту прохождения квиза (quiz) — что случится раньше.
   welcomeBonusGranted Boolean    @default(false)
   isActive            Boolean    @default(true)
+  /// Последняя активность пользователя на сайте — для аналитики активности
+  lastSeenAt          DateTime?
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
 
@@ -171,6 +179,7 @@ model User {
   @@index([phone])
   @@index([username])
   @@index([role])
+  @@index([lastSeenAt])
   @@map("users")
 }
 
@@ -748,9 +757,79 @@ model DeliveryOption {
   /// расход по заказу считается у службы; для своего курьера и самовывоза
   /// это единственный источник цифры.
   expense   Int     @default(0)
+  /// Минимальное время доставки в днях (включительно)
+  etaMin    Int?
+  /// Максимальное время доставки в днях (включительно)
+  etaMax    Int?
+  /// Минимальная сумма заказа в копейках, с которой доставка становится бесплатной (null = не бесплатная)
+  freeFrom  Int?
   isActive  Boolean @default(true)
   sortOrder Int     @default(0)
   updatedAt DateTime @updatedAt
 
   @@map("delivery_options")
+}
+
+// ─── СМС-ТЕКСТЫ И ПОСТОЯННЫЕ СТРОКИ ──────────────────────────────────────────
+
+/// Управляемые из админки текстовые строки сайта — заголовки, описания, СМС
+model SiteText {
+  /// Ключ строки, например: "home.brands.title", "email.welcome.subject"
+  key       String   @id
+  /// Текстовое значение (может содержать переменные типа {{name}})
+  value     String
+  /// Группа ключей для фильтрации в админке, например: "home", "email", "footer"
+  group     String
+  /// Человеческое описание для админки, чтобы понять что это за текст
+  label     String
+  updatedAt DateTime @updatedAt
+
+  @@index([group])
+  @@map("site_texts")
+}
+
+// ─── БЛОГ ─────────────────────────────────────────────────────────────────────
+
+/// Записи блога — статьи с поддержкой категорий и SEO
+model BlogPost {
+  id               String     @id @default(uuid())
+  /// URL-friendly идентификатор статьи
+  slug             String     @unique
+  title            String
+  /// Краткое описание — используется в списке статей и в meta description
+  subtitle         String?
+  /// Тело статьи в формате markdown
+  body             String     @default("")
+  /// Категории статьи (строки, массив)
+  categories       String[]   @default([])
+  /// Дата публикации статьи
+  date             DateTime
+  /// Примерное время чтения в минутах (рассчитывается на клиенте либо задаётся вручную)
+  readingMinutes   Int        @default(0)
+  /// Статус публикации: draft или published
+  status           BlogStatus @default(draft)
+  /// Обложка статьи (путь или URL)
+  cover            String?
+  /// Заголовок для SEO (если пусто, используется title)
+  metaTitle        String?
+  /// Описание для SEO (если пусто, используется subtitle)
+  metaDescription  String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  @@index([status])
+  @@index([date(sort: Desc)])
+  @@map("blog_posts")
+}
+
+// ─── АНАЛИТИКА ───────────────────────────────────────────────────────────────
+
+/// Ежедневный счётчик уникальных посещений сайта
+model SiteVisit {
+  /// День в UTC (только дата, без времени)
+  day   DateTime @id @db.Date
+  /// Количество уникальных посещений в этот день
+  count Int      @default(0)
+
+  @@map("site_visits")
 }

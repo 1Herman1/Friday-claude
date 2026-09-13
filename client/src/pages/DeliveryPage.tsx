@@ -3,6 +3,7 @@ import { type CSSProperties, useEffect, useState } from 'react'
 import { useMetaTags } from '../hooks/useMetaTags'
 import { CONTACTS } from '../lib/contacts'
 import { useOnScreen } from '../hooks/useOnScreen'
+import { useSiteText } from '../context/SiteTextsContext'
 import { deliveryApi } from '../lib/api'
 import { formatPrice } from '../lib/format'
 import type { DeliveryKind, DeliveryOptionKey } from '@simba/shared'
@@ -110,12 +111,15 @@ export default function DeliveryPage() {
       'Сроки и стоимость доставки кормов и товаров для животных по Москве и России. Оплата картой, СБП или наличными курьеру.',
   })
 
+  const pageDeliveryTitle = useSiteText('page.delivery.title', 'Доставка и оплата')
+  const pageDeliveryLead = useSiteText('page.delivery.lead', 'Отправляем в день заказа — любым способом')
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
-      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-3">Доставка и оплата</h1>
+      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-3">{pageDeliveryTitle}</h1>
       <div className="flex items-center gap-2 text-navy-500 mb-10">
         <ClockIcon />
-        <p>Отправляем в день заказа — любым способом</p>
+        <p>{pageDeliveryLead}</p>
       </div>
 
       {/* Delivery methods grid */}

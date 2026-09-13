@@ -2,45 +2,31 @@ import { type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { LEGAL } from '../../lib/contacts'
 import { useReveal } from '../../hooks/useReveal'
+import AboutBanner from './AboutBanner'
+import { useSiteText } from '../../context/SiteTextsContext'
 
-/** Фото основательницы/склада. null — фото ещё нет, стоит иллюстрация с питомцами.
-    Когда появится: { src: '/about/alina.jpg', alt: 'Алина, основательница Симбы' } */
-const FOUNDER_PHOTO: { src: string; alt: string } | null = null
 
 /** Каскад секции: шаг 60мс, кап 4 ступени. Текст и визуал делят одну ступень —
     разнородная группа стартует в общем окне, иначе сцена рассыпается. */
 const step = (i: number) => ({ '--reveal-delay': `${Math.min(i, 3) * 60}ms` }) as CSSProperties
 
-function FounderVisual() {
-  const photo = FOUNDER_PHOTO ?? { src: '/pets/dogwithcat.png', alt: 'Собака и кошка — питомцы Симбы' }
-  return (
-    <div className="rounded-banner overflow-hidden bg-[#D9D9D9] aspect-[16/9] md:aspect-[21/9]">
-      <img
-        src={photo.src}
-        alt={photo.alt}
-        loading="lazy"
-        decoding="async"
-        className="w-full h-full object-cover"
-      />
-    </div>
-  )
-}
-
 export default function AboutSection() {
   /** Секция подключена без обёртки <Reveal> — is-visible группе ставит свой хук. */
   const groupRef = useReveal<HTMLDivElement>()
+  const aboutEyebrow = useSiteText('home.about.eyebrow', 'О компании')
+  const aboutTitle = useSiteText('home.about.title', 'Кто мы')
 
   return (
     <section id="about" aria-labelledby="about-title" className="scroll-mt-24 py-12 md:py-16">
       <div ref={groupRef} className="reveal-group max-w-7xl mx-auto px-4">
         <div className="reveal-item" style={step(0)}>
-          <p className="text-base font-semibold uppercase tracking-wide text-navy-500">О компании</p>
-          <h2 id="about-title" className="mt-1 text-3xl font-bold text-navy-900">Кто мы</h2>
+          <p className="text-base font-semibold uppercase tracking-wide text-navy-500">{aboutEyebrow}</p>
+          <h2 id="about-title" className="mt-1 text-3xl font-bold text-navy-900">{aboutTitle}</h2>
         </div>
 
         {/* Медиа-рамка сразу после заголовка, на всю ширину секции — по ТЗ владельца */}
         <div className="reveal-item mt-6" style={step(1)}>
-          <FounderVisual />
+          <AboutBanner />
         </div>
 
         <div className="mt-8">

@@ -24,6 +24,24 @@ api.interceptors.response.use(
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export interface PeriodData {
+  from: string
+  to: string
+  orders: number
+  revenue: number
+  newUsers: number
+  activeGuests: number
+  visits: number
+  quizSessions: number
+}
+
+export interface ChartSeries {
+  date: string
+  orders: number
+  revenue: number
+  visits: number
+}
+
 export interface DashboardStats {
   ordersToday: number
   ordersMonth: number
@@ -33,6 +51,8 @@ export interface DashboardStats {
   newUsersToday: number
   totalProducts: number
   recentOrders: Order[]
+  period?: PeriodData
+  series?: ChartSeries[]
 }
 
 export interface ProductVariant {
@@ -78,6 +98,13 @@ export interface Category {
   parentId?: string
   isActive: boolean
   sortOrder: number
+  seoTitle?: string
+  seoDescription?: string
+}
+
+export interface CategoryNode extends Category {
+  productCount: number
+  children: CategoryNode[]
 }
 
 export interface Brand {
@@ -115,9 +142,43 @@ export interface DeliveryOption {
   subtitle: string | null
   price: number
   expense?: number
+  etaMin: number | null
+  etaMax: number | null
+  freeFrom: number | null
   isActive: boolean
   sortOrder: number
   updatedAt: string
+}
+
+export type BlogStatus = 'draft' | 'published'
+export const BLOG_CATEGORIES = ['Сравнения кормов', 'Питание', 'Здоровье', 'Кошки', 'Собаки', 'Ветдиеты'] as const
+
+export interface BlogPostRow {
+  id: string
+  slug: string
+  title: string
+  subtitle: string | null
+  categories: string[]
+  date: string
+  readingMinutes: number
+  status: BlogStatus
+  cover: string | null
+  updatedAt: string
+}
+
+export interface BlogPost extends BlogPostRow {
+  body: string
+  metaTitle: string | null
+  metaDescription: string | null
+}
+
+export interface SiteTextItem {
+  key: string
+  label: string
+  group: string
+  defaultValue: string
+  value: string
+  isOverridden: boolean
 }
 
 export interface OrderItem {
@@ -156,7 +217,10 @@ export interface User {
   bonusPoints: number
   bonusLevel: string
   createdAt: string
-  _count?: { orders: number }
+  lastSeenAt: string
+  isGuest: boolean
+  cartItems: number
+  _count?: { orders: number; favorites: number; quizSessions: number }
 }
 
 export interface Paginated<T> {
@@ -180,7 +244,10 @@ export const authApi = {
 }
 
 export const dashboardApi = {
-  stats: () => api.get<DashboardStats>('/api/admin/dashboard'),
+  stats: (period?: 'week' | 'month' | 'year') => {
+    const params = period ? { period } : {}
+    return api.get<DashboardStats>('/api/admin/dashboard', { params })
+  },
 }
 
 export const productsApi = {
@@ -208,10 +275,12 @@ export const productsApi = {
 }
 
 export const categoriesApi = {
-  list: () => api.get<Category[]>('/api/categories'),
-  create: (data: unknown) => api.post<Category>('/api/admin/categories', data),
-  update: (id: string, data: unknown) => api.put<Category>(`/api/admin/categories/${id}`, data),
+  list: () => api.get<{ items: CategoryNode[] }>('/api/admin/categories'),
+  create: (data: unknown) => api.post<CategoryNode>('/api/admin/categories', data),
+  update: (id: string, data: unknown) => api.put<CategoryNode>(`/api/admin/categories/${id}`, data),
   delete: (id: string) => api.delete(`/api/admin/categories/${id}`),
+  reorder: (items: Array<{ id: string; parentId?: string; sortOrder: number }>) =>
+    api.put('/api/admin/categories/reorder', { items }),
 }
 
 export const brandsApi = {
@@ -259,6 +328,28 @@ export const bannersApi = {
 export const deliveryOptionsApi = {
   list: () => api.get<DeliveryOption[]>('/api/admin/delivery-options'),
   update: (key: string, data: unknown) => api.patch<DeliveryOption>(`/api/admin/delivery-options/${key}`, data),
+}
+
+export const blogApi = {
+  list: (params?: { status?: BlogStatus; search?: string; page?: number; limit?: number }) =>
+    api.get<{ items: BlogPostRow[]; total: number; page: number; totalPages: number }>('/api/admin/blog', { params }),
+  byId: (id: string) => api.get<BlogPost>(`/api/admin/blog/${id}`),
+  create: (data: unknown) => api.post<BlogPost>('/api/admin/blog', data),
+  update: (id: string, data: unknown) => api.put<BlogPost>(`/api/admin/blog/${id}`, data),
+  delete: (id: string) => api.delete(`/api/admin/blog/${id}`),
+  uploadImage: (file: File) => {
+    const form = new FormData()
+    form.append('file', file)
+    return api.post<{ key: string; url: string }>('/api/admin/blog/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
+}
+
+export const siteTextsApi = {
+  list: () => api.get<{ items: SiteTextItem[] }>('/api/admin/site-texts'),
+  update: (key: string, value: string) => api.put<SiteTextItem>(`/api/admin/site-texts/${encodeURIComponent(key)}`, { value }),
+  reset: (key: string) => api.post<SiteTextItem>(`/api/admin/site-texts/reset/${encodeURIComponent(key)}`),
 }
 
 export interface SyncRunExample {

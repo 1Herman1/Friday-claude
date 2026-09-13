@@ -3,6 +3,7 @@ import { LOYALTY_STYLE } from '../lib/loyalty-style'
 import { CheckIcon } from '../components/icons'
 import { type CSSProperties } from 'react'
 import { useMetaTags } from '../hooks/useMetaTags'
+import { useSiteText } from '../context/SiteTextsContext'
 import CountUp from '../components/CountUp'
 import { useOnScreen } from '../hooks/useOnScreen'
 import { LOYALTY_TIERS, type BonusLevel } from '@simba/shared'
@@ -79,12 +80,14 @@ export default function BonusesPage() {
       '5% с каждого заказа возвращается бонусами, 300 приветственных при регистрации. Бонусами можно оплатить до половины суммы заказа.',
   })
 
+  const pageBonusesTitle = useSiteText('page.bonuses.title', 'Бонусная программа')
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
 
       {/* Заголовок */}
       <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-3">
-        Бонусная программа
+        {pageBonusesTitle}
       </h1>
       <p className="text-navy-500 max-w-prose mb-10 leading-relaxed">
         Накапливайте бонусы с каждого заказа и тратьте их на следующие покупки.

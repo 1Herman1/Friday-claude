@@ -217,6 +217,11 @@ async function resolveDeliveryCost(
       (sum, item) => sum + item.productVariant.weight * item.quantity,
       0
     )
+    // Сумма товаров для порога «бесплатно от» — та же формула, что и в котировках.
+    const subtotal = cart.items.reduce(
+      (sum, item) => sum + item.productVariant.price * item.quantity,
+      0
+    )
 
     const quote = await getQuoteForMethod(
       prisma,
@@ -225,7 +230,7 @@ async function resolveDeliveryCost(
         ...data.deliveryAddress,
         pickupPoint: data.deliveryPoint,
       } as DeliveryServiceAddress,
-      { weightKg: totalWeightKg }
+      { weightKg: totalWeightKg, subtotal }
     )
 
     serverDeliveryCost = quote.price

@@ -45,7 +45,7 @@ export default function ProductFormPage() {
 
   useEffect(() => {
     Promise.all([categoriesApi.list(), brandsApi.list()])
-      .then(([c, b]) => { setCategories(c.data); setBrands(b.data) })
+      .then(([c, b]) => { setCategories(c.data.items); setBrands(b.data) })
   }, [])
 
   useEffect(() => {

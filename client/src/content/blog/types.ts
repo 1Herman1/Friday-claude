@@ -22,4 +22,6 @@ export type BlogPost = {
   metaDescription: string
   /** У черновиков тела нет — страница такой статьи отдаёт «не найдено». */
   body?: () => ReactNode
+  /** Тело статьи из админки (markdown); у встроенных статей его нет. */
+  markdown?: string
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useMetaTags } from '../hooks/useMetaTags'
+import { useSiteText } from '../context/SiteTextsContext'
 import { CONTACTS } from '../lib/contacts'
 import { FAQ, renderFaqAnswer, type FaqEntry } from '../lib/faq'
 import { TelegramIcon } from '../components/icons'
@@ -65,11 +66,13 @@ export default function FaqPage() {
     })),
   }
 
+  const pageFaqTitle = useSiteText('page.faq.title', 'Вопросы и ответы')
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c') }} />
 
-      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-10">Вопросы и ответы</h1>
+      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-10">{pageFaqTitle}</h1>
 
       <div className="space-y-4 mb-10">
         {faqs.map((faq) => (

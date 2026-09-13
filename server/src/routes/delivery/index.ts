@@ -49,6 +49,7 @@ const quotesSchema = z.object({
   lat: z.number().min(-90).max(90).optional(),
   lon: z.number().min(-180).max(180).optional(),
   weightKg: z.number().positive().max(100),
+  subtotal: z.number().int().min(0).optional(),
   pickupPoint: pickupPointSchema.optional(),
 })
 
@@ -80,12 +81,12 @@ export default async function deliveryRoutes(app: FastifyInstance) {
       return reply.status(400).send({ error: 'Не удалось рассчитать доставку по этому адресу' })
     }
 
-    const { city, street, house, postalCode, lat, lon, weightKg, pickupPoint } = result.data
+    const { city, street, house, postalCode, lat, lon, weightKg, subtotal, pickupPoint } = result.data
 
     const quotes = await getAllQuotes(
       app.prisma,
       { city, street, house, postalCode, lat, lon, pickupPoint },
-      { weightKg }
+      { weightKg, subtotal }
     )
 
     return reply.send({ quotes })

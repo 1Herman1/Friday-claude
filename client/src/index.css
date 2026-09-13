@@ -49,7 +49,7 @@
     @apply bg-blue-50 text-navy-900 font-sans font-light;
   }
   /* Light мельче 14px рассыпается — мелкий текст остаётся regular. */
-  .text-xs, .text-[13px] { font-weight: 400; }
+  .text-xs, .text-\[13px\] { font-weight: 400; }
   h1, h2, h3, h4, h5, h6 { font-weight: 600; }
 
   /* Клавиатурный фокус: до этого ни одна кнопка магазина его не показывала. */

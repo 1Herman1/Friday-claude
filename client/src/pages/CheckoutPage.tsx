@@ -222,6 +222,7 @@ export default function CheckoutPage() {
           street: address.street,
           house: address.house,
           weightKg: totalWeight,
+          subtotal: cartItems.reduce((s, i) => s + i.productVariant.price * i.quantity, 0),
           lat: address.lat || undefined,
           lon: address.lon || undefined,
           postalCode: address.postalCode || undefined,
@@ -589,10 +590,13 @@ export default function CheckoutPage() {
                     const active = option === opt.key
                     // Описание сервера часто повторяет подпись варианта («СДЭК — в пункт
                     // выдачи» / «В пункт выдачи») — тогда это шум, а не информация.
+                    const label = opt.title || DELIVERY_LABELS[opt.key]
                     const description =
-                      opt.description && !DELIVERY_LABELS[opt.key]?.toLowerCase().includes(opt.description.toLowerCase())
+                      opt.description && !label.toLowerCase().includes(opt.description.toLowerCase())
                         ? opt.description
                         : null
+                    const freeHint =
+                      opt.freeFrom != null && opt.price > 0 ? `Бесплатно от ${formatPrice(opt.freeFrom)}` : null
                     const days =
                       opt.daysMax > 0
                         ? opt.daysMin === opt.daysMax ? `${opt.daysMin} дн.` : `${opt.daysMin}–${opt.daysMax} дн.`
@@ -617,11 +621,12 @@ export default function CheckoutPage() {
                             красный у семи мёртвых строк перекрикивал три живые. */}
                         <div className="flex-1 min-w-0">
                           <span className={`block font-semibold text-sm ${isDisabled ? 'text-navy-400' : 'text-navy-900'}`}>
-                            {DELIVERY_LABELS[opt.key]}
+                            {label}
                           </span>
                           {isDisabled && <span className="block text-xs text-navy-500">{opt.error}</span>}
                           {description && <span className="block text-xs text-navy-500">{description}</span>}
                           {days && <span className={`block text-xs mt-0.5 ${isDisabled ? 'text-navy-400' : 'text-navy-500'}`}>{days}</span>}
+                          {freeHint && !isDisabled && <span className="block text-xs mt-0.5 text-navy-500">{freeHint}</span>}
                         </div>
                         {selectable && (
                           <span className="flex-shrink-0 text-right text-sm font-bold tabular-nums text-navy-900">
@@ -660,7 +665,7 @@ export default function CheckoutPage() {
                           className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
                             validationErrors.deliveryCity && touched.deliveryCity
                               ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
-                              : 'border-line focus:border-line focus:ring-blue-100'
+                              : 'border-line focus:border-line focus:ring-navy-200'
                           }`}
                         />
                         {validationErrors.deliveryCity && touched.deliveryCity && (
@@ -699,7 +704,7 @@ export default function CheckoutPage() {
                             className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
                               validationErrors.deliveryStreet && touched.deliveryStreet
                                 ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
-                                : 'border-line focus:border-line focus:ring-blue-100'
+                                : 'border-line focus:border-line focus:ring-navy-200'
                             }`}
                           />
                           {validationErrors.deliveryStreet && touched.deliveryStreet && (
@@ -726,7 +731,7 @@ export default function CheckoutPage() {
                           className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
                             validationErrors.deliveryHouse && touched.deliveryHouse
                               ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
-                              : 'border-line focus:border-line focus:ring-blue-100'
+                              : 'border-line focus:border-line focus:ring-navy-200'
                           }`}
                         />
                         {validationErrors.deliveryHouse && touched.deliveryHouse && (
@@ -778,7 +783,7 @@ export default function CheckoutPage() {
                               required
                               value={address.apartment}
                               onChange={e => setAddress(a => ({ ...a, apartment: e.target.value }))}
-                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-navy-200"
                             />
                           </div>
                           <div>
@@ -791,7 +796,7 @@ export default function CheckoutPage() {
                               placeholder="Подъезд"
                               value={address.entrance}
                               onChange={e => setAddress(a => ({ ...a, entrance: e.target.value }))}
-                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-navy-200"
                             />
                           </div>
                           <div>
@@ -804,7 +809,7 @@ export default function CheckoutPage() {
                               placeholder="Этаж"
                               value={address.floor}
                               onChange={e => setAddress(a => ({ ...a, floor: e.target.value }))}
-                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-navy-200"
                             />
                           </div>
                           <div>
@@ -817,7 +822,7 @@ export default function CheckoutPage() {
                               placeholder="Домофон"
                               value={address.intercom}
                               onChange={e => setAddress(a => ({ ...a, intercom: e.target.value }))}
-                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                              className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-navy-200"
                             />
                           </div>
                         </div>
@@ -829,7 +834,7 @@ export default function CheckoutPage() {
                         value={address.comment}
                         onChange={e => setAddress(a => ({ ...a, comment: e.target.value }))}
                         rows={2}
-                        className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100 resize-none"
+                        className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-navy-200 resize-none"
                       />
                     </div>
                   </div>
@@ -852,7 +857,7 @@ export default function CheckoutPage() {
                           className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
                             validationErrors.deliveryCity && touched.deliveryCity
                               ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
-                              : 'border-line focus:border-line focus:ring-blue-100'
+                              : 'border-line focus:border-line focus:ring-navy-200'
                           }`}
                         />
                         {validationErrors.deliveryCity && touched.deliveryCity && (
@@ -902,7 +907,7 @@ export default function CheckoutPage() {
                           className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
                             validationErrors.contactName && touched.contactName
                               ? 'border-destructive focus:border-destructive focus:ring-destructive/30'
-                              : 'border-line focus:border-line focus:ring-blue-100'
+                              : 'border-line focus:border-line focus:ring-navy-200'
                           }`}
                         />
                         {validationErrors.contactName && touched.contactName && (
@@ -921,7 +926,7 @@ export default function CheckoutPage() {
                           className={`w-full px-4 py-2.5 rounded-xl border text-sm text-navy-900 focus:outline-none focus:ring-2 transition-colors ${
                             validationErrors.contactEmail && touched.contactEmail
                               ? 'border-destructive focus:border-destructive focus:ring-destructive/30'
-                              : 'border-line focus:border-line focus:ring-blue-100'
+                              : 'border-line focus:border-line focus:ring-navy-200'
                           }`}
                         />
                         {validationErrors.contactEmail && touched.contactEmail && (
@@ -938,11 +943,11 @@ export default function CheckoutPage() {
                           value={contactPhone}
                           onChange={e => setContactPhone(handlePhoneInput(e.target.value))}
                           onBlur={() => setTouched(t => ({ ...t, contactPhone: true }))}
-                          className={`w-full px-4 py-2.5 border text-navy-900 focus:outline-none focus:ring-2 ${
- validationErrors.contactPhone && touched.contactPhone
- ? 'border-destructive focus:border-destructive focus:ring-destructive/30'
- : 'border-line focus:border-line focus:ring-blue-100'
- }`}
+                          className={`w-full px-4 py-2.5 rounded-xl border text-navy-900 focus:outline-none focus:ring-2 ${
+                            validationErrors.contactPhone && touched.contactPhone
+                              ? 'border-destructive focus:border-destructive focus:ring-destructive/30'
+                              : 'border-line focus:border-line focus:ring-navy-200'
+                          }`}
  />
  {validationErrors.contactPhone && touched.contactPhone && (
  <p className="text-destructive mt-1">{validationErrors.contactPhone}</p>

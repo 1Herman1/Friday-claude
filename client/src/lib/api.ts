@@ -193,6 +193,7 @@ export interface DeliveryQuote {
   price: number
   daysMin: number
   daysMax: number
+  freeFrom?: number | null
   available: boolean
   error?: string
 }
@@ -255,9 +256,37 @@ export interface Category {
   slug: string
 }
 
+export interface CategoryTreeNode extends Category {
+  children?: CategoryTreeNode[]
+}
+
 export const categoriesApi = {
   tree: () =>
-    api.get<Category[]>('/api/categories/tree'),
+    api.get<CategoryTreeNode[]>('/api/categories/tree'),
+}
+
+// ─── Блог ────────────────────────────────────────────────────────────────
+
+export interface BlogPostDto {
+  id: string
+  slug: string
+  title: string
+  subtitle: string | null
+  categories: string[]
+  date: string
+  readingMinutes: number
+  status: 'draft' | 'published'
+  cover: string | null
+  metaTitle: string | null
+  metaDescription: string | null
+  /** Markdown; есть только у одной статьи. */
+  body?: string
+}
+
+export const blogApi = {
+  list: (params?: { category?: string; page?: number; limit?: number }) =>
+    api.get<{ items: BlogPostDto[]; total: number; page: number; totalPages: number }>('/api/blog', { params }),
+  get: (slug: string) => api.get<BlogPostDto>(`/api/blog/${slug}`),
 }
 
 // ─── Бренды ──────────────────────────────────────────────────────────────────
@@ -403,9 +432,21 @@ export const addressApi = {
 
 // ─── Доставка ────────────────────────────────────────────────────────────────
 
+/** Строка прайс-листа доставки: цены и пороги в копейках, сроки в днях. */
+export interface DeliveryOptionInfo {
+  key: DeliveryOptionKey
+  kind: DeliveryKind
+  title: string
+  subtitle: string | null
+  price: number
+  etaMin: number | null
+  etaMax: number | null
+  freeFrom: number | null
+}
+
 export const deliveryApi = {
   options: () =>
-    api.get<{ options: Array<{ key: DeliveryOptionKey; kind: DeliveryKind; title: string; subtitle: string | null; price: number }> }>('/api/delivery/options'),
+    api.get<{ options: DeliveryOptionInfo[] }>('/api/delivery/options'),
 
   features: () =>
     api.get<{ suggest: boolean; map: boolean }>('/api/delivery/features'),
@@ -421,6 +462,8 @@ export const deliveryApi = {
     lon?: number
     pickupPoint?: PickupPoint
     weightKg: number
+    /** Сумма товаров в копейках — для порога «бесплатно от». */
+    subtotal?: number
   }) => api.post<{ quotes: DeliveryQuote[] }>('/api/delivery/quotes', params),
 
   pickupPoints: (params: { provider: PickupPointProvider; city: string; lat?: number; lon?: number }) =>
@@ -521,4 +564,18 @@ export const subscriptionsApi = {
 
   cancel: (id: string) =>
     api.delete<void>(`/api/subscriptions/${id}`),
+}
+
+// ─── Тексты сайта ───────────────────────────────────────────────────────────
+
+export const siteTextsApi = {
+  list: () =>
+    api.get<{ texts: Record<string, string> }>('/api/site-texts'),
+}
+
+// ─── Визиты ─────────────────────────────────────────────────────────────────
+
+export const visitsApi = {
+  ping: () =>
+    api.post('/api/visits'),
 }

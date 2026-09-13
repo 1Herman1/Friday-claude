@@ -11,7 +11,7 @@ const schema = z.object({
   subtitle: z.string().optional(),
   link: z.string().optional(),
   buttonText: z.string().optional(),
-  page: z.enum(['home', 'catalog', 'other']),
+  page: z.enum(['home', 'catalog', 'about', 'other']),
   position: z.enum(['main_slider', 'promo_strip', 'sidebar']),
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().default(0),

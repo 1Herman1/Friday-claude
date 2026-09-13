@@ -9,6 +9,8 @@ import { CartProvider } from './context/CartContext'
 import { FavoritesProvider } from './context/FavoritesContext'
 import { DrawerProvider } from './context/DrawerContext'
 import { AuthProvider } from './context/AuthContext'
+import { SiteTextsProvider } from './context/SiteTextsContext'
+import { visitsApi } from './lib/api'
 import HomePage from './pages/HomePage'
 import CatalogPage from './pages/CatalogPage'
 import ProfilePage from './pages/ProfilePage'
@@ -41,14 +43,31 @@ export default function App() {
     }
   }, [])
 
+  useEffect(() => {
+    // Пинг визитов один раз в день
+    try {
+      const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+      const lastVisitDay = localStorage.getItem('simba_visit_day')
+
+      if (lastVisitDay !== today) {
+        visitsApi.ping().finally(() => {
+          localStorage.setItem('simba_visit_day', today)
+        })
+      }
+    } catch {
+      // Игнорируем ошибки localStorage или API
+    }
+  }, [])
+
   return (
-    <AuthProvider>
-      <CartProvider>
-        <FavoritesProvider>
-          <DrawerProvider>
-            <ScrollToTop />
-            <HashScroll />
-            <Routes>
+    <SiteTextsProvider>
+      <AuthProvider>
+        <CartProvider>
+          <FavoritesProvider>
+            <DrawerProvider>
+              <ScrollToTop />
+              <HashScroll />
+              <Routes>
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route element={<Layout />}>
@@ -73,10 +92,11 @@ export default function App() {
               <Route path="/offer" element={<OfferPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
-          </Routes>
+              </Routes>
             </DrawerProvider>
           </FavoritesProvider>
         </CartProvider>
       </AuthProvider>
+    </SiteTextsProvider>
   )
 }

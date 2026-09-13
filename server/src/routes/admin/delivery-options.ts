@@ -11,6 +11,12 @@ const updateSchema = z.object({
   expense: z.number().int().min(0).optional(),
   isActive: z.boolean().optional(),
   sortOrder: z.number().int().optional(),
+  etaMin: z.number().int().min(0).max(60).nullable().optional(),
+  etaMax: z.number().int().min(0).max(60).nullable().optional(),
+  freeFrom: z.number().int().min(0).nullable().optional(),
+}).refine((d) => d.etaMin == null || d.etaMax == null || d.etaMax >= d.etaMin, {
+  message: 'etaMax должен быть не меньше etaMin',
+  path: ['etaMax'],
 })
 
 const deliveryOptionsAdminRoute: FastifyPluginAsync = async (app) => {

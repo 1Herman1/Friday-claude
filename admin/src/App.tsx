@@ -16,6 +16,9 @@ import BannersPage from './pages/banners/BannersPage'
 import DeliveryOptionsPage from './pages/delivery/DeliveryOptionsPage'
 import SettingsPage from './pages/SettingsPage'
 import SyncPage from './pages/SyncPage'
+import BlogListPage from './pages/blog/BlogListPage'
+import BlogEditPage from './pages/blog/BlogEditPage'
+import SiteTextsPage from './pages/texts/SiteTextsPage'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<'loading' | 'ok' | 'fail'>('loading')
@@ -74,6 +77,10 @@ export default function App() {
               <Route path="/brands" element={<BrandsPage />} />
               <Route path="/banners" element={<BannersPage />} />
               <Route path="/delivery-options" element={<DeliveryOptionsPage />} />
+              <Route path="/blog" element={<BlogListPage />} />
+              <Route path="/blog/new" element={<BlogEditPage />} />
+              <Route path="/blog/:id" element={<BlogEditPage />} />
+              <Route path="/texts" element={<SiteTextsPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

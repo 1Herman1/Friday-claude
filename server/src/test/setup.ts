@@ -86,6 +86,9 @@ const TABLES = [
   'chat_messages',
   'users',
   'delivery_options',
+  'site_texts',
+  'blog_posts',
+  'site_visits',
 ]
 
 export async function resetDb() {

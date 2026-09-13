@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMetaTags } from '../hooks/useMetaTags'
-import { BLOG_POSTS, getPublished, type BlogCategory } from '../content/blog'
+import { useSiteText } from '../context/SiteTextsContext'
+import { type BlogCategory } from '../content/blog'
+import { useBlogPosts } from '../hooks/useBlog'
 import { ArrowLeftIcon, ArrowRightIcon, ImagePlaceholderIcon } from '../components/icons'
 
 const CATEGORIES: BlogCategory[] = ['Сравнения кормов', 'Питание', 'Здоровье', 'Кошки', 'Собаки', 'Ветдиеты']
@@ -17,7 +19,7 @@ export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState<BlogCategory | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const publishedPosts = getPublished()
+  const { posts: publishedPosts } = useBlogPosts()
 
   const filteredPosts = selectedCategory
     ? publishedPosts.filter((post) => post.categories.includes(selectedCategory))
@@ -39,10 +41,12 @@ export default function BlogPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const pageBlogTitle = useSiteText('page.blog.title', 'Блог')
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 md:py-14">
       {/* Заголовок */}
-      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-6">Блог</h1>
+      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-6">{pageBlogTitle}</h1>
 
       {/* Фильтры */}
       <div className="flex flex-wrap gap-2 mb-10">

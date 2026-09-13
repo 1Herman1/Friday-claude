@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { useReveal } from '../../hooks/useReveal'
 import { useDrawer } from '../../context/DrawerContext'
+import { useSiteText } from '../../context/SiteTextsContext'
 import { GiftIcon } from '../icons'
 
 /** Декор по бокам карточки — новые ассеты с поворотом запечённым.
@@ -57,6 +58,15 @@ export default function QuestionnaireTeaser() {
   const sceneRef = useReveal<HTMLDivElement>({ rootMargin: '0px 0px -25% 0px' })
   const [loaded, setLoaded] = useState<Set<string>>(new Set())
 
+  const quizTitle = useSiteText('home.quiz.title', 'Не знаете, какой корм выбрать?')
+  const quizSubtitleOverride = useSiteText('home.quiz.subtitle', '')
+  const quizSubtitleDefault = (
+    <>
+      Несколько вопросов о питомце: возраст, размер, здоровье. Подберём не просто бренд, а{' '}
+      <strong className="font-semibold text-navy-700">конкретную линейку и вкус</strong>. Займёт около минуты.
+    </>
+  )
+
   /** Показываем декор только на 1280px и выше — вся геометрия выверена на этих ширинах. */
   const showDecor = useMediaQuery('(min-width: 1280px)')
 
@@ -81,10 +91,10 @@ export default function QuestionnaireTeaser() {
 
           <div className="quiz-card relative z-10 rounded-card bg-white border border-line shadow-card px-5 py-8 md:px-8 md:py-10 text-center">
             <h2 className="text-2xl xl:text-3xl font-bold text-navy-900 mb-3">
-              Не знаете, какой корм выбрать?
+              {quizTitle}
             </h2>
             <p className="text-base leading-relaxed text-navy-500 text-pretty max-w-xl mx-auto mb-6">
-              Несколько вопросов о питомце: возраст, размер, здоровье. Подберём не просто бренд, а <strong className="font-semibold text-navy-700">конкретную линейку и вкус</strong>. Займёт около минуты.
+              {quizSubtitleOverride || quizSubtitleDefault}
             </p>
             <button
               type="button"

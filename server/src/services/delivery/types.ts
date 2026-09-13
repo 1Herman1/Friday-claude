@@ -16,6 +16,8 @@ export interface DeliveryAddress {
 
 export interface DeliveryPackage {
   weightKg: number   // суммарный вес заказа в кг
+  /// Сумма товаров в копейках — для порога «бесплатно от».
+  subtotal?: number
   lengthCm?: number
   widthCm?: number
   heightCm?: number
@@ -31,6 +33,8 @@ export interface DeliveryQuote {
   price: number           // в копейках
   daysMin: number
   daysMax: number
+  /// Порог бесплатной доставки (копейки); у сторонних провайдеров не задаётся.
+  freeFrom?: number | null
   available: boolean
   error?: string          // если не доступен — причина
 }

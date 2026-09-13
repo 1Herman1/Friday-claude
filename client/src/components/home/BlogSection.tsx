@@ -1,8 +1,10 @@
 import { useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { ImagePlaceholderIcon } from '../icons'
-import { getPublished, type BlogCategory } from '../../content/blog'
+import { type BlogCategory } from '../../content/blog'
+import { useBlogPosts } from '../../hooks/useBlog'
 import { useReveal } from '../../hooks/useReveal'
+import { useSiteText } from '../../context/SiteTextsContext'
 
 const CATEGORIES: BlogCategory[] = ['Сравнения кормов', 'Питание', 'Здоровье', 'Кошки', 'Собаки', 'Ветдиеты']
 
@@ -23,10 +25,12 @@ export default function BlogSection() {
       поэтому класс is-visible ей должен ставить собственный хук. */
   const groupRef = useReveal<HTMLDivElement>()
   const [selectedCategory, setSelectedCategory] = useState<BlogCategory | null>(null)
+  const blogTitle = useSiteText('home.blog.title', 'Блог')
+  const blogSubtitle = useSiteText('home.blog.subtitle', 'Разбираем составы кормов и отвечаем на вопросы, которые чаще всего задают на консультациях.')
   /** Растёт с каждым переключением фильтра. 0 = первая отрисовка: там работает scroll-reveal, а не swap-анимация. */
   const [swapCount, setSwapCount] = useState(0)
 
-  const posts = getPublished()
+  const { posts } = useBlogPosts()
   const filtered = selectedCategory
     ? posts.filter((post) => post.categories.includes(selectedCategory))
     : posts
@@ -49,10 +53,10 @@ export default function BlogSection() {
       <div ref={groupRef} className="reveal-group max-w-7xl mx-auto px-4">
         <div className="reveal-item">
           <h2 id="blog-title" className="text-3xl md:text-4xl font-bold text-navy-900">
-            Блог
+            {blogTitle}
           </h2>
           <p className="mt-3 text-base md:text-lg text-navy-500 max-w-prose leading-relaxed">
-            Разбираем составы кормов и отвечаем на вопросы, которые чаще всего задают на консультациях.
+            {blogSubtitle}
           </p>
         </div>
 

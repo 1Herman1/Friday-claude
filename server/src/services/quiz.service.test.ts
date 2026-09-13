@@ -656,7 +656,7 @@ describe('I. Ручные quizTags перекрывают авто-теги', ()
     const res = await runQuizMatch(prisma, dog({ health: ['joints'] }))
 
     expect(res.main.id).toBe('joints')
-    expect(res.main.matchScore).toBeCloseTo(3 / 28, 5) // 1 health match (3 pts) normalized to 0..1
+    expect(res.main.matchScore).toBeCloseTo(1, 5) // единственный достижимый критерий (health) закрыт полностью
   })
 })
 

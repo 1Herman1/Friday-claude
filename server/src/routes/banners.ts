@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 
 const querySchema = z.object({
-  page: z.enum(['home', 'catalog', 'other']).optional(),
+  page: z.enum(['home', 'catalog', 'about', 'other']).optional(),
   position: z.enum(['main_slider', 'promo_strip', 'sidebar']).optional(),
 })
 

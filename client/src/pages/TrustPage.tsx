@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { type CSSProperties } from 'react'
 import { useMetaTags } from '../hooks/useMetaTags'
+import { useSiteText } from '../context/SiteTextsContext'
 import CountUp from '../components/CountUp'
 import MarketplaceCard from '../components/MarketplaceCard'
 import { CONTACTS, MARKETPLACES } from '../lib/contacts'
@@ -150,10 +151,13 @@ export default function TrustPage() {
     },
   ]
 
+  const pageTrustTitle = useSiteText('page.trust.title', 'Почему нам доверяют')
+  const pageTrustSubtitle = useSiteText('page.trust.subtitle', 'Не обещания, а то, что можно проверить')
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
-      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-2">Почему нам доверяют</h1>
-      <p className="text-navy-500 mb-10">Не обещания, а то, что можно проверить</p>
+      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-2">{pageTrustTitle}</h1>
+      <p className="text-navy-500 mb-10">{pageTrustSubtitle}</p>
 
       {/* Цифра и площадки — прямо на фоне страницы: белые карточки на подложке
           были карточкой в карточке и съедали ширину на телефоне */}

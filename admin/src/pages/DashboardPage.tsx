@@ -22,17 +22,75 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
   )
 }
 
+function SimpleBarChart({
+  data,
+}: {
+  data: Array<{ date: string; orders: number; visits: number }>
+}) {
+  if (!data || data.length === 0) return null
+
+  const maxOrders = Math.max(...data.map(d => d.orders), 1)
+  const maxVisits = Math.max(...data.map(d => d.visits), 1)
+  const max = Math.max(maxOrders, maxVisits)
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <h3 className="font-semibold text-gray-900 mb-4">Заказы и посещения</h3>
+      <div className="flex gap-6">
+        {data.map((item, idx) => (
+          <div key={idx} className="flex flex-col items-center gap-2">
+            <div className="flex items-end gap-1 h-40">
+              <div
+                className="w-3 bg-blue-500 rounded-t"
+                style={{ height: `${(item.orders / max) * 100}%` }}
+                title={`Заказы: ${item.orders}`}
+              />
+              <div
+                className="w-3 bg-purple-500 rounded-t"
+                style={{ height: `${(item.visits / max) * 100}%` }}
+                title={`Посещения: ${item.visits}`}
+              />
+            </div>
+            <p className="text-xs text-gray-500">{item.date}</p>
+          </div>
+        ))}
+      </div>
+      <div className="flex gap-4 justify-center mt-4 text-xs">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-blue-500 rounded" />
+          <span className="text-gray-600">Заказы</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-purple-500 rounded" />
+          <span className="text-gray-600">Посещения</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [syncStatus, setSyncStatus] = useState<SyncStatusResponse | null>(null)
   const [loading, setLoading] = useState(true)
+  const [period, setPeriod] = useState<'week' | 'month' | 'year'>('month')
 
-  useEffect(() => {
+  const loadStats = (p: 'week' | 'month' | 'year' = period) => {
+    setLoading(true)
     Promise.all([
-      dashboardApi.stats().then(r => setStats(r.data)),
+      dashboardApi.stats(p).then(r => setStats(r.data)),
       syncApi.status().then(r => setSyncStatus(r.data)),
     ]).finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    loadStats()
   }, [])
+
+  const handlePeriodChange = (p: 'week' | 'month' | 'year') => {
+    setPeriod(p)
+    loadStats(p)
+  }
 
   if (loading) {
     return (
@@ -55,6 +113,24 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Period Tabs */}
+      <div className="flex gap-2 mb-6">
+        {(['week', 'month', 'year'] as const).map(p => (
+          <button
+            key={p}
+            onClick={() => handlePeriodChange(p)}
+            className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+              period === p
+                ? 'bg-blue-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            {p === 'week' ? 'Неделя' : p === 'month' ? 'Месяц' : 'Год'}
+          </button>
+        ))}
+      </div>
+
+      {/* Today Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           label="Заказы сегодня"
@@ -77,6 +153,44 @@ export default function DashboardPage() {
         />
       </div>
 
+      {/* Period Stats */}
+      {stats.period && (
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <StatCard
+            label="Заказы за период"
+            value={String(stats.period.orders)}
+          />
+          <StatCard
+            label="Выручка за период"
+            value={formatPrice(stats.period.revenue)}
+          />
+          <StatCard
+            label="Новые пользователи"
+            value={String(stats.period.newUsers)}
+          />
+          <StatCard
+            label="Активные гости"
+            value={String(stats.period.activeGuests)}
+          />
+          <StatCard
+            label="Посещения"
+            value={String(stats.period.visits)}
+          />
+          <StatCard
+            label="Подборы корма"
+            value={String(stats.period.quizSessions)}
+          />
+        </div>
+      )}
+
+      {/* Chart */}
+      {stats.series && stats.series.length > 0 && (
+        <div className="mb-8">
+          <SimpleBarChart data={stats.series} />
+        </div>
+      )}
+
+      {/* Recent Orders */}
       <div className="bg-white rounded-xl border border-gray-200">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <h2 className="font-semibold text-gray-900">Последние заказы</h2>

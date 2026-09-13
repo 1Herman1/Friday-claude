@@ -105,6 +105,7 @@ jobs:
             (cd server && npx tsx src/scripts/backfill-brand-identity.ts --apply)
             (cd server && npx tsx src/scripts/backfill-banners.ts --apply)
             (cd server && npx tsx src/scripts/backfill-species.ts --apply --only-unknown)
+            (cd server && npx tsx src/scripts/import-blog.ts)
 
             echo "==> МойСклад token probe (statuses only, no values)"
             (cd server && npx tsx src/scripts/moysklad-probe.ts || true)

@@ -2,6 +2,7 @@ import { useState, useId } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRightIcon, ChevronDownIcon } from '../icons'
 import { FAQ, renderFaqAnswer, type FaqEntry } from '../../lib/faq'
+import { useSiteText } from '../../context/SiteTextsContext'
 
 /** На главной — четыре вопроса, остальные на /faq. Источник текста один. */
 const faqs = FAQ.slice(0, 4)
@@ -40,10 +41,12 @@ function FaqItem({ faq }: { faq: FaqEntry }) {
 }
 
 export default function FaqSection() {
+  const faqTitle = useSiteText('home.faq.title', 'Вопросы и ответы')
+
   return (
     <section id="faq" className="scroll-mt-24 py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4">
-      <h2 className="text-2xl font-bold mb-8 text-navy-900">Вопросы и ответы</h2>
+      <h2 className="text-2xl font-bold mb-8 text-navy-900">{faqTitle}</h2>
       <div className="flex flex-col gap-3">
         {faqs.map((faq) => (
           <FaqItem key={faq.id} faq={faq} />

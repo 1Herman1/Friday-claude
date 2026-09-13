@@ -1,30 +1,31 @@
 import { useParams, Link } from 'react-router-dom'
 import { useMetaTags } from '../hooks/useMetaTags'
-import { getPostBySlug, getPublished } from '../content/blog'
+import { useBlogPosts, useBlogPost } from '../hooks/useBlog'
+import { renderMarkdown } from '../lib/markdown'
 import { ArrowLeftIcon, ImagePlaceholderIcon } from '../components/icons'
 import NotFoundPage from './NotFoundPage'
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>()
+  const { post, loading } = useBlogPost(slug)
+  const { posts: publishedPosts } = useBlogPosts()
 
-  if (!slug) {
-    return <NotFoundPage />
+  // Хуки — до любых ранних return, иначе React ругается на их порядок.
+  useMetaTags({
+    title: post?.metaTitle ?? 'Блог — Симба',
+    description: post?.metaDescription ?? '',
+  })
+
+  if (loading) {
+    return <div className="max-w-3xl mx-auto px-4 py-20 text-navy-500">Загружаем статью…</div>
   }
-
-  const post = getPostBySlug(slug)
 
   // Черновик по прямой ссылке открываться не должен: у него нет тела, и это
   // была бы пустая страница, которую поисковик засчитает как «тонкую».
-  if (!post || post.status !== 'published' || !post.body) {
+  if (!slug || !post || post.status !== 'published' || (!post.body && !post.markdown)) {
     return <NotFoundPage />
   }
 
-  useMetaTags({
-    title: post.metaTitle,
-    description: post.metaDescription,
-  })
-
-  const publishedPosts = getPublished()
   const allPosts = publishedPosts.filter((p) => p.slug !== slug)
 
   // Получаем посты из той же категории
@@ -103,7 +104,7 @@ export default function BlogPostPage() {
           [&>li]:mb-1
           [&_a]:text-primary-hover [&_a]:underline"
       >
-        {post.body && post.body()}
+        {post.markdown ? renderMarkdown(post.markdown) : post.body && post.body()}
       </article>
       </div>
 

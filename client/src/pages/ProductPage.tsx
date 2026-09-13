@@ -7,8 +7,10 @@ import { formatPrice } from '../lib/format'
 import { HeartIcon, HeartSolidIcon } from '../components/icons'
 import { isSellable } from '@simba/shared'
 import { apiErrorMessage } from '../lib/api-error'
+import { useDeliveryOptions, etaLabel } from '../hooks/useDeliveryOptions'
 
 export default function ProductPage() {
+  const deliveryOptions = useDeliveryOptions()
   const { slug } = useParams<{ slug: string }>()
   const [product, setProduct] = useState<Product | null>(null)
   const [related, setRelated] = useState<Product[]>([])
@@ -320,19 +322,26 @@ export default function ProductPage() {
 
             {/* Доставка */}
             <div className="bg-white rounded-xl border border-line divide-y divide-blue-50">
-              {[
-                { title: 'Экспресс', desc: 'Платно, за 1 час' },
-                { title: 'Доставка', desc: 'Бесплатно, в интервал' },
-                { title: 'Самовывоз', desc: 'Бесплатно, от 30 мин' },
-              ].map(d => (
-                <div key={d.title} className="flex items-center gap-3 p-3">
-                  <div className="flex-1">
-                    <span className="font-medium text-navy-900 text-sm">{d.title}</span>
-                    <span className="text-navy-400 text-xs ml-2">{d.desc}</span>
+              {/* Способы и цены — из прайс-листа доставки, который ведёт владелец в админке. */}
+              {deliveryOptions.map(d => {
+                const eta = etaLabel(d)
+                const desc = [
+                  d.price === 0 ? 'бесплатно' : formatPrice(d.price),
+                  d.freeFrom != null && d.price > 0 ? `бесплатно от ${formatPrice(d.freeFrom)}` : null,
+                  eta,
+                ].filter(Boolean).join(', ')
+                return (
+                  <div key={d.key} className="flex items-center gap-3 p-3">
+                    <div className="flex-1">
+                      <span className="font-medium text-navy-900 text-sm">{d.title}</span>
+                      <span className="text-navy-400 text-xs ml-2">{desc}</span>
+                    </div>
                   </div>
-                  <Link to="/delivery" className="text-primary-hover text-xs hover:text-primary-hover transition-colors">Подробнее об условиях доставки</Link>
-                </div>
-              ))}
+                )
+              })}
+              <div className="p-3">
+                <Link to="/delivery" className="text-navy-700 text-xs underline underline-offset-2 hover:text-navy-900 transition-colors">Подробнее об условиях доставки</Link>
+              </div>
             </div>
 
           </div>

@@ -1,4 +1,5 @@
 import { useMetaTags } from '../hooks/useMetaTags'
+import { useSiteText } from '../context/SiteTextsContext'
 import { CONTACTS } from '../lib/contacts'
 
 /** Декларация: лист документа + печать-медаль с лентой, наполовину перекрывающая
@@ -45,9 +46,11 @@ export default function CertificatesPage() {
       'Декларации соответствия ЕАЭС на корма Farmina и Monge из нашего ассортимента. Документы на конкретную партию пришлём по запросу.',
   })
 
+  const pageCertificatesTitle = useSiteText('page.certificates.title', 'Документы на продукцию')
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
-      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-3">Документы на продукцию</h1>
+      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-3">{pageCertificatesTitle}</h1>
 
       <p className="text-navy-500 max-w-prose mb-10 leading-relaxed">
         Мы работаем напрямую с официальными дистрибьюторами Farmina и Monge. Здесь опубликованы декларации соответствия на

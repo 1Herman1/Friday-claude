@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { productsApi, type Product } from '../lib/api'
+import { useSiteText } from '../context/SiteTextsContext'
 import ProductCard from './catalog/ProductCard'
 import { ArrowLeftIcon, ArrowRightIcon } from './icons'
 
@@ -89,7 +90,9 @@ export default function PopularProducts({ variant = 'default' }: Props) {
     return null
   }
 
-  const title = variant === 'home' ? 'Популярные товары' : 'Рекомендуем'
+  const popularTitle = useSiteText('home.popular.title', 'Популярные товары')
+  const recommendTitle = useSiteText('home.recommend.title', 'Рекомендуем')
+  const title = variant === 'home' ? popularTitle : recommendTitle
   const hasArrows = canScrollLeft || canScrollRight
 
   return (

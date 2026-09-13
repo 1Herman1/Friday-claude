@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@prisma/client'
+import type { DeliveryOptionInfo } from '@simba/shared'
 import type { DeliveryAddress, DeliveryPackage, DeliveryQuote, DeliveryOrder, DeliveryProvider, DeliveryMethod, DeliveryOptionKey, PickupPointProvider, PickupPoint } from './types.js'
 import { getCityCoords } from './city-coords.js'
 import * as ozon from './providers/ozon.js'
@@ -16,13 +17,28 @@ const PROVIDER_BY_KEY: Record<DeliveryOptionKey, DeliveryProvider> = {
   pickup: 'pickup',
 }
 
-/// Сроки — справочная константа, не цена: цена живёт в базе.
+/// Сроки по умолчанию, если в админке не заданы etaMin/etaMax.
 const DELIVERY_DAYS: Record<DeliveryOptionKey, { min: number; max: number }> = {
   simba_courier: { min: 0, max: 0 }, // сегодня
   cdek_pvz: { min: 2, max: 5 },
   yandex_pvz: { min: 1, max: 3 },
   ozon_pvz: { min: 2, max: 4 },
   pickup: { min: 0, max: 0 },
+}
+
+/** Срок из базы, иначе справочная константа. */
+function daysFor(option: DeliveryOptionInfo): { min: number; max: number } {
+  if (option.etaMin != null || option.etaMax != null) {
+    const min = option.etaMin ?? option.etaMax ?? 0
+    return { min, max: option.etaMax ?? min }
+  }
+  return DELIVERY_DAYS[option.key]
+}
+
+/** Цена с учётом порога «бесплатно от»: единое правило для котировок и проверки заказа. */
+export function priceWithFreeFrom(option: { price: number; freeFrom: number | null }, subtotal?: number): number {
+  if (option.freeFrom != null && subtotal != null && subtotal >= option.freeFrom) return 0
+  return option.price
 }
 
 // Получить котировку для выбранного способа доставки
@@ -64,7 +80,7 @@ export async function getQuoteForMethod(
     throw new Error('Этот способ доставки сейчас недоступен')
   }
 
-  const days = DELIVERY_DAYS[key]
+  const days = daysFor(option)
 
   return {
     provider: method,
@@ -72,9 +88,10 @@ export async function getQuoteForMethod(
     kind: option.kind,
     title: option.title,
     description: option.subtitle ?? '',
-    price: option.price,
+    price: priceWithFreeFrom(option, pkg.subtotal),
     daysMin: days.min,
     daysMax: days.max,
+    freeFrom: option.freeFrom,
     available: true,
   }
 }
@@ -137,7 +154,7 @@ export async function getAllQuotes(
   const quotes: DeliveryQuote[] = []
 
   for (const option of options) {
-    const days = DELIVERY_DAYS[option.key]
+    const days = daysFor(option)
 
     let available = true
     let error: string | undefined
@@ -154,9 +171,10 @@ export async function getAllQuotes(
       kind: option.kind,
       title: option.title,
       description: option.subtitle ?? '',
-      price: option.price,
+      price: priceWithFreeFrom(option, pkg.subtotal),
       daysMin: days.min,
       daysMax: days.max,
+      freeFrom: option.freeFrom,
       available,
       error,
     })

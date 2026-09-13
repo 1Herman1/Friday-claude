@@ -17,7 +17,7 @@ function imageSrc(path: string): string {
   return path
 }
 
-const PAGE_LABELS: Record<string, string> = { home: 'Главная', catalog: 'Каталог', other: 'Другое' }
+const PAGE_LABELS: Record<string, string> = { home: 'Главная', catalog: 'Каталог', about: 'О нас', other: 'Другое' }
 const POSITION_LABELS: Record<string, string> = {
   main_slider: 'Главный слайдер',
   promo_strip: 'Промо-полоса',

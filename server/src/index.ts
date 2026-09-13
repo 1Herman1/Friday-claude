@@ -17,6 +17,11 @@ import subscriptionsRoutes from './routes/subscriptions/index'
 import bonusesRoutes from './routes/bonuses/index'
 import quizRoutes from './routes/quiz/index'
 import deliveryRoutes from './routes/delivery/index'
+import blogRoutes from './routes/blog/index'
+import blogAdminRoutes from './routes/blog/admin'
+import siteTextsRoutes from './routes/site-texts/index'
+import siteTextsAdminRoutes from './routes/site-texts/admin'
+import visitsRoutes from './routes/visits'
 import addressRoutes from './routes/address/index'
 import mediaRoutes from './routes/media'
 import bannersRoutes from './routes/banners'
@@ -28,6 +33,7 @@ import adminBanners from './routes/admin/banners'
 import adminImport from './routes/admin/import'
 import adminSync from './routes/admin/sync'
 import adminDeliveryOptions from './routes/admin/delivery-options'
+import adminCategoriesRoutes from './routes/categories/admin-crud'
 
 /**
  * Собирает приложение, но НЕ слушает порт — чтобы тесты могли поднять его
@@ -63,6 +69,7 @@ export async function buildApp(opts: { logger?: boolean } = {}) {
   await app.register(adminProductRoutes, { prefix: '/api/admin/products' })
   await app.register(favoritesRoutes, { prefix: '/api/favorites' })
   await app.register(categoryRoutes, { prefix: '/api/categories' })
+  await app.register(adminCategoriesRoutes, { prefix: '/api/admin/categories' })
   await app.register(brandRoutes, { prefix: '/api/brands' })
   await app.register(cartRoutes, { prefix: '/api/cart' })
   await app.register(orderRoutes, { prefix: '/api/orders' })
@@ -82,6 +89,11 @@ export async function buildApp(opts: { logger?: boolean } = {}) {
   await app.register(adminQuizRoutes, { prefix: '/api/admin/quiz' })
   await app.register(addressRoutes, { prefix: '/api/address' })
   await app.register(deliveryRoutes, { prefix: '/api/delivery' })
+  await app.register(blogRoutes, { prefix: '/api/blog' })
+  await app.register(blogAdminRoutes, { prefix: '/api/admin/blog' })
+  await app.register(siteTextsRoutes, { prefix: '/api/site-texts' })
+  await app.register(siteTextsAdminRoutes, { prefix: '/api/admin/site-texts' })
+  await app.register(visitsRoutes, { prefix: '/api/visits' })
 
   return app
 }

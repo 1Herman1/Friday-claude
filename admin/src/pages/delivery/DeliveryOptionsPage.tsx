@@ -15,6 +15,13 @@ function parsePrice(rubles: string): number {
   return Math.round(parseFloat(rubles) * 100)
 }
 
+function etaLabel(min: number | null, max: number | null): string {
+  if (min == null && max == null) return '—'
+  if (min != null && max != null && min !== max) return `${min}–${max}`
+  const d = max ?? min ?? 0
+  return d === 0 ? 'в день заказа' : String(d)
+}
+
 export default function DeliveryOptionsPage() {
   const [options, setOptions] = useState<DeliveryOption[]>([])
   const [loading, setLoading] = useState(true)
@@ -69,6 +76,9 @@ export default function DeliveryOptionsPage() {
       if (data.expense !== undefined) {
         updateData.expense = expenseValue
       }
+      updateData.etaMin = data.etaMin === '' || data.etaMin == null ? null : Number(data.etaMin)
+      updateData.etaMax = data.etaMax === '' || data.etaMax == null ? null : Number(data.etaMax)
+      updateData.freeFrom = data.freeFromInput ? parsePrice(data.freeFromInput) : null
 
       const res = await deliveryOptionsApi.update(key, updateData)
 
@@ -80,7 +90,7 @@ export default function DeliveryOptionsPage() {
       // Обновляем форму с возвращённым значением (цена может быть целой)
       setFormData(prev => ({
         ...prev,
-        [key]: { ...res.data, priceInput: formatPrice(res.data.price), expenseInput: res.data.expense !== undefined ? formatPrice(res.data.expense) : '' },
+        [key]: { ...res.data, priceInput: formatPrice(res.data.price), expenseInput: res.data.expense !== undefined ? formatPrice(res.data.expense) : '', freeFromInput: res.data.freeFrom != null ? formatPrice(res.data.freeFrom) : '' },
       }))
 
       setEditingKey(null)
@@ -97,7 +107,7 @@ export default function DeliveryOptionsPage() {
     if (opt) {
       setFormData(prev => ({
         ...prev,
-        [key]: { ...opt, priceInput: formatPrice(opt.price), expenseInput: opt.expense !== undefined ? formatPrice(opt.expense) : '' },
+        [key]: { ...opt, priceInput: formatPrice(opt.price), expenseInput: opt.expense !== undefined ? formatPrice(opt.expense) : '', freeFromInput: opt.freeFrom != null ? formatPrice(opt.freeFrom) : '' },
       }))
       setEditingKey(key)
     }
@@ -116,11 +126,11 @@ export default function DeliveryOptionsPage() {
   }
 
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-6xl">
       <div className="mb-6">
         <h1 className="text-xl font-bold text-gray-900 mb-2">Доставка</h1>
         <p className="text-sm text-gray-600">
-          Эти цены видит покупатель в оформлении заказа и на странице «Доставка». Меняются сразу, без выкатки.
+          Эти цены, сроки и порог бесплатной доставки видит покупатель в оформлении заказа, в корзине, на странице «Доставка» и в карточке товара. Меняются сразу, без выкатки.
         </p>
       </div>
 
@@ -145,6 +155,8 @@ export default function DeliveryOptionsPage() {
                   <th className="px-5 py-3 font-medium">Подпись</th>
                   <th className="px-5 py-3 font-medium">Цена (₽)</th>
                   <th className="px-5 py-3 font-medium">Расход (₽)</th>
+                  <th className="px-5 py-3 font-medium">Срок, дн.</th>
+                  <th className="px-5 py-3 font-medium">Бесплатно от (₽)</th>
                   <th className="px-5 py-3 font-medium">Порядок</th>
                   <th className="px-5 py-3 font-medium">Статус</th>
                   <th className="px-5 py-3 font-medium"></th>
@@ -219,6 +231,32 @@ export default function DeliveryOptionsPage() {
                           />
                         ) : (
                           <span className="text-gray-600">{opt.expense !== undefined ? formatPrice(opt.expense) : '—'}</span>
+                        )}
+                      </td>
+
+                      <td className="px-5 py-3">
+                        {isEditing ? (
+                          <div className="flex items-center gap-1">
+                            <input type="number" min="0" max="60" value={data.etaMin ?? ''} placeholder="от"
+                              onChange={e => handleChange(opt.key, 'etaMin', e.target.value)}
+                              className="w-14 px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" />
+                            <span className="text-gray-400">–</span>
+                            <input type="number" min="0" max="60" value={data.etaMax ?? ''} placeholder="до"
+                              onChange={e => handleChange(opt.key, 'etaMax', e.target.value)}
+                              className="w-14 px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" />
+                          </div>
+                        ) : (
+                          <span className="text-gray-600">{etaLabel(opt.etaMin, opt.etaMax)}</span>
+                        )}
+                      </td>
+
+                      <td className="px-5 py-3">
+                        {isEditing ? (
+                          <input type="number" step="0.01" min="0" value={data.freeFromInput ?? ''} placeholder="нет"
+                            onChange={e => handleChange(opt.key, 'freeFromInput', e.target.value)}
+                            className="w-24 px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" />
+                        ) : (
+                          <span className="text-gray-600">{opt.freeFrom != null ? formatPrice(opt.freeFrom) : '—'}</span>
                         )}
                       </td>
 

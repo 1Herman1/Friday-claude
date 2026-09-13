@@ -4,6 +4,7 @@ import MarketplaceCard from '../MarketplaceCard'
 import { MARKETPLACES } from '../../lib/contacts'
 import CountUp from '../CountUp'
 import { useOnScreen } from '../../hooks/useOnScreen'
+import { useSiteText } from '../../context/SiteTextsContext'
 
 /** Медаль (Tabler icons/outline/award.svg, MIT) + своя галочка внутри —
     подтверждённая подлинность, а не абстрактная «защита».
@@ -93,12 +94,14 @@ const iconDelay = (i: number) => ({ '--idle-delay': `${600 + i * 1400}ms` }) as 
 
 export default function TrustSection() {
   const iconsRef = useOnScreen<HTMLDivElement>()
+  const trustTitle = useSiteText('home.trust.title', 'Почему нам доверяют')
+  const trustSubtitle = useSiteText('home.trust.subtitle', 'Не обещания, а то, что можно проверить')
 
   return (
     <section id="trust" className="scroll-mt-24 py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-2xl font-bold text-navy-900">Почему нам доверяют</h2>
-        <p className="mt-2 text-navy-500 max-w-prose leading-relaxed">Не обещания, а то, что можно проверить</p>
+        <h2 className="text-2xl font-bold text-navy-900">{trustTitle}</h2>
+        <p className="mt-2 text-navy-500 max-w-prose leading-relaxed">{trustSubtitle}</p>
 
         {/* Крупный стат-бокс — подложка primary-tint, без рамки */}
         <div className="mt-8 rounded-card bg-white border border-line p-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">

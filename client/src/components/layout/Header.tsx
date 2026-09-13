@@ -4,8 +4,13 @@ import { useCart } from '../../context/CartContext'
 import { useFavorites } from '../../context/FavoritesContext'
 import { useDrawer } from '../../context/DrawerContext'
 import { CONTACTS } from '../../lib/contacts'
+import { useCategoryTree, findNode } from '../../hooks/useCategoryTree'
 import { HeartIcon, CartBagIcon, UserIcon, TelegramPlaneIcon, SearchIcon, PhoneIcon } from '../icons'
 import SearchModal from './SearchModal'
+
+/** Корни меню зафиксированы (виды животных), подменю берётся из дерева категорий
+    в админке; если у корня нет детей — остаётся встроенный список. */
+const ROOT_SLUGS: Record<string, string[]> = { dogs: ['dogs-food', 'treats'], cats: ['cats-food'] }
 
 const categories = [
   {
@@ -41,6 +46,12 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [contactsOpen, setContactsOpen] = useState(false)
+  const tree = useCategoryTree()
+  const menu = categories.map((cat) => {
+    if (!cat.key) return cat
+    const kids = (ROOT_SLUGS[cat.key] ?? []).flatMap((slug) => findNode(tree, slug)?.children ?? [])
+    return kids.length ? { ...cat, subcategories: kids.map((k) => ({ label: k.name, href: `/catalog?category=${k.slug}` })) } : cat
+  })
   const contactsRef = useRef<HTMLDivElement>(null)
 
   // Попап контактов закрывается тапом вне и по Esc.
@@ -72,7 +83,7 @@ export default function Header() {
         <div className="relative max-w-7xl mx-auto rounded-full px-8 h-16 flex items-center justify-between bg-[rgb(119_119_119_/_0.5)] supports-[backdrop-filter]:backdrop-blur-[8px] shadow-md drop-shadow-sm">
           {/* Слева — навигация */}
           <nav className="flex items-center gap-4 lg:gap-6">
-            {categories.map((cat) => (
+            {menu.map((cat) => (
               <div
                 key={cat.label}
                 onMouseEnter={() => cat.key ? setActiveCategory(cat.key) : setActiveCategory(null)}
@@ -270,7 +281,7 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="mt-2 bg-white rounded-card shadow-md overflow-hidden animate-slide-down">
             <nav className="px-4 py-3 flex flex-col gap-1">
-              {categories.map((cat) => (
+              {menu.map((cat) => (
                 <Link
                   key={cat.label}
                   to={cat.href}

@@ -53,4 +53,9 @@ export interface DeliveryOptionInfo {
   subtitle: string | null
   /** Копейки. */
   price: number
+  /** Срок в днях; null — не задан в админке. */
+  etaMin: number | null
+  etaMax: number | null
+  /** Порог бесплатной доставки в копейках; null — платно всегда. */
+  freeFrom: number | null
 }

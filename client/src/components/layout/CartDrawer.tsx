@@ -8,8 +8,8 @@ import { cartApi, type CartItem } from '../../lib/api'
 import { formatPrice, formatBonuses, pluralize } from '../../lib/format'
 import { PawIcon, TrashIcon, ArrowLeftIcon } from '../icons'
 import SideDrawer from './SideDrawer'
+import { useDeliveryOptions, minFreeFrom } from '../../hooks/useDeliveryOptions'
 
-const FREE_DELIVERY_THRESHOLD = 200000
 
 type Props = {
   open: boolean
@@ -103,8 +103,11 @@ export default function CartDrawer({ open, onClose }: Props) {
   const promoDiscount = totals.promoDiscount
   const total = totals.total
 
-  const toFreeDelivery = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal)
-  const deliveryProgress = Math.min(100, (subtotal / FREE_DELIVERY_THRESHOLD) * 100)
+  // Порог бесплатной доставки берётся из прайс-листа (админка), а не из кода:
+  // null — бесплатной доставки нет, и полоса не показывается.
+  const freeFrom = minFreeFrom(useDeliveryOptions())
+  const toFreeDelivery = freeFrom == null ? 0 : Math.max(0, freeFrom - subtotal)
+  const deliveryProgress = freeFrom == null ? 0 : Math.min(100, (subtotal / freeFrom) * 100)
   const bonusEarned = totals.bonusEarned
 
   const handlePromo = () => {
@@ -154,6 +157,7 @@ export default function CartDrawer({ open, onClose }: Props) {
     content = (
       <>
         {/* Полоса до бесплатной доставки */}
+        {freeFrom != null && (
         <div className="px-4 py-3 border-b border-line">
           {toFreeDelivery > 0 ? (
             <>
@@ -161,7 +165,7 @@ export default function CartDrawer({ open, onClose }: Props) {
                 <span className="text-navy-700 font-medium">
                   До бесплатной доставки: <span className="text-blue-300 font-bold">{formatPrice(toFreeDelivery)}</span>
                 </span>
-                <span className="text-navy-400 text-xs">от {formatPrice(FREE_DELIVERY_THRESHOLD)}</span>
+                <span className="text-navy-400 text-xs">от {formatPrice(freeFrom)}</span>
               </div>
               <div className="h-2 bg-blue-50 rounded-full overflow-hidden">
                 <div
@@ -179,6 +183,7 @@ export default function CartDrawer({ open, onClose }: Props) {
             </div>
           )}
         </div>
+        )}
 
         {/* Список товаров */}
         <ul className="px-4 divide-y divide-line">

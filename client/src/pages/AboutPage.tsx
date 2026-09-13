@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useMetaTags } from '../hooks/useMetaTags'
+import { useSiteText } from '../context/SiteTextsContext'
 import CountUp from '../components/CountUp'
+import AboutBanner from '../components/home/AboutBanner'
 import { CONTACTS, LEGAL } from '../lib/contacts'
 
 export default function AboutPage() {
@@ -10,15 +12,14 @@ export default function AboutPage() {
       'Кто мы: узкий ассортимент премиальных кормов, прямые поставки от официальных дистрибьюторов, проверка каждой партии на приёмке.',
   })
 
+  const pageAboutTitle = useSiteText('page.about.title', 'Кто мы')
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 md:py-14">
-      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-5">Кто мы</h1>
+      <h1 className="text-[32px] md:text-[40px] leading-tight font-bold text-navy-900 mb-5">{pageAboutTitle}</h1>
 
-      {/* Баннер после заголовка. Реального фото магазина в репозитории нет —
-          стоит иллюстрация; замена: положить файл в public/about/ и поменять src. */}
-      <div className="mb-8 rounded-banner overflow-hidden bg-[#D9D9D9] aspect-[16/9] md:aspect-[21/9]">
-        <img src="/pets/dogwithcat.png" alt="Собака и кошка — питомцы Симбы" className="w-full h-full object-cover" />
-      </div>
+      {/* Баннер после заголовка: ставится в админке (Баннеры → страница «О нас»), иначе иллюстрация. */}
+      <div className="mb-8"><AboutBanner /></div>
       <p className="text-navy-500 max-w-prose mb-10 leading-relaxed">
         Симба начался с простой собственной проблемы: найти импортный корм для своей собаки — гарантированно оригинальный, со свежими сроками и по честной цене, — и это оказалось сложнее, чем должно быть.
       </p>

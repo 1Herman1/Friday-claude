@@ -22,7 +22,7 @@ export async function listDeliveryOptions(
   })
   return rows.flatMap((row) =>
     isKnownKey(row.key)
-      ? [{ key: row.key, kind: deliveryKindOf(row.key), title: row.title, subtitle: row.subtitle, price: row.price }]
+      ? [{ key: row.key, kind: deliveryKindOf(row.key), title: row.title, subtitle: row.subtitle, price: row.price, etaMin: row.etaMin, etaMax: row.etaMax, freeFrom: row.freeFrom }]
       : []
   )
 }
@@ -33,7 +33,7 @@ export async function getDeliveryOption(
 ): Promise<DeliveryOptionInfo | null> {
   const row = await prisma.deliveryOption.findUnique({ where: { key } })
   if (!row || !row.isActive) return null
-  return { key, kind: deliveryKindOf(key), title: row.title, subtitle: row.subtitle, price: row.price }
+  return { key, kind: deliveryKindOf(key), title: row.title, subtitle: row.subtitle, price: row.price, etaMin: row.etaMin, etaMax: row.etaMax, freeFrom: row.freeFrom }
 }
 
 /**

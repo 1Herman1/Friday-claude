@@ -1,5 +1,6 @@
 import { type CSSProperties } from 'react'
 import { useOnScreen } from '../../hooks/useOnScreen'
+import { useSiteText } from '../../context/SiteTextsContext'
 
 /** Геометрия — Tabler Icons (MIT), icons/outline/package.svg. */
 function PackageIcon() {
@@ -100,15 +101,17 @@ const iconDelay = (i: number) => ({ '--adv-delay': `${600 + i * 1400}ms` }) as C
 
 export default function AdvantagesSection() {
   const listRef = useOnScreen<HTMLUListElement>()
+  const advantagesTitle = useSiteText('home.advantages.title', 'Почему у нас')
+  const advantagesSubtitle = useSiteText('home.advantages.subtitle', 'Что мы делаем иначе, чем маркетплейс')
 
   return (
     <section id="advantages" aria-labelledby="advantages-title" className="scroll-mt-24 py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4">
         <h2 id="advantages-title" className="text-2xl font-bold text-navy-900">
-          Почему у нас
+          {advantagesTitle}
         </h2>
         <p className="mt-2 text-navy-500 max-w-prose leading-relaxed">
-          Что мы делаем иначе, чем маркетплейс
+          {advantagesSubtitle}
         </p>
 
         <ul ref={listRef} role="list" className="adv-icons mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">

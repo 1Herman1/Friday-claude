@@ -1,6 +1,7 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { useReveal } from '../../hooks/useReveal'
+import { useSiteText } from '../../context/SiteTextsContext'
 import { brandsApi, type Brand } from '../../lib/api'
 
 /** Группа логотипа по пропорции (ширина/высота) нормализованного файла.
@@ -106,6 +107,8 @@ const revealDelay = (i: number) => `${60 + Math.min(i, 5) * 45}ms`
 export default function BrandsSection() {
   const groupRef = useReveal<HTMLDivElement>()
   const [brands, setBrands] = useState<Brand[]>([])
+  const brandsTitle = useSiteText('home.brands.title', 'Бренды, которым мы доверяем')
+  const brandsSubtitle = useSiteText('home.brands.subtitle', 'Все бренды, что есть в наличии. Нажмите на любой — откроется его каталог.')
 
   useEffect(() => {
     brandsApi
@@ -121,9 +124,9 @@ export default function BrandsSection() {
   return (
     <section id="brands" className="scroll-mt-24 py-12 md:py-16">
       <div ref={groupRef} className="reveal-group max-w-7xl mx-auto px-4">
-        <h2 className="reveal-item text-2xl font-bold text-navy-900">Бренды, которым мы доверяем</h2>
+        <h2 className="reveal-item text-2xl font-bold text-navy-900">{brandsTitle}</h2>
         <p className="reveal-item mt-2 max-w-prose leading-relaxed text-navy-500">
-          Все бренды, что есть в наличии. Нажмите на любой — откроется его каталог.
+          {brandsSubtitle}
         </p>
         {/* Сетка, а не горизонтальный скролл: 12 брендов делятся на 3, 4 и 6 без
             остатка, поэтому последний ряд всегда полный и ряд центрирован сам
