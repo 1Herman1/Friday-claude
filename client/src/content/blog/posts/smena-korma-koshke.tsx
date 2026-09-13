@@ -9,6 +9,7 @@ const post: BlogPost = {
   date: '2026-06-25',
   readingMinutes: 6,
   status: 'published',
+  cover: '/blog/smena-korma-koshke.webp',
   metaTitle: 'Как перевести кошку на новый корм — Симба',
   metaDescription: 'Пошаговая схема перехода кошки на новый корм за 7–10 дней без расстройства ЖКТ. Пропорции по дням и что делать, если кошка отказывается.',
   body: () => (

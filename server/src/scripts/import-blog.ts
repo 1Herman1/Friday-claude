@@ -39,9 +39,18 @@ function parseMeta(src: string): Meta | null {
   }
 }
 
-async function upsertOnce(meta: Meta, body: string): Promise<'created' | 'skipped'> {
-  const exists = await prisma.blogPost.findUnique({ where: { slug: meta.slug }, select: { id: true } })
-  if (exists) return 'skipped'
+async function upsertOnce(meta: Meta, body: string): Promise<'created' | 'skipped' | 'cover'> {
+  const exists = await prisma.blogPost.findUnique({ where: { slug: meta.slug }, select: { id: true, cover: true } })
+  if (exists) {
+    // Тексты не трогаем, чтобы правки владельца в админке не затирались. Но
+    // обложку, если её ещё нет, ставим из исходника: иначе добавить картинку
+    // к уже импортированной статье можно было бы только руками.
+    if (!exists.cover && meta.cover) {
+      await prisma.blogPost.update({ where: { id: exists.id }, data: { cover: meta.cover } })
+      return 'cover'
+    }
+    return 'skipped'
+  }
   await prisma.blogPost.create({
     data: {
       slug: meta.slug, title: meta.title, subtitle: meta.excerpt || null, body,
@@ -54,7 +63,7 @@ async function upsertOnce(meta: Meta, body: string): Promise<'created' | 'skippe
 }
 
 async function main() {
-  let created = 0, skipped = 0
+  let created = 0, skipped = 0, covered = 0
   const postsDir = join(BLOG_DIR, 'posts')
   for (const file of readdirSync(postsDir).filter((f) => f.endsWith('.tsx'))) {
     const src = readFileSync(join(postsDir, file), 'utf8')
@@ -62,15 +71,17 @@ async function main() {
     if (!meta) { console.warn(`skip ${file}: no meta`); continue }
     const bodyStart = src.indexOf('body: () => (')
     const body = bodyStart >= 0 ? jsxToMarkdown(src.slice(bodyStart)) : ''
-    const r = await upsertOnce(meta, body); r === 'created' ? created++ : skipped++
+    const r = await upsertOnce(meta, body)
+    if (r === 'created') created++; else if (r === 'cover') covered++; else skipped++
   }
   const drafts = readFileSync(join(BLOG_DIR, 'drafts.ts'), 'utf8')
   for (const block of drafts.split(/\n\s*\{\n/).slice(1)) {
     const meta = parseMeta(block)
     if (!meta) continue
-    const r = await upsertOnce({ ...meta, status: 'draft' }, ''); r === 'created' ? created++ : skipped++
+    const r = await upsertOnce({ ...meta, status: 'draft' }, '')
+    if (r === 'created') created++; else if (r === 'cover') covered++; else skipped++
   }
-  console.log(`blog import: created ${created}, skipped ${skipped}`)
+  console.log(`blog import: created ${created}, covers set ${covered}, skipped ${skipped}`)
   await prisma.$disconnect()
 }
 
