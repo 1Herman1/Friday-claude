@@ -6,7 +6,7 @@ import { formatPrice } from '../../lib/format'
 import { CheckIcon } from '../icons'
 
 const ADDED_CLASS = 'rounded-pill min-h-[2.75rem] bg-white border border-line text-navy-900 font-semibold text-[13px]'
-const OUTLINE_CLASS = 'rounded-pill min-h-[2.75rem] bg-white border border-ink text-ink font-semibold text-[13px] [@media(hover:hover)]:hover:bg-ink [@media(hover:hover)]:hover:text-white transition-colors'
+const OUTLINE_CLASS = 'btn-glow rounded-pill min-h-[2.75rem] bg-white border border-ink text-ink font-semibold text-[13px] [@media(hover:hover)]:hover:bg-ink [@media(hover:hover)]:hover:text-white transition-colors'
 
 interface QuizProductCardProps {
   product: QuizProductCardType

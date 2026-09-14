@@ -5,6 +5,8 @@ interface CategoryNode {
   name: string
   slug: string
   image: string | null
+  kind: string | null
+  species: string | null
   children: CategoryNode[]
 }
 
@@ -19,6 +21,8 @@ export default async function treeRoute(app: FastifyInstance) {
         slug: true,
         image: true,
         parentId: true,
+        kind: true,
+        species: true,
       },
     })
 

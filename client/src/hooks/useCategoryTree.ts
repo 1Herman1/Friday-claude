@@ -26,3 +26,13 @@ export function findNode(tree: CategoryTreeNode[], slug: string): CategoryTreeNo
   }
   return undefined
 }
+
+/** Путь от корня до узла включительно. Пустой массив если узел не найден. */
+export function findPath(tree: CategoryTreeNode[], slug: string): CategoryTreeNode[] {
+  for (const n of tree) {
+    if (n.slug === slug) return [n]
+    const inner = n.children ? findPath(n.children, slug) : []
+    if (inner.length > 0) return [n, ...inner]
+  }
+  return []
+}

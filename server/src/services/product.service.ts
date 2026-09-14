@@ -2,6 +2,12 @@ import { PrismaClient } from '@prisma/client'
 import { isSellable, type Variant } from '@simba/shared'
 import { buildTagCondition, isCatalogTag } from '../lib/catalog-tags'
 
+/** Ветеринарные линейки, представленные в каталоге. */
+export const MEDICAL_LINES = ['Vet Life', 'VetSolution', 'Prescription Diet']
+/** Узлы «Лечебное питание» в дереве категорий (backfill-category-tree.ts). Фиксированные slug'и,
+    а не суффикс: переименование категории в админке не должно молча ломать фильтр. */
+export const MEDICAL_CATEGORY_SLUGS = ['dogs-medical', 'cats-medical']
+
 export interface ProductFilters {
   categorySlug?: string
   brandSlug?: string
@@ -25,8 +31,6 @@ export interface ProductFilters {
   limit?: number
 }
 
-/** Ветеринарные линейки, представленные в каталоге. */
-const MEDICAL_LINES = ['Vet Life', 'VetSolution', 'Prescription Diet']
 
 /** Получить все id категории и её потомков (BFS). Возвращает null если категория не найдена. */
 async function categoryIdsWithDescendants(prisma: PrismaClient, slug: string): Promise<string[] | null> {
@@ -114,15 +118,27 @@ export async function getProducts(prisma: PrismaClient, filters: ProductFilters)
   }
 
   if (filters.purpose === 'medical') {
-    // Только названия ветеринарных линеек. Названия болезней (Renal, Urinary,
-    // Struvite) в отбор не берём: они встречаются и у обычных функциональных
-    // кормов, а выдавать их за лечебные — вводить покупателя в заблуждение.
-    const condition = {
-      OR: MEDICAL_LINES.map((line) => ({
-        name: { contains: line, mode: 'insensitive' as const },
-      })),
+    // Ищем категорию типа medical среди активных категорий товара
+    const medicalCategories = await prisma.category.findMany({
+      where: { slug: { in: MEDICAL_CATEGORY_SLUGS }, isActive: true },
+      select: { id: true },
+    })
+
+    if (medicalCategories.length > 0) {
+      const medicalCategoryIds = medicalCategories.map((c) => c.id)
+      const condition = {
+        categories: { some: { categoryId: { in: medicalCategoryIds } } },
+      }
+      where.AND = Array.isArray(where.AND) ? [...where.AND, condition] : [condition]
+    } else {
+      // Fallback: если категорий нет, используем названия линеек
+      const condition = {
+        OR: MEDICAL_LINES.map((line) => ({
+          name: { contains: line, mode: 'insensitive' as const },
+        })),
+      }
+      where.AND = Array.isArray(where.AND) ? [...where.AND, condition] : [condition]
     }
-    where.AND = Array.isArray(where.AND) ? [...where.AND, condition] : [condition]
   }
 
   if (filters.species) {

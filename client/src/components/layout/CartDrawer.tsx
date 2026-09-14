@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { calcOrderTotals, LOYALTY_TIERS, type PromoRule } from '@simba/shared'
+import { calcOrderTotals, subscriptionPrice, LOYALTY_TIERS, type PromoRule } from '@simba/shared'
 import { LOYALTY_STYLE, LOYALTY_CURRENT_MARK } from '../../lib/loyalty-style'
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
@@ -18,7 +18,7 @@ type Props = {
 
 export default function CartDrawer({ open, onClose }: Props) {
   const { updateItem: updateItemFromCart, removeItem: removeItemFromCart } = useCart()
-  const { user } = useAuth()
+  const { user, isLoggedIn } = useAuth()
   const [items, setItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState(false)
   const [promoCode, setPromoCode] = useState('')
@@ -105,6 +105,7 @@ export default function CartDrawer({ open, onClose }: Props) {
     items: items.map(item => ({
       price: item.productVariant.price,
       quantity: item.quantity,
+      isSubscription: item.isSubscription,
     })),
     promo,
     availableBonus: 0,
@@ -258,34 +259,39 @@ export default function CartDrawer({ open, onClose }: Props) {
                     {p.name}
                   </Link>
                   {/* Toggle подписка/разово */}
-                  <div className="mt-1 flex gap-1">
-                    {(['once', 'subscription'] as const).map(m => (
-                      <button
-                        key={m}
-                        disabled={togglingId === item.id}
-                        onClick={async () => {
-                          setTogglingId(item.id)
-                          setToggleErrorId(null)
-                          try {
-                            const res = await updateItemFromCart(item.id, item.quantity, {
-                              isSubscription: m === 'subscription',
-                            })
-                            setItems(res.data.items)
-                          } catch {
-                            setToggleErrorId(item.id)
-                          } finally {
-                            setTogglingId(null)
-                          }
-                        }}
-                        className={`btn-press text-xs px-2.5 py-1 rounded-md border disabled:opacity-50 ${
-                          (item.isSubscription ? 'subscription' : 'once') === m
-                            ? 'bg-blue-50 border-primary-soft text-primary-hover font-medium'
-                            : 'bg-white border-line text-navy-500 hover:border-primary-soft'
-                        }`}>
-                        {m === 'once' ? 'Разово' : 'Подписка'}
-                      </button>
-                    ))}
-                  </div>
+                  {!isLoggedIn ? (
+                    <p className="mt-1 text-xs text-navy-500">Подписка доступна после входа</p>
+                  ) : (
+                    <div className="mt-1 flex gap-1">
+                      {(['once', 'subscription'] as const).map(m => (
+                        <button
+                          key={m}
+                          disabled={togglingId === item.id}
+                          onClick={async () => {
+                            setTogglingId(item.id)
+                            setToggleErrorId(null)
+                            try {
+                              const res = await updateItemFromCart(item.id, item.quantity, {
+                                isSubscription: m === 'subscription',
+                                intervalWeeks: m === 'subscription' ? 4 : undefined,
+                              })
+                              setItems(res.data.items)
+                            } catch {
+                              setToggleErrorId(item.id)
+                            } finally {
+                              setTogglingId(null)
+                            }
+                          }}
+                          className={`btn-press text-xs px-2.5 py-1 rounded-md border disabled:opacity-50 ${
+                            (item.isSubscription ? 'subscription' : 'once') === m
+                              ? 'bg-blue-50 border-primary-soft text-primary-hover font-medium'
+                              : 'bg-white border-line text-navy-500 hover:border-primary-soft'
+                          }`}>
+                          {m === 'once' ? 'Разово' : 'Подписка'}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   {toggleErrorId === item.id && (
                     <p className="mt-1 text-xs text-red-500">Не удалось изменить режим покупки, попробуйте ещё раз</p>
                   )}
@@ -318,7 +324,7 @@ export default function CartDrawer({ open, onClose }: Props) {
                       {item.isSubscription ? (
                         <>
                           <span className="text-sm font-bold text-navy-900 tabular-nums">
-                            {formatPrice(Math.round(v.price * item.quantity * 0.93))}
+                            {formatPrice(subscriptionPrice(v.price) * item.quantity)}
                           </span>
                           <span className="text-xs text-navy-300 line-through tabular-nums">
                             {formatPrice(v.price * item.quantity)}

@@ -316,7 +316,7 @@ export default function CheckoutPage() {
   }
 
   const totals = calcOrderTotals({
-    items: cartItems.map(i => ({ price: i.productVariant.price, quantity: i.quantity })),
+    items: cartItems.map(i => ({ price: i.productVariant.price, quantity: i.quantity, isSubscription: i.isSubscription })),
     promo,
     bonusRequested: bonusSpend ? userBonusPoints : 0,
     availableBonus: userBonusPoints,
@@ -1030,7 +1030,7 @@ export default function CheckoutPage() {
                 {authLoggedIn && (() => {
                   // Расчитаем максимально доступно в этом заказе
                   const totalsWithMaxBonus = calcOrderTotals({
-                    items: cartItems.map(i => ({ price: i.productVariant.price, quantity: i.quantity })),
+                    items: cartItems.map(i => ({ price: i.productVariant.price, quantity: i.quantity, isSubscription: i.isSubscription })),
                     promo,
                     bonusRequested: userBonusPoints,
                     availableBonus: userBonusPoints,
@@ -1258,6 +1258,11 @@ export default function CheckoutPage() {
                   <div className="flex justify-between text-sm">
                     <span className="text-navy-500">Бонусы</span>
                     <span className="text-amber-600 font-medium">−{formatPrice(bonusDiscount)}</span>
+                  </div>
+                )}
+                {cartItems.some(i => i.isSubscription) && (
+                  <div className="mt-2 pt-2 border-t border-amber-100">
+                    <p className="text-xs text-navy-500 leading-relaxed">Подписка: −7 % на отмеченные товары</p>
                   </div>
                 )}
               </div>

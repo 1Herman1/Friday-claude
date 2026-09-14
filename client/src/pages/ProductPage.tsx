@@ -2,10 +2,11 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { productsApi, type Product, type ProductVariant } from '../lib/api'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { formatPrice } from '../lib/format'
 import { HeartIcon, HeartSolidIcon, CheckIcon } from '../components/icons'
-import { isSellable } from '@simba/shared'
+import { isSellable, subscriptionPrice } from '@simba/shared'
 import { apiErrorMessage } from '../lib/api-error'
 import { useDeliveryOptions, etaLabel } from '../hooks/useDeliveryOptions'
 import ProductReviews from '../components/product/ProductReviews'
@@ -13,6 +14,7 @@ import ProductReviews from '../components/product/ProductReviews'
 export default function ProductPage() {
   const deliveryOptions = useDeliveryOptions()
   const { slug } = useParams<{ slug: string }>()
+  const { isLoggedIn } = useAuth()
   const [product, setProduct] = useState<Product | null>(null)
   const [related, setRelated] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -224,16 +226,21 @@ export default function ProductPage() {
                 {(['once', 'subscription'] as const).map(m => (
                   <button
                     key={m}
+                    disabled={m === 'subscription' && !isLoggedIn}
+                    title={m === 'subscription' && !isLoggedIn ? 'Войдите, чтобы оформить подписку' : ''}
                     onClick={() => setMode(m)}
                     className={`btn-press flex-1 px-4 py-2 rounded-xl border ${
                       mode === m
                         ? 'bg-ink border-ink text-white font-semibold'
                         : 'bg-white border-line text-navy-700 [@media(hover:hover)]:hover:border-ink'
-                    }`}>
+                    } ${m === 'subscription' && !isLoggedIn ? 'opacity-50 cursor-not-allowed' : ''}`}>
                     {m === 'once' ? 'Разово' : 'Подписка −7%'}
                   </button>
                 ))}
               </div>
+              {!isLoggedIn && (
+                <p className="mt-2 text-xs text-navy-500">Войдите, чтобы оформить подписку.</p>
+              )}
             </div>
 
             {/* Интервал подписки */}
@@ -254,20 +261,31 @@ export default function ProductPage() {
                     </button>
                   ))}
                 </div>
+                <p className="mt-3 text-sm text-navy-500 leading-relaxed max-w-prose">
+                  −7 % и напоминание раз в {intervalWeeks} недель; перед доставкой подтвердим заказ. Отменить можно в профиле.{' '}
+                  <Link to="/faq#faq-subscription" className="text-primary-hover underline underline-offset-2">Как работает подписка</Link>
+                </p>
               </div>
             )}
 
             {/* Цена */}
             <div className="flex items-baseline gap-3 flex-wrap">
               <span className="text-3xl font-black text-navy-900">
-                {formatPrice(selectedVariant.price)}
+                {mode === 'subscription' ? formatPrice(subscriptionPrice(selectedVariant.price)) : formatPrice(selectedVariant.price)}
               </span>
-              {selectedVariant.oldPrice && (
+              {mode === 'subscription' && (
+                <span className="text-lg text-navy-300 line-through">
+                  {formatPrice(selectedVariant.price)}
+                </span>
+              )}
+              {mode !== 'subscription' && selectedVariant.oldPrice && (
                 <span className="text-lg text-navy-300 line-through">
                   {formatPrice(selectedVariant.oldPrice)}
                 </span>
               )}
-              {discount && (
+              {mode === 'subscription' ? (
+                <span className="text-amber-600 font-bold text-sm">−7 % по подписке</span>
+              ) : discount && (
                 <span className="text-amber-500 font-bold text-sm">Скидка {discount}%</span>
               )}
               {selectedVariant.stock > 0 && (

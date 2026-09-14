@@ -17,7 +17,7 @@ function FaqItem({ faq }: { faq: FaqEntry }) {
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen(!open)}
-        className={`w-full flex items-center justify-between p-5 text-left transition-colors duration-150 ease`}
+        className={`w-full flex items-center justify-between p-5 text-left transition-colors duration-150 ease ${open ? 'bg-primary-tint' : ''}`}
       >
         <span className="font-semibold pr-4 text-navy-900">{faq.q}</span>
         <ChevronDownIcon open={open} className="flex-shrink-0 text-navy-900 w-5 h-5" />
@@ -28,7 +28,7 @@ function FaqItem({ faq }: { faq: FaqEntry }) {
         className={`grid transition-[grid-template-rows] ease-out ${open ? 'duration-200' : 'duration-150'}`}
         style={{ gridTemplateRows: open ? '1fr' : '0fr' }}
       >
-        <div className="overflow-hidden bg-white border-t border-line">
+        <div className="overflow-hidden bg-primary-tint border-t border-line">
           <div
             className={`px-5 pt-4 pb-5 max-w-prose leading-relaxed text-navy-500 transition-[opacity,transform] ease-out ${open ? 'duration-200 opacity-100 translate-y-0' : 'duration-150 opacity-0 -translate-y-1'}`}
           >

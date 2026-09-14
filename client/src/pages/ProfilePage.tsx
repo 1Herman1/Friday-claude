@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { authApi, ordersApi, usersApi, bonusesApi, subscriptionsApi, type User, type Order, type BonusTransaction, type Subscription } from '../lib/api'
 import { formatPrice, formatBonuses } from '../lib/format'
 import { CheckIcon, StepCurrentIcon, StepPendingIcon, ChevronDownIcon } from '../components/icons'
-import { LOYALTY_TIERS, type BonusLevel } from '@simba/shared'
+import { LOYALTY_TIERS, subscriptionPrice, type BonusLevel } from '@simba/shared'
 import LoginForm from '../components/auth/LoginForm'
 
 type OrderStatus = 'new' | 'confirmed' | 'in_transit' | 'delivered' | 'cancelled'
@@ -498,6 +498,14 @@ export default function ProfilePage() {
               </div>
             )}
 
+            {!loadingSubscriptions && !subscriptionsError && (
+              <div className="bg-white border border-line rounded-card p-4 mb-4">
+                <p className="text-xs text-navy-500 leading-relaxed">
+                  Подписка — это скидка 7 % на выбранный корм и напоминание о следующей покупке раз в выбранный интервал. Мы свяжемся с вами перед доставкой, чтобы подтвердить заказ. Изменить интервал, поставить на паузу или отменить можно в любой момент.
+                </p>
+              </div>
+            )}
+
             {!loadingSubscriptions && !subscriptionsError && subscriptions.length === 0 && (
               <div className="bg-white rounded-2xl p-10 text-center">
                 <p className="text-navy-500 mb-3">У вас ещё нет активных подписок</p>
@@ -535,6 +543,11 @@ export default function ProfilePage() {
                           <p className="text-sm text-navy-500 mb-2">
                             {intervalWeeks} недель · Следующая доставка {dateStr}
                           </p>
+                          {sub.productVariant && (
+                            <p className="text-sm font-semibold text-navy-900">
+                              {formatPrice(subscriptionPrice(sub.productVariant.price))}
+                            </p>
+                          )}
                           <p className="text-xs text-navy-400">{sub.deliveryMethod}</p>
                         </div>
                         <span className={`text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${

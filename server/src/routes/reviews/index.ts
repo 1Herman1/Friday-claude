@@ -7,6 +7,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024
 const listSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(10),
+  productId: z.string().uuid().optional(),
 })
 
 const createSchema = z.object({
@@ -23,10 +24,11 @@ export default async function reviewsRoutes(app: FastifyInstance) {
     const parsed = listSchema.safeParse(request.query)
     if (!parsed.success) return reply.status(400).send({ error: 'Некорректные параметры' })
 
-    const { page, limit } = parsed.data
+    const { page, limit, productId } = parsed.data
     const uid = (request.user as { userId?: string } | undefined)?.userId
 
     const where = {
+      ...(productId ? { productId } : {}),
       OR: [
         { status: 'approved' as const },
         ...(uid ? [{ userId: uid }] : []),

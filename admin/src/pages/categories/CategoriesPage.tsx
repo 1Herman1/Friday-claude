@@ -91,7 +91,14 @@ function TreeRow({
         style={{ paddingLeft: `${16 + depth * 24}px` }}
       >
         <div className="flex-1 min-w-0">
-          <p className="font-medium text-gray-900 truncate">{node.name}</p>
+          <div className="flex items-center gap-2 mb-1">
+            <p className="font-medium text-gray-900 truncate">{node.name}</p>
+            {node.kind && (
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-medium">
+                {{ species: 'Вид', type: 'Тип', purpose: 'Назначение' }[node.kind] || ''}
+              </span>
+            )}
+          </div>
           <p className="text-xs text-gray-400 font-mono">{node.slug}</p>
         </div>
 
@@ -258,6 +265,15 @@ export default function CategoriesPage() {
       return
     }
 
+    // Валидация: если выбран родитель с kind=purpose, это максимум 3 уровня
+    if (editing.data.parentId) {
+      const parent = allNodes.find(n => n.id === editing.data.parentId)
+      if (parent?.kind === 'purpose') {
+        setError('Максимум три уровня: Вид → Тип → Назначение')
+        return
+      }
+    }
+
     let slug = editing.data.slug
     if (!slug) {
       slug = autoSlug(editing.data.name)
@@ -273,6 +289,8 @@ export default function CategoriesPage() {
       parentId: editing.data.parentId,
       sortOrder: editing.data.sortOrder ?? 0,
       isActive: editing.data.isActive ?? true,
+      kind: editing.data.kind || null,
+      species: editing.data.species || null,
     }
 
     setSaving(true)
@@ -480,16 +498,61 @@ export default function CategoriesPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Родитель</label>
                 <select
                   value={editing.data.parentId ?? ''}
-                  onChange={e => setField('parentId', e.target.value || undefined)}
+                  onChange={(e) => {
+                    const parentId = e.target.value || undefined
+                    setField('parentId', parentId)
+                    // Автоподставка kind при выборе родителя
+                    const parent = allNodes.find(n => n.id === parentId)
+                    if (parent) {
+                      if (parent.kind === 'species') setField('kind', 'type')
+                      else if (parent.kind === 'type') setField('kind', 'purpose')
+                      // Если выбран species — автоподставляем его, если поле пусто
+                      if (parent.species && !editing.data.species) {
+                        setField('species', parent.species)
+                      }
+                    }
+                  }}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400"
                 >
                   <option value="">Корень</option>
-                  {flatParents.map(p => (
-                    <option key={p.id} value={p.id}>
-                      {'  '.repeat(p.depth)}{p.name}
-                    </option>
-                  ))}
+                  {flatParents
+                    .filter(p => p.kind !== 'purpose') // Узлы purpose не могут быть родителями
+                    .map(p => (
+                      <option key={p.id} value={p.id}>
+                        {'  '.repeat(p.depth)}{p.name}
+                      </option>
+                    ))}
                 </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Уровень</label>
+                  <select
+                    value={editing.data.kind ?? ''}
+                    onChange={e => setField('kind', e.target.value || null)}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400"
+                  >
+                    <option value="">—</option>
+                    <option value="species">Вид</option>
+                    <option value="type">Тип</option>
+                    <option value="purpose">Назначение</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Вид животного</label>
+                  <select
+                    value={editing.data.species ?? ''}
+                    onChange={e => setField('species', e.target.value || null)}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400"
+                  >
+                    <option value="">—</option>
+                    <option value="cat">Кошки</option>
+                    <option value="dog">Собаки</option>
+                    <option value="both">Оба</option>
+                  </select>
+                </div>
               </div>
 
               <div>

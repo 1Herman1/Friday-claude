@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { initButtonPress } from './lib/button-press'
+import { initButtonGlow } from './lib/button-glow'
 import ScrollToTop from './components/ScrollToTop'
 import HashScroll from './components/HashScroll'
 import Layout from './components/layout/Layout'
@@ -35,8 +36,10 @@ import DrawerRoute from './pages/DrawerRoute'
 export default function App() {
   useEffect(() => {
     const disposePress = initButtonPress()
+    const disposeGlow = initButtonGlow()
     return () => {
       disposePress()
+      disposeGlow()
     }
   }, [])
 

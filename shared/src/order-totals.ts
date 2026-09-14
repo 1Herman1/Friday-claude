@@ -1,5 +1,12 @@
 export type PromoRule = { type: 'percent' | 'fixed'; value: number; minSubtotal?: number | null }
 
+export const SUBSCRIPTION_DISCOUNT_PERCENT = 7
+
+/** Цены хранятся в копейках; скидка округляется до целого рубля, чтобы на витрине не было «929,07 ₽». */
+export function subscriptionPrice(price: number): number {
+  return Math.round((price * (100 - SUBSCRIPTION_DISCOUNT_PERCENT)) / 100 / 100) * 100
+}
+
 export function calcPromoDiscount(subtotal: number, promo?: PromoRule | null): number {
   if (!promo) return 0
   if (promo.minSubtotal != null && subtotal < promo.minSubtotal) return 0
@@ -25,7 +32,7 @@ export type OrderTotals = {
 
 export function calcOrderTotals(input: OrderCalcInput): OrderTotals {
   const subtotal = input.items.reduce((sum, item) => {
-    const price = item.isSubscription ? Math.round(item.price * 0.93) : item.price
+    const price = item.isSubscription ? subscriptionPrice(item.price) : item.price
     return sum + price * item.quantity
   }, 0)
   const promoDiscount = calcPromoDiscount(subtotal, input.promo)

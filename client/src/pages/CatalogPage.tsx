@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { brandsApi, categoriesApi, type SortValue } from '../lib/api'
 import { useScrollDirection } from '../hooks/useScrollDirection'
-import { useCategoryTree, findNode } from '../hooks/useCategoryTree'
+import { useCategoryTree, findNode, findPath } from '../hooks/useCategoryTree'
 import CatalogSearch from '../components/catalog/CatalogSearch'
 import CatalogTags, { CATALOG_TAGS, catalogTagLabel, tagFitsSpecies } from '../components/catalog/CatalogTags'
 import CatalogGrid from '../components/catalog/CatalogGrid'
@@ -115,7 +115,7 @@ function CatalogHeader({
 }) {
   const [brandName, setBrandName] = useState('')
   const tree = useCategoryTree()
-
+  const path = category ? findPath(tree, category) : []
   const categoryName = category ? findNode(tree, category)?.name : ''
 
   useEffect(() => {
@@ -146,9 +146,22 @@ function CatalogHeader({
     : 'Все товары'
 
   return (
-    <div className="flex items-center justify-between mb-6">
-      <h1 className="text-xl font-bold text-navy-900">{title}</h1>
-      <SortSelect value={sort} onChange={onSortChange} />
+    <div>
+      {path.length > 0 && (
+        <nav aria-label="Хлебные крошки" className="mb-2 text-sm text-navy-500 flex flex-wrap items-center gap-1.5">
+          <Link to="/catalog" className="hover:text-navy-900">Каталог</Link>
+          {path.map((n, i) => (
+            <span key={n.id} className="flex items-center gap-1.5">
+              <span aria-hidden="true">›</span>
+              {i === path.length - 1 ? <span className="text-navy-900">{n.name}</span> : <Link to={`/catalog?category=${n.slug}`} className="hover:text-navy-900">{n.name}</Link>}
+            </span>
+          ))}
+        </nav>
+      )}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-xl font-bold text-navy-900">{title}</h1>
+        <SortSelect value={sort} onChange={onSortChange} />
+      </div>
     </div>
   )
 }

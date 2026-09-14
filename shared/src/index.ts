@@ -1,4 +1,4 @@
-export { calcOrderTotals, calcPromoDiscount, type OrderCalcInput, type OrderTotals, type PromoRule } from './order-totals'
+export { calcOrderTotals, calcPromoDiscount, subscriptionPrice, SUBSCRIPTION_DISCOUNT_PERCENT, type OrderCalcInput, type OrderTotals, type PromoRule } from './order-totals'
 export {
   calculateBonusLevel,
   getLevelProgress,

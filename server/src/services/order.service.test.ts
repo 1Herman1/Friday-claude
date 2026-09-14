@@ -713,4 +713,14 @@ describe('правила бонусной программы', () => {
     expect(withSmallDelivery.bonusEarned).toBe(500)
     expect(withBigDelivery.bonusEarned).toBe(500)
   })
+
+  it('применяет скидку 7% для подписки', () => {
+    const r = calcOrderTotals({
+      items: [{ price: 10000, quantity: 1, isSubscription: true }],
+      availableBonus: 0,
+    })
+
+    expect(r.subtotal).toBe(9300)
+    expect(r.total).toBe(9300)
+  })
 })

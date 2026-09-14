@@ -13,6 +13,8 @@ const createSchema = z.object({
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
   sortOrder: z.number().int().default(0),
+  kind: z.enum(['species', 'type', 'purpose']).nullable().optional(),
+  species: z.enum(['cat', 'dog', 'both']).nullable().optional(),
 })
 
 const updateSchema = createSchema.partial()
@@ -25,6 +27,8 @@ interface CategoryNode {
   sortOrder: number
   isActive: boolean
   productCount: number
+  kind: string | null
+  species: string | null
   children: CategoryNode[]
 }
 
@@ -52,6 +56,48 @@ async function hasCycle(prisma: any, categoryId: string, newParentId: string | n
   return false
 }
 
+/** Проверяет правила дерева Вид → Тип → Назначение */
+async function assertTreeRules(
+  prisma: any,
+  data: { kind?: string | null; parentId?: string | null },
+): Promise<string | null> {
+  const kind = data.kind
+  const parentId = data.parentId
+
+  if (!kind) return null
+
+  // Если parentId указан, загружаем родителя для проверки
+  if (parentId) {
+    const parent = await prisma.category.findUnique({
+      where: { id: parentId },
+      select: { kind: true },
+    })
+
+    if (!parent) return 'Родительская категория не найдена'
+
+    // Проверка максимум три уровня
+    if (parent.kind === 'purpose') {
+      return 'Максимум три уровня: Вид → Тип → Назначение'
+    }
+
+    // Правила связей
+    if (kind === 'type' && parent.kind !== 'species') {
+      return 'Тип должен быть потомком Вида'
+    }
+
+    if (kind === 'purpose' && parent.kind !== 'type') {
+      return 'Назначение должно быть потомком Типа'
+    }
+  } else {
+    // Нет parentId
+    if (kind !== 'species') {
+      return 'Вид должен быть корневой категорией (без родителя)'
+    }
+  }
+
+  return null
+}
+
 export default async function adminCrudRoute(app: FastifyInstance) {
   const adminGuard = { preHandler: [app.authenticate, checkRole(['super_admin', 'products_manager'])] }
 
@@ -65,6 +111,8 @@ export default async function adminCrudRoute(app: FastifyInstance) {
         parentId: true,
         sortOrder: true,
         isActive: true,
+        kind: true,
+        species: true,
         _count: { select: { products: true } },
       },
     })
@@ -81,6 +129,8 @@ export default async function adminCrudRoute(app: FastifyInstance) {
         sortOrder: cat.sortOrder,
         isActive: cat.isActive,
         productCount: cat._count.products,
+        kind: (cat as any).kind || null,
+        species: (cat as any).species || null,
         children: [],
       })
     }
@@ -101,6 +151,11 @@ export default async function adminCrudRoute(app: FastifyInstance) {
     const parsed = createSchema.safeParse(request.body)
     if (!parsed.success) {
       return reply.status(400).send({ error: parsed.error.errors[0].message })
+    }
+
+    const treeError = await assertTreeRules(app.prisma, parsed.data)
+    if (treeError) {
+      return reply.status(400).send({ error: treeError })
     }
 
     try {
@@ -130,6 +185,11 @@ export default async function adminCrudRoute(app: FastifyInstance) {
 
     if (data.parentId !== undefined && (await hasCycle(app.prisma, id, data.parentId))) {
       return reply.status(400).send({ error: 'Cannot create cycle in category tree' })
+    }
+
+    const treeError = await assertTreeRules(app.prisma, data)
+    if (treeError) {
+      return reply.status(400).send({ error: treeError })
     }
 
     try {
@@ -165,6 +225,11 @@ export default async function adminCrudRoute(app: FastifyInstance) {
       for (const item of items) {
         if (await hasCycle(app.prisma, item.id, item.parentId ?? null)) {
           return reply.status(400).send({ error: `Cannot create cycle: category ${item.id}` })
+        }
+
+        const treeError = await assertTreeRules(app.prisma, { parentId: item.parentId })
+        if (treeError) {
+          return reply.status(400).send({ error: `Category ${item.id}: ${treeError}` })
         }
       }
 

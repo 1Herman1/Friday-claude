@@ -39,6 +39,13 @@ const importRoute: FastifyPluginAsync = async (app) => {
     // Кеши на время импорта
     const brandCache = new Map<string, string>() // slug → id
     const categoryCache = new Map<string, string>() // slug → id
+    // Категорий вида ровно две (dogs/cats) — один запрос на весь импорт, а не на каждую строку.
+    const speciesCategoryIds = new Map(
+      (await app.prisma.category.findMany({
+        where: { kind: 'species', isActive: true, species: { in: ['dog', 'cat'] } },
+        select: { id: true, species: true },
+      })).map((c) => [c.species, c.id] as const),
+    )
     const filterCache = new Map<string, string>() // slug → id
     const filterValueCache = new Map<string, string>() // filterSlug|valueSlug → id
 
@@ -345,6 +352,7 @@ const importRoute: FastifyPluginAsync = async (app) => {
         // МоегоСклада добавляла бы товары, не попадающие ни в «Кошки», ни в
         // «Собаки», — и владелец узнавал бы об этом от покупателя.
         // Уже проставленный вид не трогаем: он мог быть выбран вручную.
+        let speciesForCategory: 'dog' | 'cat' | null = null
         if (!existingProduct || existingProduct.species === 'unknown') {
           const guessed = determineSpecies(baseName, [
             ...row.categories,
@@ -354,6 +362,22 @@ const importRoute: FastifyPluginAsync = async (app) => {
             await app.prisma.product.update({
               where: { id: productId },
               data: { species: guessed },
+            })
+            speciesForCategory = guessed
+          }
+        } else if (existingProduct.species === 'dog' || existingProduct.species === 'cat') {
+          speciesForCategory = existingProduct.species
+        }
+
+        // Если определен вид животного (dog или cat), привязываем товар к категории вида
+        if (speciesForCategory) {
+          const speciesCategoryId = speciesCategoryIds.get(speciesForCategory)
+
+          if (speciesCategoryId) {
+            await app.prisma.productCategory.upsert({
+              where: { productId_categoryId: { productId, categoryId: speciesCategoryId } },
+              create: { productId, categoryId: speciesCategoryId },
+              update: {},
             })
           }
         }

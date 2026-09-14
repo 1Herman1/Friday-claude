@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 import { reviewsApi, type Review } from '../../lib/api'
 import ReviewCard from '../reviews/ReviewCard'
 import ReviewForm from '../reviews/ReviewForm'
@@ -10,12 +9,26 @@ interface ProductReviewsProps {
 
 export default function ProductReviews({ productId }: ProductReviewsProps) {
   const [reviews, setReviews] = useState<Review[]>([])
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
+  // Ответ для уже сменившегося товара выбрасываем — иначе «Показать ещё» старого
+  // товара доклеит его отзывы к новому.
+  const currentProductId = useRef(productId)
+  currentProductId.current = productId
 
-  const loadReviews = async () => {
+  const loadReviews = async (p: number = 1) => {
+    if (p === 1) setLoading(true)
     try {
-      const res = await reviewsApi.list({ limit: 5 })
-      setReviews(res.data.items)
+      const res = await reviewsApi.list({ productId, limit: 5, page: p })
+      if (currentProductId.current !== productId) return
+      if (p === 1) {
+        setReviews(res.data.items)
+      } else {
+        setReviews(prev => [...prev, ...res.data.items])
+      }
+      setTotal(res.data.total)
+      setPage(p)
     } catch {
       setReviews([])
     } finally {
@@ -24,15 +37,16 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
   }
 
   useEffect(() => {
-    loadReviews()
-  }, [])
+    loadReviews(1)
+  }, [productId])
 
   const handleCreated = (review: Review) => {
-    setReviews([review, ...reviews])
+    setReviews(prev => [review, ...prev])
+    setTotal(t => t + 1)
   }
 
   const handleDeleted = (id: string) => {
-    setReviews(reviews.filter(r => r.id !== id))
+    setReviews(prev => prev.filter(r => r.id !== id))
   }
 
   if (loading) return null
@@ -53,11 +67,15 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
             ))}
           </div>
 
-          {reviews.length > 0 && (
+          {reviews.length < total && (
             <div className="text-center">
-              <Link to="/reviews" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
-                Все отзывы →
-              </Link>
+              <button
+                type="button"
+                onClick={() => loadReviews(page + 1)}
+                className="btn-outline px-6 rounded-pill text-sm font-medium"
+              >
+                Показать ещё
+              </button>
             </div>
           )}
         </>

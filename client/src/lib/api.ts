@@ -273,6 +273,8 @@ export interface Category {
   id: string
   name: string
   slug: string
+  kind?: 'species' | 'type' | 'purpose' | null
+  species?: 'cat' | 'dog' | 'both' | null
 }
 
 export interface CategoryTreeNode extends Category {
@@ -348,7 +350,7 @@ export const brandsApi = {
 // ─── Отзывы ──────────────────────────────────────────────────────────────────
 
 export const reviewsApi = {
-  list: (params?: { page?: number; limit?: number }) =>
+  list: (params?: { page?: number; limit?: number; productId?: string }) =>
     api.get<{ items: Review[]; total: number; page: number; totalPages: number }>('/api/reviews', { params }),
 
   create: (data: { rating: number; text: string; authorName?: string; photo?: string; productId?: string }) =>

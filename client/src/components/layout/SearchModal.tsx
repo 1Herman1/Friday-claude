@@ -5,6 +5,7 @@ import { useProductSearch } from '../../hooks/useProductSearch'
 import { lockBodyScroll, unlockBodyScroll } from '../../lib/scroll-lock'
 import { PawIcon, CloseIcon, SearchIcon } from '../icons'
 import { formatPrice } from '../../lib/format'
+import LottieScene from '../LottieScene'
 
 const EXIT_MS = 150
 
@@ -13,6 +14,8 @@ const QUICK_LINKS = [
   { label: 'Корм для собак', href: '/catalog?category=dogs-food' },
   { label: 'Лакомства', href: '/catalog?category=treats' },
 ]
+
+const loadEmptyDog = () => import('../../lottie/empty-catalog.json')
 
 function pluralize(n: number, one: string, few: string, many: string): string {
   if (n % 10 === 1 && n % 100 !== 11) return one
@@ -400,7 +403,12 @@ export default function SearchModal({ open, onClose }: Props) {
           {!isEmpty && !showSkeletons && !hasResults && !loading && (
             <>
               <div className="px-6 py-10 text-center">
-                <PawIcon className="w-14 h-14 mx-auto text-navy-200" />
+                <div className="relative w-28 mx-auto">
+                  <LottieScene load={loadEmptyDog} className="w-full aspect-[1065/922]" />
+                  <svg viewBox="0 0 100 8" aria-hidden="true" focusable="false" className="absolute inset-x-0 bottom-[3%] w-[76%] mx-auto">
+                    <ellipse cx="50" cy="4" rx="50" ry="4" className="fill-navy-100" />
+                  </svg>
+                </div>
                 <p className="mt-4 text-lg font-bold text-navy-900">
                   Ничего не нашли по запросу «{value}»
                 </p>

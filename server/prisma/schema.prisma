@@ -148,6 +148,13 @@ enum ReviewStatus {
   rejected
 }
 
+/// Уровень категории в дереве «Вид → Тип → Назначение»
+enum CategoryKind {
+  species
+  type
+  purpose
+}
+
 enum PromoType {
   percent
   fixed
@@ -250,18 +257,22 @@ model Pet {
 
 /// Категории каталога — поддерживают дерево (подкатегории через parentId)
 model Category {
-  id             String   @id @default(uuid())
+  id             String         @id @default(uuid())
   name           String
-  slug           String   @unique
+  slug           String         @unique
   description    String?
   image          String?
   parentId       String?
   seoTitle       String?
   seoDescription String?
-  isActive       Boolean  @default(true)
-  sortOrder      Int      @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  isActive       Boolean        @default(true)
+  sortOrder      Int            @default(0)
+  /// Уровень в дереве «Вид → Тип → Назначение»
+  kind           CategoryKind?
+  /// Вид животного для узлов-видов и их потомков
+  species        ProductSpecies?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
   parent   Category?         @relation("CategoryTree", fields: [parentId], references: [id])
   children Category[]        @relation("CategoryTree")
@@ -271,6 +282,7 @@ model Category {
   @@index([slug])
   @@index([parentId])
   @@index([isActive])
+  @@index([kind])
   @@map("categories")
 }
 

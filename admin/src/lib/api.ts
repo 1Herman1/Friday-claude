@@ -122,6 +122,8 @@ export interface Category {
   sortOrder: number
   seoTitle?: string
   seoDescription?: string
+  kind?: 'species' | 'type' | 'purpose' | null
+  species?: 'cat' | 'dog' | 'both' | null
 }
 
 export interface CategoryNode extends Category {

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import type { FastifyInstance } from 'fastify'
 import { hasTestDb, getTestPrisma, resetDb, closeTestPrisma } from './setup'
-import { createUser, createGuestSession, authHeader } from './factories'
+import { createUser, createGuestSession, authHeader, createProductWithVariant } from './factories'
 
 describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () => {
   let app: FastifyInstance
@@ -228,5 +228,57 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
     })
     expect(fourth.statusCode).toBe(429)
     expect(fourth.json().error).toContain('Слишком много')
+  })
+
+  it('GET /api/reviews?productId= возвращает только отзывы этого товара', async () => {
+    const prisma = getTestPrisma()
+    const user = await createUser({ name: 'Тестовый пользователь' })
+
+    // Два товара
+    const { product: product1 } = await createProductWithVariant({ name: 'Корм для кошек' })
+    const { product: product2 } = await createProductWithVariant({ name: 'Корм для собак' })
+
+    // По одному одобренному отзыву на каждый товар
+    await prisma.review.create({
+      data: {
+        authorName: 'Иван',
+        rating: 5,
+        text: 'Отличный корм для кошек, кот очень доволен!',
+        userId: user.id,
+        productId: product1.id,
+        status: 'approved',
+      },
+    })
+
+    await prisma.review.create({
+      data: {
+        authorName: 'Мария',
+        rating: 4,
+        text: 'Хороший корм для собак, собака ест с удовольствием',
+        userId: user.id,
+        productId: product2.id,
+        status: 'approved',
+      },
+    })
+
+    // Запрос с productId первого товара — должен вернуть только его отзыв
+    const res = await app.inject({
+      method: 'GET',
+      url: `/api/reviews?productId=${product1.id}`,
+    })
+    expect(res.statusCode).toBe(200)
+    const data = res.json()
+    expect(data.items).toHaveLength(1)
+    expect(data.items[0].authorName).toBe('Иван')
+    expect(data.total).toBe(1)
+
+    // Запрос без productId — должен вернуть оба одобренных отзыва
+    const allRes = await app.inject({
+      method: 'GET',
+      url: '/api/reviews',
+    })
+    expect(allRes.statusCode).toBe(200)
+    expect(allRes.json().items).toHaveLength(2)
+    expect(allRes.json().total).toBe(2)
   })
 })

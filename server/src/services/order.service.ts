@@ -1,5 +1,5 @@
 import { OrderStatus, PaymentStatus, Prisma, PrismaClient } from '@prisma/client'
-import { calcOrderTotals, type OrderCalcInput, type OrderTotals, type PickupPoint } from '@simba/shared'
+import { calcOrderTotals, subscriptionPrice, type OrderCalcInput, type OrderTotals, type PickupPoint } from '@simba/shared'
 import { getQuoteForMethod } from './delivery/delivery.service.js'
 import { computeDeliveryExpense } from './delivery/delivery-expense.js'
 import type { DeliveryAddress as DeliveryServiceAddress, DeliveryMethod } from './delivery/types.js'
@@ -295,8 +295,9 @@ export async function createOrder(
     })
 
     // Вычисляем subtotal перед проверкой промокода
+    const subscriptionsAllowed = !data.guestCheckout
     const subtotalRaw = cart.items.reduce((sum, item) => {
-      const price = item.isSubscription ? Math.round(item.productVariant.price * 0.93) : item.productVariant.price
+      const price = item.isSubscription && subscriptionsAllowed ? subscriptionPrice(item.productVariant.price) : item.productVariant.price
       return sum + price * item.quantity
     }, 0)
 
@@ -360,8 +361,8 @@ export async function createOrder(
 
     // Create order items and handle subscriptions
     for (const cartItem of cart.items) {
-      const itemPrice = cartItem.isSubscription
-        ? Math.round(cartItem.productVariant.price * 0.93)
+      const itemPrice = cartItem.isSubscription && subscriptionsAllowed
+        ? subscriptionPrice(cartItem.productVariant.price)
         : cartItem.productVariant.price
 
       const orderItem = await tx.orderItem.create({
@@ -373,7 +374,7 @@ export async function createOrder(
           variantWeight: cartItem.productVariant.weight,
           price: itemPrice,
           quantity: cartItem.quantity,
-          isSubscription: cartItem.isSubscription,
+          isSubscription: cartItem.isSubscription && subscriptionsAllowed,
         },
       })
 
@@ -381,7 +382,7 @@ export async function createOrder(
       // Уникальность userId+productVariantId у Subscription — частичный индекс
       // (только среди isActive: true, см. миграцию subscription_stage1), Prisma не
       // умеет строить upsert по такому ключу — ищем активную запись вручную.
-      if (cartItem.isSubscription && cartItem.subscriptionIntervalDays) {
+      if (cartItem.isSubscription && subscriptionsAllowed && cartItem.subscriptionIntervalDays) {
         const existingSubscription = await tx.subscription.findFirst({
           where: {
             userId: actor.customerUserId,

@@ -4,43 +4,22 @@ import { useCart } from '../../context/CartContext'
 import { useFavorites } from '../../context/FavoritesContext'
 import { useDrawer } from '../../context/DrawerContext'
 import { CONTACTS } from '../../lib/contacts'
-import { useCategoryTree, findNode } from '../../hooks/useCategoryTree'
-import { HeartIcon, CartBagIcon, UserIcon, TelegramPlaneOutlineIcon, SearchIcon, PhoneIcon } from '../icons'
+import { useCategoryTree, findNode, findPath } from '../../hooks/useCategoryTree'
+import { HeartIcon, CartBagIcon, UserIcon, TelegramPlaneIcon, SearchIcon, PhoneIcon } from '../icons'
 import SearchModal from './SearchModal'
 
-/** Корни меню зафиксированы (виды животных), подменю берётся из дерева категорий
-    в админке; если у корня нет детей — остаётся встроенный список. */
-const FOOD_ROOT: Record<string, string> = { dogs: 'dogs-food', cats: 'cats-food' }
-const TREATS_CHILD: Record<string, string> = { dogs: 'treats-dogs', cats: 'treats-cats' }
+interface MenuGroup {
+  label: string
+  href: string
+  items: Array<{ label: string; href: string }>
+}
 
-const categories = [
-  {
-    label: 'Собаки',
-    key: 'dogs',
-    href: '/catalog?species=dog',
-    subcategories: [
-      { label: 'Сухой корм', href: '/catalog?category=dogs-food&format=dry' },
-      { label: 'Влажный корм', href: '/catalog?category=dogs-food&format=wet' },
-      { label: 'Лечебное питание', href: '/catalog?category=dogs-food&purpose=medical' },
-      { label: 'Лакомства', href: '/catalog?category=treats' },
-    ],
-  },
-  {
-    label: 'Коты и кошки',
-    key: 'cats',
-    href: '/catalog?species=cat',
-    subcategories: [
-      { label: 'Сухой корм', href: '/catalog?category=cats-food&format=dry' },
-      { label: 'Влажный корм', href: '/catalog?category=cats-food&format=wet' },
-      { label: 'Лечебное питание', href: '/catalog?category=cats-food&purpose=medical' },
-    ],
-  },
-  {
-    label: 'Ветаптека',
-    key: null,
-    href: '/catalog?category=care',
-  },
-]
+interface MenuItem {
+  label: string
+  key: string | null
+  href: string
+  groups?: MenuGroup[]
+}
 
 export default function Header() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
@@ -48,31 +27,36 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [contactsOpen, setContactsOpen] = useState(false)
   const tree = useCategoryTree()
-  const menu = categories.map((cat) => {
-    if (!cat.key) return cat
 
-    const foodRoot = findNode(tree, FOOD_ROOT[cat.key])
-    const foodChildren = foodRoot?.children ?? []
-
-    if (foodChildren.length === 0) {
-      // Если нет детей — используем встроенный список
-      return cat
-    }
-
-    // Строим подменю: детей корня + фиксированные пункты
-    const subcategories = [
-      ...foodChildren.map((k) => ({ label: k.name, href: `/catalog?category=${k.slug}` })),
-      { label: 'Лечебное питание', href: `/catalog?category=${FOOD_ROOT[cat.key]}&purpose=medical` },
-    ]
-
-    // Добавляем Лакомства, если существует нужная подкатегория
-    const treatsChildSlug = TREATS_CHILD[cat.key]
-    const treatsNode = findNode(tree, treatsChildSlug)
-    const treatsHref = treatsNode ? `/catalog?category=${treatsChildSlug}` : '/catalog?category=treats'
-    subcategories.push({ label: 'Лакомства', href: treatsHref })
-
-    return { ...cat, subcategories }
-  })
+  // Строим меню из дерева: уровень 1 (виды), затем уровень 2 (типы) в группах, уровень 3 (назначения) в каждой группе
+  const menu: MenuItem[] = tree.length > 0
+    ? [
+        ...tree
+          .filter(n => n.kind === 'species')
+          .map(root => ({
+            label: root.name,
+            key: root.slug,
+            href: `/catalog?category=${root.slug}`,
+            groups: (root.children ?? []).map(type => ({
+              label: type.name,
+              href: `/catalog?category=${type.slug}`,
+              items: (type.children ?? []).map(purpose => ({
+                label: purpose.name,
+                href: `/catalog?category=${purpose.slug}`,
+              })),
+            })),
+          })),
+        // Ветаптека если существует в дереве
+        ...(findNode(tree, 'care') ? [{
+          label: 'Ветаптека',
+          key: null,
+          href: '/catalog?category=care',
+        }] : []),
+      ]
+    : [
+        { label: 'Собаки', key: 'dogs', href: '/catalog?species=dog', groups: [] },
+        { label: 'Кошки', key: 'cats', href: '/catalog?species=cat', groups: [] },
+      ]
   const contactsRef = useRef<HTMLDivElement>(null)
 
   // Попап контактов закрывается тапом вне и по Esc.
@@ -108,6 +92,9 @@ export default function Header() {
               <div
                 key={cat.label}
                 onMouseEnter={() => cat.key ? setActiveCategory(cat.key) : setActiveCategory(null)}
+                onFocus={() => cat.key ? setActiveCategory(cat.key) : setActiveCategory(null)}
+                onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setActiveCategory(null) }}
+                onKeyDown={(e) => { if (e.key === 'Escape') setActiveCategory(null) }}
                 className="relative"
               >
                 <Link
@@ -116,18 +103,29 @@ export default function Header() {
                 >
                   {cat.label}
                 </Link>
-                {cat.key && activeCategory === cat.key && cat.subcategories && (
-                  <div className="absolute left-0 top-full mt-3 w-max max-w-sm bg-white rounded-card shadow-md overflow-hidden animate-slide-down z-50">
-                    <div className="px-4 py-3 flex flex-wrap gap-x-2 gap-y-1">
-                      {cat.subcategories.map((sub) => (
-                        <Link
-                          key={sub.label}
-                          to={sub.href}
-                          className="block px-3 py-2 rounded-lg text-navy-700 text-sm font-medium hover:bg-blue-50 transition-colors duration-100"
-                          onClick={() => setActiveCategory(null)}
-                        >
-                          {sub.label}
-                        </Link>
+                {cat.key && activeCategory === cat.key && (cat.groups?.length ?? 0) > 0 && (
+                  <div className="absolute left-0 top-full mt-3 w-max max-w-[calc(100vw-2rem)] bg-white rounded-card shadow-md overflow-hidden animate-slide-down z-50">
+                    <div className="px-6 py-5 grid grid-flow-col auto-cols-max gap-x-8 gap-y-1">
+                      {cat.groups?.map((group) => (
+                        <div key={group.label}>
+                          <Link
+                            to={group.href}
+                            className="block px-2 py-1.5 text-sm font-semibold text-navy-900 hover:underline"
+                            onClick={() => setActiveCategory(null)}
+                          >
+                            {group.label}
+                          </Link>
+                          {group.items.map((item) => (
+                            <Link
+                              key={item.label}
+                              to={item.href}
+                              className="block px-2 py-1 text-sm text-navy-700 hover:text-navy-900 hover:underline"
+                              onClick={() => setActiveCategory(null)}
+                            >
+                              {item.label}
+                            </Link>
+                          ))}
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -146,7 +144,7 @@ export default function Header() {
 
           {/* Справа — иконки */}
           <div className="flex items-center gap-1 lg:gap-3 ml-auto">
-            {/* Telegram — та же 44px-обёртка, что у соседей; контурный самолётик */}
+            {/* Telegram — та же 44px-обёртка, что у соседей; залитый самолётик, как в логотипе Telegram */}
             <a
               href={CONTACTS.telegram}
               target="_blank"
@@ -154,7 +152,7 @@ export default function Header() {
               aria-label="Написать в Telegram"
               className="btn-press header-pill-icon w-11 h-11 inline-flex items-center justify-center rounded-xl text-white"
             >
-              <TelegramPlaneOutlineIcon className="header-ico-telegram w-[22px] h-[22px]" />
+              <TelegramPlaneIcon className="header-ico-telegram w-[21px] h-[18px]" />
             </a>
 
             {/* Поиск */}
@@ -256,7 +254,7 @@ export default function Header() {
               aria-label="Написать в Telegram"
               className="btn-press header-pill-icon text-white w-11 h-11 flex items-center justify-center rounded-xl"
             >
-              <TelegramPlaneOutlineIcon className="w-[22px] h-[22px]" />
+              <TelegramPlaneIcon className="w-[21px] h-[18px]" />
             </a>
             <button
               type="button"
@@ -301,14 +299,29 @@ export default function Header() {
           <div className="mt-2 bg-white rounded-card shadow-md overflow-hidden animate-slide-down">
             <nav className="px-4 py-3 flex flex-col gap-1">
               {menu.map((cat) => (
-                <Link
-                  key={cat.label}
-                  to={cat.href}
-                  className="py-3 px-3 rounded-lg font-medium text-navy-900 hover:bg-blue-50 transition-colors duration-100"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {cat.label}
-                </Link>
+                <div key={cat.label}>
+                  <Link
+                    to={cat.href}
+                    className="py-3 px-3 rounded-lg font-medium text-navy-900 hover:bg-blue-50 transition-colors duration-100 block"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {cat.label}
+                  </Link>
+                  {cat.key && (cat.groups?.length ?? 0) > 0 && (
+                    <div className="pl-6 text-sm text-navy-700">
+                      {cat.groups?.map((group) => (
+                        <Link
+                          key={group.label}
+                          to={group.href}
+                          className="flex items-center min-h-[44px] px-3 hover:text-navy-900 hover:underline"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {group.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </nav>
           </div>
