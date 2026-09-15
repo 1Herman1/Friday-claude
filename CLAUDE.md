@@ -387,11 +387,11 @@ Agent(qa-engineer, "составь тест-план по всему сайту"
 | N+1 запросы, индексы БД | `database-reviewer` | performance-optimizer, code-reviewer |
 | Bundle size, LCP, ре-рендеры React | `performance-optimizer` | — |
 | Типы `any`, async/await ошибки | `typescript-reviewer` | code-reviewer |
-| XSS, `dangerouslySetInnerHTML`, хуки | `react-reviewer` | code-reviewer |
+| XSS, `dangerouslySetInnerHTML`, хуки | `react-reviewer` | code-reviewer, security-* |
 | Дизайн-качество, AI-slop, типографика, контраст | `design-reviewer` | react-reviewer, code-reviewer |
 | Сгенерированный медиа-ассет vs бренд-кит | `brand-guard` | design-reviewer |
 | Секреты в открытом коде | `security-secrets-scanner` | code-reviewer, typescript-reviewer |
-| JWT / OTP / сессии / IDOR | `security-auth-access` | code-reviewer |
+| JWT / OTP / сессии / IDOR / массовое присвоение / CSRF | `security-auth-access` | code-reviewer |
 | CORS / заголовки / env / порты / частота запросов | `security-infra-cloud` | security-api-surface |
 | Цена, купон, возврат, гонка, обход квот | `security-business-logic` | code-reviewer, database-reviewer |
 | Подпись вебхука, SSRF, редиректы, OAuth, инъекции, загрузка файлов, парсеры | `security-api-surface` | code-reviewer, typescript-reviewer |
@@ -540,7 +540,7 @@ Agent(qa-engineer, "составь тест-план по всему сайту"
 | `security-secrets-scanner` | Утечки секретов в коде и git-истории |
 | `security-dependency-audit` | Уязвимости в npm-зависимостях (CVE) |
 | `security-infra-cloud` | env, CORS, заголовки, хранилище, инфраструктура, порты |
-| `security-business-logic` | Платежи, гонки, купоны, возвраты, лимиты, массовое присвоение |
+| `security-business-logic` | Платежи, гонки, купоны, возвраты, обход бизнес-квот |
 | `security-api-surface` | Вебхуки и подписи, SSRF, редиректы, OAuth, поверхность API |
 | `security-observability` | Логи, оповещения, бэкапы и проверка восстановления |
 | `security-incident-response` | Реакция на подозрение взлома/утечки |
