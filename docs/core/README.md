@@ -17,6 +17,7 @@
 | `stack.md` | Технологический стек по умолчанию для новых проектов |
 | `rules.md`, `rules/` | Правила и соглашения кода (React, TypeScript) |
 | `anti-patterns/` | Негативные списки по доменам: TypeScript, security, database |
+| `security-runtime.md` | Проверки на живой системе: снаружи, изнутри сервера, активные тесты |
 
 ## Как завести новый проект
 
@@ -26,7 +27,10 @@
 3. Указать доменный профиль из `design-profiles.md` в `brand.md`.
 4. Сгенерировать дизайн-систему: `/design-system` → она запишется в
    `docs/projects/<имя>/design-system/MASTER.md`.
-5. В `CLAUDE.md` переключить ссылку на активный проект.
+5. Сгенерировать профиль безопасности: `/security-profile` → он запишется в
+   `docs/projects/<имя>/security-profile.md`. Без него агенты `security-*`
+   работают, но менее точно.
+6. В `CLAUDE.md` переключить ссылку на активный проект.
 
 Универсальную базу (`docs/core/`) при этом **не трогать** — она общая.
 
@@ -35,7 +39,8 @@
 > - `.claude/hooks/session-start.sh` — имя ветки захардкожено;
 > - `.claude/settings.json` — переносить обязательно: без `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` отделы не работают;
 > - `CLAUDE.md` — в части активного проекта;
-> - часть агентов (`devops`, `react-reviewer`, `typescript-reviewer`, `database-reviewer`, `seo-specialist`) упоминают стек прямо в `description` — сверить под новый проект.
+> - часть агентов (`devops`, `react-reviewer`, `typescript-reviewer`, `database-reviewer`, `seo-specialist`) упоминают стек прямо в `description` — сверить под новый проект;
+> - агенты `security-*` адаптации **не требуют**: стек они берут из `security-profile.md`.
 >
 > Переносимо без правок: `docs/core/` и агенты, не привязанные к стеку.
 

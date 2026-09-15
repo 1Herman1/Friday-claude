@@ -40,7 +40,7 @@ package-lock.json не закоммичен — сборка может отли
 
 ---
 
-## Адаптация для monorepo (Simba / npm workspaces)
+## Адаптация для монорепозитория
 
 **Monorepo с npm workspaces** (`server/`, `client/`, `admin/`) — проверять каждый воркспейс:
 
