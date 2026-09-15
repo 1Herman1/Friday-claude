@@ -35,7 +35,7 @@ model: sonnet
 client/src/pages/CartPage.tsx:12 и client/src/pages/CheckoutPage.tsx:8 — одинаковая функция formatPrice
 → Вынести в client/src/lib/utils.ts
 
-НА ЗАМЕТКУ (мёртвый код)
+КАЧЕСТВО (мёртвый код)
 client/src/components/OldBanner.tsx — компонент нигде не используется
 → Удалить файл
 ```

@@ -392,7 +392,11 @@ Agent(qa-engineer, "составь тест-план по всему сайту"
 | Сгенерированный медиа-ассет vs бренд-кит | `brand-guard` | design-reviewer |
 | Секреты в открытом коде | `security-secrets-scanner` | code-reviewer, typescript-reviewer |
 | JWT / OTP / сессии / IDOR | `security-auth-access` | code-reviewer |
-| CORS / заголовки / env / хранилище файлов | `security-infra-cloud` | — |
+| CORS / заголовки / env / порты / частота запросов | `security-infra-cloud` | security-api-surface |
+| Цена, купон, возврат, гонка, обход квот | `security-business-logic` | code-reviewer, database-reviewer |
+| Подпись вебхука, SSRF, редиректы, OAuth, инъекции, загрузка файлов, парсеры | `security-api-surface` | code-reviewer, typescript-reviewer |
+| Полнота логов, оповещения, бэкапы | `security-observability` | silent-failure-hunter |
+| Активные тесты защиты (IDOR, гонки, rate limit — слой 3 рантайма) | `qa-engineer` | security-* |
 | Проглоченные ошибки, пустой catch | `silent-failure-hunter` | — |
 | Риск выкатки миграции, потеря данных | `migration-guard` | database-reviewer |
 | Покрытие тестами, качество тестов | `qa-engineer` | code-reviewer |
@@ -470,6 +474,11 @@ Agent(qa-engineer, "составь тест-план по всему сайту"
 Чтение кода не видит боевой сервер. Внешняя проверка, проверка изнутри и
 активные тесты защиты — `docs/core/security-runtime.md`; готовый скрипт
 внешней проверки — `.claude/scripts/security-external-check.sh <домен>`.
+
+Слой 3 (активные тесты защиты: попытка достать чужое, сто одновременных
+применений купона, вебхук без подписи) пишет **`qa-engineer`** — это обычные
+тесты, просто проверяют они не функциональность, а защиту. Единственный слой,
+превращающий «в коде проверка есть» в «проверено на каждой выкатке».
 
 ### Детерминированные проверки vs проверки суждением
 
