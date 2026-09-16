@@ -12,7 +12,7 @@ model: sonnet
 
 ## Алгоритм проверки
 
-1. Найди все файлы схемы: `prisma/schema.prisma`, миграции в `prisma/migrations/`
+1. Найди все файлы схемы: `server/prisma/schema.prisma`, миграции в `server/prisma/migrations/`
 2. Найди все запросы: `prisma.$queryRaw`, `findMany`, `findFirst`, `include`, `select`
 3. Проверь по чеклисту ниже
 4. Репортируй только находки с уверенностью ≥ 80%
@@ -39,7 +39,7 @@ model: sonnet
 
 ```
 КРИТИЧНО
-prisma/schema.prisma:45 — нет индекса на Order.userId, таблица растёт
+server/prisma/schema.prisma:45 — нет индекса на Order.userId, таблица растёт
 → Добавить: @@index([userId])
 
 ВАЖНО

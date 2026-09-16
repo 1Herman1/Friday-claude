@@ -37,8 +37,12 @@ project_simba/
     │   ├── stack.md                # Стек по умолчанию для новых проектов
     │   ├── rules.md, rules/        # Правила кода (React, TypeScript)
     │   └── anti-patterns/          # Негативные списки по доменам
-    ├── projects/
+    ├── projects/           # Проектов несколько; активный задан строкой
+    │   │                   # «Активный проект» в шапке этого файла
     │   ├── _template/          # Шаблон нового проекта (project.md + brand.md)
+    │   ├── hb-landing/         # Лендинг, подкаталог hb-landing/
+    │   ├── perfect-skin/       # Подкаталог perfect-skin/
+    │   ├── vet-clinic/         # Ветклиника: аналитика SEO/GEO, сайта пока нет
     │   └── simba/              # Активный проект
     │       ├── project.md          # Контекст, стек, ветка, как общаться
     │       ├── brand.md            # Продукт, тон, dials, домены UI
@@ -58,6 +62,12 @@ project_simba/
 
 Правило разделения: если правило верно для любого проекта — оно в `core/`;
 если про конкретный продукт, бренд или бизнес-логику — в `projects/<проект>/`.
+
+**Проектов в репозитории несколько**, и живут они подкаталогами (`client/`,
+`admin/`, `server/` — Симба; `hb-landing/`, `perfect-skin/` — свои). Отдельных
+репозиториев и веток у них нет: работа всех идёт в одной рабочей ветке.
+Активный проект определяется строкой «Активный проект» выше — по ней же его
+находит хук старта сессии, а не по единственности каталога.
 
 ---
 
@@ -394,7 +404,7 @@ Agent(qa-engineer, "составь тест-план по всему сайту"
 |-------|-------|
 | `*.tsx`, `*.jsx`, `components/**` | `react-reviewer` |
 | `*.ts`, `*.js` (server, lib) | `typescript-reviewer` |
-| `prisma/schema.prisma`, `prisma/migrations/**` | `database-reviewer` + `migration-guard` |
+| `server/prisma/schema.prisma`, `server/prisma/migrations/**` | `database-reviewer` + `migration-guard` |
 | `server/src/routes/**` | `typescript-reviewer` + `code-reviewer` |
 | `client/src/pages/**` | `react-reviewer` + `design-reviewer` |
 | UI: вёрстка, стили, лендинги, письма | `design-reviewer` |

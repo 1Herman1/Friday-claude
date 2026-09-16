@@ -9,7 +9,7 @@ description: Ревью текущих изменений нужными спе�
 
 - `*.tsx` в `client/`/`admin/` → `react-reviewer` (код) + `design-reviewer` (вид)
 - `*.ts` в `server/` → `typescript-reviewer`
-- `prisma/schema.prisma`, миграции → `database-reviewer` (+ `migration-guard`, если
+- `server/prisma/schema.prisma`, миграции → `database-reviewer` (+ `migration-guard`, если
   миграция поедет на прод)
 - роуты с данными пользователя → `security-auth-access`
 - всегда в конце → `silent-failure-hunter`

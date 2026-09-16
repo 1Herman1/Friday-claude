@@ -58,7 +58,7 @@ model: sonnet
 
 - **Статичный SVG** — рядом с местом использования, адаптировав атрибуты
   (`stroke="currentColor"`, `strokeWidth`, `viewBox`) под соседние иконки.
-- **Lottie JSON** — в `client/src/assets/lottie/` или `admin/src/assets/lottie/`
+- **Lottie JSON** — в `client/src/assets/lottie/` (каталог создаётся при первой анимации) или `admin/src/assets/lottie/` (каталог создаётся при первой анимации)
   (создать по аналогии с существующими assets-папками, если её ещё нет).
 
 ## Лицензирование — обязательно
