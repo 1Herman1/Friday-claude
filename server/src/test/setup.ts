@@ -90,6 +90,7 @@ const TABLES = [
   'blog_posts',
   'site_visits',
   'reviews',
+  'consents',
   'promo_codes',
 ]
 

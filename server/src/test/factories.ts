@@ -8,15 +8,28 @@ function uniq(prefix: string) {
   return `${prefix}-${Date.now()}-${counter}`
 }
 
-export async function createUser(opts: { bonusPoints?: number; name?: string } = {}) {
+export async function createUser(opts: { bonusPoints?: number; name?: string; withConsent?: boolean } = {}) {
   const prisma = getTestPrisma()
-  return prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       name: opts.name ?? 'Тестовый покупатель',
       email: `${uniq('user')}@example.test`,
       bonusPoints: opts.bonusPoints ?? 0,
     },
   })
+
+  // Создать запись согласия если withConsent = true (default)
+  if (opts.withConsent !== false) {
+    await prisma.consent.create({
+      data: {
+        userId: user.id,
+        kind: 'pd_processing',
+        textVersion: 'test',
+      },
+    })
+  }
+
+  return user
 }
 
 /** Цена и остаток со значениями по умолчанию: тестам про рейтинг продаж и

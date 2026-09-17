@@ -4,6 +4,7 @@ import { otpService } from '../../services/otp.service'
 import { applyBonusChange } from '../../services/bonus.service'
 import { normalizeEmail } from '../../services/customer.service'
 import { mergeGuestCart } from '../../services/cart.service'
+import { consentVersionSchema, consentSource, recordConsent, PD_CONSENT_VERSIONS } from '../../services/consent.service'
 
 const WELCOME_BONUS = 300
 const OTP_MAX_ATTEMPTS = 5
@@ -14,6 +15,7 @@ const otpAttempts = new Map<string, { attempts: number; lastAttempt: Date }>()
 const bodySchema = z.object({
   email: z.string().email(),
   code: z.string().length(6),
+  consentVersion: consentVersionSchema('Нужно согласие на обработку персональных данных', PD_CONSENT_VERSIONS),
   guestToken: z.string().optional(),
 })
 
@@ -21,10 +23,15 @@ const verifyOtp: FastifyPluginAsync = async (app) => {
   app.post('/verify-otp', async (request, reply) => {
     const result = bodySchema.safeParse(request.body)
     if (!result.success) {
-      return reply.status(400).send({ error: result.error.errors[0].message })
+      const error = result.error.errors[0]
+      let message = error.message
+      if (error.path.includes('consentVersion') && error.code === 'invalid_type') {
+        message = 'Нужно согласие на обработку персональных данных'
+      }
+      return reply.status(400).send({ error: message })
     }
 
-    const { email, code, guestToken } = result.data
+    const { email, code, consentVersion, guestToken } = result.data
     const normalizedEmail = normalizeEmail(email)
 
     const now = new Date()
@@ -66,6 +73,16 @@ const verifyOtp: FastifyPluginAsync = async (app) => {
     }
 
     otpAttempts.delete(normalizedEmail)
+
+    // Записать согласие на обработку ПД
+    const source = consentSource(request)
+    await recordConsent(app.prisma, {
+      userId: user.id,
+      kind: 'pd_processing',
+      textVersion: consentVersion,
+      ip: source.ip,
+      userAgent: source.userAgent,
+    })
 
     // Проверить гостевой токен, если пришёл
     let guestUserId: string | null = null

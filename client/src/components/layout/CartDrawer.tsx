@@ -478,8 +478,11 @@ export default function CartDrawer({ open, onClose }: Props) {
           Оформить заказ
         </Link>
 
-        <p className="text-center text-xs text-navy-400">
-          Нажимая кнопку, вы соглашаетесь с условиями оферты
+        <p className="text-center text-xs text-navy-500">
+          Оформление — на условиях{' '}
+          <Link to="/offer" onClick={onClose} className="text-primary-hover font-medium underline underline-offset-2">
+            публичной оферты
+          </Link>
         </p>
       </div>
     ) : null

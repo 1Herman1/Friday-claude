@@ -310,6 +310,11 @@ export default function UsersPage() {
                             заблокирован
                           </span>
                         )}
+                        {user.deletedAt && (
+                          <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
+                            обезличен
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td className="px-5 py-3 text-gray-600">

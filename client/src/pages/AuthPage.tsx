@@ -73,8 +73,15 @@ export default function AuthPage() {
 
         {/* Юридическая строка */}
         <p className="text-center text-xs text-navy-500 mt-6">
-          Продолжая, вы соглашаетесь с{' '}
-          <Link to="/privacy" className="text-primary-hover hover:underline">политикой конфиденциальности</Link>
+          Покупка — на условиях{' '}
+          <Link to="/offer" className="text-primary-hover font-medium underline underline-offset-2">
+            публичной оферты
+          </Link>
+          . Как мы обращаемся с данными — в{' '}
+          <Link to="/privacy" className="text-primary-hover font-medium underline underline-offset-2">
+            политике конфиденциальности
+          </Link>
+          .
         </p>
       </div>
 

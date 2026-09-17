@@ -2,19 +2,20 @@ import { Link } from 'react-router-dom'
 import { useMetaTags } from '../hooks/useMetaTags'
 import { CONTACTS, LEGAL } from '../lib/contacts'
 
-const UPDATED_AT = '13 августа 2026 года'
+// Черновик студии — формулировки подтверждает юрист владельца.
+const UPDATED_AT = '16 сентября 2026 года'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
       <h2 className="text-xl font-bold text-navy-900 mb-3">{title}</h2>
-      <div className="space-y-3 text-navy-500 leading-relaxed">{children}</div>
+      <div className="space-y-3 text-navy-700 leading-relaxed max-w-prose">{children}</div>
     </section>
   )
 }
 
 const linkClass =
-  'font-medium text-navy-700 hover:text-primary-hover transition-colors duration-100 ease'
+  'text-primary-hover underline underline-offset-2 hover:opacity-80'
 
 export default function OfferPage() {
   useMetaTags({
@@ -35,16 +36,8 @@ export default function OfferPage() {
       <div className="bg-white border border-line rounded-card p-6 space-y-3 mb-10">
         <p className="text-navy-700 font-semibold">Коротко о главном</p>
         <p className="text-navy-500 leading-relaxed">
-          Оформляя заказ на сайте, вы соглашаетесь с условиями продажи. Цены указаны в рублях,
-          оплата — при получении или онлайн. Условия доставки и возврата описаны на страницах
-          «Доставка и оплата» и «Обмен и возврат».
-        </p>
-        <p className="text-navy-500 leading-relaxed">
-          Вопросы по условиям заказа — на{' '}
-          <a href={CONTACTS.emailHref} className={linkClass}>
-            {CONTACTS.email}
-          </a>
-          .
+          Оформляя заказ, вы принимаете условия продажи. Оплата — при получении или онлайн позже.
+          Доставка по всей России, возврат в течение 7 дней.
         </p>
       </div>
 
@@ -78,7 +71,7 @@ export default function OfferPage() {
           заказ не влияет.
         </p>
         <p>
-          Оплатить можно банковской картой онлайн или наличными курьеру при получении.
+          Оплатить можно картой или наличными при получении; оплата онлайн появится позже.
           Расчёт бонусами: 1 бонус равен 1 рублю, бонусами оплачивается не более половины
           суммы заказа. Бонусы начисляются после оплаты заказа и не сгорают.
         </p>
@@ -140,11 +133,16 @@ export default function OfferPage() {
 
       <Section title="7. Персональные данные">
         <p>
-          Оформляя заказ, вы соглашаетесь на обработку своих данных на условиях{' '}
-          <Link to="/privacy" className={linkClass}>
-            политики конфиденциальности
+          Согласие на обработку персональных данных даётся отдельно — галочкой при входе и
+          при оформлении заказа, текст — на странице{' '}
+          <Link to="/consent" className={linkClass}>
+            «Согласие…»
           </Link>
-          .
+          . Как храним — в{' '}
+          <Link to="/privacy" className={linkClass}>
+            политике
+          </Link>
+          . Принятие оферты согласием на обработку данных не является.
         </p>
       </Section>
 

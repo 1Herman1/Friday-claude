@@ -5,6 +5,7 @@ import guestSession from './guest-session'
 import adminLogin from './admin-login'
 import me from './me'
 import changePassword from './change-password'
+import account from './account'
 
 const authRoutes: FastifyPluginAsync = async (app) => {
   app.register(sendOtp)
@@ -13,6 +14,7 @@ const authRoutes: FastifyPluginAsync = async (app) => {
   app.register(adminLogin)
   app.register(me)
   app.register(changePassword)
+  app.register(account)
 }
 
 export default authRoutes

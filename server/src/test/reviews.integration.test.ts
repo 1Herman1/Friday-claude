@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import type { FastifyInstance } from 'fastify'
+import { REVIEW_PUBLICATION_CONSENT_VERSION } from '@simba/shared'
 import { hasTestDb, getTestPrisma, resetDb, closeTestPrisma } from './setup'
 import { createUser, createGuestSession, authHeader, createProductWithVariant } from './factories'
 
@@ -28,7 +29,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers: guest.headers,
-      payload: { rating: 5, text: 'Отличный корм для кота!' },
+      payload: { rating: 5, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Отличный корм для кота!' },
     })
     expect(res.statusCode).toBe(401)
     expect(res.json().error).toContain('Чтобы оставить отзыв')
@@ -42,7 +43,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers,
-      payload: { rating: 4, text: 'Хороший корм, кот ест с удовольствием' },
+      payload: { rating: 4, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Хороший корм, кот ест с удовольствием' },
     })
 
     expect(res.statusCode).toBe(201)
@@ -63,7 +64,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers: headers1,
-      payload: { rating: 5, text: 'Отличный продукт, очень рекомендую' },
+      payload: { rating: 5, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Отличный продукт, очень рекомендую' },
     })
 
     // user2 не видит его
@@ -79,7 +80,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers,
-      payload: { rating: 3, text: 'Средний по качеству, ничего особенного' },
+      payload: { rating: 3, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Средний по качеству, ничего особенного' },
     })
     const reviewId = created.json().id
 
@@ -119,7 +120,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers: authHeader(app, user.id),
-      payload: { rating: 4, text: 'Очень качественный продукт, доставка быстрая' },
+      payload: { rating: 4, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Очень качественный продукт, доставка быстрая' },
     })
     const reviewId = created.json().id
 
@@ -146,7 +147,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers,
-      payload: { rating: 2, text: 'Не понравилось, кот отказывается есть' },
+      payload: { rating: 2, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Не понравилось, кот отказывается есть' },
     })
     const reviewId = created.json().id
 
@@ -169,7 +170,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers: authHeader(app, user1.id),
-      payload: { rating: 5, text: 'Просто супер!' },
+      payload: { rating: 5, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Просто супер!' },
     })
     const reviewId = created.json().id
 
@@ -187,7 +188,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers: authHeader(app, user.id),
-      payload: { rating: 6, text: 'Этот рейтинг невозможен' },
+      payload: { rating: 6, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Этот рейтинг невозможен' },
     })
     expect(res.statusCode).toBe(400)
   })
@@ -198,7 +199,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers: authHeader(app, user.id),
-      payload: { rating: 3, text: 'Ок' },
+      payload: { rating: 3, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Ок' },
     })
     expect(res.statusCode).toBe(400)
     expect(res.json().error).toContain('пару предложений')
@@ -214,7 +215,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
         method: 'POST',
         url: '/api/reviews',
         headers,
-        payload: { rating: 5 - i, text: `Отзыв номер ${i + 1} с достаточно длинным текстом` },
+        payload: { rating: 5 - i, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: `Отзыв номер ${i + 1} с достаточно длинным текстом` },
       })
       expect(res.statusCode).toBe(201)
     }
@@ -224,7 +225,7 @@ describe.skipIf(!hasTestDb)('Отзывы (интеграционные)', () =>
       method: 'POST',
       url: '/api/reviews',
       headers,
-      payload: { rating: 2, text: 'Это уже четвёртый отзыв за час' },
+      payload: { rating: 2, publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION, text: 'Это уже четвёртый отзыв за час' },
     })
     expect(fourth.statusCode).toBe(429)
     expect(fourth.json().error).toContain('Слишком много')

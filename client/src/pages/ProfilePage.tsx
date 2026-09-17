@@ -6,6 +6,7 @@ import { formatPrice, formatBonuses } from '../lib/format'
 import { CheckIcon, StepCurrentIcon, StepPendingIcon, ChevronDownIcon } from '../components/icons'
 import { LOYALTY_TIERS, subscriptionPrice, type BonusLevel } from '@simba/shared'
 import LoginForm from '../components/auth/LoginForm'
+import { useAuth } from '../context/AuthContext'
 
 type OrderStatus = 'new' | 'confirmed' | 'in_transit' | 'delivered' | 'cancelled'
 
@@ -33,6 +34,7 @@ type Tab = 'orders' | 'bonuses' | 'subscriptions' | 'settings'
 
 export default function ProfilePage() {
   const navigate = useNavigate()
+  const { logout } = useAuth()
   const [tab, setTab] = useState<Tab>('orders')
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<OrderStatus | 'all'>('all')
@@ -54,6 +56,12 @@ export default function ProfilePage() {
   const [editingNextDate, setEditingNextDate] = useState('')
   const [pendingSubscriptionId, setPendingSubscriptionId] = useState<string | null>(null)
   const [subscriptionActionError, setSubscriptionActionError] = useState<string | null>(null)
+  const [exporting, setExporting] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [dataError, setDataError] = useState<string | null>(null)
+  const [deletionCodeSent, setDeletionCodeSent] = useState(false)
+  const [deletionCode, setDeletionCode] = useState('')
+  const [verifyingDeletion, setVerifyingDeletion] = useState(false)
 
   async function runSubscriptionAction(id: string, action: () => Promise<unknown>) {
     setPendingSubscriptionId(id)
@@ -75,6 +83,74 @@ export default function ProfilePage() {
     } finally {
       setPendingSubscriptionId(null)
     }
+  }
+
+  async function handleExport() {
+    setExporting(true)
+    setDataError(null)
+    try {
+      const res = await authApi.exportMe()
+      const blob = res.data instanceof Blob ? res.data : new Blob([JSON.stringify(res.data)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      const now = new Date()
+      const dateStr = now.toISOString().split('T')[0]
+      a.href = url
+      a.download = `simba-data-${dateStr}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      setDataError('Не удалось скачать данные. Попробуйте ещё раз.')
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  async function handleRequestDeleteCode() {
+    if (!confirm('Удалить аккаунт? Контакты, адреса, питомцы и подписки будут стёрты, заказы останутся без ваших данных. Отменить это нельзя.')) {
+      return
+    }
+    setDeleting(true)
+    setDataError(null)
+    setDeletionCode('')
+    try {
+      await authApi.requestDeleteCode()
+      setDeletionCodeSent(true)
+    } catch (err) {
+      setDataError('Не удалось отправить код. Попробуйте ещё раз.')
+      setDeleting(false)
+    }
+  }
+
+  async function handleConfirmDeleteAccount() {
+    if (!deletionCode.trim()) {
+      setDataError('Введите код из письма')
+      return
+    }
+    setVerifyingDeletion(true)
+    setDataError(null)
+    try {
+      await authApi.deleteMe(deletionCode)
+      logout()
+      navigate('/')
+    } catch (err) {
+      const status = (err as { response?: { status?: number } })?.response?.status
+      if (status === 400) {
+        setDataError('Неверный или просроченный код')
+      } else if (status === 429) {
+        setDataError('Слишком много попыток. Попробуйте через 15 минут.')
+      } else {
+        setDataError('Не удалось удалить аккаунт. Попробуйте ещё раз.')
+      }
+      setVerifyingDeletion(false)
+    }
+  }
+
+  function handleCancelDeletion() {
+    setDeletionCodeSent(false)
+    setDeletionCode('')
+    setDeleting(false)
+    setDataError(null)
   }
 
   useEffect(() => {
@@ -680,7 +756,7 @@ export default function ProfilePage() {
                     />
                   </div>
                 ))}
-                {saveError && <p className="text-xs text-red-400">{saveError}</p>}
+                {saveError && <p className="text-xs text-destructive">{saveError}</p>}
                 {saveSuccess && <p className="text-xs text-success">Данные сохранены</p>}
                 <button
                   disabled={savingProfile}
@@ -705,22 +781,67 @@ export default function ProfilePage() {
             </div>
 
             <div className="bg-white rounded-2xl p-5">
-              <h3 className="font-bold text-navy-900 mb-3">Уведомления</h3>
-              {[
-                { label: 'SMS о статусе заказа', defaultChecked: true },
-                { label: 'Email-рассылка об акциях', defaultChecked: false },
-              ].map(item => (
-                <label key={item.label} className="flex items-center justify-between py-2.5 cursor-pointer">
-                  <span className="text-sm text-navy-700">{item.label}</span>
-                  <input type="checkbox" defaultChecked={item.defaultChecked}
-                    className="w-4 h-4 accent-primary" />
-                </label>
-              ))}
+              <h3 className="font-bold text-navy-900 mb-3">Мои данные</h3>
+              <p className="text-sm text-navy-500 mb-4 leading-relaxed">
+                Скачайте копию всех данных, которые мы о вас храним, или удалите аккаунт. Подробнее в <Link to="/privacy" className="text-primary-hover font-medium underline underline-offset-2">политике конфиденциальности</Link>.
+              </p>
+              <div className="flex flex-col gap-2 mb-3">
+                <button
+                  disabled={exporting}
+                  onClick={handleExport}
+                  className="btn-outline rounded-xl py-2.5">
+                  {exporting ? 'Скачивание...' : 'Скачать мои данные (JSON)'}
+                </button>
+                {!deletionCodeSent ? (
+                  <button
+                    disabled={deleting}
+                    onClick={handleRequestDeleteCode}
+                    className="border-destructive/40 text-destructive font-medium py-2.5 rounded-xl text-sm hover:bg-destructive/5 transition-colors border disabled:opacity-50 btn-outline">
+                    {deleting ? 'Отправка...' : 'Удалить аккаунт'}
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    <div>
+                      <label htmlFor="deletion-code" className="text-xs text-navy-400 block mb-1">
+                        Код из письма
+                      </label>
+                      <p className="text-xs text-navy-500 mb-2">
+                        Мы отправили код на {user?.email}
+                      </p>
+                      <input
+                        id="deletion-code"
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={6}
+                        value={deletionCode}
+                        onChange={e => setDeletionCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                        placeholder="000000"
+                        className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        disabled={verifyingDeletion}
+                        onClick={handleConfirmDeleteAccount}
+                        className="flex-1 bg-destructive text-white font-medium py-2.5 rounded-xl text-sm hover:opacity-90 transition-colors disabled:opacity-50">
+                        {verifyingDeletion ? 'Удаление...' : 'Подтвердить удаление'}
+                      </button>
+                      <button
+                        disabled={verifyingDeletion}
+                        onClick={handleCancelDeletion}
+                        className="flex-1 bg-white text-navy-500 font-medium py-2.5 rounded-xl text-sm hover:bg-blue-50 transition-colors border border-line disabled:opacity-50">
+                        Отмена
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {dataError && <p role="alert" className="text-xs text-destructive">{dataError}</p>}
             </div>
 
             <button
-              onClick={() => { localStorage.removeItem('token'); navigate('/auth') }}
-              className="bg-white text-red-400 font-medium py-3.5 rounded-2xl text-sm hover:bg-red-50 transition-colors border border-red-100">
+              onClick={() => { logout(); navigate('/auth') }}
+              className="btn-outline rounded-xl w-full py-3 mt-6">
               Выйти из аккаунта
             </button>
           </div>

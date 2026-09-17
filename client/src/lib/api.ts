@@ -179,6 +179,7 @@ export interface User {
   bonusLevel: 'newcomer' | 'active' | 'premium'
   role: string
   isGuest?: boolean
+  hasPdConsent?: boolean
 }
 
 export interface Review {
@@ -226,11 +227,20 @@ export const authApi = {
   sendOtp: (email: string) =>
     api.post('/api/auth/send-otp', { email }),
 
-  verifyOtp: (email: string, code: string, guestToken?: string) => {
-    const body: { email: string; code: string; guestToken?: string } = { email, code }
+  verifyOtp: (email: string, code: string, consentVersion: string, guestToken?: string) => {
+    const body: { email: string; code: string; consentVersion: string; guestToken?: string } = { email, code, consentVersion }
     if (guestToken) body.guestToken = guestToken
     return api.post<{ token: string; user: User; bonusGranted?: number; cartMerged?: boolean }>('/api/auth/verify-otp', body)
   },
+
+  requestDeleteCode: () =>
+    api.post('/api/auth/me/delete-request'),
+
+  deleteMe: (code: string) =>
+    api.delete('/api/auth/me', { data: { code } }),
+
+  exportMe: () =>
+    api.get<Blob>('/api/auth/me/export', { responseType: 'blob' }),
 
   me: () =>
     api.get<User>('/api/auth/me'),
@@ -353,7 +363,7 @@ export const reviewsApi = {
   list: (params?: { page?: number; limit?: number; productId?: string }) =>
     api.get<{ items: Review[]; total: number; page: number; totalPages: number }>('/api/reviews', { params }),
 
-  create: (data: { rating: number; text: string; authorName?: string; photo?: string; productId?: string }) =>
+  create: (data: { rating: number; text: string; authorName?: string; photo?: string; productId?: string; publishConsentVersion: string }) =>
     api.post<Review>('/api/reviews', data),
 
   remove: (id: string) =>
@@ -472,6 +482,7 @@ export const ordersApi = {
     deliveryCost?: number
     paymentMethod?: 'card' | 'cash_on_delivery'
     contact?: { name?: string; email?: string; phone?: string }
+    consentVersion?: string
   }) => api.post<Order>('/api/orders', data),
 }
 

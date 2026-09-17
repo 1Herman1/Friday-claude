@@ -11,7 +11,12 @@ function hashCode(code: string): string {
   return crypto.createHash('sha256').update(code).digest('hex')
 }
 
-async function sendEmail(to: string, code: string): Promise<void> {
+async function sendEmail(to: string, code: string, purpose: 'login' | 'delete' = 'login'): Promise<void> {
+  // В test режиме письма не отправляются
+  if (process.env.NODE_ENV === 'test') {
+    return
+  }
+
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT) || 587,
@@ -22,12 +27,20 @@ async function sendEmail(to: string, code: string): Promise<void> {
     },
   })
 
+  const subject = purpose === 'delete' ? 'Подтверждение удаления аккаунта' : 'Ваш код входа в Симбу'
+  const text = purpose === 'delete'
+    ? `Код для подтверждения удаления аккаунта: ${code}\n\nКод действителен 10 минут.`
+    : `Ваш код для входа: ${code}\n\nКод действителен 10 минут.`
+  const html = purpose === 'delete'
+    ? `<p>Код для подтверждения удаления аккаунта: <strong>${code}</strong></p><p>Код действителен 10 минут.</p>`
+    : `<p>Ваш код для входа: <strong>${code}</strong></p><p>Код действителен 10 минут.</p>`
+
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || 'noreply@simba.ru',
+    from: process.env.SMTP_FROM || 'noreply@simbazoo.ru',
     to,
-    subject: 'Ваш код входа в Симбу',
-    text: `Ваш код для входа: ${code}\n\nКод действителен 10 минут.`,
-    html: `<p>Ваш код для входа: <strong>${code}</strong></p><p>Код действителен 10 минут.</p>`,
+    subject,
+    text,
+    html,
   })
 }
 

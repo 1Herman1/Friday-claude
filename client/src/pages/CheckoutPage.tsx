@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { calcOrderTotals, type DeliveryKind, type DeliveryOptionKey, type PickupPoint, type AddressSuggestion, type PromoRule, deliveryKindOf } from '@simba/shared'
+import { calcOrderTotals, type DeliveryKind, type DeliveryOptionKey, type PickupPoint, type AddressSuggestion, type PromoRule, deliveryKindOf, CONSENT_VERSION } from '@simba/shared'
 import { useCart } from '../context/CartContext'
 import { cartApi, authApi, ordersApi, deliveryApi, type CartItem, type DeliveryQuote } from '../lib/api'
 import { apiErrorMessage } from '../lib/api-error'
@@ -102,7 +102,7 @@ const STEPS: { key: Step; label: string }[] = [
 export default function CheckoutPage() {
   const navigate = useNavigate()
   const { clear: clearCart } = useCart()
-  const { isLoggedIn: authLoggedIn } = useAuth()
+  const { isLoggedIn: authLoggedIn, user: authUser, login: authLogin } = useAuth()
   const legacyIsLoggedIn = !!localStorage.getItem('token')
   const [step, setStep] = useState<Step>('delivery')
   const [option, setOption] = useState<DeliveryOptionKey>('simba_courier')
@@ -121,6 +121,9 @@ export default function CheckoutPage() {
   const [orderCreatedAt, setOrderCreatedAt] = useState('')
   const [entered, setEntered] = useState(false)
   const [loginModalOpen, setLoginModalOpen] = useState(false)
+  const [pdConsent, setPdConsent] = useState(false)
+  const [consentError, setConsentError] = useState('')
+  const [consentForced, setConsentForced] = useState(false)
   const reduceMotion =
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
@@ -332,9 +335,18 @@ export default function CheckoutPage() {
 
   const stepIndex = STEPS.findIndex(s => s.key === step)
 
+  // Нужно ли согласие на обработку ПД: для гостей всегда, для авторизованных без записи согласия
+  const needsPdConsent = consentForced || !legacyIsLoggedIn || !authUser?.hasPdConsent
+
   const handlePlaceOrder = async () => {
+    if (needsPdConsent && !pdConsent) {
+      setConsentError('Нужно согласие на обработку персональных данных')
+      return
+    }
+
     setPlacingOrder(true)
     setOrderError(null)
+    setConsentError('')
     try {
       const promoData = readPromo()
       const cartRes = await cartApi.get()
@@ -350,6 +362,7 @@ export default function CheckoutPage() {
         promoCode: promoData?.code,
         deliveryCost,
         paymentMethod: payment,
+        ...(needsPdConsent ? { consentVersion: CONSENT_VERSION } : {}),
       }
 
       // Доставка до дома — адрес
@@ -401,6 +414,12 @@ export default function CheckoutPage() {
       // Если ошибка в промокоде — удалить его и показать ошибку сервера
       if (errCode === 'PROMO_INVALID') {
         sessionStorage.removeItem('promo')
+      }
+
+      // Если требуется согласие — попросить пользователя дать его
+      if (errCode === 'CONSENT_REQUIRED') {
+        setConsentForced(true)
+        return
       }
 
       setOrderError(errMessage)
@@ -1188,6 +1207,48 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
+                {/* Карточка согласия на обработку ПД */}
+                {needsPdConsent && (
+                  <div className={`rounded-xl border p-4 mb-5 transition-[border-color,background-color] duration-100 ease ${
+                    consentError ? 'border-destructive bg-white' : 'border-line bg-white'
+                  }`}>
+                    <h3 className="font-semibold text-navy-900 mb-3 text-sm">Согласие на обработку персональных данных</h3>
+                    <p className="text-sm text-navy-500 mb-4 leading-relaxed">
+                      Имя, телефон, email и адрес нужны, чтобы собрать и доставить заказ. Условия — в{' '}
+                      <Link to="/consent" target="_blank" rel="noopener noreferrer" className="text-primary-hover font-medium underline underline-offset-2">
+                        тексте согласия
+                      </Link>
+                      {' '}и{' '}
+                      <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary-hover font-medium underline underline-offset-2">
+                        политике
+                      </Link>
+                      .
+                    </p>
+                    <label htmlFor="checkout-pd-consent" className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        id="checkout-pd-consent"
+                        type="checkbox"
+                        checked={pdConsent}
+                        onChange={(e) => {
+                          setPdConsent(e.target.checked)
+                          if (consentError) setConsentError('')
+                        }}
+                        className="mt-0.5 w-4 h-4 shrink-0 accent-ink rounded border border-line focus:outline-none focus:ring-2 focus:ring-primary-soft/25"
+                        aria-invalid={!!consentError}
+                        aria-describedby={consentError ? 'checkout-pd-consent-error' : undefined}
+                      />
+                      <span className="text-sm text-navy-700 font-medium">
+                        Даю согласие на обработку персональных данных
+                      </span>
+                    </label>
+                    {consentError && (
+                      <p id="checkout-pd-consent-error" role="alert" className="text-xs text-[#C0392B] mt-3">
+                        {consentError}
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 <div className="flex gap-2">
                   <button
                     onClick={() => setStep('payment')}
@@ -1214,8 +1275,8 @@ export default function CheckoutPage() {
                   <p className="text-center text-sm text-destructive mt-3">{orderError}</p>
                 )}
                 <p className="text-center text-xs text-navy-500 mt-3">
-                  Нажимая кнопку, вы соглашаетесь с{' '}
-                  <Link to="/offer" className="text-navy-700 hover:text-navy-500 transition-colors duration-100 ease">условиями оферты</Link>
+                  Оформляя заказ, вы принимаете{' '}
+                  <Link to="/offer" className="text-navy-700 hover:text-navy-500 transition-colors duration-100 ease">условия оферты</Link>
                 </p>
               </div>
             )}
@@ -1299,10 +1360,12 @@ export default function CheckoutPage() {
               <CloseIcon className="w-5 h-5" />
             </button>
             <LoginForm
-              onSuccess={(bonusGranted) => {
+              onSuccess={() => {
                 setLoginModalOpen(false)
-                // Перезагружаем данные пользователя и корзину после входа
+                // Обновляем контекст — иначе бонусы и галочка согласия ведут себя как у гостя до перезагрузки
                 authApi.me().then(res => {
+                  const token = localStorage.getItem('token')
+                  if (token) authLogin(token, res.data)
                   setUserBonusPoints(res.data.bonusPoints ?? 0)
                 }).catch(() => {})
               }}

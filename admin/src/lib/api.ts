@@ -245,6 +245,7 @@ export interface User {
   bonusLevel: string
   createdAt: string
   lastSeenAt: string
+  deletedAt?: string | null
   isGuest: boolean
   isActive: boolean
   cartItems: number
@@ -395,6 +396,8 @@ export const usersApi = {
     api.put(`/api/admin/users/${id}/active`, { isActive }),
   adjustBonus: (id: string, amount: number, comment: string) =>
     api.post<{ balanceAfter: number; bonusLevel: string }>(`/api/admin/users/${id}/bonus`, { amount, comment }),
+  anonymize: (id: string) =>
+    api.post<{ ok: boolean; alreadyDeleted?: boolean }>(`/api/admin/users/${id}/anonymize`),
   staleGuestsCount: (days: number) =>
     api.get<{ days: number; count: number }>('/api/admin/users/guests/stale', { params: { days } }),
   cleanupStaleGuests: (days: number) =>

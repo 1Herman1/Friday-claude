@@ -28,7 +28,7 @@ export default function Layout() {
   // внизу дублировал бы то, что уже показано выше. Юридические страницы —
   // не место для витрины. Каталог — тоже по просьбе владельца: под выдачей
   // товаров ещё одна лента товаров сбивает с толку и мешает пагинации.
-  const hiddenRoutes = ['/', '/catalog', '/privacy', '/offer']
+  const hiddenRoutes = ['/', '/catalog', '/privacy', '/offer', '/consent']
   const showPopularProducts = !hiddenRoutes.includes(location.pathname)
 
   return (

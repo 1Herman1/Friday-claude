@@ -63,6 +63,12 @@ export default fp(async (app) => {
       // Same throttled update for optional auth, but don't block guests
       const payload = request.user as { userId?: string; role?: string; type?: 'guest' } | undefined
       if (payload?.userId && payload.type !== 'guest') {
+        // Заблокированный или обезличенный аккаунт с живым токеном — аноним, а не пользователь
+        const u = await app.prisma.user.findUnique({ where: { id: payload.userId }, select: { isActive: true } })
+        if (!u || !u.isActive) {
+          ;(request as { user: unknown }).user = null
+          return
+        }
         const now = Date.now()
         const lastSeen = lastSeenMap.get(payload.userId) ?? 0
 

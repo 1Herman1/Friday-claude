@@ -76,6 +76,16 @@ export function renderFaqAnswer(item: FaqEntry): ReactNode {
           , это минута.
         </>
       )
+    case 'subscription':
+      return (
+        <>
+          Выберите «Подписка −7 %» на странице товара и интервал 2–8 недель. Подписка — это скидка 7 % на выбранный корм и напоминание о следующей покупке: перед доставкой мы свяжемся с вами и подтвердим заказ. Изменить интервал, поставить на паузу или отменить можно в профиле в любой момент.{' '}
+          <Link to="/subscription" className="font-medium text-primary-hover hover:underline">
+            Подробнее о подписке
+          </Link>
+          .
+        </>
+      )
     default:
       return item.text
   }

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import type { FastifyInstance } from 'fastify'
+import { CONSENT_VERSION } from '@simba/shared'
 import { hasTestDb, getTestPrisma, resetDb, closeTestPrisma } from './setup'
 import { createUser, createProductWithVariant, createGuestSession, seedDeliveryOptions } from './factories'
 import { otpService } from '../services/otp.service'
@@ -38,6 +39,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     deliveryMethod: 'pickup',
     hasSpecialPackaging: false,
     deliveryCost: 0,
+    consentVersion: CONSENT_VERSION,
     ...extra,
   })
 
@@ -215,7 +217,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     const login = await app.inject({
       method: 'POST',
       url: '/api/auth/verify-otp',
-      payload: { email, code },
+      payload: { email, code, consentVersion: CONSENT_VERSION },
     })
 
     expect(login.statusCode).toBe(200)
@@ -227,7 +229,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     const login2 = await app.inject({
       method: 'POST',
       url: '/api/auth/verify-otp',
-      payload: { email, code: code2 },
+      payload: { email, code: code2, consentVersion: CONSENT_VERSION },
     })
     expect(login2.statusCode).toBe(200)
     expect(login2.json().bonusGranted).toBe(0)
@@ -284,7 +286,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     const login = await app.inject({
       method: 'POST',
       url: '/api/auth/verify-otp',
-      payload: { email: user.email, code, guestToken: guest.token },
+      payload: { email: user.email, code, consentVersion: CONSENT_VERSION, guestToken: guest.token },
     })
     expect(login.statusCode).toBe(200)
 
@@ -331,7 +333,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     const login = await app.inject({
       method: 'POST',
       url: '/api/auth/verify-otp',
-      payload: { email, code },
+      payload: { email, code, consentVersion: CONSENT_VERSION },
     })
     expect(login.statusCode).toBe(200)
 

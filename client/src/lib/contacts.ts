@@ -8,8 +8,8 @@ export const CONTACTS = {
   /** Отдельная линия для обмена и возврата. */
   returnsPhone: '+7 915 018-30-12',
   returnsPhoneHref: 'tel:+79150183012',
-  email: 'info@simba.ru',
-  emailHref: 'mailto:info@simba.ru',
+  email: 'info@simbazoo.ru',
+  emailHref: 'mailto:info@simbazoo.ru',
   telegram: 'https://t.me/simbazooru',
   telegramChannel: 'https://t.me/simbachanel',
   hours: 'Отвечаем ежедневно 9:00–21:00',

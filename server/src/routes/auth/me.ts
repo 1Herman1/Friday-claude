@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from 'fastify'
+import { hasPdConsent } from '../../services/consent.service'
 
 const me: FastifyPluginAsync = async (app) => {
   app.get('/me', { preHandler: app.authenticate }, async (request, reply) => {
@@ -16,6 +17,8 @@ const me: FastifyPluginAsync = async (app) => {
       return reply.status(404).send({ error: 'Пользователь не найден' })
     }
 
+    const pdConsent = type === 'guest' ? false : await hasPdConsent(app.prisma, userId)
+
     return reply.send({
       id: user.id,
       email: user.email,
@@ -25,6 +28,7 @@ const me: FastifyPluginAsync = async (app) => {
       bonusPoints: user.bonusPoints,
       bonusLevel: user.bonusLevel,
       isGuest: type === 'guest',
+      hasPdConsent: pdConsent,
       addresses: user.addresses,
       pets: user.pets,
     })

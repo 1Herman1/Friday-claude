@@ -12,6 +12,7 @@ import {
 import { PromoCodeError } from '../../services/promo.service'
 import { findOrCreateCustomerByEmail } from '../../services/customer.service'
 import { pickupPointSchema } from '../../services/delivery/pickup-point.schema'
+import { consentVersionSchema, consentSource, recordConsent, hasPdConsent, PD_CONSENT_VERSIONS } from '../../services/consent.service'
 
 // Сообщения — по-русски: первое из них уходит покупателю как есть, а «Required»
 // от zod ему ничего не говорит.
@@ -48,6 +49,7 @@ const createOrderSchema = z
     deliveryCost: z.number().int().min(0).default(0),
     paymentMethod: z.enum(['card', 'cash_on_delivery']).default('card'),
     contact: contactSchema.optional(),
+    consentVersion: consentVersionSchema('Нужно согласие на обработку персональных данных', PD_CONSENT_VERSIONS).optional(),
   })
   .superRefine((data, ctx) => {
     // Самовывоз: адрес и пункт не нужны
@@ -180,7 +182,17 @@ const orderRoutes: FastifyPluginAsync = async (app) => {
       }
     }
 
-    const { bonusUsed } = result.data
+    // Проверка согласия на обработку ПД
+    const needsConsent = isGuest || !(await hasPdConsent(app.prisma, userId))
+    if (needsConsent && !result.data.consentVersion) {
+      return reply.status(400).send({
+        error: 'Нужно согласие на обработку персональных данных',
+        code: 'CONSENT_REQUIRED',
+      })
+    }
+
+    const { consentVersion, ...orderInput } = result.data
+    const { bonusUsed } = orderInput
     if (bonusUsed < 0) {
       return reply.status(400).send({ error: 'Недостаточно бонусов' })
     }
@@ -199,11 +211,11 @@ const orderRoutes: FastifyPluginAsync = async (app) => {
       let customerUserId = userId
 
       // Гостевой заказ: найти или создать пользователя по email
-      if (isGuest && result.data.contact?.email) {
+      if (isGuest && orderInput.contact?.email) {
         customerUserId = await findOrCreateCustomerByEmail(
           app.prisma,
-          result.data.contact.email,
-          result.data.contact.name
+          orderInput.contact.email,
+          orderInput.contact.name
         )
       }
 
@@ -211,9 +223,9 @@ const orderRoutes: FastifyPluginAsync = async (app) => {
         app.prisma,
         { cartOwnerId: userId, customerUserId },
         {
-          ...result.data,
-          expectedDeliveryCost: result.data.deliveryCost,
-          paymentMethod: result.data.paymentMethod,
+          ...orderInput,
+          expectedDeliveryCost: orderInput.deliveryCost,
+          paymentMethod: orderInput.paymentMethod,
           guestCheckout: isGuest,
         }
       )
@@ -227,6 +239,24 @@ const orderRoutes: FastifyPluginAsync = async (app) => {
           attempts: (currentRecord?.attempts ?? 0) + 1,
           resetAt: currentRecord?.resetAt || new Date(now.getTime() + GUEST_ORDER_WINDOW_MS),
         })
+      }
+
+      // Записать согласие если было передано
+      if (consentVersion) {
+        try {
+          const source = consentSource(request)
+          await recordConsent(app.prisma, {
+            // Гость не владелец аккаунта, найденного по email: связь только через orderId
+            userId: isGuest ? null : customerUserId,
+            kind: 'pd_processing',
+            textVersion: consentVersion,
+            orderId: order.id,
+            ip: source.ip,
+            userAgent: source.userAgent,
+          })
+        } catch (err) {
+          request.log.error(err, 'Ошибка записи согласия на заказ')
+        }
       }
 
       return reply.status(201).send(order)

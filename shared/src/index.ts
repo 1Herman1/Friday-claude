@@ -17,3 +17,4 @@ export {
   type PickupPointProvider,
 } from './delivery'
 export { type AddressSuggestion } from './address'
+export { CONSENT_VERSION, REVIEW_PUBLICATION_CONSENT_VERSION } from './consent'

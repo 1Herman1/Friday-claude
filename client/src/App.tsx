@@ -30,6 +30,8 @@ import BlogPage from './pages/BlogPage'
 import BlogPostPage from './pages/BlogPostPage'
 import PrivacyPage from './pages/PrivacyPage'
 import OfferPage from './pages/OfferPage'
+import ConsentPage from './pages/ConsentPage'
+import SubscriptionPage from './pages/SubscriptionPage'
 import NotFoundPage from './pages/NotFoundPage'
 import DrawerRoute from './pages/DrawerRoute'
 
@@ -90,6 +92,8 @@ export default function App() {
               <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/offer" element={<OfferPage />} />
+              <Route path="/consent" element={<ConsentPage />} />
+              <Route path="/subscription" element={<SubscriptionPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
               </Routes>

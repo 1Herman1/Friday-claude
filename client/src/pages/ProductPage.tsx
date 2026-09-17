@@ -263,7 +263,7 @@ export default function ProductPage() {
                 </div>
                 <p className="mt-3 text-sm text-navy-500 leading-relaxed max-w-prose">
                   −7 % и напоминание раз в {intervalWeeks} недель; перед доставкой подтвердим заказ. Отменить можно в профиле.{' '}
-                  <Link to="/faq#faq-subscription" className="text-primary-hover underline underline-offset-2">Как работает подписка</Link>
+                  <Link to="/subscription" className="text-primary-hover underline underline-offset-2">Как работает подписка</Link>
                 </p>
               </div>
             )}

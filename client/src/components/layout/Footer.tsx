@@ -13,6 +13,7 @@ export default function Footer() {
     { label: 'Доставка и оплата', to: '/delivery' },
     { label: 'Обмен и возврат', to: '/returns' },
     { label: 'Бонусная программа', to: '/bonuses' },
+    { label: 'Подписка на корм', to: '/subscription' },
     { label: 'Подбор корма за 1 минуту', to: '/questionnaire' },
     { label: 'Вопросы и ответы', to: '/faq' },
   ]
@@ -204,6 +205,9 @@ export default function Footer() {
               «Разработка сайтов» — студии пока нет, остаётся статичным текстом. */}
           <div className="flex flex-wrap gap-x-4 gap-y-1 md:justify-end text-navy-700">
             <span className="cursor-default">Разработка сайтов</span>
+            <Link to="/consent" className="hover:text-primary-hover transition-colors duration-100 ease">
+              Согласие на обработку данных
+            </Link>
             <Link to="/privacy" className="hover:text-primary-hover transition-colors duration-100 ease">
               Политика конфиденциальности
             </Link>

@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { REVIEW_PUBLICATION_CONSENT_VERSION } from '@simba/shared'
 import { Review, reviewsApi } from '../../lib/api'
 
 interface ReviewFormProps {
@@ -26,12 +27,15 @@ export default function ReviewForm({ productId, onCreated }: ReviewFormProps) {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [uploadingPhoto, setUploadingPhoto] = useState(false)
+  const [publishConsent, setPublishConsent] = useState(false)
+  const [consentError, setConsentError] = useState('')
+  const consentCheckboxRef = useRef<HTMLInputElement>(null)
 
   if (!isLoggedIn) {
     return (
       <div className="bg-blue-50 border border-blue-200 rounded-card p-5 text-center">
-        <p className="text-gray-700">
-          Чтобы оставить отзыв, <Link to="/auth" className="text-blue-600 hover:underline font-medium">войдите</Link>
+        <p className="text-navy-700">
+          Чтобы оставить отзыв, <Link to="/auth" className="text-primary-hover hover:underline font-medium">войдите</Link>
         </p>
       </div>
     )
@@ -55,7 +59,15 @@ export default function ReviewForm({ productId, onCreated }: ReviewFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setConsentError('')
     setSuccess(false)
+
+    if (!publishConsent) {
+      setConsentError('Нужно согласие на публикацию отзыва с указанием имени')
+      consentCheckboxRef.current?.focus()
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -65,10 +77,12 @@ export default function ReviewForm({ productId, onCreated }: ReviewFormProps) {
         authorName: name,
         photo,
         productId,
+        publishConsentVersion: REVIEW_PUBLICATION_CONSENT_VERSION,
       })
       setRating(5)
       setText('')
       setPhoto('')
+      setPublishConsent(false)
       setSuccess(true)
       onCreated?.(review.data)
       setTimeout(() => setSuccess(false), 3000)
@@ -80,14 +94,14 @@ export default function ReviewForm({ productId, onCreated }: ReviewFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-card p-6 border border-gray-100">
+    <form onSubmit={handleSubmit} className="bg-white rounded-card p-6 border border-line">
       <h3 className="text-lg font-semibold text-navy-900 mb-4">Оставить отзыв</h3>
 
-      {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">{error}</div>}
-      {success && <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded text-green-700 text-sm">Спасибо! Отзыв появится после проверки</div>}
+      {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-[#C0392B] text-sm">{error}</div>}
+      {success && <div className="mb-4 p-3 bg-success-tint border border-success rounded text-success text-sm">Спасибо! Отзыв появится после проверки</div>}
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Оценка</label>
+        <label className="block text-sm font-medium text-navy-900 mb-2">Оценка</label>
         <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map(i => (
             <button
@@ -96,7 +110,7 @@ export default function ReviewForm({ productId, onCreated }: ReviewFormProps) {
               onClick={() => setRating(i)}
               aria-label={`Оценка ${i} из 5`}
               aria-pressed={i <= rating}
-              className={`text-3xl transition-colors ${i <= rating ? 'text-amber-400' : 'text-gray-300 hover:text-amber-200'}`}
+              className={`min-w-11 min-h-11 flex items-center justify-center text-3xl transition-colors ${i <= rating ? 'text-amber-600' : 'text-navy-200 hover:text-amber-300'}`}
             >
               ★
             </button>
@@ -105,18 +119,19 @@ export default function ReviewForm({ productId, onCreated }: ReviewFormProps) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Ваше имя</label>
+        <label htmlFor="review-name" className="block text-sm font-medium text-navy-900 mb-2">Ваше имя</label>
         <input
+          id="review-name"
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="Как вас зовут?"
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400"
+          className="w-full px-4 py-2.5 border border-line rounded-xl text-sm text-navy-900 focus:outline-none focus:border-primary-soft focus:ring-2 focus:ring-primary-soft/25"
         />
       </div>
 
       <div className="mb-4">
-        <label htmlFor="review-text" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="review-text" className="block text-sm font-medium text-navy-900 mb-2">
           Ваш отзыв
         </label>
         <textarea
@@ -125,26 +140,53 @@ export default function ReviewForm({ productId, onCreated }: ReviewFormProps) {
           onChange={e => setText(e.target.value)}
           placeholder="Напишите честный отзыв..."
           rows={4}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none"
+          className="w-full px-4 py-2.5 border border-line rounded-xl text-sm text-navy-900 focus:outline-none focus:border-primary-soft focus:ring-2 focus:ring-primary-soft/25 resize-none"
         />
-        <p className="mt-1 text-xs text-gray-500">{text.length} символов</p>
+        <p className="mt-1 text-xs text-navy-500">{text.length} символов</p>
       </div>
 
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Прикрепить фото (необязательно)</label>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-navy-900 mb-2">Прикрепить фото (необязательно)</label>
         <div className="flex gap-3 items-center">
-          <label className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
+          <label className="px-4 py-2 bg-blue-50 text-navy-700 text-sm rounded-lg hover:bg-blue-100 cursor-pointer transition-colors font-medium">
             {uploadingPhoto ? 'Загрузка...' : 'Выбрать фото'}
             <input type="file" accept="image/*" onChange={handlePhotoUpload} disabled={uploadingPhoto} hidden />
           </label>
-          {photo && <span className="text-xs text-green-600">✓ Фото загружено</span>}
+          {photo && <span className="text-xs text-success font-medium">✓ Фото загружено</span>}
         </div>
+      </div>
+
+      <div className="mb-5">
+        <label htmlFor="review-publish-consent" className="flex items-start gap-3 cursor-pointer">
+          <input
+            ref={consentCheckboxRef}
+            id="review-publish-consent"
+            type="checkbox"
+            checked={publishConsent}
+            onChange={(e) => {
+              setPublishConsent(e.target.checked)
+              if (consentError) setConsentError('')
+            }}
+            className="mt-0.5 w-4 h-4 shrink-0 accent-ink rounded border border-line focus:outline-none focus:ring-2 focus:ring-primary-soft/25"
+            aria-invalid={!!consentError}
+            aria-describedby={consentError ? 'review-publish-consent-error' : undefined}
+          />
+          <span className="text-sm text-navy-700 leading-snug">
+            Согласен на публикацию отзыва на сайте с указанием моего имени
+          </span>
+        </label>
+        <p className="text-xs text-navy-500 mt-1">Отзыв можно удалить в любой момент — кнопка появится рядом с ним после модерации.</p>
+        {consentError && (
+          <p id="review-publish-consent-error" role="alert" className="text-xs text-[#C0392B] mt-2">
+            {consentError}
+          </p>
+        )}
       </div>
 
       <button
         type="submit"
         disabled={loading || !text.trim()}
-        className="w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:bg-gray-300 transition-colors"
+        className="btn-primary press-wide w-full py-3 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? 'Отправка...' : 'Отправить'}
       </button>

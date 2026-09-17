@@ -119,13 +119,13 @@ jobs:
             echo "==> Product photos from МойСклад: full pass in the background (log: sync-photos.log)"
             (cd server && setsid nohup npx tsx src/scripts/sync-photos.ts --apply > /var/www/simba-src/sync-photos.log 2>&1 < /dev/null &)
 
-            pm2 reload simba-server --update-env
-
-            echo "==> Deploying static files"
+            echo "==> Deploying static files (before reload: new API must not meet the old bundle)"
             mkdir -p /var/www/simba/client /var/www/simba/admin
             rm -rf /var/www/simba/client/* /var/www/simba/admin/*
             cp -r client/dist/* /var/www/simba/client/
             cp -r admin/dist/*  /var/www/simba/admin/
+
+            pm2 reload simba-server --update-env
 
             echo "==> Health check"
             sleep 2

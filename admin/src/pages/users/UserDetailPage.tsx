@@ -53,7 +53,7 @@ export default function UserDetailPage() {
   const [detail, setDetail] = useState<UserDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState(false)
-  const [activeModalType, setActiveModalType] = useState<'block' | 'unblock' | 'bonus' | null>(null)
+  const [activeModalType, setActiveModalType] = useState<'block' | 'unblock' | 'bonus' | 'anonymize' | null>(null)
   const [bonusForm, setBonusForm] = useState({ amount: '', comment: '' })
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -113,6 +113,24 @@ export default function UserDetailPage() {
     }
   }
 
+  const handleAnonymize = async () => {
+    if (!detail) return
+    setUpdating(true)
+    setError('')
+    setSuccess('')
+    try {
+      await usersApi.anonymize(detail.user.id)
+      const res = await usersApi.byId(detail.user.id)
+      setDetail(res.data)
+      setSuccess('Данные пользователя обезличены')
+      setActiveModalType(null)
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Ошибка')
+    } finally {
+      setUpdating(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center py-16">
@@ -159,6 +177,7 @@ export default function UserDetailPage() {
           <div className="flex gap-2">
             {user.isGuest && <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm">Гость</span>}
             {!user.isActive && <span className="px-3 py-1 bg-red-100 text-red-700 rounded-lg text-sm">Заблокирован</span>}
+            {user.deletedAt && <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-lg text-sm">Обезличен</span>}
           </div>
         </div>
       </div>
@@ -242,6 +261,15 @@ export default function UserDetailPage() {
         >
           Начислить/списать бонусы
         </button>
+
+        {!user.deletedAt && (
+          <button
+            onClick={() => setActiveModalType('anonymize')}
+            className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700 font-medium"
+          >
+            Обезличить данные
+          </button>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -513,6 +541,32 @@ export default function UserDetailPage() {
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50"
               >
                 {updating ? 'Загрузка...' : 'Применить'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Anonymize Modal */}
+      {activeModalType === 'anonymize' && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full mx-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Обезличить пользователя?</h3>
+            <p className="text-gray-600 mb-6">Имя, email, телефон, адреса, питомцы, подписки и корзина будут стёрты. Заказы и история бонусов останутся без контактных данных. Отменить нельзя.</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setActiveModalType(null)}
+                disabled={updating}
+                className="flex-1 px-4 py-2 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleAnonymize}
+                disabled={updating}
+                className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 disabled:opacity-50"
+              >
+                {updating ? 'Загрузка...' : 'Обезличить'}
               </button>
             </div>
           </div>

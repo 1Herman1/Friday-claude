@@ -1,6 +1,8 @@
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
+import type { PrismaClient } from '@prisma/client'
 import { saveFile } from '../../lib/storage'
+import { consentVersionSchema, consentSource, recordConsent, REVIEW_CONSENT_VERSIONS } from '../../services/consent.service'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024
 
@@ -16,6 +18,7 @@ const createSchema = z.object({
   authorName: z.string().trim().min(2).max(60).optional(),
   photo: z.string().max(500).optional(),
   productId: z.string().uuid().optional(),
+  publishConsentVersion: consentVersionSchema('Нужно согласие на публикацию отзыва с указанием имени', REVIEW_CONSENT_VERSIONS),
 })
 
 export default async function reviewsRoutes(app: FastifyInstance) {
@@ -72,7 +75,12 @@ export default async function reviewsRoutes(app: FastifyInstance) {
 
     const parsed = createSchema.safeParse(request.body)
     if (!parsed.success) {
-      return reply.status(400).send({ error: parsed.error.issues[0]?.message ?? 'Некорректные данные' })
+      const error = parsed.error.issues[0]
+      let message = error?.message ?? 'Некорректные данные'
+      if (error?.path.includes('publishConsentVersion') && error?.code === 'invalid_type') {
+        message = 'Нужно согласие на публикацию отзыва с указанием имени'
+      }
+      return reply.status(400).send({ error: message })
     }
 
     // Анти-спам: не более 3 отзывов в час
@@ -85,11 +93,11 @@ export default async function reviewsRoutes(app: FastifyInstance) {
       return reply.status(429).send({ error: 'Слишком много отзывов, попробуйте позже' })
     }
 
-    const data = parsed.data
+    const { publishConsentVersion, ...data } = parsed.data
     const user = await app.prisma.user.findUnique({ where: { id: uid }, select: { name: true } })
 
-    try {
-      const review = await app.prisma.review.create({
+    const review = await app.prisma.$transaction(async (tx) => {
+      const created = await tx.review.create({
         data: {
           rating: data.rating,
           text: data.text,
@@ -102,10 +110,21 @@ export default async function reviewsRoutes(app: FastifyInstance) {
         select: { id: true, authorName: true, rating: true, text: true, photo: true, status: true, createdAt: true },
       })
 
-      return reply.status(201).send({ ...review, mine: true })
-    } catch (err) {
-      throw err
-    }
+      // Записать согласие на публикацию
+      const source = consentSource(request)
+      await recordConsent(tx as PrismaClient, {
+        userId: uid,
+        kind: 'review_publication',
+        textVersion: publishConsentVersion,
+        reviewId: created.id,
+        ip: source.ip,
+        userAgent: source.userAgent,
+      })
+
+      return created
+    })
+
+    return reply.status(201).send({ ...review, mine: true })
   })
 
   // DELETE /:id - удалить свой отзыв

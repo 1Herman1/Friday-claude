@@ -4,59 +4,32 @@ import { useCart } from '../../context/CartContext'
 import { useFavorites } from '../../context/FavoritesContext'
 import { useDrawer } from '../../context/DrawerContext'
 import { CONTACTS } from '../../lib/contacts'
-import { useCategoryTree, findNode, findPath } from '../../hooks/useCategoryTree'
 import { HeartIcon, CartBagIcon, UserIcon, TelegramPlaneIcon, SearchIcon, PhoneIcon } from '../icons'
 import SearchModal from './SearchModal'
 
-interface MenuGroup {
-  label: string
-  href: string
-  items: Array<{ label: string; href: string }>
-}
+interface MenuLink { label: string; href: string }
+interface MenuItem { label: string; key: string | null; href: string; items?: MenuLink[] }
 
-interface MenuItem {
-  label: string
-  key: string | null
-  href: string
-  groups?: MenuGroup[]
-}
+/** Решение владельца (16.09.2026): меню статичное, без дерева из админки. */
+const MENU: MenuItem[] = [
+  { label: 'Собаки', key: 'dogs', href: '/catalog?category=dogs', items: [
+    { label: 'Сухой корм', href: '/catalog?category=dogs-dry' },
+    { label: 'Влажный корм', href: '/catalog?category=dogs-wet' },
+    { label: 'Лечебное питание', href: '/catalog?category=dogs-medical' },
+    { label: 'Лакомства', href: '/catalog?category=treats' } ]},
+  { label: 'Коты и кошки', key: 'cats', href: '/catalog?category=cats', items: [
+    { label: 'Сухой корм', href: '/catalog?category=cats-dry' },
+    { label: 'Влажный корм', href: '/catalog?category=cats-wet' },
+    { label: 'Лечебное питание', href: '/catalog?category=cats-medical' },
+    { label: 'Лакомства', href: '/catalog?category=treats' } ]},
+  { label: 'Ветаптека', key: null, href: '/catalog?category=care' },
+]
 
 export default function Header() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [contactsOpen, setContactsOpen] = useState(false)
-  const tree = useCategoryTree()
-
-  // Строим меню из дерева: уровень 1 (виды), затем уровень 2 (типы) в группах, уровень 3 (назначения) в каждой группе
-  const menu: MenuItem[] = tree.length > 0
-    ? [
-        ...tree
-          .filter(n => n.kind === 'species')
-          .map(root => ({
-            label: root.name,
-            key: root.slug,
-            href: `/catalog?category=${root.slug}`,
-            groups: (root.children ?? []).map(type => ({
-              label: type.name,
-              href: `/catalog?category=${type.slug}`,
-              items: (type.children ?? []).map(purpose => ({
-                label: purpose.name,
-                href: `/catalog?category=${purpose.slug}`,
-              })),
-            })),
-          })),
-        // Ветаптека если существует в дереве
-        ...(findNode(tree, 'care') ? [{
-          label: 'Ветаптека',
-          key: null,
-          href: '/catalog?category=care',
-        }] : []),
-      ]
-    : [
-        { label: 'Собаки', key: 'dogs', href: '/catalog?species=dog', groups: [] },
-        { label: 'Кошки', key: 'cats', href: '/catalog?species=cat', groups: [] },
-      ]
   const contactsRef = useRef<HTMLDivElement>(null)
 
   // Попап контактов закрывается тапом вне и по Esc.
@@ -88,7 +61,7 @@ export default function Header() {
         <div className="relative max-w-7xl mx-auto rounded-full px-8 h-16 flex items-center justify-between bg-[rgb(119_119_119_/_0.5)] supports-[backdrop-filter]:backdrop-blur-[8px] shadow-md drop-shadow-sm">
           {/* Слева — навигация */}
           <nav className="flex items-center gap-4 lg:gap-6">
-            {menu.map((cat) => (
+            {MENU.map((cat) => (
               <div
                 key={cat.label}
                 onMouseEnter={() => cat.key ? setActiveCategory(cat.key) : setActiveCategory(null)}
@@ -103,29 +76,18 @@ export default function Header() {
                 >
                   {cat.label}
                 </Link>
-                {cat.key && activeCategory === cat.key && (cat.groups?.length ?? 0) > 0 && (
-                  <div className="absolute left-0 top-full mt-3 w-max max-w-[calc(100vw-2rem)] bg-white rounded-card shadow-md overflow-hidden animate-slide-down z-50">
-                    <div className="px-6 py-5 grid grid-flow-col auto-cols-max gap-x-8 gap-y-1">
-                      {cat.groups?.map((group) => (
-                        <div key={group.label}>
-                          <Link
-                            to={group.href}
-                            className="block px-2 py-1.5 text-sm font-semibold text-navy-900 hover:underline"
-                            onClick={() => setActiveCategory(null)}
-                          >
-                            {group.label}
-                          </Link>
-                          {group.items.map((item) => (
-                            <Link
-                              key={item.label}
-                              to={item.href}
-                              className="block px-2 py-1 text-sm text-navy-700 hover:text-navy-900 hover:underline"
-                              onClick={() => setActiveCategory(null)}
-                            >
-                              {item.label}
-                            </Link>
-                          ))}
-                        </div>
+                {cat.key && activeCategory === cat.key && cat.items && (
+                  <div className="absolute left-0 top-full mt-3 w-max max-w-sm bg-white rounded-card shadow-md overflow-hidden animate-slide-down z-50">
+                    <div className="px-4 py-3 grid grid-cols-2 gap-x-2 gap-y-1">
+                      {cat.items.map((item) => (
+                        <Link
+                          key={item.label}
+                          to={item.href}
+                          className="block px-3 py-2 rounded-lg text-navy-700 text-sm font-medium hover:bg-blue-50 hover:text-navy-900 transition-colors duration-100"
+                          onClick={() => setActiveCategory(null)}
+                        >
+                          {item.label}
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -294,34 +256,19 @@ export default function Header() {
           </div>
         )}
 
-        {/* Мобильное меню */}
+        {/* Мобильное меню — только корни */}
         {mobileMenuOpen && (
           <div className="mt-2 bg-white rounded-card shadow-md overflow-hidden animate-slide-down">
             <nav className="px-4 py-3 flex flex-col gap-1">
-              {menu.map((cat) => (
-                <div key={cat.label}>
-                  <Link
-                    to={cat.href}
-                    className="py-3 px-3 rounded-lg font-medium text-navy-900 hover:bg-blue-50 transition-colors duration-100 block"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {cat.label}
-                  </Link>
-                  {cat.key && (cat.groups?.length ?? 0) > 0 && (
-                    <div className="pl-6 text-sm text-navy-700">
-                      {cat.groups?.map((group) => (
-                        <Link
-                          key={group.label}
-                          to={group.href}
-                          className="flex items-center min-h-[44px] px-3 hover:text-navy-900 hover:underline"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {group.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              {MENU.map((cat) => (
+                <Link
+                  key={cat.label}
+                  to={cat.href}
+                  className="py-3 px-3 rounded-lg font-medium text-navy-900 hover:bg-blue-50 transition-colors duration-100 block"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {cat.label}
+                </Link>
               ))}
             </nav>
           </div>

@@ -148,6 +148,12 @@ enum ReviewStatus {
   rejected
 }
 
+enum ConsentKind {
+  pd_processing
+  review_publication
+  withdrawal
+}
+
 /// Уровень категории в дереве «Вид → Тип → Назначение»
 enum CategoryKind {
   species
@@ -178,6 +184,8 @@ model User {
   isActive            Boolean    @default(true)
   /// Последняя активность пользователя на сайте — для аналитики активности
   lastSeenAt          DateTime?
+  /// Обезличен по запросу
+  deletedAt           DateTime?
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
 
@@ -193,12 +201,14 @@ model User {
   bonusTransactions BonusTransaction[]
   quizSessions      QuizSession[]
   reviews           Review[]
+  consents          Consent[]
 
   @@index([email])
   @@index([phone])
   @@index([username])
   @@index([role])
   @@index([lastSeenAt])
+  @@index([deletedAt])
   @@map("users")
 }
 
@@ -552,6 +562,7 @@ model Order {
   items             OrderItem[]
   bonusTransactions BonusTransaction[]
   promo             PromoCode?         @relation(fields: [promoCodeId], references: [id], onDelete: SetNull)
+  consents          Consent[]
 
   @@index([userId])
   @@index([status])
@@ -881,6 +892,7 @@ model Review {
   updatedAt  DateTime     @updatedAt
   user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
   product    Product?     @relation(fields: [productId], references: [id], onDelete: SetNull)
+  consents   Consent[]
 
   @@index([status, createdAt(sort: Desc)])
   @@index([userId])
@@ -909,6 +921,30 @@ model PromoCode {
 
   @@index([isActive])
   @@map("promo_codes")
+}
+
+// ─── СОГЛАСИЯ ────────────────────────────────────────────────────────────────
+
+/// Записи о согласии пользователя на обработку персональных данных
+model Consent {
+  id        String       @id @default(uuid())
+  userId    String?
+  orderId   String?
+  reviewId  String?
+  kind      ConsentKind
+  textVersion String      @db.VarChar(64)
+  ip        String?     @db.VarChar(45)
+  userAgent String?     @db.VarChar(512)
+  createdAt DateTime     @default(now())
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  order  Order?  @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  review Review? @relation(fields: [reviewId], references: [id], onDelete: SetNull)
+
+  @@index([userId, kind, createdAt(sort: Desc)])
+  @@index([orderId])
+  @@index([reviewId])
+  @@map("consents")
 }
 
 // ─── АНАЛИТИКА ───────────────────────────────────────────────────────────────

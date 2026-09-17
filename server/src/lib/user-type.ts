@@ -1,12 +1,14 @@
 import type { Prisma } from '@prisma/client'
 
 /** Гость = строка users без email, телефона и пароля (guest-session.ts). Одно определение для users и dashboard. */
-export const GUEST_USER_WHERE: Prisma.UserWhereInput = { email: null, phone: null, passwordHash: null }
+export const GUEST_USER_WHERE: Prisma.UserWhereInput = { email: null, phone: null, passwordHash: null, deletedAt: null }
 export const REGISTERED_USER_WHERE: Prisma.UserWhereInput = {
+  deletedAt: null,
   OR: [{ email: { not: null } }, { phone: { not: null } }, { passwordHash: { not: null } }],
 }
-export function isGuestUser(u: { email: string | null; phone: string | null; passwordHash: string | null }): boolean {
-  return !u.email && !u.phone && !u.passwordHash
+export const DELETED_USER_WHERE: Prisma.UserWhereInput = { deletedAt: { not: null } }
+export function isGuestUser(u: { email: string | null; phone: string | null; passwordHash: string | null; deletedAt?: Date | null }): boolean {
+  return !u.email && !u.phone && !u.passwordHash && !u.deletedAt
 }
 
 /** Предикат для поиска старых гостевых записей без взаимодействий (заказов, избранного, подборов) и без товаров в корзине. */

@@ -5,6 +5,7 @@ import { Prisma, UserRole } from '@prisma/client'
 import { checkRole } from '../../middleware/check-role'
 import { GUEST_USER_WHERE, REGISTERED_USER_WHERE, isGuestUser, staleGuestWhere } from '../../lib/user-type'
 import { applyBonusChange, InsufficientBonusError } from '../../services/bonus.service'
+import { anonymizeUser, AccountNotFoundError } from '../../services/account.service'
 
 const usersAdminRoute: FastifyPluginAsync = async (app) => {
   const guard = { preHandler: [app.authenticate, checkRole(['super_admin'])] }
@@ -107,6 +108,7 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
             createdAt: true,
             lastSeenAt: true,
             isActive: true,
+            deletedAt: true,
             passwordHash: true,
             _count: { select: { orders: true, favorites: true, quizSessions: true } },
             cart: { select: { items: { select: { id: true } } } },
@@ -127,6 +129,8 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
         lastSeenAt: u.lastSeenAt,
         isGuest: isGuestUser(u),
         isActive: u.isActive,
+        isDeleted: !!u.deletedAt,
+        deletedAt: u.deletedAt,
         cartItems: u.cart?.items?.length ?? 0,
         _count: u._count,
       }))
@@ -199,6 +203,7 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
             bonusPoints: true,
             bonusLevel: true,
             isActive: true,
+            deletedAt: true,
             welcomeBonusGranted: true,
             createdAt: true,
             lastSeenAt: true,
@@ -256,6 +261,7 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
       const userResponse = {
         ...userWithoutHash,
         isGuest: isGuestUser(user),
+        isDeleted: !!user.deletedAt,
       }
 
       return reply.send({
@@ -410,6 +416,42 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
           return reply.status(404).send({ error: 'Пользователь не найден' })
         }
         throw err
+      }
+    }
+  )
+
+  app.post<{ Params: { id: string } }>(
+    '/:id/anonymize',
+    guard,
+    async (request, reply) => {
+      const { id } = request.params
+      const { userId: actorId } = request.user as { userId: string }
+
+      if (id === actorId) {
+        return reply.status(400).send({ error: 'Нельзя обезличить себя' })
+      }
+      const target = await app.prisma.user.findUnique({ where: { id }, select: { role: true } })
+      if (target?.role === 'super_admin') {
+        return reply.status(400).send({ error: 'Аккаунт администратора обезличить нельзя' })
+      }
+
+      try {
+        await anonymizeUser(app.prisma, id, {
+          reason: 'admin',
+          actorId,
+          ip: request.ip,
+          userAgent: request.headers['user-agent'] || null,
+        })
+
+        return reply.send({ ok: true, alreadyDeleted: false })
+      } catch (error) {
+        if (error instanceof AccountNotFoundError) {
+          if (error.alreadyDeleted) {
+            return reply.send({ ok: true, alreadyDeleted: true })
+          }
+          return reply.status(404).send({ error: error.message })
+        }
+        throw error
       }
     }
   )

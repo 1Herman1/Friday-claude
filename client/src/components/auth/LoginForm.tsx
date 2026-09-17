@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { authApi } from '../../lib/api'
+import { CONSENT_VERSION } from '@simba/shared'
 import { ArrowLeftIcon, CoinsIcon } from '../icons'
 
 type Step = 'input' | 'code'
@@ -23,6 +25,9 @@ export default function LoginForm({ onSuccess, hideWelcomeBonus = false }: Login
   const [resendTimer, setResendTimer] = useState(0)
   const [stepIn, setStepIn] = useState(false)
   const [cartMergeError, setCartMergeError] = useState('')
+  const [pdConsent, setPdConsent] = useState(false)
+  const [consentError, setConsentError] = useState('')
+  const consentCheckboxRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setStepIn(true)
@@ -46,16 +51,25 @@ export default function LoginForm({ onSuccess, hideWelcomeBonus = false }: Login
   const handleSendCode = async () => {
     if (!email.trim()) {
       setError('Введите email')
+      setConsentError('')
       return
     }
 
     if (!isEmailValid) {
       setError('Проверьте адрес — похоже, есть опечатка')
+      setConsentError('')
+      return
+    }
+
+    if (!pdConsent) {
+      setConsentError('Нужно согласие на обработку персональных данных')
+      consentCheckboxRef.current?.focus()
       return
     }
 
     setLoading(true)
     setError('')
+    setConsentError('')
     setCartMergeError('')
 
     try {
@@ -83,7 +97,7 @@ export default function LoginForm({ onSuccess, hideWelcomeBonus = false }: Login
 
     try {
       const guestToken = localStorage.getItem('guestToken')
-      const res = await authApi.verifyOtp(email.trim(), code, guestToken || undefined)
+      const res = await authApi.verifyOtp(email.trim(), code, CONSENT_VERSION, guestToken || undefined)
       localStorage.setItem('token', res.data.token)
 
       // Проверить, было ли слияние корзины
@@ -125,6 +139,7 @@ export default function LoginForm({ onSuccess, hideWelcomeBonus = false }: Login
     setStepIn(false)
     setCode('')
     setError('')
+    setConsentError('')
     setCartMergeError('')
     setTimeout(() => setStepIn(true), 10)
   }
@@ -135,7 +150,7 @@ export default function LoginForm({ onSuccess, hideWelcomeBonus = false }: Login
       <div className="relative">
         <div className={`auth-step ${stepIn && step === 'input' ? 'is-in' : ''}`}>
           <h2 className="text-xl font-bold text-navy-900 mb-1">Вход в аккаунт</h2>
-          <p className="text-sm text-navy-400 mb-6">
+          <p className="text-sm text-navy-500 mb-6">
             Введите email — пришлём код для входа
           </p>
 
@@ -174,6 +189,38 @@ export default function LoginForm({ onSuccess, hideWelcomeBonus = false }: Login
               {error && step === 'input' ? error : 'Пришлём код для входа — пароль не нужен'}
             </p>
           </div>
+
+          {/* Чекбокс согласия на обработку ПД */}
+          <label htmlFor="auth-pd-consent" className="flex items-start gap-3 mb-4 cursor-pointer">
+            <input
+              ref={consentCheckboxRef}
+              id="auth-pd-consent"
+              type="checkbox"
+              checked={pdConsent}
+              onChange={(e) => {
+                setPdConsent(e.target.checked)
+                if (consentError) setConsentError('')
+              }}
+              className="mt-0.5 w-4 h-4 shrink-0 accent-ink rounded border border-line focus:outline-none focus:ring-2 focus:ring-primary-soft/25"
+              aria-invalid={!!consentError}
+              aria-describedby={consentError ? 'auth-pd-consent-error' : undefined}
+            />
+            <span className="text-sm text-navy-700 leading-snug">
+              Даю согласие на обработку персональных данных на условиях{' '}
+              <Link to="/consent" target="_blank" rel="noopener noreferrer" className="font-medium text-primary-hover underline underline-offset-2">
+                согласия
+              </Link>
+              {' '}и{' '}
+              <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="font-medium text-primary-hover underline underline-offset-2">
+                политики конфиденциальности
+              </Link>
+            </span>
+          </label>
+          {consentError && (
+            <p id="auth-pd-consent-error" role="alert" className="text-xs text-[#C0392B] mb-4">
+              {consentError}
+            </p>
+          )}
 
           {/* Кнопка отправки */}
           <button
