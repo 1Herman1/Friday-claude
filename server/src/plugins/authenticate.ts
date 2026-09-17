@@ -11,6 +11,22 @@ declare module 'fastify' {
 const lastSeenMap = new Map<string, number>()
 const THROTTLE_MS = 10 * 60 * 1000 // 10 minutes
 
+type JwtPayload = { userId?: string; role?: string; type?: 'guest'; iat?: number }
+
+/**
+ * Токен, подписанный до отметки sessionsValidFrom, недействителен.
+ *
+ * Токен живёт 7 дней, поэтому смена почты, блокировка и обезличивание обязаны
+ * гасить ранее выданные сессии сразу: иначе угнанный доступ переживает возврат
+ * адреса владельцем. iat в JWT хранится в секундах, отметка — в миллисекундах.
+ * Токен без iat датировать нечем, поэтому при наличии отметки он тоже мёртв.
+ */
+function isSessionRevoked(sessionsValidFrom: Date | null, iat: number | undefined): boolean {
+  if (!sessionsValidFrom) return false
+  if (typeof iat !== 'number') return true
+  return iat * 1000 < sessionsValidFrom.getTime()
+}
+
 export default fp(async (app) => {
   app.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
     // JWT verification in separate try/catch: DB errors should not cause 401
@@ -21,16 +37,22 @@ export default fp(async (app) => {
     }
 
     // Type the JWT payload to include type field for guest detection
-    const payload = request.user as { userId?: string; role?: string; type?: 'guest' } | undefined
+    const payload = request.user as JwtPayload | undefined
     if (payload?.userId && payload.type !== 'guest') {
       try {
         // Один запрос в БД на пользователя перед throttle: проверить заблокирован ли
+        // и не старше ли токен отметки гашения сессий
         const u = await app.prisma.user.findUnique({
           where: { id: payload.userId },
-          select: { isActive: true },
+          select: { isActive: true, sessionsValidFrom: true },
         })
         if (u && !u.isActive) {
           return reply.status(401).send({ error: 'Аккаунт заблокирован', code: 'USER_BLOCKED' })
+        }
+        if (u && isSessionRevoked(u.sessionsValidFrom, payload.iat)) {
+          return reply
+            .status(401)
+            .send({ error: 'Сессия завершена, войдите заново', code: 'SESSION_REVOKED' })
         }
       } catch (err) {
         request.log.error(err)
@@ -61,11 +83,14 @@ export default fp(async (app) => {
       await request.jwtVerify()
 
       // Same throttled update for optional auth, but don't block guests
-      const payload = request.user as { userId?: string; role?: string; type?: 'guest' } | undefined
+      const payload = request.user as JwtPayload | undefined
       if (payload?.userId && payload.type !== 'guest') {
-        // Заблокированный или обезличенный аккаунт с живым токеном — аноним, а не пользователь
-        const u = await app.prisma.user.findUnique({ where: { id: payload.userId }, select: { isActive: true } })
-        if (!u || !u.isActive) {
+        // Заблокированный, обезличенный или погашенный по отметке токен — аноним, а не пользователь
+        const u = await app.prisma.user.findUnique({
+          where: { id: payload.userId },
+          select: { isActive: true, sessionsValidFrom: true },
+        })
+        if (!u || !u.isActive || isSessionRevoked(u.sessionsValidFrom, payload.iat)) {
           ;(request as { user: unknown }).user = null
           return
         }

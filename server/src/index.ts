@@ -5,6 +5,7 @@ import multipart from '@fastify/multipart'
 import prismaPlugin from './plugins/prisma'
 import authenticatePlugin from './plugins/authenticate'
 import authRoutes from './routes/auth/index'
+import usersRoutes from './routes/users/index'
 import productRoutes from './routes/products'
 import adminProductRoutes from './routes/products/admin-crud'
 import favoritesRoutes from './routes/favorites/index'
@@ -69,6 +70,7 @@ export async function buildApp(opts: { logger?: boolean } = {}) {
 
   app.get('/health', async () => ({ status: 'ok' }))
 
+  await app.register(usersRoutes, { prefix: '/api/users' })
   await app.register(productRoutes, { prefix: '/api/products' })
   await app.register(adminProductRoutes, { prefix: '/api/admin/products' })
   await app.register(favoritesRoutes, { prefix: '/api/favorites' })

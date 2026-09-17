@@ -249,8 +249,17 @@ export const authApi = {
 // ─── Пользователи ────────────────────────────────────────────────────────────
 
 export const usersApi = {
-  updateProfile: (data: { name?: string; phone?: string; email?: string }) =>
+  updateProfile: (data: { name?: string; phone?: string }) =>
     api.put<User>('/api/users/profile', data),
+
+  // Смена почты — в два шага: коды уходят сразу на текущий и на новый адрес,
+  // подтверждение требует обоих. Доступ к одному ящику адрес не меняет.
+  requestEmailChange: (email: string) =>
+    api.post<{ ok: true }>('/api/users/profile/email-request', { email }),
+
+  /** Ответ несёт новый токен: смена адреса гасит все прежние сессии, включая текущую. */
+  confirmEmailChange: (email: string, currentCode: string, code: string) =>
+    api.put<{ user: User; token: string }>('/api/users/profile/email', { email, currentCode, code }),
 }
 
 // ─── Товары ──────────────────────────────────────────────────────────────────

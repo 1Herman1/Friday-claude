@@ -122,12 +122,22 @@ export async function createGuestSession(app: FastifyInstance, ip?: string) {
   }
 }
 
+/**
+ * `issuedSecondsAgo` состаривает токен.
+ *
+ * Гашение сессий сверяет iat токена (секунды) с отметкой sessionsValidFrom
+ * (миллисекунды), а в тесте выдача и гашение попадают в одну и ту же секунду.
+ * Сдвиг назад делает возраст токена однозначным — как у реального покупателя,
+ * вошедшего вчера.
+ */
 export function authHeader(
   app: FastifyInstance,
   userId: string,
-  role: UserRole = 'customer'
+  role: UserRole = 'customer',
+  opts: { issuedSecondsAgo?: number } = {}
 ) {
-  const token = app.jwt.sign({ userId, role })
+  const issuedAt = Date.now() - (opts.issuedSecondsAgo ?? 0) * 1000
+  const token = app.jwt.sign({ userId, role }, { clockTimestamp: issuedAt })
   return { authorization: `Bearer ${token}` }
 }
 

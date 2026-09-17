@@ -235,7 +235,10 @@ describe.skipIf(!hasTestDb)('Admin users (интеграционные)', () => 
     const prisma = getTestPrisma()
     const admin = await createUser({ name: 'Admin', email: 'admin@test.com' })
     const user = await createUser({ name: 'User', email: 'user@test.com' })
-    const userToken = app.jwt.sign({ userId: user.id, role: user.role }, { expiresIn: '7d' })
+    const userToken = app.jwt.sign(
+      { userId: user.id, role: user.role },
+      { expiresIn: '7d', clockTimestamp: Date.now() - 60_000 }
+    )
 
     const res = await app.inject({
       method: 'PUT',
@@ -256,6 +259,20 @@ describe.skipIf(!hasTestDb)('Admin users (интеграционные)', () => 
     expect(meRes.statusCode).toBe(401)
     const meData = meRes.json() as any
     expect(meData.code).toBe('USER_BLOCKED')
+
+    // Блокировка ставит отметку гашения: разблокировка не воскрешает старые
+    // токены, войти придётся заново
+    const inDb = await prisma.user.findUniqueOrThrow({ where: { id: user.id } })
+    expect(inDb.sessionsValidFrom).not.toBeNull()
+
+    await prisma.user.update({ where: { id: user.id }, data: { isActive: true } })
+    const afterUnblock = await app.inject({
+      method: 'GET',
+      url: '/api/auth/me',
+      headers: { Authorization: `Bearer ${userToken}` },
+    })
+    expect(afterUnblock.statusCode).toBe(401)
+    expect((afterUnblock.json() as any).code).toBe('SESSION_REVOKED')
   })
 
   it('POST /:id/bonus увеличивает баланс и создаёт запись с типом admin_adjust', async () => {

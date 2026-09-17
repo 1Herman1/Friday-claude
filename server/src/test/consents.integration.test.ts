@@ -39,7 +39,7 @@ describe.skipIf(!hasTestDb)('Согласие на обработку ПД (ин
         data: { email, name: 'Test' },
       })
 
-      const code = await otpService.createOtp(prisma, user.id, 'email')
+      const code = await otpService.createOtp(prisma, user.id, 'email', 'login', email)
       const res = await app.inject({
         method: 'POST',
         url: '/api/auth/verify-otp',
@@ -57,7 +57,7 @@ describe.skipIf(!hasTestDb)('Согласие на обработку ПД (ин
         data: { email, name: 'Test' },
       })
 
-      const code = await otpService.createOtp(prisma, user.id, 'email')
+      const code = await otpService.createOtp(prisma, user.id, 'email', 'login', email)
       const res = await app.inject({
         method: 'POST',
         url: '/api/auth/verify-otp',

@@ -9,8 +9,9 @@ import {
 import { computeDeliveryExpense } from '../../services/delivery/delivery-expense.js'
 import { createReturnDocument } from '../../services/moysklad/returns'
 
-async function adminOnly(request: FastifyRequest, reply: FastifyReply) {
-  await request.jwtVerify()
+/** Роль проверяем сами, живость токена — плагином `app.authenticate`:
+    блокировка сотрудника и гашение сессий должны действовать и здесь. */
+async function requireOrdersRole(request: FastifyRequest, reply: FastifyReply) {
   const { role } = request.user
   if (role !== 'super_admin' && role !== 'orders_manager') {
     return reply.status(403).send({ error: 'Недостаточно прав' })
@@ -26,7 +27,7 @@ const updatePaymentSchema = z.object({
 })
 
 const orderAdminRoutes: FastifyPluginAsync = async (app) => {
-  app.get('/', { preHandler: adminOnly }, async (request, reply) => {
+  app.get('/', { preHandler: [app.authenticate, requireOrdersRole] }, async (request, reply) => {
     const query = request.query as {
       status?: string
       page?: string
@@ -70,7 +71,7 @@ const orderAdminRoutes: FastifyPluginAsync = async (app) => {
     })
   })
 
-  app.get('/:id', { preHandler: adminOnly }, async (request, reply) => {
+  app.get('/:id', { preHandler: [app.authenticate, requireOrdersRole] }, async (request, reply) => {
     const { id } = request.params as { id: string }
 
     const order = await app.prisma.order.findUnique({
@@ -88,7 +89,7 @@ const orderAdminRoutes: FastifyPluginAsync = async (app) => {
     return reply.send(order)
   })
 
-  app.put('/:id/status', { preHandler: adminOnly }, async (request, reply) => {
+  app.put('/:id/status', { preHandler: [app.authenticate, requireOrdersRole] }, async (request, reply) => {
     const result = updateStatusSchema.safeParse(request.body)
     if (!result.success) {
       return reply.status(400).send({ error: result.error.errors[0].message })
@@ -160,7 +161,7 @@ const orderAdminRoutes: FastifyPluginAsync = async (app) => {
     }
   })
 
-  app.put('/:id/payment', { preHandler: adminOnly }, async (request, reply) => {
+  app.put('/:id/payment', { preHandler: [app.authenticate, requireOrdersRole] }, async (request, reply) => {
     const result = updatePaymentSchema.safeParse(request.body)
     if (!result.success) {
       return reply.status(400).send({ error: result.error.errors[0].message })
@@ -192,7 +193,7 @@ const orderAdminRoutes: FastifyPluginAsync = async (app) => {
     }
   })
 
-  app.post('/:id/delivery-expense/recompute', { preHandler: adminOnly }, async (request, reply) => {
+  app.post('/:id/delivery-expense/recompute', { preHandler: [app.authenticate, requireOrdersRole] }, async (request, reply) => {
     const { id } = request.params as { id: string }
 
     // Проверяем, что заказ существует

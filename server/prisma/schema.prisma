@@ -27,6 +27,15 @@ enum OtpChannel {
   sms
 }
 
+/// Сценарий, ради которого выпущен одноразовый код. Без него код входа и код
+/// подтверждения нового адреса взаимозаменяемы: verifyOtp брал любой свежий
+/// код пользователя, и письмо на неподтверждённый адрес открывало вход.
+enum OtpPurpose {
+  login
+  delete
+  email_change
+}
+
 enum PetSpecies {
   cat
   dog
@@ -186,6 +195,8 @@ model User {
   lastSeenAt          DateTime?
   /// Обезличен по запросу
   deletedAt           DateTime?
+  /// Момент, начиная с которого выданные токены действительны: всё, что подписано раньше, отвергается. Смена почты, блокировка и обезличивание гасят ранее выданные JWT, не дожидаясь их срока.
+  sessionsValidFrom   DateTime?
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
 
@@ -218,6 +229,11 @@ model OtpCode {
   userId    String
   code      String
   channel   OtpChannel
+  /// Для какого сценария выпущен код — код одного сценария не подходит другому
+  purpose   OtpPurpose @default(login)
+  /// Адрес или номер, на который код реально ушёл. Пусто у кодов, выпущенных до
+  /// появления поля: тогда адрес не проверяется, иначе живые коды сломались бы.
+  target    String?
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime   @default(now())
@@ -226,6 +242,8 @@ model OtpCode {
 
   @@index([userId])
   @@index([expiresAt])
+  /// Порядок полей — под выборку verifyOtp: код ищется по владельцу, сценарию и хешу
+  @@index([userId, purpose, code])
   @@map("otp_codes")
 }
 

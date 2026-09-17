@@ -74,13 +74,14 @@ const accountRoutes: FastifyPluginAsync = async (app) => {
       resetAt: new Date(now.getTime() + DELETE_REQUEST_RATE_LIMIT_WINDOW_MS),
     })
 
-    // Удалить старые неиспользованные OTP
+    // Удалить старые неиспользованные коды удаления. Код входа и код смены
+    // почты живут своей жизнью — их этот запрос не гасит.
     await app.prisma.otpCode.deleteMany({
-      where: { userId, usedAt: null },
+      where: { userId, usedAt: null, purpose: 'delete' },
     })
 
     // Создать новый OTP код
-    const code = await otpService.createOtp(app.prisma, userId, 'email')
+    const code = await otpService.createOtp(app.prisma, userId, 'email', 'delete', user.email)
 
     // Отправить письмо
     await otpService.sendEmail(user.email, code, 'delete')
@@ -119,8 +120,8 @@ const accountRoutes: FastifyPluginAsync = async (app) => {
       }
     }
 
-    // Проверить код OTP
-    const isValid = await otpService.verifyOtp(app.prisma, userId, code)
+    // Проверить код OTP: годится только код, выпущенный под удаление аккаунта
+    const isValid = await otpService.verifyOtp(app.prisma, userId, code, 'delete')
     if (!isValid) {
       const current = deleteAttempts.get(userId)
       deleteAttempts.set(userId, {

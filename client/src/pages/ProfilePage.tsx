@@ -3,6 +3,7 @@ import { LOYALTY_STYLE, LOYALTY_CURRENT_MARK } from '../lib/loyalty-style'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi, ordersApi, usersApi, bonusesApi, subscriptionsApi, type User, type Order, type BonusTransaction, type Subscription } from '../lib/api'
 import { formatPrice, formatBonuses } from '../lib/format'
+import { formatPhoneDisplay, handlePhoneInput } from '../lib/phone'
 import { CheckIcon, StepCurrentIcon, StepPendingIcon, ChevronDownIcon } from '../components/icons'
 import { LOYALTY_TIERS, subscriptionPrice, type BonusLevel } from '@simba/shared'
 import LoginForm from '../components/auth/LoginForm'
@@ -28,13 +29,23 @@ const STATUS_COLOR: Record<OrderStatus, string> = {
 
 const STATUS_STEPS: OrderStatus[] = ['new', 'confirmed', 'in_transit', 'delivered']
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-zA-Zа-яА-Я]{2,}$/
+
+function errorStatus(err: unknown): number | undefined {
+  return (err as { response?: { status?: number } })?.response?.status
+}
+
+function errorMessage(err: unknown): string | undefined {
+  return (err as { response?: { data?: { error?: string } } })?.response?.data?.error
+}
+
 // Шкала нагрева: холод → тепло → жар
 
 type Tab = 'orders' | 'bonuses' | 'subscriptions' | 'settings'
 
 export default function ProfilePage() {
   const navigate = useNavigate()
-  const { logout } = useAuth()
+  const { logout, updateUser } = useAuth()
   const [tab, setTab] = useState<Tab>('orders')
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<OrderStatus | 'all'>('all')
@@ -55,13 +66,23 @@ export default function ProfilePage() {
   const [editingIntervalWeeks, setEditingIntervalWeeks] = useState(2)
   const [editingNextDate, setEditingNextDate] = useState('')
   const [pendingSubscriptionId, setPendingSubscriptionId] = useState<string | null>(null)
+  const [cancelingSubscriptionId, setCancelingSubscriptionId] = useState<string | null>(null)
   const [subscriptionActionError, setSubscriptionActionError] = useState<string | null>(null)
   const [exporting, setExporting] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [deleteConfirming, setDeleteConfirming] = useState(false)
   const [dataError, setDataError] = useState<string | null>(null)
   const [deletionCodeSent, setDeletionCodeSent] = useState(false)
   const [deletionCode, setDeletionCode] = useState('')
   const [verifyingDeletion, setVerifyingDeletion] = useState(false)
+  const [emailEditing, setEmailEditing] = useState(false)
+  const [newEmail, setNewEmail] = useState('')
+  const [emailCodeSent, setEmailCodeSent] = useState(false)
+  const [emailCurrentCode, setEmailCurrentCode] = useState('')
+  const [emailCode, setEmailCode] = useState('')
+  const [emailBusy, setEmailBusy] = useState(false)
+  const [emailError, setEmailError] = useState<string | null>(null)
+  const [emailSuccess, setEmailSuccess] = useState(false)
 
   async function runSubscriptionAction(id: string, action: () => Promise<unknown>) {
     setPendingSubscriptionId(id)
@@ -106,10 +127,15 @@ export default function ProfilePage() {
     }
   }
 
+  function handleStartDeletion() {
+    setDeleteConfirming(true)
+    setDeletionCodeSent(false)
+    setDeletionCode('')
+    setDeleting(false)
+    setDataError(null)
+  }
+
   async function handleRequestDeleteCode() {
-    if (!confirm('Удалить аккаунт? Контакты, адреса, питомцы и подписки будут стёрты, заказы останутся без ваших данных. Отменить это нельзя.')) {
-      return
-    }
     setDeleting(true)
     setDataError(null)
     setDeletionCode('')
@@ -147,10 +173,133 @@ export default function ProfilePage() {
   }
 
   function handleCancelDeletion() {
+    setDeleteConfirming(false)
     setDeletionCodeSent(false)
     setDeletionCode('')
     setDeleting(false)
     setDataError(null)
+  }
+
+  function applyUser(next: User) {
+    setUser(next)
+    updateUser(next)
+    setProfileForm({
+      name: next.name ?? '',
+      phone: formatPhoneDisplay(next.phone ?? ''),
+      email: next.email ?? '',
+    })
+  }
+
+  async function handleSaveProfile() {
+    setSavingProfile(true)
+    setSaveError(null)
+    setSaveSuccess(false)
+    try {
+      const res = await usersApi.updateProfile({ name: profileForm.name, phone: profileForm.phone })
+      applyUser(res.data)
+      setSaveSuccess(true)
+    } catch (err) {
+      const status = errorStatus(err)
+      const serverMessage = errorMessage(err)
+      if (status === 409) {
+        setSaveError('Этот телефон уже привязан к другому аккаунту')
+      } else if (status === 400 && serverMessage) {
+        setSaveError(serverMessage)
+      } else {
+        setSaveError('Не удалось сохранить. Попробуйте ещё раз.')
+      }
+    } finally {
+      setSavingProfile(false)
+    }
+  }
+
+  function handleStartEmailChange() {
+    setEmailEditing(true)
+    setEmailCodeSent(false)
+    setNewEmail('')
+    setEmailCurrentCode('')
+    setEmailCode('')
+    setEmailError(null)
+    setEmailSuccess(false)
+  }
+
+  function handleCancelEmailChange() {
+    setEmailEditing(false)
+    setEmailCodeSent(false)
+    setNewEmail('')
+    setEmailCurrentCode('')
+    setEmailCode('')
+    setEmailBusy(false)
+    setEmailError(null)
+  }
+
+  async function handleRequestEmailCode() {
+    const email = newEmail.trim()
+    if (!EMAIL_RE.test(email)) {
+      setEmailError('Проверьте адрес — похоже, есть опечатка')
+      return
+    }
+    setEmailBusy(true)
+    setEmailError(null)
+    try {
+      await usersApi.requestEmailChange(email)
+      setEmailCurrentCode('')
+      setEmailCode('')
+      setEmailCodeSent(true)
+    } catch (err) {
+      const status = errorStatus(err)
+      const serverMessage = errorMessage(err)
+      if (status === 400) {
+        setEmailError(serverMessage || 'Это ваш текущий адрес')
+      } else if (status === 409) {
+        setEmailError('Этот адрес уже занят')
+      } else if (status === 429) {
+        setEmailError('Повторный запрос возможен через 60 секунд')
+      } else if (status === 502) {
+        setEmailError(serverMessage || 'Не удалось отправить письмо. Попробуйте позже.')
+      } else {
+        setEmailError('Не удалось отправить код. Попробуйте ещё раз.')
+      }
+    } finally {
+      setEmailBusy(false)
+    }
+  }
+
+  async function handleConfirmEmailChange() {
+    if (emailCurrentCode.length < 6 || emailCode.length < 6) {
+      setEmailError('Введите оба кода из писем')
+      return
+    }
+    setEmailBusy(true)
+    setEmailError(null)
+    try {
+      const res = await usersApi.confirmEmailChange(newEmail.trim(), emailCurrentCode, emailCode)
+      // Прежний токен уже мёртв — сервер погасил сессии вместе со сменой адреса
+      localStorage.setItem('token', res.data.token)
+      applyUser(res.data.user)
+      setEmailEditing(false)
+      setEmailCodeSent(false)
+      setNewEmail('')
+      setEmailCurrentCode('')
+      setEmailCode('')
+      setEmailSuccess(true)
+    } catch (err) {
+      const status = errorStatus(err)
+      const serverMessage = errorMessage(err)
+      if (status === 400) {
+        setEmailError(serverMessage || 'Неверный или просроченный код')
+      } else if (status === 409) {
+        setEmailError('Этот адрес уже занят')
+      } else if (status === 429) {
+        setEmailError('Слишком много попыток. Попробуйте через 15 минут.')
+      } else if (status === 502) {
+        setEmailError(serverMessage || 'Не удалось отправить письмо. Попробуйте позже.')
+      } else {
+        setEmailError('Не удалось изменить адрес. Попробуйте ещё раз.')
+      }
+    } finally {
+      setEmailBusy(false)
+    }
   }
 
   useEffect(() => {
@@ -159,7 +308,7 @@ export default function ProfilePage() {
         setUser(res.data)
         setProfileForm({
           name: res.data.name ?? '',
-          phone: res.data.phone ?? '',
+          phone: formatPhoneDisplay(res.data.phone ?? ''),
           email: res.data.email ?? '',
         })
       })
@@ -244,7 +393,7 @@ export default function ProfilePage() {
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold text-navy-900 truncate">{user?.name ?? '—'}</h1>
-            <p className="text-sm text-navy-400 truncate">{user?.phone ?? user?.email ?? '—'}</p>
+            <p className="text-sm text-navy-500 truncate">{user?.phone ?? user?.email ?? '—'}</p>
           </div>
           <span className={`text-xs font-bold px-3 py-1 rounded-full flex-shrink-0 ${LOYALTY_STYLE[user?.bonusLevel ?? 'newcomer']}`}>
             {currentLevelTier.label}
@@ -265,7 +414,7 @@ export default function ProfilePage() {
               className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium transition-colors duration-100 ease ${
                 tab === t.key
                   ? 'bg-primary text-white shadow-sm'
-                  : 'text-navy-400 hover:text-navy-700'
+                  : 'text-navy-500 hover:text-navy-700'
               }`}>
               <span>{t.label}</span>
             </button>
@@ -299,7 +448,7 @@ export default function ProfilePage() {
 
             {filteredOrders.length === 0 && (
               <div className="bg-white rounded-2xl p-10 text-center">
-                <p className="text-navy-400">Заказов не найдено</p>
+                <p className="text-navy-500">Заказов не найдено</p>
               </div>
             )}
 
@@ -321,7 +470,7 @@ export default function ProfilePage() {
                             {STATUS_LABEL[order.status]}
                           </span>
                         </div>
-                        <p className="text-xs text-navy-400">{dateStr} · {order.deliveryMethod}</p>
+                        <p className="text-xs text-navy-500">{dateStr} · {order.deliveryMethod}</p>
                       </div>
                       <div className="text-right flex-shrink-0">
                         <p className="font-bold text-navy-900">{formatPrice(order.total)}</p>
@@ -355,7 +504,7 @@ export default function ProfilePage() {
                                       <StepPendingIcon className="w-4 h-4" />
                                     )}
                                   </div>
-                                  <span className="text-[10px] text-navy-400 mt-1 text-center leading-tight">
+                                  <span className="text-[10px] text-navy-500 mt-1 text-center leading-tight">
                                     {STATUS_LABEL[s]}
                                   </span>
                                 </div>
@@ -381,7 +530,7 @@ export default function ProfilePage() {
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm text-navy-900 font-medium truncate">{item.productName}</p>
-                                <p className="text-xs text-navy-400">{item.variantWeight} кг · {item.quantity} шт.</p>
+                                <p className="text-xs text-navy-500">{item.variantWeight} кг · {item.quantity} шт.</p>
                               </div>
                               <span className="text-sm font-semibold text-navy-900 flex-shrink-0">
                                 {formatPrice(item.price * item.quantity)}
@@ -420,9 +569,9 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-4">
             {/* Баланс */}
             <div className="bg-white rounded-2xl p-6 text-center">
-              <p className="text-sm text-navy-400 mb-1">Ваш счёт бонусов</p>
+              <p className="text-sm text-navy-500 mb-1">Ваш счёт бонусов</p>
               <p className="text-5xl font-black text-amber-400 mb-1">{bonusPoints.toLocaleString('ru-RU')}</p>
-              <p className="text-sm text-navy-400">бонусов · 1 бонус = 1 ₽</p>
+              <p className="text-sm text-navy-500">бонусов · 1 бонус = 1 ₽</p>
             </div>
 
             {/* Уровень */}
@@ -441,7 +590,7 @@ export default function ProfilePage() {
                       style={{ transform: `scaleX(${progressToNext / 100})` }}
                     />
                   </div>
-                  <p className="text-xs text-navy-400">
+                  <p className="text-xs text-navy-500">
                     До уровня <span className="font-semibold text-navy-700">«{nextLevelTier.label}»</span>:{' '}
                     {formatBonuses(Math.max(0, nextLevelTier.minPoints - bonusPoints))}
                   </p>
@@ -472,7 +621,7 @@ export default function ProfilePage() {
 
               {loadingBonuses && (
                 <div className="flex items-center justify-center py-8">
-                  <svg className="animate-spin w-6 h-6 text-navy-400" viewBox="0 0 24 24" fill="none">
+                  <svg className="animate-spin w-6 h-6 text-navy-500" viewBox="0 0 24 24" fill="none">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                   </svg>
@@ -524,7 +673,7 @@ export default function ProfilePage() {
                             {typeLabels[tx.type] || tx.type}
                           </p>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <p className="text-xs text-navy-400">{dateStr}, {timeStr}</p>
+                            <p className="text-xs text-navy-500">{dateStr}, {timeStr}</p>
                             {tx.orderId && (
                               <Link
                                 to="#"
@@ -555,7 +704,7 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-4">
             {loadingSubscriptions && (
               <div className="bg-white rounded-2xl p-10 flex items-center justify-center">
-                <svg className="animate-spin w-6 h-6 text-navy-400" viewBox="0 0 24 24" fill="none">
+                <svg className="animate-spin w-6 h-6 text-navy-500" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                 </svg>
@@ -624,7 +773,7 @@ export default function ProfilePage() {
                               {formatPrice(subscriptionPrice(sub.productVariant.price))}
                             </p>
                           )}
-                          <p className="text-xs text-navy-400">{sub.deliveryMethod}</p>
+                          <p className="text-xs text-navy-500">{sub.deliveryMethod}</p>
                         </div>
                         <span className={`text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${
                           sub.isPaused ? 'bg-red-100 text-red-600' : 'bg-green-100 text-success'
@@ -657,7 +806,7 @@ export default function ProfilePage() {
                             type="date"
                             value={editingNextDate}
                             onChange={e => setEditingNextDate(e.target.value)}
-                            className="px-3 py-2 rounded-lg border border-line text-sm focus:outline-none focus:ring-2 focus:ring-blue-100"
+                            className="px-3 py-2 rounded-lg border border-line text-sm focus:outline-none focus:border-ink focus:ring-2 focus:ring-ink/25"
                           />
 
                           <div className="flex gap-2 mt-2">
@@ -679,6 +828,29 @@ export default function ProfilePage() {
                               onClick={() => setEditingSubscription(null)}
                               className="flex-1 bg-blue-50 text-navy-700 text-xs py-1.5 rounded-lg font-medium hover:bg-blue-100 disabled:opacity-50">
                               Отменить
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {cancelingSubscriptionId === sub.id && (
+                        <div className="mb-3 rounded-xl bg-destructive/5 p-3">
+                          <p className="text-sm text-navy-900 mb-2">Вы уверены, что хотите отменить подписку?</p>
+                          <div className="flex gap-2">
+                            <button
+                              disabled={pendingSubscriptionId === sub.id}
+                              onClick={() => {
+                                setCancelingSubscriptionId(null)
+                                runSubscriptionAction(sub.id, () => subscriptionsApi.cancel(sub.id))
+                              }}
+                              className="flex-1 bg-destructive text-white text-xs py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50">
+                              Отменить подписку
+                            </button>
+                            <button
+                              disabled={pendingSubscriptionId === sub.id}
+                              onClick={() => setCancelingSubscriptionId(null)}
+                              className="flex-1 bg-white text-navy-500 text-xs py-2 rounded-lg font-medium border border-line hover:bg-blue-50 disabled:opacity-50">
+                              Не отменять
                             </button>
                           </div>
                         </div>
@@ -719,9 +891,8 @@ export default function ProfilePage() {
                         <button
                           disabled={pendingSubscriptionId === sub.id}
                           onClick={() => {
-                            if (confirm('Вы уверены, что хотите отменить подписку?')) {
-                              runSubscriptionAction(sub.id, () => subscriptionsApi.cancel(sub.id))
-                            }
+                            setSubscriptionActionError(null)
+                            setCancelingSubscriptionId(sub.id)
                           }}
                           className="flex-1 text-xs py-2 rounded-lg border border-red-100 text-red-400 font-medium hover:bg-red-50 disabled:opacity-50">
                           {pendingSubscriptionId === sub.id ? 'Отмена…' : 'Отменить подписку'}
@@ -741,42 +912,162 @@ export default function ProfilePage() {
             <div className="bg-white rounded-2xl p-5">
               <h3 className="font-bold text-navy-900 mb-4">Личные данные</h3>
               <div className="flex flex-col gap-3">
-                {([
-                  { label: 'Имя', key: 'name' },
-                  { label: 'Телефон', key: 'phone' },
-                  { label: 'Email', key: 'email' },
-                ] as { label: string; key: keyof typeof profileForm }[]).map(field => (
-                  <div key={field.key}>
-                    <label className="text-xs text-navy-400 block mb-1">{field.label}</label>
-                    <input
-                      type="text"
-                      value={profileForm[field.key]}
-                      onChange={e => setProfileForm(prev => ({ ...prev, [field.key]: e.target.value }))}
-                      className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
-                    />
-                  </div>
-                ))}
-                {saveError && <p className="text-xs text-destructive">{saveError}</p>}
-                {saveSuccess && <p className="text-xs text-success">Данные сохранены</p>}
+                <div>
+                  <label htmlFor="profile-name" className="text-xs text-navy-500 block mb-1">Имя</label>
+                  <input
+                    id="profile-name"
+                    type="text"
+                    autoComplete="name"
+                    aria-invalid={!!saveError}
+                    aria-describedby={saveError ? 'profile-save-error' : undefined}
+                    value={profileForm.name}
+                    onChange={e => {
+                      setProfileForm(prev => ({ ...prev, name: e.target.value }))
+                      setSaveSuccess(false)
+                    }}
+                    className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-ink focus:ring-2 focus:ring-ink/25 aria-[invalid=true]:border-destructive"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="profile-phone" className="text-xs text-navy-500 block mb-1">Телефон</label>
+                  <input
+                    id="profile-phone"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    placeholder="+7 999 123-45-67"
+                    aria-invalid={!!saveError}
+                    aria-describedby={saveError ? 'profile-save-error' : undefined}
+                    value={profileForm.phone}
+                    onChange={e => {
+                      setProfileForm(prev => ({ ...prev, phone: handlePhoneInput(e.target.value) }))
+                      setSaveSuccess(false)
+                    }}
+                    className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 placeholder-navy-300 focus:outline-none focus:border-ink focus:ring-2 focus:ring-ink/25 aria-[invalid=true]:border-destructive"
+                  />
+                </div>
+                {saveError && <p id="profile-save-error" role="alert" className="text-xs text-destructive">{saveError}</p>}
+                {saveSuccess && <p role="status" className="text-xs text-success">Данные сохранены</p>}
                 <button
                   disabled={savingProfile}
-                  onClick={async () => {
-                    setSavingProfile(true)
-                    setSaveError(null)
-                    setSaveSuccess(false)
-                    try {
-                      const res = await usersApi.updateProfile(profileForm)
-                      setUser(res.data)
-                      setSaveSuccess(true)
-                    } catch {
-                      setSaveError('Не удалось сохранить. Попробуйте ещё раз.')
-                    } finally {
-                      setSavingProfile(false)
-                    }
-                  }}
+                  onClick={handleSaveProfile}
                   className="btn-primary py-2.5 mt-1 disabled:opacity-50">
                   {savingProfile ? 'Сохранение...' : 'Сохранить'}
                 </button>
+              </div>
+
+              {/* Почта — единственный фактор входа, поэтому смена подтверждается
+                  двумя кодами: с текущего адреса и с нового */}
+              <div className="mt-5 pt-5 border-t border-line">
+                <p className="text-xs text-navy-500 mb-1">Email</p>
+                {!emailEditing ? (
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm text-navy-900 truncate">{profileForm.email || '—'}</p>
+                    <button
+                      onClick={handleStartEmailChange}
+                      className="shrink-0 min-h-[44px] px-4 rounded-xl border border-line text-sm font-medium text-navy-700 hover:bg-blue-50 transition-colors">
+                      Изменить
+                    </button>
+                  </div>
+                ) : !emailCodeSent ? (
+                  <div className="space-y-3">
+                    <div>
+                      <label htmlFor="profile-new-email" className="text-xs text-navy-500 block mb-1">Новый адрес</label>
+                      <input
+                        id="profile-new-email"
+                        type="email"
+                        inputMode="email"
+                        autoComplete="email"
+                        spellCheck={false}
+                        aria-invalid={!!emailError}
+                        aria-describedby={emailError ? 'profile-email-error' : undefined}
+                        value={newEmail}
+                        onChange={e => {
+                          setNewEmail(e.target.value)
+                          if (emailError) setEmailError(null)
+                        }}
+                        placeholder="name@example.com"
+                        className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 placeholder-navy-300 focus:outline-none focus:border-ink focus:ring-2 focus:ring-ink/25 aria-[invalid=true]:border-destructive"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        disabled={emailBusy}
+                        onClick={handleRequestEmailCode}
+                        className="flex-1 btn-primary py-2.5 disabled:opacity-50">
+                        {emailBusy ? 'Отправка...' : 'Выслать код'}
+                      </button>
+                      <button
+                        disabled={emailBusy}
+                        onClick={handleCancelEmailChange}
+                        className="flex-1 bg-white text-navy-500 font-medium py-2.5 rounded-xl text-sm hover:bg-blue-50 transition-colors border border-line disabled:opacity-50">
+                        Отмена
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div>
+                      <label htmlFor="profile-email-code-current" className="text-xs text-navy-500 block mb-1">Код с текущего адреса</label>
+                      <p className="text-xs text-navy-500 mb-2">Письмо пришло на нынешний адрес аккаунта{profileForm.email ? ` — ${profileForm.email}` : ''}</p>
+                      <input
+                        id="profile-email-code-current"
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="one-time-code"
+                        maxLength={6}
+                        aria-invalid={!!emailError}
+                        aria-describedby={emailError ? 'profile-email-error' : undefined}
+                        value={emailCurrentCode}
+                        onChange={e => {
+                          setEmailCurrentCode(e.target.value.replace(/\D/g, '').slice(0, 6))
+                          if (emailError) setEmailError(null)
+                        }}
+                        placeholder="000000"
+                        className="w-full px-4 py-3 rounded-xl border border-line text-center text-xl font-bold tracking-[0.4em] text-navy-900 placeholder-navy-300 focus:outline-none focus:border-ink focus:ring-2 focus:ring-ink/25 aria-[invalid=true]:border-destructive"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="profile-email-code-new" className="text-xs text-navy-500 block mb-1">Код с нового адреса</label>
+                      <p className="text-xs text-navy-500 mb-2">Письмо пришло на {newEmail}</p>
+                      <input
+                        id="profile-email-code-new"
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="one-time-code"
+                        maxLength={6}
+                        aria-invalid={!!emailError}
+                        aria-describedby={emailError ? 'profile-email-error' : undefined}
+                        value={emailCode}
+                        onChange={e => {
+                          setEmailCode(e.target.value.replace(/\D/g, '').slice(0, 6))
+                          if (emailError) setEmailError(null)
+                        }}
+                        placeholder="000000"
+                        className="w-full px-4 py-3 rounded-xl border border-line text-center text-xl font-bold tracking-[0.4em] text-navy-900 placeholder-navy-300 focus:outline-none focus:border-ink focus:ring-2 focus:ring-ink/25 aria-[invalid=true]:border-destructive"
+                      />
+                    </div>
+                    <p className="text-xs text-navy-500 leading-relaxed">
+                      Мы отправили два письма: на нынешний адрес и на новый. Введите оба кода — так никто не сможет сменить адрес, получив доступ только к одному ящику.
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        disabled={emailBusy || emailCurrentCode.length < 6 || emailCode.length < 6}
+                        onClick={handleConfirmEmailChange}
+                        className="flex-1 btn-primary py-2.5 disabled:opacity-50">
+                        {emailBusy ? 'Проверяем...' : 'Подтвердить'}
+                      </button>
+                      <button
+                        disabled={emailBusy}
+                        onClick={handleCancelEmailChange}
+                        className="flex-1 bg-white text-navy-500 font-medium py-2.5 rounded-xl text-sm hover:bg-blue-50 transition-colors border border-line disabled:opacity-50">
+                        Отмена
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {emailError && <p id="profile-email-error" role="alert" className="text-xs text-destructive mt-2">{emailError}</p>}
+                {emailSuccess && !emailEditing && <p role="status" className="text-xs text-success mt-2">Адрес изменён</p>}
               </div>
             </div>
 
@@ -792,17 +1083,39 @@ export default function ProfilePage() {
                   className="btn-outline rounded-xl py-2.5">
                   {exporting ? 'Скачивание...' : 'Скачать мои данные (JSON)'}
                 </button>
-                {!deletionCodeSent ? (
+                {!deleteConfirming ? (
                   <button
-                    disabled={deleting}
-                    onClick={handleRequestDeleteCode}
-                    className="border-destructive/40 text-destructive font-medium py-2.5 rounded-xl text-sm hover:bg-destructive/5 transition-colors border disabled:opacity-50 btn-outline">
-                    {deleting ? 'Отправка...' : 'Удалить аккаунт'}
+                    onClick={handleStartDeletion}
+                    className="border-destructive/40 text-destructive font-medium py-2.5 rounded-xl text-sm hover:bg-destructive/5 transition-colors border btn-outline">
+                    Удалить аккаунт
                   </button>
+                ) : !deletionCodeSent ? (
+                  <div className="space-y-3">
+                    <div className="rounded-xl bg-destructive/5 p-3">
+                      <p className="text-sm font-medium text-navy-900 mb-1">Удалить аккаунт?</p>
+                      <p className="text-xs text-navy-500 leading-relaxed">
+                        Контакты, адреса, питомцы и подписки будут стёрты, заказы останутся без ваших данных. Отменить это нельзя.
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        disabled={deleting}
+                        onClick={handleRequestDeleteCode}
+                        className="flex-1 bg-destructive text-white font-medium py-2.5 rounded-xl text-sm hover:opacity-90 transition-colors disabled:opacity-50">
+                        {deleting ? 'Отправка...' : 'Удалить аккаунт'}
+                      </button>
+                      <button
+                        disabled={deleting}
+                        onClick={handleCancelDeletion}
+                        className="flex-1 bg-white text-navy-500 font-medium py-2.5 rounded-xl text-sm hover:bg-blue-50 transition-colors border border-line disabled:opacity-50">
+                        Отмена
+                      </button>
+                    </div>
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     <div>
-                      <label htmlFor="deletion-code" className="text-xs text-navy-400 block mb-1">
+                      <label htmlFor="deletion-code" className="text-xs text-navy-500 block mb-1">
                         Код из письма
                       </label>
                       <p className="text-xs text-navy-500 mb-2">
@@ -816,7 +1129,7 @@ export default function ProfilePage() {
                         value={deletionCode}
                         onChange={e => setDeletionCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                         placeholder="000000"
-                        className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-line focus:ring-2 focus:ring-blue-100"
+                        className="w-full px-4 py-2.5 rounded-xl border border-line text-sm text-navy-900 focus:outline-none focus:border-ink focus:ring-2 focus:ring-ink/25"
                       />
                     </div>
                     <div className="flex gap-2">

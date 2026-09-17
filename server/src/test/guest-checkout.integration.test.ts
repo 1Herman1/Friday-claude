@@ -213,7 +213,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     const user = await prisma.user.findFirstOrThrow({ where: { email } })
     expect(user.welcomeBonusGranted).toBe(false)
 
-    const code = await otpService.createOtp(prisma, user.id, 'email')
+    const code = await otpService.createOtp(prisma, user.id, 'email', 'login', email)
     const login = await app.inject({
       method: 'POST',
       url: '/api/auth/verify-otp',
@@ -225,7 +225,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     expect(login.json().user.bonusPoints).toBe(300)
 
     // Второй вход тем же покупателем — защёлка welcomeBonusGranted закрыта.
-    const code2 = await otpService.createOtp(prisma, user.id, 'email')
+    const code2 = await otpService.createOtp(prisma, user.id, 'email', 'login', email)
     const login2 = await app.inject({
       method: 'POST',
       url: '/api/auth/verify-otp',
@@ -282,7 +282,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
       expect(res.statusCode).toBe(201)
     }
 
-    const code = await otpService.createOtp(prisma, user.id, 'email')
+    const code = await otpService.createOtp(prisma, user.id, 'email', 'login', user.email)
     const login = await app.inject({
       method: 'POST',
       url: '/api/auth/verify-otp',
@@ -329,7 +329,7 @@ describe.skipIf(!hasTestDb)('Гостевой чекаут и email-вход (и
     // Отдельный вход, не связанный с той же гостевой сессией: guestToken не передаём.
     // Код берём через otpService — в send-otp он хранится хешем и из БД не восстановим.
     const user = await prisma.user.findFirstOrThrow({ where: { email } })
-    const code = await otpService.createOtp(prisma, user.id, 'email')
+    const code = await otpService.createOtp(prisma, user.id, 'email', 'login', email)
     const login = await app.inject({
       method: 'POST',
       url: '/api/auth/verify-otp',

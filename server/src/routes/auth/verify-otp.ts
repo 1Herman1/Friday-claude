@@ -62,7 +62,9 @@ const verifyOtp: FastifyPluginAsync = async (app) => {
       return reply.status(400).send({ error: 'Неверный или истёкший код' })
     }
 
-    const isValid = await otpService.verifyOtp(app.prisma, user.id, code)
+    // Только код входа и только выданный на этот адрес: код со смены почты
+    // или удаления аккаунта здесь не подходит.
+    const isValid = await otpService.verifyOtp(app.prisma, user.id, code, 'login', normalizedEmail)
     if (!isValid) {
       const current = otpAttempts.get(normalizedEmail)
       otpAttempts.set(normalizedEmail, {

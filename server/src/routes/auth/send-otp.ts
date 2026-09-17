@@ -46,10 +46,12 @@ const sendOtp: FastifyPluginAsync = async (app) => {
     // Найти или создать пользователя по email
     const userId = await findOrCreateCustomerByEmail(app.prisma, normalizedEmail)
 
-    // Rate limit: не чаще одного запроса в 60 секунд
+    // Rate limit: не чаще одного запроса в 60 секунд.
+    // Только коды входа: запрос кода на удаление или смену почты вход не блокирует.
     const recentOtp = await app.prisma.otpCode.findFirst({
       where: {
         userId,
+        purpose: 'login',
         createdAt: { gt: new Date(Date.now() - 60 * 1000) },
       },
       orderBy: { createdAt: 'desc' },
@@ -59,12 +61,13 @@ const sendOtp: FastifyPluginAsync = async (app) => {
       return reply.status(429).send({ error: 'Повторный запрос возможен через 60 секунд' })
     }
 
-    // Удалить старые неиспользованные OTP
+    // Удалить старые неиспользованные коды входа. Коды других сценариев не
+    // трогаем: запрос входа не должен гасить начатое удаление или смену почты.
     await app.prisma.otpCode.deleteMany({
-      where: { userId, usedAt: null },
+      where: { userId, usedAt: null, purpose: 'login' },
     })
 
-    const code = await otpService.createOtp(app.prisma, userId, 'email')
+    const code = await otpService.createOtp(app.prisma, userId, 'email', 'login', normalizedEmail)
 
     await otpService.sendEmail(normalizedEmail, code)
 

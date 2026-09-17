@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import type { FastifyInstance } from 'fastify'
+import { CONSENT_VERSION } from '@simba/shared'
 import { hasTestDb, getTestPrisma, resetDb, closeTestPrisma } from './setup'
 import { createUser, authHeader, createProductWithVariant, createCart, seedDeliveryOptions } from './factories'
 import { otpService } from '../services/otp.service'
 
 describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт данных', () => {
   let app: FastifyInstance
-  const prisma = getTestPrisma()
 
   beforeAll(async () => {
     process.env.NODE_ENV = 'test'
@@ -21,11 +21,15 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   beforeEach(async () => {
+
+    const prisma = getTestPrisma()
     await resetDb()
     await seedDeliveryOptions()
   })
 
   it('DELETE /me удаляет все ПД и оставляет заказы/бонусы', async () => {
+
+    const prisma = getTestPrisma()
     // Создать полный профиль пользователя
     const user = await createUser({ name: 'Иван Петров' })
     const headers = authHeader(app, user.id)
@@ -174,7 +178,7 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
     })
     expect(requestRes.statusCode).toBe(200)
 
-    const code = await otpService.createOtp(prisma, user.id, 'email')
+    const code = await otpService.createOtp(prisma, user.id, 'email', 'delete', user.email)
 
     // Удалить аккаунт с кодом
     const deleteRes = await app.inject({
@@ -251,6 +255,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('повторный DELETE /me тем же токеном → 401', async () => {
+
+    const prisma = getTestPrisma()
     const user = await createUser()
     const headers = authHeader(app, user.id)
 
@@ -263,7 +269,7 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
     expect(requestRes.statusCode).toBe(200)
 
     // Первый DELETE с кодом
-    const code = await otpService.createOtp(prisma, user.id, 'email')
+    const code = await otpService.createOtp(prisma, user.id, 'email', 'delete', user.email)
     const res1 = await app.inject({
       method: 'DELETE',
       url: '/api/auth/me',
@@ -282,7 +288,39 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
     expect(res2.statusCode).toBe(401)
   })
 
+  it('обезличивание гасит выданные токены: прежний токен → 401', async () => {
+
+    const prisma = getTestPrisma()
+    // Иначе неделю после удаления аккаунта по его токену продолжают ходить
+    const user = await createUser()
+    const headers = authHeader(app, user.id, 'customer', { issuedSecondsAgo: 60 })
+
+    const requestRes = await app.inject({
+      method: 'POST',
+      url: '/api/auth/me/delete-request',
+      headers,
+    })
+    expect(requestRes.statusCode).toBe(200)
+
+    const code = await otpService.createOtp(prisma, user.id, 'email', 'delete', user.email)
+    const deleted = await app.inject({
+      method: 'DELETE',
+      url: '/api/auth/me',
+      headers,
+      payload: { code },
+    })
+    expect(deleted.statusCode).toBe(200)
+
+    const inDb = await prisma.user.findUniqueOrThrow({ where: { id: user.id } })
+    expect(inDb.sessionsValidFrom).not.toBeNull()
+
+    const me = await app.inject({ method: 'GET', url: '/api/auth/me', headers })
+    expect(me.statusCode).toBe(401)
+  })
+
   it('гость DELETE /me → 403', async () => {
+
+    const prisma = getTestPrisma()
     const guestToken = app.jwt.sign({ userId: 'guest-123', type: 'guest' })
     const headers = { authorization: `Bearer ${guestToken}` }
 
@@ -298,6 +336,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('гость POST /me/delete-request → 403', async () => {
+
+    const prisma = getTestPrisma()
     const guestToken = app.jwt.sign({ userId: 'guest-123', type: 'guest' })
     const headers = { authorization: `Bearer ${guestToken}` }
 
@@ -312,6 +352,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('сотрудник DELETE /me → 403', async () => {
+
+    const prisma = getTestPrisma()
     const user = await prisma.user.create({
       data: {
         name: 'Админ',
@@ -333,6 +375,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('сотрудник POST /me/delete-request → 403', async () => {
+
+    const prisma = getTestPrisma()
     const user = await prisma.user.create({
       data: {
         name: 'Админ',
@@ -353,6 +397,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('GET /me/export возвращает JSON с attachment', async () => {
+
+    const prisma = getTestPrisma()
     const user = await createUser({ name: 'Экспортный' })
     const { product, variant } = await createProductWithVariant()
 
@@ -415,6 +461,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('гость GET /me/export → 403', async () => {
+
+    const prisma = getTestPrisma()
     const guestToken = app.jwt.sign({ userId: 'guest-456', type: 'guest' })
     const headers = { authorization: `Bearer ${guestToken}` }
 
@@ -429,6 +477,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('admin POST /:id/anonymize работает', async () => {
+
+    const prisma = getTestPrisma()
     const user = await createUser({ name: 'Жертва' })
     const admin = await prisma.user.create({
       data: {
@@ -461,6 +511,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('admin не может обезличить себя', async () => {
+
+    const prisma = getTestPrisma()
     const admin = await prisma.user.create({
       data: {
         name: 'Админ',
@@ -481,6 +533,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('обезличенный пользователь не в type=guests/registered', async () => {
+
+    const prisma = getTestPrisma()
     const user = await createUser({ name: 'Удаляем' })
     const admin = await prisma.user.create({
       data: {
@@ -551,6 +605,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('DELETE /me без кода → 400', async () => {
+
+    const prisma = getTestPrisma()
     const user = await createUser()
     const headers = authHeader(app, user.id)
 
@@ -565,6 +621,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('DELETE /me с неверным кодом → 400 и аккаунт не удален', async () => {
+
+    const prisma = getTestPrisma()
     const user = await createUser()
     const headers = authHeader(app, user.id)
 
@@ -592,6 +650,8 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
   })
 
   it('POST /me/delete-request повторный в течение 60с → 429', async () => {
+
+    const prisma = getTestPrisma()
     const user = await createUser()
     const headers = authHeader(app, user.id)
 
@@ -611,7 +671,57 @@ describe.skipIf(!hasTestDb)('Удаление аккаунта и экспорт
     expect(res2.json().error).toContain('Повторный запрос возможен через 60 секунд')
   })
 
+  it('код удаления не пускает в аккаунт: POST /api/auth/verify-otp → 400', async () => {
+
+    const prisma = getTestPrisma()
+    const user = await createUser()
+    const headers = authHeader(app, user.id)
+
+    const requested = await app.inject({
+      method: 'POST',
+      url: '/api/auth/me/delete-request',
+      headers,
+    })
+    expect(requested.statusCode).toBe(200)
+
+    const code = await otpService.createOtp(prisma, user.id, 'email', 'delete', user.email)
+
+    const login = await app.inject({
+      method: 'POST',
+      url: '/api/auth/verify-otp',
+      payload: { email: user.email, code, consentVersion: CONSENT_VERSION },
+    })
+
+    expect(login.statusCode).toBe(400)
+    expect(login.json()).toEqual({ error: 'Неверный или истёкший код' })
+  })
+
+  it('код входа не удаляет аккаунт: DELETE /me → 400', async () => {
+
+    const prisma = getTestPrisma()
+    const user = await createUser()
+    const headers = authHeader(app, user.id)
+
+    const code = await otpService.createOtp(prisma, user.id, 'email', 'login', user.email)
+
+    const res = await app.inject({
+      method: 'DELETE',
+      url: '/api/auth/me',
+      headers,
+      payload: { code },
+    })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.json().error).toContain('Неверный или просроченный код')
+
+    const fresh = await prisma.user.findUnique({ where: { id: user.id } })
+    expect(fresh?.deletedAt).toBeNull()
+    expect(fresh?.isActive).toBe(true)
+  })
+
   it('DELETE /me с 5+ неверными попытками → 429 на 15 минут', async () => {
+
+    const prisma = getTestPrisma()
     const user = await createUser()
     const headers = authHeader(app, user.id)
 

@@ -76,10 +76,18 @@ jobs:
             (cd server && npx prisma generate)
 
             echo "==> Backing up database before any migration"
-            BACKUP_FILE="/tmp/simba_backup_$(date +%Y%m%d_%H%M%S).dump"
-            docker exec deploy-postgres-1 pg_dump -U simba -d simba -F c -f "$BACKUP_FILE"
-            docker exec deploy-postgres-1 test -s "$BACKUP_FILE"
+            # Дамп уезжает на хост потоком: файл внутри контейнера исчезает вместе
+            # с контейнером, а бэкап нужен именно на случай, когда контейнер пересоздают.
+            mkdir -p /var/backups/simba
+            BACKUP_FILE="/var/backups/simba/simba_backup_$(date +%Y%m%d_%H%M%S).dump"
+            docker exec deploy-postgres-1 pg_dump -U simba -d simba -F c > "$BACKUP_FILE"
+            test -s "$BACKUP_FILE"
+            # Держим последние 10 дампов, остальное чистим — диск не резиновый.
+            ls -1t /var/backups/simba/simba_backup_*.dump | tail -n +11 | xargs -r rm -f
             echo "Backup OK: $BACKUP_FILE"
+
+            echo "==> Applying migrations (right after the backup: the built code must never meet the old schema)"
+            (cd server && npx prisma migrate deploy)
 
             echo "==> Building server, client, admin"
             npm run build --workspace=server
@@ -95,9 +103,6 @@ jobs:
               VITE_YANDEX_MAPS_KEY='${{ secrets.YANDEX_MAPS_KEY }}' \
               npm run build --workspace=client
             VITE_API_URL=http://147.45.157.11 npm run build --workspace=admin
-
-            echo "==> Applying migrations (old code keeps running on the new schema until reload: only additive migrations are safe here)"
-            (cd server && npx prisma migrate deploy)
 
             echo "==> Backfilling data the code expects (idempotent, admin edits win)"
             (cd server && npx tsx src/scripts/backfill-quiz-tags.ts --apply)

@@ -100,6 +100,8 @@ export async function anonymizeUser(
         isActive: false,
         lastSeenAt: null,
         deletedAt: now,
+        // Живые токены обезличенного аккаунта гаснут сразу, а не через неделю
+        sessionsValidFrom: now,
       },
     })
 

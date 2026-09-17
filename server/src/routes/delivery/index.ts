@@ -5,8 +5,9 @@ import { checkRateLimit } from '../../lib/rate-limit.js'
 import { listDeliveryOptions } from '../../services/delivery/delivery-options.js'
 import { pickupPointSchema } from '../../services/delivery/pickup-point.schema.js'
 
-async function adminOnly(request: FastifyRequest, reply: FastifyReply) {
-  await request.jwtVerify()
+/** Роль проверяем сами, живость токена — плагином `app.authenticate`:
+    блокировка сотрудника и гашение сессий должны действовать и здесь. */
+async function requireOrdersRole(request: FastifyRequest, reply: FastifyReply) {
   const { role } = request.user
   if (role !== 'super_admin' && role !== 'orders_manager') {
     return reply.status(403).send({ error: 'Недостаточно прав' })
@@ -124,7 +125,7 @@ export default async function deliveryRoutes(app: FastifyInstance) {
   // Операция бэк-офиса: покупатель заявку не создаёт, её оформляет магазин.
   // Раньше хватало любого токена (включая гостевой), а заказ по orderId не
   // сверялся с владельцем — чужой заказ можно было отгрузить на свой адрес.
-  app.post('/create', { preHandler: adminOnly }, async (req, reply) => {
+  app.post('/create', { preHandler: [app.authenticate, requireOrdersRole] }, async (req, reply) => {
     const parsed = createSchema.safeParse(req.body)
     if (!parsed.success) {
       return reply.status(400).send({ error: 'Проверьте данные доставки' })

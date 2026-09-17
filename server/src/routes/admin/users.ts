@@ -308,7 +308,9 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
       try {
         const user = await app.prisma.user.update({
           where: { id },
-          data: { isActive },
+          // Блокировка гасит и уже выданные токены: иначе заблокированный
+          // ходит по сайту до истечения недельного срока своего JWT
+          data: isActive ? { isActive } : { isActive, sessionsValidFrom: new Date() },
           select: { id: true, isActive: true },
         })
         return reply.send(user)
