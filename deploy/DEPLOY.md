@@ -66,9 +66,50 @@ export POSTGRES_PASSWORD='ПАРОЛЬ_БД'
 export MINIO_PASSWORD='ПАРОЛЬ_MINIO'
 
 docker compose -f deploy/docker-compose.prod.yml up -d
-docker ps   # имя контейнера БД смотреть здесь: на текущем сервере это deploy-postgres-1
-            # (префикс зависит от того, из какой папки поднимался docker compose)
+docker ps   # имена контейнеров смотреть здесь: на текущем сервере это
+            # deploy-postgres-1 и deploy-minio-1 (префикс зависит от того,
+            # из какой папки поднимался docker compose)
 ```
+
+### Пароль хранилища живёт в двух местах и умеет расходиться
+
+`MINIO_PASSWORD` выше уходит контейнеру как `MINIO_ROOT_PASSWORD` — **и нигде
+не сохраняется**: ни в файле, ни в GitHub. Сервер берёт тот же пароль из
+`server/.env` (`MINIO_SECRET_KEY`). Поменяли одну сторону, забыли вторую —
+и загрузка картинок отваливается **молча**: сайт работает, а в логе
+`pm2 logs simba-server` появляется
+
+```
+The request signature we calculated does not match
+```
+
+Слово «signature» здесь и значит «не тот пароль». Ломается при этом не только
+перенос фото из МоегоСклада: через то же хранилище идут логотипы брендов,
+баннеры, обложки блога и фотографии в отзывах — в админке просто перестают
+сохраняться картинки.
+
+Сверка, не раскрывая пароль ни в логах, ни в чате:
+```bash
+CP=$(docker inspect -f '{{range .Config.Env}}{{println .}}{{end}}' deploy-minio-1 \
+     | sed -n 's/^MINIO_ROOT_PASSWORD=//p')
+EP=$(sed -n 's/^MINIO_SECRET_KEY=//p' server/.env | tr -d '"')
+[ "$CP" = "$EP" ] && echo SAME || echo DIFF
+```
+
+Разошлись — подгоняем `.env` под контейнер (хранилище и файлы в нём не трогаем):
+```bash
+cp server/.env server/.env.bak-$(date +%F)     # откат в одну команду
+TMP=$(mktemp); umask 077
+grep -v '^MINIO_SECRET_KEY=' server/.env > "$TMP"
+printf 'MINIO_SECRET_KEY="%s"\n' "$CP" >> "$TMP"
+cat "$TMP" > server/.env && rm -f "$TMP"       # cat, а не mv: сохраняем права файла
+pm2 reload simba-server --update-env           # .env читает Node при старте процесса
+```
+
+Чтобы это не повторялось, тот же пароль заведён в GitHub Secrets как
+`MINIO_SECRET_KEY` и переносится в `server/.env` при каждой выкатке. Пока
+секрет в GitHub пуст, выкатка печатает «empty in secrets, left as is» и
+рабочее значение на сервере не трогает.
 
 ## 5. Установить зависимости и собрать
 ```bash

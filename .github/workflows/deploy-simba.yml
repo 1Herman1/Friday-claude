@@ -27,6 +27,7 @@ jobs:
           SVC_OZON_CLIENT_ID: ${{ secrets.OZON_CLIENT_ID }}
           SVC_OZON_API_KEY: ${{ secrets.OZON_API_KEY }}
           SVC_MOYSKLAD_TOKEN: ${{ secrets.MOYSKLAD_TOKEN }}
+          SVC_MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
         with:
           host: ${{ secrets.SIMBA_DEPLOY_HOST }}
           username: ${{ secrets.SIMBA_DEPLOY_USER }}
@@ -35,7 +36,7 @@ jobs:
           # Ключи служб живут в секретах GitHub и переносятся в server/.env на
           # сервере этим же шагом (см. "Syncing service keys" ниже). Значения в
           # лог не попадают — только «задан/пусто».
-          envs: SVC_CDEK_CLIENT_ID,SVC_CDEK_CLIENT_SECRET,SVC_YANDEX_DELIVERY_TOKEN,SVC_YANDEX_PVZ_SOURCE_STATION,SVC_DADATA_TOKEN,SVC_OZON_CLIENT_ID,SVC_OZON_API_KEY,SVC_MOYSKLAD_TOKEN
+          envs: SVC_CDEK_CLIENT_ID,SVC_CDEK_CLIENT_SECRET,SVC_YANDEX_DELIVERY_TOKEN,SVC_YANDEX_PVZ_SOURCE_STATION,SVC_DADATA_TOKEN,SVC_OZON_CLIENT_ID,SVC_OZON_API_KEY,SVC_MOYSKLAD_TOKEN,SVC_MINIO_SECRET_KEY
           script: |
             set -euo pipefail
             cd /var/www/simba-src
@@ -63,6 +64,13 @@ jobs:
             upsert_env OZON_CLIENT_ID "$SVC_OZON_CLIENT_ID"
             upsert_env OZON_API_KEY "$SVC_OZON_API_KEY"
             upsert_env MOYSKLAD_TOKEN "$SVC_MOYSKLAD_TOKEN"
+            # Пароль хранилища картинок. Он же MINIO_ROOT_PASSWORD у контейнера
+            # (deploy/docker-compose.prod.yml): контейнер получает его переменной
+            # в момент запуска и нигде не сохраняет, поэтому значения расходятся
+            # молча — все загрузки начинают падать с «The request signature we
+            # calculated does not match». Пока секрет в GitHub пуст, upsert_env
+            # ничего не трогает: рабочее значение на сервере в безопасности.
+            upsert_env MINIO_SECRET_KEY "$SVC_MINIO_SECRET_KEY"
 
             echo "==> Fetching deploy/simba"
             git fetch origin deploy/simba
