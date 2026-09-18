@@ -22,18 +22,24 @@ export const MARKETPLACES = [
     rating: '4,9',
     stats: '13 000+ заказов · 3 000+ отзывов',
     url: 'https://market.yandex.ru/cc/82doRs',
+    showLink: true,
   },
   {
     name: 'Ozon',
     rating: '4,9',
     stats: '6 200+ заказов · 1 200+ отзывов',
     url: 'https://ozon.ru/s/simba-2856486',
+    showLink: true,
   },
   {
     name: 'Авито',
     rating: '4,9',
     stats: '5 000+ заказов · 1 000+ отзывов',
     url: 'https://www.avito.ru/',
+    showLink: false,
+    /** URL ведёт на корень avito.ru, а не на профиль магазина —
+        ссылку не показываем, но карточка должна выглядеть намеренным воздухом,
+        не обрезкой. */
   },
 ] as const
 

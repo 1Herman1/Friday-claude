@@ -48,12 +48,19 @@ const syncRoutes: FastifyPluginAsync = async (app) => {
 
   app.get('/moysklad', guard, async () => {
     const [last, lastSuccess, history] = await Promise.all([
-      app.prisma.syncRun.findFirst({ orderBy: { startedAt: 'desc' } }),
       app.prisma.syncRun.findFirst({
-        where: { status: 'success', dryRun: false },
+        where: { source: 'moysklad' },
         orderBy: { startedAt: 'desc' },
       }),
-      app.prisma.syncRun.findMany({ orderBy: { startedAt: 'desc' }, take: 20 }),
+      app.prisma.syncRun.findFirst({
+        where: { status: 'success', dryRun: false, source: 'moysklad' },
+        orderBy: { startedAt: 'desc' },
+      }),
+      app.prisma.syncRun.findMany({
+        where: { source: 'moysklad' },
+        orderBy: { startedAt: 'desc' },
+        take: 20,
+      }),
     ])
 
     return { last, lastSuccess, history }
@@ -64,6 +71,7 @@ const syncRoutes: FastifyPluginAsync = async (app) => {
     const run = await app.prisma.syncRun.findUnique({ where: { id } })
 
     if (!run) return reply.status(404).send({ error: 'Прогон не найден' })
+    if (run.source !== 'moysklad') return reply.status(404).send({ error: 'Прогон не найден' })
     return run
   })
 }

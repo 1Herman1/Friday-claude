@@ -110,7 +110,7 @@ export default function TrustSection() {
         </div>
 
         {/* Три мини-карточки площадок */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           {MARKETPLACES.map((m) => (
             <MarketplaceCard
               key={m.name}
@@ -118,7 +118,7 @@ export default function TrustSection() {
               rating={m.rating}
               stats={m.stats}
               url={m.url}
-              showLink={m.name === 'Яндекс Маркет' || m.name === 'Ozon'}
+              showLink={m.showLink}
             />
           ))}
         </div>

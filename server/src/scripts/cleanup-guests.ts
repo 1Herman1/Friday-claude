@@ -1,60 +1,115 @@
 import { PrismaClient } from '@prisma/client'
-import { staleGuestWhere } from '../lib/user-type'
-
-// Чистка гостевых аккаунтов без взаимодействий старше N дней.
-// По умолчанию только показывает список. Удаляет с флагом --apply.
-// Не встроена в деплой автоматически — запускать вручную через run-command.yml
+import { z } from 'zod'
+import { guestCleanupDaysSchema, runGuestCleanupTracked } from '../services/guest-cleanup.service'
 
 const prisma = new PrismaClient()
-const apply = process.argv.includes('--apply')
-const daysStr = process.argv.find(arg => arg.startsWith('--days='))?.split('=')[1]
-const days = daysStr ? parseInt(daysStr) : 30
 
-async function main() {
-  const found = await prisma.user.findMany({
-    where: staleGuestWhere(days),
-    select: {
-      id: true,
-      createdAt: true,
-    },
-  })
-
-  if (found.length === 0) {
-    console.log(`Гостевых аккаунтов старше ${days} дней без взаимодействий не найдено.`)
-    return
+class InvalidDaysError extends Error {
+  constructor(public input: string) {
+    super(`Недопустимое значение для --days: ${input}. Ожидается целое число от 7 до 365.`)
   }
-
-  console.log(`Найдено гостевых аккаунтов для удаления: ${found.length}`)
-  for (const u of found.slice(0, 10)) {
-    console.log(`  • ${u.id}  [создан: ${u.createdAt.toISOString()}]`)
-  }
-  if (found.length > 10) {
-    console.log(`  ... и ещё ${found.length - 10}`)
-  }
-
-  if (!apply) {
-    console.log('\nЭто предварительный просмотр. Ничего не изменено.')
-    console.log('Для удаления запустите ту же команду с флагом --apply')
-    return
-  }
-
-  // Delete in batches of 500
-  const batchSize = 500
-  let deleted = 0
-  for (let i = 0; i < found.length; i += batchSize) {
-    const batch = found.slice(i, i + batchSize).map(u => u.id)
-    const result = await prisma.user.deleteMany({
-      where: { id: { in: batch } },
-    })
-    deleted += result.count
-  }
-
-  console.log(`\nУдалено: ${deleted}`)
 }
 
-main()
-  .catch(e => {
-    console.error('Ошибка:', e instanceof Error ? e.message : e)
-    process.exitCode = 1
-  })
-  .finally(() => prisma.$disconnect())
+export function parseDaysArg(input: string): number {
+  // Number() безопаснее parseInt: Number('30abc') даёт NaN вместо 30
+  const num = Number(input)
+  if (!Number.isInteger(num)) {
+    throw new InvalidDaysError(input)
+  }
+  try {
+    return guestCleanupDaysSchema.parse(num)
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      throw new InvalidDaysError(input)
+    }
+    throw error
+  }
+}
+
+async function main() {
+  const now = new Date().toISOString()
+  const apply = process.argv.includes('--apply')
+  const daysStr = process.argv.find(arg => arg.startsWith('--days='))?.split('=')[1]
+
+  let days: number
+  try {
+    days = daysStr ? parseDaysArg(daysStr) : 30
+  } catch (error) {
+    if (error instanceof InvalidDaysError) {
+      console.error(`${now} ${error.message}`)
+      process.exit(2)
+    }
+    throw error
+  }
+
+  try {
+    const dryRun = !apply
+    console.log(`${now} Чистка гостевых сессий старше ${days} дней${dryRun ? ' (предпросмотр)' : ''}`)
+
+    // SYNC_TRIGGER=cron ставит crontab (deploy/DEPLOY.md): иначе ночной прогон
+    // покажется в админке как запущенный вручную.
+    const trigger = process.env.SYNC_TRIGGER === 'cron' ? 'cron' : 'manual'
+    const report = await runGuestCleanupTracked(prisma, days, dryRun, undefined, trigger)
+
+    if (report.candidates === 0) {
+      console.log(`${now} Кандидатов не найдено.`)
+      process.exit(0)
+    }
+
+    console.log(`${now} Найдено кандидатов: ${report.candidates}`)
+    console.log(`${now} Обработано: ${report.taken}${report.hasMore ? ' (взят максимум за прогон, остальные — следующей ночью)' : ''}`)
+
+    if (report.sample.length > 0) {
+      console.log(`${now} Примеры (первые ${report.sample.length}):`)
+      for (const item of report.sample) {
+        console.log(`${now}   • ${item.id} [последняя активность: ${item.lastActivity}]`)
+      }
+    }
+
+    if (!apply) {
+      console.log(`${now} Это предварительный просмотр. Ничего не изменено.`)
+      console.log(`${now} Для удаления запустите команду с флагом --apply`)
+      process.exit(0)
+    }
+
+    console.log(`${now} Удалено: ${report.deleted}`)
+    if (report.consentsCleared > 0) {
+      console.log(`${now} Обезличено согласий: ${report.consentsCleared}`)
+    }
+
+    if (report.skippedChunks > 0) {
+      console.log(`${now} Пропущено батчей: ${report.skippedChunks} (заказы прошли во время обработки)`)
+    }
+
+    if (report.hasMore) {
+      console.log(`${now} Есть ещё кандидаты (следующий прогон поймёт остальных)`)
+    }
+
+    if (report.failedChunks > 0 || report.errors.length > 0) {
+      console.error(`${now} Чанков с ошибкой: ${report.failedChunks}`)
+      for (const err of report.errors) {
+        console.error(`${now}   • ${err.id}: ${err.error}`)
+      }
+      // Ненулевой код: cron судит о прогоне по нему, а не по содержимому лога.
+      process.exit(4)
+    }
+
+    process.exit(0)
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error)
+    console.error(`${now} Ошибка: ${msg}`)
+    if (error instanceof Error && error.stack) {
+      console.error(`${now} ${error.stack}`)
+    }
+    process.exit(1)
+  } finally {
+    await prisma.$disconnect()
+  }
+}
+
+// Запуск только как скрипт: импорт ради parseDaysArg не должен поднимать Prisma,
+// занимать слот прогона и звать process.exit (это убивает воркер тестов).
+// Проект собирается в CommonJS, поэтому сверяем require.main, а не import.meta.
+if (require.main === module) {
+  main()
+}

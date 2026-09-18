@@ -533,5 +533,150 @@ describe.skipIf(!hasTestDb)('Admin users (интеграционные)', () => 
       })
       expect(remaining).toBe(0)
     })
+
+    it.each(['3', 'abc', '400', '30.5'])(
+      'GET /guests/stale?days=%s → 400, а не 500',
+      async (days) => {
+        const admin = await createUser({ name: 'Admin' })
+
+        const res = await app.inject({
+          method: 'GET',
+          url: `/api/admin/users/guests/stale?days=${days}`,
+          headers: authHeader(app, admin.id, 'super_admin'),
+        })
+
+        expect(res.statusCode).toBe(400)
+      }
+    )
+
+    it.each(['3', 'abc', '400'])(
+      'DELETE /guests/stale?days=%s → 400, а не 500',
+      async (days) => {
+        const admin = await createUser({ name: 'Admin' })
+
+        const res = await app.inject({
+          method: 'DELETE',
+          url: `/api/admin/users/guests/stale?days=${days}`,
+          headers: authHeader(app, admin.id, 'super_admin'),
+        })
+
+        expect(res.statusCode).toBe(400)
+      }
+    )
+
+    it('без параметра days обе ручки считают по 30 дням', async () => {
+      const admin = await createUser({ name: 'Admin' })
+
+      const getRes = await app.inject({
+        method: 'GET',
+        url: '/api/admin/users/guests/stale',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+      expect(getRes.statusCode).toBe(200)
+      expect(getRes.json().days).toBe(30)
+
+      const delRes = await app.inject({
+        method: 'DELETE',
+        url: '/api/admin/users/guests/stale',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+      expect(delRes.statusCode).toBe(200)
+      expect(delRes.json().days).toBe(30)
+    })
+
+    it('роль не super_admin получает 403 на обеих ручках', async () => {
+      const manager = await createUser({ name: 'Manager' })
+
+      const getRes = await app.inject({
+        method: 'GET',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, manager.id, 'orders_manager'),
+      })
+      expect(getRes.statusCode).toBe(403)
+
+      const delRes = await app.inject({
+        method: 'DELETE',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, manager.id, 'orders_manager'),
+      })
+      expect(delRes.statusCode).toBe(403)
+    })
+
+    it('GET /guests/stale отдаёт lastCleanup: до чистки null, после — сводку прогона', async () => {
+      const prisma = getTestPrisma()
+      const admin = await createUser({ name: 'Admin' })
+
+      await prisma.user.create({
+        data: { name: 'Старый гость', createdAt: new Date(Date.now() - 40 * 86400000) },
+      })
+
+      const before = await app.inject({
+        method: 'GET',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+      expect(before.statusCode).toBe(200)
+      expect(before.json().lastCleanup).toBeNull()
+
+      const del = await app.inject({
+        method: 'DELETE',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+      expect(del.statusCode).toBe(200)
+      expect(del.json().deleted).toBe(1)
+
+      const after = await app.inject({
+        method: 'GET',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+      expect(after.statusCode).toBe(200)
+      const lastCleanup = after.json().lastCleanup
+      expect(lastCleanup).not.toBeNull()
+      expect(lastCleanup.trigger).toBe('admin')
+      expect(lastCleanup.status).toBe('success')
+      expect(lastCleanup.finishedAt).not.toBeNull()
+      expect(lastCleanup.deleted).toBe(1)
+      expect(lastCleanup.skippedChunks).toBe(0)
+    })
+
+    it('DELETE /guests/stale отвечает 409, если прогон чистки уже идёт', async () => {
+      const prisma = getTestPrisma()
+      const admin = await createUser({ name: 'Admin' })
+
+      await prisma.syncRun.create({
+        data: { source: 'guest_cleanup', trigger: 'cron', status: 'running', startedAt: new Date() },
+      })
+
+      const res = await app.inject({
+        method: 'DELETE',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+
+      expect(res.statusCode).toBe(409)
+    })
+
+    it('идущая синхронизация МойСклада не мешает ручной чистке гостей', async () => {
+      const prisma = getTestPrisma()
+      const admin = await createUser({ name: 'Admin' })
+
+      await prisma.syncRun.create({
+        data: { source: 'moysklad', trigger: 'cron', status: 'running', startedAt: new Date() },
+      })
+      await prisma.user.create({
+        data: { name: 'Старый гость', createdAt: new Date(Date.now() - 40 * 86400000) },
+      })
+
+      const res = await app.inject({
+        method: 'DELETE',
+        url: '/api/admin/users/guests/stale?days=30',
+        headers: authHeader(app, admin.id, 'super_admin'),
+      })
+
+      expect(res.statusCode).toBe(200)
+      expect(res.json().deleted).toBe(1)
+    })
   })
 })

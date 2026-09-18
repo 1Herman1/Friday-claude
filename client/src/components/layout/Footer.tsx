@@ -179,7 +179,7 @@ export default function Footer() {
                 rating={marketplace.rating}
                 stats={marketplace.stats}
                 url={marketplace.url}
-                showLink={marketplace.name === 'Яндекс Маркет' || marketplace.name === 'Ozon'}
+                showLink={marketplace.showLink}
               />
             ))}
           </div>

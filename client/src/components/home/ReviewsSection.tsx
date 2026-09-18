@@ -11,18 +11,17 @@ export default function ReviewsSection() {
           Мы не публикуем отзывы у себя на сайте вручную — их невозможно проверить. Читайте нас там, где отзывы оставляют реальные покупатели после реальных заказов.
         </p>
 
-        {/* Три карточки площадок — первая выделена рамкой primary */}
-        <div className="mt-8 grid sm:grid-cols-3 gap-4">
-          {MARKETPLACES.map((m, i) => (
-            <div key={m.name} className={i === 0 ? 'rounded-card ring-2 ring-ink' : ''}>
-              <MarketplaceCard
-                name={m.name}
-                rating={m.rating}
-                stats={m.stats}
-                url={m.url}
-                showLink={m.name === 'Яндекс Маркет' || m.name === 'Ozon'}
-              />
-            </div>
+        {/* Три карточки площадок */}
+        <div className="mt-8 grid md:grid-cols-3 gap-4">
+          {MARKETPLACES.map((m) => (
+            <MarketplaceCard
+              key={m.name}
+              name={m.name}
+              rating={m.rating}
+              stats={m.stats}
+              url={m.url}
+              showLink={m.showLink}
+            />
           ))}
         </div>
 

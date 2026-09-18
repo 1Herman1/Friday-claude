@@ -1,10 +1,19 @@
 import type { PrismaClient } from '@prisma/client'
 import type { SyncReport } from './plan'
+import {
+  startRun as startRunGeneric,
+  failRun as failRunGeneric,
+  finishRun as finishRunGeneric,
+  RunAlreadyRunningError as RunAlreadyRunningErrorGeneric,
+  type RunTrigger,
+} from '../run-history'
 
-export type SyncTrigger = 'cron' | 'admin' | 'manual'
+export type SyncTrigger = RunTrigger
 
-const STALE_MINUTES = Number(process.env.SYNC_STALE_MINUTES) || 15
-
+/**
+ * Для обратной совместимости: используется в run.ts, sync.ts и sync-moysklad.ts.
+ * Новый генерический класс живёт в run-history.ts, но имя сохраняется дословно.
+ */
 export class SyncAlreadyRunningError extends Error {
   constructor(public runId: string) {
     super('Синхронизация уже выполняется')
@@ -12,42 +21,22 @@ export class SyncAlreadyRunningError extends Error {
 }
 
 /**
- * Занимает «слот» прогона. Запись со статусом running — это и есть лок:
- * второй запуск (кнопка в админке или cron) упрётся в неё и не стартует.
- * Зависший прогон старше STALE_MINUTES помечается failed и не мешает.
+ * Тонкий адаптер: занимает слот для МойСклада через генерический startRun.
+ * Сигнатура и имя ошибки остаются прежними для обратной совместимости.
  */
 export async function startRun(
   prisma: PrismaClient,
   trigger: SyncTrigger,
   dryRun: boolean
 ): Promise<string> {
-  const running = await prisma.syncRun.findFirst({
-    where: { status: 'running' },
-    orderBy: { startedAt: 'desc' },
-  })
-
-  if (running) {
-    const ageMinutes = (Date.now() - running.startedAt.getTime()) / 60000
-    if (ageMinutes < STALE_MINUTES) {
-      throw new SyncAlreadyRunningError(running.id)
+  try {
+    return await startRunGeneric(prisma, 'moysklad', trigger, dryRun)
+  } catch (err) {
+    if (err instanceof RunAlreadyRunningErrorGeneric) {
+      throw new SyncAlreadyRunningError(err.runId)
     }
-
-    await prisma.syncRun.update({
-      where: { id: running.id },
-      data: {
-        status: 'failed',
-        finishedAt: new Date(),
-        error: 'Прогон не завершился — вероятно, процесс был прерван',
-      },
-    })
+    throw err
   }
-
-  const run = await prisma.syncRun.create({
-    data: { trigger, dryRun },
-    select: { id: true },
-  })
-
-  return run.id
 }
 
 /** Списки в отчёте обрезаем: иначе строка Json вырастает до мегабайтов. */
@@ -71,20 +60,16 @@ export async function finishRun(
   status: 'success' | 'aborted',
   report: SyncReport
 ): Promise<void> {
-  await prisma.syncRun.update({
-    where: { id: runId },
-    data: {
-      status,
-      finishedAt: new Date(),
-      itemsFromMs: report.receivedFromMs,
-      matched: report.matched,
-      priceUpdated: report.pricesUpdated,
-      stockUpdated: report.stocksUpdated,
-      productsActivated: report.productsActivated,
-      missingInMs: report.notFoundInMs,
-      skipped: report.skippedZeroPrice + report.skippedPriceDrop,
-      report: trimReport(report) as object,
-    },
+  await finishRunGeneric(prisma, runId, {
+    status,
+    itemsFromMs: report.receivedFromMs,
+    matched: report.matched,
+    priceUpdated: report.pricesUpdated,
+    stockUpdated: report.stocksUpdated,
+    productsActivated: report.productsActivated,
+    missingInMs: report.notFoundInMs,
+    skipped: report.skippedZeroPrice + report.skippedPriceDrop,
+    report: trimReport(report) as object,
   })
 }
 
@@ -93,12 +78,5 @@ export async function failRun(
   runId: string,
   error: unknown
 ): Promise<void> {
-  await prisma.syncRun.update({
-    where: { id: runId },
-    data: {
-      status: 'failed',
-      finishedAt: new Date(),
-      error: error instanceof Error ? error.message : String(error),
-    },
-  })
+  await failRunGeneric(prisma, runId, error)
 }

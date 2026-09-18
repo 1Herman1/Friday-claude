@@ -168,7 +168,7 @@ export default function TrustPage() {
 
       <h2 className="text-2xl font-bold text-navy-900 mb-4">Что говорят площадки</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
         {MARKETPLACES.map((marketplace) => (
           <MarketplaceCard
             key={marketplace.name}
@@ -176,7 +176,7 @@ export default function TrustPage() {
             rating={marketplace.rating}
             stats={marketplace.stats}
             url={marketplace.url}
-            showLink={marketplace.name === 'Яндекс Маркет' || marketplace.name === 'Ozon'}
+            showLink={marketplace.showLink}
           />
         ))}
       </div>

@@ -384,6 +384,28 @@ export const ordersApi = {
     api.post<{ deliveryExpense: number | null; deliveryExpenseNote: string | null }>(`/api/admin/orders/${id}/delivery-expense/recompute`, {}),
 }
 
+export interface LastCleanupRun {
+  trigger: 'cron' | 'admin' | 'manual'
+  status: 'running' | 'success' | 'failed' | 'aborted'
+  finishedAt?: string | null
+  deleted: number
+  skippedChunks: number
+  hasMore: boolean
+}
+
+export interface StaleGuestsResponse {
+  days: number
+  count: number
+  lastCleanup?: LastCleanupRun | null
+}
+
+export interface CleanupGuestsResponse {
+  days: number
+  deleted: number
+  skippedChunks?: number
+  hasMore?: boolean
+}
+
 export const usersApi = {
   list: (params?: Record<string, unknown>) =>
     api.get<Paginated<User>>('/api/admin/users', { params }),
@@ -399,9 +421,9 @@ export const usersApi = {
   anonymize: (id: string) =>
     api.post<{ ok: boolean; alreadyDeleted?: boolean }>(`/api/admin/users/${id}/anonymize`),
   staleGuestsCount: (days: number) =>
-    api.get<{ days: number; count: number }>('/api/admin/users/guests/stale', { params: { days } }),
+    api.get<StaleGuestsResponse>('/api/admin/users/guests/stale', { params: { days } }),
   cleanupStaleGuests: (days: number) =>
-    api.delete<{ days: number; deleted: number }>('/api/admin/users/guests/stale', { params: { days } }),
+    api.delete<CleanupGuestsResponse>('/api/admin/users/guests/stale', { params: { days } }),
 }
 
 export const bannersApi = {

@@ -22,7 +22,7 @@ export default function ReviewsPage() {
 
       <h2 className="text-2xl font-bold text-navy-900 mb-4">Где нас читают</h2>
 
-      <div className="grid sm:grid-cols-3 gap-4 mb-10">
+      <div className="grid md:grid-cols-3 gap-4 mb-10">
         {MARKETPLACES.map((marketplace) => (
           <MarketplaceCard
             key={marketplace.name}
@@ -30,8 +30,7 @@ export default function ReviewsPage() {
             rating={marketplace.rating}
             stats={marketplace.stats}
             url={marketplace.url}
-            /* Кликабелен только Яндекс Маркет — решение владельца. */
-            showLink={marketplace.name === 'Яндекс Маркет' || marketplace.name === 'Ozon'}
+            showLink={marketplace.showLink}
           />
         ))}
       </div>

@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin'
-import { FastifyRequest, FastifyReply } from 'fastify'
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -12,6 +12,32 @@ const lastSeenMap = new Map<string, number>()
 const THROTTLE_MS = 10 * 60 * 1000 // 10 minutes
 
 type JwtPayload = { userId?: string; role?: string; type?: 'guest'; iat?: number }
+
+/**
+ * Обновить lastSeenAt для пользователя с троттлингом.
+ * Используется для гостей и зарегистрированных; ошибка обновления игнорируется.
+ */
+async function touchLastSeen(app: FastifyInstance, userId: string): Promise<void> {
+  const now = Date.now()
+  const lastSeen = lastSeenMap.get(userId) ?? 0
+
+  if (now - lastSeen > THROTTLE_MS) {
+    lastSeenMap.set(userId, now)
+
+    await app.prisma.user
+      .update({
+        where: { id: userId },
+        data: { lastSeenAt: new Date() },
+      })
+      .catch((err: unknown) => {
+      // P2025 — строки уже нет: гостя мог удалить ночной прогон, это штатно.
+      // Остальное (таймаут, обрыв соединения) молчать не должно.
+      if ((err as { code?: string })?.code !== 'P2025') {
+        app.log.warn({ err, userId }, 'Не удалось обновить отметку последнего визита')
+      }
+    })
+  }
+}
 
 /**
  * Токен, подписанный до отметки sessionsValidFrom, недействителен.
@@ -38,7 +64,9 @@ export default fp(async (app) => {
 
     // Type the JWT payload to include type field for guest detection
     const payload = request.user as JwtPayload | undefined
-    if (payload?.userId && payload.type !== 'guest') {
+    if (!payload?.userId) return
+
+    if (payload.type !== 'guest') {
       try {
         // Один запрос в БД на пользователя перед throttle: проверить заблокирован ли
         // и не старше ли токен отметки гашения сессий
@@ -58,33 +86,20 @@ export default fp(async (app) => {
         request.log.error(err)
         return reply.status(500).send({ error: 'Ошибка сервера' })
       }
-
-      const now = Date.now()
-      const lastSeen = lastSeenMap.get(payload.userId) ?? 0
-
-      if (now - lastSeen > THROTTLE_MS) {
-        lastSeenMap.set(payload.userId, now)
-
-        // Fire-and-forget: update in background, don't block request
-        app.prisma.user
-          .update({
-            where: { id: payload.userId },
-            data: { lastSeenAt: new Date() },
-          })
-          .catch(() => {
-            // Silent failure: don't throw if update fails
-          })
-      }
     }
+
+    // Fire-and-forget: update lastSeenAt for both guests and registered users
+    touchLastSeen(app, payload.userId).catch(() => {}) // eslint-disable-line @typescript-eslint/no-floating-promises
   })
 
   app.decorate('authenticateOptional', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       await request.jwtVerify()
 
-      // Same throttled update for optional auth, but don't block guests
       const payload = request.user as JwtPayload | undefined
-      if (payload?.userId && payload.type !== 'guest') {
+      if (!payload?.userId) return
+
+      if (payload.type !== 'guest') {
         // Заблокированный, обезличенный или погашенный по отметке токен — аноним, а не пользователь
         const u = await app.prisma.user.findUnique({
           where: { id: payload.userId },
@@ -94,22 +109,10 @@ export default fp(async (app) => {
           ;(request as { user: unknown }).user = null
           return
         }
-        const now = Date.now()
-        const lastSeen = lastSeenMap.get(payload.userId) ?? 0
-
-        if (now - lastSeen > THROTTLE_MS) {
-          lastSeenMap.set(payload.userId, now)
-
-          app.prisma.user
-            .update({
-              where: { id: payload.userId },
-              data: { lastSeenAt: new Date() },
-            })
-            .catch(() => {
-              // Silent failure: don't throw if update fails
-            })
-        }
       }
+
+      // Fire-and-forget: update lastSeenAt for both guests and registered users
+      touchLastSeen(app, payload.userId).catch(() => {}) // eslint-disable-line @typescript-eslint/no-floating-promises
     } catch {
       // гость — это нормальный сценарий квиза, не ошибка
     }

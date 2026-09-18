@@ -11,7 +11,8 @@
     "db:seed:admin": "tsx --env-file=.env prisma/seed-admin.ts",
     "db:studio": "prisma studio",
     "test": "vitest run",
-    "test:integration": "vitest run src/test/orders.integration.test.ts"
+    "test:integration": "vitest run src/test/orders.integration.test.ts",
+    "cleanup:guests": "tsx src/scripts/cleanup-guests.ts"
   },
   "dependencies": {
     "@simba/shared": "*",

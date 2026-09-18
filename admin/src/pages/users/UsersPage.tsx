@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { usersApi, type User } from '../../lib/api'
+import { usersApi, type User, type LastCleanupRun } from '../../lib/api'
 import { LOYALTY_TIERS } from '@simba/shared'
 
 const ROLES = ['customer', 'products_manager', 'orders_manager', 'super_admin']
@@ -22,6 +22,19 @@ const ROLE_STYLE: Record<string, string> = {
   products_manager: 'bg-blue-100 text-blue-700',
   orders_manager: 'bg-purple-100 text-purple-700',
   super_admin: 'bg-red-100 text-red-700',
+}
+
+const TRIGGER_LABEL: Record<string, string> = {
+  cron: 'по расписанию',
+  admin: 'из админки',
+  manual: 'вручную',
+}
+
+function formatCleanupDate(dateStr: string): string {
+  const date = new Date(dateStr)
+  const d = date.toLocaleDateString('ru-RU')
+  const t = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+  return `${d} ${t}`
 }
 
 type TabType = 'registered' | 'guests' | 'all'
@@ -63,6 +76,7 @@ export default function UsersPage() {
   const [sort, setSort] = useState<SortType>('lastSeen')
   const [segment, setSegment] = useState<SegmentType>('')
   const [staleGuestsCount, setStaleGuestsCount] = useState(0)
+  const [lastCleanup, setLastCleanup] = useState<LastCleanupRun | null | undefined>(undefined)
   const [cleanupLoading, setCleanupLoading] = useState(false)
   const [cleanupMessage, setCleanupMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const staleGuestsDays = 30
@@ -81,7 +95,10 @@ export default function UsersPage() {
 
   const loadStaleGuestsCount = () => {
     usersApi.staleGuestsCount(staleGuestsDays)
-      .then(r => setStaleGuestsCount(r.data.count))
+      .then(r => {
+        setStaleGuestsCount(r.data.count)
+        setLastCleanup(r.data.lastCleanup)
+      })
       .catch(() => setError('Не удалось загрузить количество старых гостей'))
   }
 
@@ -94,7 +111,17 @@ export default function UsersPage() {
     setCleanupMessage(null)
     try {
       const result = await usersApi.cleanupStaleGuests(staleGuestsDays)
-      setCleanupMessage({ type: 'success', text: `Удалено: ${result.data.deleted}` })
+      let msg = `Удалено: ${result.data.deleted}`
+
+      if (result.data.skippedChunks && result.data.skippedChunks > 0) {
+        msg += ` · пропущено ${result.data.skippedChunks} батч${result.data.skippedChunks % 10 === 1 && result.data.skippedChunks % 100 !== 11 ? '' : 'ей'}`
+      }
+
+      if (result.data.hasMore) {
+        msg += ' · остались данные (будут очищены следующими прогонами)'
+      }
+
+      setCleanupMessage({ type: 'success', text: msg })
       loadStaleGuestsCount()
       load(1, search, tab, sort, segment)
     } catch (err: any) {
@@ -221,17 +248,31 @@ export default function UsersPage() {
 
       {/* Stale guests cleanup panel */}
       {(tab === 'guests' || tab === 'all') && (
-        <div className="mb-4 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
-          <div className="text-sm text-blue-900">
-            Гостевые записи старше {staleGuestsDays} дней без корзины, заказов, избранного и подборов: <span className="font-semibold">{staleGuestsCount}</span>
+        <div className="mb-4 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-sm text-blue-900">
+              Гости, не заходившие {staleGuestsDays} дней: <span className="font-semibold">{staleGuestsCount}</span>
+            </div>
+            <button
+              onClick={handleCleanupStaleGuests}
+              disabled={staleGuestsCount === 0 || cleanupLoading}
+              className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+            >
+              {cleanupLoading ? 'Удаление...' : 'Очистить'}
+            </button>
           </div>
-          <button
-            onClick={handleCleanupStaleGuests}
-            disabled={staleGuestsCount === 0 || cleanupLoading}
-            className="ml-4 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
-          >
-            {cleanupLoading ? 'Удаление...' : 'Очистить'}
-          </button>
+
+          {lastCleanup !== undefined && lastCleanup !== null && (
+            <div className="text-xs text-blue-800 mt-2">
+              Последняя чистка: <span className="font-medium">{formatCleanupDate(lastCleanup.finishedAt || '')}</span> · {TRIGGER_LABEL[lastCleanup.trigger as keyof typeof TRIGGER_LABEL]} · удалено {lastCleanup.deleted}
+              {lastCleanup.status === 'failed' && (
+                <span className="text-red-600 font-medium"> · прогон завершился ошибкой</span>
+              )}
+              {lastCleanup.skippedChunks > 0 && (
+                <span className="text-amber-600"> · пропущено {lastCleanup.skippedChunks} батч{lastCleanup.skippedChunks % 10 === 1 && lastCleanup.skippedChunks % 100 !== 11 ? '' : 'ей'}</span>
+              )}
+            </div>
+          )}
         </div>
       )}
 

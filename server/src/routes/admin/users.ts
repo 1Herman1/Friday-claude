@@ -1,11 +1,13 @@
 import { FastifyPluginAsync } from 'fastify'
-import { z } from 'zod'
+import { z, ZodError } from 'zod'
 import * as bcrypt from 'bcryptjs'
 import { Prisma, UserRole } from '@prisma/client'
 import { checkRole } from '../../middleware/check-role'
 import { GUEST_USER_WHERE, REGISTERED_USER_WHERE, isGuestUser, staleGuestWhere } from '../../lib/user-type'
 import { applyBonusChange, InsufficientBonusError } from '../../services/bonus.service'
 import { anonymizeUser, AccountNotFoundError } from '../../services/account.service'
+import { guestCleanupDaysSchema, countStaleGuests, runGuestCleanupTracked } from '../../services/guest-cleanup.service'
+import { RunAlreadyRunningError, startRun } from '../../services/run-history'
 
 const usersAdminRoute: FastifyPluginAsync = async (app) => {
   const guard = { preHandler: [app.authenticate, checkRole(['super_admin'])] }
@@ -139,20 +141,52 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
     }
   )
 
-  // Получить количество старых гостевых записей
+  // Получить количество старых гостевых записей и информацию о последнем прогоне
   app.get(
     '/guests/stale',
     guard,
     async (request, reply) => {
       const q = request.query as { days?: string }
-      const daysSchema = z.number().int().min(7).max(365).default(30)
-      const days = daysSchema.parse(q.days ? parseInt(q.days) : 30)
+      try {
+        const days = guestCleanupDaysSchema.parse(q.days ? Number(q.days) : 30)
 
-      const count = await app.prisma.user.count({
-        where: staleGuestWhere(days),
-      })
+        const [count, lastRun] = await Promise.all([
+          countStaleGuests(app.prisma, days),
+          app.prisma.syncRun.findFirst({
+            // Только боевые завершённые прогоны: сухой прогон ничего не удаляет,
+            // и показывать его как «последнюю чистку» значит вводить в заблуждение.
+            where: { source: 'guest_cleanup', dryRun: false, status: { in: ['success', 'failed'] } },
+            orderBy: { startedAt: 'desc' },
+            select: {
+              id: true,
+              trigger: true,
+              status: true,
+              finishedAt: true,
+              report: true,
+            },
+          }),
+        ])
 
-      return reply.send({ days, count })
+        const lastCleanup = lastRun
+          ? {
+              trigger: lastRun.trigger,
+              status: lastRun.status,
+              finishedAt: lastRun.finishedAt,
+              deleted: (lastRun.report as any)?.deleted ?? 0,
+              skippedChunks: (lastRun.report as any)?.skippedChunks ?? 0,
+              failedChunks: (lastRun.report as any)?.failedChunks ?? 0,
+              errors: ((lastRun.report as any)?.errors ?? []).slice(0, 3),
+              hasMore: (lastRun.report as any)?.hasMore ?? false,
+            }
+          : null
+
+        return reply.send({ days, count, lastCleanup })
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ error: 'Недопустимое значение для days' })
+        }
+        throw error
+      }
     }
   )
 
@@ -162,25 +196,37 @@ const usersAdminRoute: FastifyPluginAsync = async (app) => {
     guard,
     async (request, reply) => {
       const q = request.query as { days?: string }
-      const daysSchema = z.number().int().min(7).max(365).default(30)
-      const days = daysSchema.parse(q.days ? parseInt(q.days) : 30)
+      try {
+        const days = guestCleanupDaysSchema.parse(q.days ? Number(q.days) : 30)
 
-      const ids = await app.prisma.user.findMany({
-        where: staleGuestWhere(days),
-        select: { id: true },
-      })
+        // Занимаем слот ДО начала работы
+        let runId: string
+        try {
+          runId = await startRun(app.prisma, 'guest_cleanup', 'admin', false)
+        } catch (error) {
+          if (error instanceof RunAlreadyRunningError) {
+            return reply.status(409).send({ error: 'Прогон уже выполняется' })
+          }
+          throw error
+        }
 
-      let deleted = 0
-      const batchSize = 500
-      for (let i = 0; i < ids.length; i += batchSize) {
-        const batch = ids.slice(i, i + batchSize).map(u => u.id)
-        const result = await app.prisma.user.deleteMany({
-          where: { id: { in: batch } },
+        // Запускаем чистку с полученным ID
+        const report = await runGuestCleanupTracked(app.prisma, days, false, runId)
+
+        return reply.send({
+          days,
+          deleted: report.deleted,
+          skippedChunks: report.skippedChunks,
+          failedChunks: report.failedChunks,
+          hasMore: report.hasMore,
+          errors: report.errors.slice(0, 3),
         })
-        deleted += result.count
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return reply.status(400).send({ error: 'Недопустимое значение для days' })
+        }
+        throw error
       }
-
-      return reply.send({ days, deleted })
     }
   )
 

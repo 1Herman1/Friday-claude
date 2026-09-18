@@ -92,6 +92,7 @@ const TABLES = [
   'reviews',
   'consents',
   'promo_codes',
+  'sync_runs',
 ]
 
 export async function resetDb() {
