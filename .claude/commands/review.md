@@ -7,12 +7,14 @@ description: Ревью текущих изменений нужными спе�
 Подбери ревьюеров по типу изменённых файлов и запусти их **параллельно**,
 соблюдая разделение ответственности из `CLAUDE.md` (каждый репортит свою зону):
 
-- `*.tsx` в `client/`/`admin/` → `react-reviewer` (код) + `design-reviewer` (вид)
-- `*.ts` в `server/` → `typescript-reviewer`
-- `server/prisma/schema.prisma`, миграции → `database-reviewer` (+ `migration-guard`, если
+- Файлы фронтенда (`.tsx`/`.jsx` в каталогах фронта проекта) → `react-reviewer` (код) + `design-reviewer` (вид)
+- Файлы бэкенда (`.ts`/`.js` в каталогах бэка проекта) → `typescript-reviewer`
+- Схема БД и миграции (согласно стеку проекта) → `database-reviewer` (+ `migration-guard`, если
   миграция поедет на прод)
 - роуты с данными пользователя → `security-auth-access`
 - всегда в конце → `silent-failure-hunter`
+
+Точные пути каталогов — см. `docs/projects/<проект>/project.md`.
 
 Правила: репортить находку только при уверенности ≥ 80%. Отсутствие находок —
 валидный результат. Не дублировать одну находку между агентами.

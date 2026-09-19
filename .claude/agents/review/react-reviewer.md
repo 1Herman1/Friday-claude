@@ -45,11 +45,11 @@ model: sonnet
 
 ```
 КРИТИЧНО
-client/src/components/ProductCard.tsx:34 — dangerouslySetInnerHTML с description из API
+например, src/components/ProductCard.tsx:34 — dangerouslySetInnerHTML с description из API
 → Использовать DOMPurify.sanitize() или рендерить как текст
 
 ВАЖНО
-client/src/pages/CatalogPage.tsx:67 — useEffect без зависимостей вызывает бесконечный fetch
+например, src/pages/CatalogPage.tsx:67 — useEffect без зависимостей вызывает бесконечный fetch
 → Добавить [searchParams] в массив зависимостей
 ```
 

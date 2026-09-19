@@ -7,7 +7,8 @@ description: Финальный проход по UI — типографика,
 
 Порядок:
 
-1. Прочитай `docs/core/design-principles.md` — бренд Симбы и anti-references. Для анимаций —
+1. Прочитай `docs/core/design-principles.md` (универсальные anti-references) и
+   `docs/projects/<проект>/brand.md` (бренд активного проекта). Для анимаций —
    `docs/core/motion.md` (easing, длительности, гейт «надо ли анимировать») и
    `docs/core/apple-patterns.md`.
 2. Запусти `node .claude/scripts/design-lint.mjs` — он ловит `transition: all`,

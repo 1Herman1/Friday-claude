@@ -35,9 +35,9 @@
 - Make (Integromat) — платный, простой
 - Zapier — платный, простой
 
-**Кастомный код:**
+**Кастомный код (пример для стека с очередями):**
 ```typescript
-// BullMQ — очередь задач
+// BullMQ — очередь задач (требует Redis)
 import { Queue, Worker } from 'bullmq'
 
 const queue = new Queue('automation', { connection: redis })

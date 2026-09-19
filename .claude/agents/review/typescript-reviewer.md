@@ -1,6 +1,6 @@
 ---
 name: typescript-reviewer
-description: Эксперт по TypeScript и JavaScript — типобезопасность, async/await корректность, безопасность Node.js, идиоматические паттерны. Используй перед коммитом изменений в TypeScript файлах. Стек проекта: Fastify + React + TypeScript.
+description: Эксперт по TypeScript и JavaScript — типобезопасность, async/await корректность, безопасность, идиоматические паттерны. Используй перед коммитом изменений в TypeScript файлах. Стек проекта — в его `docs/projects/<проект>/project.md`.
 tools: Read, Glob, Grep, Bash
 model: sonnet
 ---
@@ -47,11 +47,11 @@ model: sonnet
 
 ```
 КРИТИЧНО
-server/src/routes/orders/index.ts:45 — SQL injection: параметр из req.body напрямую в запрос
-→ Использовать параметризованный запрос Prisma
+например, src/routes/orders/index.ts:45 — SQL injection: параметр из req.body напрямо в запрос
+→ Использовать параметризованный запрос БД (синтаксис зависит от ORM)
 
 ВАЖНО  
-client/src/pages/CartPage.tsx:23 — await внутри forEach, должен быть Promise.all()
+например, src/pages/CartPage.tsx:23 — await внутри forEach, должен быть Promise.all()
 → await Promise.all(items.map(async item => ...))
 ```
 

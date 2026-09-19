@@ -43,7 +43,7 @@ src/api/users/route.ts:23 — нет проверки сессии перед о
 
 ВАЖНО
 src/lib/orders.ts:45 — N+1 запрос: getUserById вызывается в цикле
-→ Заменить на: prisma.user.findMany({ where: { id: { in: userIds } } })
+→ Заменить на (например): user.findMany({ where: { id: { in: userIds } } })
 
 КАЧЕСТВО
 src/components/Form.tsx:12 — тип `any` для данных формы

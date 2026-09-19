@@ -4,6 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
+import { projects } from "./lib/projects.mjs";
 
 let fail = 0;
 let warn = 0;
@@ -148,7 +149,25 @@ if (withSplit.length !== withThreshold.length) {
   bad(`порог 80% без расщепления в ${missing.length} агентах: ${missing.join(", ")} — они прочитают старую формулировку «сомневаешься молчи»`);
 } else ok(`${withSplit.length} из ${withThreshold.length} агентов знают, что возражение порога не имеет`);
 
-console.log("\n[10] Переносимость универсальной базы");
+console.log("\n[10] Проекты укомплектованы по реестру");
+{
+  // Реестр обещает состав каталога проекта. Обещание, которое никто не
+  // проверяет, со временем перестаёт быть правдой.
+  const reg = read("docs/projects/README.md") || "";
+  const promised = [...reg.matchAll(/^- `([^`]+\.md)`/gm)].map((m) => m[1]);
+  // Дизайн-система и профиль безопасности осмысленны только там, где есть код.
+  // У аналитического проекта без сайта их отсутствие — не дыра.
+  const onlyWithCode = new Set(["design-system/MASTER.md", "security-profile.md"]);
+  let holes = 0;
+  for (const proj of projects()) {
+    const need = promised.filter((f) => proj.roots.length || !onlyWithCode.has(f));
+    const missing = need.filter((f) => !fs.existsSync(path.join("docs/projects", proj.docs, f)));
+    if (missing.length) { wrn(`${proj.docs}: нет ${missing.join(", ")}`); holes += missing.length; }
+  }
+  if (!holes) ok(`состав каталога соответствует реестру у всех проектов`);
+}
+
+console.log("\n[11] Переносимость универсальной базы");
 try {
   execSync("bash .claude/scripts/portability-check.sh", { stdio: "pipe" });
   ok("привязок к конкретному проекту нет");

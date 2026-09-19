@@ -61,7 +61,10 @@ friday/                         # репозиторий Friday (1Herman1/Friday
     │       └── design-system/      # Зафиксированные токены
     │           ├── MASTER.md       # Источник истины по палитре/шрифту/шкалам
     │           └── pages/          # Переопределения страниц (приоритетнее MASTER)
-    └── decisions/              # ADR — архитектурные решения
+    ├── decisions/              # ADR — архитектурные решения
+    └── archive/                # Память между сессиями
+        ├── CONTEXT.md              # Свод: что решили и почему (читается при старте)
+        └── sessions/               # Сырые записи сессий (пишет хук)
 ```
 
 ### Новый проект
@@ -77,8 +80,8 @@ friday/                         # репозиторий Friday (1Herman1/Friday
 
 **Код проектов живёт подкаталогами репозитория** — где именно, сказано в
 `docs/projects/README.md` и в `project.md` каждого проекта. Исторически код
-Симбы лежит в корне (`client/`, `admin/`, `server/`, `shared/`), потому что
-репозиторий начинался с неё; это наследие, а не признак старшинства. Отдельных
+Симбы лежит в корне репозитория — наследие того, что он с неё начинался, а не
+признак старшинства. Конкретные каталоги каждого проекта — в реестре. Отдельных
 репозиториев и веток у проектов нет: работа всех идёт в одной рабочей ветке.
 
 Активный проект берётся из `docs/projects/.active` — по нему же его находят хук
@@ -382,7 +385,7 @@ CSS `transition` остаётся базой по умолчанию, движо
 Примеры:
 ```
 # Параллельно: ревью + тесты
-Agent(code-reviewer, "проверь безопасность роутов server/src/routes/auth/")
+Agent(code-reviewer, "проверь безопасность роутов авторизации, пути — в project.md")
 Agent(qa-engineer, "составь план тестирования корзины")
 
 # Последовательно: сначала исследование, потом реализация
@@ -441,9 +444,9 @@ Agent(qa-engineer, "составь тест-план по всему сайту"
 |-------|-------|
 | `*.tsx`, `*.jsx`, `components/**` | `react-reviewer` |
 | `*.ts`, `*.js` (server, lib) | `typescript-reviewer` |
-| `server/prisma/schema.prisma`, `server/prisma/migrations/**` | `database-reviewer` + `migration-guard` |
-| `server/src/routes/**` | `typescript-reviewer` + `code-reviewer` |
-| `client/src/pages/**` | `react-reviewer` + `design-reviewer` |
+| `schema.prisma`, каталог миграций | `database-reviewer` + `migration-guard` |
+| Серверные роуты (`**/routes/**`) | `typescript-reviewer` + `code-reviewer` |
+| Страницы фронтенда (`**/pages/**`) | `react-reviewer` + `design-reviewer` |
 | UI: вёрстка, стили, лендинги, письма | `design-reviewer` |
 | UI-анимации/моторика (читать `docs/core/motion.md` + `docs/core/apple-patterns.md` перед задачей) | `design-reviewer` |
 | Обёртка моторики проекта и всё, что анимируется на движке | `motion-curator` + `design-reviewer` |

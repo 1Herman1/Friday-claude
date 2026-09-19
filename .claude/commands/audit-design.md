@@ -10,8 +10,8 @@ description: Дизайн-аудит — детерминированный ск
 1. Запусти `node .claude/scripts/design-lint.mjs` — детерминированный слой,
    без LLM. Он находит формализуемые анти-паттерны (шрифты, градиенты,
    контраст, тач-таргеты, радиусы, декоративные бордеры, `transition: all`,
-   `ease-in`, `scale(0)`, анимацию layout-свойств и т.п.) по всем `.tsx` в
-   `client/src` и `admin/src`.
+   `ease-in`, `scale(0)`, анимацию layout-свойств и т.п.) по всем `.tsx`
+   в каталогах фронтенда проекта (см. `docs/projects/<проект>/project.md`).
 2. Сверь моторику с `docs/core/motion.md` (гейт «надо ли анимировать», easing,
    длительности) и `docs/core/apple-patterns.md`.
 3. Передай вывод скрипта агенту `design-reviewer` вместе с `git diff`.

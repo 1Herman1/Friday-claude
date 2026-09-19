@@ -38,11 +38,11 @@ const userId = req.user?.id ?? ''   // пустая строка вместо 40
 
 ```
 КРИТИЧНО
-server/src/routes/orders/index.ts:89 — catch возвращает { success: true } при ошибке БД
+например, src/routes/orders/index.ts:89 — catch возвращает { success: true } при ошибке БД
 → Пробросить ошибку или вернуть 500
 
 ВАЖНО
-client/src/lib/api.ts:23 — Promise без await и без .catch() — ошибка потеряется
+например, src/lib/api.ts:23 — Promise без await и без .catch() — ошибка потеряется
 → Добавить await или явный .catch(err => logger.error(err))
 ```
 

@@ -25,10 +25,14 @@ PROJECT_NAMES=$(find docs/projects -maxdepth 1 -mindepth 1 -type d -printf '%f\n
                 | grep -v '^_template$' | paste -sd'|' -)
 [ -z "$PROJECT_NAMES" ] && PROJECT_NAMES='__нет_проектов__'
 
-# Корни кода проектов — каталоги верхнего уровня, не входящие в служебные.
-CODE_ROOTS=$(find . -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null \
-             | grep -vE '^(\.git|\.claude|\.github|docs|node_modules|\..*)$' \
-             | sed 's|$|/|' | paste -sd'|' -)
+# Корни кода — из реестра проектов, а не «все каталоги верхнего уровня».
+# Гадание по верхнему уровню ловило служебные `scripts/` и `tools/`, которые
+# ничьим проектом не являются.
+CODE_ROOTS=$(node -e '
+  import("./.claude/scripts/lib/projects.mjs")
+    .then((m) => console.log(m.codeRoots().map((r) => r + "/").join("|")))
+    .catch(() => {});
+' 2>/dev/null)
 [ -z "$CODE_ROOTS" ] && CODE_ROOTS='__нет_каталогов__'
 
 # Маркеры стека: фреймворки, ORM, хранилища, хостинги.
@@ -48,7 +52,12 @@ PROJECT_COUPLING="$PROJECT_NAMES|$CODE_ROOTS"
 
 # Что разрешено. Главное — контекст «это пример» и «это профиль проекта»:
 # универсальный файл вправе СОСЛАТЬСЯ на проектный, но не вправе его заменять.
-ALLOW='docs/projects|project\.md|brand\.md|security-profile|\.active|_template|<проект>|<активный|<имя>|<путь>|например|напр\.|пример|по умолчанию|стек по умолчанию'
+ALLOW='docs/projects|project\.md|brand\.md|security-profile|\.active|_template|<проект>|<активный|<имя>|<путь>|например|напр\.|пример|по умолчанию|стек по умолчанию|наследие'
+
+# Схема дерева каталогов — картинка этого репозитория, а не правило. Строки
+# дерева (│ ├ └) пропускаем: запрещать репозиторию изображать самого себя
+# бессмысленно.
+TREE='^[0-9]+:[[:space:]]*[│├└]'
 
 # Файлы универсальной базы. Шаблоны кода исключены намеренно: в них живой
 # импорт библиотеки, это эталон для копирования, а не правило.
@@ -75,7 +84,8 @@ for f in $FILES; do
 
   # Корень кода засчитывается, только когда он начинает путь: `client/...`,
   # но не `.claude/scripts/...`, где совпал бы каталог `scripts/`.
-  HITS=$(grep -inP "(?i)(?<![\w./-])($PATTERN)" "$f" 2>/dev/null | grep -viE "$ALLOW" || true)
+  HITS=$(grep -inP "(?i)(?<![\w./-])($PATTERN)" "$f" 2>/dev/null \
+         | grep -viE "$ALLOW" | grep -vE "$TREE" || true)
   [ -z "$HITS" ] && continue
   N=$(printf '%s\n' "$HITS" | grep -c .)
   echo "✗ $f  ($N)"

@@ -32,11 +32,11 @@ model: sonnet
 
 ```
 ВАЖНО (дублирование)
-client/src/pages/CartPage.tsx:12 и client/src/pages/CheckoutPage.tsx:8 — одинаковая функция formatPrice
-→ Вынести в client/src/lib/utils.ts
+например, src/pages/CartPage.tsx:12 и src/pages/CheckoutPage.tsx:8 — одинаковая функция formatPrice
+→ Вынести в src/lib/utils.ts
 
 КАЧЕСТВО (мёртвый код)
-client/src/components/OldBanner.tsx — компонент нигде не используется
+например, src/components/OldBanner.tsx — компонент нигде не используется
 → Удалить файл
 ```
 
