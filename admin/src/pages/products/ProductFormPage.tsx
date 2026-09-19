@@ -49,6 +49,7 @@ export default function ProductFormPage() {
   const [isHypoallergenic, setIsHypoallergenic] = useState(false)
   const [isWeightControl, setIsWeightControl] = useState(false)
   const [isFeatured, setIsFeatured] = useState(false)
+  const [species, setSpecies] = useState<'cat' | 'dog' | 'both' | 'unknown'>('unknown')
   const [protein, setProtein] = useState('')
   const [fat, setFat] = useState('')
   const [fiber, setFiber] = useState('')
@@ -86,6 +87,7 @@ export default function ProductFormPage() {
         setIsHypoallergenic(p.isHypoallergenic)
         setIsWeightControl(p.isWeightControl)
         setIsFeatured(p.isFeatured || false)
+        setSpecies(p.species ?? 'unknown')
         setProtein(p.protein != null ? String(p.protein) : '')
         setFat(p.fat != null ? String(p.fat) : '')
         setFiber(p.fiber != null ? String(p.fiber) : '')
@@ -172,6 +174,7 @@ export default function ProductFormPage() {
         isHypoallergenic,
         isWeightControl,
         isFeatured,
+        species,
         protein: protein ? parseFloat(protein) : undefined,
         fat: fat ? parseFloat(fat) : undefined,
         fiber: fiber ? parseFloat(fiber) : undefined,
@@ -284,6 +287,17 @@ export default function ProductFormPage() {
                 <option value="">— Без бренда —</option>
                 {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
               </select>
+            </div>
+            <div>
+              <label htmlFor="species-select" className="block text-sm font-medium text-gray-700 mb-1">Вид животного</label>
+              <select id="species-select" value={species} onChange={e => setSpecies(e.target.value as 'cat' | 'dog' | 'both' | 'unknown')}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue-400">
+                <option value="unknown">Не задан</option>
+                <option value="cat">Кошки</option>
+                <option value="dog">Собаки</option>
+                <option value="both">Универсальный — уход, аксессуары</option>
+              </select>
+              <p className="text-xs text-gray-500 mt-1">Не задан — товар не попадёт в разделы «Для кошек» и «Для собак» и в меню сайта</p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Изображения (URL, по одному на строку)</label>

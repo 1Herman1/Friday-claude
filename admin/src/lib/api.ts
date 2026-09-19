@@ -95,6 +95,8 @@ export interface Product {
   ingredients?: string
   seoTitle?: string
   seoDescription?: string
+  species?: 'cat' | 'dog' | 'both' | 'unknown'
+  quizTags?: string[]
   variants: ProductVariant[]
   categories: { categoryId: string }[]
   createdAt: string
@@ -104,6 +106,7 @@ export interface AdminProductRow {
   id: string
   name: string
   slug: string
+  species?: 'cat' | 'dog' | 'both' | 'unknown'
   isActive: boolean
   hiddenManually: boolean
   brand: { name: string } | null

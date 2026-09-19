@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { deriveQuizTags, mergeQuizTags, type AutotagInput } from './quiz-autotag'
+import { deriveQuizTags, mergeQuizTags, determineSpecies, isUniversalCare, type AutotagInput } from './quiz-autotag'
 import { isQuizTag } from '../lib/quiz-tags'
 
 /** Собрать вход, подставив вид животного через категорию. */
@@ -219,5 +219,106 @@ describe('mergeQuizTags', () => {
 
   it('не дублирует одинаковые теги', () => {
     expect(mergeQuizTags(['format:dry'], ['format:dry'])).toEqual(['format:dry'])
+  })
+})
+
+describe('determineSpecies — расширенные проверки', () => {
+  it('голые формы слов для собак', () => {
+    const cases = [
+      'Мультивитамины для взрослых собак 8in1 Excel',
+      'Витамины для щенят',
+      'Корм for dogs',
+      'Canine Adult',
+    ]
+    for (const name of cases) {
+      expect(determineSpecies(name, []), name).toBe('dog')
+    }
+  })
+
+  it('голые формы слов для кошек', () => {
+    const cases = [
+      'Витамины для шерсти Laveta Super for Cats, 50 мл',
+      'Для кошек препарат',
+      'Feline Urinary',
+    ]
+    for (const name of cases) {
+      expect(determineSpecies(name, []), name).toBe('cat')
+    }
+  })
+
+  it('маркеры линеек для кошек: когтеточка, hairball, y/d', () => {
+    const cases = [
+      'Когтеточка деревянная - 605х205х225',
+      'Royal Canin Urinary S/O Feline',
+      'Hill\'s Prescription Diet y/d Thyroid Care',
+    ]
+    for (const name of cases) {
+      expect(determineSpecies(name, []), name).toBe('cat')
+    }
+  })
+
+  it('маркеры линеек для собак: для выгула, дождевик, симпарика, low fat, derm', () => {
+    const cases = [
+      'Muzzle Крахмальные пакеты для выгула собак',
+      'Симпарика 1,3-2,5 кг (3 таблетки)',
+      'Hill\'s Prescription Diet i/d Low Fat Digestive Care (курица)',
+      'Hill\'s Prescription Diet u/d Urinary Care',
+      'Royal Canin Derm Complete',
+    ]
+    for (const name of cases) {
+      expect(determineSpecies(name, []), name).toBe('dog')
+    }
+  })
+
+  it('u/d в диете не путается с утка', () => {
+    // Hill's Science Plan Adult (утка) содержит слово «утка», но не содержит u/d диету
+    expect(determineSpecies('Hill\'s Science Plan Adult (утка)', [])).toBe(null)
+  })
+
+  it('оба вида в названии → null', () => {
+    expect(determineSpecies('Бальзам-кондиционер Muzzle для собак и кошек', [])).toBe(null)
+  })
+
+  it('k/d существует для обоих видов → не определяем', () => {
+    // Hill's Prescription Diet k/d Kidney Care — есть для кошек и собак
+    expect(determineSpecies('Hill\'s Prescription Diet k/d Kidney Care (курица)', [])).toBe(null)
+  })
+
+  it('регрессия: кошачий маркер (steril) перетягивает размерный (mini)', () => {
+    expect(determineSpecies('Grandorf Sterilised Mini', [])).toBe('cat')
+  })
+
+  it('регрессия: щенячий маркер (puppy)', () => {
+    expect(determineSpecies('Prime Puppy Mini', [])).toBe('dog')
+  })
+})
+
+describe('isUniversalCare', () => {
+  it('определяет по названию', () => {
+    const cases = [
+      'Гель-мыло для лап',
+      'Muzzle Нейтрализатор запаха животных',
+      'Расческа для кошек и собак',
+      'Зубная щётка для животных',
+      'Шампунь универсальный',
+    ]
+    for (const name of cases) {
+      expect(isUniversalCare(name, []), name).toBe(true)
+    }
+  })
+
+  it('определяет по категории', () => {
+    expect(isUniversalCare('Товар', ['care'])).toBe(true)
+    expect(isUniversalCare('Товар', ['care-accessories'])).toBe(true)
+    expect(isUniversalCare('Товар', ['dogs-care'])).toBe(false) // dogs-care не начинается с care-
+  })
+
+  it('не ловит обычный корм', () => {
+    expect(isUniversalCare('Hill\'s Science Plan Adult', [])).toBe(false)
+  })
+
+  it('ё и е считаются одинаково', () => {
+    expect(isUniversalCare('Расчёска', [])).toBe(true)
+    expect(isUniversalCare('Расческа', [])).toBe(true)
   })
 })

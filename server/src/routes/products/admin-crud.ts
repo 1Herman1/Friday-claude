@@ -30,6 +30,7 @@ const createSchema = z.object({
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
   categoryIds: z.array(z.string().uuid()).default([]),
+  species: z.enum(['cat', 'dog', 'both', 'unknown']).optional(),
   quizTags: z.array(z.enum(QUIZ_TAGS)).default([]),
   showAboutTab: z.boolean().default(true),
   showSpecsTab: z.boolean().default(true),
@@ -39,13 +40,23 @@ const createSchema = z.object({
 
 const updateSchema = createSchema.partial()
 
+// Поле species и тег species:* в quizTags дублируются намеренно (schema.prisma:364):
+// поле фильтрует каталог, тег обслуживает подбор. Меняем одно — приводим второе.
+function syncSpeciesTag(quizTags: string[], species?: string | null): string[] {
+  const filtered = quizTags.filter(tag => !tag.startsWith('species:'))
+  if (!species || species === 'unknown' || species === 'both') return filtered
+  // cat или dog → добавляем species:cat или species:dog
+  return [...filtered, `species:${species}`]
+}
+
 export default async function adminCrudRoute(app: FastifyInstance) {
   const adminGuard = { preHandler: [app.authenticate, checkRole(['super_admin', 'products_manager'])] }
 
-  app.get<{ Querystring: { search?: string; status?: string; page?: string; limit?: string } }>('/', adminGuard, async (request, reply) => {
+  app.get<{ Querystring: { search?: string; status?: string; species?: string; page?: string; limit?: string } }>('/', adminGuard, async (request, reply) => {
     const querySchema = z.object({
       search: z.string().max(100).optional(),
       status: z.enum(['all', 'active', 'hidden']).default('all'),
+      species: z.enum(['cat', 'dog', 'both', 'unknown']).optional(),
       page: z.coerce.number().int().min(1).default(1),
       limit: z.coerce.number().int().min(1).max(100).default(20),
     })
@@ -55,7 +66,7 @@ export default async function adminCrudRoute(app: FastifyInstance) {
       return reply.status(400).send({ error: parsed.error.errors[0].message })
     }
 
-    const { search, status, page, limit } = parsed.data
+    const { search, status, species, page, limit } = parsed.data
 
     const where: Prisma.ProductWhereInput = {}
 
@@ -69,12 +80,17 @@ export default async function adminCrudRoute(app: FastifyInstance) {
       where.isActive = false
     }
 
+    if (species) {
+      where.species = species
+    }
+
     const items = await app.prisma.product.findMany({
       where,
       select: {
         id: true,
         name: true,
         slug: true,
+        species: true,
         isActive: true,
         hiddenManually: true,
         updatedAt: true,
@@ -115,11 +131,14 @@ export default async function adminCrudRoute(app: FastifyInstance) {
       return reply.status(400).send({ error: parsed.error.errors[0].message })
     }
 
-    const { categoryIds, variants, ...data } = parsed.data
+    const { categoryIds, variants, species, quizTags: rawQuizTags, ...data } = parsed.data
+    const quizTags = syncSpeciesTag(rawQuizTags ?? [], species)
 
     const product = await app.prisma.product.create({
       data: {
         ...data,
+        species: species ?? 'unknown',
+        quizTags,
         categories: {
           create: categoryIds.map((categoryId) => ({ categoryId })),
         },
@@ -140,12 +159,17 @@ export default async function adminCrudRoute(app: FastifyInstance) {
     }
 
     const { id } = request.params
-    const { categoryIds, variants, ...data } = parsed.data
+    const { categoryIds, variants, species, quizTags: rawQuizTags, ...data } = parsed.data
 
     const exists = await app.prisma.product.findUnique({ where: { id } })
     if (!exists) {
       return reply.status(404).send({ error: 'Product not found' })
     }
+
+    // Вид пришёл без тегов — синхронизируем поверх текущих тегов товара, иначе
+    // смена вида из формы стирала бы все ручные теги подбора.
+    const quizTags =
+      species !== undefined ? syncSpeciesTag(rawQuizTags ?? exists.quizTags, species) : rawQuizTags
 
     const product = await app.prisma.$transaction(async (tx) => {
       if (categoryIds !== undefined) {
@@ -159,6 +183,8 @@ export default async function adminCrudRoute(app: FastifyInstance) {
         where: { id },
         data: {
           ...data,
+          ...(species !== undefined && { species }),
+          ...(quizTags !== undefined && { quizTags }),
           ...(categoryIds !== undefined && {
             categories: {
               create: categoryIds.map((categoryId) => ({ categoryId })),

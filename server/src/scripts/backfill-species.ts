@@ -1,5 +1,6 @@
 import { PrismaClient, type ProductSpecies } from '@prisma/client'
-import { determineSpecies } from '../services/quiz-autotag.js'
+import { determineSpecies, isUniversalCare, mentionsBothSpecies } from '../services/quiz-autotag.js'
+import { CAT_ONLY_BRANDS } from '../services/product.service.js'
 
 const prisma = new PrismaClient()
 
@@ -45,41 +46,6 @@ function normalizeCase(s: string): string {
   return s.toLowerCase().replace(/ё/g, 'е')
 }
 
-function containsSubstring(haystack: string, needle: string): boolean {
-  return normalizeCase(haystack).includes(normalizeCase(needle))
-}
-
-function checkBothSpeciesInName(name: string): boolean {
-  // Если в названии упоминаются оба вида, это универсальный товар
-  const nameLower = normalizeCase(name)
-  const mentionsCat = containsSubstring(nameLower, 'кошек') || containsSubstring(nameLower, 'кошки')
-  const mentionsDog = containsSubstring(nameLower, 'собак')
-  return mentionsCat && mentionsDog
-}
-
-function checkOneSpeciesInName(name: string): ProductSpecies | null {
-  const nameLower = normalizeCase(name)
-  const mentionsCat =
-    containsSubstring(nameLower, 'для кошек') ||
-    containsSubstring(nameLower, 'кошачий') ||
-    normalizeCase(name).match(/\bcat\b/)
-  const mentionsDog =
-    containsSubstring(nameLower, 'для собак') ||
-    containsSubstring(nameLower, 'собачий') ||
-    normalizeCase(name).match(/\bdog\b/)
-
-  if (mentionsCat && !mentionsDog) return 'cat'
-  if (mentionsDog && !mentionsCat) return 'dog'
-  return null
-}
-
-function getCategorySpecies(categorySlugs: string[]): ProductSpecies | null {
-  const path = categorySlugs.map(normalizeCase).join(' ')
-  if (path.includes('cats-') || path.includes('cat-')) return 'cat'
-  if (path.includes('dogs-') || path.includes('dog-')) return 'dog'
-  return null
-}
-
 async function determineProductSpecies(product: Product): Promise<{
   species: ProductSpecies
   reason: string
@@ -98,34 +64,44 @@ async function determineProductSpecies(product: Product): Promise<{
     return { species: autoTagSpecies, reason: 'тег в autoQuizTags', isDisputed: false }
   }
 
-  // 2. Оба вида в названии → both
-  if (checkBothSpeciesInName(product.name)) {
+  // 2. Оба вида названы явно — универсальный товар. Проверяем ДО determineSpecies:
+  // та возвращает null и здесь, и когда не определила ничего.
+  if (mentionsBothSpecies(product.name)) {
     return { species: 'both', reason: 'оба вида в названии', isDisputed: false }
   }
 
-  // 3. Один вид в названии
-  const nameSpecies = checkOneSpeciesInName(product.name)
-  if (nameSpecies) {
-    return { species: nameSpecies, reason: 'вид в названии товара', isDisputed: false }
-  }
-
-  // 4. determineSpecies из quiz-autotag
+  // 3-4. determineSpecies из quiz-autotag (категории, один вид, маркеры линеек)
   const autotagSpecies = determineSpecies(product.name, categorySlugs)
-  if (autotagSpecies === 'cat' || autotagSpecies === 'dog') {
+  if (autotagSpecies === 'cat') {
     return {
-      species: autotagSpecies,
-      reason: 'определено по названию и категориям (quiz-autotag)',
+      species: 'cat',
+      reason: 'определено по названию и категориям',
       isDisputed: false,
     }
   }
-
-  // 5. Категории напрямую
-  const categorySpecies = getCategorySpecies(categorySlugs)
-  if (categorySpecies) {
-    return { species: categorySpecies, reason: 'определено по категориям', isDisputed: false }
+  if (autotagSpecies === 'dog') {
+    return {
+      species: 'dog',
+      reason: 'определено по названию и категориям',
+      isDisputed: false,
+    }
+  }
+  // 5. Бренд только для кошек
+  if (product.brand?.name) {
+    const brandNameLower = normalizeCase(product.brand.name)
+    for (const catBrand of CAT_ONLY_BRANDS) {
+      if (brandNameLower === normalizeCase(catBrand)) {
+        return { species: 'cat', reason: 'бренд только для кошек', isDisputed: false }
+      }
+    }
   }
 
-  // 6. Не определено → unknown, но это спорное значение
+  // 6. Универсальный уход → both
+  if (isUniversalCare(product.name, categorySlugs)) {
+    return { species: 'both', reason: 'универсальный уход', isDisputed: false }
+  }
+
+  // 7. Не определено → unknown, но это спорное значение
   return { species: 'unknown', reason: 'не определено', isDisputed: true }
 }
 
@@ -141,7 +117,17 @@ async function main() {
   console.log('════════════════════════════════════════════════════════════════════')
   console.log(`Режим: ${apply ? '✅ ПРИМЕНЕНИЕ' : '📋 ПРЕДПРОСМОТР (без записи)'}${onlyUnknown ? ' · только неразмеченные' : ''}\n`)
 
-  // Загружаем все товары с категориями и тегами
+  // Загружаем ВСЕ товары для статистики по каталогу
+  const allProducts = await prisma.product.findMany({
+    select: { species: true },
+  })
+  const totalCatalogSize = allProducts.length
+  const catalogStatsBySpecies = new Map<ProductSpecies, number>()
+  for (const p of allProducts) {
+    catalogStatsBySpecies.set(p.species, (catalogStatsBySpecies.get(p.species) ?? 0) + 1)
+  }
+
+  // Загружаем товары для обработки (все или только неразмеченные)
   const products = await prisma.product.findMany({
     ...(onlyUnknown ? { where: { species: 'unknown' as ProductSpecies } } : {}),
     select: {
@@ -155,11 +141,12 @@ async function main() {
     },
   })
 
-  console.log(`📊 Всего товаров в базе: ${products.length}\n`)
+  console.log(`📊 Всего товаров в каталоге: ${totalCatalogSize}`)
+  console.log(`Обрабатывается: ${products.length}${onlyUnknown ? ' (только неразмеченные)' : ''}\n`)
 
   const decisions: SpeciesDecision[] = []
-  const statsBySpecies = new Map<ProductSpecies, number>()
   const statesByReason = new Map<string, number>()
+  let disputed: SpeciesDecision[] = []
 
   // Определяем вид для каждого товара
   for (const product of products) {
@@ -179,23 +166,22 @@ async function main() {
       })
     }
 
-    // Статистика
-    statsBySpecies.set(newSpecies, (statsBySpecies.get(newSpecies) ?? 0) + 1)
+    // Статистика методов определения
     statesByReason.set(reason, (statesByReason.get(reason) ?? 0) + 1)
   }
 
-  // Выводим результаты по видам
-  console.log('📈 РАСПРЕДЕЛЕНИЕ ПО ВИДАМ:')
-  // Пары типизируем явно: без этого выводится string | number, и сборка
-  // спотыкается на padEnd. tsx такое пропускает, tsc — нет.
+  disputed = decisions.filter((d) => d.isDisputed)
+
+  // Выводим результаты по видам ВО ВСЁМ каталоге
+  console.log('📈 РАСПРЕДЕЛЕНИЕ ПО ВИДАМ (весь каталог):')
   const rows: Array<[ProductSpecies, number]> = [
-    ['cat', statsBySpecies.get('cat') ?? 0],
-    ['dog', statsBySpecies.get('dog') ?? 0],
-    ['both', statsBySpecies.get('both') ?? 0],
-    ['unknown', statsBySpecies.get('unknown') ?? 0],
+    ['cat', catalogStatsBySpecies.get('cat') ?? 0],
+    ['dog', catalogStatsBySpecies.get('dog') ?? 0],
+    ['both', catalogStatsBySpecies.get('both') ?? 0],
+    ['unknown', catalogStatsBySpecies.get('unknown') ?? 0],
   ]
   for (const [species, count] of rows) {
-    const percent = (count / products.length) * 100
+    const percent = (count / totalCatalogSize) * 100
     console.log(`  ${species.padEnd(10)} ${String(count).padStart(3)}  (${percent.toFixed(1).padStart(5)}%)`)
   }
 
@@ -209,7 +195,6 @@ async function main() {
   }
 
   // Выводим спорные товары
-  const disputed = decisions.filter((d) => d.isDisputed)
   if (disputed.length > 0) {
     console.log(`\n⚠️  ТРЕБУЕТ РЕШЕНИЯ ВЛАДЕЛЬЦА (${disputed.length} товаров):\n`)
     for (const d of disputed) {
@@ -226,12 +211,11 @@ async function main() {
   const toChange = decisions.filter((d) => d.currentSpecies !== d.newSpecies)
   if (toChange.length > 0) {
     console.log(`\n📝 БУДЕТ ИЗМЕНЕНО (${toChange.length} товаров):`)
-    for (const d of toChange.slice(0, 20)) {
+    // Печатаем все: список читает владелец перед записью, а сотня строк —
+    // это ровно тот объём, который надо проверить глазами, а не «и ещё 80».
+    for (const d of toChange) {
       const arrow = `${d.currentSpecies.padEnd(8)} → ${d.newSpecies.padEnd(8)}`
-      console.log(`  ${arrow}  ${d.name.slice(0, 60)}`)
-    }
-    if (toChange.length > 20) {
-      console.log(`  ... и ещё ${toChange.length - 20} товаров`)
+      console.log(`  ${arrow}  ${d.name.slice(0, 70)}  · ${d.reason}`)
     }
   }
 
@@ -248,9 +232,25 @@ async function main() {
   let updated = 0
   for (const d of decisions) {
     if (d.currentSpecies !== d.newSpecies) {
+      // Тег вида дублируем в quizTags — ручные теги, их выкатка не пересчитывает.
+      // autoQuizTags для этого не годятся: backfill-quiz-tags строит их заново
+      // каждый деплой, и вид, взятый от бренда или раздела «уход», там не переживёт
+      // следующего прогона.
+      const product = await prisma.product.findUnique({
+        where: { id: d.productId },
+        select: { quizTags: true },
+      })
+      if (!product) continue
+
+      let quizTags = product.quizTags
+      if (d.newSpecies === 'cat' || d.newSpecies === 'dog') {
+        quizTags = quizTags.filter((tag) => !tag.startsWith('species:'))
+        quizTags.push(`species:${d.newSpecies}`)
+      }
+
       await prisma.product.update({
         where: { id: d.productId },
-        data: { species: d.newSpecies },
+        data: { species: d.newSpecies, quizTags },
       })
       updated++
     }

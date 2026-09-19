@@ -23,6 +23,38 @@ function matchesRegex(text: string, pattern: string): boolean {
   }
 }
 
+/** Явные упоминания вида в названии — голые формы слов, не только «для кошек». */
+function speciesMentions(nameLower: string): { cat: boolean; dog: boolean } {
+  const cat =
+    containsSubstring(nameLower, 'кошек') ||
+    containsSubstring(nameLower, 'кошки') ||
+    containsSubstring(nameLower, 'кошке') ||
+    containsSubstring(nameLower, 'кошач') ||
+    containsSubstring(nameLower, 'котят') ||
+    containsSubstring(nameLower, 'котов') ||
+    matchesRegex(nameLower, '\\bcat\\b') ||
+    containsSubstring(nameLower, 'for cats') ||
+    containsSubstring(nameLower, 'feline')
+  const dog =
+    containsSubstring(nameLower, 'собак') ||
+    containsSubstring(nameLower, 'щенк') ||
+    containsSubstring(nameLower, 'щенят') ||
+    matchesRegex(nameLower, '\\bdog\\b') ||
+    containsSubstring(nameLower, 'for dogs') ||
+    containsSubstring(nameLower, 'canine')
+  return { cat, dog }
+}
+
+/**
+ * Оба вида названы явно («для собак и кошек»). determineSpecies в этом случае
+ * возвращает null — так же, как и когда не определил ничего, — поэтому бэкфиллу
+ * нужен отдельный предикат: «универсальный» и «неизвестный» — разные решения.
+ */
+export function mentionsBothSpecies(name: string): boolean {
+  const m = speciesMentions(normalizeCase(name))
+  return m.cat && m.dog
+}
+
 export function determineSpecies(
   name: string,
   categorySlugs: string[]
@@ -38,37 +70,44 @@ export function determineSpecies(
     return 'dog'
   }
 
+  const { cat: mentionsCat, dog: mentionsDog } = speciesMentions(nameLower)
+
   // «Шампунь для собак и кошек» — универсальный уход, а не корм для кого-то
   // одного. Такой товар в подбор не идёт: иначе он всплывёт как рекомендация
   // по питанию.
-  const mentionsCat = containsSubstring(nameLower, 'кошек') || containsSubstring(nameLower, 'кошки')
-  const mentionsDog = containsSubstring(nameLower, 'собак')
   if (mentionsCat && mentionsDog) {
     return null
   }
 
-  // Product name
-  if (matchesRegex(nameLower, '\\bcat\\b') || containsSubstring(nameLower, 'для кошек') || containsSubstring(nameLower, 'кошачий')) {
+  // Один вид в названии → явное упоминание
+  if (mentionsCat) {
     return 'cat'
   }
-  if (matchesRegex(nameLower, '\\bdog\\b') || containsSubstring(nameLower, 'для собак') || containsSubstring(nameLower, 'собачий')) {
+  if (mentionsDog) {
     return 'dog'
   }
 
   // 251 товар в каталоге вообще без категорий, и вид у них читается только по
-  // маркерам линейки. Маркеры ниже в этом каталоге однозначны: стерилизация и
-  // «indoor» — исключительно кошачьи линейки, размер породы — исключительно
-  // собачьи. Кошачьи проверяем первыми: «Sterilised Mini» не бывает, а вот
-  // осечься на слове Adult легко.
+  // маркерам линейки. Маркеры ниже в этом каталоге однозначны: стерилизация,
+  // «indoor», когтеточка, Hill's y/d — исключительно кошачьи; размер породы,
+  // выгул, Hill's u/d — исключительно собачьи. Кошачьи проверяем первыми:
+  // «Sterilised Mini» не бывает, а вот осечься на слове Adult легко.
   if (
     matchesRegex(nameLower, 'kitten') ||
     matchesRegex(nameLower, 'steril') ||
     matchesRegex(nameLower, 'neutered') ||
     matchesRegex(nameLower, 'indoor') ||
-    matchesRegex(nameLower, 'matisse')
+    matchesRegex(nameLower, 'matisse') ||
+    matchesRegex(nameLower, 'когтеточк') ||
+    matchesRegex(nameLower, 'для вывода шерсти') ||
+    matchesRegex(nameLower, 'hairball') ||
+    containsSubstring(nameLower, 'y/d') || // Hill's Prescription Diet y/d
+    matchesRegex(nameLower, 'fibre response') ||
+    matchesRegex(nameLower, 'urinary stress')
   ) {
     return 'cat'
   }
+
   if (
     matchesRegex(nameLower, 'puppy') ||
     matchesRegex(nameLower, 'junior') ||
@@ -78,12 +117,57 @@ export function determineSpecies(
     matchesRegex(nameLower, 'maxi') ||
     matchesRegex(nameLower, 'giant') ||
     matchesRegex(nameLower, '\\bsmall\\b') ||
-    matchesRegex(nameLower, 'all breeds')
+    matchesRegex(nameLower, 'all breeds') ||
+    matchesRegex(nameLower, 'для выгула') ||
+    matchesRegex(nameLower, 'дождевик') ||
+    matchesRegex(nameLower, 'симпарика') ||
+    containsSubstring(nameLower, 'u/d') || // Hill's Prescription Diet u/d
+    matchesRegex(nameLower, 'i/d low fat') ||
+    matchesRegex(nameLower, 'derm complete') ||
+    matchesRegex(nameLower, 'derm defense')
   ) {
     return 'dog'
   }
 
   return null
+}
+
+export function isUniversalCare(name: string, categorySlugs: string[]): boolean {
+  const nameLower = normalizeCase(name)
+
+  // Проверка категории: slug содержит слово "care" или начинается с "care"
+  for (const slug of categorySlugs) {
+    const slugNorm = normalizeCase(slug)
+    if (slugNorm === 'care' || slugNorm.startsWith('care-')) {
+      return true
+    }
+  }
+
+  // Проверка названия: универсальный уход
+  const careKeywords = [
+    'гель-мыло',
+    'лосьон',
+    'воск для лап',
+    'расческ',
+    'расчёск',
+    'когтерез',
+    'зубная щетк',
+    'нейтрализатор запаха',
+    'ветеринарный паспорт',
+    'пеленк',
+    'пивных дрожжей',
+    "brewer's yeast",
+    'шампунь',
+    'салфетк',
+  ]
+
+  for (const keyword of careKeywords) {
+    if (containsSubstring(nameLower, keyword)) {
+      return true
+    }
+  }
+
+  return false
 }
 
 function deriveFormat(filters: { filter: string; value: string }[]): QuizTag[] {

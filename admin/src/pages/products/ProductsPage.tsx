@@ -9,29 +9,39 @@ const STATUSES = [
   { value: 'hidden', label: 'Скрытые' },
 ]
 
+const SPECIES = [
+  { value: 'all', label: 'Все' },
+  { value: 'unknown', label: 'Не задан' },
+  { value: 'cat', label: 'Кошки' },
+  { value: 'dog', label: 'Собаки' },
+  { value: 'both', label: 'Универсальный' },
+]
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<AdminProductRow[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('all')
+  const [species, setSpecies] = useState('all')
   const [loading, setLoading] = useState(true)
   const [togglingId, setTogglingId] = useState<string | null>(null)
   const [error, setError] = useState('')
 
-  const load = (p = page, s = search, st = status) => {
+  const load = (p = page, s = search, st = status, sp = species) => {
     setLoading(true)
     const params: Record<string, unknown> = { page: p, limit: 20, status: st }
     if (s) params.search = s
+    if (sp !== 'all') params.species = sp
     productsApi.adminList(params)
       .then(r => { setProducts(r.data.items); setTotal(r.data.total) })
       .finally(() => setLoading(false))
   }
 
   useEffect(() => {
-    const t = setTimeout(() => load(page, search, status), 300)
+    const t = setTimeout(() => load(page, search, status, species), 300)
     return () => clearTimeout(t)
-  }, [page, search, status])
+  }, [page, search, status, species])
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
@@ -40,6 +50,11 @@ export default function ProductsPage() {
 
   const handleStatusChange = (value: string) => {
     setStatus(value)
+    setPage(1)
+  }
+
+  const handleSpeciesChange = (value: string) => {
+    setSpecies(value)
     setPage(1)
   }
 
@@ -108,6 +123,23 @@ export default function ProductsPage() {
         ))}
       </div>
 
+      {/* Species filter */}
+      <div className="flex gap-2 mb-4 flex-wrap">
+        {SPECIES.map(s => (
+          <button
+            key={s.value}
+            onClick={() => handleSpeciesChange(s.value)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              species === s.value
+                ? 'bg-blue-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
       <div className="mb-4">
         <input
           type="text"
@@ -129,6 +161,7 @@ export default function ProductsPage() {
               <thead>
                 <tr className="text-left text-gray-500 text-xs border-b border-gray-100 bg-gray-50">
                   <th className="px-5 py-3 font-medium">Товар</th>
+                  <th className="px-5 py-3 font-medium">Вид</th>
                   <th className="px-5 py-3 font-medium">Бренд</th>
                   <th className="px-5 py-3 font-medium">Вариантов</th>
                   <th className="px-5 py-3 font-medium">Цена от</th>
@@ -142,6 +175,19 @@ export default function ProductsPage() {
                     <td className="px-5 py-3">
                       <p className="font-medium text-gray-900 line-clamp-1">{p.name}</p>
                       <p className="text-xs text-gray-400">{p.slug}</p>
+                    </td>
+                    <td className="px-5 py-3 text-xs">
+                      <span className={`px-2 py-1 rounded-md font-medium ${
+                        p.species === 'cat' ? 'bg-blue-100 text-blue-700' :
+                        p.species === 'dog' ? 'bg-amber-100 text-amber-700' :
+                        p.species === 'both' ? 'bg-green-100 text-green-700' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        {p.species === 'cat' ? 'Кошки' :
+                         p.species === 'dog' ? 'Собаки' :
+                         p.species === 'both' ? 'Универсальный' :
+                         'Не задан'}
+                      </span>
                     </td>
                     <td className="px-5 py-3 text-gray-600">{p.brand?.name ?? '—'}</td>
                     <td className="px-5 py-3 text-gray-600">{p.variants.length}</td>

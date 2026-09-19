@@ -7,6 +7,8 @@ export const MEDICAL_LINES = ['Vet Life', 'VetSolution', 'Prescription Diet']
 /** Узлы «Лечебное питание» в дереве категорий (backfill-category-tree.ts). Фиксированные slug'и,
     а не суффикс: переименование категории в админке не должно молча ломать фильтр. */
 export const MEDICAL_CATEGORY_SLUGS = ['dogs-medical', 'cats-medical']
+/** Бренды только для кошек (сравнение без учёта регистра). */
+export const CAT_ONLY_BRANDS = ['ZILLII', 'Matisse']
 
 export interface ProductFilters {
   categorySlug?: string
