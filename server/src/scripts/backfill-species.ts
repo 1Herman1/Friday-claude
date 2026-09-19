@@ -94,6 +94,9 @@ async function loadMoyskladSpecies(): Promise<Map<string, 'cat' | 'dog'>> {
       if (hasDog) result.set(row.id, 'dog')
     }
 
+    // Цифра важна: если источник вдруг перестанет давать путь папки, правило
+    // молча выключится, и это будет выглядеть как «товары просто не определились».
+    console.log(`📁 Папки МоегоСклада: вид читается у ${result.size} из ${rows.length} позиций`)
     return result
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
@@ -192,6 +195,16 @@ async function main() {
   console.log(`Режим: ${apply ? '✅ ПРИМЕНЕНИЕ' : '📋 ПРЕДПРОСМОТР (без записи)'}${onlyUnknown ? ' · только неразмеченные' : ''}\n`)
 
   const moyskladSpecies = await loadMoyskladSpecies()
+
+  // Сколько из обрабатываемых товаров вообще привязаны к МоемуСкладу — без этого
+  // «0 определено по папке» не отличить от «привязок нет».
+  const linkedCount = await prisma.product.count({
+    where: {
+      ...(onlyUnknown ? { species: 'unknown' as ProductSpecies } : {}),
+      variants: { some: { moyskladId: { not: null } } },
+    },
+  })
+  console.log(`🔗 Привязано к МоемуСкладу: ${linkedCount}`)
 
   // Загружаем ВСЕ товары для статистики по каталогу
   const allProducts = await prisma.product.findMany({
