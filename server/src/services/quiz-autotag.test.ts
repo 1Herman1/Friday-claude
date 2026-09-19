@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { deriveQuizTags, mergeQuizTags, determineSpecies, isUniversalCare, type AutotagInput } from './quiz-autotag'
+import { deriveQuizTags, mergeQuizTags, determineSpecies, isUniversalCare, speciesFromText, type AutotagInput } from './quiz-autotag'
 import { isQuizTag } from '../lib/quiz-tags'
 
 /** Собрать вход, подставив вид животного через категорию. */
@@ -320,5 +320,30 @@ describe('isUniversalCare', () => {
   it('ё и е считаются одинаково', () => {
     expect(isUniversalCare('Расчёска', [])).toBe(true)
     expect(isUniversalCare('Расческа', [])).toBe(true)
+  })
+})
+
+describe('speciesFromText — вид из пути папки МоегоСклада', () => {
+  it('читает родительный падеж: «для кошек»', () => {
+    expect(speciesFromText('Корм/Grandorf/Grandorf для кошек')).toBe('cat')
+  })
+
+  it('читает именительный: «Кошки»', () => {
+    expect(speciesFromText('Корм/Farmina/Farmina / Кошки/Farmina / Кошки / Сухой/N&D')).toBe('cat')
+  })
+
+  it('читает собачьи папки в обеих формах', () => {
+    expect(speciesFromText('Корм/Monge/Monge / Собаки')).toBe('dog')
+    expect(speciesFromText('Корм/Grandorf/Grandorf для собак')).toBe('dog')
+  })
+
+  it('папка по бренду вида не несёт', () => {
+    expect(speciesFromText("Корм/Hill's")).toBeNull()
+    expect(speciesFromText('Корм/Zillii')).toBeNull()
+    expect(speciesFromText('Уход и косметика/Muzzle')).toBeNull()
+  })
+
+  it('оба вида в пути — не гадаем', () => {
+    expect(speciesFromText('Уход/Для собак и кошек')).toBeNull()
   })
 })

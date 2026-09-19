@@ -55,6 +55,22 @@ export function mentionsBothSpecies(name: string): boolean {
   return m.cat && m.dog
 }
 
+/**
+ * Вид по словам в произвольном тексте — например, в пути папки МоегоСклада
+ * («Корм/Grandorf/Grandorf для кошек»). Назван один вид — он и возвращается,
+ * названы оба или ни одного — null.
+ *
+ * Отдельной реализации здесь быть не должно: свой список форм для папок уже
+ * подвёл — «кошк» не совпадает с «кошек», и семнадцать товаров молча остались
+ * без вида.
+ */
+export function speciesFromText(text: string): 'dog' | 'cat' | null {
+  const m = speciesMentions(normalizeCase(text))
+  if (m.cat && !m.dog) return 'cat'
+  if (m.dog && !m.cat) return 'dog'
+  return null
+}
+
 export function determineSpecies(
   name: string,
   categorySlugs: string[]

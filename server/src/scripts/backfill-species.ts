@@ -1,5 +1,5 @@
 import { PrismaClient, type ProductSpecies } from '@prisma/client'
-import { determineSpecies, isUniversalCare, mentionsBothSpecies } from '../services/quiz-autotag.js'
+import { determineSpecies, isUniversalCare, mentionsBothSpecies, speciesFromText } from '../services/quiz-autotag.js'
 import { CAT_ONLY_BRANDS } from '../services/product.service.js'
 import { withSpeciesTag } from '../lib/quiz-tags.js'
 import { fetchAssortment } from '../services/moysklad/client.js'
@@ -83,15 +83,8 @@ async function loadMoyskladSpecies(): Promise<Map<string, 'cat' | 'dog'>> {
 
       if (!pathName) continue
 
-      const normalized = normalizeCase(pathName)
-      const hasCat = normalized.includes('кошк') || normalized.includes('cat')
-      const hasDog = normalized.includes('собак') || normalized.includes('dog')
-
-      // Если оба вида или ни один — пропускаем
-      if ((hasCat && hasDog) || (!hasCat && !hasDog)) continue
-
-      if (hasCat) result.set(row.id, 'cat')
-      if (hasDog) result.set(row.id, 'dog')
+      const species = speciesFromText(pathName)
+      if (species) result.set(row.id, species)
     }
 
     // Цифра важна: если источник вдруг перестанет давать путь папки, правило
