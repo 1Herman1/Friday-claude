@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-09-19T21:59:29.977Z",
+  "built_at": "2026-09-19T22:12:57.003Z",
   "source": "vendored",
   "models": [
     {
@@ -152,7 +152,10 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_urls"
+        ],
         "defaults": {}
       },
       "description": "Image editing by Seedream4.0",
@@ -210,8 +213,15 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "quality"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "quality": "basic"
+        }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
       "price": {
@@ -283,8 +293,16 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "image_urls",
+          "aspect_ratio",
+          "quality"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "quality": "basic"
+        }
       },
       "description": "Image editing by Seedream4.5",
       "price": {
@@ -359,8 +377,15 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "quality"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "quality": "basic"
+        }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
       "price": {
@@ -443,8 +468,16 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "image_urls",
+          "aspect_ratio",
+          "quality"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "quality": "basic"
+        }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
       "price": {
@@ -518,8 +551,15 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "quality"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "quality": "basic"
+        }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
       "price": {
@@ -601,8 +641,16 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "image_urls",
+          "aspect_ratio",
+          "quality"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "quality": "basic"
+        }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
       "schemaSource": "docs",
@@ -656,7 +704,9 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
@@ -709,7 +759,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Image generation by Seedream3.0",
@@ -747,10 +799,22 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1"
+        }
       },
       "description": "Image generation by z-image",
+      "price": {
+        "creditsMin": 0.8,
+        "creditsMax": 0.8,
+        "usdMin": 0.004,
+        "usdMax": 0.004,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -800,7 +864,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Image generation by Google imagen4-fast",
@@ -860,7 +926,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Image generation by Google imagen4-ultra",
@@ -1010,7 +1078,10 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_urls"
+        ],
         "defaults": {}
       },
       "description": "Image editing using Google's Nano Banana Edit model",
@@ -1171,7 +1242,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Image generation using Google's Pro Image to Image model",
@@ -1247,10 +1320,19 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Image generation by Nano Banana 2",
+      "price": {
+        "creditsMin": 4,
+        "creditsMax": 4,
+        "usdMin": 0.02,
+        "usdMax": 0.02,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -1303,10 +1385,22 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio"
+        ],
+        "defaults": {
+          "aspect_ratio": "auto"
+        }
       },
       "description": "",
+      "price": {
+        "creditsMin": 4,
+        "creditsMax": 4,
+        "usdMin": 0.02,
+        "usdMax": 0.02,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -1369,8 +1463,16 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "input_urls",
+          "prompt",
+          "aspect_ratio",
+          "resolution"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        }
       },
       "description": "Image generation by flux-2/pro-image-to-image",
       "price": {
@@ -1433,8 +1535,15 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "resolution"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        }
       },
       "description": "High-quality photorealistic image generation powered by Flux-2's advanced AI model",
       "price": {
@@ -1506,8 +1615,16 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "input_urls",
+          "prompt",
+          "aspect_ratio",
+          "resolution"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        }
       },
       "description": "Image generation by flux-2/flex-image-to-image",
       "price": {
@@ -1570,8 +1687,15 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "resolution"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        }
       },
       "description": "High-quality photorealistic image generation powered by Flux-2's advanced AI model",
       "price": {
@@ -1615,7 +1739,10 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "aspect_ratio"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -1646,7 +1773,9 @@
       },
       "meta": {
         "imageList": false,
-        "required": [],
+        "required": [
+          "task_id"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -1685,7 +1814,10 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "task_id"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -1737,7 +1869,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -1791,7 +1925,10 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "aspect_ratio",
+          "image_urls"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -1838,7 +1975,9 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "image_urls"
+        ],
         "defaults": {}
       },
       "description": "Content generation using grok-imagine/image-to-image",
@@ -1913,7 +2052,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -1989,7 +2130,10 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "input_urls"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -2057,7 +2201,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -2140,7 +2286,10 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "input_urls"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -2193,8 +2342,15 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "quality"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "quality": "medium"
+        }
       },
       "description": "",
       "price": {
@@ -2254,8 +2410,16 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "input_urls",
+          "prompt",
+          "aspect_ratio",
+          "quality"
+        ],
+        "defaults": {
+          "aspect_ratio": "3:2",
+          "quality": "medium"
+        }
       },
       "description": "",
       "price": {
@@ -2332,7 +2496,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -2418,7 +2584,10 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "input_urls"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -2461,8 +2630,13 @@
       "meta": {
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "image_url",
+          "upscale_factor"
+        ],
+        "defaults": {
+          "upscale_factor": "2"
+        }
       },
       "description": "Enhance image resolution and quality using advanced AI upscaling powered by Topaz",
       "schemaSource": "docs",
@@ -2486,7 +2660,9 @@
       "meta": {
         "imageField": "image",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image"
+        ],
         "defaults": {}
       },
       "description": "remove background by recraft/remove-background",
@@ -2511,7 +2687,9 @@
       "meta": {
         "imageField": "image",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image"
+        ],
         "defaults": {}
       },
       "description": "Enhance image resolution and quality using advanced AI upscaling powered by Recraft",
@@ -2606,7 +2784,12 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url",
+          "mask_url",
+          "reference_image_urls"
+        ],
         "defaults": {}
       },
       "description": "Image generation by ideogram/character-edit",
@@ -2743,7 +2926,11 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url",
+          "reference_image_urls"
+        ],
         "defaults": {}
       },
       "description": "Image generation by ideogram/character-remix",
@@ -2852,7 +3039,10 @@
         "promptField": "prompt",
         "imageField": "reference_image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "reference_image_urls"
+        ],
         "defaults": {}
       },
       "description": "Image generation by ideogram/character",
@@ -2942,7 +3132,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Image generation by ideogram/v3-text-to-image",
@@ -3014,7 +3206,11 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url",
+          "mask_url"
+        ],
         "defaults": {}
       },
       "description": "Image generation by ideogram/v3-edit",
@@ -3131,7 +3327,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Image generation by ideogram/v3-remix",
@@ -3240,7 +3439,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "High-quality photorealistic image generation powered by Qwen's advanced AI model",
@@ -3343,7 +3544,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Image generation by Qwen's advanced AI model",
@@ -3472,7 +3676,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Image generation by qwen/image-edit",
@@ -3545,7 +3752,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Image generation by qwen2/image-edit",
@@ -3607,7 +3817,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Image generation by qwen2/text-to-image",
@@ -3703,7 +3915,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -3799,7 +4013,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -3903,7 +4119,10 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "image_urls",
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -4007,7 +4226,10 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "image_urls",
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -4116,7 +4338,9 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Based on wan/2-7-image, image generation and editing are achieved.",
@@ -4225,7 +4449,9 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Based on wan/2-7-image-pro, image generation and editing are achieved.",
@@ -4306,7 +4532,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -4450,7 +4678,9 @@
       },
       "meta": {
         "imageList": false,
-        "required": [],
+        "required": [
+          "task_id"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -4503,8 +4733,15 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "task_id",
+          "prompt",
+          "extend_at",
+          "extend_times"
+        ],
+        "defaults": {
+          "extend_at": 2
+        }
       },
       "description": "",
       "price": {
@@ -4586,6 +4823,13 @@
         "defaults": {}
       },
       "description": "",
+      "price": {
+        "creditsMin": 2.4,
+        "creditsMax": 4.5,
+        "usdMin": 0.012,
+        "usdMax": 0.0225,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -4685,7 +4929,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -4742,8 +4988,15 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "image_urls",
+          "sound",
+          "duration"
+        ],
+        "defaults": {
+          "duration": "5"
+        }
       },
       "description": "",
       "price": {
@@ -4813,7 +5066,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -4880,7 +5136,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -4927,7 +5185,11 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image_url",
+          "audio_url",
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -4967,7 +5229,11 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image_url",
+          "audio_url",
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -5024,7 +5290,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -5091,7 +5360,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -5162,7 +5433,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -5226,7 +5500,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -5293,8 +5570,16 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "input_urls",
+          "video_urls",
+          "character_orientation",
+          "mode"
+        ],
+        "defaults": {
+          "character_orientation": "video",
+          "mode": "720p"
+        }
       },
       "description": "",
       "schemaSource": "docs",
@@ -5354,7 +5639,10 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "input_urls",
+          "video_urls"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -5458,8 +5746,22 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "sound",
+          "duration",
+          "aspect_ratio",
+          "mode",
+          "multi_shots",
+          "multi_prompt"
+        ],
+        "defaults": {
+          "sound": false,
+          "duration": "5",
+          "aspect_ratio": "16:9",
+          "mode": "pro",
+          "multi_shots": false
+        }
       },
       "description": "Generate high-quality videos with advanced multi-shot capabilities and element references using Kling 3.0 AI",
       "schemaSource": "docs",
@@ -5511,8 +5813,17 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "duration",
+          "aspect_ratio",
+          "resolution"
+        ],
+        "defaults": {
+          "duration": "5",
+          "aspect_ratio": "16:9",
+          "resolution": "720p"
+        }
       },
       "description": "",
       "schemaSource": "docs",
@@ -5561,8 +5872,16 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "image_urls",
+          "duration",
+          "resolution"
+        ],
+        "defaults": {
+          "duration": "5",
+          "resolution": "720p"
+        }
       },
       "description": "",
       "schemaSource": "docs",
@@ -5930,6 +6249,13 @@
         "defaults": {}
       },
       "description": "",
+      "price": {
+        "creditsMin": 2.4,
+        "creditsMax": 8.2,
+        "usdMin": 0.012,
+        "usdMax": 0.041,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -6055,6 +6381,13 @@
         "defaults": {}
       },
       "description": "",
+      "price": {
+        "creditsMin": 17,
+        "creditsMax": 158,
+        "usdMin": 0.085,
+        "usdMax": 0.79,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -6137,10 +6470,23 @@
         "promptField": "prompt",
         "imageField": "input_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "duration"
+        ],
+        "defaults": {
+          "aspect_ratio": "1:1"
+        }
       },
       "description": "",
+      "price": {
+        "creditsMin": 1.75,
+        "creditsMax": 15,
+        "usdMin": 0.00875,
+        "usdMax": 0.075,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -6197,7 +6543,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -6279,7 +6628,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using bytedance/v1-pro-image-to-video",
@@ -6367,7 +6719,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Content generation using bytedance/v1-pro-text-to-video",
@@ -6456,7 +6810,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using bytedance/v1-lite-image-to-video",
@@ -6544,7 +6901,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Content generation using bytedance/v1-lite-text-to-video",
@@ -6604,7 +6963,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using hailuo/2-3-image-to-video-pro",
@@ -6671,7 +7033,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using hailuo/2-3-image-to-video-standard",
@@ -6717,7 +7082,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Content generation using hailuo/02-text-to-video-pro",
@@ -6778,7 +7145,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using hailuo/02-image-to-video-pro",
@@ -6834,7 +7204,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Content generation using hailuo/02-text-to-video-standard",
@@ -6915,7 +7287,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using hailuo/02-image-to-video-standard",
@@ -6996,7 +7371,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image_url",
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Transform images into dynamic videos powered by Wan's advanced AI model",
@@ -7110,7 +7488,11 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url",
+          "audio_url"
+        ],
         "defaults": {}
       },
       "description": "Generate videos using Wan's advanced AI model",
@@ -7186,7 +7568,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "High-quality video generation from text descriptions powered by Wan's advanced AI model",
@@ -7243,7 +7627,10 @@
       "meta": {
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "video_url",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using Wan's advanced AI model",
@@ -7286,7 +7673,10 @@
       "meta": {
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "video_url",
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using Wan's advanced AI model",
@@ -7354,7 +7744,10 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_urls"
+        ],
         "defaults": {}
       },
       "description": "Transform static images into dynamic videos powered by Wan's advanced AI model",
@@ -7421,7 +7814,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "High-quality video generation from text descriptions powered by Wan's advanced AI model",
@@ -7494,7 +7889,10 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "video_urls"
+        ],
         "defaults": {}
       },
       "description": "Transform existing videos with new prompts using Wan's advanced AI model",
@@ -7576,7 +7974,11 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_urls",
+          "audio"
+        ],
         "defaults": {}
       },
       "description": "> Transform images into dynamic videos powered by Wan's advanced AI model",
@@ -7649,7 +8051,10 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "video_urls"
+        ],
         "defaults": {}
       },
       "description": "> Content generation using wan/2-6-flash-video-to-video",
@@ -7730,7 +8135,11 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "image_url",
+          "duration"
+        ],
         "defaults": {}
       },
       "description": "Video generation by wan/2-5-image-to-video",
@@ -7821,7 +8230,10 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "duration"
+        ],
         "defaults": {}
       },
       "description": "Video generation by wan/2-5-text-to-video",
@@ -7925,7 +8337,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -8038,7 +8452,9 @@
         "promptField": "prompt",
         "imageField": "first_frame_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -8159,7 +8575,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "video_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -8284,7 +8702,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -8554,7 +8974,9 @@
       },
       "meta": {
         "imageList": false,
-        "required": [],
+        "required": [
+          "video_url"
+        ],
         "defaults": {}
       },
       "description": "Enhance video resolution and quality using advanced AI upscaling powered by Topaz",
@@ -8611,7 +9033,11 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image_url",
+          "audio_url",
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "Content generation using infinitalk/from-audio",
@@ -8692,8 +9118,17 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "quality",
+          "duration"
+        ],
+        "defaults": {
+          "aspect_ratio": "16:9",
+          "quality": "720p",
+          "duration": 5
+        }
       },
       "description": "",
       "schemaSource": "docs",
@@ -8823,8 +9258,16 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "image_urls",
+          "quality",
+          "duration"
+        ],
+        "defaults": {
+          "quality": "720p",
+          "duration": 5
+        }
       },
       "description": "",
       "price": {
@@ -8902,8 +9345,17 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "first_frame_image_url",
+          "last_frame_image_url",
+          "quality",
+          "duration"
+        ],
+        "defaults": {
+          "quality": "720p",
+          "duration": 5
+        }
       },
       "description": "",
       "schemaSource": "docs",
@@ -8967,7 +9419,12 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "duration",
+          "quality",
+          "taskId"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -9055,8 +9512,18 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "image_references",
+          "aspect_ratio",
+          "quality",
+          "duration"
+        ],
+        "defaults": {
+          "aspect_ratio": "16:9",
+          "quality": "720p",
+          "duration": 5
+        }
       },
       "description": "",
       "price": {
@@ -9131,8 +9598,14 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "aspect_ratio",
+          "duration"
+        ],
+        "defaults": {
+          "duration": 6
+        }
       },
       "description": "",
       "price": {
@@ -9208,8 +9681,13 @@
         "promptField": "prompt",
         "imageField": "first_frame_url",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "duration"
+        ],
+        "defaults": {
+          "duration": 6
+        }
       },
       "description": "",
       "price": {
@@ -9307,8 +9785,13 @@
         "promptField": "prompt",
         "imageField": "reference_image_urls",
         "imageList": true,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "duration"
+        ],
+        "defaults": {
+          "duration": 6
+        }
       },
       "description": "",
       "price": {
@@ -9376,7 +9859,9 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -9508,7 +9993,10 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "reference_image"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -9574,7 +10062,10 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
+        "required": [
+          "prompt",
+          "video_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -9631,7 +10122,9 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "image_urls"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -9697,8 +10190,12 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt"
+        ],
+        "defaults": {
+          "prompt": ""
+        }
       },
       "description": "",
       "price": {
@@ -9770,8 +10267,14 @@
       "meta": {
         "promptField": "prompt",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "prompt",
+          "reference_image"
+        ],
+        "defaults": {
+          "prompt": "",
+          "reference_image": "[]"
+        }
       },
       "description": "",
       "price": {
@@ -9886,10 +10389,20 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "duration"
+        ],
         "defaults": {}
       },
       "description": "",
+      "price": {
+        "creditsMin": 63,
+        "creditsMax": 252,
+        "usdMin": 0.315,
+        "usdMax": 1.26,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -9980,10 +10493,20 @@
         "promptField": "prompt",
         "imageField": "image_urls",
         "imageList": true,
-        "required": [],
+        "required": [
+          "prompt",
+          "duration"
+        ],
         "defaults": {}
       },
       "description": "",
+      "price": {
+        "creditsMin": 63,
+        "creditsMax": 252,
+        "usdMin": 0.315,
+        "usdMax": 1.26,
+        "approximate": false
+      },
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -10051,7 +10574,10 @@
         "promptField": "prompt",
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image_url",
+          "audio_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -10083,7 +10609,9 @@
       "meta": {
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -10108,7 +10636,9 @@
       "meta": {
         "imageField": "image_url",
         "imageList": false,
-        "required": [],
+        "required": [
+          "image_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -10184,7 +10714,11 @@
       },
       "meta": {
         "imageList": false,
-        "required": [],
+        "required": [
+          "mode",
+          "video_url",
+          "audio_url"
+        ],
         "defaults": {}
       },
       "description": "",
@@ -10208,7 +10742,9 @@
       },
       "meta": {
         "imageList": false,
-        "required": [],
+        "required": [
+          "audio_url"
+        ],
         "defaults": {}
       },
       "description": "Content generation using elevenlabs/audio-isolation",
@@ -10325,7 +10861,9 @@
       },
       "meta": {
         "imageList": false,
-        "required": [],
+        "required": [
+          "dialogue"
+        ],
         "defaults": {}
       },
       "description": "Dialogue text-to-speech generation using elevenlabs/text-to-dialogue-v3",
@@ -10481,8 +11019,13 @@
       "meta": {
         "promptField": "text",
         "imageList": false,
-        "required": [],
-        "defaults": {}
+        "required": [
+          "text",
+          "voice"
+        ],
+        "defaults": {
+          "voice": "EkK5I93UQWFDigLMpZcX"
+        }
       },
       "description": "Content generation using elevenlabs/text-to-speech-multilingual-v2",
       "price": {
@@ -10644,7 +11187,9 @@
       "meta": {
         "promptField": "text",
         "imageList": false,
-        "required": [],
+        "required": [
+          "text"
+        ],
         "defaults": {}
       },
       "description": "Content generation using elevenlabs/text-to-speech-turbo-2-5",
@@ -10703,7 +11248,10 @@
       },
       "meta": {
         "imageList": false,
-        "required": [],
+        "required": [
+          "speakers",
+          "dialogue_turns"
+        ],
         "defaults": {}
       },
       "description": "Content generation using elevenlabs/audio-isolation",

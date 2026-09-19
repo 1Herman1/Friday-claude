@@ -38,14 +38,16 @@ async function buildCatalog() {
         api: "jobs",
         docUrl: entry.docUrl,
         fields,
+        // Поля передаём как есть: раньше required/default обнулялись при
+        // пересборке, и валидация перед запуском пропускала пустой prompt.
         meta: deriveModelMeta(
           Object.entries(fields).map(([name, spec]) => ({
             name,
             type: spec.type,
-            required: false,
+            required: Boolean(spec.required),
             description: spec.description,
-            enum: [],
-            default: null,
+            enum: spec.enum ?? [],
+            default: spec.default ?? null,
             constraints: {},
           }))
         ),

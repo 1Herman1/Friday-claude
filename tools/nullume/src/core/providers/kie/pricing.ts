@@ -117,7 +117,13 @@ export async function fetchPricing(): Promise<PricingRecord[]> {
 }
 
 export function priceForModel(records: PricingRecord[], modelId: string): PriceInfo | null {
-  const matching = records.filter((r) => r.id === modelId);
+  let matching = records.filter((r) => r.id === modelId);
+
+  // Fallback: search by description if id not found
+  if (matching.length === 0) {
+    matching = records.filter((r) => r.description && r.description.includes(modelId));
+  }
+
   if (matching.length === 0) return null;
 
   let minCredit = Infinity;
