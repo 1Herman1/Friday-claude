@@ -32,7 +32,7 @@ catalogCmd
 
 catalogCmd
   .command("audit")
-  .description("Аудит каталога на расхождения с живым сервером")
+  .description("Аудит полноты локального каталога (required, поле промпта, цена)")
   .action(async function () {
     const flags = getGlobalFlags();
 

@@ -53,7 +53,13 @@ async function main() {
       }
       exit(error.exitCode);
     }
-    stderr.write(`Неожиданная ошибка: ${(error as Error).message}\n`);
+    const message = (error as Error).message;
+    stderr.write(`Неожиданная ошибка: ${message}\n`);
+    // Контракт --json держим и для непредвиденных ошибок: скрипт или агент
+    // ждёт разбираемый вывод, а не пустой stdout.
+    if ((program.opts() as Record<string, unknown>).json) {
+      stdout.write(JSON.stringify({ error: { message, code: "Error" } }, null, 2) + "\n");
+    }
     exit(1);
   }
 }
