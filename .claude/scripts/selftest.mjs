@@ -152,20 +152,37 @@ if (withSplit.length !== withThreshold.length) {
 // Разрешить возражать мало — нужен канал в отчёте. Раньше эта проверка сверяла
 // наличие текста где угодно в файле и была зелёной при том, что рубрики для
 // возражения в формате вывода не существовало, а рядом стоял запрет на «а вдруг».
+//
+// Отбор идёт по департаменту, а НЕ по наличию строки «80%» в тексте: при отборе
+// по строке performance-optimizer и silent-failure-hunter — обязательная пара
+// перед деплоем — молча проходили мимо, потому что цифры в их тексте не было.
+// Теперь пропуск агента-ревьюера это ошибка по умолчанию, а исключения названы
+// поимённо: курирующие и генерирующие агенты отчётов о находках не пишут.
 {
+  const REVIEW_DEPTS = ["review", "quality", "design", "security", "legal"];
+  const NOT_REVIEWERS = new Set([
+    "component-curator", "icon-curator", "media-generator", "motion-curator",
+  ]);
+  const reviewers = agents.filter((f) => {
+    const dept = f.includes("/") ? f.split("/")[0] : "";
+    return REVIEW_DEPTS.includes(dept) && !NOT_REVIEWERS.has(path.basename(f, ".md"));
+  });
+
   const noRubric = [];
-  for (const f of withSplit) {
+  const noFormat = [];
+  for (const f of reviewers) {
     const body = read(`.claude/agents/${f}`) || "";
     const head = body.search(/^## Формат/m);
-    if (head < 0) continue; // у агента нет блока формата — рубрике негде быть
+    if (head < 0) { noFormat.push(path.basename(f, ".md")); continue; }
     const tail = body.slice(head);
     const next = tail.search(/\n## (?!Формат)/);
     const section = next < 0 ? tail : tail.slice(0, next);
     if (!/ВОЗРАЖЕНИЕ/.test(section)) noRubric.push(path.basename(f, ".md"));
   }
   if (noRubric.length) {
-    bad(`рубрики ВОЗРАЖЕНИЕ нет в формате вывода у ${noRubric.length} агентов: ${noRubric.join(", ")} — возражать разрешено, но написать его некуда`);
-  } else ok("рубрика ВОЗРАЖЕНИЕ есть в каждом блоке формата");
+    bad(`рубрики ВОЗРАЖЕНИЕ нет в формате вывода у ${noRubric.length} ревьюеров: ${noRubric.join(", ")} — возражать разрешено, но написать его некуда`);
+  } else ok(`рубрика ВОЗРАЖЕНИЕ есть у всех ${reviewers.length - noFormat.length} ревьюеров с блоком формата`);
+  if (noFormat.length) wrn(`без блока «Формат»: ${noFormat.join(", ")} — рубрике негде стоять, проверить вручную`);
 }
 
 console.log("\n[10] Карта департаментов совпадает с диском");
