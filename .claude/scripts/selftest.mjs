@@ -47,22 +47,31 @@ const settings = read(".claude/settings.json");
 const depth = settings ? (JSON.parse(settings).env || {}).CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH : null;
 const orchestrators = agents.filter((f) => /^tools:.*\bAgent\b/m.test(read(`.claude/agents/${f}`)));
 if (orchestrators.length && (!depth || Number(depth) < 2)) {
-  bad(`агенты с tools: Agent (${orchestrators.map((f) => f.replace(".md", "")).join(", ")}) не смогут вызывать субагентов — задай env.CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH >= 2 в .claude/settings.json`);
+  bad(`агенты с tools: Agent (${orchestrators.map((f) => path.basename(f, ".md")).join(", ")}) не смогут вызывать субагентов — задай env.CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH >= 2 в .claude/settings.json`);
 } else if (orchestrators.length) {
   ok(`${orchestrators.length} оркестраторов, глубина вложенности = ${depth}`);
 }
 
 console.log("\n[3] Суб-агенты, упомянутые оркестраторами, существуют");
+let missing = 0;
 for (const f of orchestrators) {
   const body = read(`.claude/agents/${f}`);
-  const mentioned = [...body.matchAll(/`([a-z][a-z-]{3,})`/g)].map((m) => m[1]);
+  // Отдел называет подчинённых в таблице команды: `имя-агента` в обратных
+  // кавычках. Дефис обязателен — иначе в выборку попадают обычные слова.
+  const mentioned = [...body.matchAll(/`([a-z]+(?:-[a-z]+)+)`/g)].map((m) => m[1]);
   for (const name of new Set(mentioned)) {
     if (agents.some((a) => path.basename(a, ".md") === name)) continue;
     if (fs.existsSync(`.claude/commands/${name}.md`)) continue;
     if (fs.existsSync(`.claude/skills/${name}`)) continue;
+    // Отдел продвижения командует скиллами GEO-рантайма, а не агентами:
+    // они лежат своим каталогом и агентами Claude Code не являются.
+    if (fs.existsSync(`.geo-topic-agent-runtime/skills/${name}/SKILL.md`)) continue;
+    if (name.includes(".")) continue;
+    bad(`${path.basename(f, ".md")} ссылается на «${name}» — такого агента, команды или скилла нет`);
+    missing++;
   }
 }
-ok("проверено");
+if (!missing) ok(`проверено, ${orchestrators.length} отделов`);
 
 console.log("\n[4] Хук design-lint доносит находки до модели");
 const hook = read(".claude/hooks/post-edit-design-lint.sh");
@@ -103,6 +112,9 @@ for (const dir of ["CLAUDE.md", ".claude", "docs"]) {
     if (!fs.existsSync(p)) return;
     if (fs.statSync(p).isDirectory()) { for (const e of fs.readdirSync(p)) walk(path.join(p, e)); return; }
     if (!/\.(md|mjs|sh)$/.test(p)) return;
+    // Архив сессий — исторические записи. Ссылка, верная на момент записи,
+    // после переезда файла устаревает законно: переписывать прошлое нельзя.
+    if (p.startsWith(path.join("docs", "archive"))) return;
     const t = read(p) || "";
     for (const m of t.matchAll(/`?(docs\/[\w./-]+\.md)`?/g)) {
       const target = m[1];
@@ -135,6 +147,16 @@ if (withSplit.length !== withThreshold.length) {
   const missing = withThreshold.filter((f) => !withSplit.includes(f)).map((f) => path.basename(f, ".md"));
   bad(`порог 80% без расщепления в ${missing.length} агентах: ${missing.join(", ")} — они прочитают старую формулировку «сомневаешься молчи»`);
 } else ok(`${withSplit.length} из ${withThreshold.length} агентов знают, что возражение порога не имеет`);
+
+console.log("\n[10] Переносимость универсальной базы");
+try {
+  execSync("bash .claude/scripts/portability-check.sh", { stdio: "pipe" });
+  ok("привязок к конкретному проекту нет");
+} catch (e) {
+  const out = String(e.stdout || "");
+  const n = (out.match(/Привязок: (\d+) в (\d+) файлах/) || [])[0] || "есть привязки";
+  wrn(`${n} — подробности: bash .claude/scripts/portability-check.sh`);
+}
 
 console.log(`\n${"─".repeat(50)}`);
 console.log(fail ? `ПРОВАЛЕНО: ${fail} ошибок, ${warn} предупреждений` : `СИСТЕМА ЗДОРОВА (${warn} предупреждений)`);
