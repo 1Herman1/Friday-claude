@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - deploy/simba
+  # Ручной запуск нужен, когда код не менялся, а перенести на сервер надо: смена
+  # секрета (токен МоегоСклада, ключ хранилища) попадает в server/.env только
+  # шагом «Syncing service keys» этой выкатки — другого пути нет, run-command.yml
+  # секретов не получает.
+  workflow_dispatch:
 
 permissions:
   contents: read
