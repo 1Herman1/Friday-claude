@@ -1,0 +1,165 @@
+{
+  "built_at": "2026-09-19T21:00:00Z",
+  "source": "vendored",
+  "models": [
+    {
+      "id": "google/nano-banana-2-lite",
+      "category": "image",
+      "api": "jobs",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt"],
+        "defaults": {}
+      },
+      "description": "Google Nano Banana 2 Lite — быстрая и дешёвая text-to-image генерация",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "bytedance/seedance-2-video",
+      "category": "video",
+      "api": "jobs",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt"],
+        "defaults": {}
+      },
+      "description": "Seedance 2.0 — генерация видео от ByteDance",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "kling/v2-5-turbo",
+      "category": "video",
+      "api": "jobs",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt"],
+        "defaults": {}
+      },
+      "description": "Kling 2.5 Turbo — быстрая видеогенерация",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "veo3",
+      "category": "video",
+      "api": "veo",
+      "docUrl": "https://docs.kie.ai/veo3-api/generate-veo-3-video.md",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt"],
+        "defaults": {}
+      },
+      "description": "Google Veo 3 — видеогенерация через выделенный API",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "suno-v4",
+      "category": "audio",
+      "api": "suno",
+      "docUrl": "https://docs.kie.ai/suno-api/generate-music.md",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt"],
+        "defaults": {}
+      },
+      "description": "Suno V4 — музыкальная генерация",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "gpt-image/1.5",
+      "category": "image",
+      "api": "gpt4o",
+      "docUrl": "https://docs.kie.ai/4o-image-api/generate-4-o-image.md",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt", "aspect_ratio", "quality"],
+        "defaults": {
+          "aspect_ratio": "1:1",
+          "quality": "medium"
+        }
+      },
+      "description": "GPT-4o Image — text-to-image от OpenAI",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "flux/flux-2-pro",
+      "category": "image",
+      "api": "flux",
+      "docUrl": "https://docs.kie.ai/flux-kontext-api/generate-or-edit-image.md",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt"],
+        "defaults": {}
+      },
+      "description": "Flux 2 Pro — высокое качество text-to-image",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "runway/gen3",
+      "category": "video",
+      "api": "runway",
+      "docUrl": "https://docs.kie.ai/runway-api/generate-ai-video.md",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt"],
+        "defaults": {}
+      },
+      "description": "Runway Gen-3 — видеогенерация через Runway API",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "elevenlabs-tts",
+      "category": "audio",
+      "api": "jobs",
+      "fields": {},
+      "meta": {
+        "promptField": "prompt",
+        "required": ["prompt"],
+        "defaults": {}
+      },
+      "description": "ElevenLabs TTS — синтез речи высокого качества",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    },
+    {
+      "id": "topaz/gigapixel",
+      "category": "image",
+      "api": "jobs",
+      "fields": {},
+      "meta": {
+        "promptField": null,
+        "imageField": "image",
+        "required": ["image"],
+        "defaults": {}
+      },
+      "description": "Topaz Gigapixel AI — увеличение разрешения изображений",
+      "schemaSource": "seed",
+      "stale": false,
+      "source": "seed"
+    }
+  ]
+}

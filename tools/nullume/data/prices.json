@@ -1,0 +1,126 @@
+{
+  "verified_at": "2026-09-19T21:00:00Z",
+  "usd_per_credit": 0.005,
+  "records": [
+    {
+      "id": "google/nano-banana-2-lite",
+      "category": "image",
+      "creditsMin": 4,
+      "creditsMax": 4,
+      "usdMin": 0.02,
+      "usdMax": 0.02,
+      "unit": "per image",
+      "provider": "kie.ai",
+      "description": "Nano Banana 2 Lite",
+      "approximate": false
+    },
+    {
+      "id": "bytedance/seedance-2-video",
+      "category": "video",
+      "creditsMin": 60,
+      "creditsMax": 100,
+      "usdMin": 0.3,
+      "usdMax": 0.5,
+      "unit": "per video",
+      "provider": "kie.ai",
+      "description": "Seedance 2.0 Video",
+      "approximate": false
+    },
+    {
+      "id": "kling/v2-5-turbo",
+      "category": "video",
+      "creditsMin": 40,
+      "creditsMax": 60,
+      "usdMin": 0.2,
+      "usdMax": 0.3,
+      "unit": "per video",
+      "provider": "kie.ai",
+      "description": "Kling 2.5 Turbo",
+      "approximate": false
+    },
+    {
+      "id": "veo3",
+      "category": "video",
+      "creditsMin": 80,
+      "creditsMax": 120,
+      "usdMin": 0.4,
+      "usdMax": 0.6,
+      "unit": "per video",
+      "provider": "kie.ai",
+      "description": "Google Veo 3",
+      "approximate": true
+    },
+    {
+      "id": "suno-v4",
+      "category": "audio",
+      "creditsMin": 50,
+      "creditsMax": 100,
+      "usdMin": 0.25,
+      "usdMax": 0.5,
+      "unit": "per track",
+      "provider": "kie.ai",
+      "description": "Suno V4 Music",
+      "approximate": true
+    },
+    {
+      "id": "gpt-image/1.5",
+      "category": "image",
+      "creditsMin": 20,
+      "creditsMax": 30,
+      "usdMin": 0.1,
+      "usdMax": 0.15,
+      "unit": "per image",
+      "provider": "kie.ai",
+      "description": "GPT Image 1.5",
+      "approximate": false
+    },
+    {
+      "id": "flux/flux-2-pro",
+      "category": "image",
+      "creditsMin": 15,
+      "creditsMax": 25,
+      "usdMin": 0.075,
+      "usdMax": 0.125,
+      "unit": "per image",
+      "provider": "kie.ai",
+      "description": "Flux 2 Pro",
+      "approximate": false
+    },
+    {
+      "id": "runway/gen3",
+      "category": "video",
+      "creditsMin": 100,
+      "creditsMax": 150,
+      "usdMin": 0.5,
+      "usdMax": 0.75,
+      "unit": "per video",
+      "provider": "kie.ai",
+      "description": "Runway Gen-3",
+      "approximate": true
+    },
+    {
+      "id": "elevenlabs-tts",
+      "category": "audio",
+      "creditsMin": 10,
+      "creditsMax": 20,
+      "usdMin": 0.05,
+      "usdMax": 0.1,
+      "unit": "per minute",
+      "provider": "kie.ai",
+      "description": "ElevenLabs TTS",
+      "approximate": false
+    },
+    {
+      "id": "topaz/gigapixel",
+      "category": "image",
+      "creditsMin": 30,
+      "creditsMax": 50,
+      "usdMin": 0.15,
+      "usdMax": 0.25,
+      "unit": "per image",
+      "provider": "kie.ai",
+      "description": "Topaz Gigapixel",
+      "approximate": true
+    }
+  ]
+}

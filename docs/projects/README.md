@@ -13,6 +13,7 @@
 | HB Landing | Лендинг-визитка | `hb-landing/` | `hb-landing/` | нет |
 | Perfect Skin | Магазин косметики | `perfect-skin/` | `perfect-skin/` | нет |
 | Ветклиника | SEO/GEO-аналитика, сайта пока нет | `vet-clinic/` | нет | нет |
+| Nullume | CLI и MCP генерации медиа через kie.ai, библиотека вкуса | `nullume/` | `tools/nullume/` | нет (npm) |
 | `_template` | Шаблон нового проекта | `_template/` | — | — |
 
 ## Состав каталога проекта

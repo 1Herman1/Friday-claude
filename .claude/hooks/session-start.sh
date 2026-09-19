@@ -50,3 +50,24 @@ if [ -n "$CURRENT" ] && [ "$CURRENT" != "$BRANCH" ]; then
 fi
 
 git pull origin "$BRANCH" --ff-only 2>/dev/null || true
+
+# ── 3. Установка зависимостей в tools/* ────────────────────────────────────
+# Каждый инструмент в tools/ может иметь свой package.json (вне npm workspaces).
+# Если node_modules отсутствуют, устанавливаем зависимости. История: блок был
+# в коммите e0b5a88, удалён в последующих ревизиях, и из-за этого icon-library
+# MCP-сервер падал с CONNECTION_CLOSED. Без установки зависимостей новые серверы
+# (например, nullume) также не будут запускаться.
+
+for tool_dir in tools/*/; do
+  [ -d "$tool_dir" ] || continue
+  [ -f "$tool_dir/package.json" ] || continue
+  [ -d "$tool_dir/node_modules" ] && continue
+
+  if [ -f "$tool_dir/package-lock.json" ]; then
+    npm ci --no-audit --no-fund -C "$tool_dir" 2>&1 >&2 || true
+  else
+    npm install --no-audit --no-fund -C "$tool_dir" 2>&1 >&2 || true
+  fi
+done
+
+exit 0
