@@ -70,12 +70,13 @@ async function loadMoyskladSpecies(): Promise<Map<string, 'cat' | 'dog'>> {
       let pathName: string | null = null
 
       if (row.meta.type === 'variant') {
-        // Вариант: берём папку родительского товара
+        // У модификации своей папки может не быть — тогда берём папку родительского
+        // товара. Ссылка на родителя приходит не всегда (ассортимент отдаётся без
+        // expand), поэтому запасной вариант — собственный путь строки: без него
+        // модификации молча выпадали, а это большая часть каталога.
         const parentId = productIdFromHref(row.product?.meta?.href)
-        if (parentId) {
-          const parent = byId.get(parentId)
-          pathName = parent?.pathName ?? row.pathName ?? null
-        }
+        const parent = parentId ? byId.get(parentId) : undefined
+        pathName = parent?.pathName ?? row.pathName ?? null
       } else {
         pathName = row.pathName ?? null
       }

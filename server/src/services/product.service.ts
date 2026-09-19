@@ -8,7 +8,9 @@ export const MEDICAL_LINES = ['Vet Life', 'VetSolution', 'Prescription Diet']
     а не суффикс: переименование категории в админке не должно молча ломать фильтр. */
 export const MEDICAL_CATEGORY_SLUGS = ['dogs-medical', 'cats-medical']
 /** Бренды только для кошек (сравнение без учёта регистра). */
-export const CAT_ONLY_BRANDS = ['ZILLII', 'Matisse']
+// Только бренды, у которых в каталоге НЕТ собачьих позиций. ZILLII сюда не годится:
+// в МоемСкладе у него и кошачьи, и собачьи товары в одной папке «Корм/Zillii».
+export const CAT_ONLY_BRANDS = ['Matisse']
 
 export interface ProductFilters {
   categorySlug?: string
