@@ -3,8 +3,9 @@
 Негативный список того, к чему модель тянется в работе с БД. Читается
 `database-reviewer`; сверять находки с этим файлом.
 
-Стек: PostgreSQL (Docker) + Prisma. Схема — `server/prisma/schema.prisma`,
-запросы — через сервисы в `server/src/services/**`.
+**Стек:** универсальные правила для PostgreSQL; реальный стек проекта —
+в `docs/projects/<проект>/project.md`. По умолчанию ORM — Prisma + PostgreSQL (см. `docs/core/stack.md`),
+но конкретные пути схемы и сервисов зависят от проекта.
 
 ## Производительность запросов
 - ❌ Prisma-запрос внутри `.map`/`for`/`forEach` (N+1) → `include`/`findMany` с `in`

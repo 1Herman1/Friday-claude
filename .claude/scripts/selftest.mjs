@@ -223,7 +223,7 @@ try {
   ok("привязок к конкретному проекту нет");
 } catch (e) {
   const out = String(e.stdout || "");
-  const n = (out.match(/Привязок: (\d+) в (\d+) файлах/) || [])[0] || "есть привязки";
+  const n = (out.match(/Привязок к проекту: (\d+)/) || [])[0] || "есть привязки";
   wrn(`${n} — подробности: bash .claude/scripts/portability-check.sh`);
 }
 

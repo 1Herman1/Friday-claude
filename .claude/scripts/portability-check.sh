@@ -67,43 +67,48 @@ FILES=$( { echo CLAUDE.md
                 -not -name 'README.md' 2>/dev/null
          } | sort -u )
 
-FOUND=0
-FILES_HIT=0
+scan() {  # $1 — шаблон, печатает «файл:строка:текст»
+  for f in $FILES; do
+    [ -f "$f" ] || continue
+    grep -inP "(?i)(?<![\w./-])($1)" "$f" 2>/dev/null \
+      | grep -viE "$ALLOW" | grep -vE "$TREE" | sed "s|^|$f:|" || true
+  done
+}
+
+report() {  # $1 — заголовок, $2 — строки
+  [ -z "$2" ] && return 0
+  echo "$1"
+  printf '%s\n' "$2" | cut -c1-118 | sed 's/^/  /'
+  echo
+}
+
+COUPLING=$(scan "$PROJECT_COUPLING")
+
+# Маркеры стека спрашиваем только с агентов, команд и воркфлоу, и это вторая,
+# мягкая категория: воркфлоу, поднимающий проект на стеке по умолчанию, обязан
+# этот стек назвать. Смешивать её с привязкой к проекту нельзя — иначе
+# настоящий дефект тонет в списке названий инструментов.
+STACK_HITS=$(FILES=$(printf '%s\n' $FILES | grep '^\.claude/' || true); scan "$STACK")
+
+N_COUPLING=$(printf '%s' "$COUPLING" | grep -c . || true)
+N_STACK=$(printf '%s' "$STACK_HITS" | grep -c . || true)
+
 echo "═══ Переносимость универсальной базы ═══"
 echo "Проекты на диске: ${PROJECT_NAMES//|/, }"
 echo
 
-for f in $FILES; do
-  [ -f "$f" ] || continue
+report "✗ ПРИВЯЗКА К ПРОЕКТУ — дефект, чинить:" "$COUPLING"
+report "· Названия инструментов и платформ — проверь, что рядом сказано «стек по умолчанию» или «например»:" "$STACK_HITS"
 
-  PATTERN="$PROJECT_COUPLING"
-  # Маркеры стека спрашиваем только с агентов и команд — они переносимые.
-  case "$f" in
-    .claude/*) PATTERN="$PROJECT_COUPLING|$STACK" ;;
-  esac
-
-  # Корень кода засчитывается, только когда он начинает путь: `client/...`,
-  # но не `.claude/scripts/...`, где совпал бы каталог `scripts/`.
-  HITS=$(grep -inP "(?i)(?<![\w./-])($PATTERN)" "$f" 2>/dev/null \
-         | grep -viE "$ALLOW" | grep -vE "$TREE" || true)
-  [ -z "$HITS" ] && continue
-  N=$(printf '%s\n' "$HITS" | grep -c .)
-  echo "✗ $f  ($N)"
-  printf '%s\n' "$HITS" | head -4 | cut -c1-110 | sed 's/^/    /'
-  [ "$N" -gt 4 ] && echo "    … ещё $((N - 4))"
-  echo
-  FOUND=$((FOUND + N))
-  FILES_HIT=$((FILES_HIT + 1))
-done
-
-if [ "$FOUND" -eq 0 ]; then
-  echo "✓ Привязок к конкретному проекту не найдено."
+if [ "$N_COUPLING" -eq 0 ]; then
+  echo "✓ Привязок к конкретному проекту нет."
+  [ "$N_STACK" -gt 0 ] && echo "  Упоминаний стека: $N_STACK — не дефект, но повод перечитать."
   echo "  Универсальная база переносится в новый репозиторий как есть."
   exit 0
 fi
 
 echo "─────────────────────────────────────────"
-echo "Привязок: $FOUND в $FILES_HIT файлах."
+echo "Привязок к проекту: $N_COUPLING."
 echo "Специфика проекта должна жить в docs/projects/<проект>/, а не в"
 echo "универсальной базе. Если упоминание намеренное — оформи его как пример"
 echo "или ссылку на проектный файл."

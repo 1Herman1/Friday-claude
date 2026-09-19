@@ -73,6 +73,16 @@
 - Reverse proxy: Nginx
 - Деплой: `git pull` на VPS → `prisma migrate deploy` → сборка → `pm2 reload`
 
+## Каталог сохранения медиа
+
+Для агентов `media-generator` и `icon-curator` при работе с Симбой:
+
+- **Изображения и видео:** `client/public/` (рядом с существующими папками: `brands/`, `decor/`, `pets/`)
+- **Lottie-анимации:** `client/src/assets/lottie/`
+
+Новый тип контента → новая папка в `client/public/` по тому же принципу.
+Не сохранять медиа-ассеты в `admin/` или `server/` — только в клиентской части.
+
 ## Выкатка на сервер
 
 Общие правила выкатки — в `CLAUDE.md`, раздел «Выкатка на сервер». Здесь —

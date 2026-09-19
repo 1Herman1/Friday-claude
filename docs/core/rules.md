@@ -1,5 +1,8 @@
 # Правила и соглашения
 
+**Примечание:** правила ниже — универсальные для любого проекта. Реальные пути файлов и структура —
+в `docs/projects/<проект>/project.md`. Примеры предполагают стек по умолчанию (см. `docs/core/stack.md`).
+
 Доменные правила вынесены отдельно и читаются соответствующими ревьюерами:
 - `docs/core/rules/react.md` — React (хуки, рендеры, компоненты) → `react-reviewer`
 - `docs/core/rules/typescript.md` — TypeScript (типы, async, безопасность) → `typescript-reviewer`
@@ -7,11 +10,11 @@
 ## Именование
 
 ### Файлы и папки
-- Компоненты React: `PascalCase.tsx` (`UserCard.tsx`)
-- Хуки: `camelCase.ts` с префиксом `use` (`useAuth.ts`)
-- Утилиты: `camelCase.ts` (`formatDate.ts`)
-- Страницы (React Router): `PascalCase.tsx` в `client/src/pages/` (`CartPage.tsx`)
-- API роуты (Fastify): по домену в `server/src/routes/` (`orders.ts`, `auth.ts`)
+- Компоненты React: `PascalCase.tsx` (например, `UserCard.tsx`)
+- Хуки: `camelCase.ts` с префиксом `use` (например, `useAuth.ts`)
+- Утилиты: `camelCase.ts` (например, `formatDate.ts`)
+- Страницы (React): `PascalCase.tsx` в каталоге страниц проекта (например, `CartPage.tsx`)
+- API роуты: по домену в каталоге роутов проекта (например, `orders.ts`, `auth.ts`)
 - Типы: `types.ts` или `*.types.ts`
 
 ### Переменные и функции
@@ -68,34 +71,32 @@ export function UserCard({ userId, onSuccess }: Props) {
 }
 ```
 
-## API роуты (Fastify)
+## API роуты
+
+Пример для стека по умолчанию (Fastify + TypeScript):
 
 ```typescript
-// server/src/routes/users.ts
-import { FastifyInstance } from 'fastify'
+// Роут для обновления пользователя
 import { z } from 'zod'
 
 const updateSchema = z.object({
   name: z.string().min(1).max(100),
 })
 
-export async function userRoutes(server: FastifyInstance) {
-  // preHandler: [authenticate] — проверка JWT до входа в хендлер
-  server.patch('/users/:id', { preHandler: [authenticate] }, async (req, reply) => {
-    const parsed = updateSchema.safeParse(req.body)
-    if (!parsed.success) {
-      return reply.code(400).send({ success: false, error: parsed.error.flatten() })
-    }
+export async function handlePatchUser(req: Request, reply: Reply) {
+  const parsed = updateSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return reply.code(400).send({ success: false, error: parsed.error.flatten() })
+  }
 
-    // фильтр по req.user.userId — пользователь меняет только своё (защита от IDOR)
-    const { id } = req.params as { id: string }
-    if (id !== req.user.userId) {
-      return reply.code(403).send({ success: false, error: 'Forbidden' })
-    }
+  // Проверка авторизации — пользователь меняет только своё (защита от IDOR)
+  const { id } = req.params as { id: string }
+  if (id !== req.user.userId) {
+    return reply.code(403).send({ success: false, error: 'Forbidden' })
+  }
 
-    const user = await updateUser(id, parsed.data)
-    return reply.send({ success: true, data: user })
-  })
+  const user = await updateUser(id, parsed.data)
+  return reply.send({ success: true, data: user })
 }
 ```
 

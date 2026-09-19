@@ -104,6 +104,14 @@
 зоо-поля товара (`isGrainFree`, `protein`, `fat`, `ProductVariant.weight`) —
 для косметики нужны свои характеристики (объём, тип кожи, активные компоненты).
 
+## Каталог сохранения медиа
+
+Для агентов `media-generator` и `icon-curator` при работе с Perfect Skin:
+
+- **Изображения и видео:** `perfect-skin/client/public/` (подпапки: `photos/`, `products/`, `video/`)
+- **Lottie-анимации:** `perfect-skin/client/src/assets/lottie/`
+- **Admin медиа:** `perfect-skin/admin/public/` (если понадобится)
+
 ## Что уже сделано
 
 - Три концепта главной — `concepts/`. Заказчик выбрал `concept-1-editorial.html`
