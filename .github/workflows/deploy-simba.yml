@@ -115,12 +115,15 @@ jobs:
             echo "==> Backfilling data the code expects (idempotent, admin edits win)"
             (cd server && npx tsx src/scripts/backfill-quiz-tags.ts --apply)
             (cd server && npx tsx src/scripts/backfill-categories.ts --apply)
+            # Вид животного — раньше дерева категорий: дерево группирует товары по
+            # Product.species и пропускает unknown, поэтому вид, определённый после
+            # него, попадал в меню только следующей выкаткой.
+            (cd server && npx tsx src/scripts/backfill-species.ts --apply --only-unknown)
             echo "==> Category tree: preview, then apply"
             (cd server && npx tsx src/scripts/backfill-category-tree.ts)
             (cd server && npx tsx src/scripts/backfill-category-tree.ts --apply)
             (cd server && npx tsx src/scripts/backfill-brand-identity.ts --apply)
             (cd server && npx tsx src/scripts/backfill-banners.ts --apply)
-            (cd server && npx tsx src/scripts/backfill-species.ts --apply --only-unknown)
             (cd server && npx tsx src/scripts/backfill-brand-logos.ts --apply)
             (cd server && npx tsx src/scripts/seed-promo-codes.ts --apply)
             (cd server && npx tsx src/scripts/import-blog.ts)
