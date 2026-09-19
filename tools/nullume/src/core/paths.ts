@@ -33,7 +33,7 @@ export function getSessionsDir(): string {
 
 export async function ensureDir(dir: string): Promise<void> {
   try {
-    await fs.promises.mkdir(dir, { recursive: true });
+    await fs.promises.mkdir(dir, { recursive: true, mode: 0o700 });
   } catch (e) {
     if ((e as any)?.code !== "EEXIST") throw e;
   }

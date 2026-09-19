@@ -226,7 +226,7 @@ nullume generate create nano-banana-2-lite \
   --prompt "editorial still life: coffee cup and autumn leaves, golden hour light" \
   --set width=512 --set height=512 \
   --wait --wait-timeout 300 \
-  --out ~/.nullume/outputs \
+  --json
   --json
 
 # 6. Видим результат в JSON: {"taskId":"...","state":"success","urls":["https://..."]}
@@ -238,7 +238,7 @@ nullume models list --category image --search ideogram --json
 nullume generate create ideogram/ideogram-2-turbo \
   --prompt "editorial still life: coffee cup and autumn leaves, golden hour light, professional photography, warm tones, shallow depth of field" \
   --set width=1024 --set height=1024 \
-  --wait --out ~/.nullume/outputs \
+  --wait \
   --json
 ```
 

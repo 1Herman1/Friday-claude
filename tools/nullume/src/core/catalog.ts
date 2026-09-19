@@ -63,7 +63,8 @@ const SEARCH_SYNONYMS: Record<string, string[]> = {
 };
 
 function squashText(text: string): string {
-  return text.toLowerCase().replace(/[^\w\s]/g, "").replace(/\s+/g, " ").trim();
+  // Support Cyrillic: [\p{L}\p{N}]+ matches Unicode letters and numbers
+  return text.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, "").replace(/\s+/g, " ").trim();
 }
 
 function expandSearchTerms(query: string): string[] {

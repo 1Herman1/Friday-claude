@@ -1,5 +1,5 @@
 import { getProvider } from "../core/providers/index.js";
-import { getApiKey, loadConfig } from "../core/config.js";
+import { getApiKey } from "../core/config.js";
 import { loadCatalog } from "../core/catalog.js";
 import fs from "node:fs";
 import path from "node:path";
@@ -34,11 +34,10 @@ export async function getProviderInstance() {
   let pricing: any[] = [];
   try {
     const pricingPath = path.join(dataDir, "prices.json");
-    if (fs.existsSync(pricingPath)) {
-      const data: PricingData = JSON.parse(fs.readFileSync(pricingPath, "utf-8"));
-      pricing = data.records || [];
-      cachedUsdPerCredit = data.usd_per_credit ?? 0.005;
-    }
+    const content = await fs.promises.readFile(pricingPath, "utf-8");
+    const data: PricingData = JSON.parse(content);
+    pricing = data.records || [];
+    cachedUsdPerCredit = data.usd_per_credit ?? 0.005;
   } catch (e) {
     // Ignore pricing load errors, use defaults
   }

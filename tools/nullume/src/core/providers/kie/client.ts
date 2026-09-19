@@ -2,6 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { ProviderError, TaskNotFound } from "../../errors.js";
 import { FetchImpl } from "../../net.js";
+import { assertUploadable } from "../../files.js";
+import { getDownloadsDir } from "../../../core/paths.js";
+
+export { TaskNotFound } from "../../errors.js";
 
 export const BASE_URL = "https://api.kie.ai";
 export const UPLOAD_URL = "https://kieai.redpandaai.co/api/file-stream-upload";
@@ -138,6 +142,10 @@ export class KieClient {
   }
 
   async upload(filePath: string, uploadPath?: string): Promise<string> {
+    // Validate file before upload
+    const allowedRoots = [process.cwd(), getDownloadsDir()];
+    await assertUploadable(filePath, allowedRoots);
+
     if (!uploadPath) uploadPath = guessUploadPath(filePath);
 
     const name = path.basename(filePath);

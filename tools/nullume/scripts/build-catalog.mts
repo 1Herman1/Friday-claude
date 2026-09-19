@@ -51,7 +51,7 @@ async function buildCatalog() {
             constraints: {},
           }))
         ),
-        description: entry.description,
+        description: sanitizeDescription(entry.description),
         price: priceForModel(pricingRecords, entry.id) || undefined,
         schemaSource: schemaSource as any,
         stale: false,
@@ -114,7 +114,16 @@ async function buildCatalog() {
 
 async function fetchAndParseSchema(docUrl: string) {
   try {
-    const markdown = await fetch(docUrl).then((r) => r.text());
+    const response = await fetch(docUrl, {
+      signal: AbortSignal.timeout(20000),
+    });
+
+    const buffer = await response.arrayBuffer();
+    if (buffer.byteLength > 2 * 1024 * 1024) {
+      throw new Error(`Response too large: ${(buffer.byteLength / 1024 / 1024).toFixed(1)}MB`);
+    }
+
+    const markdown = new TextDecoder().decode(buffer);
     const fields = extractInputSchema(markdown);
     const fieldsMap: Record<string, any> = {};
 
@@ -133,6 +142,19 @@ async function fetchAndParseSchema(docUrl: string) {
     // console.warn(`Failed to fetch schema for ${docUrl}:`, e);
     return {};
   }
+}
+
+function sanitizeDescription(desc: string | undefined): string | undefined {
+  if (!desc) return undefined;
+  // Remove markdown links [text](url) -> text
+  let cleaned = desc.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+  // Remove newlines and extra whitespace
+  cleaned = cleaned.replace(/\s+/g, " ").trim();
+  // Truncate to 300 chars
+  if (cleaned.length > 300) {
+    cleaned = cleaned.slice(0, 297) + "...";
+  }
+  return cleaned;
 }
 
 buildCatalog();

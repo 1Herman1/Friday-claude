@@ -29,7 +29,7 @@
 | HTTP-клиент и обёртка fetch | `src/core/net.ts` |
 | Конфигурация и ключи | `src/core/config.ts` |
 | Провайдер kie.ai | `src/core/providers/kie/` |
-| Загрузка файлов | `src/core/download.ts`, `src/core/providers/kie/upload` |
+| Защита при загрузке/скачивании | `src/core/files.ts`, `src/core/download.ts`, `src/core/jobs/results.ts` |
 | Задачи и кэш | `src/core/jobs/`, `~/.nullume/jobs/` |
 | CLI-команды | `src/cli/commands/` |
 | MCP-инструменты | `src/mcp/tools/` |
@@ -47,7 +47,7 @@
 | §5 XSS / сырой HTML | —; CLI только текст, нет HTML-рендера |
 | §6 CORS / CSRF | —; CLI не принимает запросы из браузера |
 | §7 Загрузки | `src/core/download.ts`: валидация расширений, размеров, path traversal (нет `..` в путях) |
-| §7 Upload | `src/core/providers/kie/upload/`: multipart, валидация `Content-Type`, размер < 200 МБ |
+| §7 Upload | `src/core/files.ts::assertUploadable`: magic bytes + deny-patterns, размер < 200 МБ; `src/core/providers/kie/client.ts`: multipart, path-traversal check |
 | §8 Переполнение | —; Node.js не уязвим к классическому buffer overflow |
 | §9 Rate limit | `src/core/net.ts`: token-bucket 20/10 с на kie.ai, retry на 429 с backoff |
 | §10 Отказ в обслуживании | —; локальный CLI, DoS от Гермеса себе самому |
@@ -57,7 +57,7 @@
 | §13 .env | `.env.example` в репо, `.env` + `.env.local` в `.gitignore` |
 | §14 Логи | Не писать ключи в stderr/stdout; логирование функция log(msg, level); debug-флаг |
 | §15 Зависимости | `npm audit`, `@dependabot/...` на GitHub, еженедельный audit |
-| §16 SSRF | `src/core/providers/kie/download.ts`: URL из ответа API; валидировать схему (https только), хост (не localhost/127.0.0.1) |
+| §16 SSRF | `src/core/download.ts`: https-only, DNS validation (deny private ranges), manual redirects, 512MB limit |
 | §17 Порты | —; CLI работает локально |
 | §18 Авторизация API | Ключ kie.ai в заголовке `Authorization: Bearer`; Never в URL или теле |
 | §19 Версионирование | npm publish с семверсионированием; спринт 3 |

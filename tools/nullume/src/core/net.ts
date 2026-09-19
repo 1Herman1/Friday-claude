@@ -61,6 +61,8 @@ export async function fetchJson<T = unknown>(
   } = options;
 
   let lastError: Error | undefined;
+  // Only retry GET requests; never POST (avoid duplicate charges)
+  const shouldRetry = method === "GET";
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -76,21 +78,15 @@ export async function fetchJson<T = unknown>(
 
       const resp = await fetchImpl(url, init);
 
-      // Retry 429 и 5xx
-      if (resp.status === 429) {
+      // Retry only on GET for 429 and 5xx
+      if (shouldRetry && (resp.status === 429 || resp.status >= 500)) {
         if (attempt < maxRetries) {
           const backoff = Math.pow(2, attempt - 1) * 1000 + Math.random() * 1000;
           await new Promise((resolve) => setTimeout(resolve, backoff));
           continue;
         }
-        throw new RateLimitError(`HTTP 429 после ${maxRetries} попыток`);
-      }
-
-      if (resp.status >= 500) {
-        if (attempt < maxRetries) {
-          const backoff = Math.pow(2, attempt - 1) * 1000 + Math.random() * 1000;
-          await new Promise((resolve) => setTimeout(resolve, backoff));
-          continue;
+        if (resp.status === 429) {
+          throw new RateLimitError(`HTTP 429 после ${maxRetries} попыток`);
         }
       }
 

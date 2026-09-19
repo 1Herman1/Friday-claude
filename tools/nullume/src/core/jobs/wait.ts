@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Provider } from "../providers/types.js";
+import { TaskNotFound } from "../errors.js";
 import { downloadFile } from "../download.js";
 import { getDownloadsDir, ensureDir } from "../paths.js";
 import { loadJob, saveJob } from "./store.js";
@@ -79,7 +80,7 @@ export async function waitJob(
           const dest = path.join(getDownloadsDir(), name);
 
           try {
-            await downloadFile(url, dest);
+            await downloadFile(url, dest, getDownloadsDir());
             job.localPaths.push(dest);
           } catch (e) {
             console.error(`Failed to download ${url}:`, e);
@@ -95,7 +96,9 @@ export async function waitJob(
         throw new Error(`Job failed: ${job.failMsg}`);
       }
     } catch (e) {
-      // Continue polling on error
+      // Re-throw critical errors, retry others
+      if (e instanceof TaskNotFound) throw e;
+      // Continue polling on transient errors
     }
 
     // Wait before next poll

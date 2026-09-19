@@ -3,58 +3,43 @@ import { loadJob, saveJob } from "../../core/jobs/store.js";
 import { getProviderInstance } from "../provider.js";
 import { downloadFile } from "../../core/download.js";
 import { getDownloadsDir, ensureDir } from "../../core/paths.js";
+import { resultExtension } from "../../core/jobs/results.js";
 import path from "node:path";
 import { formatError } from "../utils.js";
 
 export const schema = z.object({
-  job_id: z.string().describe("ID задачи для проверки"),
+  job_id: z.string().uuid().describe("ID задачи для проверки"),
 });
-
-function getExtFromUrl(url: string): string {
-  try {
-    const pathname = new URL(url).pathname;
-    const lastPart = pathname.split("/").pop() || "";
-    const dotIdx = lastPart.lastIndexOf(".");
-    if (dotIdx > 0) return lastPart.slice(dotIdx);
-  } catch {
-    // Invalid URL
-  }
-
-  if (url.includes("mp3") || url.includes("audio")) return ".mp3";
-  if (url.includes("mp4") || url.includes("video")) return ".mp4";
-  if (url.includes("wav")) return ".wav";
-  if (url.includes("webm")) return ".webm";
-  return ".png";
-}
 
 export async function handler(args: { job_id: string }) {
   try {
     const job = await loadJob(args.job_id);
+    const downloadsDir = getDownloadsDir();
 
     // If pending, check status once
     if (job.state === "pending") {
       try {
         const provider = await getProviderInstance();
         const status = await provider.status(job.taskId);
-        job.state = status.state as any;
+        job.state = status.state;
         if (status.urls) job.resultUrls = status.urls;
         if (status.failMsg) job.failMsg = status.failMsg;
         job.updatedAt = new Date().toISOString();
 
         // Download if success
-        if (status.state === "success" && status.urls.length > 0) {
-          await ensureDir(getDownloadsDir());
+        if (status.state === "success" && status.urls && status.urls.length > 0) {
+          await ensureDir(downloadsDir);
 
           for (let i = 0; i < status.urls.length; i++) {
             const url = status.urls[i];
             if (url.startsWith("data:")) continue;
 
-            const ext = getExtFromUrl(url);
+            const ext = resultExtension(url, undefined, job.model.split("/")[0]);
             const name = `${job.model.replace(/\//g, "-")}-${job.id.slice(0, 8)}-${i}${ext}`;
-            const dest = path.join(getDownloadsDir(), name);
+            const dest = path.join(downloadsDir, name);
 
             try {
-              await downloadFile(url, dest);
+              await downloadFile(url, dest, downloadsDir);
               if (!job.localPaths.includes(dest)) {
                 job.localPaths.push(dest);
               }

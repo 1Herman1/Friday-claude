@@ -1,16 +1,38 @@
 import fs from "node:fs";
+import * as pathModule from "node:path";
 import { getJobsDir, ensureDir } from "../paths.js";
 import type { Job } from "./model.js";
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function validateJobId(id: string): void {
+  if (!UUID_REGEX.test(id)) {
+    throw new Error(`Invalid job ID (must be UUID): ${id}`);
+  }
+}
+
+function validateJobPath(jobPath: string): void {
+  const jobsDir = getJobsDir();
+  const resolvedPath = pathModule.resolve(jobPath);
+  const resolvedDir = pathModule.resolve(jobsDir);
+  if (!resolvedPath.startsWith(resolvedDir + pathModule.sep)) {
+    throw new Error(`Path traversal not allowed: ${jobPath}`);
+  }
+}
+
 export async function saveJob(job: Job): Promise<void> {
+  validateJobId(job.id);
   await ensureDir(getJobsDir());
-  const path = `${getJobsDir()}/${job.id}.json`;
-  await fs.promises.writeFile(path, JSON.stringify(job, null, 2));
+  const jobPath = pathModule.join(getJobsDir(), `${job.id}.json`);
+  validateJobPath(jobPath);
+  await fs.promises.writeFile(jobPath, JSON.stringify(job, null, 2));
 }
 
 export async function loadJob(id: string): Promise<Job> {
-  const path = `${getJobsDir()}/${id}.json`;
-  const content = await fs.promises.readFile(path, "utf-8");
+  validateJobId(id);
+  const jobPath = pathModule.join(getJobsDir(), `${id}.json`);
+  validateJobPath(jobPath);
+  const content = await fs.promises.readFile(jobPath, "utf-8");
   return JSON.parse(content);
 }
 

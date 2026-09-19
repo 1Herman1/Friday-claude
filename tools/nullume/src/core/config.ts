@@ -22,10 +22,15 @@ export async function loadConfig(): Promise<NullumeConfig> {
 export async function saveConfig(config: NullumeConfig): Promise<void> {
   const configPath = getConfigPath();
   await ensureDir(getDataDir());
-  await fs.promises.writeFile(configPath, JSON.stringify(config, null, 2), {
+
+  // Atomic write: temp file -> chmod -> rename
+  const tmpPath = configPath + ".tmp";
+  await fs.promises.writeFile(tmpPath, JSON.stringify(config, null, 2), {
     encoding: "utf-8",
     mode: 0o600,
   });
+  await fs.promises.chmod(tmpPath, 0o600);
+  await fs.promises.rename(tmpPath, configPath);
 }
 
 export async function mergeConfig(updates: Partial<NullumeConfig>): Promise<NullumeConfig> {

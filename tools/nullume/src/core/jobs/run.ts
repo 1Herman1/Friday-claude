@@ -9,7 +9,6 @@ export interface CreateJobOptions {
   prompt: string;
   images?: string[];
   input?: Record<string, unknown>;
-  out?: string;
   style?: string;
 }
 
@@ -17,7 +16,7 @@ export async function createJobTask(
   provider: Provider,
   options: CreateJobOptions
 ): Promise<Job> {
-  const { model: modelId, prompt, images = [], input = {}, out, style } = options;
+  const { model: modelId, prompt, images = [], input = {}, style } = options;
 
   // Resolve model
   const modelInfo = await provider.model(modelId);

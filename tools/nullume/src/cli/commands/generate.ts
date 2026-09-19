@@ -58,7 +58,6 @@ generateCmd
   .option("--wait", "Ждать завершения")
   .option("--wait-timeout <sec>", "Таймаут ожидания в секундах", "600")
   .option("--wait-interval <sec>", "Интервал проверки статуса в секундах", "2")
-  .option("--out <dir>", "Директория для сохранения результатов")
   .option("--style <slug>", "Стиль из библиотеки вкуса (спринт 2)")
   .option("--yes", "Пропустить подтверждение при дорогой генерации")
   .description("Создать задачу генерации")
@@ -111,7 +110,6 @@ generateCmd
         prompt: options.prompt as string,
         images,
         input: setParams,
-        out: options.out as string | undefined,
         style: options.style as string | undefined,
       });
 
@@ -224,7 +222,6 @@ generateCmd
   .command("wait <jobId>")
   .option("--wait-timeout <sec>", "Таймаут ожидания в секундах", "600")
   .option("--wait-interval <sec>", "Интервал проверки статуса в секундах", "2")
-  .option("--out <dir>", "Директория для сохранения результатов")
   .description("Дождаться завершения задачи")
   .action(async function (jobId: string, options: Record<string, unknown>) {
     const flags = getGlobalFlags();

@@ -1,5 +1,5 @@
 import type { Provider, ModelInfo, CostEstimate, NormalizedStatus } from "../types.js";
-import { KieClient, CASCADE_ORDER } from "./client.js";
+import { KieClient, CASCADE_ORDER, TaskNotFound } from "./client.js";
 import { normalizeStatus } from "./status.js";
 import { priceForModel } from "./pricing.js";
 import type { PricingRecord } from "./pricing.js";
@@ -69,15 +69,22 @@ export class KieProvider implements Provider {
 
   async status(ref: string): Promise<NormalizedStatus> {
     // Try each API type in CASCADE_ORDER
+    let lastError: unknown;
+
     for (const api of CASCADE_ORDER) {
       try {
         const data = (await this.client.status(api as any, ref)) as any;
         return normalizeStatus(api, data);
       } catch (e) {
-        // Continue to next API
+        // If TaskNotFound, continue; else save error
+        if (!(e instanceof TaskNotFound)) {
+          lastError = e;
+        }
       }
     }
 
+    // If we have a non-NotFound error, throw it; else generic
+    if (lastError) throw lastError;
     throw new Error(`Task not found with any API: ${ref}`);
   }
 

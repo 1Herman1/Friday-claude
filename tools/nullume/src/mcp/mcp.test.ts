@@ -31,11 +31,36 @@ test("MCP: tools/list отдаёт 9 инструментов со схемам�
       assert.ok(tool.inputSchema && typeof tool.inputSchema === "object", `${tool.name}: нет inputSchema`);
       assert.ok("properties" in tool.inputSchema, `${tool.name}: нет properties`);
     }
-    const res = await client.callTool({ name: "generate", arguments: { model: "mock/image", prompt: "test", out_dir: home } });
+    const res = await client.callTool({ name: "generate", arguments: { model: "mock/image", prompt: "test" } });
     const text = (res.content as Array<{ type: string; text?: string }>).find((c) => c.type === "text")?.text ?? "";
     const job = JSON.parse(text);
     assert.ok(!res.isError, text);
     assert.ok(job.job_id ?? job.id, "нет id задачи");
+  } finally {
+    await client.close();
+  }
+});
+
+test("MCP: upload_file отказывает на config.json и .env", async () => {
+  const home = mkdtempSync(path.join(tmpdir(), "nullume-mcp-"));
+  const transport = new StdioClientTransport({
+    command: "npx",
+    args: ["tsx", serverEntry],
+    env: { ...process.env, NULLUME_PROVIDER: "mock", NULLUME_HOME: home } as Record<string, string>,
+    stderr: "pipe",
+  });
+  const client = new Client({ name: "smoke", version: "0" });
+  await client.connect(transport);
+  try {
+    // Попытка загрузить ~/.nullume/config.json (путь вне cwd)
+    const configPath = path.join(home, "config.json");
+    const res1 = await client.callTool({ name: "upload_file", arguments: { path: configPath } });
+    assert.ok(res1.isError, "должен отказать на config.json");
+
+    // Попытка загрузить .env
+    const envPath = path.join(process.cwd(), ".env");
+    const res2 = await client.callTool({ name: "upload_file", arguments: { path: envPath } });
+    assert.ok(res2.isError, "должен отказать на .env");
   } finally {
     await client.close();
   }

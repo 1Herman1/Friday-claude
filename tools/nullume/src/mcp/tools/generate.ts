@@ -12,7 +12,6 @@ export const schema = z.object({
   input: z.record(z.string(), z.unknown()).optional().describe("Дополнительные параметры модели"),
   wait: z.boolean().optional().default(true).describe("Ждать завершения задачи"),
   wait_timeout_sec: z.number().optional().default(300).describe("Таймаут ожидания в секундах"),
-  out_dir: z.string().optional().describe("Каталог для сохранения результатов"),
   confirm_cost: z.boolean().optional().describe("Подтверждение при стоимости > $1"),
 });
 
@@ -23,7 +22,6 @@ export async function handler(args: {
   input?: Record<string, unknown>;
   wait?: boolean;
   wait_timeout_sec?: number;
-  out_dir?: string;
   confirm_cost?: boolean;
 }) {
   try {
@@ -36,7 +34,6 @@ export async function handler(args: {
       prompt: args.prompt || "",
       images: args.images,
       input: args.input,
-      out: args.out_dir,
     });
 
     // Check cost
