@@ -18,3 +18,20 @@ export const QUIZ_TAGS = [
 export type QuizTag = (typeof QUIZ_TAGS)[number]
 export const QUIZ_TAG_SET = new Set<string>(QUIZ_TAGS)
 export function isQuizTag(v: string): v is QuizTag { return QUIZ_TAG_SET.has(v) }
+
+/**
+ * Приводит теги в соответствие с видом животного.
+ *
+ * Поле species и тег species:* в quizTags дублируются намеренно (schema.prisma:364):
+ * поле фильтрует каталог на уровне API, тег обслуживает подбор в квизе.
+ * Меняем вид — приводим теги в актуальное состояние.
+ *
+ * Для cat/dog добавляет соответствующий тег; для both/unknown удаляет все species:*.
+ */
+export function withSpeciesTag(quizTags: string[], species: 'cat' | 'dog' | 'both' | 'unknown'): string[] {
+  const filtered = quizTags.filter((tag) => !tag.startsWith('species:'))
+  if (species === 'cat' || species === 'dog') {
+    filtered.push(`species:${species}`)
+  }
+  return filtered
+}

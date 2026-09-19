@@ -5,6 +5,8 @@ export type MsAssortmentItem = {
   article?: string
   code?: string
   archived?: boolean
+  pathName?: string
+  product?: { meta?: { href?: string } }
   salePrices?: Array<{
     value: number
     priceType?: { name?: string }

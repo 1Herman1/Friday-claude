@@ -1,6 +1,8 @@
 import { PrismaClient, type ProductSpecies } from '@prisma/client'
 import { determineSpecies, isUniversalCare, mentionsBothSpecies } from '../services/quiz-autotag.js'
 import { CAT_ONLY_BRANDS } from '../services/product.service.js'
+import { withSpeciesTag } from '../lib/quiz-tags.js'
+import { fetchAssortment } from '../services/moysklad/client.js'
 
 const prisma = new PrismaClient()
 
@@ -12,6 +14,7 @@ type Product = {
   autoQuizTags: string[]
   categories: Array<{ category: { slug: string } }>
   brand: { name: string } | null
+  variants: Array<{ moyskladId: string | null }>
 }
 
 type SpeciesDecision = {
@@ -27,11 +30,76 @@ type SpeciesDecision = {
 
 // Порядок доверия для определения вида:
 // 1. Существующие теги species:* в quizTags/autoQuizTags (товар уже размечен)
-// 2. Оба вида в названии → both (универсальный уход)
-// 3. Один вид в названии → cat/dog (явное упоминание)
-// 4. determineSpecies из quiz-autotag (вторичный анализ названия и категорий)
-// 5. Категории напрямую (cats-food / dogs-food)
-// 6. Спорное или не определено → unknown
+// 2. Папка МоегоСклада (если товар привязан и папка содержит явный вид)
+// 3. Оба вида в названии → both (универсальный уход)
+// 4. Один вид в названии → cat/dog (явное упоминание)
+// 5. determineSpecies из quiz-autotag (анализ названия и категорий)
+// 6. Бренд только для кошек
+// 7. Универсальный уход → both
+// 8. Спорное или не определено → unknown
+
+function normalizeCase(s: string): string {
+  return s.toLowerCase().replace(/ё/g, 'е')
+}
+
+function productIdFromHref(href: string | undefined): string | null {
+  if (!href) return null
+  const match = href.match(/\/entity\/product\/([0-9a-f-]{36})/)
+  return match ? match[1] : null
+}
+
+async function loadMoyskladSpecies(): Promise<Map<string, 'cat' | 'dog'>> {
+  if (!process.env.MOYSKLAD_TOKEN) {
+    console.warn('⚠️  MOYSKLAD_TOKEN не задан — папки МоегоСклада не будут использованы')
+    return new Map()
+  }
+
+  try {
+    const rows = (await fetchAssortment()) as Array<{
+      id: string
+      meta: { type: string }
+      pathName?: string
+      product?: { meta?: { href?: string } }
+    }>
+
+    const byId = new Map(rows.map((row) => [row.id, row]))
+    const result = new Map<string, 'cat' | 'dog'>()
+
+    // Для каждой позиции определяем папку (у варианта — родительского товара)
+    for (const row of rows) {
+      let pathName: string | null = null
+
+      if (row.meta.type === 'variant') {
+        // Вариант: берём папку родительского товара
+        const parentId = productIdFromHref(row.product?.meta?.href)
+        if (parentId) {
+          const parent = byId.get(parentId)
+          pathName = parent?.pathName ?? row.pathName ?? null
+        }
+      } else {
+        pathName = row.pathName ?? null
+      }
+
+      if (!pathName) continue
+
+      const normalized = normalizeCase(pathName)
+      const hasCat = normalized.includes('кошк') || normalized.includes('cat')
+      const hasDog = normalized.includes('собак') || normalized.includes('dog')
+
+      // Если оба вида или ни один — пропускаем
+      if ((hasCat && hasDog) || (!hasCat && !hasDog)) continue
+
+      if (hasCat) result.set(row.id, 'cat')
+      if (hasDog) result.set(row.id, 'dog')
+    }
+
+    return result
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.warn(`⚠️  Ошибка загрузки МоегоСклада (${msg}) — папки не будут использованы`)
+    return new Map()
+  }
+}
 
 function getTagSpecies(tags: string[]): ProductSpecies | null {
   for (const tag of tags) {
@@ -42,11 +110,7 @@ function getTagSpecies(tags: string[]): ProductSpecies | null {
   return null
 }
 
-function normalizeCase(s: string): string {
-  return s.toLowerCase().replace(/ё/g, 'е')
-}
-
-async function determineProductSpecies(product: Product): Promise<{
+async function determineProductSpecies(product: Product, moyskladSpecies: Map<string, 'cat' | 'dog'>): Promise<{
   species: ProductSpecies
   reason: string
   isDisputed: boolean
@@ -64,13 +128,22 @@ async function determineProductSpecies(product: Product): Promise<{
     return { species: autoTagSpecies, reason: 'тег в autoQuizTags', isDisputed: false }
   }
 
-  // 2. Оба вида названы явно — универсальный товар. Проверяем ДО determineSpecies:
+  // 2. Папка МоегоСклада (данные владельца сильнее эвристик)
+  const moyskladId = product.variants[0]?.moyskladId
+  if (moyskladId) {
+    const msSpecies = moyskladSpecies.get(moyskladId)
+    if (msSpecies) {
+      return { species: msSpecies, reason: 'папка МоегоСклада', isDisputed: false }
+    }
+  }
+
+  // 3. Оба вида названы явно — универсальный товар. Проверяем ДО determineSpecies:
   // та возвращает null и здесь, и когда не определила ничего.
   if (mentionsBothSpecies(product.name)) {
     return { species: 'both', reason: 'оба вида в названии', isDisputed: false }
   }
 
-  // 3-4. determineSpecies из quiz-autotag (категории, один вид, маркеры линеек)
+  // 4-5. determineSpecies из quiz-autotag (категории, один вид, маркеры линеек)
   const autotagSpecies = determineSpecies(product.name, categorySlugs)
   if (autotagSpecies === 'cat') {
     return {
@@ -86,7 +159,7 @@ async function determineProductSpecies(product: Product): Promise<{
       isDisputed: false,
     }
   }
-  // 5. Бренд только для кошек
+  // 6. Бренд только для кошек
   if (product.brand?.name) {
     const brandNameLower = normalizeCase(product.brand.name)
     for (const catBrand of CAT_ONLY_BRANDS) {
@@ -96,12 +169,12 @@ async function determineProductSpecies(product: Product): Promise<{
     }
   }
 
-  // 6. Универсальный уход → both
+  // 7. Универсальный уход → both
   if (isUniversalCare(product.name, categorySlugs)) {
     return { species: 'both', reason: 'универсальный уход', isDisputed: false }
   }
 
-  // 7. Не определено → unknown, но это спорное значение
+  // 8. Не определено → unknown, но это спорное значение
   return { species: 'unknown', reason: 'не определено', isDisputed: true }
 }
 
@@ -116,6 +189,8 @@ async function main() {
   console.log('  Разметка вида животного для товаров (species)')
   console.log('════════════════════════════════════════════════════════════════════')
   console.log(`Режим: ${apply ? '✅ ПРИМЕНЕНИЕ' : '📋 ПРЕДПРОСМОТР (без записи)'}${onlyUnknown ? ' · только неразмеченные' : ''}\n`)
+
+  const moyskladSpecies = await loadMoyskladSpecies()
 
   // Загружаем ВСЕ товары для статистики по каталогу
   const allProducts = await prisma.product.findMany({
@@ -138,6 +213,7 @@ async function main() {
       autoQuizTags: true,
       categories: { select: { category: { select: { slug: true } } } },
       brand: { select: { name: true } },
+      variants: { where: { moyskladId: { not: null } }, select: { moyskladId: true }, take: 1 },
     },
   })
 
@@ -150,7 +226,7 @@ async function main() {
 
   // Определяем вид для каждого товара
   for (const product of products) {
-    const { species: newSpecies, reason, isDisputed } = await determineProductSpecies(product)
+    const { species: newSpecies, reason, isDisputed } = await determineProductSpecies(product, moyskladSpecies)
 
     // Только добавляем в список если есть изменение или это спорный товар
     if (newSpecies !== product.species || isDisputed) {
@@ -242,12 +318,7 @@ async function main() {
       })
       if (!product) continue
 
-      // Старый тег снимаем при любой смене вида: у «универсального» и
-      // «неизвестного» тега нет, иначе подбор продолжит считать товар собачьим.
-      const quizTags = product.quizTags.filter((tag) => !tag.startsWith('species:'))
-      if (d.newSpecies === 'cat' || d.newSpecies === 'dog') {
-        quizTags.push(`species:${d.newSpecies}`)
-      }
+      const quizTags = withSpeciesTag(product.quizTags, d.newSpecies)
 
       await prisma.product.update({
         where: { id: d.productId },
