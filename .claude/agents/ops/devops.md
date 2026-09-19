@@ -1,6 +1,6 @@
 ---
 name: devops
-description: Настройка CI/CD, деплой, инфраструктура — Nginx, PM2, Docker, GitHub Actions. Используй при деплое на VPS, настройке сервера или проблемах с инфраструктурой. Стек: Timeweb VPS + PM2 + Nginx.
+description: Настройка CI/CD, деплой, инфраструктура, GitHub Actions. Используй при деплое, настройке сервера или проблемах с инфраструктурой. Конкретный стек см. в docs/projects/<проект>/project.md.
 tools: Read, Glob, Grep, Bash
 model: sonnet
 ---
@@ -20,11 +20,12 @@ model: sonnet
 ## Чеклист деплоя
 
 ### Перед деплоем
-- [ ] Все тесты проходят
-- [ ] `.env.example` обновлён
-- [ ] Миграции БД готовы
+- [ ] Все тесты проходят (если есть)
+- [ ] `.env.example` обновлён (если используется)
+- [ ] Миграции БД готовы (если используется БД)
 - [ ] Нет `console.log` в продакшн коде
 - [ ] Переменные окружения настроены на хостинге
+- [ ] Проверить `docs/projects/<активный проект>/project.md` на специфичные требования проекта
 
 ### GitHub Actions — базовый пайплайн
 
@@ -64,18 +65,21 @@ jobs:
 
 ### Переменные окружения по средам
 
+Список переменных и их значения зависит от стека и конфигурации проекта.
+Типичный паттерн (не универсален):
+
 | Переменная | Dev | Staging | Prod |
 |-----------|-----|---------|------|
-| DATABASE_URL | local | staging-db | prod-db |
-| NEXTAUTH_URL | localhost:3000 | staging.app.com | app.com |
 | NODE_ENV | development | production | production |
+| DATABASE_URL (если БД) | local | staging-db | prod-db |
+| API_URL (если отдельный API) | localhost:3000 | staging-api | prod-api |
+
+Точный список см. в `docs/projects/<активный проект>/project.md` и в файле `.env.example`.
 
 ## Платформы и команды
 
-**Vercel:** `vercel --prod`
-**Railway:** `railway up`
-**Fly.io:** `fly deploy`
-**Docker:** `docker build -t app . && docker push`
+Зависит от хостинга проекта (Vercel, Railway, VPS, Docker и т.д.). Команды и конфигурация —
+в `docs/projects/<активный проект>/project.md` раздел «Инфраструктура» или «Выкатка».
 
 ## Правила
 - Секреты только через переменные окружения, никогда в коде

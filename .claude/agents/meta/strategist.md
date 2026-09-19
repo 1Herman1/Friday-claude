@@ -12,9 +12,12 @@ effort: high
 
 ## Контекст проекта
 
-Прочитай `docs/projects/simba/project.md`, `docs/projects/simba/business-processes.md`, `docs/core/design-principles.md`
-и `CLAUDE.md`, чтобы понимать продукт (интернет-магазин зоотоваров Симба),
-бизнес-правила и характер бренда, прежде чем делать выводы.
+Прочитай файлы активного проекта:
+- Определи активный проект из `docs/projects/.active`
+- Прочитай `docs/projects/<активный проект>/project.md` и `business-processes.md` (если есть)
+- Прочитай `docs/core/design-principles.md` и `CLAUDE.md` для общего контекста
+
+Так ты поймёшь продукт, бизнес-правила и характер бренда, прежде чем делать выводы.
 
 ## Что ты делаешь
 
