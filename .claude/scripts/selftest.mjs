@@ -149,6 +149,25 @@ if (withSplit.length !== withThreshold.length) {
   bad(`порог 80% без расщепления в ${missing.length} агентах: ${missing.join(", ")} — они прочитают старую формулировку «сомневаешься молчи»`);
 } else ok(`${withSplit.length} из ${withThreshold.length} агентов знают, что возражение порога не имеет`);
 
+// Разрешить возражать мало — нужен канал в отчёте. Раньше эта проверка сверяла
+// наличие текста где угодно в файле и была зелёной при том, что рубрики для
+// возражения в формате вывода не существовало, а рядом стоял запрет на «а вдруг».
+{
+  const noRubric = [];
+  for (const f of withSplit) {
+    const body = read(`.claude/agents/${f}`) || "";
+    const head = body.search(/^## Формат/m);
+    if (head < 0) continue; // у агента нет блока формата — рубрике негде быть
+    const tail = body.slice(head);
+    const next = tail.search(/\n## (?!Формат)/);
+    const section = next < 0 ? tail : tail.slice(0, next);
+    if (!/ВОЗРАЖЕНИЕ/.test(section)) noRubric.push(path.basename(f, ".md"));
+  }
+  if (noRubric.length) {
+    bad(`рубрики ВОЗРАЖЕНИЕ нет в формате вывода у ${noRubric.length} агентов: ${noRubric.join(", ")} — возражать разрешено, но написать его некуда`);
+  } else ok("рубрика ВОЗРАЖЕНИЕ есть в каждом блоке формата");
+}
+
 console.log("\n[10] Карта департаментов совпадает с диском");
 {
   // .claude/agents/README.md — карта: какой агент в каком департаменте.
