@@ -40,6 +40,7 @@ node -v && docker --version && nginx -v && pm2 -v
 ## 2. Забрать код
 ```bash
 mkdir -p /var/www && cd /var/www
+# репозиторий «Пятница»; адрес на GitHub сменится после переименования
 git clone https://github.com/1Herman1/project_simba.git simba-src
 cd simba-src
 git checkout claude/greeting-nnz368

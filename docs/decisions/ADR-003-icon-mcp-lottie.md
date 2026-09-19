@@ -25,7 +25,7 @@
   без атрибуции).
 - Реализовано как собственный MCP-сервер (`tools/icon-mcp-server/`),
   зарегистрированный в `.mcp.json`, и новый агент `icon-curator` в отделе
-  дизайна (`.claude/agents/design-department.md`).
+  дизайна (`.claude/agents/design/design-department.md`).
 - Плеер для воспроизведения Lottie на фронте — `@lottiefiles/dotlottie-web`
   (легче классического `lottie-web`), ставится в тот workspace, где реально
   понадобится первым — не заранее в оба.
