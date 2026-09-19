@@ -13,12 +13,13 @@ cd "$CLAUDE_PROJECT_DIR" || exit 0
 "$CLAUDE_PROJECT_DIR/.claude/scripts/archive-read.sh" 2>/dev/null || true
 
 # ── 2. Рабочая ветка активного проекта ──
-# Активный проект задан строкой в CLAUDE.md, а не единственностью каталога:
-# проектов в репозитории несколько, и так будет дальше.
-ACTIVE=$(sed -n 's/.*\*\*Активный проект:[^*]*\*\*[^`]*`docs\/projects\/\([a-z0-9_-]*\)\/.*/\1/p' CLAUDE.md 2>/dev/null | head -1)
+# Активный проект задан файлом docs/projects/.active, а не единственностью
+# каталога: проектов в репозитории несколько, и так будет дальше. Тот же файл
+# читает design-lint.mjs — источник истины один.
+ACTIVE=$(head -1 docs/projects/.active 2>/dev/null | tr -d '[:space:]')
 
 if [ -z "$ACTIVE" ]; then
-  echo "session-start: активный проект не указан в CLAUDE.md — переключение пропущено" >&2
+  echo "session-start: docs/projects/.active пуст или отсутствует — переключение пропущено" >&2
   exit 0
 fi
 
