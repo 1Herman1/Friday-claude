@@ -13,6 +13,13 @@
       "env": {
         "LOTTIEFILES_API_KEY": "${LOTTIEFILES_API_KEY}"
       }
+    },
+    "nullume": {
+      "command": "bash",
+      "args": ["tools/nullume/bin/mcp-stdio.sh"],
+      "env": {
+        "KIE_API_KEY": "${KIE_API_KEY}"
+      }
     }
   }
 }
