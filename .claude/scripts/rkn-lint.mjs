@@ -12,6 +12,7 @@
 // rate limit, инъекции) — это зона security-* агентов.
 import fs from "node:fs";
 import path from "node:path";
+import { codeRoots } from "./lib/projects.mjs";
 
 const CODE = [".tsx", ".ts", ".jsx", ".astro", ".html"];
 
@@ -171,20 +172,15 @@ const REPO_RULES = [
 
 // ----------------------------------------------------------------- сбор файлов
 
-const ROOTS = [
-  "client",
-  "admin",
-  "server/src",
-  "hb-landing/src",
-  "perfect-skin/client/src",
-];
+// Корни и точки входа выводятся из реестра проектов. Прежний жёсткий список
+// приходилось дописывать руками при каждом новом проекте — а забытая строка
+// означала, что правовые проверки по нему просто не запускались.
+const ROOTS = codeRoots();
 
-const EXTRA_FILES = [
-  "client/index.html",
-  "admin/index.html",
-  "hb-landing/index.html",
-  "perfect-skin/client/index.html",
-];
+const EXTRA_FILES = ROOTS.flatMap((r) => [
+  path.join(r, "index.html"),
+  path.join(r, "client", "index.html"),
+]).filter((f) => fs.existsSync(f));
 
 const SKIP_DIRS = new Set(["node_modules", "dist", "build", ".astro", ".git"]);
 

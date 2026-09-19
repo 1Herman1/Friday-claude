@@ -2,6 +2,7 @@
 // Детерминированный детектор дизайн-анти-паттернов. Без LLM, без внешних зависимостей.
 import fs from "node:fs";
 import path from "node:path";
+import { codeRoots } from "./lib/projects.mjs";
 
 const RULES = [
   {
@@ -239,9 +240,12 @@ function walkDir(dir, exts) {
 function collectFiles(args) {
   if (args.length > 0) return args;
 
+  // Корни кода берутся из реестра проектов, а не из списка в этом файле:
+  // иначе новый проект молча остаётся непроверенным.
   const files = [];
-  for (const dir of ["client/src", "admin/src"]) {
-    files.push(...walkDir(dir, [".tsx"]));
+  for (const root of codeRoots()) {
+    const ui = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
+    files.push(...walkDir(ui, [".tsx"]));
   }
   return files;
 }

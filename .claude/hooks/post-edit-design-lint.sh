@@ -20,10 +20,17 @@ case "$FILE_PATH" in
   *) exit 0 ;;
 esac
 
-case "$FILE_PATH" in
-  client/*|admin/*|*/client/*|*/admin/*) ;;
-  *) exit 0 ;;
-esac
+# Относится ли файл к коду какого-нибудь проекта — решает реестр
+# (docs/projects/README.md), а не список в этом хуке. Прежний жёсткий список
+# знал только про два каталога, и правка UI остальных проектов проходила мимо
+# линта молча.
+if ! node -e '
+  import("./.claude/scripts/lib/projects.mjs")
+    .then((m) => process.exit(m.isProjectCode(process.argv[1]) ? 0 : 1))
+    .catch(() => process.exit(0));
+' "$FILE_PATH" 2>/dev/null; then
+  exit 0
+fi
 
 OUTPUT=$(node "$CLAUDE_PROJECT_DIR/.claude/scripts/design-lint.mjs" "$FILE_PATH" 2>&1)
 
