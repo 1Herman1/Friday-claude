@@ -229,7 +229,7 @@ export default function ProductsPage() {
                 ))}
                 {products.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="px-5 py-12 text-center text-gray-400">
+                    <td colSpan={7} className="px-5 py-12 text-center text-gray-400">
                       {search ? 'Ничего не найдено' : 'Товаров пока нет'}
                     </td>
                   </tr>
