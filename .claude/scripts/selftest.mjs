@@ -149,7 +149,38 @@ if (withSplit.length !== withThreshold.length) {
   bad(`порог 80% без расщепления в ${missing.length} агентах: ${missing.join(", ")} — они прочитают старую формулировку «сомневаешься молчи»`);
 } else ok(`${withSplit.length} из ${withThreshold.length} агентов знают, что возражение порога не имеет`);
 
-console.log("\n[10] Проекты укомплектованы по реестру");
+console.log("\n[10] Карта департаментов совпадает с диском");
+{
+  // .claude/agents/README.md — карта: какой агент в каком департаменте.
+  // Карта, которую никто не сверяет с территорией, устаревает первой же
+  // перестройкой, и новый агент ложится не туда.
+  const map = read(".claude/agents/README.md") || "";
+  const rows = new Map(); // каталог → имена, заявленные в его строке
+  for (const line of map.split("\n")) {
+    if (!line.startsWith("|")) continue;
+    const cells = line.split("|").map((c) => c.trim());
+    if (cells.length < 6) continue;
+    const dir = (cells[2].match(/`([^`]+)\/`/) || [])[1];
+    if (!dir) continue;
+    rows.set(dir, cells[3].split(",").map((n) => n.trim()).filter((n) => /^[a-z][a-z-]+$/.test(n)));
+  }
+  let drift = 0;
+  for (const f of agents) {
+    const dir = path.dirname(f).split(path.sep).pop();
+    const name = path.basename(f, ".md");
+    if (!rows.has(dir)) { bad(`каталог ${dir}/ не описан в .claude/agents/README.md`); drift++; continue; }
+    // Имя названо в чужой строке — агент лежит не в своём департаменте.
+    for (const [other, names] of rows) {
+      if (other !== dir && names.includes(name)) {
+        bad(`${name} лежит в ${dir}/, а карта относит его к ${other}/`);
+        drift++;
+      }
+    }
+  }
+  if (!drift) ok(`${rows.size} департаментов, расхождений с картой нет`);
+}
+
+console.log("\n[11] Проекты укомплектованы по реестру");
 {
   // Реестр обещает состав каталога проекта. Обещание, которое никто не
   // проверяет, со временем перестаёт быть правдой.
@@ -167,7 +198,7 @@ console.log("\n[10] Проекты укомплектованы по реест�
   if (!holes) ok(`состав каталога соответствует реестру у всех проектов`);
 }
 
-console.log("\n[11] Переносимость универсальной базы");
+console.log("\n[12] Переносимость универсальной базы");
 try {
   execSync("bash .claude/scripts/portability-check.sh", { stdio: "pipe" });
   ok("привязок к конкретному проекту нет");

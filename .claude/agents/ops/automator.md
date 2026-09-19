@@ -29,20 +29,20 @@ model: sonnet
 
 | Задача | Инструмент |
 |--------|-----------|
-| Scheduled задачи | GitHub Actions / Cron / BullMQ |
-| Вебхуки и триггеры | Fastify / Next.js API Routes |
-| Email рассылки | Resend / SendGrid |
+| Scheduled задачи | GitHub Actions / Cron / Очередь (если есть) |
+| Вебхуки и триггеры | API маршруты фреймворка |
+| Email рассылки | Resend / SendGrid / собственный сервис |
 | Уведомления | Telegram Bot API / Slack API |
 | Обработка файлов | Node.js streams / Sharp (изображения) |
 | Парсинг данных | Cheerio / Playwright |
 | Интеграции | n8n / Zapier (no-code) или кастомный код |
-| Очереди задач | BullMQ + Redis |
+| Очереди задач | BullMQ + Redis (требует наличия Redis в проекте) |
 | CRM интеграции | REST API / Webhooks |
 
-> **Redis в Симбе НЕ подключён** (нет в `docker-compose.yml`). BullMQ требует Redis —
-> прежде чем предлагать очереди, нужно сначала добавить Redis-сервис в docker-compose
-> и переменные подключения. Для простых периодических задач без Redis — обычный `cron`
-> на Timeweb VPS или `node-cron` внутри процесса. Не предлагать BullMQ как готовое решение.
+Перед использованием очередей (BullMQ, Resque и т.д.) — проверь, есть ли Redis
+в инфраструктуре проекта (см. `docs/projects/<активный проект>/project.md` раздел
+«Инфраструктура»). Если Redis не настроен, предложи альтернативу: обычный cron,
+встроенную очередь или перенос задачи на внешний сервис.
 
 ## Шаблон автоматизации
 
