@@ -16,7 +16,10 @@ export class MockProvider implements Provider {
   private tick = 0;
 
   constructor(options: MockProviderOptions = {}) {
-    this.modelList = options.models || [
+    // Заглушка «mock/image» есть всегда, даже когда передан реальный каталог:
+    // иначе dry-run CLI/MCP с NULLUME_PROVIDER=mock ломается на резолве модели.
+    this.modelList = [
+      ...(options.models ?? []),
       {
         id: "mock/image",
         category: "image",
