@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert";
-import { searchModels } from "./catalog.js";
+import { searchModels, loadCatalog, getModel } from "./catalog.js";
 
 test("searchModels finds by model id", () => {
   const models: any = [
@@ -56,4 +56,22 @@ test("searchModels is case insensitive", () => {
 
   const results = searchModels(models, "GOOGLE");
   assert.strictEqual(results.length, 1);
+});
+
+test("loadCatalog отдаёт непустой вендоренный каталог", async () => {
+  const models = await loadCatalog();
+  assert(models.length > 0, "каталог не должен быть пустым");
+  for (const m of models) {
+    assert(typeof m.id === "string" && m.id.length > 0, `модель без id: ${JSON.stringify(m)}`);
+    assert(m.meta, `модель без meta: ${m.id}`);
+    assert(Array.isArray(m.meta.required), `required не массив: ${m.id}`);
+    assert(typeof m.api === "string" && m.api.length > 0, `модель без api: ${m.id}`);
+  }
+});
+
+test("getModel находит модель из каталога и падает на неизвестной", async () => {
+  const models = await loadCatalog();
+  const found = await getModel(models[0].id);
+  assert.strictEqual(found.id, models[0].id);
+  await assert.rejects(() => getModel("нет/такой-модели"), /Model not found/);
 });

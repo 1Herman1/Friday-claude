@@ -21,12 +21,13 @@ const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200 MB
 export async function assertUploadable(filePath: string, allowedRoots: string[]): Promise<string> {
   // Resolve and verify real path (no symlinks)
   const realPath = await fs.promises.realpath(filePath);
-  const resolvedPath = path.resolve(filePath);
 
   // Check against allowed roots
   const isAllowed = allowedRoots.some((root) => {
     const resolvedRoot = path.resolve(root);
-    return resolvedPath.startsWith(resolvedRoot + path.sep) || resolvedPath === resolvedRoot;
+    // Сверяем реальный путь: симлинк внутри проекта, ведущий наружу, иначе
+    // проходил проверку корней.
+    return realPath.startsWith(resolvedRoot + path.sep) || realPath === resolvedRoot;
   });
 
   if (!isAllowed) {

@@ -33,6 +33,10 @@ export interface WaitOptions {
   onTick?: (job: Job) => void;
 }
 
+export class JobFailed extends Error {
+  name = "JobFailed";
+}
+
 export async function waitJob(
   provider: Provider,
   jobId: string,
@@ -93,12 +97,12 @@ export async function waitJob(
 
       if (status.state === "fail") {
         await saveJob(job);
-        throw new Error(`Job failed: ${job.failMsg}`);
+        throw new JobFailed(`Задача завершилась ошибкой: ${job.failMsg ?? "без описания"}`);
       }
     } catch (e) {
-      // Re-throw critical errors, retry others
-      if (e instanceof TaskNotFound) throw e;
-      // Continue polling on transient errors
+      // Провал задачи и «задача не найдена» — окончательные, остальное
+      // (сеть, 5xx) переживаем и опрашиваем дальше.
+      if (e instanceof TaskNotFound || e instanceof JobFailed) throw e;
     }
 
     // Wait before next poll
