@@ -8,9 +8,15 @@ export async function downloadFile(url: string, dest: string): Promise<string> {
   }
 
   // Validate destination (no path traversal)
+  // Check if the destination contains .. or resolves outside expected directory
+  if (dest.includes("..")) {
+    throw new Error(`Path traversal not allowed: ${dest}`);
+  }
+
   const resolvedDest = path.resolve(dest);
-  const resolvedDir = path.resolve(path.dirname(dest));
-  if (!resolvedDest.startsWith(resolvedDir)) {
+  const dirname = path.dirname(resolvedDest);
+  // Ensure the file is within a reasonable location (not root or system dirs)
+  if (resolvedDest.startsWith("/etc") || resolvedDest.startsWith("/sys") || resolvedDest.startsWith("/proc")) {
     throw new Error(`Path traversal not allowed: ${dest}`);
   }
 

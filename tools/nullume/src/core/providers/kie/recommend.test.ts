@@ -28,20 +28,24 @@ test("recommend returns top models by category", () => {
       id: "nano-banana-2-lite",
       category: "image",
       stale: false,
+      description: "Lite version",
     },
     {
       id: "nano-banana-2",
       category: "image",
       stale: false,
+      description: "Standard version",
     },
     {
       id: "flux-pro",
       category: "image",
       stale: false,
+      description: "Flux Pro",
     },
   ];
 
-  const recommendations = recommend("image", models, [], { limit: 2 });
-  assert(recommendations.length > 0);
-  assert(recommendations.every((r: any) => r.model));
+  const recommendations = recommend("image", models, [], 2);
+  assert(recommendations.length <= 2, `Should have at most 2 recommendations, got ${recommendations.length}`);
+  assert(recommendations.length > 0, `Should have at least 1 recommendation, got ${recommendations.length}`);
+  assert(recommendations.every((r: any) => r.model), "All recommendations should have model field");
 });

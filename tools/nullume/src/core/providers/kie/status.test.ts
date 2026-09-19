@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert";
-import { normalizeStatus, extractFileUrl } from "./status.js";
+import { normalizeStatus } from "./status.js";
+import { extractFileUrl } from "./client.js";
 
 test("normalizeStatus: jobs API success", () => {
   const data = {
