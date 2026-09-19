@@ -17,7 +17,7 @@
 | Право | `legal/` | rkn-compliance | Правовая обвязка: 152-ФЗ, согласия, cookie, реклама. Намеренно отдельно от `security/` — это не техническая защита |
 | Маркетинг | `marketing/` | marketing-agent, seo-department, seo-specialist | Тексты, классическое SEO, видимость в ИИ-ответах |
 | Инфраструктура | `ops/` | devops, automator, documenter, anthropic-docs | CI/CD, сервер, автоматизация, документация |
-| Мета | `meta/` | agent-auditor, agent-evaluator, strategist, archivarius | Работа над самой системой: аудит ростера, оценка агентов, синтез, память |
+| Мета | `meta/` | agent-auditor, agent-evaluator, strategist, archivarius, challenger | Работа над самой системой и над качеством суждений: аудит ростера, оценка агентов, возражение против решений, синтез, память |
 
 Точки входа отделов (`design-department`, `security-department`,
 `seo-department`) вызывают специалистов своего каталога — им нужен

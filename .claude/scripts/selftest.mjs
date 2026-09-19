@@ -12,14 +12,24 @@ const bad = (m) => { console.log(`  ✗ ${m}`); fail++; };
 const wrn = (m) => { console.log(`  ! ${m}`); warn++; };
 
 const read = (p) => (fs.existsSync(p) ? fs.readFileSync(p, "utf8") : null);
-const agents = fs.existsSync(".claude/agents")
-  ? fs.readdirSync(".claude/agents").filter((f) => f.endsWith(".md"))
-  : [];
+// Агенты лежат подкаталогами-департаментами — обходим рекурсивно.
+// Плоский readdirSync после переезда возвращал только README.md, и все
+// проверки по агентам становились пустыми, продолжая печатать «валиден».
+const walkAgents = (dir, prefix = "") => {
+  if (!fs.existsSync(dir)) return [];
+  const out = [];
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (e.isDirectory()) out.push(...walkAgents(path.join(dir, e.name), `${prefix}${e.name}/`));
+    else if (e.name.endsWith(".md") && e.name !== "README.md") out.push(`${prefix}${e.name}`);
+  }
+  return out;
+};
+const agents = walkAgents(".claude/agents");
 
 console.log("\n[1] Frontmatter агентов");
 for (const f of agents) {
   const t = read(`.claude/agents/${f}`);
-  const base = f.replace(/\.md$/, "");
+  const base = path.basename(f, ".md"); // f теперь «департамент/имя.md»
   if (!t.startsWith("---")) { bad(`${base}: нет frontmatter`); continue; }
   const end = t.indexOf("\n---", 3);
   if (end < 0) { bad(`${base}: незакрытый frontmatter`); continue; }
@@ -47,7 +57,7 @@ for (const f of orchestrators) {
   const body = read(`.claude/agents/${f}`);
   const mentioned = [...body.matchAll(/`([a-z][a-z-]{3,})`/g)].map((m) => m[1]);
   for (const name of new Set(mentioned)) {
-    if (fs.existsSync(`.claude/agents/${name}.md`)) continue;
+    if (agents.some((a) => path.basename(a, ".md") === name)) continue;
     if (fs.existsSync(`.claude/commands/${name}.md`)) continue;
     if (fs.existsSync(`.claude/skills/${name}`)) continue;
   }
@@ -75,7 +85,7 @@ else ok(`активный проект: ${active.trim()}, MASTER.md на мес�
 console.log("\n[6] Реестр CLAUDE.md соответствует файлам");
 const claude = read("CLAUDE.md") || "";
 for (const f of agents) {
-  const base = f.replace(/\.md$/, "");
+  const base = path.basename(f, ".md"); // f теперь «департамент/имя.md»
   if (!claude.includes(`\`${base}\``)) wrn(`${base} не упомянут в CLAUDE.md`);
 }
 for (const dir of ["commands"]) {
@@ -105,6 +115,26 @@ for (const dir of ["CLAUDE.md", ".claude", "docs"]) {
   walk(dir);
 }
 ok(`проверено ${scanned.size} ссылок`);
+
+console.log("\n[8] Механика возражения на месте");
+const challengerFile = agents.find((a) => path.basename(a, ".md") === "challenger");
+const challenger = challengerFile ? read(`.claude/agents/${challengerFile}`) : null;
+const claudeMd = read("CLAUDE.md") || "";
+if (!challenger) bad("нет агента challenger — возражать против решений некому");
+else if (!/ПРИ КАКИХ УСЛОВИЯХ/.test(challenger)) bad("challenger без раздела условий неверности — вернётся к пустому согласию");
+else ok("агент-оппонент на месте");
+if (!/Возражение по существу/.test(claudeMd)) bad("в CLAUDE.md нет раздела «Возражение по существу»");
+else ok("правило для главного агента записано");
+if (!fs.existsSync(".claude/commands/council.md")) wrn("нет команды /council");
+else ok("режим совета на месте");
+
+console.log("\n[9] Порог уверенности расщеплён везде");
+const withThreshold = agents.filter((f) => /80%/.test(read(`.claude/agents/${f}`) || ""));
+const withSplit = withThreshold.filter((f) => /Порог уверенности: два разных случая/.test(read(`.claude/agents/${f}`) || ""));
+if (withSplit.length !== withThreshold.length) {
+  const missing = withThreshold.filter((f) => !withSplit.includes(f)).map((f) => path.basename(f, ".md"));
+  bad(`порог 80% без расщепления в ${missing.length} агентах: ${missing.join(", ")} — они прочитают старую формулировку «сомневаешься молчи»`);
+} else ok(`${withSplit.length} из ${withThreshold.length} агентов знают, что возражение порога не имеет`);
 
 console.log(`\n${"─".repeat(50)}`);
 console.log(fail ? `ПРОВАЛЕНО: ${fail} ошибок, ${warn} предупреждений` : `СИСТЕМА ЗДОРОВА (${warn} предупреждений)`);
