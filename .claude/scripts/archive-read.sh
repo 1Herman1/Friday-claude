@@ -39,6 +39,6 @@ if [ "$RAW_COUNT" -gt 0 ]; then
 fi
 
 echo
-echo "За подробностями по конкретной теме — Agent(archivist, \"справка: <тема>\")."
+echo "За подробностями по конкретной теме — Agent(archivarius, \"справка: <тема>\")."
 echo "=== КОНЕЦ ПАМЯТИ ==="
 exit 0
