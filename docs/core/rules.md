@@ -104,18 +104,19 @@ export async function handlePatchUser(req: Request, reply: Reply) {
 
 ## Работа с БД
 
-```typescript
-// Всегда через абстракцию в server/src/services/
-// Не писать Prisma запросы прямо в хендлерах роутов или компонентах
+Всегда через слой сервисов/бизнес-логики, не прямо в роутах или компонентах:
 
-// server/src/services/users.ts
+```typescript
+// Пример с Prisma (стек по умолчанию)
 export async function getUserById(id: string) {
   return prisma.user.findUnique({
     where: { id, deletedAt: null },
-    select: { id: true, name: true, email: true, bonusPoints: true },
+    select: { id: true, name: true, email: true },
   })
 }
 ```
+
+Конкретные пути сервисов — в `docs/projects/<проект>/project.md`.
 
 ## Переменные окружения
 
