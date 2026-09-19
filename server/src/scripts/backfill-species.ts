@@ -242,9 +242,10 @@ async function main() {
       })
       if (!product) continue
 
-      let quizTags = product.quizTags
+      // Старый тег снимаем при любой смене вида: у «универсального» и
+      // «неизвестного» тега нет, иначе подбор продолжит считать товар собачьим.
+      const quizTags = product.quizTags.filter((tag) => !tag.startsWith('species:'))
       if (d.newSpecies === 'cat' || d.newSpecies === 'dog') {
-        quizTags = quizTags.filter((tag) => !tag.startsWith('species:'))
         quizTags.push(`species:${d.newSpecies}`)
       }
 

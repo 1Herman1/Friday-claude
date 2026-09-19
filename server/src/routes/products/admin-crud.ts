@@ -166,10 +166,14 @@ export default async function adminCrudRoute(app: FastifyInstance) {
       return reply.status(404).send({ error: 'Product not found' })
     }
 
-    // Вид пришёл без тегов — синхронизируем поверх текущих тегов товара, иначе
-    // смена вида из формы стирала бы все ручные теги подбора.
+    // Синхронизируем при любом участии вида или тегов в запросе: вид без тегов —
+    // поверх текущих тегов товара (иначе смена вида из формы стирала бы ручные
+    // теги подбора), теги без вида — под текущим видом (иначе тег вида молча
+    // терялся бы, а поле оставалось).
     const quizTags =
-      species !== undefined ? syncSpeciesTag(rawQuizTags ?? exists.quizTags, species) : rawQuizTags
+      species !== undefined || rawQuizTags !== undefined
+        ? syncSpeciesTag(rawQuizTags ?? exists.quizTags, species ?? exists.species)
+        : undefined
 
     const product = await app.prisma.$transaction(async (tx) => {
       if (categoryIds !== undefined) {
