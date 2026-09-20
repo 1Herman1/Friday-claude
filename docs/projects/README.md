@@ -16,7 +16,7 @@
 |--------|---------|---------------|-------------------|---------------|
 | Симба | Интернет-магазин зоотоваров simbazoo.ru | `simba/` | `projects/simba/` (`client/ admin/ server/ shared/ deploy/ scripts/`) | `deploy/simba` |
 | HB Landing | Лендинг-визитка | `hb-landing/` | `projects/hb-landing/` | нет |
-| Perfect Skin | Магазин косметики | `perfect-skin/` | `projects/perfect-skin/` | нет |
+| Perfect Skin | Магазин косметики | `perfect-skin/` | `projects/perfect-skin/` | `deploy/perfect-skin` |
 | Ветклиника | SEO/GEO-аналитика, сайта пока нет | `vet-clinic/` | нет | нет |
 | Nullume | CLI и MCP генерации медиа через kie.ai, библиотека вкуса | `nullume/` | `tools/nullume/` | нет (npm) |
 | Стройматериалы | Страница «обновление ассортимента» поставщика листовых материалов, статический HTML | `stroymat/` | `projects/stroymat/` | нет |

@@ -121,10 +121,15 @@ await app.register(postsRoutes, { prefix: '/api/v1' })
 // Register admin routes
 await app.register(adminRoutes)
 
+// На сервере наружу смотрит только Nginx, поэтому по умолчанию слушаем
+// петлю. 0.0.0.0 остаётся доступен через HOST — он нужен в контейнерах.
+const PORT = Number(process.env.PORT) || 3000
+const HOST = process.env.HOST || '127.0.0.1'
+
 const start = async () => {
   try {
-    await app.listen({ port: 3000, host: '0.0.0.0' })
-    app.log.info('Server is running on http://0.0.0.0:3000')
+    await app.listen({ port: PORT, host: HOST })
+    app.log.info(`Server is running on http://${HOST}:${PORT}`)
   } catch (err) {
     app.log.error(err)
     process.exit(1)
