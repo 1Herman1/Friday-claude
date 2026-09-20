@@ -4,6 +4,7 @@
  * In production: delegates to configured provider.
  */
 import { isDevelopment } from '../../lib/env.js'
+import { maskPhone } from '../../lib/masks.js'
 
 export interface SmsSender {
   send(phone: string, code: string): Promise<void>
@@ -11,7 +12,7 @@ export interface SmsSender {
 
 export class DevSmsSender implements SmsSender {
   async send(phone: string, code: string): Promise<void> {
-    console.log(`[SMS] Sent to ${phone}: ${code}`)
+    console.log(`[SMS] Sent to ${maskPhone(phone)}: code sent (${code.length} chars)`)
   }
 }
 

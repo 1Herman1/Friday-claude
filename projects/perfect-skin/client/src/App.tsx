@@ -20,6 +20,7 @@ const BrandsPage = lazy(() => import('@/components/pages/BrandsPage').then((m) =
 const AboutPage = lazy(() => import('@/components/pages/AboutPage').then((m) => ({ default: m.AboutPage })))
 const ContactsPage = lazy(() => import('@/components/pages/ContactsPage').then((m) => ({ default: m.ContactsPage })))
 const OfferPage = lazy(() => import('@/components/pages/OfferPage').then((m) => ({ default: m.OfferPage })))
+const PrivacyPage = lazy(() => import('@/components/pages/PrivacyPage').then((m) => ({ default: m.default })))
 const ProPage = lazy(() => import('@/components/pages/ProPage').then((m) => ({ default: m.ProPage })))
 const BlogPage = lazy(() => import('@/components/pages/BlogPage').then((m) => ({ default: m.BlogPage })))
 const BlogPostPage = lazy(() => import('@/components/pages/BlogPostPage').then((m) => ({ default: m.BlogPostPage })))
@@ -64,6 +65,7 @@ function App() {
             <Route path="/about" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><AboutPage /></Suspense>} />
             <Route path="/contacts" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><ContactsPage /></Suspense>} />
             <Route path="/offer" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><OfferPage /></Suspense>} />
+            <Route path="/privacy" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><PrivacyPage /></Suspense>} />
             <Route path="/pro" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><ProPage /></Suspense>} />
             <Route path="/blog" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BlogPage /></Suspense>} />
             <Route path="/blog/:slug" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BlogPostPage /></Suspense>} />

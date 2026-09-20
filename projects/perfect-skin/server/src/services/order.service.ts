@@ -168,6 +168,17 @@ export class OrderService {
 
     // Execute order creation in transaction
     const order = await db.$transaction(async (tx) => {
+      // Step 1.5: Mark consent when order is placed (if not already marked)
+      await tx.user.updateMany({
+        where: {
+          id: owner.customerId,
+          acceptedTermsAt: null
+        },
+        data: {
+          acceptedTermsAt: new Date()
+        },
+      })
+
       // Step 3: Conditional stock deduction with race condition protection.
       // Порядок обхода фиксируем по productVariantId: два параллельных заказа
       // с пересекающимися позициями иначе берут row-lock в разном порядке —

@@ -256,8 +256,10 @@ export default function CartDrawer({ open, onClose }: Props) {
       </Link>
 
       <p className="text-center text-xs text-muted-foreground">
-        Нажимая кнопку, вы соглашаетесь с{' '}
-        <Link to="/offer" onClick={onClose} className="underline underline-offset-2">условиями оферты</Link>
+        Ознакомьтесь с{' '}
+        <Link to="/offer" onClick={onClose} className="text-primary underline underline-offset-2 hover:opacity-80">условиями оферты</Link>
+        {' '}и{' '}
+        <Link to="/privacy" onClick={onClose} className="text-primary underline underline-offset-2 hover:opacity-80">политикой обработки данных</Link>
       </p>
     </div>
   )

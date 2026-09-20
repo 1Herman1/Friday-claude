@@ -21,6 +21,7 @@ export function AuthPage() {
   const [error, setError] = useState('')
   const [resendTimer, setResendTimer] = useState(0)
   const [stepIn, setStepIn] = useState(false)
+  const [consentPD, setConsentPD] = useState(false)
 
   // Анимация появления шага
   useEffect(() => {
@@ -61,6 +62,11 @@ export function AuthPage() {
 
     if (!isEmailValid) {
       setError('Введите корректный email')
+      return
+    }
+
+    if (!consentPD) {
+      setError('Примите условия Политики обработки данных')
       return
     }
 
@@ -240,9 +246,27 @@ export function AuthPage() {
                     </p>
                   </div>
 
+                  <label className="flex items-start gap-3 cursor-pointer group mb-4">
+                    <input
+                      type="checkbox"
+                      checked={consentPD}
+                      onChange={(e) => {
+                        setConsentPD(e.target.checked)
+                        if (error) setError('')
+                      }}
+                      className="w-5 h-5 mt-0.5 flex-shrink-0 rounded border border-border-strong checked:bg-primary checked:border-primary cursor-pointer"
+                    />
+                    <span className="text-sm text-foreground leading-snug">
+                      Согласен на обработку персональных данных согласно{' '}
+                      <a href="/privacy" target="_blank" rel="noopener" className="text-primary underline underline-offset-2 hover:opacity-80">
+                        Политике обработки данных
+                      </a>
+                    </span>
+                  </label>
+
                   <button
                     onClick={handleSendCode}
-                    disabled={loading}
+                    disabled={loading || !consentPD}
                     className="w-full px-6 py-3 bg-primary text-primary-foreground font-bold rounded-pill disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors min-h-11 flex items-center justify-center"
                   >
                     {loading ? (

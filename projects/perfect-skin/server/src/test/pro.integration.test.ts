@@ -390,6 +390,8 @@ describe('Professional (wholesale) Integration Tests', () => {
   // 8. Full application flow: apply → admin approves → wholesale catalog
   it('(8) Заявка на статус: подача, повтор, валидация, админ одобряет → опт', async () => {
     const user = await createUser('apply-8')
+    expect(user.acceptedTermsAt).toBeNull()
+
     const token = tokenFor(user)
 
     const noAuthRes = await app.inject({
@@ -420,6 +422,11 @@ describe('Professional (wholesale) Integration Tests', () => {
     })
     expect(applyRes.statusCode).toBe(200)
     expect(JSON.parse(applyRes.body).proStatus).toBe('pending')
+
+    // Verify acceptedTermsAt was set on pro application
+    const userAfterApply = await db.user.findUnique({ where: { id: user.id } })
+    expect(userAfterApply?.acceptedTermsAt).not.toBeNull()
+    expect(userAfterApply?.acceptedTermsAt).toBeInstanceOf(Date)
 
     const statusRes = await app.inject({
       method: 'GET',

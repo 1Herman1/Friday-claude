@@ -57,6 +57,8 @@ export function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [orderPlaced, setOrderPlaced] = useState<Order | null>(null)
+  const [consentPD, setConsentPD] = useState(false)
+  const [consentOffer, setConsentOffer] = useState(false)
 
   // Загружаем методы доставки (только если корзина не пуста)
   useEffect(() => {
@@ -171,6 +173,7 @@ export function CheckoutPage() {
           ...(recipient.email && { email: recipient.email }),
         },
         expectedTotal: total,
+        consentGiven: consentPD,
       }
 
       // Добавляем адрес если требуется
@@ -727,7 +730,37 @@ export function CheckoutPage() {
 
             <div className="mb-4 text-xs text-muted-foreground space-y-2">
               <p>Оплата: СБП или карта.</p>
-              <p>Нажимая кнопку, вы соглашаетесь с <a href="/offer" target="_blank" rel="noopener" className="underline underline-offset-2">условиями оферты</a></p>
+            </div>
+
+            <div className="mb-6 space-y-3">
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={consentPD}
+                  onChange={(e) => setConsentPD(e.target.checked)}
+                  className="w-5 h-5 mt-0.5 flex-shrink-0 rounded border border-border-strong checked:bg-primary checked:border-primary cursor-pointer"
+                />
+                <span className="text-sm text-foreground leading-snug">
+                  Согласен на обработку персональных данных согласно{' '}
+                  <a href="/privacy" target="_blank" rel="noopener" className="text-primary underline underline-offset-2 hover:opacity-80">
+                    Политике обработки данных
+                  </a>
+                </span>
+              </label>
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={consentOffer}
+                  onChange={(e) => setConsentOffer(e.target.checked)}
+                  className="w-5 h-5 mt-0.5 flex-shrink-0 rounded border border-border-strong checked:bg-primary checked:border-primary cursor-pointer"
+                />
+                <span className="text-sm text-foreground leading-snug">
+                  Принимаю условия{' '}
+                  <a href="/offer" target="_blank" rel="noopener" className="text-primary underline underline-offset-2 hover:opacity-80">
+                    Публичной оферты
+                  </a>
+                </span>
+              </label>
             </div>
 
             <div className="mb-4 p-3 bg-muted rounded-block text-xs text-muted-foreground border border-border">
@@ -740,7 +773,9 @@ export function CheckoutPage() {
                 submitting ||
                 !recipient.name ||
                 !recipient.phone ||
-                (!isAuthed && !recipient.email.trim())
+                (!isAuthed && !recipient.email.trim()) ||
+                !consentPD ||
+                !consentOffer
               }
               className="w-full px-6 py-3 bg-primary text-primary-foreground font-bold rounded-pill disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors min-h-11 mb-4"
             >

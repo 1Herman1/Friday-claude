@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { fetchApi, ApiError } from '@/lib/api'
 import { IconPackage } from '@/components/icons'
 import { OrderView, type OrderDetail } from '@/components/orders/OrderView'
@@ -181,6 +181,12 @@ export function TrackOrderPage() {
               placeholder="your@email.com"
               className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
             />
+            <p className="text-xs text-muted-foreground mt-2">
+              Ваши данные обрабатываются согласно{' '}
+              <Link to="/privacy" className="text-primary underline underline-offset-2 hover:opacity-80">
+                Политике обработки данных
+              </Link>
+            </p>
           </div>
 
           {error && (

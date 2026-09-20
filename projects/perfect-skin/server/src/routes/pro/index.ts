@@ -54,7 +54,7 @@ export default async function proRoute(app: FastifyInstance) {
       // Check if user already has a professional status request pending or approved
       const user = await app.prisma.user.findUnique({
         where: { id: request.user!.id },
-        select: { proStatus: true },
+        select: { proStatus: true, acceptedTermsAt: true },
       })
 
       if (user?.proStatus === 'pending') {
@@ -66,17 +66,24 @@ export default async function proRoute(app: FastifyInstance) {
       }
 
       // Update user with professional request data
+      const updateData: any = {
+        proStatus: 'pending',
+        companyName,
+        inn,
+        specialization,
+        proRequestedAt: new Date(),
+        proRejectReason: null,
+        proReviewedAt: null,
+      }
+
+      // Mark consent date on first pro request only (if not already marked)
+      if (!user?.acceptedTermsAt) {
+        updateData.acceptedTermsAt = new Date()
+      }
+
       const updatedUser = await app.prisma.user.update({
         where: { id: request.user!.id },
-        data: {
-          proStatus: 'pending',
-          companyName,
-          inn,
-          specialization,
-          proRequestedAt: new Date(),
-          proRejectReason: null,
-          proReviewedAt: null,
-        },
+        data: updateData,
         select: { proStatus: true },
       })
 

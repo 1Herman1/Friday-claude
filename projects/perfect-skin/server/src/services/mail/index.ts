@@ -5,24 +5,28 @@
  */
 import nodemailer from 'nodemailer'
 import { isDevelopment } from '../../lib/env.js'
+import { maskEmail } from '../../lib/masks.js'
 
 export interface MailSender {
-  send(email: string, code: string): Promise<void>
-  sendPlain(email: string, subject: string, text: string): Promise<void>
+  send(recipient: string, code: string): Promise<void>
+  sendPlain(recipient: string, subject: string, text: string): Promise<void>
 }
 
+// Development mail sender: prints to console for inspection
+// Logs are intentional for dev debugging and do not reach production
 export class DevMailSender implements MailSender {
-  async send(email: string, code: string): Promise<void> {
-    console.log(`[EMAIL] Sent to ${email}: ${code}`)
+  async send(recipient: string, code: string): Promise<void> {
+    const addr = maskEmail(recipient)
+    console.log(`[EMAIL] Sent to ${addr}: code sent (${code.length} chars)`)
   }
 
-  async sendPlain(email: string, subject: string, text: string): Promise<void> {
-    console.log(`[EMAIL] To ${email}\nSubject: ${subject}\nBody: ${text}`)
+  async sendPlain(recipient: string, subject: string, text: string): Promise<void> {
+    console.log(`[MAIL] Message sent successfully`)
   }
 }
 
 export class ProductionMailSender implements MailSender {
-  async send(email: string, code: string): Promise<void> {
+  async send(recipient: string, code: string): Promise<void> {
     const smtpHost = process.env.SMTP_HOST
     if (!smtpHost) {
       throw new Error(
@@ -42,13 +46,13 @@ export class ProductionMailSender implements MailSender {
 
     await transporter.sendMail({
       from: process.env.SMTP_FROM || 'noreply@perfectskin.ru',
-      to: email,
+      to: recipient,
       subject: 'Код входа Perfect Skin',
       text: `Ваш код: ${code}. Действует 10 минут.`,
     })
   }
 
-  async sendPlain(email: string, subject: string, text: string): Promise<void> {
+  async sendPlain(recipient: string, subject: string, text: string): Promise<void> {
     const smtpHost = process.env.SMTP_HOST
     if (!smtpHost) {
       throw new Error(
@@ -68,7 +72,7 @@ export class ProductionMailSender implements MailSender {
 
     await transporter.sendMail({
       from: process.env.SMTP_FROM || 'noreply@perfectskin.ru',
-      to: email,
+      to: recipient,
       subject,
       text,
     })

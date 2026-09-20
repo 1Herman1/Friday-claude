@@ -826,4 +826,66 @@ describe('Checkout Integration Tests', () => {
     const trackNotFoundData = JSON.parse(trackNotFoundResponse.body)
     expect(trackNotFoundData.error.code).toBe('ORDER_NOT_FOUND')
   })
+
+  // (h) Order marks acceptedTermsAt on user
+  it('(h) Creating order marks acceptedTermsAt on user when it was null', async () => {
+    const email = `test-${Date.now()}-${Math.random().toString(36).slice(2)}@ps-test.local`
+    const user = await db.user.create({
+      data: { email, name: 'Terms Test User', role: 'customer', acceptedTermsAt: null },
+    })
+
+    expect(user.acceptedTermsAt).toBeNull()
+
+    const token = sign(
+      { userId: user.id, role: user.role, tv: user.tokenVersion },
+      process.env.JWT_SECRET || 'dev-secret'
+    )
+
+    // Get product and add to cart
+    const product = await db.product.findFirst({
+      where: {
+        isActive: true,
+        deletedAt: null,
+        variants: { some: { isActive: true, stock: { gte: 1 } } },
+      },
+      include: { variants: { where: { isActive: true, stock: { gte: 1 } }, take: 1 } },
+    })
+
+    const variant = product!.variants[0]
+
+    await app.inject({
+      method: 'POST',
+      url: '/api/v1/cart/items',
+      payload: { variantId: variant.id, quantity: 1 },
+      headers: { authorization: `Bearer ${token}` },
+    })
+
+    // Get cart totals
+    const cartResponse = await app.inject({
+      method: 'GET',
+      url: '/api/v1/cart',
+      headers: { authorization: `Bearer ${token}` },
+    })
+
+    const cartData = JSON.parse(cartResponse.body)
+
+    // Create order
+    const orderResponse = await app.inject({
+      method: 'POST',
+      url: '/api/v1/orders',
+      payload: {
+        deliveryMethod: 'pickup',
+        recipient: { name: 'Test', phone: '+79999999999' },
+        expectedTotal: cartData.subtotal,
+      },
+      headers: { authorization: `Bearer ${token}` },
+    })
+
+    expect(orderResponse.statusCode).toBe(201)
+
+    // Check user now has acceptedTermsAt set
+    const updatedUser = await db.user.findUnique({ where: { id: user.id } })
+    expect(updatedUser?.acceptedTermsAt).not.toBeNull()
+    expect(updatedUser?.acceptedTermsAt).toBeInstanceOf(Date)
+  })
 })
