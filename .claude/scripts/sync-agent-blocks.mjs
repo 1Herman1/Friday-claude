@@ -70,29 +70,69 @@ function reviewers() {
 
 // --- вырезание блоков из файла агента -------------------------------------
 
+// Границы блоков ищем так, чтобы они не зависели от везения в расположении
+// абзацев. Предыдущая версия брала ПЕРВОЕ вхождение слова «ВОЗРАЖЕНИЕ» — а в
+// design-reviewer.md первое вхождение стоит в прозе («рубрика ВОЗРАЖЕНИЕ под
+// него не подпадает»), и --apply заменил бы абзац на текст рубрики, оставив
+// настоящую рубрику ниже. Следующая сверка при этом стала бы зелёной: первое
+// вхождение совпало бы с эталоном. Ровно та галочка, что подтверждает порчу.
+
+// Все фенсы файла: [{ inner, start, end }], где start/end — границы содержимого
+function fences(body) {
+  const out = [];
+  const re = /```[^\n]*\n([\s\S]*?)```/g;
+  let m;
+  while ((m = re.exec(body)) !== null) {
+    const inner = m[1];
+    const start = m.index + m[0].indexOf("\n") + 1;
+    out.push({ inner, start, end: start + inner.length });
+  }
+  return out;
+}
+
 function findThreshold(body) {
   const start = body.indexOf(THRESHOLD_HEADING);
   if (start < 0) return null;
-  const after = body.slice(start + THRESHOLD_HEADING.length);
-  const next = after.indexOf("\n## ");
-  const end = next < 0 ? body.length : start + THRESHOLD_HEADING.length + next;
+  // следующий заголовок 2-го уровня, но только вне фенсов: «## » внутри примера
+  // обрезало бы блок посередине
+  const blocks = fences(body);
+  const inFence = (i) => blocks.some((f) => i >= f.start && i < f.end);
+  let end = body.length;
+  let from = start + THRESHOLD_HEADING.length;
+  for (;;) {
+    const next = body.indexOf("\n## ", from);
+    if (next < 0) break;
+    if (!inFence(next + 1)) { end = next; break; }
+    from = next + 1;
+  }
   return { start, end, text: body.slice(start, end).trim() };
 }
 
+// Рубрика привязана к фенсу, а не к слову: кандидаты — фенсы, содержащие
+// строку, которая НАЧИНАЕТСЯ с «ВОЗРАЖЕНИЕ». Ровно один кандидат — правим;
+// ноль — блока нет; больше одного — отказываемся править и говорим об этом.
 function findRubric(body) {
-  const start = body.indexOf("ВОЗРАЖЕНИЕ");
-  if (start < 0) return null;
-  // рубрика живёт внутри примера в блоке формата — до закрывающего фенса
-  const after = body.slice(start);
-  const fence = after.indexOf("\n```");
-  const end = fence < 0 ? body.length : start + fence;
-  return { start, end, text: body.slice(start, end).trim() };
+  const cands = fences(body).filter((f) => /^ВОЗРАЖЕНИЕ/m.test(f.inner));
+  if (cands.length === 0) return null;
+  if (cands.length > 1) return { ambiguous: true };
+  const f = cands[0];
+  const idx = f.inner.search(/^ВОЗРАЖЕНИЕ/m);
+  const start = f.start + idx;
+  return { start, end: f.end, text: body.slice(start, f.end).trim() };
 }
 
 // --- основное -------------------------------------------------------------
 
-function main() {
+async function main() {
   const apply = process.argv.includes("--apply");
+
+  // Порчу от --apply не отличить от своих правок, если дерево грязное.
+  if (apply) {
+    const { execSync } = await import("node:child_process");
+    let dirty = "";
+    try { dirty = execSync(`git status --porcelain -- ${AGENTS}`, { encoding: "utf8" }).trim(); } catch {}
+    if (dirty) die(`в ${AGENTS} есть незакоммиченные правки — закоммить их, иначе автоправку не отличить от своей:\n${dirty}`);
+  }
   const src = loadSource();
   const files = reviewers();
 
@@ -100,6 +140,7 @@ function main() {
 
   const drift = [];
   const missing = [];
+  const ambiguous = [];
   let fixed = 0;
 
   for (const rel of files) {
@@ -113,6 +154,7 @@ function main() {
     ]) {
       const found = find(body);
       if (!found) { missing.push(`${rel} — ${name}`); continue; }
+      if (found.ambiguous) { ambiguous.push(`${rel} — ${name}: несколько блоков, поправить руками`); continue; }
       if (found.text === want) continue;
       drift.push(`${rel} — ${name} разошлась с эталоном`);
       if (apply) {
@@ -125,6 +167,7 @@ function main() {
   }
 
   for (const m of missing) console.log(`нет блока: ${m}`);
+  for (const a of ambiguous) console.log(`неоднозначно: ${a}`);
   for (const d of drift) console.log(apply ? `выровнено: ${d}` : d);
 
   console.log("");
@@ -133,6 +176,11 @@ function main() {
   if (apply) {
     console.log(fixed ? `выровнено файлов: ${fixed}` : "выравнивать нечего");
     process.exit(0);
+  }
+
+  if (ambiguous.length) {
+    console.log(`${ambiguous.length} файлов с неоднозначной разметкой — автоправка по ним отключена`);
+    process.exit(1);
   }
 
   if (drift.length) {
