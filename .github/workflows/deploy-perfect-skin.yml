@@ -1,0 +1,139 @@
+name: Deploy Perfect Skin to VPS
+
+on:
+  push:
+    branches:
+      - deploy/perfect-skin
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-perfect-skin
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          # Служебные ключи вкладываются через envs и вписываются в .env функцией upsert_env
+          # (пустой секрет не затирает существующее значение на сервере).
+          SVC_SMTP_HOST: ${{ secrets.PS_SMTP_HOST }}
+          SVC_SMTP_PORT: ${{ secrets.PS_SMTP_PORT }}
+          SVC_SMTP_USER: ${{ secrets.PS_SMTP_USER }}
+          SVC_SMTP_PASS: ${{ secrets.PS_SMTP_PASS }}
+          SVC_SMTP_FROM: ${{ secrets.PS_SMTP_FROM }}
+          SVC_SMTP_SECURE: ${{ secrets.PS_SMTP_SECURE }}
+          SVC_SMS_PROVIDER: ${{ secrets.PS_SMS_PROVIDER }}
+          SVC_SMS_API_KEY: ${{ secrets.PS_SMS_API_KEY }}
+          SVC_SMS_SENDER: ${{ secrets.PS_SMS_SENDER }}
+          SVC_PS_1C_LOGIN: ${{ secrets.PS_1C_LOGIN }}
+          SVC_PS_1C_PASSWORD: ${{ secrets.PS_1C_PASSWORD }}
+        with:
+          host: ${{ secrets.PS_DEPLOY_HOST }}
+          username: ${{ secrets.PS_DEPLOY_USER }}
+          key: ${{ secrets.PS_DEPLOY_SSH_KEY }}
+          command_timeout: 15m
+          envs: SVC_SMTP_HOST,SVC_SMTP_PORT,SVC_SMTP_USER,SVC_SMTP_PASS,SVC_SMTP_FROM,SVC_SMTP_SECURE,SVC_SMS_PROVIDER,SVC_SMS_API_KEY,SVC_SMS_SENDER,SVC_PS_1C_LOGIN,SVC_PS_1C_PASSWORD
+          script: |
+            set -euo pipefail
+            cd /var/www/ps-src
+
+            echo "==> Syncing service keys from GitHub secrets into projects/perfect-skin/server/.env"
+            touch projects/perfect-skin/server/.env
+            upsert_env() {
+              local key="$1" value="$2"
+              if [ -z "$value" ]; then echo "   $key: empty in secrets, left as is"; return; fi
+              local escaped
+              escaped=$(printf '%s' "$value" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')
+              if grep -q "^${key}=" projects/perfect-skin/server/.env; then
+                sed -i "s|^${key}=.*|${key}=\"${escaped}\"|" projects/perfect-skin/server/.env
+              else
+                printf '%s="%s"\n' "$key" "$escaped" >> projects/perfect-skin/server/.env
+              fi
+              echo "   $key: set"
+            }
+            upsert_env SMTP_HOST "$SVC_SMTP_HOST"
+            upsert_env SMTP_PORT "$SVC_SMTP_PORT"
+            upsert_env SMTP_USER "$SVC_SMTP_USER"
+            upsert_env SMTP_PASS "$SVC_SMTP_PASS"
+            upsert_env SMTP_FROM "$SVC_SMTP_FROM"
+            upsert_env SMTP_SECURE "$SVC_SMTP_SECURE"
+            upsert_env SMS_PROVIDER "$SVC_SMS_PROVIDER"
+            upsert_env SMS_API_KEY "$SVC_SMS_API_KEY"
+            upsert_env SMS_SENDER "$SVC_SMS_SENDER"
+            upsert_env PS_1C_LOGIN "$SVC_PS_1C_LOGIN"
+            upsert_env PS_1C_PASSWORD "$SVC_PS_1C_PASSWORD"
+
+            echo "==> Fetching deploy/perfect-skin"
+            git fetch origin deploy/perfect-skin
+            git checkout deploy/perfect-skin
+            git merge --ff-only origin/deploy/perfect-skin
+
+            echo "==> Installing dependencies"
+            npm install
+
+            echo "==> Building @ps/shared"
+            npm run build --workspace=@ps/shared
+
+            echo "==> Generating Prisma client"
+            (cd projects/perfect-skin/server && npx prisma generate)
+
+            echo "==> Backing up database before any migration"
+            mkdir -p /var/backups/perfect-skin
+            BACKUP_FILE="/var/backups/perfect-skin/ps_backup_$(date +%Y%m%d_%H%M%S).dump"
+            docker compose -f projects/perfect-skin/deploy/docker-compose.prod.yml \
+              exec -T postgres pg_dump -U ps -d perfect_skin -F c > "$BACKUP_FILE"
+            test -s "$BACKUP_FILE"
+            # Держим последние 10 дампов, остальное чистим
+            ls -1t /var/backups/perfect-skin/ps_backup_*.dump 2>/dev/null | tail -n +11 | xargs -r rm -f
+            echo "Backup OK: $BACKUP_FILE"
+
+            echo "==> Applying migrations"
+            (cd projects/perfect-skin/server && npx prisma migrate deploy)
+
+            echo "==> Building server"
+            npm run build --workspace=@ps/server
+
+            echo "==> Building client with API URL"
+            VITE_API_URL=https://new.perfect-skin.shop npm run build --workspace=@ps/client
+
+            echo "==> Deploying static files (before reload: new API must not meet the old bundle)"
+            mkdir -p /var/www/perfect-skin/client
+            rm -rf /var/www/perfect-skin/client/*
+            cp -r projects/perfect-skin/client/dist/* /var/www/perfect-skin/client/
+
+            echo "==> Sidecar health check for PM2 path consistency"
+            EXPECTED_SCRIPT="$(pwd)/projects/perfect-skin/server/dist/index.js"
+            if pm2 describe ps-server >/dev/null 2>&1 \
+               && ! pm2 describe ps-server | grep -qF "$EXPECTED_SCRIPT"; then
+              echo "   процесс смотрит на другой путь — пересоздаём"
+              pm2 delete ps-server
+            fi
+
+            echo "==> Reloading application via PM2"
+            pm2 startOrReload projects/perfect-skin/deploy/ecosystem.config.js --update-env
+            pm2 save
+
+            echo "==> Verifying PM2 points to correct script"
+            if ! pm2 describe ps-server | grep -qF "$EXPECTED_SCRIPT"; then
+              echo "PM2 всё ещё запущен не из $EXPECTED_SCRIPT"
+              pm2 describe ps-server | grep -Ei 'script path|exec cwd'
+              exit 1
+            fi
+
+            echo "==> Health check"
+            sleep 2
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/v1/health)
+            if [ "$STATUS" != "200" ]; then
+              echo "Health check FAILED: HTTP $STATUS"
+              pm2 logs ps-server --lines 40 --nostream --err
+              exit 1
+            fi
+            echo "Health check OK: HTTP $STATUS"
+
+            echo "==> Deploy complete"

@@ -1,0 +1,29 @@
+# Прод-версия для VPS: Postgres слушает ТОЛЬКО localhost (127.0.0.1),
+# чтобы БД не была доступна из интернета на публичном IP.
+# Пароль берётся из переменной окружения (см. .env рядом или экспортировать перед up).
+# Запуск: export POSTGRES_PASSWORD='...' && docker compose -f deploy/docker-compose.prod.yml up -d
+
+# Имя проекта задано явно: без него compose берёт имя каталога («deploy»),
+# и контейнер называется так же, как у соседнего проекта.
+name: perfect-skin
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: perfect_skin
+      POSTGRES_USER: ps
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - ps_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ps -d perfect_skin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  ps_postgres_data:
