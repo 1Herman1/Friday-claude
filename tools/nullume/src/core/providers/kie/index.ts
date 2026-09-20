@@ -51,13 +51,16 @@ export class KieProvider implements Provider {
       return Promise.resolve(null);
     }
 
+    // Determine source: if pricing is empty, it's vendored (from model.price)
+    const source = this.pricing.length === 0 ? "vendored" : (price.approximate ? "fuzzy" : "pricing-api");
+
     return Promise.resolve({
       creditsMin: price.creditsMin,
       creditsMax: price.creditsMax,
       usdMin: price.usdMin,
       usdMax: price.usdMax,
       approximate: price.approximate,
-      source: price.approximate ? "fuzzy" : "pricing-api",
+      source,
     });
   }
 

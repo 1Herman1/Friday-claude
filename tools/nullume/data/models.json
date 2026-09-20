@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-09-19T22:12:57.003Z",
+  "built_at": "2026-09-20T11:09:12.835Z",
   "source": "vendored",
   "models": [
     {
@@ -74,7 +74,7 @@
         "defaults": {}
       },
       "description": "High-quality photorealistic image generation powered by Seedream4.0's advanced AI model",
-      "schemaSource": "seed",
+      "schemaSource": "docs",
       "stale": false,
       "source": "live"
     },
@@ -224,16 +224,16 @@
         }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6.5,
         "creditsMax": 6.5,
         "usdMin": 0.0325,
         "usdMax": 0.0325,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "seedream/4.5-edit",
@@ -305,16 +305,16 @@
         }
       },
       "description": "Image editing by Seedream4.5",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6.5,
         "creditsMax": 6.5,
         "usdMin": 0.0325,
         "usdMax": 0.0325,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "seedream/5-lite-text-to-image",
@@ -388,16 +388,16 @@
         }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 5.5,
         "creditsMax": 5.5,
         "usdMin": 0.0275,
         "usdMax": 0.0275,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "seedream/5-lite-image-to-image",
@@ -480,16 +480,16 @@
         }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 5.5,
         "creditsMax": 5.5,
         "usdMin": 0.0275,
         "usdMax": 0.0275,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "seedream/5-pro-text-to-image",
@@ -562,16 +562,16 @@
         }
       },
       "description": "High-quality photorealistic image generation powered by Seedream's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 7,
         "creditsMax": 14,
         "usdMin": 0.035,
         "usdMax": 0.07,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "seedream/5-pro-image-to-image",
@@ -794,6 +794,13 @@
             "9:16"
           ],
           "default": "1:1"
+        },
+        "nsfw_checker": {
+          "type": "boolean",
+          "required": false,
+          "description": "Defaults to false. You can set it to false based on your needs. If set to false, our content filtering will be disabled, and all results will be returned directly by the model itself. Note: There is no guarantee that everything can be filtered out; if you are not satisfied with the results, you will need to make your own arrangements.",
+          "enum": [],
+          "default": null
         }
       },
       "meta": {
@@ -808,16 +815,16 @@
         }
       },
       "description": "Image generation by z-image",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 0.8,
         "creditsMax": 0.8,
         "usdMin": 0.004,
         "usdMax": 0.004,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "google/imagen4-fast",
@@ -870,16 +877,16 @@
         "defaults": {}
       },
       "description": "Image generation by Google imagen4-fast",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 4,
         "usdMin": 0.02,
         "usdMax": 0.02,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "google/imagen4-ultra",
@@ -932,16 +939,16 @@
         "defaults": {}
       },
       "description": "Image generation by Google imagen4-ultra",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 12,
         "creditsMax": 12,
         "usdMin": 0.06,
         "usdMax": 0.06,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "google/imagen4",
@@ -994,16 +1001,16 @@
         "defaults": {}
       },
       "description": "Image generation by Google imagen4",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 8,
         "creditsMax": 8,
         "usdMin": 0.04,
         "usdMax": 0.04,
         "approximate": false
-      },
-      "schemaSource": "seed",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "google/nano-banana-edit",
@@ -1085,16 +1092,16 @@
         "defaults": {}
       },
       "description": "Image editing using Google's Nano Banana Edit model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 4,
         "usdMin": 0.02,
         "usdMax": 0.02,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "google/nano-banana",
@@ -1174,7 +1181,7 @@
         "defaults": {}
       },
       "description": "Content generation using google/nano-banana",
-      "schemaSource": "seed",
+      "schemaSource": "docs",
       "stale": false,
       "source": "live"
     },
@@ -1326,16 +1333,16 @@
         "defaults": {}
       },
       "description": "Image generation by Nano Banana 2",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 4,
         "usdMin": 0.02,
         "usdMax": 0.02,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "nano-banana-2-lite",
@@ -1393,17 +1400,16 @@
           "aspect_ratio": "auto"
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 4,
         "usdMin": 0.02,
         "usdMax": 0.02,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "flux-2/pro-image-to-image",
@@ -1475,16 +1481,16 @@
         }
       },
       "description": "Image generation by flux-2/pro-image-to-image",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 5,
         "creditsMax": 7,
         "usdMin": 0.025,
         "usdMax": 0.035,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "flux-2/pro-text-to-image",
@@ -1546,16 +1552,16 @@
         }
       },
       "description": "High-quality photorealistic image generation powered by Flux-2's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 5,
         "creditsMax": 7,
         "usdMin": 0.025,
         "usdMax": 0.035,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "flux-2/flex-image-to-image",
@@ -1627,16 +1633,16 @@
         }
       },
       "description": "Image generation by flux-2/flex-image-to-image",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 14,
         "creditsMax": 24,
         "usdMin": 0.07,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "flux-2/flex-text-to-image",
@@ -1698,16 +1704,16 @@
         }
       },
       "description": "High-quality photorealistic image generation powered by Flux-2's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 14,
         "creditsMax": 24,
         "usdMin": 0.07,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine-image-2-0/text-to-image",
@@ -1745,17 +1751,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 4,
         "usdMin": 0.02,
         "usdMax": 0.02,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine-image-2-0/segment-map",
@@ -1778,7 +1783,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -1820,7 +1824,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -1874,17 +1877,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 5,
         "creditsMax": 5,
         "usdMin": 0.025,
         "usdMax": 0.025,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine-image-2-0/image-edit",
@@ -1931,17 +1933,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 4,
         "usdMin": 0.02,
         "usdMax": 0.02,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine/image-to-image",
@@ -1981,16 +1982,16 @@
         "defaults": {}
       },
       "description": "Content generation using grok-imagine/image-to-image",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 4,
         "usdMin": 0.02,
         "usdMax": 0.02,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "gpt-image-2-5-flare-text-to-image",
@@ -2057,7 +2058,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -2136,7 +2136,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -2206,17 +2205,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6,
         "creditsMax": 16,
         "usdMin": 0.03,
         "usdMax": 0.08,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "gpt-image-2-5-sunburst-image-to-image",
@@ -2292,17 +2290,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6,
         "creditsMax": 16,
         "usdMin": 0.03,
         "usdMax": 0.08,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "gpt-image/1.5-text-to-image",
@@ -2352,17 +2349,16 @@
           "quality": "medium"
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 22,
         "usdMin": 0.02,
         "usdMax": 0.11,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "gpt-image/1.5-image-to-image",
@@ -2421,17 +2417,16 @@
           "quality": "medium"
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 22,
         "usdMin": 0.02,
         "usdMax": 0.11,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "gpt-image-2-text-to-image",
@@ -2501,17 +2496,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6,
         "creditsMax": 16,
         "usdMin": 0.03,
         "usdMax": 0.08,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "gpt-image-2-image-to-image",
@@ -2590,17 +2584,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6,
         "creditsMax": 16,
         "usdMin": 0.03,
         "usdMax": 0.08,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "topaz/image-upscale",
@@ -2793,16 +2786,16 @@
         "defaults": {}
       },
       "description": "Image generation by ideogram/character-edit",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 12,
         "creditsMax": 24,
         "usdMin": 0.06,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "ideogram/character-remix",
@@ -2934,16 +2927,16 @@
         "defaults": {}
       },
       "description": "Image generation by ideogram/character-remix",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 12,
         "creditsMax": 24,
         "usdMin": 0.06,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "ideogram/character",
@@ -3046,16 +3039,16 @@
         "defaults": {}
       },
       "description": "Image generation by ideogram/character",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 12,
         "creditsMax": 24,
         "usdMin": 0.06,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "ideogram/v3-text-to-image",
@@ -3138,16 +3131,16 @@
         "defaults": {}
       },
       "description": "Image generation by ideogram/v3-text-to-image",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 3.5,
         "creditsMax": 10,
         "usdMin": 0.0175,
         "usdMax": 0.05,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "ideogram/v3-edit",
@@ -3214,16 +3207,16 @@
         "defaults": {}
       },
       "description": "Image generation by ideogram/v3-edit",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 3.5,
         "creditsMax": 10,
         "usdMin": 0.0175,
         "usdMax": 0.05,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "ideogram/v3-remix",
@@ -3334,16 +3327,16 @@
         "defaults": {}
       },
       "description": "Image generation by ideogram/v3-remix",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 3.5,
         "creditsMax": 10,
         "usdMin": 0.0175,
         "usdMax": 0.05,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "qwen/text-to-image",
@@ -3823,16 +3816,16 @@
         "defaults": {}
       },
       "description": "Image generation by qwen2/text-to-image",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 5.6,
         "creditsMax": 5.6,
         "usdMin": 0.028,
         "usdMax": 0.028,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "qwen3/pro-text-to-image",
@@ -3920,17 +3913,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6.4,
         "creditsMax": 12,
         "usdMin": 0.032,
         "usdMax": 0.06,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "qwen3/text-to-image",
@@ -4018,17 +4010,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4.8,
         "creditsMax": 4.8,
         "usdMin": 0.024,
         "usdMax": 0.024,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "qwen3/pro-image-to-image",
@@ -4125,17 +4116,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 0.5,
         "creditsMax": 12,
         "usdMin": 0.0025,
         "usdMax": 0.06,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "qwen3/image-to-image",
@@ -4232,17 +4222,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 0.5,
         "creditsMax": 4.8,
         "usdMin": 0.0025,
         "usdMax": 0.024,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-7-image",
@@ -4332,6 +4321,13 @@
           "description": "Random seed, range 0-2147483647.",
           "enum": [],
           "default": "0"
+        },
+        "nsfw_checker": {
+          "type": "boolean",
+          "required": false,
+          "description": "Defaults to false. You can set it to false based on your needs. If set to false, our content filtering will be disabled, and all results will be returned directly by the model itself. Note: There is no guarantee that everything can be filtered out; if you are not satisfied with the results, you will need to make your own arrangements.",
+          "enum": [],
+          "default": null
         }
       },
       "meta": {
@@ -4455,16 +4451,16 @@
         "defaults": {}
       },
       "description": "Based on wan/2-7-image-pro, image generation and editing are achieved.",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 12,
         "creditsMax": 12,
         "usdMin": 0.06,
         "usdMax": 0.06,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine/text-to-video",
@@ -4537,17 +4533,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 2.4,
         "creditsMax": 8,
         "usdMin": 0.012,
         "usdMax": 0.04,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine/image-to-video",
@@ -4640,17 +4635,16 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 2.4,
         "creditsMax": 8,
         "usdMin": 0.004,
         "usdMax": 0.0225,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine/upscale",
@@ -4683,17 +4677,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 10,
         "creditsMax": 30,
         "usdMin": 0.05,
         "usdMax": 0.15,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine/extend",
@@ -4743,17 +4736,16 @@
           "extend_at": 2
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 14.4,
         "creditsMax": 45,
         "usdMin": 0.072,
         "usdMax": 0.225,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "grok-imagine-video-1-5-preview",
@@ -4822,17 +4814,16 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 2.4,
         "creditsMax": 4.5,
         "usdMin": 0.012,
         "usdMax": 0.0225,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling-2.6/text-to-video",
@@ -4934,17 +4925,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 55,
         "creditsMax": 220,
         "usdMin": 0.275,
         "usdMax": 1.1,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling-2.6/image-to-video",
@@ -4998,17 +4988,16 @@
           "duration": "5"
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 110,
         "creditsMax": 220,
         "usdMin": 0.55,
         "usdMax": 1.1,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling/v2-5-turbo-image-to-video-pro",
@@ -5072,17 +5061,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 42,
         "creditsMax": 84,
         "usdMin": 0.21,
         "usdMax": 0.42,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling/v2-5-turbo-text-to-video-pro",
@@ -5141,17 +5129,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 42,
         "creditsMax": 84,
         "usdMin": 0.21,
         "usdMax": 0.42,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling/ai-avatar-standard",
@@ -5192,7 +5179,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -5236,7 +5222,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -5296,17 +5281,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 160,
         "creditsMax": 320,
         "usdMin": 0.8,
         "usdMax": 1.6,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling/v2-1-master-text-to-video",
@@ -5365,17 +5349,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 160,
         "creditsMax": 320,
         "usdMin": 0.8,
         "usdMax": 1.6,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling/v2-1-pro",
@@ -5439,17 +5422,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 50,
         "creditsMax": 100,
         "usdMin": 0.25,
         "usdMax": 0.5,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling/v2-1-standard",
@@ -5506,17 +5488,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 25,
         "creditsMax": 50,
         "usdMin": 0.125,
         "usdMax": 0.25,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "kling-2.6/motion-control",
@@ -5581,7 +5562,6 @@
           "mode": "720p"
         }
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -5645,7 +5625,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -5825,7 +5804,6 @@
           "resolution": "720p"
         }
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -5883,7 +5861,6 @@
           "resolution": "720p"
         }
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -6006,17 +5983,16 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 11.5,
         "creditsMax": 208,
         "usdMin": 0.057,
         "usdMax": 1.04,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "bytedance/seedance-2-fast",
@@ -6127,17 +6103,16 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6.8,
         "creditsMax": 24.8,
         "usdMin": 0.034,
         "usdMax": 0.124,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "bytedance/seedance-2-mini",
@@ -6248,17 +6223,16 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 2.4,
         "creditsMax": 8.2,
         "usdMin": 0.012,
         "usdMax": 0.041,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "bytedance/seedance-2-5",
@@ -6266,71 +6240,10 @@
       "api": "jobs",
       "docUrl": "https://docs.kie.ai/market/bytedance/seedance-2-5.md",
       "fields": {
-        "resolution": {
-          "type": "string",
-          "required": false,
-          "description": "Video resolution - 480p for faster generation, 720p for balance.",
-          "enum": [
-            "480p",
-            "720p",
-            "1080p"
-          ],
-          "default": "720p"
-        },
-        "duration": {
-          "type": "integer",
-          "required": false,
-          "description": "Video duration in 4-30 seconds. Special values -1: Pass -1 for automatic duration selection — the model picks a suitable duration itself (for video-editing tasks, it matches the input video's length; for other task types, it selects within the valid range), instead of you specifying an exact value.",
-          "enum": [],
-          "default": "5"
-        },
-        "generate_audio": {
-          "type": "boolean",
-          "required": false,
-          "description": "Whether to generate audio for the video. - **true**: Generate with audio (higher cost) - **false**: Generate without audio Note: Enabling audio will increase the generation cost",
-          "enum": [],
-          "default": "true"
-        },
-        "return_last_frame": {
-          "type": "boolean",
-          "required": false,
-          "description": "Whether to return the last frame of the video. When draft=true, this parameter cannot be set to true.",
-          "enum": [],
-          "default": "false"
-        },
-        "aspect_ratio": {
-          "type": "string",
-          "required": false,
-          "description": "'Video aspect ratio configuration. '",
-          "enum": [
-            "1:1",
-            "4:3",
-            "3:4",
-            "16:9",
-            "9:16",
-            "21:9",
-            "adaptive"
-          ],
-          "default": "adaptive"
-        },
         "prompt": {
           "type": "string",
           "required": false,
           "description": "The text prompt used to generate the video.. ( Max length: 30000 characters)",
-          "enum": [],
-          "default": null
-        },
-        "reference_image_urls": {
-          "type": "array",
-          "required": false,
-          "description": "Enter a list of image URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj). Single image requirements: Format: jpeg, png, webp, bmp, tiff, gif. Aspect ratio (width/height): (0.4, 2.5) Width and height (px): (300, 6000) Size: Single image less than 30 MB. Maximum number of files: The sum of the number of frames at the beginning and end must not exceed 30. Mutually exclusive with the first/last-frame scenario;",
-          "enum": [],
-          "default": null
-        },
-        "reference_audio_urls": {
-          "type": "array",
-          "required": false,
-          "description": "Enter a list of audio URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj) . Single audio requirements: Format: wav, mp3 Size: Single audio file size not exceeding 15 MB. Single audio duration: [2, 30] seconds; Mutually exclusive with the first/last-frame scenario; Total duration of reference videos must not exceed 30 seconds.",
           "enum": [],
           "default": null
         },
@@ -6348,6 +6261,74 @@
           "enum": [],
           "default": null
         },
+        "reference_image_urls": {
+          "type": "array",
+          "required": false,
+          "description": "Enter a list of image URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj). Single image requirements: Format: jpeg, png, webp, bmp, tiff, gif. Aspect ratio (width/height): (0.4, 2.5) Width and height (px): (300, 6000) Size: Single image less than 30 MB. Maximum number of files: The sum of the number of frames at the beginning and end must not exceed 30. Mutually exclusive with the first/last-frame scenario;",
+          "enum": [],
+          "default": null
+        },
+        "reference_video_urls": {
+          "type": "array",
+          "required": false,
+          "description": "Enter a list of video URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj) . Single video requirements: Video format: mp4, mov. Resolution: 480p, 720p Dimensions: Aspect ratio (width/height): [0.4, 2.5] Width/height (px): [300, 6000] Total pixels: [640×640=409600, 834×1112=927408], i.e., the product of width and height must meet the range requirement of [409600, 927408]. Size: Single video not exceeding 200 MB. Frame rate (FPS): [24, 60] Single video duration: [2, 30] seconds; Mutually exclusive with the first/last-frame scenario; Total duration of reference videos must not exceed 30 seconds.",
+          "enum": [],
+          "default": null
+        },
+        "reference_audio_urls": {
+          "type": "array",
+          "required": false,
+          "description": "Enter a list of audio URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj) . Single audio requirements: Format: wav, mp3 Size: Single audio file size not exceeding 15 MB. Single audio duration: [2, 30] seconds; Mutually exclusive with the first/last-frame scenario; Total duration of reference videos must not exceed 30 seconds.",
+          "enum": [],
+          "default": null
+        },
+        "return_last_frame": {
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to return the last frame of the video. When draft=true, this parameter cannot be set to true.",
+          "enum": [],
+          "default": "false"
+        },
+        "generate_audio": {
+          "type": "boolean",
+          "required": false,
+          "description": "Whether to generate audio for the video. - **true**: Generate with audio (higher cost) - **false**: Generate without audio Note: Enabling audio will increase the generation cost",
+          "enum": [],
+          "default": "true"
+        },
+        "resolution": {
+          "type": "string",
+          "required": false,
+          "description": "Video resolution - 480p for faster generation, 720p for balance.",
+          "enum": [
+            "480p",
+            "720p",
+            "1080p"
+          ],
+          "default": "720p"
+        },
+        "aspect_ratio": {
+          "type": "string",
+          "required": false,
+          "description": "'Video aspect ratio configuration. '",
+          "enum": [
+            "1:1",
+            "4:3",
+            "3:4",
+            "16:9",
+            "9:16",
+            "21:9",
+            "adaptive"
+          ],
+          "default": "adaptive"
+        },
+        "duration": {
+          "type": "integer",
+          "required": false,
+          "description": "Video duration in 4-30 seconds. Special values -1: Pass -1 for automatic duration selection — the model picks a suitable duration itself (for video-editing tasks, it matches the input video's length; for other task types, it selects within the valid range), instead of you specifying an exact value.",
+          "enum": [],
+          "default": "5"
+        },
         "output_format": {
           "type": "string",
           "required": false,
@@ -6358,17 +6339,17 @@
           ],
           "default": "mp4"
         },
-        "reference_video_urls": {
-          "type": "array",
-          "required": false,
-          "description": "Enter a list of video URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj) . Single video requirements: Video format: mp4, mov. Resolution: 480p, 720p Dimensions: Aspect ratio (width/height): [0.4, 2.5] Width/height (px): [300, 6000] Total pixels: [640×640=409600, 834×1112=927408], i.e., the product of width and height must meet the range requirement of [409600, 927408]. Size: Single video not exceeding 200 MB. Frame rate (FPS): [24, 60] Single video duration: [2, 30] seconds; Mutually exclusive with the first/last-frame scenario; Total duration of reference videos must not exceed 30 seconds.",
-          "enum": [],
-          "default": null
-        },
         "web_search": {
           "type": "boolean",
           "required": false,
           "description": "Enable online search.",
+          "enum": [],
+          "default": null
+        },
+        "nsfw_checker": {
+          "type": "boolean",
+          "required": false,
+          "description": "Defaults to false. You can set it to false based on your needs. If set to false, our content filtering will be disabled, and all results will be returned directly by the model itself. Note: There is no guarantee that everything can be filtered out; if you are not satisfied with the results, you will need to make your own arrangements.",
           "enum": [],
           "default": null
         }
@@ -6380,17 +6361,16 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 17,
         "creditsMax": 158,
         "usdMin": 0.085,
         "usdMax": 0.79,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "bytedance/seedance-1.5-pro",
@@ -6479,17 +6459,16 @@
           "aspect_ratio": "1:1"
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 1.75,
         "creditsMax": 15,
         "usdMin": 0.00875,
         "usdMax": 0.075,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "bytedance/v1-pro-fast-image-to-video",
@@ -6549,7 +6528,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -6970,16 +6948,16 @@
         "defaults": {}
       },
       "description": "Content generation using hailuo/2-3-image-to-video-pro",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 45,
         "creditsMax": 90,
         "usdMin": 0.225,
         "usdMax": 0.45,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "hailuo/2-3-image-to-video-standard",
@@ -7040,16 +7018,16 @@
         "defaults": {}
       },
       "description": "Content generation using hailuo/2-3-image-to-video-standard",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 30,
         "creditsMax": 50,
         "usdMin": 0.15,
         "usdMax": 0.25,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "hailuo/02-text-to-video-pro",
@@ -7088,16 +7066,16 @@
         "defaults": {}
       },
       "description": "Content generation using hailuo/02-text-to-video-pro",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 57,
         "creditsMax": 57,
         "usdMin": 0.285,
         "usdMax": 0.285,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "hailuo/02-image-to-video-pro",
@@ -7152,16 +7130,16 @@
         "defaults": {}
       },
       "description": "Content generation using hailuo/02-image-to-video-pro",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 57,
         "creditsMax": 57,
         "usdMin": 0.285,
         "usdMax": 0.285,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "hailuo/02-text-to-video-standard",
@@ -7210,16 +7188,16 @@
         "defaults": {}
       },
       "description": "Content generation using hailuo/02-text-to-video-standard",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 30,
         "creditsMax": 50,
         "usdMin": 0.15,
         "usdMax": 0.25,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "hailuo/02-image-to-video-standard",
@@ -7294,16 +7272,16 @@
         "defaults": {}
       },
       "description": "Content generation using hailuo/02-image-to-video-standard",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 12,
         "creditsMax": 50,
         "usdMin": 0.06,
         "usdMax": 0.25,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-2-a14b-image-to-video-turbo",
@@ -7378,16 +7356,16 @@
         "defaults": {}
       },
       "description": "Transform images into dynamic videos powered by Wan's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 60,
         "creditsMax": 80,
         "usdMin": 0.3,
         "usdMax": 0.4,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-2-a14b-speech-to-video-turbo",
@@ -7574,16 +7552,16 @@
         "defaults": {}
       },
       "description": "High-quality video generation from text descriptions powered by Wan's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 40,
         "creditsMax": 80,
         "usdMin": 0.2,
         "usdMax": 0.4,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-2-animate-move",
@@ -7668,6 +7646,13 @@
             "720p"
           ],
           "default": "480p"
+        },
+        "nsfw_checker": {
+          "type": "boolean",
+          "required": false,
+          "description": "Defaults to false. You can set it to false based on your needs. If set to false, our content filtering will be disabled, and all results will be returned directly by the model itself. Note: There is no guarantee that everything can be filtered out; if you are not satisfied with the results, you will need to make your own arrangements.",
+          "enum": [],
+          "default": null
         }
       },
       "meta": {
@@ -7751,16 +7736,16 @@
         "defaults": {}
       },
       "description": "Transform static images into dynamic videos powered by Wan's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 70,
         "creditsMax": 315,
         "usdMin": 0.35,
         "usdMax": 1.575,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-6-text-to-video",
@@ -7820,16 +7805,16 @@
         "defaults": {}
       },
       "description": "High-quality video generation from text descriptions powered by Wan's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 70,
         "creditsMax": 315,
         "usdMin": 0.35,
         "usdMax": 1.575,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-6-video-to-video",
@@ -7896,16 +7881,16 @@
         "defaults": {}
       },
       "description": "Transform existing videos with new prompts using Wan's advanced AI model",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 70,
         "creditsMax": 209.5,
         "usdMin": 0.35,
         "usdMax": 1.0475,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-6-flash-image-to-video",
@@ -8143,16 +8128,16 @@
         "defaults": {}
       },
       "description": "Video generation by wan/2-5-image-to-video",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 60,
         "creditsMax": 200,
         "usdMin": 0.3,
         "usdMax": 1,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-5-text-to-video",
@@ -8237,16 +8222,16 @@
         "defaults": {}
       },
       "description": "Video generation by wan/2-5-text-to-video",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 60,
         "creditsMax": 200,
         "usdMin": 0.3,
         "usdMax": 1,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-7-text-to-video",
@@ -8342,17 +8327,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 16,
         "creditsMax": 24,
         "usdMin": 0.08,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-7-image-to-video",
@@ -8457,17 +8441,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 16,
         "creditsMax": 24,
         "usdMin": 0.08,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-7-videoedit",
@@ -8580,17 +8563,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 16,
         "creditsMax": 24,
         "usdMin": 0.08,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/2-7-r2v",
@@ -8707,17 +8689,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 16,
         "creditsMax": 24,
         "usdMin": 0.08,
         "usdMax": 0.12,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "wan/3-0-video",
@@ -8828,7 +8809,6 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -8942,7 +8922,6 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -9130,7 +9109,6 @@
           "duration": 5
         }
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -9269,17 +9247,16 @@
           "duration": 5
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 18.4,
         "usdMin": 0.02,
         "usdMax": 0.092,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "pixverse-v6/transition",
@@ -9291,20 +9268,6 @@
           "type": "string",
           "required": true,
           "description": "Generate prompt, cannot be empty, length is limited to 3-5000 characters.",
-          "enum": [],
-          "default": null
-        },
-        "first_frame_image_url": {
-          "type": "string",
-          "required": true,
-          "description": "First frame image URL. Supports HTTP, HTTPS, and OSS addresses; supported image formats include JPG, JPEG, PNG, and WebP; the size of a single image file must not exceed 20 MB",
-          "enum": [],
-          "default": null
-        },
-        "last_frame_image_url": {
-          "type": "string",
-          "required": true,
-          "description": "Last frame image URL. Supports HTTP, HTTPS, and OSS addresses; supported image formats include JPG, JPEG, PNG, and WebP; the size of a single image file must not exceed 20 MB",
           "enum": [],
           "default": null
         },
@@ -9340,6 +9303,20 @@
           "description": "Random seed, value range is 0–2147483647. Using the same parameters and seed helps improve result reproducibility.",
           "enum": [],
           "default": null
+        },
+        "first_frame_image_url": {
+          "type": "string",
+          "required": true,
+          "description": "First frame image URL. Supports HTTP, HTTPS, and OSS addresses; supported image formats include JPG, JPEG, PNG, and WebP; the size of a single image file must not exceed 20 MB",
+          "enum": [],
+          "default": null
+        },
+        "last_frame_image_url": {
+          "type": "string",
+          "required": true,
+          "description": "Last frame image URL. Supports HTTP, HTTPS, and OSS addresses; supported image formats include JPG, JPEG, PNG, and WebP; the size of a single image file must not exceed 20 MB",
+          "enum": [],
+          "default": null
         }
       },
       "meta": {
@@ -9347,17 +9324,16 @@
         "imageList": false,
         "required": [
           "prompt",
-          "first_frame_image_url",
-          "last_frame_image_url",
           "quality",
-          "duration"
+          "duration",
+          "first_frame_image_url",
+          "last_frame_image_url"
         ],
         "defaults": {
           "quality": "720p",
           "duration": 5
         }
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -9427,17 +9403,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4,
         "creditsMax": 18.4,
         "usdMin": 0.02,
         "usdMax": 0.092,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "pixverse-v6/reference-to-video",
@@ -9525,17 +9500,16 @@
           "duration": 5
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 4.5,
         "creditsMax": 20.7,
         "usdMin": 0.0225,
         "usdMax": 0.1035,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "minimax-h3/text-to-video",
@@ -9607,17 +9581,16 @@
           "duration": 6
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 8,
         "creditsMax": 13,
         "usdMin": 0.04,
         "usdMax": 0.065,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "minimax-h3/image-to-video",
@@ -9689,17 +9662,16 @@
           "duration": 6
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 8,
         "creditsMax": 13,
         "usdMin": 0.04,
         "usdMax": 0.065,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "minimax-h3/reference-to-video",
@@ -9793,17 +9765,16 @@
           "duration": 6
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 8,
         "creditsMax": 13,
         "usdMin": 0.04,
         "usdMax": 0.065,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "happyhorse/text-to-video",
@@ -9864,17 +9835,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 28,
         "creditsMax": 48,
         "usdMin": 0.14,
         "usdMax": 0.24,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "happyhorse/image-to-video",
@@ -9920,17 +9890,16 @@
         "required": [],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 28,
         "creditsMax": 48,
         "usdMin": 0.14,
         "usdMax": 0.24,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "happyhorse/reference-to-video",
@@ -9999,17 +9968,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 28,
         "creditsMax": 48,
         "usdMin": 0.14,
         "usdMax": 0.24,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "happyhorse/video-edit",
@@ -10068,17 +10036,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 28,
         "creditsMax": 48,
         "usdMin": 0.14,
         "usdMax": 0.24,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "happyhorse-1-1/image-to-video",
@@ -10127,17 +10094,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 22.5,
         "creditsMax": 29,
         "usdMin": 0.1125,
         "usdMax": 0.145,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "happyhorse-1-1/text-to-video",
@@ -10197,17 +10163,16 @@
           "prompt": ""
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 22.5,
         "creditsMax": 29,
         "usdMin": 0.1125,
         "usdMax": 0.145,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "happyhorse-1-1/reference-to-video",
@@ -10276,17 +10241,16 @@
           "reference_image": "[]"
         }
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 22.5,
         "creditsMax": 29,
         "usdMin": 0.1125,
         "usdMax": 0.145,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "google/gemini-omni-flash-1-1",
@@ -10395,17 +10359,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 63,
         "creditsMax": 252,
         "usdMin": 0.315,
         "usdMax": 1.26,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "gemini-omni-video",
@@ -10499,17 +10462,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 63,
         "creditsMax": 252,
         "usdMin": 0.315,
         "usdMax": 1.26,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "omnihuman-1-5",
@@ -10580,17 +10542,16 @@
         ],
         "defaults": {}
       },
-      "description": "",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 27,
         "creditsMax": 27,
         "usdMin": 0.135,
         "usdMax": 0.135,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "omnihuman-1-5/human-identification",
@@ -10614,7 +10575,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -10641,7 +10601,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -10721,7 +10680,6 @@
         ],
         "defaults": {}
       },
-      "description": "",
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
@@ -11028,16 +10986,16 @@
         }
       },
       "description": "Content generation using elevenlabs/text-to-speech-multilingual-v2",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 12,
         "creditsMax": 12,
         "usdMin": 0.06,
         "usdMax": 0.06,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "elevenlabs/text-to-speech-turbo-2-5",
@@ -11193,16 +11151,16 @@
         "defaults": {}
       },
       "description": "Content generation using elevenlabs/text-to-speech-turbo-2-5",
+      "schemaSource": "docs",
+      "stale": false,
+      "source": "live",
       "price": {
         "creditsMin": 6,
         "creditsMax": 6,
         "usdMin": 0.03,
         "usdMax": 0.03,
         "approximate": false
-      },
-      "schemaSource": "docs",
-      "stale": false,
-      "source": "live"
+      }
     },
     {
       "id": "google/gemini-3-1-flash-tts",
@@ -11258,114 +11216,6 @@
       "schemaSource": "docs",
       "stale": false,
       "source": "live"
-    },
-    {
-      "id": "google/nano-banana-2",
-      "category": "image",
-      "api": "jobs",
-      "fields": {},
-      "meta": {
-        "promptField": "prompt",
-        "imageList": false,
-        "required": [
-          "prompt"
-        ],
-        "defaults": {}
-      },
-      "description": "Nano Banana 2 — улучшенная версия.",
-      "schemaSource": "seed",
-      "stale": true,
-      "source": "seed"
-    },
-    {
-      "id": "bytedance/seedance-2-video",
-      "category": "video",
-      "api": "jobs",
-      "fields": {},
-      "meta": {
-        "promptField": "prompt",
-        "imageList": false,
-        "required": [
-          "prompt"
-        ],
-        "defaults": {}
-      },
-      "description": "Seedance 2.0 — видеогенерация от ByteDance.",
-      "schemaSource": "seed",
-      "stale": true,
-      "source": "seed"
-    },
-    {
-      "id": "kling/v2-5-turbo",
-      "category": "video",
-      "api": "jobs",
-      "fields": {},
-      "meta": {
-        "promptField": "prompt",
-        "imageList": false,
-        "required": [
-          "prompt"
-        ],
-        "defaults": {}
-      },
-      "description": "Kling 2.5 Turbo — быстрая видеогенерация.",
-      "schemaSource": "seed",
-      "stale": true,
-      "source": "seed"
-    },
-    {
-      "id": "hailuo/hailuo-video",
-      "category": "video",
-      "api": "jobs",
-      "fields": {},
-      "meta": {
-        "promptField": "prompt",
-        "imageList": false,
-        "required": [
-          "prompt"
-        ],
-        "defaults": {}
-      },
-      "description": "Hailuo Video — видеогенерация от Hailuo.",
-      "schemaSource": "seed",
-      "stale": true,
-      "source": "seed"
-    },
-    {
-      "id": "flux/flux-pro-image",
-      "category": "image",
-      "api": "jobs",
-      "fields": {},
-      "meta": {
-        "promptField": "prompt",
-        "imageList": false,
-        "required": [
-          "prompt"
-        ],
-        "defaults": {}
-      },
-      "description": "Flux Pro Image — высокое качество text-to-image.",
-      "schemaSource": "seed",
-      "stale": true,
-      "source": "seed"
-    },
-    {
-      "id": "flux/flux-2-pro",
-      "category": "image",
-      "api": "jobs",
-      "fields": {},
-      "meta": {
-        "promptField": "prompt",
-        "imageList": false,
-        "required": [
-          "prompt"
-        ],
-        "defaults": {}
-      },
-      "description": "Flux 2 Pro — улучшенная версия.",
-      "schemaSource": "seed",
-      "stale": true,
-      "source": "seed"
     },
     {
       "id": "veo3",
@@ -11427,43 +11277,6 @@
       "description": "Suno V4 API — музыкальная генерация.",
       "schemaSource": "seed",
       "stale": false,
-      "source": "seed"
-    },
-    {
-      "id": "elevenlabs-tts",
-      "category": "audio",
-      "api": "jobs",
-      "fields": {},
-      "meta": {
-        "promptField": "prompt",
-        "imageList": false,
-        "required": [
-          "prompt"
-        ],
-        "defaults": {}
-      },
-      "description": "ElevenLabs TTS — синтез речи.",
-      "schemaSource": "seed",
-      "stale": true,
-      "source": "seed"
-    },
-    {
-      "id": "topaz-gigapixel",
-      "category": "image",
-      "api": "jobs",
-      "fields": {},
-      "meta": {
-        "promptField": "prompt",
-        "imageField": "image",
-        "imageList": false,
-        "required": [
-          "image"
-        ],
-        "defaults": {}
-      },
-      "description": "Topaz Gigapixel AI — увеличение разрешения.",
-      "schemaSource": "seed",
-      "stale": true,
       "source": "seed"
     }
   ]

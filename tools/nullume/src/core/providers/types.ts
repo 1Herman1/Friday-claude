@@ -1,7 +1,7 @@
 export type ModelCategory = "image" | "video" | "audio" | "other";
 export type NormalizedState = "pending" | "success" | "fail";
 export type SchemaSource = "docs" | "seed" | "api";
-export type CostSource = "pricing-api" | "fuzzy" | "unknown";
+export type CostSource = "pricing-api" | "fuzzy" | "vendored" | "unknown";
 
 export interface FieldSpec {
   type?: string;

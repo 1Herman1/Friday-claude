@@ -96,7 +96,8 @@ generateCmd
         const needsConfirm =
           approximate ||
           usdMax > 1 ||
-          source === "unknown";
+          source === "unknown" ||
+          source === "vendored";
 
         if (needsConfirm && !options.yes) {
           throw new UsageError(

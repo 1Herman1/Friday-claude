@@ -136,28 +136,34 @@ modelsCmd
 
 modelsCmd
   .command("recommend <category>")
+  .option("--task <task>", "Тип задачи (t2i|edit|upscale|t2v|i2v|tts|music)")
   .description("Рекомендуемая модель по категории")
-  .action(async function (category: string) {
+  .action(async function (category: string, options: Record<string, unknown>) {
     const flags = getGlobalFlags();
 
     try {
+      const { recommend } = await import("../../core/providers/kie/recommend.js");
       const models = await loadCatalog();
+
+      // Filter by category
       const inCategory = models.filter((m) => m.category === category);
 
       if (inCategory.length === 0) {
         throw new Error(`Нет моделей в категории: ${category}`);
       }
 
-      // Recommend cheapest with good schema
-      const sorted = inCategory.sort((a, b) => {
-        const aPrice = a.price?.creditsMin || 999999;
-        const bPrice = b.price?.creditsMin || 999999;
-        return aPrice - bPrice;
+      // Get recommendations with task filter
+      const task = options.task as string | undefined;
+      const recommendations = recommend(category as any, inCategory, [], 4, task as any);
+
+      if (recommendations.length === 0) {
+        throw new Error(`Нет рекомендаций для категории: ${category}${task ? ` и задачи: ${task}` : ""}`);
+      }
+
+      emit(flags, { data: recommendations }, () => {
+        const lines = recommendations.map((r, i) => `${i + 1}. ${r.model} (${r.family})`);
+        return lines.join("\n");
       });
-
-      const recommended = sorted[0];
-
-      emit(flags, { data: recommended }, () => `Рекомендуемая модель: ${recommended.id}`);
     } catch (error) {
       throw error;
     }
