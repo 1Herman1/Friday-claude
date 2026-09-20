@@ -61,7 +61,16 @@ const RULES = [
   {
     name: "pd-in-logs",
     ext: [".ts", ".tsx", ".jsx"],
-    test: /console\.(log|info|warn)\([^)]*(phone|email|password|otp|passport|address)/i,
+    // Правило про БОЕВОЙ путь запроса. Dev-заглушки отправки (DevMailSender,
+    // DevSmsSender) и bootstrap-скрипты печатают контакт намеренно: в первом
+    // случае это и есть способ увидеть код, во втором — сообщить оператору,
+    // под каким админом он только что завёл базу. Без этого исключения правило
+    // давало сто процентов ложных срабатываний, а отчёт, где все находки
+    // ложные, перестают читать целиком.
+    test: (line, ctx) =>
+      /console\.(log|info|warn)\([^)]*(phone|email|password|otp|passport|address)/i.test(line) &&
+      !/\bclass\s+Dev\w+|\bDev\w*(Sender|Mailer|Sms)\b/.test(ctx || ""),
+    skipPath: /prisma\/seed[\w.-]*\.ts$/,
     hint: "персональные данные в логах — логи становятся местом обработки ПД, маскировать",
     level: "ERROR",
   },
@@ -240,10 +249,14 @@ function main() {
     }
     loaded.push({ path: filePath, content });
 
-    content.split("\n").forEach((line, idx) => {
+    const lines = content.split("\n");
+    lines.forEach((line, idx) => {
+      // окно вокруг строки: часть правил смотрит, в каком объявлении она стоит
+      const ctx = lines.slice(Math.max(0, idx - 4), idx + 2).join("\n");
       for (const rule of RULES) {
         if (!applies(rule, filePath)) continue;
-        if (run(rule, line)) {
+        if (rule.skipPath && rule.skipPath.test(filePath)) continue;
+        if (typeof rule.test === "function" ? rule.test(line, ctx) : rule.test.test(line)) {
           findings.push({ file: filePath, line: idx + 1, hint: rule.hint, level: rule.level });
         }
       }
