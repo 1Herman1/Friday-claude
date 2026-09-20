@@ -36,22 +36,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // При монтировании проверяем токен и загружаем пользователя
+  // При монтировании спрашиваем сервер, кто мы. Проверить заранее нечего:
+  // кука ps_auth недоступна скриптам, и это как раз то, чего мы добиваемся.
+  // Гостю /me отвечает 401 — это не ошибка, а ответ «не вошёл».
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('ps_token')
-      if (!token) {
-        setIsLoading(false)
-        return
-      }
-
       try {
         const userData = await fetchApi<User>('/api/v1/auth/me')
         setUser(userData)
       } catch (error) {
         if (error instanceof ApiError && error.status === 401) {
-          // Токен невалиден — очищаем
-          localStorage.removeItem('ps_token')
           setUser(null)
         }
       } finally {
@@ -76,8 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ email, code }),
     })
 
-    // Сохраняем токен и пользователя
-    localStorage.setItem('ps_token', response.token)
+    // Токен из ответа намеренно не сохраняем: сервер уже поставил куку
+    // ps_auth с httpOnly. Копия в localStorage свела бы эту защиту на нет.
     setUser(response.user)
 
     return response
@@ -89,8 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         method: 'POST',
       })
     } finally {
-      // Очищаем в любом случае
-      localStorage.removeItem('ps_token')
+      // Куку гасит сервер в /auth/logout; здесь очищаем только своё состояние.
       setUser(null)
     }
   }

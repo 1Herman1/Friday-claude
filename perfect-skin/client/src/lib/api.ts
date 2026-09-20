@@ -39,11 +39,9 @@ export async function fetchApi<T>(
     'Content-Type': 'application/json',
   }
 
-  // Добавляем Authorization header если есть токен
-  const token = localStorage.getItem('ps_token')
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`
-  }
+  // Токен не хранится на клиенте: вход держится на куке ps_auth с httpOnly,
+  // её браузер прикладывает сам благодаря credentials: 'include' ниже.
+  // Хранить копию токена в localStorage значило бы отдать сессию любому XSS.
 
   // Мержим с пользовательскими headers
   if (options?.headers) {
