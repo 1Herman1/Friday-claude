@@ -1,0 +1,43 @@
+name: Nullume CI
+
+# Проверка пакета tools/nullume при изменениях в нём:
+# типы, тесты, сборка, упаковка (dry-run).
+
+on:
+  push:
+    paths:
+      - 'tools/nullume/**'
+  pull_request:
+    paths:
+      - 'tools/nullume/**'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/nullume
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: tools/nullume/package-lock.json
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Проверка типов
+        run: npm run typecheck
+
+      - name: Тесты
+        run: npm test
+
+      - name: Сборка
+        run: npm run build
+
+      - name: Проверка упаковки пакета (без публикации)
+        run: npm pack --dry-run
