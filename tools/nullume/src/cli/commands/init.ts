@@ -95,14 +95,23 @@ async function initProject(targetDir: string, force: boolean): Promise<InitResul
 
     // 1. Handle .mcp.json
     const mcpJsonPath = path.join(targetDir, ".mcp.json");
-    const existing: McpConfig = (await readJson(mcpJsonPath)) as McpConfig;
+    let existing: McpConfig | null = null;
+    if (fs.existsSync(mcpJsonPath)) {
+      // Битый JSON не перезаписываем молча: иначе пропадут чужие серверы.
+      existing = (await readJson(mcpJsonPath)) as McpConfig | null;
+      if (existing === null) {
+        result.errors.push("существующий .mcp.json повреждён — почини вручную или удали, запись пропущена");
+      }
+    }
     const mcpConfig: McpConfig = existing || { mcpServers: {} };
 
     if (!mcpConfig.mcpServers) {
       mcpConfig.mcpServers = {};
     }
 
-    if (mcpConfig.mcpServers.nullume && !force) {
+    if (fs.existsSync(mcpJsonPath) && existing === null) {
+      // пропуск: ошибка уже записана выше
+    } else if (mcpConfig.mcpServers.nullume && !force) {
       result.skipped.push(".mcp.json (nullume entry exists, use --force to overwrite)");
     } else {
       mcpConfig.mcpServers.nullume = {
@@ -123,15 +132,13 @@ async function initProject(targetDir: string, force: boolean): Promise<InitResul
     const skillDest = path.join(skillDestDir, "SKILL.md");
 
     if (fs.existsSync(skillSrc)) {
-      const skillResult = await copyFile(skillSrc, skillDest, true);
+      const skillRel = path.relative(targetDir, skillDest);
+      const existedBefore = fs.existsSync(skillDest);
+      const skillResult = await copyFile(skillSrc, skillDest, force);
       if (skillResult.copied) {
-        if (fs.existsSync(skillDest) && result.created.includes(skillDest) === false) {
-          result.created.push(skillDest);
-        } else if (fs.existsSync(skillDest)) {
-          result.updated.push(skillDest);
-        }
+        (existedBefore ? result.updated : result.created).push(skillRel);
       } else {
-        result.skipped.push(skillDest);
+        result.skipped.push(`${skillRel} (exists, use --force to overwrite)`);
       }
     } else {
       result.errors.push(`Source skill file not found: ${skillSrc}`);

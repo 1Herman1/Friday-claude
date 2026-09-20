@@ -31,7 +31,7 @@ test("MCP: tools/list отдаёт 11 инструментов со схемам
       assert.ok(tool.inputSchema && typeof tool.inputSchema === "object", `${tool.name}: нет inputSchema`);
       assert.ok("properties" in tool.inputSchema, `${tool.name}: нет properties`);
     }
-    const res = await client.callTool({ name: "generate", arguments: { model: "mock/image", prompt: "test" } });
+    const res = await client.callTool({ name: "generate", arguments: { model: "mock/image", prompt: "test", confirm_cost: true } });
     const text = (res.content as Array<{ type: string; text?: string }>).find((c) => c.type === "text")?.text ?? "";
     const job = JSON.parse(text);
     assert.ok(!res.isError, text);

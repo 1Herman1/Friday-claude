@@ -37,20 +37,17 @@ export async function handler(args: {
     // Use new prompt or original
     const prompt = args.prompt || (baseInput.prompt as string) || "";
 
-    // Create job with rerunOf link
-    const job = await createJobTask(provider, {
-      model: originalJob.model,
-      prompt,
-      input: finalInput,
+    // Estimate cost BEFORE creating job
+    const modelInfo = await provider.model(originalJob.model);
+    const costEstimate = await provider.estimate(originalJob.model, {
+      [modelInfo.meta.promptField || "prompt"]: prompt,
+      ...finalInput,
     });
 
-    job.rerunOf = args.job_id;
-    await saveJob(job);
-
-    // Check cost
-    if (job.estimate) {
-      const usdCost = formatPrice(job.estimate.creditsMax, usdPerCredit);
-      if ((job.estimate.creditsMax > 200 || usdCost > 1.0) && !args.confirm_cost) {
+    // Check cost BEFORE creating job
+    if (costEstimate) {
+      const usdCost = formatPrice(costEstimate.creditsMax, usdPerCredit);
+      if ((costEstimate.creditsMax > 200 || usdCost > 1.0) && !args.confirm_cost) {
         return {
           content: [
             {
@@ -58,10 +55,10 @@ export async function handler(args: {
               text: JSON.stringify(
                 {
                   needs_confirmation: true,
-                  job_id: job.id,
                   rerun_of: args.job_id,
+                  model: originalJob.model,
                   estimate: {
-                    credits_max: job.estimate.creditsMax,
+                    credits_max: costEstimate.creditsMax,
                     usd_max: usdCost,
                   },
                   message: "Стоимость > $1, нужно подтверждение. Вызови rerun_job снова с confirm_cost: true",
@@ -73,7 +70,29 @@ export async function handler(args: {
           ],
         };
       }
+    } else if (!args.confirm_cost) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              error: "Стоимость оценить не удалось. Подтверди запуск с confirm_cost: true",
+            }),
+          },
+        ],
+        isError: true,
+      };
     }
+
+    // Create job AFTER cost check
+    const job = await createJobTask(provider, {
+      model: originalJob.model,
+      prompt,
+      input: finalInput,
+    });
+
+    job.rerunOf = args.job_id;
+    await saveJob(job);
 
     // If no wait, return job immediately
     if (!args.wait) {

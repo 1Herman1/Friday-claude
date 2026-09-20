@@ -64,18 +64,17 @@ export async function handler(args: {
       };
     }
 
-    // Create job
-    const job = await createJobTask(provider, {
-      model: modelId,
-      prompt: args.prompt || "",
-      images: args.images,
-      input: finalInput,
+    // Estimate cost BEFORE creating job
+    const modelInfo = await provider.model(modelId);
+    const costEstimate = await provider.estimate(modelId, {
+      [modelInfo.meta.promptField || "prompt"]: args.prompt || "",
+      ...finalInput,
     });
 
-    // Check cost
-    if (job.estimate) {
-      const usdCost = formatPrice(job.estimate.creditsMax, usdPerCredit);
-      if ((job.estimate.creditsMax > 200 || usdCost > 1.0) && !args.confirm_cost) {
+    // Check cost BEFORE creating job
+    if (costEstimate) {
+      const usdCost = formatPrice(costEstimate.creditsMax, usdPerCredit);
+      if ((costEstimate.creditsMax > 200 || usdCost > 1.0) && !args.confirm_cost) {
         return {
           content: [
             {
@@ -83,10 +82,9 @@ export async function handler(args: {
               text: JSON.stringify(
                 {
                   needs_confirmation: true,
-                  job_id: job.id,
-                  model: job.model,
+                  model: modelId,
                   estimate: {
-                    credits_max: job.estimate.creditsMax,
+                    credits_max: costEstimate.creditsMax,
                     usd_max: usdCost,
                   },
                   message: "Стоимость > $1, нужно подтверждение. Вызови generate снова с confirm_cost: true",
@@ -98,7 +96,27 @@ export async function handler(args: {
           ],
         };
       }
+    } else if (!args.confirm_cost) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              error: "Стоимость оценить не удалось. Подтверди запуск с confirm_cost: true",
+            }),
+          },
+        ],
+        isError: true,
+      };
     }
+
+    // Create job AFTER cost check
+    const job = await createJobTask(provider, {
+      model: modelId,
+      prompt: args.prompt || "",
+      images: args.images,
+      input: finalInput,
+    });
 
     // If no wait, return job immediately
     if (!args.wait) {

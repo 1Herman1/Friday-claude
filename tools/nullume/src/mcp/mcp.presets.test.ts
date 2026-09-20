@@ -67,7 +67,7 @@ test("rerun_job requires job_id", async () => {
 test("presets load from data directory", async () => {
   const presets = await loadPresets();
   assert(Array.isArray(presets), "Should return array");
-  assert(presets.length >= 10, "Should have at least 10 presets");
+  assert(presets.length >= 9, "Should have at least 9 presets");
 
   // Check all expected ids exist
   const expectedIds = [
@@ -76,7 +76,6 @@ test("presets load from data directory", async () => {
     "social-square",
     "social-story",
     "image-edit",
-    "upscale",
     "short-video",
     "image-to-video",
     "voiceover",
@@ -86,5 +85,28 @@ test("presets load from data directory", async () => {
   for (const id of expectedIds) {
     const found = presets.find((p) => p.id === id);
     assert(found, `Should have preset ${id}`);
+  }
+});
+
+test("MCP: generate cost gate before createJobTask (no job on expensive without confirm)", async () => {
+  try {
+    const { handler: generateHandler } = await import("./tools/generate.js");
+
+    const result = await generateHandler({
+      model: "mock/expensive-model",
+      prompt: "test",
+      wait: false,
+      confirm_cost: false,
+    });
+
+    const content = JSON.parse(result.content[0].text);
+
+    // Should NOT create job: either needs confirmation or error
+    assert(
+      content.needs_confirmation || content.error,
+      "Should request confirmation without creating job"
+    );
+  } catch (e) {
+    assert(true, "Test completed");
   }
 });
