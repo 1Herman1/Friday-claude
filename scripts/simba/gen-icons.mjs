@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 
 const PACK = JSON.parse(
-  readFileSync(new URL('../node_modules/@iconify-json/iconoir/icons.json', import.meta.url), 'utf8')
+  readFileSync(new URL('../../node_modules/@iconify-json/iconoir/icons.json', import.meta.url), 'utf8')
 )
 
 /** Толщина линии Iconoir — 1.5. Меняется здесь одним числом для всего набора. */
@@ -208,7 +208,7 @@ const base = 'w-5 h-5 flex-shrink-0'
 `
 
 writeFileSync(
-  new URL('../client/src/components/icons.tsx', import.meta.url),
+  new URL('../../client/src/components/icons.tsx', import.meta.url),
   [header, CUSTOM.trim(), ...parts].join('\n\n') + '\n'
 )
 console.log(`сгенерировано: ${Object.keys(MAP).length} из набора + 5 своих`)

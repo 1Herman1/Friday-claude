@@ -8,7 +8,7 @@ coverage
 
 .claude/settings.local.json
 
-# Perfect Skin: производные изображения — пересобираются скриптом tools/process-images.mjs
+# Perfect Skin: производные изображения — пересобираются скриптом perfect-skin/server/tools/process-images.mjs
 perfect-skin/server/assets/processed/
 
 # сборочные артефакты @ps/shared — dist собирается из src
@@ -25,3 +25,4 @@ hb-landing/.astro/
 
 # Смещения архиватора сессий — служебное состояние, у каждой машины своё
 .claude/.archive-state/
+__pycache__/

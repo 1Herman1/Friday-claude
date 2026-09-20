@@ -15,7 +15,7 @@ from PIL import Image
 from PIL import ImageOps
 
 SIZE = (1600, 900)
-OUT_DIR = Path(__file__).resolve().parent.parent / 'client' / 'public' / 'blog'
+OUT_DIR = Path(__file__).resolve().parent.parent.parent / 'client' / 'public' / 'blog'
 
 
 def convert(src, out_dir, max_kb, quality):

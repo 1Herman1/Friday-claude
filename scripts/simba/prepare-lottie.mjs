@@ -8,7 +8,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 
-const SRC = new URL('../client/src/lottie/', import.meta.url)
+const SRC = new URL('../../client/src/lottie/', import.meta.url)
 
 /** Замерено в браузере по фактическим контурам, объединённым по всей петле:
     у обоих файлов рисунок занимает примерно половину холста. Без подрезки
