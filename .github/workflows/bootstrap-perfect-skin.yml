@@ -45,8 +45,11 @@ jobs:
             echo "==> Пакеты"
             export DEBIAN_FRONTEND=noninteractive
             apt-get update -qq
+            # Node 22 LTS: на 20-й ветке поддержка закончилась в апреле 2026,
+            # и разработка проекта идёт на 22-й — расхождение версий между
+            # машиной сборки и сервером ловится только в проде.
             if ! command -v node >/dev/null; then
-              curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+              curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
             fi
             apt-get install -y -qq nodejs docker.io docker-compose-v2 \
               nginx certbot python3-certbot-nginx postgresql-client git
