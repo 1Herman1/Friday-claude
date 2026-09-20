@@ -185,6 +185,18 @@ if (withSplit.length !== withThreshold.length) {
   if (noFormat.length) wrn(`без блока «Формат»: ${noFormat.join(", ")} — рубрике негде стоять, проверить вручную`);
 }
 
+{
+  // Копии общих блоков сверяются с docs/core/agent-report-format.md отдельным
+  // скриптом — он же умеет их выровнять. Здесь только прогон и вывод.
+  try {
+    execSync("node .claude/scripts/sync-agent-blocks.mjs", { encoding: "utf8" });
+    ok("копии общих блоков совпадают с эталоном");
+  } catch (e) {
+    const out = (e.stdout || "").trim().split("\n").filter((l) => l && !l.startsWith("проверено"));
+    bad(`общие блоки разошлись с docs/core/agent-report-format.md: ${out.join("; ")}`);
+  }
+}
+
 console.log("\n[10] Карта департаментов совпадает с диском");
 {
   // .claude/agents/README.md — карта: какой агент в каком департаменте.

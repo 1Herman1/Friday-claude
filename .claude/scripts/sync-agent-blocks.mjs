@@ -125,6 +125,11 @@ function findRubric(body) {
 
 async function main() {
   const apply = process.argv.includes("--apply");
+  // --check принимается явно: эталон называет режим по имени, и молчаливое
+  // игнорирование неизвестного флага тут было бы очередной зелёной галочкой
+  for (const a of process.argv.slice(2)) {
+    if (a !== "--apply" && a !== "--check") die(`неизвестный флаг ${a} — есть --check (по умолчанию) и --apply`);
+  }
 
   // Порчу от --apply не отличить от своих правок, если дерево грязное.
   if (apply) {
