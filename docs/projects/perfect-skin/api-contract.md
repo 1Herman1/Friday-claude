@@ -783,7 +783,7 @@ GIN нужен под `hasSome` по массивам перечислений �
 
 | Файл-донор (Симба) | Куда | Что менять |
 |---|---|---|
-| `<корень репозитория>/server/src/index.ts` | `perfect-skin/server/src/index.ts` | Оставить порядок регистрации плагинов; префикс `/api/v1`; добавить `@fastify/cookie` (секрет `PS_COOKIE_SECRET`) и `@fastify/rate-limit`; выбросить регистрацию `quiz`, `bonuses`, `subscriptions`, `admin`; добавить `setErrorHandler` в едином формате |
+| `projects/simba/server/src/index.ts` | `projects/perfect-skin/server/src/index.ts` | Оставить порядок регистрации плагинов; префикс `/api/v1`; добавить `@fastify/cookie` (секрет `PS_COOKIE_SECRET`) и `@fastify/rate-limit`; выбросить регистрацию `quiz`, `bonuses`, `subscriptions`, `admin`; добавить `setErrorHandler` в едином формате |
 | `server/src/plugins/prisma.ts` | `plugins/prisma.ts` | Импорт клиента из `.prisma/ps-client`, переменная `PS_DATABASE_URL` |
 | `server/src/plugins/authenticate.ts` | `plugins/authenticate.ts` | Добавить сверку по БД: `isActive`, `deletedAt`, `tokenVersion` против `tv` в токене; ошибки в формате `{error:{code,message}}` вместо `{error:'Unauthorized'}` |
 | `server/src/services/otp.service.ts` | `services/otp.service.ts` | `sendEmail` → `services/sms/`; `hashCode` sha256 → **bcrypt/argon2id**; `code` → `codeHash`; канал `sms` |

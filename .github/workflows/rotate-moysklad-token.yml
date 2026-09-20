@@ -32,7 +32,7 @@ jobs:
           command_timeout: 5m
           script: |
             set -euo pipefail
-            cd /var/www/simba-src/server
+            cd /var/www/simba-src/projects/simba/server
 
             if [ "$VERIFY_ONLY" != "true" ]; then
               if [ -z "${MS_TOKEN:-}" ]; then

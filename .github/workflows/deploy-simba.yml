@@ -5,7 +5,7 @@ on:
     branches:
       - deploy/simba
   # Ручной запуск нужен, когда код не менялся, а перенести на сервер надо: смена
-  # секрета (токен МоегоСклада, ключ хранилища) попадает в server/.env только
+  # секрета (токен МоегоСклада, ключ хранилища) попадает в projects/simba/server/.env только
   # шагом «Syncing service keys» этой выкатки — другого пути нет, run-command.yml
   # секретов не получает.
   workflow_dispatch:
@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.SIMBA_DEPLOY_USER }}
           key: ${{ secrets.SIMBA_DEPLOY_SSH_KEY }}
           command_timeout: 15m
-          # Ключи служб живут в секретах GitHub и переносятся в server/.env на
+          # Ключи служб живут в секретах GitHub и переносятся в projects/simba/server/.env на
           # сервере этим же шагом (см. "Syncing service keys" ниже). Значения в
           # лог не попадают — только «задан/пусто».
           envs: SVC_CDEK_CLIENT_ID,SVC_CDEK_CLIENT_SECRET,SVC_YANDEX_DELIVERY_TOKEN,SVC_YANDEX_PVZ_SOURCE_STATION,SVC_DADATA_TOKEN,SVC_OZON_CLIENT_ID,SVC_OZON_API_KEY,SVC_MOYSKLAD_TOKEN,SVC_MINIO_SECRET_KEY
@@ -46,17 +46,17 @@ jobs:
             set -euo pipefail
             cd /var/www/simba-src
 
-            echo "==> Syncing service keys from GitHub secrets into server/.env"
-            touch server/.env
+            echo "==> Syncing service keys from GitHub secrets into projects/simba/server/.env"
+            touch projects/simba/server/.env
             upsert_env() {
               local key="$1" value="$2"
               if [ -z "$value" ]; then echo "   $key: empty in secrets, left as is"; return; fi
               local escaped
               escaped=$(printf '%s' "$value" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')
-              if grep -q "^${key}=" server/.env; then
-                sed -i "s|^${key}=.*|${key}=\"${escaped}\"|" server/.env
+              if grep -q "^${key}=" projects/simba/server/.env; then
+                sed -i "s|^${key}=.*|${key}=\"${escaped}\"|" projects/simba/server/.env
               else
-                printf '%s="%s"\n' "$key" "$escaped" >> server/.env
+                printf '%s="%s"\n' "$key" "$escaped" >> projects/simba/server/.env
               fi
               echo "   $key: set"
             }
@@ -70,7 +70,7 @@ jobs:
             upsert_env OZON_API_KEY "$SVC_OZON_API_KEY"
             upsert_env MOYSKLAD_TOKEN "$SVC_MOYSKLAD_TOKEN"
             # Пароль хранилища картинок. Он же MINIO_ROOT_PASSWORD у контейнера
-            # (deploy/docker-compose.prod.yml): контейнер получает его переменной
+            # (projects/simba/deploy/docker-compose.prod.yml): контейнер получает его переменной
             # в момент запуска и нигде не сохраняет, поэтому значения расходятся
             # молча — все загрузки начинают падать с «The request signature we
             # calculated does not match». Пока секрет в GitHub пуст, upsert_env
@@ -86,7 +86,7 @@ jobs:
             npm install
 
             echo "==> Generating Prisma client"
-            (cd server && npx prisma generate)
+            (cd projects/simba/server && npx prisma generate)
 
             echo "==> Backing up database before any migration"
             # Дамп уезжает на хост потоком: файл внутри контейнера исчезает вместе
@@ -100,10 +100,10 @@ jobs:
             echo "Backup OK: $BACKUP_FILE"
 
             echo "==> Applying migrations (right after the backup: the built code must never meet the old schema)"
-            (cd server && npx prisma migrate deploy)
+            (cd projects/simba/server && npx prisma migrate deploy)
 
             echo "==> Building server, client, admin"
-            npm run build --workspace=server
+            npm run build --workspace=@simba/server
             # Ключ карт приходит из секретов репозитория, а не вписан здесь:
             # VITE_* попадает в собранный код страницы, и адрес API мы держим
             # открытым осознанно, а ключ Яндекса — нет. Пока секрет не заведён,
@@ -114,29 +114,29 @@ jobs:
             # уведут со страницы и потратят чужую квоту.
             VITE_API_URL=http://147.45.157.11 \
               VITE_YANDEX_MAPS_KEY='${{ secrets.YANDEX_MAPS_KEY }}' \
-              npm run build --workspace=client
-            VITE_API_URL=http://147.45.157.11 npm run build --workspace=admin
+              npm run build --workspace=@simba/client
+            VITE_API_URL=http://147.45.157.11 npm run build --workspace=@simba/admin
 
             echo "==> Backfilling data the code expects (idempotent, admin edits win)"
-            (cd server && npx tsx src/scripts/backfill-quiz-tags.ts --apply)
-            (cd server && npx tsx src/scripts/backfill-categories.ts --apply)
+            (cd projects/simba/server && npx tsx src/scripts/backfill-quiz-tags.ts --apply)
+            (cd projects/simba/server && npx tsx src/scripts/backfill-categories.ts --apply)
             # Вид животного — раньше дерева категорий: дерево группирует товары по
             # Product.species и пропускает unknown, поэтому вид, определённый после
             # него, попадал в меню только следующей выкаткой.
-            (cd server && npx tsx src/scripts/backfill-species.ts --apply --only-unknown)
+            (cd projects/simba/server && npx tsx src/scripts/backfill-species.ts --apply --only-unknown)
             echo "==> Category tree: preview, then apply"
-            (cd server && npx tsx src/scripts/backfill-category-tree.ts)
-            (cd server && npx tsx src/scripts/backfill-category-tree.ts --apply)
-            (cd server && npx tsx src/scripts/backfill-brand-identity.ts --apply)
-            (cd server && npx tsx src/scripts/backfill-banners.ts --apply)
-            (cd server && npx tsx src/scripts/backfill-brand-logos.ts --apply)
-            (cd server && npx tsx src/scripts/seed-promo-codes.ts --apply)
-            (cd server && npx tsx src/scripts/import-blog.ts)
+            (cd projects/simba/server && npx tsx src/scripts/backfill-category-tree.ts)
+            (cd projects/simba/server && npx tsx src/scripts/backfill-category-tree.ts --apply)
+            (cd projects/simba/server && npx tsx src/scripts/backfill-brand-identity.ts --apply)
+            (cd projects/simba/server && npx tsx src/scripts/backfill-banners.ts --apply)
+            (cd projects/simba/server && npx tsx src/scripts/backfill-brand-logos.ts --apply)
+            (cd projects/simba/server && npx tsx src/scripts/seed-promo-codes.ts --apply)
+            (cd projects/simba/server && npx tsx src/scripts/import-blog.ts)
 
             echo "==> МойСклад token probe (statuses only, no values)"
-            (cd server && npx tsx src/scripts/moysklad-probe.ts || true)
+            (cd projects/simba/server && npx tsx src/scripts/moysklad-probe.ts || true)
             echo "==> Product photos from МойСклад: quick probe (dry run, 3 products) so the outcome is visible here"
-            (cd server && npx tsx src/scripts/sync-photos.ts --limit 3 || true)
+            (cd projects/simba/server && npx tsx src/scripts/sync-photos.ts --limit 3 || true)
             # Полный проход по фотографиям из деплоя убран: он висит в бесконечных
             # повторах, пока не совпадут ключи MinIO, и держит SSH-сессию до таймаута
             # раннера — выкатка падала уже после «Deploy complete». Запускать вручную
@@ -145,10 +145,12 @@ jobs:
             echo "==> Deploying static files (before reload: new API must not meet the old bundle)"
             mkdir -p /var/www/simba/client /var/www/simba/admin
             rm -rf /var/www/simba/client/* /var/www/simba/admin/*
-            cp -r client/dist/* /var/www/simba/client/
-            cp -r admin/dist/*  /var/www/simba/admin/
+            cp -r projects/simba/client/dist/* /var/www/simba/client/
+            cp -r projects/simba/admin/dist/*  /var/www/simba/admin/
 
-            pm2 reload simba-server --update-env
+            # startOrReload, не reload: после переезда каталогов процесс поднимается
+            # с новым cwd, а reload оставил бы старый и крутил бы прежнюю сборку.
+            pm2 startOrReload projects/simba/deploy/ecosystem.config.js --update-env
 
             echo "==> Health check"
             sleep 2

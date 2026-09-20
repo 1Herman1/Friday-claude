@@ -106,8 +106,8 @@
 
 Для агентов `media-generator` и `icon-curator` при работе с Perfect Skin:
 
-- **Изображения и видео:** `perfect-skin/client/public/` (подпапки: `photos/`, `products/`, `video/`)
-- **Lottie-анимации:** `perfect-skin/client/src/assets/lottie/`
+- **Изображения и видео:** `projects/perfect-skin/client/public/` (подпапки: `photos/`, `products/`, `video/`)
+- **Lottie-анимации:** `projects/perfect-skin/client/src/assets/lottie/`
 - **Admin медиа:** `perfect-skin/admin/public/` (если понадобится)
 
 ## Что уже сделано
@@ -117,7 +117,7 @@
   из оранжевого в тёплый бежевый с продуктовой съёмки ISSEIMI.
 - Дизайн-система — `design-system/MASTER.md`. Токены ролями, контрасты проверены
   расчётом.
-- Схема БД — `perfect-skin/server/prisma/schema.prisma` + ограничения уровня базы
+- Схема БД — `projects/perfect-skin/server/prisma/schema.prisma` + ограничения уровня базы
   в `prisma/sql/01-constraints.sql`.
 - Расчёт итогов заказа — `perfect-skin/shared/src/order-totals.ts`, 55 тестов.
 
