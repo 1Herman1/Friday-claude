@@ -58,6 +58,21 @@ fi
 
 git pull origin "$BRANCH" --ff-only 2>/dev/null || true
 
+# ── 2а. Сторож одной ветки ──────────────────────────────────────────────────
+# Среда выдаёт каждому чату свою ветку claude/<имя>; писать в неё нельзя.
+# Удалять ветки из среды запрещено (403), поэтому хук только перечисляет
+# лишние — удаляет Гермес в GitHub. Ветки выкатки берём из таблицы реестра.
+NOW=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+if [ -n "$NOW" ] && [ "$NOW" != "$BRANCH" ]; then
+  echo "session-start: ВНИМАНИЕ — текущая ветка $NOW, рабочая $BRANCH. Переключись перед любой правкой." >&2
+fi
+DEPLOY_BRANCHES=$(grep -oP '^\|[^|]*\|[^|]*\|[^|]*\|[^|]*\|\s*`\K[^`]+' docs/projects/README.md 2>/dev/null | paste -sd'|' -)
+EXTRA=$(git ls-remote --heads origin 2>/dev/null | awk '{print $2}' | sed 's|refs/heads/||' \
+        | grep -vxF "$BRANCH" | grep -vE "^(${DEPLOY_BRANCHES:-__none__})$" | paste -sd' ' -)
+if [ -n "$EXTRA" ]; then
+  echo "session-start: лишние ветки на GitHub (удалить в интерфейсе GitHub, из среды нельзя): $EXTRA" >&2
+fi
+
 # ── 3. Установка зависимостей в tools/* ────────────────────────────────────
 # Каждый инструмент в tools/ может иметь свой package.json (вне npm workspaces).
 # Если node_modules отсутствуют, устанавливаем зависимости. История: блок был
