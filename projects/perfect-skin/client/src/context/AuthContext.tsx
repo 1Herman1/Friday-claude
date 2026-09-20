@@ -7,6 +7,11 @@ export interface User {
   phone: string
   email?: string
   role: string
+  proStatus?: 'none' | 'pending' | 'approved' | 'rejected'
+  companyName?: string
+  inn?: string
+  specialization?: string
+  proRejectReason?: string
 }
 
 interface SendOtpResponse {
@@ -110,4 +115,14 @@ export function useAuth(): AuthContextType {
     throw new Error('useAuth must be used within AuthProvider')
   }
   return context
+}
+
+export const STAFF_ROLES = ['super_admin', 'orders_manager', 'products_manager', 'content_manager']
+
+export function isStaff(user: User | null): boolean {
+  return !!user && STAFF_ROLES.includes(user.role)
+}
+
+export function isApprovedPro(user: User | null): boolean {
+  return user?.role === 'professional' && user?.proStatus === 'approved'
 }

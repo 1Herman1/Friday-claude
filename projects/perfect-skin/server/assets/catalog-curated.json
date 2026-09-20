@@ -1,1940 +1,1940 @@
 {
- "_meta": {
-  "matching": "products.json.id == manifest.json.products[].externalId; slug в манифесте усечён до 63 символов — сопоставлять ТОЛЬКО по id"
- },
- "categories": [
-  {
-   "slug": "kremy-dlya-litsa-i-shei",
-   "name": "Кремы для лица и шеи",
-   "count": 17
-  },
-  {
-   "slug": "flyuidy",
-   "name": "Флюиды",
-   "count": 1
-  },
-  {
-   "slug": "syvorotki",
-   "name": "Сыворотки",
-   "count": 7
-  },
-  {
-   "slug": "toniki",
-   "name": "Тоники",
-   "count": 5
-  },
-  {
-   "slug": "ochishchenie",
-   "name": "Очищение",
-   "count": 4
-  },
-  {
-   "slug": "maski",
-   "name": "Маски",
-   "count": 6
-  },
-  {
-   "slug": "nabory",
-   "name": "Наборы",
-   "count": 6
-  },
-  {
-   "slug": "kremy-dlya-vek",
-   "name": "Кремы для век",
-   "count": 4
-  },
-  {
-   "slug": "masla",
-   "name": "Масла",
-   "count": 4
-  },
-  {
-   "slug": "uhod-za-telom",
-   "name": "Уход за телом",
-   "count": 2
-  },
-  {
-   "slug": "spf",
-   "name": "SPF",
-   "count": 1
-  }
- ],
- "products": [
-  {
-   "externalId": 929,
-   "slug": "podarochnyj-nabor-bee-venom-s-pchelinym-yadom-dlya-razglazhivaniya-morshhin-i-ustraneniya-tusklosti-kozhi",
-   "name": "Подарочный набор «Bee Venom» с пчелиным ядом для разглаживания морщин и устранения тусклости кожи",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 1117600,
-   "oldPriceKopecks": 1596600,
-   "primaryCategory": "nabory",
-   "secondaryTypes": [
-    "Крем",
-    "Сыворотка"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Придание сияния коже",
-    "Регенерация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": null,
-   "action": "Набор из антивозрастного крема (50 мл) и сыворотки (30 мл) с пчелиным ядом. Апитоксин действует как «натуральный ботокс»: уменьшает морщины, усиливает микроциркуляцию, возвращает коже тонус и сияние.",
-   "application": null,
-   "ingredients": [
-    "Пчелиный яд",
-    "EGF",
-    "Гиалуроновая кислота",
-    "Гемоцианин",
-    "Аллантоин",
-    "Витамин Е",
-    "Экстракт фукуса"
-   ],
-   "imageFile": "podarochnyj-nabor-bee-venom-s-pchelinym-yadom-dlya-razglazhi.jpg"
-  },
-  {
-   "externalId": 928,
-   "slug": "podarochnyj-nabor-expert-team-box-2-dlya-tonizaczii-kozhi-i-ustraneniya-otekov-krugov-vokrug-glaz",
-   "name": "Подарочный набор «Expert Team. Box 2» для тонизации кожи и устранения отеков кругов вокруг глаз",
-   "brand": "GLACÉE Skincare",
-   "line": "GLACÉE Skincare Man Line",
-   "priceKopecks": 549900,
-   "oldPriceKopecks": 907900,
-   "primaryCategory": "nabory",
-   "secondaryTypes": [
-    "Крем",
-    "Тоник / Тонер"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Снятие признаков раздражения кожи",
-    "Ежедневный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная"
-   ],
-   "volume": null,
-   "action": "Набор: тоник BALANCE TONER (250 мл) и крем для глаз EYE RESISTANCE (15 мл). Тоник восстанавливает pH и кожный барьер, крем снимает отеки, темные круги и следы усталости вокруг глаз.",
-   "application": null,
-   "ingredients": [
-    "Термальная вода",
-    "Алоэ вера",
-    "Глицерин",
-    "Биокомплекс Phyto-decongestive",
-    "Ниацинамид",
-    "Кофеин",
-    "NMF"
-   ],
-   "imageFile": "podarochnyj-nabor-expert-team-box-2-dlya-tonizaczii-kozhi-i-.jpg"
-  },
-  {
-   "externalId": 927,
-   "slug": "podarochnyj-nabor-expert-team-box-1-dlya-glubokogo-ochishheniya-i-uvlazhneniya-kozhi",
-   "name": "Подарочный набор «Expert Team. Box 1» для глубокого очищения и увлажнения кожи",
-   "brand": "GLACÉE Skincare",
-   "line": "GLACÉE Skincare Man Line",
-   "priceKopecks": 832400,
-   "oldPriceKopecks": 1189200,
-   "primaryCategory": "nabory",
-   "secondaryTypes": [
-    "Гель",
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Глубокое очищение и детоксикация",
-    "Увлажнение"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": null,
-   "action": "Набор: очищающий гель ENERGEL (250 мл) и крем с озоном HYDROCOMBAT (50 мл). Гель глубоко очищает и детоксицирует кожу, крем увлажняет, тонизирует и укрепляет ее.",
-   "application": null,
-   "ingredients": [
-    "Термальная вода",
-    "Бетаин",
-    "Экстракт мыльного ореха",
-    "Инкапсулированный озон",
-    "Гиалуроновая кислота",
-    "Органический кремний"
-   ],
-   "imageFile": "podarochnyj-nabor-expert-team-box-1-dlya-glubokogo-ochishhen-2.jpg"
-  },
-  {
-   "externalId": 925,
-   "slug": "podarochnyj-nabor-expert-team-full-box-dlya-uhoda-za-muzhskoj-kozhej",
-   "name": "Подарочный набор «Expert Team. Full Box» для ухода за мужской кожей",
-   "brand": "GLACÉE Skincare",
-   "line": "GLACÉE Skincare Man Line",
-   "priceKopecks": 1468000,
-   "oldPriceKopecks": 2097100,
-   "primaryCategory": "nabory",
-   "secondaryTypes": [
-    "Гель",
-    "Крем",
-    "Тоник / Тонер"
-   ],
-   "keyNeeds": [
-    "Гигиена",
-    "Увлажнение",
-    "Ежедневный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": null,
-   "action": "Полный набор ежедневного ухода за мужской кожей: очищающий гель ENERGEL, тоник BALANCE TONER, крем HYDROCOMBAT и крем для глаз EYE RESISTANCE.",
-   "application": null,
-   "ingredients": [
-    "Термальная вода",
-    "Бетаин",
-    "Алоэ вера",
-    "Инкапсулированный озон",
-    "Гиалуроновая кислота",
-    "Ниацинамид",
-    "Кофеин"
-   ],
-   "imageFile": "podarochnyj-nabor-expert-team-full-box-dlya-uhoda-za-muzhsko.jpg"
-  },
-  {
-   "externalId": 924,
-   "slug": "podarochnyj-nabor-obnovlennaya-kozha-dlya-liftinga-i-ukrepleniya-kozhi",
-   "name": "Подарочный набор «Обновленная кожа» для лифтинга и укрепления кожи",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 814500,
-   "oldPriceKopecks": 1086000,
-   "primaryCategory": "nabory",
-   "secondaryTypes": [
-    "Крем",
-    "Сыворотка",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Регенерация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": null,
-   "action": "Набор: укрепляющий крем GEN ADN (50 мл) и набор пробников (HIDRORREVITALIZANTE, SERUM TRIPLE ACCION, RETI+, DINAMIZANTE). Крем противостоит птозу, подтягивает кожу и формирует четкий овал лица.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "Органический кремний",
-    "ДМАЕ",
-    "Витамин В9",
-    "Биомиметический пептид",
-    "Инкапсулированный озон"
-   ],
-   "imageFile": "podarochnyj-nabor-obnovlennaya-kozha-dlya-liftinga-i-ukreple.jpg"
-  },
-  {
-   "externalId": 923,
-   "slug": "podarochnyj-nabor-obnovlennaya-kozha-dlya-korrekczii-vozrastnyh-izmenenij-kozhi-licza-i-vek",
-   "name": "Подарочный набор «Обновленная кожа» для коррекции возрастных изменений кожи лица и век",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 1282400,
-   "oldPriceKopecks": 1832000,
-   "primaryCategory": "nabory",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Регенерация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": null,
-   "action": "Набор: укрепляющий крем GEN ADN (50 мл) и крем для глаз CONTOUR-K (15 мл) для коррекции возрастных изменений кожи лица и век.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "Органический кремний",
-    "ДМАЕ",
-    "Инкапсулированный озон",
-    "Витамин В9",
-    "Биомиметический пептид"
-   ],
-   "imageFile": "podarochnyj-nabor-obnovlennaya-kozha-dlya-korrekczii-vozrast.jpg"
-  },
-  {
-   "externalId": 484,
-   "slug": "korpo-slim-crema-anticzellyulitnyj-i-modeliruyushhij-krem",
-   "name": "KORPO SLIM CREMA Антицеллюлитный и моделирующий крем",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 560000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "uhod-za-telom",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Ежедневный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 200,
-   "action": "Легкий антицеллюлитный крем с цитрусовым ароматом. Улучшает микроциркуляцию, дренирует кожу и выводит избыточную жидкость, постепенно уменьшая объем и моделируя силуэт.",
-   "application": null,
-   "ingredients": [
-    "Кофеин",
-    "Карнитин",
-    "Экстракт фукуса",
-    "Метил никотинат",
-    "Фосфатидилхолин",
-    "Экстракт розмарина",
-    "Коллагеназы"
-   ],
-   "imageFile": "korpo-slim-crema-anticzellyulitnyj-i-modeliruyushhij-krem.jpg"
-  },
-  {
-   "externalId": 483,
-   "slug": "korpo-slim-gel-ukreplyayushhij-gel-dlya-nog",
-   "name": "KORPO SLIM GEL Укрепляющий гель для ног",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 524600,
-   "oldPriceKopecks": null,
-   "primaryCategory": "uhod-za-telom",
-   "secondaryTypes": [
-    "Гель"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Экспресс-уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 200,
-   "action": "Охлаждающий гель для ног с дренажным, антицеллюлитным и липолитическим действием. Улучшает кровообращение, уменьшает объем и снимает усталость ног после нагрузок и каблуков.",
-   "application": null,
-   "ingredients": [
-    "Экстракт фукуса",
-    "Экстракт рускуса",
-    "Фосфатидилхолин",
-    "Липаза",
-    "Экстракт плюща"
-   ],
-   "imageFile": "korpo-slim-gel-ukreplyayushhij-gel-dlya-nog.jpg"
-  },
-  {
-   "externalId": 482,
-   "slug": "o3-depur-krem-s-ozonom",
-   "name": "O3 DEPUR Крем с озоном",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 549900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Гель",
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Себорегуляция",
-    "Глубокое очищение и детоксикация"
-   ],
-   "skinTypes": [
-    "Жирная / Проблемная / Комбинированная"
-   ],
-   "volume": 50,
-   "action": "Крем-гель с озоном для кожи, склонной к акне. Оказывает антибактериальное и себорегулирующее действие, сужает поры, устраняет жирный блеск и повышает иммунитет кожи.",
-   "application": null,
-   "ingredients": [
-    "Инкапсулированный озон",
-    "Алоэ вера",
-    "Пчелиный воск",
-    "Витамин Е",
-    "Дикий шиповник"
-   ],
-   "imageFile": "o3-depur-krem-s-ozonom.jpg"
-  },
-  {
-   "externalId": 481,
-   "slug": "fluido-viscoso-forte-syvorotka-obnovlyayushhaya",
-   "name": "FLUIDO VISCOSO FORTE Сыворотка обновляющая",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 599900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "flyuidy",
-   "secondaryTypes": [
-    "Сыворотка",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Регенерация",
-    "Укрепление и лифтинг",
-    "Увлажнение"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": 30,
-   "action": "Легкая флюидизированная сыворотка с EGF: стимулирует выработку собственного коллагена и гиалуроновой кислоты, повышает плотность кожи, сокращает глубину морщин и пигментацию.",
-   "application": null,
-   "ingredients": [
-    "EGF 2%",
-    "NMF",
-    "Масло шиповника",
-    "Фосфатидилинозитол",
-    "Аллантоин",
-    "Витамин Е"
-   ],
-   "imageFile": "fluido-viscoso-forte-syvorotka-obnovlyayushhaya.jpg"
-  },
-  {
-   "externalId": 480,
-   "slug": "dermosun-spf-50-solnczezashhitnyj-krem",
-   "name": "DERMOSUN SPF 50 Солнцезащитный крем",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 378100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "spf",
-   "secondaryTypes": [
-    "Крем",
-    "Солнцезащитные средства"
-   ],
-   "keyNeeds": [
-    "Повышение защитных свойств кожи",
-    "Ежедневный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Легкий солнцезащитный крем SPF 50+ (UVA, UVB, HEVis) с антиоксидантами. Предотвращает фотостарение и гиперпигментацию, увлажняет, подходит чувствительной и атопичной коже.",
-   "application": null,
-   "ingredients": [
-    "Физические и химические солнцезащитные фильтры",
-    "Витамин Е",
-    "Витамин C",
-    "Алоэ вера",
-    "Аллантоин"
-   ],
-   "imageFile": "dermosun-spf-50-solnczezashhitnyj-krem.jpg"
-  },
-  {
-   "externalId": 479,
-   "slug": "bb-cream-matiruyushhij-krem",
-   "name": "BB CREAM Матирующий крем",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 792200,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "ВВ Крем",
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Выравнивание цвета и рельефа",
-    "Увлажнение",
-    "Придание сияния коже"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 100,
-   "action": "Тонирующий крем с матирующим эффектом нейтрально-бежевого оттенка. Скрывает несовершенства, выравнивает тон и текстуру, увлажняет и деликатно заполняет морщинки.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "Гиалуроновая кислота",
-    "Осветляющий пептид SH-Oligopeptide-50",
-    "Витамин Е",
-    "Бисаболол",
-    "Масло шиповника"
-   ],
-   "imageFile": "bb-cream-matiruyushhij-krem.jpg"
-  },
-  {
-   "externalId": 478,
-   "slug": "veevenom-serum-syvorotka-pchelinyj-yad",
-   "name": "ВEEVENOM SERUM Антивозрастная сыворотка",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 788900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "syvorotki",
-   "secondaryTypes": [
-    "Сыворотка"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Регенерация",
-    "Придание сияния коже"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Регенерирующая сыворотка с пчелиным ядом («натуральный ботокс») для тусклой кожи. Уменьшает морщины, подтягивает, насыщает кожу кислородом за счет гемоцианинов.",
-   "application": null,
-   "ingredients": [
-    "Пчелиный яд",
-    "EGF",
-    "Глицин сои",
-    "Аллантоин",
-    "Гемоцианин",
-    "Витамин Е"
-   ],
-   "imageFile": "veevenom-serum-syvorotka-pchelinyj-yad.jpg"
-  },
-  {
-   "externalId": 477,
-   "slug": "bee-venom-cream-antivozrastnoj-krem",
-   "name": "BEEVENOM CREAM Антивозрастной крем",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 807700,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Увлажнение"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Легкий антивозрастной крем с пчелиным ядом. Восстанавливает и увлажняет кожу, уменьшает морщины, усиливает микроциркуляцию и клеточное дыхание.",
-   "application": null,
-   "ingredients": [
-    "Пчелиный яд",
-    "EGF",
-    "Гиалуроновая кислота",
-    "Аллантоин",
-    "Гемоцианин",
-    "Витамин Е",
-    "Экстракт фукуса"
-   ],
-   "imageFile": "bee-venom-cream-antivozrastnoj-krem.jpg"
-  },
-  {
-   "externalId": 476,
-   "slug": "sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami",
-   "name": "СONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 802500,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-vek",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Крем-контур для век: увлажняет и разглаживает тонкую кожу, повышает выработку коллагена, устраняет мешки и темные круги.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "NMF",
-    "Экстракт арники",
-    "Экстракт конского каштана",
-    "Экстракт мальвы"
-   ],
-   "imageFile": "sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-pepti.jpg"
-  },
-  {
-   "externalId": 475,
-   "slug": "regenerativo-cellular-syvorotka-obnovlyayushhaya",
-   "name": "REGENERATIVO CELLULAR Сыворотка обновляющая",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 845400,
-   "oldPriceKopecks": null,
-   "primaryCategory": "syvorotki",
-   "secondaryTypes": [
-    "Сыворотка",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Регенерация",
-    "Увлажнение",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Интенсивная регенерирующая сыворотка-флюид. Восстанавливает кожу, укрепляет липидный барьер, уменьшает поры и поддерживает длительное увлажнение за счет NMF.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "NMF",
-    "Гидролизат шелковых протеинов",
-    "Аллантоин",
-    "Витамин Е"
-   ],
-   "imageFile": "regenerativo-cellular-syvorotka-obnovlyayushhaya.jpg"
-  },
-  {
-   "externalId": 474,
-   "slug": "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska",
-   "name": "TTS ESSENTIAL MASK Укрепляющая и обновляющая маска",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 153900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "maski",
-   "secondaryTypes": [
-    "Маска",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Интенсивный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Биоцеллюлозная маска для уплотнения и лифтинга кожи лица и шеи с ДМАЕ и пептидами. Дает почти моментальное улучшение внешнего вида кожи.",
-   "application": "Наложить кроеную по форме лица и шеи маску, закрепить на ушах, оставить до впитывания актива.",
-   "ingredients": [
-    "ДМАЕ",
-    "Экстракт пшеницы",
-    "FGF",
-    "EGF",
-    "Pronalen",
-    "Алоэ вера",
-    "Эластин",
-    "Гиалуроновая кислота"
-   ],
-   "imageFile": "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska.jpg"
-  },
-  {
-   "externalId": 473,
-   "slug": "tts-moisturizing-mask-uvlazhnyayushhaya-maska",
-   "name": "TTS MOISTURIZING MASK Увлажняющая маска",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 153900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "maski",
-   "secondaryTypes": [
-    "Маска",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Интенсивный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Ультрагидратирующая биоцеллюлозная маска с разноуровневой гиалуроновой кислотой и АТФ. Увлажняет, стимулирует кровообращение и выработку коллагена.",
-   "application": "Наложить кроеную по форме лица и шеи маску, закрепить на ушах, оставить до впитывания актива.",
-   "ingredients": [
-    "Гиалуроновая кислота",
-    "Озон",
-    "АТФ",
-    "Экстракт лаванды",
-    "Алоэ вера",
-    "Витамин Е",
-    "Экстракт шиповника"
-   ],
-   "imageFile": "tts-moisturizing-mask-uvlazhnyayushhaya-maska.jpg"
-  },
-  {
-   "externalId": 472,
-   "slug": "tts-energizing-mask-maska-so-stvolovymi-kletkami",
-   "name": "TTS ENERGIZING MASK Маска со стволовыми клетками",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 153900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "maski",
-   "secondaryTypes": [
-    "Маска",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Регенерация",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Биоцеллюлозная маска со стволовыми клетками яблони для лифтинга и регенерации. Разглаживает и подтягивает кожу, уменьшает отечность и раздражение.",
-   "application": "Наложить кроеную по форме лица и шеи маску, закрепить на ушах, оставить до впитывания актива.",
-   "ingredients": [
-    "Стволовые клетки яблони",
-    "Алоэ вера",
-    "Озон",
-    "Ретинол",
-    "Биотин",
-    "Витамин Е",
-    "Масло шиповника"
-   ],
-   "imageFile": "tts-energizing-mask-maska-so-stvolovymi-kletkami.jpg"
-  },
-  {
-   "externalId": 471,
-   "slug": "tts-o3-ozono-kislorodnaya-maska-s-ozonom",
-   "name": "TTS O3 OZONO Кислородная маска с озоном",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 155900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "maski",
-   "secondaryTypes": [
-    "Маска",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Себорегуляция",
-    "Глубокое очищение и детоксикация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная"
-   ],
-   "volume": 30,
-   "action": "Биоцеллюлозная маска с инкапсулированным озоном для кожи, склонной к акне. Детоксицирует, уменьшает саловыделение, борется с C. acnes без резистентности.",
-   "application": "Наложить кроеную по форме лица и шеи маску, закрепить на ушах, оставить до впитывания актива.",
-   "ingredients": [
-    "Озон",
-    "Гидролат лаванды",
-    "Масло жожоба",
-    "Алоэ вера",
-    "Витамин Е",
-    "Глюконолактон"
-   ],
-   "imageFile": null
-  },
-  {
-   "externalId": 470,
-   "slug": "nutriestimul-antivozrastnoj-pitatelnyj-krem",
-   "name": "NUTRIESTIMUL Антивозрастной питательный крем",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 913000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Питание",
-    "Увлажнение",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": 50,
-   "action": "Питательный восстанавливающий крем для обезвоженной зрелой кожи. Насыщает влагой, укрепляет волокнистые структуры, стимулирует синтез коллагена и гиалуроновой кислоты.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "NMF",
-    "Масло ши",
-    "Гидролизат протеинов пшеницы",
-    "Алоэ вера",
-    "Полифенолы винограда",
-    "Гидролизат шелка"
-   ],
-   "imageFile": "nutriestimul-antivozrastnoj-pitatelnyj-krem.jpg"
-  },
-  {
-   "externalId": 469,
-   "slug": "crema-elite-ultra-uvlazhnyayushhij-krem",
-   "name": "CREMA ELITE Ультра увлажняющий крем",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 622500,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Регенерация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Суперувлажняющий крем для кожи с нарушенным липидным барьером. Глубоко увлажняет, успокаивает, снимает покраснения и предупреждает преждевременное старение.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "Алоэ вера",
-    "Аллантоин",
-    "Масло шиповника",
-    "Витамин Е"
-   ],
-   "imageFile": "crema-elite-ultra-uvlazhnyayushhij-krem.jpg"
-  },
-  {
-   "externalId": 468,
-   "slug": "kerathor-plus-izotonicheskij-tonik",
-   "name": "KERATHOR PLUS Изотонический тоник",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 720100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "toniki",
-   "secondaryTypes": [
-    "Тоник / Тонер"
-   ],
-   "keyNeeds": [
-    "Глубокое очищение и детоксикация",
-    "Себорегуляция",
-    "Придание сияния коже"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная"
-   ],
-   "volume": 200,
-   "action": "Изотонический тоник с фруктовыми кислотами и серой. Размягчает кератиновые пробки, элиминирует комедоны, сокращает поры и придает коже сияние.",
-   "application": "Использовать после очищения — тоник значительно повышает эффективность средств, наносимых после него.",
-   "ingredients": [
-    "AHA-кислоты",
-    "Сера",
-    "Ниацинамид",
-    "Витамин С",
-    "Растительные экстракты"
-   ],
-   "imageFile": "kerathor-plus-izotonicheskij-tonik.jpg"
-  },
-  {
-   "externalId": 467,
-   "slug": "collagen-booster-vosstanavlivayushhaya-syvorotka",
-   "name": "COLLAGEN BOOSTER Восстанавливающая сыворотка",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 775100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "syvorotki",
-   "secondaryTypes": [
-    "Сыворотка",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Увлажнение"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Укрепляющая сыворотка-флюид с высокой концентрацией пептидов. Ускоряет синтез коллагена, разглаживает морщины, корректирует рыхлую текстуру кожи.",
-   "application": "Наносить перед кремом. Утром — как основа под макияж, вечером — как регенерирующее средство.",
-   "ingredients": [
-    "EGF",
-    "Пептиды",
-    "NMF"
-   ],
-   "imageFile": "collagen-booster-vosstanavlivayushhaya-syvorotka.jpg"
-  },
-  {
-   "externalId": 466,
-   "slug": "tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
-   "name": "TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 396900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "toniki",
-   "secondaryTypes": [
-    "Тоник / Тонер"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Снятие признаков раздражения кожи",
-    "Ежедневный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 200,
-   "action": "Балансирующий натуральный тоник: выравнивает pH, восстанавливает клеточный баланс, повышает местный иммунитет и увлажненность кожи.",
-   "application": "Применять как завершающий этап очищения — подготавливает кожу к нанесению последующих средств.",
-   "ingredients": [
-    "NMF",
-    "Алоэ вера"
-   ],
-   "imageFile": "tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-.jpg"
-  },
-  {
-   "externalId": 465,
-   "slug": "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha",
-   "name": "EMULSION HIGIENIZANTE Крем-скраб для снятия макияжа",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Base",
-   "priceKopecks": 467000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "ochishchenie",
-   "secondaryTypes": [
-    "Молочко",
-    "Скраб"
-   ],
-   "keyNeeds": [
-    "Гигиена",
-    "Глубокое очищение и детоксикация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 200,
-   "action": "Молочко-скраб с биополимерными микрогранулами для ежедневного демакияжа. Деликатно и глубоко очищает, увлажняет и помогает восстановить гидролипидный барьер.",
-   "application": "Массирующими движениями нанести на кожу лица, шеи и декольте во время умывания, затем смыть.",
-   "ingredients": [
-    "Биополимерные микрогранулы Worlee",
-    "Экстракт алоэ вера"
-   ],
-   "imageFile": "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha.jpg"
-  },
-  {
-   "externalId": 449,
-   "slug": "oxioderm-maska-s-ozonom",
-   "name": "OXIODERM Маска с озоном",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 361100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "maski",
-   "secondaryTypes": [
-    "Маска",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Регенерация",
-    "Снятие признаков раздражения кожи"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 15,
-   "action": "Салфетка-маска, пропитанная EGF в липосомах и озоном. Мощное заживляющее, противовоспалительное и антигипоксическое действие, препятствует формированию рубцов.",
-   "application": "Наложить пропитанную салфетку на зону воздействия.",
-   "ingredients": [
-    "EGF 1%",
-    "Озон"
-   ],
-   "imageFile": "oxioderm-maska-s-ozonom.jpg"
-  },
-  {
-   "externalId": 448,
-   "slug": "senitul-vosstanavlivayushhaya-maska",
-   "name": "SENITUL Восстанавливающая маска",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 145800,
-   "oldPriceKopecks": null,
-   "primaryCategory": "maski",
-   "secondaryTypes": [
-    "Маска",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Регенерация",
-    "Снятие признаков раздражения кожи"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": null,
-   "action": "Маска-дермокомпресс с EGF в липосомах для восстановления кожи после агрессивных процедур. Уже после одного применения уменьшает эритему, боль и отек на 25-30%.",
-   "application": "Наложить маску-компресс на поврежденную зону.",
-   "ingredients": [
-    "EGF 1%",
-    "Масло розы москета",
-    "Витамин Е",
-    "Фосфатидилхолин",
-    "Фосфатидилинозитол"
-   ],
-   "imageFile": "senitul-vosstanavlivayushhaya-maska.jpg"
-  },
-  {
-   "externalId": 447,
-   "slug": "fluvix-syvorotka-obnovlyayushhaya",
-   "name": "FLUVIX Сыворотка обновляющая",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 605100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "syvorotki",
-   "secondaryTypes": [
-    "Сыворотка",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Регенерация",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 15,
-   "action": "Сыворотка с 3% EGF с мощным заживляющим действием. Стимулирует фибробласты, повышает уровень коллагена и гиалуроновой кислоты, разглаживает и подтягивает кожу.",
-   "application": null,
-   "ingredients": [
-    "EGF 3%",
-    "Масло розы москета",
-    "Молочная кислота",
-    "Серин",
-    "Аллантоин",
-    "Витамин Е"
-   ],
-   "imageFile": "fluvix-syvorotka-obnovlyayushhaya.jpg"
-  },
-  {
-   "externalId": 446,
-   "slug": "depurative-crema-ochishhayushhij-krem",
-   "name": "DEPURATIVE CREMA Очищающий крем",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 504800,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Себорегуляция",
-    "Глубокое очищение и детоксикация"
-   ],
-   "skinTypes": [
-    "Жирная / Проблемная / Комбинированная"
-   ],
-   "volume": 50,
-   "action": "Легкий крем-уход для жирной кожи с акне двойного действия: борется с воспалениями и возрастными изменениями, уменьшает выработку себума, насыщает кожу кислородом.",
-   "application": null,
-   "ingredients": [
-    "Инкапсулированный озон",
-    "Алоэ вера",
-    "Фосфатидилхолин",
-    "Витамин Е",
-    "Масло шиповника"
-   ],
-   "imageFile": "depurative-crema-ochishhayushhij-krem.jpg"
-  },
-  {
-   "externalId": 445,
-   "slug": "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami",
-   "name": "CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 814100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-vek",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Концентрированный деликатный крем для зоны вокруг глаз. Снимает припухлость век, выводит гемосидерин (причину темных кругов), укрепляет и подтягивает кожу.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "NMF",
-    "Масло ши",
-    "Экстракт арники",
-    "Экстракт каштана",
-    "Экстракт мальвы",
-    "Олигопептид-24"
-   ],
-   "imageFile": "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami.jpg"
-  },
-  {
-   "externalId": 444,
-   "slug": "biocell-syvorotka-obnovlyayushhaya",
-   "name": "BIOCELL Сыворотка обновляющая",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 714400,
-   "oldPriceKopecks": null,
-   "primaryCategory": "syvorotki",
-   "secondaryTypes": [
-    "Сыворотка",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Сыворотка-энхансер с интенсивным увлажняющим и антивозрастным действием. Питает зрелую кожу и усиливает эффект косметических средств, наносимых после нее.",
-   "application": null,
-   "ingredients": [
-    "NMF",
-    "Гидролизат шелка",
-    "EGF",
-    "Витамин Е",
-    "Масло шиповника"
-   ],
-   "imageFile": "biocell-syvorotka-obnovlyayushhaya.jpg"
-  },
-  {
-   "externalId": 443,
-   "slug": "hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej",
-   "name": "HIDRORRENOVADORA Крем для стимулирования тканей",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 748800,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Регенерация",
-    "Снятие признаков раздражения кожи"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": 50,
-   "action": "Мультигидратирующий крем для чувствительной кожи. Ускоряет восстановление и заживление, стимулирует выработку коллагена и эластина, усиливает антистрессовую систему кожи.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "NMF",
-    "Алоэ вера",
-    "Масло карите",
-    "Гидролизат шелка",
-    "Аллантоин",
-    "Масло розы москета",
-    "Витамин Е"
-   ],
-   "imageFile": "hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej.jpg"
-  },
-  {
-   "externalId": 442,
-   "slug": "keradetox-keratoliticheskij-tonik",
-   "name": "KERADETOX Кератолитический тоник",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 704100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "toniki",
-   "secondaryTypes": [
-    "Лосьон",
-    "Тоник / Тонер"
-   ],
-   "keyNeeds": [
-    "Глубокое очищение и детоксикация",
-    "Себорегуляция",
-    "Выравнивание цвета и рельефа"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 200,
-   "action": "Кератолитический тоник с AHA-кислотами: удаляет мертвые клетки, освобождает протоки сальных желез, сглаживает рельеф и уменьшает поры.",
-   "application": "Использовать после очищения — эксфолиация повышает эффективность средств, наносимых после тоника.",
-   "ingredients": [
-    "Молочная кислота",
-    "Комплекс AHA",
-    "Сера",
-    "Витамин С",
-    "Ниацинамид",
-    "Экстракты лука, мирта, гамамелиса, черники, шалфея"
-   ],
-   "imageFile": "keradetox-keratoliticheskij-tonik.jpg"
-  },
-  {
-   "externalId": 441,
-   "slug": "scrub-lotion-krem-dlya-snyatiya-makiyazha",
-   "name": "SCRUB LOTION Крем для снятия макияжа",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI MD",
-   "priceKopecks": 434600,
-   "oldPriceKopecks": null,
-   "primaryCategory": "ochishchenie",
-   "secondaryTypes": [
-    "Крем",
-    "Скраб",
-    "Тоник / Тонер"
-   ],
-   "keyNeeds": [
-    "Гигиена",
-    "Глубокое очищение и детоксикация",
-    "Питание"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 200,
-   "action": "Молочко для демакияжа с микрочастицами целлюлозы. Мягко эксфолиирует и глубоко очищает любой тип кожи, включая чувствительную, одновременно питая ее.",
-   "application": null,
-   "ingredients": [
-    "Экстракт алоэ вера",
-    "Гераниол",
-    "Частицы целлюлозы"
-   ],
-   "imageFile": "scrub-lotion-krem-dlya-snyatiya-makiyazha.jpg"
-  },
-  {
-   "externalId": 397,
-   "slug": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba",
-   "name": "BAOBAB OIL ILLUMINATOR AND REPAIRER Восстанавливающее масло баобаба",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 402000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "masla",
-   "secondaryTypes": [
-    "Масло"
-   ],
-   "keyNeeds": [
-    "Регенерация",
-    "Себорегуляция"
-   ],
-   "skinTypes": [
-    "Жирная / Проблемная / Комбинированная"
-   ],
-   "volume": 30,
-   "action": "Легкое некомедогенное масло баобаба для жирной, склонной к акне кожи. Восстанавливает структуры кожи, себорегулирует и защищает от фотостарения.",
-   "application": null,
-   "ingredients": [
-    "Озонированное масло баобаба",
-    "Экстракт розмарина",
-    "Витамин Е"
-   ],
-   "imageFile": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-mas.jpg"
-  },
-  {
-   "externalId": 395,
-   "slug": "rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom",
-   "name": "ROSE HIP OIL + O3 Регенерирующее масло шиповника с озоном",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 377700,
-   "oldPriceKopecks": null,
-   "primaryCategory": "masla",
-   "secondaryTypes": [
-    "Масло"
-   ],
-   "keyNeeds": [
-    "Регенерация",
-    "Увлажнение"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Регенерирующее масло шиповника с озоном для кожи после 30 лет. Стимулирует выработку коллагена, борется с обезвоженностью, эффективно против шрамов и рубцов.",
-   "application": null,
-   "ingredients": [
-    "Масло шиповника",
-    "Инкапсулированный озон",
-    "Экстракт розмарина",
-    "Витамин Е"
-   ],
-   "imageFile": "rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom.jpg"
-  },
-  {
-   "externalId": 394,
-   "slug": "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom",
-   "name": "JOJOBA OIL + O3 Себорегулирующее масло жожоба с озоном",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 374600,
-   "oldPriceKopecks": null,
-   "primaryCategory": "masla",
-   "secondaryTypes": [
-    "Масло"
-   ],
-   "keyNeeds": [
-    "Себорегуляция",
-    "Снятие признаков раздражения кожи"
-   ],
-   "skinTypes": [
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная"
-   ],
-   "volume": 30,
-   "action": "Масло жожоба с озоном: себорегулирующий и пролонгированный увлажняющий эффект, питает кожу, насыщает кислородом и уменьшает морщины.",
-   "application": null,
-   "ingredients": [
-    "Масло жожоба",
-    "Инкапсулированный озон",
-    "Экстракт розмарина",
-    "Витамин Е"
-   ],
-   "imageFile": "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom.jpg"
-  },
-  {
-   "externalId": 393,
-   "slug": "365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami",
-   "name": "365 NIGHT REPAIR CREAM Обновляющий крем с виноградными кислотами",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 651200,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Выравнивание цвета и рельефа",
-    "Придание сияния коже",
-    "Регенерация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Ночной обновляющий крем с комплексом виноградных кислот (активность как у гликолевой, без фотосенсибилизации). Обновляет кожу, уменьшает пигментацию, придает сияние.",
-   "application": "Использовать для восстанавливающего ухода в ночное время.",
-   "ingredients": [
-    "Экстракт сицилийского винограда",
-    "Масло семян чиа",
-    "Пчелиный воск",
-    "Воск жожоба"
-   ],
-   "imageFile": "365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-k.jpg"
-  },
-  {
-   "externalId": 392,
-   "slug": "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka",
-   "name": "3 FLOWER SERUM Мульти увлажняющая сыворотка",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 499500,
-   "oldPriceKopecks": null,
-   "primaryCategory": "syvorotki",
-   "secondaryTypes": [
-    "Сыворотка"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Снятие признаков раздражения кожи",
-    "Придание сияния коже"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Сыворотка из гидролатов цветков апельсина, лаванды и гамамелиса. Тонизирует, увлажняет, снимает покраснение, укрепляет сосуды и придает сияние.",
-   "application": null,
-   "ingredients": [
-    "Гидролат цветков апельсина",
-    "Гидролат лаванды",
-    "Гидролат гамамелиса"
-   ],
-   "imageFile": "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka.jpg"
-  },
-  {
-   "externalId": 391,
-   "slug": "chia-protect-oil-maslo-chia-s-ozonom",
-   "name": "CHIA PROTECT OIL Масло чиа с озоном",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 494200,
-   "oldPriceKopecks": null,
-   "primaryCategory": "masla",
-   "secondaryTypes": [
-    "Масло"
-   ],
-   "keyNeeds": [
-    "Снятие признаков раздражения кожи",
-    "Увлажнение",
-    "Повышение защитных свойств кожи"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 30,
-   "action": "Сухое озонированное масло чиа для раздраженной и реактивной кожи. Мгновенно уменьшает зуд и покраснение, повышает эластичность и усиливает кожный иммунитет.",
-   "application": null,
-   "ingredients": [
-    "Масло семян чиа",
-    "Инкапсулированный озон"
-   ],
-   "imageFile": "chia-protect-oil-maslo-chia-s-ozonom.jpg"
-  },
-  {
-   "externalId": 390,
-   "slug": "chia-detox-cream-uvlazhnyayushhij-krem-s-chia",
-   "name": "CHIA DETOX CREAM Увлажняющий крем с чиа",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 656400,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Снятие признаков раздражения кожи"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Увлажняющий крем для чувствительной кожи против фото- и хроностарения. Устраняет шелушение и покраснение, поддерживает гидролипидный баланс, действует антигликационно.",
-   "application": null,
-   "ingredients": [
-    "Гидролат лаванды",
-    "Масло семян чиа",
-    "Пчелиный воск"
-   ],
-   "imageFile": "chia-detox-cream-uvlazhnyayushhij-krem-s-chia.jpg"
-  },
-  {
-   "externalId": 389,
-   "slug": "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj",
-   "name": "PURE MARINE WATER CREAM Увлажняющий крем с морской водой",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 610000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Глубокое очищение и детоксикация"
-   ],
-   "skinTypes": [
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная"
-   ],
-   "volume": 50,
-   "action": "Натуральный увлажняющий крем с термальной морской водой Нуармутье. Решает проблему глубокого обезвоживания, детоксицирует, уменьшает поры; рекомендован жирной и комбинированной коже.",
-   "application": null,
-   "ingredients": [
-    "Термальная морская вода Noirmoutier",
-    "Пчелиный воск и воск жожоба",
-    "Витамин Е",
-    "Масло чиа"
-   ],
-   "imageFile": "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodo.jpg"
-  },
-  {
-   "externalId": 388,
-   "slug": "natural-tonic-naturalnyj-tonik-dlya-licza",
-   "name": "NATURAL TONIC Натуральный тоник для лица",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 371000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "toniki",
-   "secondaryTypes": [
-    "Тоник / Тонер"
-   ],
-   "keyNeeds": [
-    "Гигиена",
-    "Повышение защитных свойств кожи",
-    "Ежедневный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Чувствительная"
-   ],
-   "volume": 200,
-   "action": "Бесспиртовой тоник со слабокислым pH. Деликатно очищает, восстанавливает pH и микробиом кожи, предупреждает воспаления.",
-   "application": "Применять после очищения — подготавливает кожу к дальнейшему уходу.",
-   "ingredients": [
-    "Гидролат лаванды",
-    "Гидролат цветков апельсина",
-    "Глюконолактон",
-    "Алоэ вера",
-    "Аллантоин",
-    "Витамин Е"
-   ],
-   "imageFile": "natural-tonic-naturalnyj-tonik-dlya-licza.jpg"
-  },
-  {
-   "externalId": 387,
-   "slug": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza",
-   "name": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
-   "brand": "ISSEIMI",
-   "line": "ISSEIMI Nat Collection",
-   "priceKopecks": 418600,
-   "oldPriceKopecks": null,
-   "primaryCategory": "ochishchenie",
-   "secondaryTypes": [
-    "Крем",
-    "Молочко"
-   ],
-   "keyNeeds": [
-    "Гигиена",
-    "Глубокое очищение и детоксикация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Чувствительная"
-   ],
-   "volume": 200,
-   "action": "Натуральное молочко: удаляет макияж и глубоко очищает кожу, восстанавливая ее естественный баланс, pH и ламеллярные структуры.",
-   "application": null,
-   "ingredients": [
-    "Пчелиный воск и воск жожоба",
-    "Масло шиповника",
-    "Гидролат цветков апельсина",
-    "Витамин Е"
-   ],
-   "imageFile": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-.jpg"
-  },
-  {
-   "externalId": 285,
-   "slug": "redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi",
-   "name": "REDENSIFICANTЕ Реденсифицирующий крем для зрелой кожи",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 1599900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Выравнивание цвета и рельефа",
-    "Увлажнение"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Лифтинговый крем с тающей текстурой для зрелой кожи. Выравнивает цвет и текстуру, разглаживает морщины, повышает уровни коллагена, эластина и гиалуроновой кислоты.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "Гиалуроновая кислота",
-    "Биомиметические пептиды",
-    "Алоэ вера",
-    "Масло шиповника",
-    "Аллантоин",
-    "Молочная кислота"
-   ],
-   "imageFile": "redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi.png"
-  },
-  {
-   "externalId": 318,
-   "slug": "eye-resistance-krem-dlya-glaz",
-   "name": "EYE RESISTANCE Крем для глаз",
-   "brand": "GLACÉE Skincare",
-   "line": "GLACÉE Skincare Man Line",
-   "priceKopecks": 549900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-vek",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Снятие признаков раздражения кожи",
-    "Увлажнение",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 15,
-   "action": "Легкий крем для глаз с противоотечным действием. Устраняет темные круги и мешки, увлажняет чувствительную кожу век, укрепляет и разглаживает.",
-   "application": null,
-   "ingredients": [
-    "Биокомплекс Phyto-decongestive",
-    "Термальная вода",
-    "NMF",
-    "Ниацинамид",
-    "Кофеин",
-    "Алоэ вера"
-   ],
-   "imageFile": "eye-resistance-krem-dlya-glaz.jpg"
-  },
-  {
-   "externalId": 317,
-   "slug": "hydrocombat-krem-s-ozonom",
-   "name": "HYDROCOMBAT Крем с озоном",
-   "brand": "GLACÉE Skincare",
-   "line": "GLACÉE Skincare Man Line",
-   "priceKopecks": 802100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Укрепление и лифтинг",
-    "Себорегуляция"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": 50,
-   "action": "Увлажняющий крем-гель с озоном: держит оптимальное увлажнение 12-14 часов, контролирует сальную секрецию, тонизирует и укрепляет кожу.",
-   "application": null,
-   "ingredients": [
-    "Инкапсулированный озон",
-    "Гиалуроновая кислота",
-    "Органический кремний",
-    "Термальная вода",
-    "Камедь тары",
-    "Масло ши",
-    "Витамин Е"
-   ],
-   "imageFile": "hydrocombat-krem-s-ozonom.jpg"
-  },
-  {
-   "externalId": 316,
-   "slug": "balance-toner-tonik-s-morskoj-termalnoj-vodoj",
-   "name": "BALANCE TONER Тоник с морской термальной водой",
-   "brand": "GLACÉE Skincare",
-   "line": "GLACÉE Skincare Man Line",
-   "priceKopecks": 358000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "toniki",
-   "secondaryTypes": [
-    "Тоник / Тонер"
-   ],
-   "keyNeeds": [
-    "Ежедневный уход"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная"
-   ],
-   "volume": 250,
-   "action": "Тонизирующий лосьон на основе термальной воды острова Нуармутье. Восстанавливает кожный барьер и pH, сужает поры, реминерализирует и оздоравливает кожу.",
-   "application": null,
-   "ingredients": [
-    "Термальная вода",
-    "Экстракт алоэ вера",
-    "Глицерин"
-   ],
-   "imageFile": "balance-toner-tonik-s-morskoj-termalnoj-vodoj.jpg"
-  },
-  {
-   "externalId": 309,
-   "slug": "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj",
-   "name": "ENERGEL Очищающий гель с морской термальной водой",
-   "brand": "GLACÉE Skincare",
-   "line": "GLACÉE Skincare Man Line",
-   "priceKopecks": 387100,
-   "oldPriceKopecks": null,
-   "primaryCategory": "ochishchenie",
-   "secondaryTypes": [
-    "Гель"
-   ],
-   "keyNeeds": [
-    "Гигиена",
-    "Глубокое очищение и детоксикация",
-    "Себорегуляция"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": 250,
-   "action": "Энергезирующий гель для мягкого глубокого очищения. Детоксицирует, реминерализирует, уменьшает жирный блеск, размер пор и гиперкератоз.",
-   "application": "Использовать как первый шаг ежедневного ухода.",
-   "ingredients": [
-    "Термальная вода",
-    "Бетаин",
-    "Экстракт мыльного ореха",
-    "Экстракт цезальпинии спиноза",
-    "Энергезирующий комплекс"
-   ],
-   "imageFile": "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj.jpg"
-  },
-  {
-   "externalId": 308,
-   "slug": "serum-triple-accion-syvorotka-trojnogo-dejstviya",
-   "name": "SERUM TRIPLE ACCIÓN Сыворотка тройного действия",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 1000000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "syvorotki",
-   "secondaryTypes": [
-    "Сыворотка",
-    "Флюид"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Придание сияния коже",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": 30,
-   "action": "Флюидизированная сыворотка с тремя факторами роста (EGF, FGF, KGF). Устраняет дегидратацию на всех уровнях, разглаживает кожу и возвращает сияние.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "FGF",
-    "KGF",
-    "NMF"
-   ],
-   "imageFile": "serum-triple-accion-syvorotka-trojnogo-dejstviya.jpg"
-  },
-  {
-   "externalId": 307,
-   "slug": "contour-k-krem-dlya-glaz",
-   "name": "CONTOUR-K Крем для глаз",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 746000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-vek",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Снятие признаков раздражения кожи",
-    "Увлажнение",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Нормальная",
-    "Сухая"
-   ],
-   "volume": 15,
-   "action": "Легкий крем для орбитальной зоны с витамином К. Устраняет отеки, темные круги и припухлость, увлажняет и укрепляет кожу век.",
-   "application": null,
-   "ingredients": [
-    "Витамин К1",
-    "Алоэ вера",
-    "Кофеин",
-    "Ниацинамид",
-    "Гиалуроновая кислота",
-    "NMF",
-    "EGF",
-    "Масло ши",
-    "Экстракты каштана, арники, гамамелиса"
-   ],
-   "imageFile": "contour-k-krem-dlya-glaz.png"
-  },
-  {
-   "externalId": 306,
-   "slug": "reti-bogatyj-retinolom-krem",
-   "name": "RETI+ Богатый ретинолом крем",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 1069900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Выравнивание цвета и рельефа",
-    "Укрепление и лифтинг",
-    "Регенерация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Насыщенный ночной крем с ретинолом. Активизирует выработку коллагена, разглаживает рельеф, осветляет пигментацию, уплотняет и подтягивает кожу.",
-   "application": "Использовать как ночной уход.",
-   "ingredients": [
-    "Ретинол",
-    "Аллантоин",
-    "Инкапсулированный озон",
-    "Экстракт алоэ вера",
-    "Масло шиповника",
-    "Масло ши",
-    "Витамин Е"
-   ],
-   "imageFile": "reti-bogatyj-retinolom-krem.png"
-  },
-  {
-   "externalId": 305,
-   "slug": "gen-adn-ukreplyayushhij-krem",
-   "name": "GEN ADN Укрепляющий крем",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 1086000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Укрепление и лифтинг",
-    "Регенерация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Крем-гель для лифтинга и коррекции возрастных изменений. Противостоит гравитационному птозу, разглаживает морщины и формирует четкий овал лица.",
-   "application": null,
-   "ingredients": [
-    "EGF",
-    "Органический кремний",
-    "ДМАЕ",
-    "Витамин В9",
-    "Биомиметический пептид",
-    "Инкапсулированный озон",
-    "Масло ши",
-    "Гидролизат эластина"
-   ],
-   "imageFile": "gen-adn-ukreplyayushhij-krem.png"
-  },
-  {
-   "externalId": 304,
-   "slug": "antiox-c-antioksidantnyj-krem",
-   "name": "ANTIOX-C Антиоксидантный крем",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 779900,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Выравнивание цвета и рельефа",
-    "Придание сияния коже",
-    "Повышение защитных свойств кожи"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Антиоксидантный крем с витаминами С и Е. Блокирует оксидантный стресс, уменьшает гиперпигментацию, выравнивает тон и возвращает коже сияние.",
-   "application": null,
-   "ingredients": [
-    "Витамин С",
-    "Аминокислоты (лизин, пролин, цистеин)",
-    "Витамины В6, В3, Е",
-    "Инкапсулированный озон",
-    "Масло ши"
-   ],
-   "imageFile": "antiox-c-antioksidantnyj-krem.jpg"
-  },
-  {
-   "externalId": 303,
-   "slug": "hidrorrevitalizante-vosstanavlivayushhij-krem",
-   "name": "HIDRORREVITALIZANTE Восстанавливающий крем",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 1136000,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Укрепление и лифтинг"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи"
-   ],
-   "volume": 50,
-   "action": "Ультраувлажняющий крем с тающей текстурой против потери влаги в эпидермисе и дерме. EGF, FGF и биомиметический пептид стимулируют выработку собственной гиалуроновой кислоты.",
-   "application": null,
-   "ingredients": [
-    "FGF",
-    "EGF",
-    "Биомиметический пептид",
-    "NMF"
-   ],
-   "imageFile": "hidrorrevitalizante-vosstanavlivayushhij-krem.png"
-  },
-  {
-   "externalId": 293,
-   "slug": "dinamizante-vosstanavlivayushhij-krem",
-   "name": "DINAMIZANTE Восстанавливающий крем",
-   "brand": "GLACÉE Skincare",
-   "line": null,
-   "priceKopecks": 1110500,
-   "oldPriceKopecks": null,
-   "primaryCategory": "kremy-dlya-litsa-i-shei",
-   "secondaryTypes": [
-    "Крем"
-   ],
-   "keyNeeds": [
-    "Увлажнение",
-    "Повышение защитных свойств кожи",
-    "Регенерация"
-   ],
-   "skinTypes": [
-    "Для всех типов кожи",
-    "Жирная / Проблемная / Комбинированная",
-    "Нормальная"
-   ],
-   "volume": 50,
-   "action": "Легкий антивозрастной крем со стволовыми клетками яблони (сертификат ECOCERT). Идеален для молодой кожи с начальными признаками снижения тонуса.",
-   "application": null,
-   "ingredients": [
-    "Стволовые клетки яблони Malus domestica",
-    "EGF",
-    "Масло баобаба",
-    "Масло зародышей пшеницы",
-    "Витамин С"
-   ],
-   "imageFile": "dinamizante-vosstanavlivayushhij-krem.png"
-  }
- ]
+  "_meta": {
+    "matching": "products.json.id == manifest.json.products[].externalId; slug в манифесте усечён до 63 символов — сопоставлять ТОЛЬКО по id"
+  },
+  "categories": [
+    {
+      "slug": "kremy-dlya-litsa-i-shei",
+      "name": "Кремы для лица и шеи",
+      "count": 17
+    },
+    {
+      "slug": "flyuidy",
+      "name": "Флюиды",
+      "count": 1
+    },
+    {
+      "slug": "syvorotki",
+      "name": "Сыворотки",
+      "count": 7
+    },
+    {
+      "slug": "toniki",
+      "name": "Тоники",
+      "count": 5
+    },
+    {
+      "slug": "ochishchenie",
+      "name": "Очищение",
+      "count": 4
+    },
+    {
+      "slug": "maski",
+      "name": "Маски",
+      "count": 6
+    },
+    {
+      "slug": "nabory",
+      "name": "Наборы",
+      "count": 6
+    },
+    {
+      "slug": "kremy-dlya-vek",
+      "name": "Кремы для век",
+      "count": 4
+    },
+    {
+      "slug": "masla",
+      "name": "Масла",
+      "count": 4
+    },
+    {
+      "slug": "uhod-za-telom",
+      "name": "Уход за телом",
+      "count": 2
+    },
+    {
+      "slug": "spf",
+      "name": "SPF",
+      "count": 1
+    }
+  ],
+  "products": [
+    {
+      "externalId": 929,
+      "slug": "podarochnyj-nabor-bee-venom-s-pchelinym-yadom-dlya-razglazhivaniya-morshhin-i-ustraneniya-tusklosti-kozhi",
+      "name": "Подарочный набор «Bee Venom» с пчелиным ядом для разглаживания морщин и устранения тусклости кожи",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1117600,
+      "oldPriceKopecks": 1596600,
+      "primaryCategory": "nabory",
+      "secondaryTypes": [
+        "Крем",
+        "Сыворотка"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Придание сияния коже",
+        "Регенерация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": null,
+      "action": "Набор из антивозрастного крема (50 мл) и сыворотки (30 мл) с пчелиным ядом. Апитоксин действует как «натуральный ботокс»: уменьшает морщины, усиливает микроциркуляцию, возвращает коже тонус и сияние.",
+      "application": null,
+      "ingredients": [
+        "Пчелиный яд",
+        "EGF",
+        "Гиалуроновая кислота",
+        "Гемоцианин",
+        "Аллантоин",
+        "Витамин Е",
+        "Экстракт фукуса"
+      ],
+      "imageFile": "podarochnyj-nabor-bee-venom-s-pchelinym-yadom-dlya-razglazhi.jpg"
+    },
+    {
+      "externalId": 928,
+      "slug": "podarochnyj-nabor-expert-team-box-2-dlya-tonizaczii-kozhi-i-ustraneniya-otekov-krugov-vokrug-glaz",
+      "name": "Подарочный набор «Expert Team. Box 2» для тонизации кожи и устранения отеков кругов вокруг глаз",
+      "brand": "GLACÉE Skincare",
+      "line": "GLACÉE Skincare Man Line",
+      "priceKopecks": 549900,
+      "oldPriceKopecks": 907900,
+      "primaryCategory": "nabory",
+      "secondaryTypes": [
+        "Крем",
+        "Тоник / Тонер"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Снятие признаков раздражения кожи",
+        "Ежедневный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная"
+      ],
+      "volume": null,
+      "action": "Набор: тоник BALANCE TONER (250 мл) и крем для глаз EYE RESISTANCE (15 мл). Тоник восстанавливает pH и кожный барьер, крем снимает отеки, темные круги и следы усталости вокруг глаз.",
+      "application": null,
+      "ingredients": [
+        "Термальная вода",
+        "Алоэ вера",
+        "Глицерин",
+        "Биокомплекс Phyto-decongestive",
+        "Ниацинамид",
+        "Кофеин",
+        "NMF"
+      ],
+      "imageFile": "podarochnyj-nabor-expert-team-box-2-dlya-tonizaczii-kozhi-i-.jpg"
+    },
+    {
+      "externalId": 927,
+      "slug": "podarochnyj-nabor-expert-team-box-1-dlya-glubokogo-ochishheniya-i-uvlazhneniya-kozhi",
+      "name": "Подарочный набор «Expert Team. Box 1» для глубокого очищения и увлажнения кожи",
+      "brand": "GLACÉE Skincare",
+      "line": "GLACÉE Skincare Man Line",
+      "priceKopecks": 832400,
+      "oldPriceKopecks": 1189200,
+      "primaryCategory": "nabory",
+      "secondaryTypes": [
+        "Гель",
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Глубокое очищение и детоксикация",
+        "Увлажнение"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": null,
+      "action": "Набор: очищающий гель ENERGEL (250 мл) и крем с озоном HYDROCOMBAT (50 мл). Гель глубоко очищает и детоксицирует кожу, крем увлажняет, тонизирует и укрепляет ее.",
+      "application": null,
+      "ingredients": [
+        "Термальная вода",
+        "Бетаин",
+        "Экстракт мыльного ореха",
+        "Инкапсулированный озон",
+        "Гиалуроновая кислота",
+        "Органический кремний"
+      ],
+      "imageFile": "podarochnyj-nabor-expert-team-box-1-dlya-glubokogo-ochishhen-2.jpg"
+    },
+    {
+      "externalId": 925,
+      "slug": "podarochnyj-nabor-expert-team-full-box-dlya-uhoda-za-muzhskoj-kozhej",
+      "name": "Подарочный набор «Expert Team. Full Box» для ухода за мужской кожей",
+      "brand": "GLACÉE Skincare",
+      "line": "GLACÉE Skincare Man Line",
+      "priceKopecks": 1468000,
+      "oldPriceKopecks": 2097100,
+      "primaryCategory": "nabory",
+      "secondaryTypes": [
+        "Гель",
+        "Крем",
+        "Тоник / Тонер"
+      ],
+      "keyNeeds": [
+        "Гигиена",
+        "Увлажнение",
+        "Ежедневный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": null,
+      "action": "Полный набор ежедневного ухода за мужской кожей: очищающий гель ENERGEL, тоник BALANCE TONER, крем HYDROCOMBAT и крем для глаз EYE RESISTANCE.",
+      "application": null,
+      "ingredients": [
+        "Термальная вода",
+        "Бетаин",
+        "Алоэ вера",
+        "Инкапсулированный озон",
+        "Гиалуроновая кислота",
+        "Ниацинамид",
+        "Кофеин"
+      ],
+      "imageFile": "podarochnyj-nabor-expert-team-full-box-dlya-uhoda-za-muzhsko.jpg"
+    },
+    {
+      "externalId": 924,
+      "slug": "podarochnyj-nabor-obnovlennaya-kozha-dlya-liftinga-i-ukrepleniya-kozhi",
+      "name": "Подарочный набор «Обновленная кожа» для лифтинга и укрепления кожи",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 814500,
+      "oldPriceKopecks": 1086000,
+      "primaryCategory": "nabory",
+      "secondaryTypes": [
+        "Крем",
+        "Сыворотка",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Регенерация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": null,
+      "action": "Набор: укрепляющий крем GEN ADN (50 мл) и набор пробников (HIDRORREVITALIZANTE, SERUM TRIPLE ACCION, RETI+, DINAMIZANTE). Крем противостоит птозу, подтягивает кожу и формирует четкий овал лица.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "Органический кремний",
+        "ДМАЕ",
+        "Витамин В9",
+        "Биомиметический пептид",
+        "Инкапсулированный озон"
+      ],
+      "imageFile": "podarochnyj-nabor-obnovlennaya-kozha-dlya-liftinga-i-ukreple.jpg"
+    },
+    {
+      "externalId": 923,
+      "slug": "podarochnyj-nabor-obnovlennaya-kozha-dlya-korrekczii-vozrastnyh-izmenenij-kozhi-licza-i-vek",
+      "name": "Подарочный набор «Обновленная кожа» для коррекции возрастных изменений кожи лица и век",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 1282400,
+      "oldPriceKopecks": 1832000,
+      "primaryCategory": "nabory",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Регенерация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": null,
+      "action": "Набор: укрепляющий крем GEN ADN (50 мл) и крем для глаз CONTOUR-K (15 мл) для коррекции возрастных изменений кожи лица и век.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "Органический кремний",
+        "ДМАЕ",
+        "Инкапсулированный озон",
+        "Витамин В9",
+        "Биомиметический пептид"
+      ],
+      "imageFile": "podarochnyj-nabor-obnovlennaya-kozha-dlya-korrekczii-vozrast.jpg"
+    },
+    {
+      "externalId": 484,
+      "slug": "korpo-slim-crema-anticzellyulitnyj-i-modeliruyushhij-krem",
+      "name": "KORPO SLIM CREMA Антицеллюлитный и моделирующий крем",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 560000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "uhod-za-telom",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Ежедневный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 200,
+      "action": "Легкий антицеллюлитный крем с цитрусовым ароматом. Улучшает микроциркуляцию, дренирует кожу и выводит избыточную жидкость, постепенно уменьшая объем и моделируя силуэт.",
+      "application": null,
+      "ingredients": [
+        "Кофеин",
+        "Карнитин",
+        "Экстракт фукуса",
+        "Метил никотинат",
+        "Фосфатидилхолин",
+        "Экстракт розмарина",
+        "Коллагеназы"
+      ],
+      "imageFile": "korpo-slim-crema-anticzellyulitnyj-i-modeliruyushhij-krem.jpg"
+    },
+    {
+      "externalId": 483,
+      "slug": "korpo-slim-gel-ukreplyayushhij-gel-dlya-nog",
+      "name": "KORPO SLIM GEL Укрепляющий гель для ног",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 714600,
+      "oldPriceKopecks": null,
+      "primaryCategory": "uhod-za-telom",
+      "secondaryTypes": [
+        "Гель"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Экспресс-уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 200,
+      "action": "Охлаждающий гель для ног с дренажным, антицеллюлитным и липолитическим действием. Улучшает кровообращение, уменьшает объем и снимает усталость ног после нагрузок и каблуков.",
+      "application": null,
+      "ingredients": [
+        "Экстракт фукуса",
+        "Экстракт рускуса",
+        "Фосфатидилхолин",
+        "Липаза",
+        "Экстракт плюща"
+      ],
+      "imageFile": "korpo-slim-gel-ukreplyayushhij-gel-dlya-nog.jpg"
+    },
+    {
+      "externalId": 482,
+      "slug": "o3-depur-krem-s-ozonom",
+      "name": "O3 DEPUR Крем с озоном",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 850000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Гель",
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Себорегуляция",
+        "Глубокое очищение и детоксикация"
+      ],
+      "skinTypes": [
+        "Жирная / Проблемная / Комбинированная"
+      ],
+      "volume": 50,
+      "action": "Крем-гель с озоном для кожи, склонной к акне. Оказывает антибактериальное и себорегулирующее действие, сужает поры, устраняет жирный блеск и повышает иммунитет кожи.",
+      "application": null,
+      "ingredients": [
+        "Инкапсулированный озон",
+        "Алоэ вера",
+        "Пчелиный воск",
+        "Витамин Е",
+        "Дикий шиповник"
+      ],
+      "imageFile": "o3-depur-krem-s-ozonom.jpg"
+    },
+    {
+      "externalId": 481,
+      "slug": "fluido-viscoso-forte-syvorotka-obnovlyayushhaya",
+      "name": "FLUIDO VISCOSO FORTE Сыворотка обновляющая",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 940000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "flyuidy",
+      "secondaryTypes": [
+        "Сыворотка",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Регенерация",
+        "Укрепление и лифтинг",
+        "Увлажнение"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": 30,
+      "action": "Легкая флюидизированная сыворотка с EGF: стимулирует выработку собственного коллагена и гиалуроновой кислоты, повышает плотность кожи, сокращает глубину морщин и пигментацию.",
+      "application": null,
+      "ingredients": [
+        "EGF 2%",
+        "NMF",
+        "Масло шиповника",
+        "Фосфатидилинозитол",
+        "Аллантоин",
+        "Витамин Е"
+      ],
+      "imageFile": "fluido-viscoso-forte-syvorotka-obnovlyayushhaya.jpg"
+    },
+    {
+      "externalId": 480,
+      "slug": "dermosun-spf-50-solnczezashhitnyj-krem",
+      "name": "DERMOSUN SPF 50 Солнцезащитный крем",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 532200,
+      "oldPriceKopecks": null,
+      "primaryCategory": "spf",
+      "secondaryTypes": [
+        "Крем",
+        "Солнцезащитные средства"
+      ],
+      "keyNeeds": [
+        "Повышение защитных свойств кожи",
+        "Ежедневный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Легкий солнцезащитный крем SPF 50+ (UVA, UVB, HEVis) с антиоксидантами. Предотвращает фотостарение и гиперпигментацию, увлажняет, подходит чувствительной и атопичной коже.",
+      "application": null,
+      "ingredients": [
+        "Физические и химические солнцезащитные фильтры",
+        "Витамин Е",
+        "Витамин C",
+        "Алоэ вера",
+        "Аллантоин"
+      ],
+      "imageFile": "dermosun-spf-50-solnczezashhitnyj-krem.jpg"
+    },
+    {
+      "externalId": 479,
+      "slug": "bb-cream-matiruyushhij-krem",
+      "name": "BB CREAM Матирующий крем",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1115100,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "ВВ Крем",
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Выравнивание цвета и рельефа",
+        "Увлажнение",
+        "Придание сияния коже"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 100,
+      "action": "Тонирующий крем с матирующим эффектом нейтрально-бежевого оттенка. Скрывает несовершенства, выравнивает тон и текстуру, увлажняет и деликатно заполняет морщинки.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "Гиалуроновая кислота",
+        "Осветляющий пептид SH-Oligopeptide-50",
+        "Витамин Е",
+        "Бисаболол",
+        "Масло шиповника"
+      ],
+      "imageFile": "bb-cream-matiruyushhij-krem.jpg"
+    },
+    {
+      "externalId": 478,
+      "slug": "veevenom-serum-syvorotka-pchelinyj-yad",
+      "name": "ВEEVENOM SERUM Антивозрастная сыворотка",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 788900,
+      "oldPriceKopecks": null,
+      "primaryCategory": "syvorotki",
+      "secondaryTypes": [
+        "Сыворотка"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Регенерация",
+        "Придание сияния коже"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 30,
+      "action": "Регенерирующая сыворотка с пчелиным ядом («натуральный ботокс») для тусклой кожи. Уменьшает морщины, подтягивает, насыщает кожу кислородом за счет гемоцианинов.",
+      "application": null,
+      "ingredients": [
+        "Пчелиный яд",
+        "EGF",
+        "Глицин сои",
+        "Аллантоин",
+        "Гемоцианин",
+        "Витамин Е"
+      ],
+      "imageFile": "veevenom-serum-syvorotka-pchelinyj-yad.jpg"
+    },
+    {
+      "externalId": 477,
+      "slug": "bee-venom-cream-antivozrastnoj-krem",
+      "name": "BEEVENOM CREAM Антивозрастной крем",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1220000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Увлажнение"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Легкий антивозрастной крем с пчелиным ядом. Восстанавливает и увлажняет кожу, уменьшает морщины, усиливает микроциркуляцию и клеточное дыхание.",
+      "application": null,
+      "ingredients": [
+        "Пчелиный яд",
+        "EGF",
+        "Гиалуроновая кислота",
+        "Аллантоин",
+        "Гемоцианин",
+        "Витамин Е",
+        "Экстракт фукуса"
+      ],
+      "imageFile": "bee-venom-cream-antivozrastnoj-krem.jpg"
+    },
+    {
+      "externalId": 476,
+      "slug": "sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami",
+      "name": "СONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 802500,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-vek",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 30,
+      "action": "Крем-контур для век: увлажняет и разглаживает тонкую кожу, повышает выработку коллагена, устраняет мешки и темные круги.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "NMF",
+        "Экстракт арники",
+        "Экстракт конского каштана",
+        "Экстракт мальвы"
+      ],
+      "imageFile": "sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-pepti.jpg"
+    },
+    {
+      "externalId": 475,
+      "slug": "regenerativo-cellular-syvorotka-obnovlyayushhaya",
+      "name": "REGENERATIVO CELLULAR Сыворотка обновляющая",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1310000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "syvorotki",
+      "secondaryTypes": [
+        "Сыворотка",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Регенерация",
+        "Увлажнение",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 30,
+      "action": "Интенсивная регенерирующая сыворотка-флюид. Восстанавливает кожу, укрепляет липидный барьер, уменьшает поры и поддерживает длительное увлажнение за счет NMF.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "NMF",
+        "Гидролизат шелковых протеинов",
+        "Аллантоин",
+        "Витамин Е"
+      ],
+      "imageFile": "regenerativo-cellular-syvorotka-obnovlyayushhaya.jpg"
+    },
+    {
+      "externalId": 474,
+      "slug": "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska",
+      "name": "TTS ESSENTIAL MASK Укрепляющая и обновляющая маска",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1020000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "maski",
+      "secondaryTypes": [
+        "Маска",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Интенсивный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 6,
+      "action": "Биоцеллюлозная маска для уплотнения и лифтинга кожи лица и шеи с ДМАЕ и пептидами. Дает почти моментальное улучшение внешнего вида кожи.",
+      "application": "Наложить кроеную по форме лица и шеи маску, закрепить на ушах, оставить до впитывания актива.",
+      "ingredients": [
+        "ДМАЕ",
+        "Экстракт пшеницы",
+        "FGF",
+        "EGF",
+        "Pronalen",
+        "Алоэ вера",
+        "Эластин",
+        "Гиалуроновая кислота"
+      ],
+      "imageFile": "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska.jpg"
+    },
+    {
+      "externalId": 473,
+      "slug": "tts-moisturizing-mask-uvlazhnyayushhaya-maska",
+      "name": "TTS MOISTURIZING MASK Увлажняющая маска",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1020000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "maski",
+      "secondaryTypes": [
+        "Маска",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Интенсивный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 6,
+      "action": "Ультрагидратирующая биоцеллюлозная маска с разноуровневой гиалуроновой кислотой и АТФ. Увлажняет, стимулирует кровообращение и выработку коллагена.",
+      "application": "Наложить кроеную по форме лица и шеи маску, закрепить на ушах, оставить до впитывания актива.",
+      "ingredients": [
+        "Гиалуроновая кислота",
+        "Озон",
+        "АТФ",
+        "Экстракт лаванды",
+        "Алоэ вера",
+        "Витамин Е",
+        "Экстракт шиповника"
+      ],
+      "imageFile": "tts-moisturizing-mask-uvlazhnyayushhaya-maska.jpg"
+    },
+    {
+      "externalId": 472,
+      "slug": "tts-energizing-mask-maska-so-stvolovymi-kletkami",
+      "name": "TTS ENERGIZING MASK Маска со стволовыми клетками",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1020000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "maski",
+      "secondaryTypes": [
+        "Маска",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Регенерация",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 6,
+      "action": "Биоцеллюлозная маска со стволовыми клетками яблони для лифтинга и регенерации. Разглаживает и подтягивает кожу, уменьшает отечность и раздражение.",
+      "application": "Наложить кроеную по форме лица и шеи маску, закрепить на ушах, оставить до впитывания актива.",
+      "ingredients": [
+        "Стволовые клетки яблони",
+        "Алоэ вера",
+        "Озон",
+        "Ретинол",
+        "Биотин",
+        "Витамин Е",
+        "Масло шиповника"
+      ],
+      "imageFile": "tts-energizing-mask-maska-so-stvolovymi-kletkami.jpg"
+    },
+    {
+      "externalId": 471,
+      "slug": "tts-o3-ozono-kislorodnaya-maska-s-ozonom",
+      "name": "TTS O3 OZONO Кислородная маска с озоном",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 155900,
+      "oldPriceKopecks": null,
+      "primaryCategory": "maski",
+      "secondaryTypes": [
+        "Маска",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Себорегуляция",
+        "Глубокое очищение и детоксикация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная"
+      ],
+      "volume": 6,
+      "action": "Биоцеллюлозная маска с инкапсулированным озоном для кожи, склонной к акне. Детоксицирует, уменьшает саловыделение, борется с C. acnes без резистентности.",
+      "application": "Наложить кроеную по форме лица и шеи маску, закрепить на ушах, оставить до впитывания актива.",
+      "ingredients": [
+        "Озон",
+        "Гидролат лаванды",
+        "Масло жожоба",
+        "Алоэ вера",
+        "Витамин Е",
+        "Глюконолактон"
+      ],
+      "imageFile": null
+    },
+    {
+      "externalId": 470,
+      "slug": "nutriestimul-antivozrastnoj-pitatelnyj-krem",
+      "name": "NUTRIESTIMUL Антивозрастной питательный крем",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1420000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Питание",
+        "Увлажнение",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": 50,
+      "action": "Питательный восстанавливающий крем для обезвоженной зрелой кожи. Насыщает влагой, укрепляет волокнистые структуры, стимулирует синтез коллагена и гиалуроновой кислоты.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "NMF",
+        "Масло ши",
+        "Гидролизат протеинов пшеницы",
+        "Алоэ вера",
+        "Полифенолы винограда",
+        "Гидролизат шелка"
+      ],
+      "imageFile": "nutriestimul-antivozrastnoj-pitatelnyj-krem.jpg"
+    },
+    {
+      "externalId": 469,
+      "slug": "crema-elite-ultra-uvlazhnyayushhij-krem",
+      "name": "CREMA ELITE Ультра увлажняющий крем",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 970000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Регенерация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Суперувлажняющий крем для кожи с нарушенным липидным барьером. Глубоко увлажняет, успокаивает, снимает покраснения и предупреждает преждевременное старение.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "Алоэ вера",
+        "Аллантоин",
+        "Масло шиповника",
+        "Витамин Е"
+      ],
+      "imageFile": "crema-elite-ultra-uvlazhnyayushhij-krem.jpg"
+    },
+    {
+      "externalId": 468,
+      "slug": "kerathor-plus-izotonicheskij-tonik",
+      "name": "KERATHOR PLUS Изотонический тоник",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 720100,
+      "oldPriceKopecks": null,
+      "primaryCategory": "toniki",
+      "secondaryTypes": [
+        "Тоник / Тонер"
+      ],
+      "keyNeeds": [
+        "Глубокое очищение и детоксикация",
+        "Себорегуляция",
+        "Придание сияния коже"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная"
+      ],
+      "volume": 200,
+      "action": "Изотонический тоник с фруктовыми кислотами и серой. Размягчает кератиновые пробки, элиминирует комедоны, сокращает поры и придает коже сияние.",
+      "application": "Использовать после очищения — тоник значительно повышает эффективность средств, наносимых после него.",
+      "ingredients": [
+        "AHA-кислоты",
+        "Сера",
+        "Ниацинамид",
+        "Витамин С",
+        "Растительные экстракты"
+      ],
+      "imageFile": "kerathor-plus-izotonicheskij-tonik.jpg"
+    },
+    {
+      "externalId": 467,
+      "slug": "collagen-booster-vosstanavlivayushhaya-syvorotka",
+      "name": "COLLAGEN BOOSTER Восстанавливающая сыворотка",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 1150000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "syvorotki",
+      "secondaryTypes": [
+        "Сыворотка",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Увлажнение"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 30,
+      "action": "Укрепляющая сыворотка-флюид с высокой концентрацией пептидов. Ускоряет синтез коллагена, разглаживает морщины, корректирует рыхлую текстуру кожи.",
+      "application": "Наносить перед кремом. Утром — как основа под макияж, вечером — как регенерирующее средство.",
+      "ingredients": [
+        "EGF",
+        "Пептиды",
+        "NMF"
+      ],
+      "imageFile": "collagen-booster-vosstanavlivayushhaya-syvorotka.jpg"
+    },
+    {
+      "externalId": 466,
+      "slug": "tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
+      "name": "TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 630000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "toniki",
+      "secondaryTypes": [
+        "Тоник / Тонер"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Снятие признаков раздражения кожи",
+        "Ежедневный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 200,
+      "action": "Балансирующий натуральный тоник: выравнивает pH, восстанавливает клеточный баланс, повышает местный иммунитет и увлажненность кожи.",
+      "application": "Применять как завершающий этап очищения — подготавливает кожу к нанесению последующих средств.",
+      "ingredients": [
+        "NMF",
+        "Алоэ вера"
+      ],
+      "imageFile": "tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-.jpg"
+    },
+    {
+      "externalId": 465,
+      "slug": "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha",
+      "name": "EMULSION HIGIENIZANTE Крем-скраб для снятия макияжа",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Base",
+      "priceKopecks": 700000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "ochishchenie",
+      "secondaryTypes": [
+        "Молочко",
+        "Скраб"
+      ],
+      "keyNeeds": [
+        "Гигиена",
+        "Глубокое очищение и детоксикация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 200,
+      "action": "Молочко-скраб с биополимерными микрогранулами для ежедневного демакияжа. Деликатно и глубоко очищает, увлажняет и помогает восстановить гидролипидный барьер.",
+      "application": "Массирующими движениями нанести на кожу лица, шеи и декольте во время умывания, затем смыть.",
+      "ingredients": [
+        "Биополимерные микрогранулы Worlee",
+        "Экстракт алоэ вера"
+      ],
+      "imageFile": "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha.jpg"
+    },
+    {
+      "externalId": 449,
+      "slug": "oxioderm-maska-s-ozonom",
+      "name": "OXIODERM Маска с озоном",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 500000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "maski",
+      "secondaryTypes": [
+        "Маска",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Регенерация",
+        "Снятие признаков раздражения кожи"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 15,
+      "action": "Салфетка-маска, пропитанная EGF в липосомах и озоном. Мощное заживляющее, противовоспалительное и антигипоксическое действие, препятствует формированию рубцов.",
+      "application": "Наложить пропитанную салфетку на зону воздействия.",
+      "ingredients": [
+        "EGF 1%",
+        "Озон"
+      ],
+      "imageFile": "oxioderm-maska-s-ozonom.jpg"
+    },
+    {
+      "externalId": 448,
+      "slug": "senitul-vosstanavlivayushhaya-maska",
+      "name": "SENITUL Восстанавливающая маска",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 510000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "maski",
+      "secondaryTypes": [
+        "Маска",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Регенерация",
+        "Снятие признаков раздражения кожи"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": null,
+      "action": "Маска-дермокомпресс с EGF в липосомах для восстановления кожи после агрессивных процедур. Уже после одного применения уменьшает эритему, боль и отек на 25-30%.",
+      "application": "Наложить маску-компресс на поврежденную зону.",
+      "ingredients": [
+        "EGF 1%",
+        "Масло розы москета",
+        "Витамин Е",
+        "Фосфатидилхолин",
+        "Фосфатидилинозитол"
+      ],
+      "imageFile": "senitul-vosstanavlivayushhaya-maska.jpg"
+    },
+    {
+      "externalId": 447,
+      "slug": "fluvix-syvorotka-obnovlyayushhaya",
+      "name": "FLUVIX Сыворотка обновляющая",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 1000000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "syvorotki",
+      "secondaryTypes": [
+        "Сыворотка",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Регенерация",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 15,
+      "action": "Сыворотка с 3% EGF с мощным заживляющим действием. Стимулирует фибробласты, повышает уровень коллагена и гиалуроновой кислоты, разглаживает и подтягивает кожу.",
+      "application": null,
+      "ingredients": [
+        "EGF 3%",
+        "Масло розы москета",
+        "Молочная кислота",
+        "Серин",
+        "Аллантоин",
+        "Витамин Е"
+      ],
+      "imageFile": "fluvix-syvorotka-obnovlyayushhaya.jpg"
+    },
+    {
+      "externalId": 446,
+      "slug": "depurative-crema-ochishhayushhij-krem",
+      "name": "DEPURATIVE CREMA Очищающий крем",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 504800,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Себорегуляция",
+        "Глубокое очищение и детоксикация"
+      ],
+      "skinTypes": [
+        "Жирная / Проблемная / Комбинированная"
+      ],
+      "volume": 50,
+      "action": "Легкий крем-уход для жирной кожи с акне двойного действия: борется с воспалениями и возрастными изменениями, уменьшает выработку себума, насыщает кожу кислородом.",
+      "application": null,
+      "ingredients": [
+        "Инкапсулированный озон",
+        "Алоэ вера",
+        "Фосфатидилхолин",
+        "Витамин Е",
+        "Масло шиповника"
+      ],
+      "imageFile": "depurative-crema-ochishhayushhij-krem.jpg"
+    },
+    {
+      "externalId": 445,
+      "slug": "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami",
+      "name": "CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 814100,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-vek",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Концентрированный деликатный крем для зоны вокруг глаз. Снимает припухлость век, выводит гемосидерин (причину темных кругов), укрепляет и подтягивает кожу.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "NMF",
+        "Масло ши",
+        "Экстракт арники",
+        "Экстракт каштана",
+        "Экстракт мальвы",
+        "Олигопептид-24"
+      ],
+      "imageFile": "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami.jpg"
+    },
+    {
+      "externalId": 444,
+      "slug": "biocell-syvorotka-obnovlyayushhaya",
+      "name": "BIOCELL Сыворотка обновляющая",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 1240000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "syvorotki",
+      "secondaryTypes": [
+        "Сыворотка",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 30,
+      "action": "Сыворотка-энхансер с интенсивным увлажняющим и антивозрастным действием. Питает зрелую кожу и усиливает эффект косметических средств, наносимых после нее.",
+      "application": null,
+      "ingredients": [
+        "NMF",
+        "Гидролизат шелка",
+        "EGF",
+        "Витамин Е",
+        "Масло шиповника"
+      ],
+      "imageFile": "biocell-syvorotka-obnovlyayushhaya.jpg"
+    },
+    {
+      "externalId": 443,
+      "slug": "hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej",
+      "name": "HIDRORRENOVADORA Крем для стимулирования тканей",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 748800,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Регенерация",
+        "Снятие признаков раздражения кожи"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": 50,
+      "action": "Мультигидратирующий крем для чувствительной кожи. Ускоряет восстановление и заживление, стимулирует выработку коллагена и эластина, усиливает антистрессовую систему кожи.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "NMF",
+        "Алоэ вера",
+        "Масло карите",
+        "Гидролизат шелка",
+        "Аллантоин",
+        "Масло розы москета",
+        "Витамин Е"
+      ],
+      "imageFile": "hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej.jpg"
+    },
+    {
+      "externalId": 442,
+      "slug": "keradetox-keratoliticheskij-tonik",
+      "name": "KERADETOX Кератолитический тоник",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 704100,
+      "oldPriceKopecks": null,
+      "primaryCategory": "toniki",
+      "secondaryTypes": [
+        "Лосьон",
+        "Тоник / Тонер"
+      ],
+      "keyNeeds": [
+        "Глубокое очищение и детоксикация",
+        "Себорегуляция",
+        "Выравнивание цвета и рельефа"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 200,
+      "action": "Кератолитический тоник с AHA-кислотами: удаляет мертвые клетки, освобождает протоки сальных желез, сглаживает рельеф и уменьшает поры.",
+      "application": "Использовать после очищения — эксфолиация повышает эффективность средств, наносимых после тоника.",
+      "ingredients": [
+        "Молочная кислота",
+        "Комплекс AHA",
+        "Сера",
+        "Витамин С",
+        "Ниацинамид",
+        "Экстракты лука, мирта, гамамелиса, черники, шалфея"
+      ],
+      "imageFile": "keradetox-keratoliticheskij-tonik.jpg"
+    },
+    {
+      "externalId": 441,
+      "slug": "scrub-lotion-krem-dlya-snyatiya-makiyazha",
+      "name": "SCRUB LOTION Крем для снятия макияжа",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI MD",
+      "priceKopecks": 640000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "ochishchenie",
+      "secondaryTypes": [
+        "Крем",
+        "Скраб",
+        "Тоник / Тонер"
+      ],
+      "keyNeeds": [
+        "Гигиена",
+        "Глубокое очищение и детоксикация",
+        "Питание"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 200,
+      "action": "Молочко для демакияжа с микрочастицами целлюлозы. Мягко эксфолиирует и глубоко очищает любой тип кожи, включая чувствительную, одновременно питая ее.",
+      "application": null,
+      "ingredients": [
+        "Экстракт алоэ вера",
+        "Гераниол",
+        "Частицы целлюлозы"
+      ],
+      "imageFile": "scrub-lotion-krem-dlya-snyatiya-makiyazha.jpg"
+    },
+    {
+      "externalId": 397,
+      "slug": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba",
+      "name": "BAOBAB OIL ILLUMINATOR AND REPAIRER Восстанавливающее масло баобаба",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 630000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "masla",
+      "secondaryTypes": [
+        "Масло"
+      ],
+      "keyNeeds": [
+        "Регенерация",
+        "Себорегуляция"
+      ],
+      "skinTypes": [
+        "Жирная / Проблемная / Комбинированная"
+      ],
+      "volume": 30,
+      "action": "Легкое некомедогенное масло баобаба для жирной, склонной к акне кожи. Восстанавливает структуры кожи, себорегулирует и защищает от фотостарения.",
+      "application": null,
+      "ingredients": [
+        "Озонированное масло баобаба",
+        "Экстракт розмарина",
+        "Витамин Е"
+      ],
+      "imageFile": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-mas.jpg"
+    },
+    {
+      "externalId": 395,
+      "slug": "rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom",
+      "name": "ROSE HIP OIL + O3 Регенерирующее масло шиповника с озоном",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 377700,
+      "oldPriceKopecks": null,
+      "primaryCategory": "masla",
+      "secondaryTypes": [
+        "Масло"
+      ],
+      "keyNeeds": [
+        "Регенерация",
+        "Увлажнение"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 30,
+      "action": "Регенерирующее масло шиповника с озоном для кожи после 30 лет. Стимулирует выработку коллагена, борется с обезвоженностью, эффективно против шрамов и рубцов.",
+      "application": null,
+      "ingredients": [
+        "Масло шиповника",
+        "Инкапсулированный озон",
+        "Экстракт розмарина",
+        "Витамин Е"
+      ],
+      "imageFile": "rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom.jpg"
+    },
+    {
+      "externalId": 394,
+      "slug": "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom",
+      "name": "JOJOBA OIL + O3 Себорегулирующее масло жожоба с озоном",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 590000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "masla",
+      "secondaryTypes": [
+        "Масло"
+      ],
+      "keyNeeds": [
+        "Себорегуляция",
+        "Снятие признаков раздражения кожи"
+      ],
+      "skinTypes": [
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная"
+      ],
+      "volume": 30,
+      "action": "Масло жожоба с озоном: себорегулирующий и пролонгированный увлажняющий эффект, питает кожу, насыщает кислородом и уменьшает морщины.",
+      "application": null,
+      "ingredients": [
+        "Масло жожоба",
+        "Инкапсулированный озон",
+        "Экстракт розмарина",
+        "Витамин Е"
+      ],
+      "imageFile": "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom.jpg"
+    },
+    {
+      "externalId": 393,
+      "slug": "365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami",
+      "name": "365 NIGHT REPAIR CREAM Обновляющий крем с виноградными кислотами",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 1000000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Выравнивание цвета и рельефа",
+        "Придание сияния коже",
+        "Регенерация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Ночной обновляющий крем с комплексом виноградных кислот (активность как у гликолевой, без фотосенсибилизации). Обновляет кожу, уменьшает пигментацию, придает сияние.",
+      "application": "Использовать для восстанавливающего ухода в ночное время.",
+      "ingredients": [
+        "Экстракт сицилийского винограда",
+        "Масло семян чиа",
+        "Пчелиный воск",
+        "Воск жожоба"
+      ],
+      "imageFile": "365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-k.jpg"
+    },
+    {
+      "externalId": 392,
+      "slug": "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka",
+      "name": "3 FLOWER SERUM Мульти увлажняющая сыворотка",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 770000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "syvorotki",
+      "secondaryTypes": [
+        "Сыворотка"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Снятие признаков раздражения кожи",
+        "Придание сияния коже"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 30,
+      "action": "Сыворотка из гидролатов цветков апельсина, лаванды и гамамелиса. Тонизирует, увлажняет, снимает покраснение, укрепляет сосуды и придает сияние.",
+      "application": null,
+      "ingredients": [
+        "Гидролат цветков апельсина",
+        "Гидролат лаванды",
+        "Гидролат гамамелиса"
+      ],
+      "imageFile": "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka.jpg"
+    },
+    {
+      "externalId": 391,
+      "slug": "chia-protect-oil-maslo-chia-s-ozonom",
+      "name": "CHIA PROTECT OIL Масло чиа с озоном",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 494200,
+      "oldPriceKopecks": null,
+      "primaryCategory": "masla",
+      "secondaryTypes": [
+        "Масло"
+      ],
+      "keyNeeds": [
+        "Снятие признаков раздражения кожи",
+        "Увлажнение",
+        "Повышение защитных свойств кожи"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 30,
+      "action": "Сухое озонированное масло чиа для раздраженной и реактивной кожи. Мгновенно уменьшает зуд и покраснение, повышает эластичность и усиливает кожный иммунитет.",
+      "application": null,
+      "ingredients": [
+        "Масло семян чиа",
+        "Инкапсулированный озон"
+      ],
+      "imageFile": "chia-protect-oil-maslo-chia-s-ozonom.jpg"
+    },
+    {
+      "externalId": 390,
+      "slug": "chia-detox-cream-uvlazhnyayushhij-krem-s-chia",
+      "name": "CHIA DETOX CREAM Увлажняющий крем с чиа",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 1000000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Снятие признаков раздражения кожи"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Увлажняющий крем для чувствительной кожи против фото- и хроностарения. Устраняет шелушение и покраснение, поддерживает гидролипидный баланс, действует антигликационно.",
+      "application": null,
+      "ingredients": [
+        "Гидролат лаванды",
+        "Масло семян чиа",
+        "Пчелиный воск"
+      ],
+      "imageFile": "chia-detox-cream-uvlazhnyayushhij-krem-s-chia.jpg"
+    },
+    {
+      "externalId": 389,
+      "slug": "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj",
+      "name": "PURE MARINE WATER CREAM Увлажняющий крем с морской водой",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 950000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Глубокое очищение и детоксикация"
+      ],
+      "skinTypes": [
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная"
+      ],
+      "volume": 50,
+      "action": "Натуральный увлажняющий крем с термальной морской водой Нуармутье. Решает проблему глубокого обезвоживания, детоксицирует, уменьшает поры; рекомендован жирной и комбинированной коже.",
+      "application": null,
+      "ingredients": [
+        "Термальная морская вода Noirmoutier",
+        "Пчелиный воск и воск жожоба",
+        "Витамин Е",
+        "Масло чиа"
+      ],
+      "imageFile": "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodo.jpg"
+    },
+    {
+      "externalId": 388,
+      "slug": "natural-tonic-naturalnyj-tonik-dlya-licza",
+      "name": "NATURAL TONIC Натуральный тоник для лица",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 371000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "toniki",
+      "secondaryTypes": [
+        "Тоник / Тонер"
+      ],
+      "keyNeeds": [
+        "Гигиена",
+        "Повышение защитных свойств кожи",
+        "Ежедневный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Чувствительная"
+      ],
+      "volume": 200,
+      "action": "Бесспиртовой тоник со слабокислым pH. Деликатно очищает, восстанавливает pH и микробиом кожи, предупреждает воспаления.",
+      "application": "Применять после очищения — подготавливает кожу к дальнейшему уходу.",
+      "ingredients": [
+        "Гидролат лаванды",
+        "Гидролат цветков апельсина",
+        "Глюконолактон",
+        "Алоэ вера",
+        "Аллантоин",
+        "Витамин Е"
+      ],
+      "imageFile": "natural-tonic-naturalnyj-tonik-dlya-licza.jpg"
+    },
+    {
+      "externalId": 387,
+      "slug": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza",
+      "name": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
+      "brand": "ISSEIMI",
+      "line": "ISSEIMI Nat Collection",
+      "priceKopecks": 418600,
+      "oldPriceKopecks": null,
+      "primaryCategory": "ochishchenie",
+      "secondaryTypes": [
+        "Крем",
+        "Молочко"
+      ],
+      "keyNeeds": [
+        "Гигиена",
+        "Глубокое очищение и детоксикация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Чувствительная"
+      ],
+      "volume": 200,
+      "action": "Натуральное молочко: удаляет макияж и глубоко очищает кожу, восстанавливая ее естественный баланс, pH и ламеллярные структуры.",
+      "application": null,
+      "ingredients": [
+        "Пчелиный воск и воск жожоба",
+        "Масло шиповника",
+        "Гидролат цветков апельсина",
+        "Витамин Е"
+      ],
+      "imageFile": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-.jpg"
+    },
+    {
+      "externalId": 285,
+      "slug": "redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi",
+      "name": "REDENSIFICANTЕ Реденсифицирующий крем для зрелой кожи",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 2490000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Выравнивание цвета и рельефа",
+        "Увлажнение"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Лифтинговый крем с тающей текстурой для зрелой кожи. Выравнивает цвет и текстуру, разглаживает морщины, повышает уровни коллагена, эластина и гиалуроновой кислоты.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "Гиалуроновая кислота",
+        "Биомиметические пептиды",
+        "Алоэ вера",
+        "Масло шиповника",
+        "Аллантоин",
+        "Молочная кислота"
+      ],
+      "imageFile": "redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi.png"
+    },
+    {
+      "externalId": 318,
+      "slug": "eye-resistance-krem-dlya-glaz",
+      "name": "EYE RESISTANCE Крем для глаз",
+      "brand": "GLACÉE Skincare",
+      "line": "GLACÉE Skincare Man Line",
+      "priceKopecks": 855000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-vek",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Снятие признаков раздражения кожи",
+        "Увлажнение",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 15,
+      "action": "Легкий крем для глаз с противоотечным действием. Устраняет темные круги и мешки, увлажняет чувствительную кожу век, укрепляет и разглаживает.",
+      "application": null,
+      "ingredients": [
+        "Биокомплекс Phyto-decongestive",
+        "Термальная вода",
+        "NMF",
+        "Ниацинамид",
+        "Кофеин",
+        "Алоэ вера"
+      ],
+      "imageFile": "eye-resistance-krem-dlya-glaz.jpg"
+    },
+    {
+      "externalId": 317,
+      "slug": "hydrocombat-krem-s-ozonom",
+      "name": "HYDROCOMBAT Крем с озоном",
+      "brand": "GLACÉE Skincare",
+      "line": "GLACÉE Skincare Man Line",
+      "priceKopecks": 1250000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Укрепление и лифтинг",
+        "Себорегуляция"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": 50,
+      "action": "Увлажняющий крем-гель с озоном: держит оптимальное увлажнение 12-14 часов, контролирует сальную секрецию, тонизирует и укрепляет кожу.",
+      "application": null,
+      "ingredients": [
+        "Инкапсулированный озон",
+        "Гиалуроновая кислота",
+        "Органический кремний",
+        "Термальная вода",
+        "Камедь тары",
+        "Масло ши",
+        "Витамин Е"
+      ],
+      "imageFile": "hydrocombat-krem-s-ozonom.jpg"
+    },
+    {
+      "externalId": 316,
+      "slug": "balance-toner-tonik-s-morskoj-termalnoj-vodoj",
+      "name": "BALANCE TONER Тоник с морской термальной водой",
+      "brand": "GLACÉE Skincare",
+      "line": "GLACÉE Skincare Man Line",
+      "priceKopecks": 550000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "toniki",
+      "secondaryTypes": [
+        "Тоник / Тонер"
+      ],
+      "keyNeeds": [
+        "Ежедневный уход"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная"
+      ],
+      "volume": 250,
+      "action": "Тонизирующий лосьон на основе термальной воды острова Нуармутье. Восстанавливает кожный барьер и pH, сужает поры, реминерализирует и оздоравливает кожу.",
+      "application": null,
+      "ingredients": [
+        "Термальная вода",
+        "Экстракт алоэ вера",
+        "Глицерин"
+      ],
+      "imageFile": "balance-toner-tonik-s-morskoj-termalnoj-vodoj.jpg"
+    },
+    {
+      "externalId": 309,
+      "slug": "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj",
+      "name": "ENERGEL Очищающий гель с морской термальной водой",
+      "brand": "GLACÉE Skincare",
+      "line": "GLACÉE Skincare Man Line",
+      "priceKopecks": 590000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "ochishchenie",
+      "secondaryTypes": [
+        "Гель"
+      ],
+      "keyNeeds": [
+        "Гигиена",
+        "Глубокое очищение и детоксикация",
+        "Себорегуляция"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": 250,
+      "action": "Энергезирующий гель для мягкого глубокого очищения. Детоксицирует, реминерализирует, уменьшает жирный блеск, размер пор и гиперкератоз.",
+      "application": "Использовать как первый шаг ежедневного ухода.",
+      "ingredients": [
+        "Термальная вода",
+        "Бетаин",
+        "Экстракт мыльного ореха",
+        "Экстракт цезальпинии спиноза",
+        "Энергезирующий комплекс"
+      ],
+      "imageFile": "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj.jpg"
+    },
+    {
+      "externalId": 308,
+      "slug": "serum-triple-accion-syvorotka-trojnogo-dejstviya",
+      "name": "SERUM TRIPLE ACCIÓN Сыворотка тройного действия",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 1560000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "syvorotki",
+      "secondaryTypes": [
+        "Сыворотка",
+        "Флюид"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Придание сияния коже",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": 30,
+      "action": "Флюидизированная сыворотка с тремя факторами роста (EGF, FGF, KGF). Устраняет дегидратацию на всех уровнях, разглаживает кожу и возвращает сияние.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "FGF",
+        "KGF",
+        "NMF"
+      ],
+      "imageFile": "serum-triple-accion-syvorotka-trojnogo-dejstviya.jpg"
+    },
+    {
+      "externalId": 307,
+      "slug": "contour-k-krem-dlya-glaz",
+      "name": "CONTOUR-K Крем для глаз",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 1160000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-vek",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Снятие признаков раздражения кожи",
+        "Увлажнение",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Нормальная",
+        "Сухая"
+      ],
+      "volume": 15,
+      "action": "Легкий крем для орбитальной зоны с витамином К. Устраняет отеки, темные круги и припухлость, увлажняет и укрепляет кожу век.",
+      "application": null,
+      "ingredients": [
+        "Витамин К1",
+        "Алоэ вера",
+        "Кофеин",
+        "Ниацинамид",
+        "Гиалуроновая кислота",
+        "NMF",
+        "EGF",
+        "Масло ши",
+        "Экстракты каштана, арники, гамамелиса"
+      ],
+      "imageFile": "contour-k-krem-dlya-glaz.png"
+    },
+    {
+      "externalId": 306,
+      "slug": "reti-bogatyj-retinolom-krem",
+      "name": "RETI+ Богатый ретинолом крем",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 1650000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Выравнивание цвета и рельефа",
+        "Укрепление и лифтинг",
+        "Регенерация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Насыщенный ночной крем с ретинолом. Активизирует выработку коллагена, разглаживает рельеф, осветляет пигментацию, уплотняет и подтягивает кожу.",
+      "application": "Использовать как ночной уход.",
+      "ingredients": [
+        "Ретинол",
+        "Аллантоин",
+        "Инкапсулированный озон",
+        "Экстракт алоэ вера",
+        "Масло шиповника",
+        "Масло ши",
+        "Витамин Е"
+      ],
+      "imageFile": "reti-bogatyj-retinolom-krem.png"
+    },
+    {
+      "externalId": 305,
+      "slug": "gen-adn-ukreplyayushhij-krem",
+      "name": "GEN ADN Укрепляющий крем",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 1670000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Укрепление и лифтинг",
+        "Регенерация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Крем-гель для лифтинга и коррекции возрастных изменений. Противостоит гравитационному птозу, разглаживает морщины и формирует четкий овал лица.",
+      "application": null,
+      "ingredients": [
+        "EGF",
+        "Органический кремний",
+        "ДМАЕ",
+        "Витамин В9",
+        "Биомиметический пептид",
+        "Инкапсулированный озон",
+        "Масло ши",
+        "Гидролизат эластина"
+      ],
+      "imageFile": "gen-adn-ukreplyayushhij-krem.png"
+    },
+    {
+      "externalId": 304,
+      "slug": "antiox-c-antioksidantnyj-krem",
+      "name": "ANTIOX-C Антиоксидантный крем",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 1220000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Выравнивание цвета и рельефа",
+        "Придание сияния коже",
+        "Повышение защитных свойств кожи"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Антиоксидантный крем с витаминами С и Е. Блокирует оксидантный стресс, уменьшает гиперпигментацию, выравнивает тон и возвращает коже сияние.",
+      "application": null,
+      "ingredients": [
+        "Витамин С",
+        "Аминокислоты (лизин, пролин, цистеин)",
+        "Витамины В6, В3, Е",
+        "Инкапсулированный озон",
+        "Масло ши"
+      ],
+      "imageFile": "antiox-c-antioksidantnyj-krem.jpg"
+    },
+    {
+      "externalId": 303,
+      "slug": "hidrorrevitalizante-vosstanavlivayushhij-krem",
+      "name": "HIDRORREVITALIZANTE Восстанавливающий крем",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 1750000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Укрепление и лифтинг"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": 50,
+      "action": "Ультраувлажняющий крем с тающей текстурой против потери влаги в эпидермисе и дерме. EGF, FGF и биомиметический пептид стимулируют выработку собственной гиалуроновой кислоты.",
+      "application": null,
+      "ingredients": [
+        "FGF",
+        "EGF",
+        "Биомиметический пептид",
+        "NMF"
+      ],
+      "imageFile": "hidrorrevitalizante-vosstanavlivayushhij-krem.png"
+    },
+    {
+      "externalId": 293,
+      "slug": "dinamizante-vosstanavlivayushhij-krem",
+      "name": "DINAMIZANTE Восстанавливающий крем",
+      "brand": "GLACÉE Skincare",
+      "line": null,
+      "priceKopecks": 1530000,
+      "oldPriceKopecks": null,
+      "primaryCategory": "kremy-dlya-litsa-i-shei",
+      "secondaryTypes": [
+        "Крем"
+      ],
+      "keyNeeds": [
+        "Увлажнение",
+        "Повышение защитных свойств кожи",
+        "Регенерация"
+      ],
+      "skinTypes": [
+        "Для всех типов кожи",
+        "Жирная / Проблемная / Комбинированная",
+        "Нормальная"
+      ],
+      "volume": 50,
+      "action": "Легкий антивозрастной крем со стволовыми клетками яблони (сертификат ECOCERT). Идеален для молодой кожи с начальными признаками снижения тонуса.",
+      "application": null,
+      "ingredients": [
+        "Стволовые клетки яблони Malus domestica",
+        "EGF",
+        "Масло баобаба",
+        "Масло зародышей пшеницы",
+        "Витамин С"
+      ],
+      "imageFile": "dinamizante-vosstanavlivayushhij-krem.png"
+    }
+  ]
 }

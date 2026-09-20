@@ -54,7 +54,7 @@ export function OrderPage() {
           <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
             <IconSearch className="w-6 h-6 text-muted-foreground" />
           </div>
-          <h1 className="text-2xl font-heading font-bold text-foreground mb-2">
+          <h1 className="text-h3 md:text-h2 font-heading font-bold text-foreground mb-2">
             Заказ не найден
           </h1>
           <p className="text-body text-muted-foreground mb-8">

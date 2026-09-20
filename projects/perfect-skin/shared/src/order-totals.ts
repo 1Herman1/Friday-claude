@@ -1,5 +1,5 @@
-// NOTE: The 'professional' branch is kept for test compatibility only.
-// The shop is B2C — always 'retail' in production.
+// 'professional' — заказ одобренного косметолога по оптовым ценам (order.service.ts);
+// промокод на этом прайсе не применяется, скидка уже в цене.
 export type PriceList = 'retail' | 'professional'
 
 export type DeliveryMethod = 'pickup' | 'pvz' | 'courier'

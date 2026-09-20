@@ -11,13 +11,13 @@ interface ProductGridProps {
 
 function ProductCardSkeleton() {
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm">
-      <div className="w-full h-64 bg-gray-200 animate-pulse" />
-      <div className="p-4 space-y-3">
-        <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
-        <div className="h-5 bg-gray-200 rounded animate-pulse" />
-        <div className="h-4 bg-gray-200 rounded animate-pulse w-1/3" />
-        <div className="h-11 bg-gray-200 rounded-full animate-pulse" />
+    <div className="bg-card rounded-block overflow-hidden">
+      <div className="w-full h-64 bg-muted animate-pulse" />
+      <div className="p-5 space-y-3">
+        <div className="h-4 bg-muted rounded animate-pulse w-1/2" />
+        <div className="h-5 bg-muted rounded animate-pulse" />
+        <div className="h-4 bg-muted rounded animate-pulse w-1/3" />
+        <div className="h-11 bg-muted rounded-pill animate-pulse" />
       </div>
     </div>
   )
@@ -28,7 +28,7 @@ export function ProductGrid({ products, onReset, loading, onAddToCart }: Product
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
         {Array.from({ length: 6 }).map((_, i) => (
           <ProductCardSkeleton key={i} />
         ))}
@@ -65,7 +65,7 @@ export function ProductGrid({ products, onReset, loading, onAddToCart }: Product
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
       {products.map((product, i) => (
         <ProductCard
           eager={i < 3}

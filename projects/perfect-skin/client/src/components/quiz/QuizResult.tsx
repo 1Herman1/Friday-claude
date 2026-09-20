@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { QuizResult as QuizResultType } from '@/lib/quiz-match'
-import { formatPrice } from '@/lib/format'
+import { PriceTag } from '@/components/product/PriceTag'
 import { useCart } from '@/context/CartContext'
 import { IconCheck, IconArrowRight } from '../icons'
 
@@ -112,7 +112,12 @@ export function QuizResult({ result, onRetry, onClose }: QuizResultProps) {
                     </div>
 
                     <p className="text-sm font-bold text-foreground">
-                      {formatPrice(step.product.minPrice)}
+                      <PriceTag
+                        price={step.product.minPrice}
+                        oldPrice={step.product.oldPrice}
+                        hidden={step.product.priceHidden}
+                        size="sm"
+                      />
                     </p>
                   </div>
                 </div>

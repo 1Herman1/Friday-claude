@@ -5,7 +5,7 @@ import { IconSearch, IconClose } from '@/components/icons'
 import { useProductSearch } from '@/hooks/useProductSearch'
 import { useDrawer } from '@/context/DrawerContext'
 import { lockBodyScroll, unlockBodyScroll } from '@/lib/scroll-lock'
-import { formatPrice } from '@/lib/format'
+import { PriceTag } from '@/components/product/PriceTag'
 
 interface SearchModalProps {
   open: boolean
@@ -152,7 +152,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
           </div>
 
           {/* Content */}
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-[456px] overflow-y-auto">
             {/* Empty State */}
             {showEmpty && (
               <div className="px-4 py-8 text-center">
@@ -213,8 +213,13 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
                           {product.brand.name}
                         </p>
                       )}
-                      <p className="text-xs text-primary font-semibold mt-1">
-                        {formatPrice(product.minPrice)}
+                      <p className="text-xs font-semibold mt-1">
+                        <PriceTag
+                          price={product.minPrice}
+                          oldPrice={product.oldPrice}
+                          hidden={product.priceHidden}
+                          size="sm"
+                        />
                       </p>
                     </div>
                   </button>

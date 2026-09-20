@@ -728,4 +728,102 @@ describe('Checkout Integration Tests', () => {
     const orderData = JSON.parse(orderResponse.body)
     expect(orderData.error.code).toBe('EMAIL_REQUIRED')
   })
+
+  // (i) Guest order track: correct number+email → 200, wrong email → 404
+  it('(i) Guest order track: correct pair returns 200, wrong email returns 404', async () => {
+    const guestEmail = `test-${Date.now()}-${Math.random().toString(36).slice(2)}@ps-test.local`
+    const wrongEmail = `wrong-${Date.now()}@ps-test.local`
+    const code = '123456'
+
+    // Get a product and create guest order
+    const product = await db.product.findFirst({
+      where: {
+        isActive: true,
+        deletedAt: null,
+        variants: {
+          some: {
+            isActive: true,
+            stock: { gte: 1 },
+            retailPrice: { gt: 0 },
+          },
+        },
+      },
+      include: {
+        variants: {
+          where: { isActive: true, stock: { gte: 1 } },
+          take: 1,
+        },
+      },
+    })
+
+    expect(product).toBeDefined()
+    const variant = product!.variants[0]
+
+    // Guest adds item
+    const addResponse = await app.inject({
+      method: 'POST',
+      url: '/api/v1/cart/items',
+      payload: { variantId: variant.id, quantity: 1 },
+    })
+
+    const setCookie = ([] as string[]).concat(addResponse.headers['set-cookie'] as any || [])
+    const sessionCookie = setCookie?.find((c) => c.includes('ps_sid'))?.split(';')[0]
+
+    // Get cart for totals
+    const cartResponse = await app.inject({
+      method: 'GET',
+      url: '/api/v1/cart',
+      headers: { cookie: sessionCookie! },
+    })
+
+    const cartData = JSON.parse(cartResponse.body)
+
+    // Guest creates order with email
+    const orderResponse = await app.inject({
+      method: 'POST',
+      url: '/api/v1/orders',
+      headers: { cookie: sessionCookie! },
+      payload: {
+        deliveryMethod: 'pickup',
+        recipient: { name: 'Guest User', phone: '+79999999999', email: guestEmail },
+        expectedTotal: cartData.subtotal,
+      },
+    })
+
+    expect(orderResponse.statusCode).toBe(201)
+    const orderData = JSON.parse(orderResponse.body)
+    const orderNumber = orderData.number
+    expect(orderNumber).toMatch(/^PS-\d{6}$/)
+
+    // Track with correct email → 200
+    const trackCorrectResponse = await app.inject({
+      method: 'GET',
+      url: `/api/v1/orders/track?number=${orderNumber}&email=${encodeURIComponent(guestEmail)}`,
+    })
+
+    expect(trackCorrectResponse.statusCode).toBe(200)
+    const trackData = JSON.parse(trackCorrectResponse.body)
+    expect(trackData.number).toBe(orderNumber)
+    expect(trackData.status).toBe('new')
+
+    // Track with wrong email → 404 ORDER_NOT_FOUND
+    const trackWrongResponse = await app.inject({
+      method: 'GET',
+      url: `/api/v1/orders/track?number=${orderNumber}&email=${encodeURIComponent(wrongEmail)}`,
+    })
+
+    expect(trackWrongResponse.statusCode).toBe(404)
+    const trackWrongData = JSON.parse(trackWrongResponse.body)
+    expect(trackWrongData.error.code).toBe('ORDER_NOT_FOUND')
+
+    // Track with non-existent number → 404 ORDER_NOT_FOUND
+    const trackNotFoundResponse = await app.inject({
+      method: 'GET',
+      url: `/api/v1/orders/track?number=PS-999999&email=${encodeURIComponent(guestEmail)}`,
+    })
+
+    expect(trackNotFoundResponse.statusCode).toBe(404)
+    const trackNotFoundData = JSON.parse(trackNotFoundResponse.body)
+    expect(trackNotFoundData.error.code).toBe('ORDER_NOT_FOUND')
+  })
 })

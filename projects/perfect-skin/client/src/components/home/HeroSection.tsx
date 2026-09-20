@@ -5,7 +5,7 @@ export function HeroSection() {
   const { openQuiz } = useDrawer()
 
   return (
-    <section className="bg-background pt-12 md:pt-24 pb-20 md:pb-32">
+    <section className="bg-background pt-8 md:pt-12 pb-10 md:pb-14">
       <div className="container-app">
         {/* Grid: left (text) + right (card with accent bg) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-20 items-start">
@@ -17,10 +17,12 @@ export function HeroSection() {
             </div>
 
             {/* Main heading */}
-            <h1 className="text-display font-heading font-bold mb-2 md:mb-10 leading-tight">
-              ПРО-КОСМЕТИКА
-              <span className="block">ИЗ ИСПАНИИ</span>
-            </h1>
+            <div className="max-w-[680px]">
+              <h1 className="text-5xl md:text-6xl font-heading font-bold mb-2 md:mb-10 leading-[1.12]">
+                ПРО-КОСМЕТИКА
+                <span className="block">ИЗ ИСПАНИИ</span>
+              </h1>
+            </div>
 
             {/* Subtitle */}
             <p className="text-body leading-body text-muted-foreground mb-10 md:mb-3 max-w-prose">
@@ -29,7 +31,7 @@ export function HeroSection() {
             </p>
 
             {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-1 mb-3 md:mb-4">
+            <div className="flex flex-col sm:flex-row gap-3 mb-6 md:mb-10">
               <Link
                 to="/catalog"
                 className="inline-flex items-center justify-center bg-primary text-primary-foreground font-heading font-bold px-6 py-3 rounded-pill transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-h-11"
@@ -38,7 +40,7 @@ export function HeroSection() {
               </Link>
               <button
                 onClick={openQuiz}
-                className="inline-flex items-center justify-center bg-accent text-foreground font-heading font-bold px-6 py-3 rounded-pill border-2 border-accent transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-h-11"
+                className="inline-flex items-center justify-center border border-primary text-primary bg-transparent font-heading font-bold px-6 py-3 rounded-pill transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-h-11"
               >
                 Подобрать уход
               </button>
@@ -61,10 +63,20 @@ export function HeroSection() {
           {/* RIGHT: Accent background with product card */}
           <div className="relative min-h-[500px] flex items-start justify-end">
             {/* Accent bg block (golden) */}
-            <div className="absolute inset-0 bg-accent rounded-block hidden md:block" aria-hidden="true" />
+            <picture className="absolute inset-0 hidden md:block">
+              <source srcSet="/photos/m4.webp" type="image/webp" />
+              <img
+                src="/photos/m4.png"
+                className="w-full h-full object-cover rounded-block"
+                alt="Косметика ISSEIMI в воде"
+                width={1122}
+                height={1402}
+                fetchPriority="high"
+              />
+            </picture>
 
             {/* Product card (beige) */}
-            <div className="relative z-10 bg-background rounded-block p-2 md:p-10 max-w-[320px] ml-auto mt-[180px] md:-ml-10">
+            <Link to="/product/bee-venom-cream-antivozrastnoj-krem" className="relative z-10 bg-background rounded-block p-6 md:p-10 max-w-[320px] ml-auto mt-32 md:mt-48 md:-ml-10 block hover:no-underline">
               {/* Badge */}
               <div className="text-label font-bold text-gold-text mb-2">
                 ХИТ ПРОДАЖ · ISSEIMI BASE
@@ -86,10 +98,10 @@ export function HeroSection() {
               </div>
 
               {/* CTA Button */}
-              <button className="w-full bg-primary text-primary-foreground font-heading font-bold py-3 px-6 rounded-pill transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-h-11">
+              <span className="w-full bg-primary text-primary-foreground font-heading font-bold py-3 px-6 rounded-pill transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-h-11 flex items-center justify-center">
                 В корзину
-              </button>
-            </div>
+              </span>
+            </Link>
           </div>
         </div>
       </div>

@@ -46,7 +46,7 @@ export function RelatedProducts({
           ))
         ) : (
           relatedProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} aspectRatio="4/5" />
           ))
         )}
       </div>

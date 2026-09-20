@@ -58,10 +58,16 @@ export function CheckoutPage() {
   const [submitError, setSubmitError] = useState('')
   const [orderPlaced, setOrderPlaced] = useState<Order | null>(null)
 
-  // Загружаем методы доставки
+  // Загружаем методы доставки (только если корзина не пуста)
   useEffect(() => {
     let cancelled = false
     const loadMethods = async () => {
+      // Не запрашиваем методы доставки, если корзина пуста
+      if (!cart || cart.items.length === 0) {
+        setLoading(false)
+        return
+      }
+
       try {
         const result = await api.getDeliveryMethods(appliedPromo?.code)
         if (cancelled) return
@@ -84,7 +90,7 @@ export function CheckoutPage() {
     return () => {
       cancelled = true
     }
-  }, [appliedPromo?.code])
+  }, [appliedPromo?.code, cart?.items.length])
 
   const currentMethod = methods.find((m) => m.code === selectedMethod)
   const isDemoMode = import.meta.env.VITE_API_MODE === 'snapshot'
@@ -139,6 +145,20 @@ export function CheckoutPage() {
       return
     }
 
+    // Сервер принимает только +7XXXXXXXXXX, а подсказка поля показывает
+    // формат со скобками — приводим любой человеческий ввод к каноническому.
+    const digits = recipient.phone.replace(/\D/g, '')
+    const normalizedPhone =
+      digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))
+        ? `+7${digits.slice(1)}`
+        : digits.length === 10
+          ? `+7${digits}`
+          : recipient.phone
+    if (!/^\+7\d{10}$/.test(normalizedPhone)) {
+      setSubmitError('Проверьте номер телефона — нужен российский номер из 10 цифр')
+      return
+    }
+
     setSubmitting(true)
     setSubmitError('')
 
@@ -147,7 +167,7 @@ export function CheckoutPage() {
         deliveryMethod: selectedMethod,
         recipient: {
           name: recipient.name,
-          phone: recipient.phone,
+          phone: normalizedPhone,
           ...(recipient.email && { email: recipient.email }),
         },
         expectedTotal: total,
@@ -245,7 +265,7 @@ export function CheckoutPage() {
                 Войти
               </Link>
               <p className="text-sm text-muted-foreground mt-4">
-                Или проверяйте статус по номеру заказа и email — вход не обязателен со ссылкой{' '}
+                Или проверяйте статус по номеру заказа и email — вход не обязателен:{' '}
                 <Link to={`/track?number=${orderPlaced.number}`} className="underline underline-offset-2">
                   Проверить статус без входа
                 </Link>
@@ -306,7 +326,7 @@ export function CheckoutPage() {
 
   return (
     <div className="container-app py-12 md:py-16">
-      <h1 className="text-2xl font-heading font-bold text-foreground mb-8 uppercase tracking-tight">
+      <h1 className="text-h3 md:text-h2 font-heading font-bold text-foreground mb-8 uppercase tracking-tight">
         Оформление заказа
       </h1>
 
@@ -412,7 +432,7 @@ export function CheckoutPage() {
                       value={pvzCode}
                       onChange={(e) => setPvzCode(e.target.value)}
                       placeholder="Например: 62901"
-                      className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                      className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                     />
                   </div>
                 )}
@@ -436,7 +456,7 @@ export function CheckoutPage() {
                             setAddress({ ...address, city: e.target.value })
                           }
                           placeholder="Москва"
-                          className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                          className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                         />
                       </div>
                       <div>
@@ -455,7 +475,7 @@ export function CheckoutPage() {
                             setAddress({ ...address, index: e.target.value })
                           }
                           placeholder="123456"
-                          className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                          className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                         />
                       </div>
                     </div>
@@ -474,7 +494,7 @@ export function CheckoutPage() {
                           setAddress({ ...address, street: e.target.value })
                         }
                         placeholder="Тверская"
-                        className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                        className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
@@ -493,7 +513,7 @@ export function CheckoutPage() {
                             setAddress({ ...address, house: e.target.value })
                           }
                           placeholder="1"
-                          className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                          className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                         />
                       </div>
                       <div>
@@ -511,7 +531,7 @@ export function CheckoutPage() {
                             setAddress({ ...address, apartment: e.target.value })
                           }
                           placeholder="101"
-                          className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                          className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                         />
                       </div>
                     </div>
@@ -540,7 +560,7 @@ export function CheckoutPage() {
                         setRecipient({ ...recipient, name: e.target.value })
                       }
                       placeholder="Иван Сидоров"
-                      className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                      className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                     />
                   </div>
                   <div>
@@ -559,7 +579,7 @@ export function CheckoutPage() {
                         setRecipient({ ...recipient, phone: e.target.value })
                       }
                       placeholder="+7 (901) 123-45-67"
-                      className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                      className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                     />
                   </div>
                   <div>
@@ -578,7 +598,7 @@ export function CheckoutPage() {
                         setRecipient({ ...recipient, email: e.target.value })
                       }
                       placeholder="ivan@example.com"
-                      className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                      className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                     />
                     {!isAuthed && (
                       <p className="text-xs text-muted-foreground mt-2">
@@ -617,7 +637,7 @@ export function CheckoutPage() {
                         setPromoError('')
                       }}
                       placeholder="Введите код"
-                      className="flex-1 px-4 py-3 text-base rounded-pill border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                      className="flex-1 px-4 py-3 text-base rounded-pill border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                     />
                     <button
                       onClick={handleApplyPromo}
@@ -646,7 +666,7 @@ export function CheckoutPage() {
                   maxLength={500}
                   placeholder="Напишите пожелания к доставке…"
                   rows={3}
-                  className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 resize-none"
+                  className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 resize-none"
                 />
                 <p className="text-xs text-muted-foreground mt-2">
                   {comment.length}/500
@@ -706,8 +726,12 @@ export function CheckoutPage() {
             </div>
 
             <div className="mb-4 text-xs text-muted-foreground space-y-2">
-              <p>Оплата: СБП или карта. Косметика надлежащего качества возврату не подлежит (ПП РФ №55).</p>
+              <p>Оплата: СБП или карта.</p>
               <p>Нажимая кнопку, вы соглашаетесь с <a href="/offer" target="_blank" rel="noopener" className="underline underline-offset-2">условиями оферты</a></p>
+            </div>
+
+            <div className="mb-4 p-3 bg-muted rounded-block text-xs text-muted-foreground border border-border">
+              <p>Косметика надлежащего качества обмену и возврату не подлежит (ПП РФ №55).</p>
             </div>
 
             <button

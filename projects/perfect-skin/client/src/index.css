@@ -4,17 +4,17 @@
 
 @layer base {
   h1 {
-    @apply text-display font-heading font-bold uppercase leading-[1.02];
+    @apply text-display font-heading font-bold uppercase leading-[1.12];
     letter-spacing: -0.015em;
   }
 
   h2 {
-    @apply text-h2 font-heading font-bold uppercase leading-[1.02];
+    @apply text-h2 font-heading font-bold uppercase leading-[1.12];
     letter-spacing: -0.015em;
   }
 
   h3 {
-    @apply text-h3 font-heading font-bold leading-[1.02];
+    @apply text-h3 font-heading font-bold leading-[1.12];
     letter-spacing: -0.015em;
   }
 
@@ -39,7 +39,7 @@
 
 @layer components {
   .container-app {
-    @apply max-w-[1440px] mx-auto px-6 sm:px-24;
+    @apply max-w-[1440px] mx-auto px-6 md:px-12 xl:px-24;
   }
 
   .spine-vertical {

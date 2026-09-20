@@ -3,10 +3,14 @@ export interface Variant {
   volumeValue: number
   volumeUnit: 'ml' | 'g' | 'pcs'
   volumeLabel: string
-  retailPrice: number
+  retailPrice: number | null
   oldRetailPrice: number | null
+  wholesalePrice?: number | null
   stock: number
   sku: string | null
+  // Фасовка только для кабинета: гостю и рознице цена не отдаётся (null).
+  isProfessional?: boolean
+  priceHidden?: boolean
 }
 
 export interface Brand {
@@ -30,8 +34,10 @@ export interface ProductCard {
   image: string | null
   skinTypes: string[]
   needs: string[]
-  minPrice: number
+  minPrice: number | null
   oldPrice: number | null
+  priceHidden?: boolean
+  isProfessional?: boolean
   inStock: boolean
   variants: Variant[]
 }
@@ -84,7 +90,7 @@ export interface CartItem {
   }
   variant: {
     volumeLabel: string
-    retailPrice: number
+    retailPrice: number | null
     oldRetailPrice: number | null
     stock: number
   }

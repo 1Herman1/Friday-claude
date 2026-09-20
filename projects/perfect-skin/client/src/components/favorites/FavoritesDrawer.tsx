@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useFavorites } from '@/context/FavoritesContext'
 import { useCart } from '@/context/CartContext'
-import { formatPrice } from '@/lib/format'
+import { PriceTag } from '@/components/product/PriceTag'
 import { fetchApi } from '@/lib/api'
 import { IconHeartSolid, IconHeart } from '../icons'
 import SideDrawer from '../cart/SideDrawer'
@@ -219,15 +219,12 @@ export default function FavoritesDrawer({ open, onClose }: Props) {
               )}
 
               {/* Price */}
-              <div className="mt-2 flex items-center justify-between gap-2">
-                <span className="text-sm font-bold text-foreground tabular-nums">
-                  {formatPrice(variant.retailPrice)}
-                </span>
-                {variant.oldRetailPrice && (
-                  <span className="text-xs text-muted-foreground line-through tabular-nums">
-                    {formatPrice(variant.oldRetailPrice)}
-                  </span>
-                )}
+              <div className="mt-2">
+                <PriceTag
+                  price={variant.retailPrice}
+                  oldPrice={variant.oldRetailPrice}
+                  size="sm"
+                />
               </div>
             </div>
 

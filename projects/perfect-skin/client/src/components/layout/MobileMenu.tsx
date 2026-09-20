@@ -11,6 +11,7 @@ const navItems = [
   { label: 'Каталог', href: '/catalog' },
   { label: 'Мои заказы', href: '/orders' },
   { label: 'Бренды', href: '/brands' },
+  { label: 'Специалистам', href: '/pro' },
   { label: 'О компании', href: '/about' },
   { label: 'Контакты', href: '/contacts' },
 ]

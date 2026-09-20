@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { CatalogGrid } from '@/components/catalog/CatalogGrid'
 import { ProductGrid } from '@/components/catalog/ProductGrid'
 import { Filters } from '@/components/catalog/Filters'
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { useCatalogTree } from '@/hooks/useCatalogTree'
 import { useCatalogList } from '@/hooks/useCatalogList'
 import { useCatalogFacets } from '@/hooks/useCatalogFacets'
@@ -81,6 +82,19 @@ export function CatalogPage() {
   // Show listing with filters
   const { data: products, loading: productsLoading, error: productsError } = useCatalogList(filters)
   const { data: facets } = useCatalogFacets(facetFilters)
+  const { data: categoriesTree } = useCatalogTree()
+
+  // Find selected category name
+  const selectedCategoryName = useMemo(() => {
+    if (!slug || slug === 'all' || !categoriesTree) return null
+    for (const cat of categoriesTree) {
+      if (cat.slug === slug) return cat.name
+      for (const subcat of cat.children || []) {
+        if (subcat.slug === slug) return subcat.name
+      }
+    }
+    return null
+  }, [slug, categoriesTree])
 
   const handleFilterChange = (newFilters: any) => {
     const params = new URLSearchParams()
@@ -150,8 +164,23 @@ export function CatalogPage() {
     <div className="container-app py-12 md:py-24">
       {/* Header */}
       <div className="mb-6">
+        {slug && slug !== 'all' && (
+          <Breadcrumbs
+            items={[
+              { label: 'Главная', href: '/' },
+              { label: 'Каталог', href: '/catalog/all' },
+              { label: selectedCategoryName || slug },
+            ]}
+          />
+        )}
         <h1 className="text-display font-heading font-bold mb-2 md:mb-3">
-          {filters.q ? `Результаты поиска: „${filters.q}"` : slug === 'all' ? 'Все средства' : 'Каталог'}
+          {filters.pro
+            ? 'Для кабинета'
+            : filters.q
+              ? `Результаты поиска: „${filters.q}"`
+              : slug === 'all'
+                ? 'Все средства'
+                : selectedCategoryName || 'Каталог'}
         </h1>
         {filters.q && (
           <button
@@ -178,9 +207,34 @@ export function CatalogPage() {
         </div>
       )}
 
+      {/* Mobile: Filters and Sort on one row */}
+      <div className="lg:hidden flex items-center gap-3 mb-4">
+        <Filters
+          facets={facets}
+          selectedFilters={facetFilters}
+          onFilterChange={handleFilterChange}
+          showCategories={slug === 'all'}
+        />
+        <select
+          value={filters.sort || 'newest'}
+          onChange={e => handleSortChange(e.target.value)}
+          className="flex-1 px-3 py-2 border border-border-strong rounded text-sm text-foreground bg-card min-h-11"
+        >
+          <option value="newest">Новинки</option>
+          <option value="price_asc">Цена: возрастание</option>
+          <option value="price_desc">Цена: убывание</option>
+          <option value="popular">Популярные</option>
+        </select>
+      </div>
+
+      {/* Mobile: Counter */}
+      <p className="lg:hidden text-xs text-muted-foreground mb-4">
+        {products ? `Показано ${Math.min((filters.offset || 0) + (products.items?.length || 0), products.total)} из ${products.total}` : ''}
+      </p>
+
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
         {/* Filters */}
-        <div className="lg:col-span-1">
+        <div className="hidden lg:block lg:col-span-1">
           <Filters
             facets={facets}
             selectedFilters={facetFilters}
@@ -191,15 +245,15 @@ export function CatalogPage() {
 
         {/* Products */}
         <div className="lg:col-span-3">
-          {/* Sort and Info */}
-          <div className="flex items-center justify-between mb-6">
+          {/* Desktop: Sort and Info */}
+          <div className="hidden lg:flex lg:items-center lg:justify-between lg:mb-6">
             <p className="text-sm text-muted-foreground">
               {products ? `Показано ${Math.min((filters.offset || 0) + (products.items?.length || 0), products.total)} из ${products.total}` : ''}
             </p>
             <select
               value={filters.sort || 'newest'}
               onChange={e => handleSortChange(e.target.value)}
-              className="px-1 py-0.5 border border-border rounded text-sm text-foreground bg-card min-h-10"
+              className="px-3 py-2 border border-border-strong rounded text-sm text-foreground bg-card min-h-11"
             >
               <option value="newest">Новинки</option>
               <option value="price_asc">Цена: возрастание</option>

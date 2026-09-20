@@ -43,7 +43,8 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         })
       }
 
-      const formatted = cartService.formatCartResponse(cart)
+      const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
+      const formatted = cartService.formatCartResponse(cart, viewer)
       reply.status(200).send(formatted)
     }
   )
@@ -108,7 +109,8 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         })
       }
 
-      const cart = await cartService.addItem(owner, variantId, quantity)
+      const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
+      const cart = await cartService.addItem(owner, variantId, quantity, viewer)
       reply.status(201).send(cart)
     }
   )
@@ -154,8 +156,9 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         throw new ApiError(401, 'UNAUTHORIZED', 'Требуется авторизация')
       }
 
+      const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
       const { itemId } = request.params
-      const cart = await cartService.updateItem(owner, itemId, result.data.quantity)
+      const cart = await cartService.updateItem(owner, itemId, result.data.quantity, viewer)
       reply.status(200).send(cart)
     }
   )
@@ -178,8 +181,9 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         throw new ApiError(401, 'UNAUTHORIZED', 'Требуется авторизация')
       }
 
+      const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
       const { itemId } = request.params as { itemId: string }
-      const cart = await cartService.deleteItem(owner, itemId)
+      const cart = await cartService.deleteItem(owner, itemId, viewer)
       reply.status(200).send(cart)
     }
   )
@@ -208,7 +212,8 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         })
       }
 
-      const cart = await cartService.clearCart(owner)
+      const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
+      const cart = await cartService.clearCart(owner, viewer)
       reply.status(200).send(cart)
     }
   )

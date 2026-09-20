@@ -1,36 +1,43 @@
 import { useEffect, useState } from 'react'
-import { formatPrice } from '@/lib/format'
+import { Link } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
 import { useDrawer } from '@/context/DrawerContext'
 import { useFavorites } from '@/context/FavoritesContext'
+import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { IconHeart, IconHeartSolid } from '../icons'
+import { PriceTag } from './PriceTag'
 import type { ProductCardExtended } from '@/types/api'
 
 interface StickyProductPanelProps {
   product: ProductCardExtended
   buttonRef: React.RefObject<HTMLDivElement>
+  selectedVariantId?: string
   onAddToCart?: () => void
 }
 
 export function StickyProductPanel({
   product,
   buttonRef,
+  selectedVariantId,
   onAddToCart,
 }: StickyProductPanelProps) {
   const [isVisible, setIsVisible] = useState(false)
   const { addItem } = useCart()
   const { openCart } = useDrawer()
   const { isFavorite, toggle } = useFavorites()
+  const { user } = useAuth()
   const [addingState, setAddingState] = useState<'idle' | 'loading' | 'success'>('idle')
 
+  const selectedVariant = product?.variants?.find(v => v.id === selectedVariantId) || product?.variants?.[0]
   const isFav = isFavorite(product.slug)
+  const isVariantProOnly = selectedVariant?.priceHidden && !isApprovedPro(user)
 
   const handleAddToCart = async () => {
-    if (!product.inStock || product.variants.length === 0) return
+    if (!product.inStock || !selectedVariant) return
 
     try {
       setAddingState('loading')
-      await addItem(product.variants[0].id, 1)
+      await addItem(selectedVariant.id, 1)
       setAddingState('success')
       openCart()
 
@@ -70,52 +77,47 @@ export function StickyProductPanel({
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-4 shadow-lg z-40 animate-in slide-in-from-bottom-2">
-      <div className="container-app flex items-center gap-1">
-        {/* Image */}
-        {product.image && (
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-20 h-20 object-cover rounded"
+      <div className="container-app flex items-center justify-between gap-4">
+        {/* Price */}
+        <p className="font-semibold text-foreground whitespace-nowrap tabular-nums text-lg">
+          <PriceTag
+            price={selectedVariant?.retailPrice || null}
+            oldPrice={selectedVariant?.oldRetailPrice || null}
+            hidden={selectedVariant?.priceHidden}
+            size="sm"
           />
-        )}
-
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <h3 className="font-sans font-bold text-foreground truncate">
-            {product.name}
-          </h3>
-          {product.variants?.[0] && (
-            <p className="text-sm text-muted-foreground">
-              {product.variants[0].volumeLabel}
-            </p>
-          )}
-          <p className="font-semibold text-foreground mt-1">
-            {formatPrice(product.minPrice)}
-          </p>
-        </div>
+        </p>
 
         {/* Button + Favorite */}
         <div className="flex gap-2 flex-shrink-0">
-          <button
-            onClick={handleAddToCart}
-            disabled={!product.inStock || addingState === 'loading'}
-            className="px-6 py-0.5 bg-primary text-primary-foreground font-semibold rounded-full hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity whitespace-nowrap min-h-10"
-          >
-            {addingState === 'success'
-              ? 'Добавлено ✓'
-              : addingState === 'loading'
-                ? 'Добавляю...'
-                : product.inStock
-                  ? 'В корзину'
-                  : 'Недоступно'}
-          </button>
+          {isVariantProOnly ? (
+            <Link
+              to="/pro/register"
+              className="px-6 py-2.5 bg-accent text-accent-foreground text-center font-semibold rounded-full hover:opacity-90 transition-opacity whitespace-nowrap min-h-11 flex items-center"
+            >
+              Специалистам
+            </Link>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              disabled={!product.inStock || addingState === 'loading'}
+              className="px-6 py-2.5 bg-primary text-primary-foreground font-semibold rounded-full hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity whitespace-nowrap min-h-11"
+            >
+              {addingState === 'success'
+                ? 'Добавлено ✓'
+                : addingState === 'loading'
+                  ? 'Добавляю...'
+                  : product.inStock
+                    ? 'В корзину'
+                    : 'Недоступно'}
+            </button>
+          )}
 
           <button
             onClick={() => toggle(product.slug)}
             aria-pressed={isFav}
             aria-label={isFav ? 'Убрать из избранного' : 'Добавить в избранное'}
-            className="w-10 h-10 flex items-center justify-center hover:bg-muted rounded-full transition-colors duration-200 flex-shrink-0"
+            className="w-11 h-11 flex items-center justify-center hover:bg-muted rounded-full transition-colors duration-200 flex-shrink-0"
           >
             {isFav ? (
               <IconHeartSolid className="w-5 h-5 text-primary" />

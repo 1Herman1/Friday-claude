@@ -1,6 +1,7 @@
 import { db, type Prisma } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
 import type { FastifyRequest } from 'fastify'
+import { isWholesaleViewer, resolvePrice, type PriceViewer } from '../lib/pricing.js'
 
 type CartOwner = { userId: string } | { sessionId: string }
 
@@ -83,7 +84,8 @@ export class CartService {
    * Format cart response with warnings.
    */
   formatCartResponse(
-    cart: CartWithItems | null
+    cart: CartWithItems | null,
+    viewer: PriceViewer = null
   ): {
     id: string | null
     items: Array<{
@@ -120,7 +122,14 @@ export class CartService {
     }
 
     const items = (cart.items || []).map((item) => {
-      const lineTotal = Number(item.productVariant.retailPrice) * item.quantity
+      const resolvedPrice = resolvePrice(
+        { retailPrice: Number(item.productVariant.retailPrice), wholesalePrice: item.productVariant.wholesalePrice },
+        viewer
+      )
+      const lineTotal = resolvedPrice * item.quantity
+      const oldRetailPrice = isWholesaleViewer(viewer) && item.productVariant.wholesalePrice && item.productVariant.wholesalePrice > 0
+        ? Number(item.productVariant.retailPrice)
+        : item.productVariant.oldRetailPrice ? Number(item.productVariant.oldRetailPrice) : null
       return {
         id: item.id,
         productId: item.productId,
@@ -134,8 +143,8 @@ export class CartService {
         },
         variant: {
           volumeLabel: item.productVariant.volumeLabel,
-          retailPrice: Number(item.productVariant.retailPrice),
-          oldRetailPrice: item.productVariant.oldRetailPrice ? Number(item.productVariant.oldRetailPrice) : null,
+          retailPrice: resolvedPrice,
+          oldRetailPrice,
           stock: item.productVariant.stock || 0,
         },
         lineTotal,
@@ -143,15 +152,25 @@ export class CartService {
     })
 
     // Calculate warnings
-    const warnings = items
-      .map((item) => {
-        // Check if item's variant is still active
-        if (!item.variant || item.variant.stock < 0) {
+    const warnings = (cart.items || [])
+      .map((cartItem, idx) => {
+        const item = items[idx]
+        if (!item || !item.variant) {
           return {
             code: 'ITEM_UNAVAILABLE',
-            itemId: item.id,
+            itemId: cartItem.id,
             available: 0,
             message: 'Товар недоступен',
+          }
+        }
+
+        // Check if professional variant and viewer is not wholesale
+        if (cartItem.productVariant.isProfessional && !isWholesaleViewer(viewer)) {
+          return {
+            code: 'PRO_ONLY',
+            itemId: cartItem.id,
+            available: 0,
+            message: 'Фасовка доступна только для специалистов',
           }
         }
 
@@ -198,7 +217,7 @@ export class CartService {
   /**
    * Add item to cart. Creates cart if needed for guests.
    */
-  async addItem(owner: CartOwner, variantId: string, quantity: number) {
+  async addItem(owner: CartOwner, variantId: string, quantity: number, viewer: PriceViewer = null) {
     // Verify variant exists and is active
     const variant = await db.productVariant.findUnique({
       where: { id: variantId },
@@ -220,7 +239,23 @@ export class CartService {
       })
     }
 
-    if (variant.retailPrice <= 0) {
+    // Проверяем что товар не профессиональный ИЛИ viewer оптовый покупатель
+    if (variant.product.isProfessional && !isWholesaleViewer(viewer)) {
+      throw new ApiError(403, 'PRO_ONLY', 'Товар доступен только специалистам после подтверждения статуса', {
+        itemId: variantId,
+        productName: variant.product.name,
+      })
+    }
+
+    // Проверяем что фасовка не профессиональная ИЛИ viewer оптовый покупатель
+    if (variant.isProfessional && !isWholesaleViewer(viewer)) {
+      throw new ApiError(403, 'PRO_ONLY', 'Фасовка доступна только специалистам', {
+        itemId: variantId,
+        productName: variant.product.name,
+      })
+    }
+
+    if (resolvePrice({ retailPrice: Number(variant.retailPrice), wholesalePrice: variant.wholesalePrice }, viewer) <= 0) {
       throw new ApiError(409, 'ITEM_UNAVAILABLE', 'Товар не готов к продаже')
     }
 
@@ -294,13 +329,13 @@ export class CartService {
 
     // Return updated cart
     const updatedCart = await this.getOrCreateCart(owner)
-    return this.formatCartResponse(updatedCart!)
+    return this.formatCartResponse(updatedCart!, viewer)
   }
 
   /**
    * Update item quantity.
    */
-  async updateItem(owner: CartOwner, itemId: string, quantity: number) {
+  async updateItem(owner: CartOwner, itemId: string, quantity: number, viewer: PriceViewer = null) {
     const item = await db.cartItem.findUnique({
       where: { id: itemId },
       include: { cart: true, productVariant: { include: { product: true } } },
@@ -337,13 +372,13 @@ export class CartService {
 
     // Return updated cart
     const updatedCart = await this.getOrCreateCart(owner)
-    return this.formatCartResponse(updatedCart!)
+    return this.formatCartResponse(updatedCart!, viewer)
   }
 
   /**
    * Delete item from cart.
    */
-  async deleteItem(owner: CartOwner, itemId: string) {
+  async deleteItem(owner: CartOwner, itemId: string, viewer: PriceViewer = null) {
     const item = await db.cartItem.findUnique({
       where: { id: itemId },
       include: { cart: true },
@@ -363,13 +398,13 @@ export class CartService {
 
     // Return updated cart
     const updatedCart = await this.getOrCreateCart(owner)
-    return this.formatCartResponse(updatedCart!)
+    return this.formatCartResponse(updatedCart!, viewer)
   }
 
   /**
    * Clear all items from cart.
    */
-  async clearCart(owner: CartOwner) {
+  async clearCart(owner: CartOwner, viewer: PriceViewer = null) {
     const cart = await this.getOrCreateCart(owner)
     if (cart) {
       await db.cartItem.deleteMany({ where: { cartId: cart.id } })

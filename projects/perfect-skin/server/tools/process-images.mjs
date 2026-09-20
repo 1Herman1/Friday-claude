@@ -53,6 +53,102 @@ async function fileExists(filePath) {
   }
 }
 
+async function normalizeProductImage(page, imageBase64, mimeType = 'jpeg') {
+  /**
+   * Нормализация карточки товара через браузер:
+   * Поиск контента, обрезка инфографики, центрирование на белом фоне
+   */
+  const script = `
+    (async () => {
+      const img = new Image();
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+      return new Promise((resolve) => {
+        img.onload = () => {
+          const W = img.width, H = img.height;
+          canvas.width = W;
+          canvas.height = H;
+          ctx.drawImage(img, 0, 0);
+
+          const imgData = ctx.getImageData(0, 0, W, H);
+          const data = imgData.data;
+
+          // Найти bounding box контента (не-белые пиксели)
+          let minY = H, maxY = -1;
+          for (let y = 0; y < H; y++) {
+            for (let x = 0; x < W; x++) {
+              const idx = (y * W + x) * 4;
+              const r = data[idx], g = data[idx+1], b = data[idx+2];
+              // Если не белый (< 245), это контент
+              if (r < 245 || g < 245 || b < 245) {
+                minY = Math.min(minY, y);
+                maxY = Math.max(maxY, y);
+                break;
+              }
+            }
+          }
+
+          if (maxY < 0) {
+            resolve({ status: 'no-content', normalizedBase64: '${imageBase64}', contentHeightPercent: 0 });
+            return;
+          }
+
+          const contentHeight = maxY - minY + 1;
+          const contentHeightPercent = (contentHeight / H) * 100;
+
+          // Если контент занимает слишком мало или слишком много, пропустить
+          if (contentHeightPercent < 30 || contentHeightPercent > 95) {
+            resolve({ status: 'suspicious', normalizedBase64: '${imageBase64}', contentHeightPercent });
+            return;
+          }
+
+          // Вписать в квадрат 800×800, 76% заполнения
+          const targetSize = 800;
+          const fitSize = Math.round(targetSize * 0.76);
+          const ratio = W / contentHeight;
+          let fitW = fitSize, fitH = fitSize;
+          if (ratio > 1) {
+            fitW = fitSize;
+            fitH = Math.round(fitSize / ratio);
+          } else {
+            fitH = fitSize;
+            fitW = Math.round(fitSize * ratio);
+          }
+
+          const outCanvas = document.createElement('canvas');
+          outCanvas.width = targetSize;
+          outCanvas.height = targetSize;
+          const outCtx = outCanvas.getContext('2d');
+
+          outCtx.fillStyle = '#ffffff';
+          outCtx.fillRect(0, 0, targetSize, targetSize);
+
+          const padX = (targetSize - fitW) / 2;
+          const padY = (targetSize - fitH) / 2;
+
+          outCtx.drawImage(img, 0, minY, W, contentHeight, padX, padY, fitW, fitH);
+
+          resolve({
+            status: 'normalized',
+            normalizedBase64: outCanvas.toDataURL('image/webp', 0.92).replace('data:image/webp;base64,', ''),
+            contentHeightPercent
+          });
+        };
+        img.src = 'data:image/${mimeType};base64,${imageBase64}';
+      });
+    })()
+  `
+
+  try {
+    const result = await page.evaluate(script)
+    return result || { status: 'failed' }
+  } catch (err) {
+    // На ошибку просто пропускаем
+    return { status: 'error', normalizedBase64: imageBase64, contentHeightPercent: 100, error: err.message }
+  }
+}
+
 async function resizeImage(page, imageBase64, targetWidth, originalWidth, originalHeight, mimeType = 'jpeg') {
   // Если нет целевой ширины (orig) или исходник меньше цели — пропустить
   if (!targetWidth) {
@@ -74,7 +170,7 @@ async function resizeImage(page, imageBase64, targetWidth, originalWidth, origin
     var img=new Image();img.onload=function(){
     var c=document.getElementById('c');c.width=${targetWidth};c.height=${targetHeight};
     var x=c.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(img,0,0,${targetWidth},${targetHeight});
-    window.r=c.toDataURL('image/webp',0.82)};
+    window.r=c.toDataURL('image/webp',0.92)};
     img.src='data:image/${mimeType};base64,${imageBase64}'</script></body></html>
   `
 
@@ -111,8 +207,11 @@ async function processProducts(browser, manifest, page) {
   console.log(`\n=== Обработка товарных фото (${manifest.products.length} товаров) ===`)
 
   const index = {}
+  const md5Map = {}  // Для подсчёта уникальных изображений
+  const suspiciousProducts = []  // Товары с контент-боксом < 30% или > 95%
   let processed = 0
   let skipped = 0
+  let normalized = 0
 
   for (const product of manifest.products) {
     const { slug, images } = product
@@ -138,6 +237,12 @@ async function processProducts(browser, manifest, page) {
       if (allExist.every(e => e)) {
         skipped++
         processed++
+        // Если кэш существует, прочитать card.webp для md5
+        const cardPath = path.join(outDir, 'card.webp')
+        const cardBuf = await fs.readFile(cardPath)
+        const crypto = await import('crypto')
+        const md5 = crypto.createHash('md5').update(cardBuf).digest('hex')
+        md5Map[md5] = (md5Map[md5] || 0) + 1
         continue
       }
 
@@ -156,6 +261,32 @@ async function processProducts(browser, manifest, page) {
       try {
         const { width: origWidth, height: origHeight } = await getImageDimensions(page, imageBase64, mimeType)
 
+        // Нормализовать карточку
+        let normalizedBase64 = imageBase64
+        let normStatus = 'skipped'
+        let contentHeightPercent = 100
+
+        const normResult = await normalizeProductImage(page, imageBase64, mimeType)
+        if (normResult.status === 'normalized') {
+          normalizedBase64 = normResult.normalizedBase64
+          normStatus = 'normalized'
+          normalized++
+          contentHeightPercent = normResult.contentHeightPercent
+
+          // Проверить на подозрительные значения
+          if (contentHeightPercent < 30 || contentHeightPercent > 95) {
+            suspiciousProducts.push({
+              slug,
+              contentHeightPercent,
+              reason: contentHeightPercent < 30 ? 'too-small' : 'too-large'
+            })
+            // НЕ перезаписываем карточку для подозрительных
+            console.log(`\n  ⚠️  [${slug}]: контент ${contentHeightPercent.toFixed(1)}% — пропускаю нормализацию`)
+            normalizedBase64 = imageBase64
+            normStatus = 'suspicious-skipped'
+          }
+        }
+
         const sizes = {}
 
         for (const size of SIZES.products) {
@@ -167,7 +298,8 @@ async function processProducts(browser, manifest, page) {
             continue
           }
 
-          const resized = await resizeImage(page, imageBase64, size.width, origWidth, origHeight, mimeType)
+          const baseToResize = size.name === 'full' ? imageBase64 : normalizedBase64
+          const resized = await resizeImage(page, baseToResize, size.width, origWidth, origHeight, mimeType)
           if (!resized) {
             sizes[size.name] = { skipped: true, reason: 'too small' }
             continue
@@ -175,6 +307,13 @@ async function processProducts(browser, manifest, page) {
 
           const webpBuffer = Buffer.from(resized.webpBase64, 'base64')
           await fs.writeFile(filePath, webpBuffer)
+
+          // Посчитать md5 для card.webp
+          if (size.name === 'card') {
+            const crypto = await import('crypto')
+            const md5 = crypto.createHash('md5').update(webpBuffer).digest('hex')
+            md5Map[md5] = (md5Map[md5] || 0) + 1
+          }
 
           sizes[size.name] = {
             file: fileName,
@@ -186,6 +325,8 @@ async function processProducts(browser, manifest, page) {
 
         index[slug] = {
           original: { width: origWidth, height: origHeight, bytes: buffer.length },
+          normStatus,
+          contentHeightPercent,
           sizes,
         }
       } catch (err) {
@@ -200,8 +341,19 @@ async function processProducts(browser, manifest, page) {
     }
   }
 
-  console.log(`\n  Завершено: ${processed}/${manifest.products.length} (кэш: ${skipped})`)
-  return index
+  const uniqueMd5Count = Object.keys(md5Map).length
+
+  console.log(`\n  Завершено: ${processed}/${manifest.products.length} (кэш: ${skipped}, нормализовано: ${normalized})`)
+  console.log(`  Уникальные card.webp: ${uniqueMd5Count} (всего ${manifest.products.length - skipped} переработано)`)
+
+  if (suspiciousProducts.length > 0) {
+    console.log(`  ⚠️  Подозрительные товары (пропущены): ${suspiciousProducts.length}`)
+    suspiciousProducts.forEach(p => {
+      console.log(`     - ${p.slug}: ${p.contentHeightPercent.toFixed(1)}% (${p.reason})`)
+    })
+  }
+
+  return { index, md5Map, suspiciousProducts, normalizedCount: normalized }
 }
 
 async function processPhotos(browser, page) {
@@ -313,6 +465,27 @@ async function processPhotos(browser, page) {
   return index
 }
 
+async function saveControlSample(slug, beforeBase64, afterBase64, mimeType = 'jpeg') {
+  /**
+   * Сохранить контрольные примеры до/после в scratchpad для визуальной проверки
+   */
+  const scratchDir = '/tmp/claude-0/-home-user-project-simba/1749002d-5615-562f-864f-d89af882543c/scratchpad/imgcheck'
+  await ensureDir(scratchDir)
+
+  try {
+    const beforeBuf = Buffer.from(beforeBase64, 'base64')
+    const afterBuf = Buffer.from(afterBase64, 'base64')
+
+    await fs.writeFile(path.join(scratchDir, `${slug}-before.png`), beforeBuf)
+    await fs.writeFile(path.join(scratchDir, `${slug}-after.png`), afterBuf)
+
+    return path.join(scratchDir, slug)
+  } catch (err) {
+    console.error(`  Ошибка сохранения примера [${slug}]: ${err.message}`)
+    return null
+  }
+}
+
 async function main() {
   console.log('Perfect Skin — конвейер обработки изображений')
   console.log('='.repeat(60))
@@ -328,7 +501,7 @@ async function main() {
     const browser = await chromium.launch({ headless: true })
     const page = await browser.newPage()
 
-    const productsIndex = await processProducts(browser, manifest, page)
+    const { index: productsIndex, md5Map, suspiciousProducts, normalizedCount } = await processProducts(browser, manifest, page)
     const photosIndex = await processPhotos(browser, page)
 
     await page.close()
@@ -337,6 +510,13 @@ async function main() {
 
     const fullIndex = {
       generatedAt: new Date().toISOString(),
+      stats: {
+        totalProducts: manifest.products.length,
+        normalized: normalizedCount,
+        suspicious: suspiciousProducts.length,
+        uniqueCardImages: Object.keys(md5Map).length,
+        md5Distribution: md5Map,
+      },
       products: productsIndex,
       photos: photosIndex,
     }
@@ -346,7 +526,40 @@ async function main() {
     console.log(`index.json сохранён`)
 
     console.log(`\n${'='.repeat(60)}`)
-    console.log(`✓ Завершено: ${Object.keys(productsIndex).length} товаров, ${Object.keys(photosIndex).length} файлов медиалики`)
+    console.log(`✓ Завершено:`)
+    console.log(`  • Товаров обработано: ${manifest.products.length}`)
+    console.log(`  • Нормализовано карточек: ${normalizedCount}`)
+    console.log(`  • Уникальные card.webp: ${Object.keys(md5Map).length}`)
+    if (suspiciousProducts.length > 0) {
+      console.log(`  • ⚠️  Подозрительные (пропущены): ${suspiciousProducts.length}`)
+    }
+    console.log(`  • Файлов медиалики: ${Object.keys(photosIndex).length}`)
+    console.log(`\nПроверка размеров файлов:`)
+
+    // Проверить размеры card.webp
+    const cardSizes = []
+    for (const slug of Object.keys(productsIndex)) {
+      const cardPath = path.join(OUTPUT_DIR, 'products', slug, 'card.webp')
+      if (await fileExists(cardPath)) {
+        const stat = await fs.stat(cardPath)
+        cardSizes.push({ slug, bytes: stat.size })
+      }
+    }
+
+    const minCardSize = Math.min(...cardSizes.map(c => c.bytes))
+    const maxCardSize = Math.max(...cardSizes.map(c => c.bytes))
+    const avgCardSize = Math.round(cardSizes.reduce((sum, c) => sum + c.bytes, 0) / cardSizes.length)
+
+    console.log(`  card.webp: ${minCardSize}–${maxCardSize} байт (avg: ${avgCardSize})`)
+
+    if (minCardSize < 4096 || maxCardSize > 40960) {
+      console.log(`  ⚠️  Некоторые файлы вне диапазона 4–40KB`)
+      cardSizes.forEach(c => {
+        if (c.bytes < 4096 || c.bytes > 40960) {
+          console.log(`     - ${c.slug}: ${c.bytes} байт`)
+        }
+      })
+    }
 
   } catch (err) {
     console.error('❌ ОШИБКА:', err.message)

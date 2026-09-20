@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { formatPrice } from '@/lib/format'
 import { useCart } from '@/context/CartContext'
 import { useDrawer } from '@/context/DrawerContext'
 import { useFavorites } from '@/context/FavoritesContext'
+import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { IconHeart, IconHeartSolid } from '../icons'
+import { PriceTag } from './PriceTag'
 import { StickyProductPanel } from './StickyProductPanel'
 import { RelatedProducts } from './RelatedProducts'
 import type { ProductCardExtended } from '@/types/api'
@@ -20,16 +21,23 @@ export function ProductDetail({ product, loading, error }: ProductDetailProps) {
   const { addItem } = useCart()
   const { openCart } = useDrawer()
   const { isFavorite, toggle } = useFavorites()
+  const { user } = useAuth()
   const [addingState, setAddingState] = useState<'idle' | 'loading' | 'success'>('idle')
 
+  // Выбранный вариант: по умолчанию первый видимый (не скрытый), иначе первый
+  const defaultVariantId = product?.variants?.find(v => !v.priceHidden)?.id || product?.variants?.[0]?.id
+  const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId)
+
+  const selectedVariant = product?.variants?.find(v => v.id === selectedVariantId) || product?.variants?.[0]
   const isFav = isFavorite(product?.slug || '')
+  const isVariantProOnly = selectedVariant?.priceHidden && !isApprovedPro(user)
 
   const handleAddToCart = async () => {
-    if (!product.inStock || product.variants.length === 0) return
+    if (!product.inStock || !selectedVariant) return
 
     try {
       setAddingState('loading')
-      await addItem(product.variants[0].id, 1)
+      await addItem(selectedVariant.id, 1)
       setAddingState('success')
       openCart()
 
@@ -130,7 +138,7 @@ export function ProductDetail({ product, loading, error }: ProductDetailProps) {
             )}
 
             {/* Title */}
-            <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4 break-words">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-4 hyphens-auto break-words min-w-0">
               {product.name}
             </h1>
 
@@ -141,41 +149,88 @@ export function ProductDetail({ product, loading, error }: ProductDetailProps) {
               </p>
             )}
 
-            {/* Volume */}
-            {product.variants?.[0]?.volumeLabel && (
+            {/* Variant Selector - if multiple variants available */}
+            {product.variants && product.variants.length > 1 && (
+              <div className="mb-6">
+                <div className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-widest">
+                  Фасовка
+                </div>
+                <div className="flex flex-wrap gap-3" role="group" aria-label="Фасовка">
+                  {product.variants.map(variant => {
+                    const isSelected = variant.id === selectedVariantId
+                    const isProOnly = variant.priceHidden && !isApprovedPro(user)
+                    return (
+                      <button
+                        key={variant.id}
+                        type="button"
+                        onClick={() => setSelectedVariantId(variant.id)}
+                        aria-pressed={isSelected}
+                        className={`
+                          px-6 py-3 rounded-pill border text-body-sm font-semibold
+                          transition-colors duration-200 min-h-11
+                          ${isSelected
+                            ? 'bg-primary text-primary-foreground border-primary'
+                            : 'border-border-strong text-foreground hover:border-primary'
+                          }
+                        `}
+                      >
+                        <div className="flex flex-col items-start gap-1">
+                          <span>{variant.volumeLabel}</span>
+                          {isProOnly && (
+                            <span className="text-label opacity-70">для кабинета</span>
+                          )}
+                        </div>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Single Volume Badge - if only one variant */}
+            {product.variants && product.variants.length === 1 && selectedVariant?.volumeLabel && (
               <div className="inline-block px-3 py-1 bg-muted rounded-full text-sm text-foreground mb-6">
-                {product.variants[0].volumeLabel}
+                {selectedVariant.volumeLabel}
               </div>
             )}
 
             {/* Price */}
-            <div className="flex items-baseline gap-2 mb-6">
-              <span className="text-3xl font-semibold text-foreground">
-                {formatPrice(product.minPrice)}
-              </span>
-              {product.oldPrice && (
-                <span className="text-lg text-muted-foreground line-through">
-                  {formatPrice(product.oldPrice)}
-                </span>
-              )}
+            <div className="mb-6">
+              <div className="text-3xl font-semibold text-foreground">
+                <PriceTag
+                  price={selectedVariant?.retailPrice || null}
+                  oldPrice={selectedVariant?.oldRetailPrice || null}
+                  hidden={selectedVariant?.priceHidden}
+                  size="lg"
+                />
+              </div>
             </div>
           </div>
 
           {/* Add to Cart Button + Favorite */}
           <div ref={addToCartButtonRef} className="flex gap-3">
-            <button
-              onClick={handleAddToCart}
-              disabled={!product.inStock || addingState === 'loading'}
-              className="flex-1 py-3 px-6 bg-primary text-primary-foreground font-semibold font-sans rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity min-h-11 text-lg"
-            >
-              {addingState === 'success'
-                ? 'Добавлено ✓'
-                : addingState === 'loading'
-                  ? 'Добавляю...'
-                  : product.inStock
-                    ? 'В корзину'
-                    : 'Нет в наличии'}
-            </button>
+            {isVariantProOnly ? (
+              <Link
+                to="/pro/register"
+                className="flex-1 py-3 px-6 bg-accent text-accent-foreground text-center font-semibold font-sans rounded-pill hover:opacity-90 transition-opacity min-h-11 text-lg flex items-center justify-center"
+              >
+                Для специалистов
+              </Link>
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                disabled={!product.inStock || !selectedVariant || addingState === 'loading'}
+                className="flex-1 py-3 px-6 bg-primary text-primary-foreground font-semibold font-sans rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity min-h-11 text-lg"
+              >
+                {addingState === 'success'
+                  ? 'Добавлено ✓'
+                  : addingState === 'loading'
+                    ? 'Добавляю...'
+                    : product.inStock
+                      ? 'В корзину'
+                      : 'Нет в наличии'}
+              </button>
+            )}
 
             <button
               onClick={() => toggle(product.slug)}
@@ -192,13 +247,29 @@ export function ProductDetail({ product, loading, error }: ProductDetailProps) {
           </div>
 
           {/* Stock Status */}
-          <p className="text-sm text-muted-foreground">
-            {product.inStock ? (
-              <span className="text-success">В наличии</span>
-            ) : (
-              <span className="text-destructive">Нет в наличии</span>
-            )}
-          </p>
+          {product.inStock && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-2 px-3 py-2 bg-success/10 text-success rounded-full text-sm font-semibold">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                  </svg>
+                  В наличии
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Доставка СДЭК 2–4 дня
+              </p>
+              {selectedVariant?.stock !== undefined && selectedVariant.stock <= 3 && (
+                <p className="text-sm text-urgency font-semibold">
+                  Осталось {selectedVariant.stock} {selectedVariant.stock === 1 ? 'шт.' : selectedVariant.stock % 10 === 1 && selectedVariant.stock % 100 !== 11 ? 'шт.' : 'шт.'}
+                </p>
+              )}
+            </div>
+          )}
+          {!product.inStock && (
+            <p className="text-sm text-destructive font-semibold">Нет в наличии</p>
+          )}
         </div>
       </div>
 
@@ -282,6 +353,7 @@ export function ProductDetail({ product, loading, error }: ProductDetailProps) {
       <StickyProductPanel
         product={product}
         buttonRef={addToCartButtonRef}
+        selectedVariantId={selectedVariantId}
         onAddToCart={() => console.log('Add to cart:', product.id)}
       />
     </div>

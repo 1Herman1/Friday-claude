@@ -1,0 +1,1625 @@
+{
+  "generatedAt": "2026-09-01T11:51:48.346Z",
+  "stats": {
+    "totalProducts": 57,
+    "normalized": 55,
+    "suspicious": 0,
+    "uniqueCardImages": 54,
+    "md5Distribution": {
+      "aa3a40340f393b2698566a340829ecd5": 1,
+      "ca344060b4c0a0c7f2275c109c19ca4c": 1,
+      "1039f031f169af68429548aabb7c392b": 1,
+      "8756a743257a2816f9f4d5a38c0ede76": 1,
+      "b3b174ea56990e8bb6b6e04be3842643": 1,
+      "195f65e3437eadb6bee25900a5134e84": 1,
+      "a47c3d1d417fd15dcd707657a7e1683d": 1,
+      "891301310c493f60758ea8e02651b41e": 1,
+      "84f7217cd4c2e96cc7775c6f25ab9bd7": 1,
+      "59f019102f3d6e2417a6bb05688ebecd": 1,
+      "25822daf3d1d937aa21512f2a975d980": 1,
+      "eddf664a102274d0488eb5c9f4b8c9f2": 1,
+      "593a47a359bfb4cb560abb696a5fbdd5": 1,
+      "f94a283afa396442ffe098e048bed0cc": 1,
+      "11c752094d5fa93dea5d781558231ba9": 1,
+      "fcc77160883a1cc2b73736af4766e9cb": 1,
+      "823967499e8a9d7619427127cb3765dc": 4,
+      "832fbd1e2182562bf563aac575bfc2ff": 1,
+      "b9d8dedffcab5f3244b1ecfa49bf86de": 1,
+      "306fd71f1cdd7c9ae926c0fc21058621": 1,
+      "4357387c143accf2e4dd21699d2ae3bd": 1,
+      "805ae455b8438a4bb5f30b5bc285232d": 1,
+      "7d45d36fb967dfbe8570b74e75c55aad": 1,
+      "ec1a5578216044b7737246a21dddb315": 1,
+      "79c074c382e5830d26e15323c8bf96ca": 1,
+      "72d0416907b0e89b240f91b149a8774a": 1,
+      "a600467d333f8bbfe807dcecef891094": 1,
+      "d49fbcddf39e938ed9e35205578ddb59": 1,
+      "13019c379554d6201c95b87bc9ec08fc": 1,
+      "71d39751c36b0263998065abe7a058c6": 1,
+      "87035026900f98825f5ac7c6cbeb1410": 1,
+      "060e469e9e9ef64b29a5deea5821752d": 1,
+      "55a33cc5fdabfe37cf68e1579fe7c8e5": 1,
+      "d46224496bf7d38e24a6973d6cf4b77c": 1,
+      "0971191f62a4c679ec1675e113ae9517": 1,
+      "57b64d701653578c0bbb3d155ed0bcfb": 1,
+      "aefdd11f09485060d270b3effcae186f": 1,
+      "0f931d68adbfaa7e35f03f9e2b4c6410": 1,
+      "fd9604cd15be8a3a955ed57b7196e77c": 1,
+      "15b7cd47709dafed59ed779d425d981d": 1,
+      "184a31c9df852d4424e1d352b9bef2a9": 1,
+      "e2b89ea82eddd25d725a9729b7e8e2d3": 1,
+      "de6d2933d76839af1b3a232b3e1f2271": 1,
+      "acdbb28e4665de672f91b812247d73de": 1,
+      "e6671061308e324ce646f93b72dada00": 1,
+      "1d47a33f50a59f5deb61171086c651d0": 1,
+      "b2a53d0a8d5d2664158bef6bce80350d": 1,
+      "6332f817afcafe8a1d8f4f597fe49f14": 1,
+      "2c78db6524ec91ae2968be98fd67042e": 1,
+      "dabbc102369ea0dc6fd2bcbb609632dd": 1,
+      "2804ba405068345826c9e3a382a81b72": 1,
+      "d84dd03d566376d89f6c317f4c8c22c3": 1,
+      "c1df50a27a106237dcfbb58edfe99ca2": 1,
+      "95985dea9af8a963bfbdab6ead886dc4": 1
+    }
+  },
+  "products": {
+    "podarochnyj-nabor-bee-venom-s-pchelinym-yadom-dlya-razglazhi": {
+      "original": {
+        "width": 744,
+        "height": 744,
+        "bytes": 124321
+      },
+      "normStatus": "skipped",
+      "contentHeightPercent": 100,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 25058
+        },
+        "card@2x": {
+          "skipped": true,
+          "reason": "too small"
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "podarochnyj-nabor-expert-team-box-2-dlya-tonizaczii-kozhi-i-": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 179208
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 85.75,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 21572
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 64144
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "podarochnyj-nabor-expert-team-box-1-dlya-glubokogo-ochishhen": {
+      "original": {
+        "width": 450,
+        "height": 450,
+        "bytes": 92425
+      },
+      "normStatus": "skipped",
+      "contentHeightPercent": 100,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 15088
+        },
+        "card@2x": {
+          "skipped": true,
+          "reason": "too small"
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "podarochnyj-nabor-expert-team-full-box-dlya-uhoda-za-muzhsko": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 127704
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 81.875,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 14692
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 40780
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "podarochnyj-nabor-obnovlennaya-kozha-dlya-liftinga-i-ukreple": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 97925
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 90.875,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 11362
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 28996
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "podarochnyj-nabor-obnovlennaya-kozha-dlya-korrekczii-vozrast": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 150283
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 85.25,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 19506
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 52898
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "korpo-slim-crema-anticzellyulitnyj-i-modeliruyushhij-krem": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 83102
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 91,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 3636
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 8606
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "korpo-slim-gel-ukreplyayushhij-gel-dlya-nog": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 63013
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 83.5,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 2650
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 6432
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "o3-depur-krem-s-ozonom": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 97386
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 39.625,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 4200
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 11306
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "fluido-viscoso-forte-syvorotka-obnovlyayushhaya": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 137195
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 79.375,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6282
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 19102
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "dermosun-spf-50-solnczezashhitnyj-krem": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 100801
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 79.625,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 5888
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 14902
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "bb-cream-matiruyushhij-krem": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 20265
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 61.12499999999999,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 3364
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 8256
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "veevenom-serum-syvorotka-pchelinyj-yad": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 140814
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 83.25,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 5630
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 15586
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "bee-venom-cream-antivozrastnoj-krem": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 115701
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 40,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 5048
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 13340
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-pepti": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 141672
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 43,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 5456
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 16408
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "regenerativo-cellular-syvorotka-obnovlyayushhaya": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 122499
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 81,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6010
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 17234
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 138535
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 75.125,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6406
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 18764
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "tts-moisturizing-mask-uvlazhnyayushhaya-maska": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 138535
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 75.125,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6406
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 18764
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "tts-energizing-mask-maska-so-stvolovymi-kletkami": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 138535
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 75.125,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6406
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 18764
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "tts-o3-ozono-kislorodnaya-maska-s-ozonom": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 138535
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 75.125,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6406
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 18764
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "nutriestimul-antivozrastnoj-pitatelnyj-krem": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 97032
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 38.5,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 4802
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 12930
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "crema-elite-ultra-uvlazhnyayushhij-krem": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 97326
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 36.5,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 4446
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 12360
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "kerathor-plus-izotonicheskij-tonik": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 60345
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 77.375,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 2996
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 6900
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "collagen-booster-vosstanavlivayushhaya-syvorotka": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 141104
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 79.125,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6860
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 20306
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 67084
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 80.625,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 3220
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 8330
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 64695
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 81.5,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 2972
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 6900
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "oxioderm-maska-s-ozonom": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 127045
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 59.875,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6378
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 18010
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "senitul-vosstanavlivayushhaya-maska": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 172118
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 62.74999999999999,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 8400
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 26914
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "fluvix-syvorotka-obnovlyayushhaya": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 29271
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 78.75,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 7912
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 21298
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "depurative-crema-ochishhayushhij-krem": {
+      "original": {
+        "width": 1025,
+        "height": 684,
+        "bytes": 180793
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 50.14619883040936,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 267,
+          "bytes": 3734
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 534,
+          "bytes": 10052
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami": {
+      "original": {
+        "width": 945,
+        "height": 631,
+        "bytes": 773978
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 52.77337559429477,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 267,
+          "bytes": 3482
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 534,
+          "bytes": 10126
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "biocell-syvorotka-obnovlyayushhaya": {
+      "original": {
+        "width": 684,
+        "height": 1025,
+        "bytes": 217586
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 70.24390243902438,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 599,
+          "bytes": 10964
+        },
+        "card@2x": {
+          "skipped": true,
+          "reason": "too small"
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej": {
+      "original": {
+        "width": 600,
+        "height": 600,
+        "bytes": 100100
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 43.333333333333336,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 6478
+        },
+        "card@2x": {
+          "skipped": true,
+          "reason": "too small"
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "keradetox-keratoliticheskij-tonik": {
+      "original": {
+        "width": 1707,
+        "height": 2560,
+        "bytes": 113789
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 78.75,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 600,
+          "bytes": 4840
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 1200,
+          "bytes": 10518
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 2400,
+          "bytes": 37424
+        }
+      }
+    },
+    "scrub-lotion-krem-dlya-snyatiya-makiyazha": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 49894
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 77.375,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 2898
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 6590
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-mas": {
+      "original": {
+        "width": 632,
+        "height": 2560,
+        "bytes": 87372
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 84.921875,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 1620,
+          "bytes": 7606
+        },
+        "card@2x": {
+          "skipped": true,
+          "reason": "too small"
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom": {
+      "original": {
+        "width": 632,
+        "height": 2560,
+        "bytes": 89149
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 84.921875,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 1620,
+          "bytes": 7966
+        },
+        "card@2x": {
+          "skipped": true,
+          "reason": "too small"
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom": {
+      "original": {
+        "width": 632,
+        "height": 2560,
+        "bytes": 83989
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 84.921875,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 1620,
+          "bytes": 7200
+        },
+        "card@2x": {
+          "skipped": true,
+          "reason": "too small"
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-k": {
+      "original": {
+        "width": 1667,
+        "height": 2500,
+        "bytes": 761909
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 44.12,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 600,
+          "bytes": 10472
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 1200,
+          "bytes": 23182
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 2400,
+          "bytes": 66034
+        }
+      }
+    },
+    "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka": {
+      "original": {
+        "width": 1667,
+        "height": 2500,
+        "bytes": 742520
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 76.4,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 600,
+          "bytes": 7428
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 1200,
+          "bytes": 17610
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 2400,
+          "bytes": 69684
+        }
+      }
+    },
+    "chia-protect-oil-maslo-chia-s-ozonom": {
+      "original": {
+        "width": 1667,
+        "height": 2500,
+        "bytes": 783360
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 76.32,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 600,
+          "bytes": 8014
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 1200,
+          "bytes": 19038
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 2400,
+          "bytes": 78168
+        }
+      }
+    },
+    "chia-detox-cream-uvlazhnyayushhij-krem-s-chia": {
+      "original": {
+        "width": 1667,
+        "height": 2500,
+        "bytes": 707434
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 44.12,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 600,
+          "bytes": 7984
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 1200,
+          "bytes": 18620
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 2400,
+          "bytes": 51250
+        }
+      }
+    },
+    "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodo": {
+      "original": {
+        "width": 1667,
+        "height": 2500,
+        "bytes": 743938
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 44.2,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 600,
+          "bytes": 9278
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 1200,
+          "bytes": 21674
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 2400,
+          "bytes": 62266
+        }
+      }
+    },
+    "natural-tonic-naturalnyj-tonik-dlya-licza": {
+      "original": {
+        "width": 800,
+        "height": 1200,
+        "bytes": 126558
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 74,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 600,
+          "bytes": 9972
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 1200,
+          "bytes": 28762
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-": {
+      "original": {
+        "width": 800,
+        "height": 800,
+        "bytes": 77735
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 79.5,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 400,
+          "bytes": 3546
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 800,
+          "bytes": 10644
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 357127
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 88.53801169590643,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 13676
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 36800
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 139586
+        }
+      }
+    },
+    "eye-resistance-krem-dlya-glaz": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 499163
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 78.30409356725147,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 8600
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 21710
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 77650
+        }
+      }
+    },
+    "hydrocombat-krem-s-ozonom": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 398709
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 73.45029239766082,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 7520
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 18316
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 61998
+        }
+      }
+    },
+    "balance-toner-tonik-s-morskoj-termalnoj-vodoj": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 640626
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 84.3859649122807,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 10248
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 27142
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 100288
+        }
+      }
+    },
+    "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 630926
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 85.26315789473684,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 9598
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 25208
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 93812
+        }
+      }
+    },
+    "serum-triple-accion-syvorotka-trojnogo-dejstviya": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 617786
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 75.26315789473685,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 9298
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 25884
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 115616
+        }
+      }
+    },
+    "contour-k-krem-dlya-glaz": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 407756
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 92.7485380116959,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 13278
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 34668
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 130696
+        }
+      }
+    },
+    "reti-bogatyj-retinolom-krem": {
+      "original": {
+        "width": 1800,
+        "height": 1353,
+        "bytes": 135880
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 90.83518107908351,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 301,
+          "bytes": 7126
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 601,
+          "bytes": 18870
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1203,
+          "bytes": 84206
+        }
+      }
+    },
+    "gen-adn-ukreplyayushhij-krem": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 331510
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 89.94152046783626,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 10354
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 29438
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 113282
+        }
+      }
+    },
+    "antiox-c-antioksidantnyj-krem": {
+      "original": {
+        "width": 643,
+        "height": 437,
+        "bytes": 23639
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 88.78718535469108,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 272,
+          "bytes": 6108
+        },
+        "card@2x": {
+          "skipped": true,
+          "reason": "too small"
+        },
+        "full": {
+          "skipped": true,
+          "reason": "too small"
+        }
+      }
+    },
+    "hidrorrevitalizante-vosstanavlivayushhij-krem": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 356631
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 88.18713450292398,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 12070
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 32142
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 129044
+        }
+      }
+    },
+    "dinamizante-vosstanavlivayushhij-krem": {
+      "original": {
+        "width": 1800,
+        "height": 1710,
+        "bytes": 342987
+      },
+      "normStatus": "normalized",
+      "contentHeightPercent": 87.83625730994153,
+      "sizes": {
+        "card": {
+          "file": "card.webp",
+          "width": 400,
+          "height": 380,
+          "bytes": 12226
+        },
+        "card@2x": {
+          "file": "card@2x.webp",
+          "width": 800,
+          "height": 760,
+          "bytes": 33578
+        },
+        "full": {
+          "file": "full.webp",
+          "width": 1600,
+          "height": 1520,
+          "bytes": 129418
+        }
+      }
+    }
+  },
+  "photos": {}
+}

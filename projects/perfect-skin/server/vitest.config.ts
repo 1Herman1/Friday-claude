@@ -15,5 +15,11 @@ try {
 export default defineConfig({
   test: {
     environment: 'node',
+    // Все интеграционные наборы делят одну dev-БД и гоняются за общими
+    // строками товаров/остатков — параллельные файлы дают гонки. Гоним
+    // тесты последовательно, одним воркером.
+    fileParallelism: false,
+    pool: 'forks',
+    poolOptions: { forks: { singleFork: true } },
   },
 })

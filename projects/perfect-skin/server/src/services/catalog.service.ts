@@ -3,6 +3,7 @@ import { ACTIVE } from '../lib/prisma-filters.js'
 import { CONCERNS, SKIN_TYPES } from '../lib/dictionaries.js'
 import type { Concern, SkinType } from '../lib/db.js'
 import { getPopularProductsMap } from './popular.service.js'
+import { isWholesaleViewer, resolvePrice, type PriceViewer } from '../lib/pricing.js'
 
 export interface CatalogFilters {
   q?: string
@@ -14,6 +15,7 @@ export interface CatalogFilters {
   minPrice?: number
   maxPrice?: number
   sort?: 'price_asc' | 'price_desc' | 'newest' | 'popular'
+  pro?: boolean
   limit: number
   offset: number
 }
@@ -27,9 +29,11 @@ export interface ProductCardDTO {
   image: string | null
   skinTypes: string[]
   needs: string[]
-  minPrice: number
+  minPrice: number | null
   oldPrice: number | null
   inStock: boolean
+  isProfessional: boolean
+  priceHidden: boolean
   variants: VariantDTO[]
 }
 
@@ -38,17 +42,21 @@ export interface VariantDTO {
   volumeValue: number
   volumeUnit: string
   volumeLabel: string
-  retailPrice: number
+  retailPrice: number | null
   oldRetailPrice: number | null
   stock: number
   sku: string | null
+  isProfessional: boolean
+  priceHidden: boolean
 }
 
 // Build volume label from variant data
 function buildVolumeLabel(volumeValue: number, volumeUnit: string, label: string | null): string {
   if (label) return label
   const units: Record<string, string> = { ml: 'мл', g: 'г', pcs: 'шт' }
-  return `${volumeValue.toString().replace(/\.?0+$/, '')} ${units[volumeUnit] || volumeUnit}`
+  // volumeValue уже число без хвостовых нулей (decimalToNumber); regex-обрезка
+  // превращала «200» в «2».
+  return `${volumeValue} ${units[volumeUnit] || volumeUnit}`
 }
 
 // Convert Prisma Decimal to number and strip trailing zeros
@@ -73,7 +81,7 @@ type ProductWithBrandLineVariants = Prisma.ProductGetPayload<{
 type ProductWithRelations = ProductWithBrandLineVariants | (ProductWithBrandLineVariants & { categories: Prisma.ProductCategoryGetPayload<object>[] })
 
 // Build product card DTO from product record
-export function buildProductCard(product: ProductWithRelations): ProductCardDTO {
+export function buildProductCard(product: ProductWithRelations, viewer: PriceViewer = null): ProductCardDTO {
   const images = product.images || []
   const brand = product.brand
     ? { id: product.brand.id, name: product.brand.name, slug: product.brand.slug }
@@ -82,28 +90,79 @@ export function buildProductCard(product: ProductWithRelations): ProductCardDTO 
     ? { id: product.line.id, name: product.line.name, slug: product.line.slug }
     : null
 
+  // Определяем видна ли цена: скрыта если товар профессиональный И viewer не оптовый покупатель
+  const productPriceHidden = product.isProfessional && !isWholesaleViewer(viewer)
+
   // Filter active variants (already pre-filtered by ProductGetPayload)
   const activeVariants = (product.variants || [])
 
-  // Find cheapest variant
-  const cheapest = activeVariants.length > 0 ? activeVariants[0] : null
-  const minPrice = cheapest ? decimalToNumber(cheapest.retailPrice) : 0
-  const oldPrice = cheapest && cheapest.oldRetailPrice ? decimalToNumber(cheapest.oldRetailPrice) : null
+  // Отфильтруем видимые варианты (учитываем как профессиональный статус товара, так и варианта)
+  const visibleVariants = activeVariants.filter((v) => {
+    // Вариант видимый если товар не скрывает все цены И вариант не профессиональный ИЛИ viewer оптовый
+    if (productPriceHidden) return false
+    const variantHidden = v.isProfessional && !isWholesaleViewer(viewer)
+    return !variantHidden
+  })
 
-  // Check if in stock
-  const inStock = activeVariants.some((v) => (v.stock || 0) > 0)
+  // Find cheapest visible variant
+  const cheapest = visibleVariants.length > 0 ? visibleVariants[0] : null
+
+  let minPrice: number | null = null
+  let oldPrice: number | null = null
+
+  if (cheapest) {
+    // Видимая цена — используем resolved prices
+    const resolvedPrice = resolvePrice({ retailPrice: decimalToNumber(cheapest.retailPrice), wholesalePrice: cheapest.wholesalePrice }, viewer)
+    minPrice = resolvedPrice
+    // oldPrice становится розничной если применена оптовая цена
+    if (isWholesaleViewer(viewer) && cheapest.wholesalePrice && cheapest.wholesalePrice > 0) {
+      oldPrice = decimalToNumber(cheapest.retailPrice)
+    } else if (cheapest.oldRetailPrice) {
+      oldPrice = decimalToNumber(cheapest.oldRetailPrice)
+    }
+  }
+
+  // Check if in stock (только видимые варианты)
+  const inStock = visibleVariants.some((v) => (v.stock || 0) > 0)
+
+  // Если нет видимых вариантов — товар целиком скрыт
+  const finalProductPriceHidden = productPriceHidden || visibleVariants.length === 0
 
   // Convert variants to DTO
-  const variants: VariantDTO[] = activeVariants.map((v) => ({
-    id: v.id,
-    volumeValue: decimalToNumber(v.volumeValue),
-    volumeUnit: v.volumeUnit,
-    volumeLabel: buildVolumeLabel(decimalToNumber(v.volumeValue), v.volumeUnit, v.volumeLabel),
-    retailPrice: decimalToNumber(v.retailPrice),
-    oldRetailPrice: v.oldRetailPrice ? decimalToNumber(v.oldRetailPrice) : null,
-    stock: v.stock || 0,
-    sku: v.sku || null,
-  }))
+  const variants: VariantDTO[] = activeVariants.map((v) => {
+    const variantPriceHidden = v.isProfessional && !isWholesaleViewer(viewer)
+    const shouldHidePrice = productPriceHidden || variantPriceHidden
+
+    if (shouldHidePrice) {
+      return {
+        id: v.id,
+        volumeValue: decimalToNumber(v.volumeValue),
+        volumeUnit: v.volumeUnit,
+        volumeLabel: buildVolumeLabel(decimalToNumber(v.volumeValue), v.volumeUnit, v.volumeLabel),
+        retailPrice: null,
+        oldRetailPrice: null,
+        stock: v.stock || 0,
+        sku: v.sku || null,
+        isProfessional: v.isProfessional,
+        priceHidden: true,
+      }
+    }
+    const resolvedPrice = resolvePrice({ retailPrice: decimalToNumber(v.retailPrice), wholesalePrice: v.wholesalePrice }, viewer)
+    return {
+      id: v.id,
+      volumeValue: decimalToNumber(v.volumeValue),
+      volumeUnit: v.volumeUnit,
+      volumeLabel: buildVolumeLabel(decimalToNumber(v.volumeValue), v.volumeUnit, v.volumeLabel),
+      retailPrice: resolvedPrice,
+      oldRetailPrice: isWholesaleViewer(viewer) && v.wholesalePrice && v.wholesalePrice > 0
+        ? decimalToNumber(v.retailPrice)
+        : v.oldRetailPrice ? decimalToNumber(v.oldRetailPrice) : null,
+      stock: v.stock || 0,
+      sku: v.sku || null,
+      isProfessional: v.isProfessional,
+      priceHidden: false,
+    }
+  })
 
   return {
     id: product.id,
@@ -117,13 +176,16 @@ export function buildProductCard(product: ProductWithRelations): ProductCardDTO 
     minPrice,
     oldPrice,
     inStock,
+    isProfessional: product.isProfessional,
+    priceHidden: finalProductPriceHidden,
     variants,
   }
 }
 
 export async function getProducts(
   prisma: PrismaClient,
-  filters: CatalogFilters
+  filters: CatalogFilters,
+  viewer: PriceViewer = null
 ): Promise<{ items: ProductCardDTO[]; total: number; limit: number; offset: number }> {
   // Build where clause
   const where: any = {
@@ -135,15 +197,33 @@ export async function getProducts(
     },
   }
 
+  const andConditions: any[] = []
+
   // Text search: ILIKE over name/descriptions/brand. On 57 products a
   // pg_trgm index is unnecessary; add one when the catalog grows.
   if (filters.q) {
-    where.OR = [
-      { name: { contains: filters.q, mode: 'insensitive' } },
-      { shortDescription: { contains: filters.q, mode: 'insensitive' } },
-      { description: { contains: filters.q, mode: 'insensitive' } },
-      { brand: { name: { contains: filters.q, mode: 'insensitive' } } },
-    ]
+    andConditions.push({
+      OR: [
+        { name: { contains: filters.q, mode: 'insensitive' } },
+        { shortDescription: { contains: filters.q, mode: 'insensitive' } },
+        { description: { contains: filters.q, mode: 'insensitive' } },
+        { brand: { name: { contains: filters.q, mode: 'insensitive' } } },
+      ]
+    })
+  }
+
+  // Professional products filter: товар профессиональный ИЛИ имеет профессиональные варианты
+  if (filters.pro) {
+    andConditions.push({
+      OR: [
+        { isProfessional: true },
+        { variants: { some: { isProfessional: true, isActive: true, deletedAt: null } } },
+      ]
+    })
+  }
+
+  if (andConditions.length > 0) {
+    where.AND = andConditions
   }
 
   // Category filter (recursive to get children)
@@ -237,53 +317,63 @@ export async function getProducts(
   } else if (filters.sort === 'newest') {
     orderBy = [{ createdAt: 'desc' }, { id: 'asc' }]
   } else if (filters.sort === 'popular') {
-    // Handle popular sorting in-memory with caching
-    // For now, degrade to newest if too many products
-    const count = await prisma.product.count({ where })
-    if (count > 1000) {
-      // Degrade to newest
-      orderBy = [{ createdAt: 'desc' }, { id: 'asc' }]
-    } else {
-      // Get all product IDs matching filter
-      const productIds = await prisma.product.findMany({
-        where,
-        select: { id: true },
-      })
+    // Optimize popular sorting: lightweight query → in-memory sort → fetch page
+    // Get all matching product IDs with popularPin for sorting
+    const productRecords = await prisma.product.findMany({
+      where,
+      select: { id: true, popularPin: true },
+    })
 
-      // Get cached popular products map (10-minute TTL)
-      const popularMap = await getPopularProductsMap(prisma)
+    // Get cached popular products map (10-minute TTL)
+    const popularMap = await getPopularProductsMap(prisma)
 
-      // Get full products for sorting
-      const products = await prisma.product.findMany({
-        where: { id: { in: productIds.map((p) => p.id) } },
-        include: { brand: true, line: true, variants: true },
-      })
+    // Sort in memory: pinned by popularPin asc → unpinned by units desc → id asc
+    const sorted = productRecords.sort((a, b) => {
+      const aPinned = a.popularPin !== null
+      const bPinned = b.popularPin !== null
 
-      // Sort in memory: units desc → isFeatured desc → createdAt desc → id asc
-      const sorted = products.sort((a, b) => {
-        const unitsA = popularMap.get(a.id) || 0
-        const unitsB = popularMap.get(b.id) || 0
-        if (unitsA !== unitsB) return unitsB - unitsA
-        if (a.isFeatured !== b.isFeatured) return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0)
-        if (a.createdAt !== b.createdAt) return b.createdAt.getTime() - a.createdAt.getTime()
-        return a.id.localeCompare(b.id)
-      })
-
-      // Apply limit/offset and build result
-      const total = sorted.length
-      const pageIds = sorted
-        .slice(filters.offset, filters.offset + filters.limit)
-        .map((p) => p.id)
-
-      const pageProducts = products.filter((p) => pageIds.includes(p.id))
-      const orderedByPage = pageIds.map((id) => pageProducts.find((p) => p.id === id)!)
-
-      return {
-        items: orderedByPage.map(buildProductCard),
-        total,
-        limit: filters.limit,
-        offset: filters.offset,
+      // Pinned items first
+      if (aPinned && !bPinned) return -1
+      if (!aPinned && bPinned) return 1
+      if (aPinned && bPinned) {
+        // Both pinned: sort by popularPin ascending
+        return a.popularPin! - b.popularPin!
       }
+
+      // Both unpinned: sort by sales units desc
+      const unitsA = popularMap.get(a.id) || 0
+      const unitsB = popularMap.get(b.id) || 0
+      if (unitsA !== unitsB) return unitsB - unitsA
+      return a.id.localeCompare(b.id)
+    })
+
+    // Apply limit/offset to get page IDs
+    const total = sorted.length
+    const pageIds = sorted
+      .slice(filters.offset, filters.offset + filters.limit)
+      .map((p) => p.id)
+
+    // Fetch full product data for page items
+    const pageProducts = await prisma.product.findMany({
+      where: { id: { in: pageIds } },
+      include: {
+        brand: true,
+        line: true,
+        variants: {
+          where: ACTIVE,
+          orderBy: { volumeValue: 'asc' },
+        },
+      },
+    })
+
+    // Restore original page order (as sorted above)
+    const orderedByPage = pageIds.map((id) => pageProducts.find((p) => p.id === id)!)
+
+    return {
+      items: orderedByPage.map((p) => buildProductCard(p, viewer)),
+      total,
+      limit: filters.limit,
+      offset: filters.offset,
     }
   }
 
@@ -306,7 +396,7 @@ export async function getProducts(
   ])
 
   return {
-    items: items.map(buildProductCard),
+    items: items.map((p) => buildProductCard(p, viewer)),
     total,
     limit: filters.limit,
     offset: filters.offset,
@@ -554,7 +644,8 @@ export async function getFacets(
 
 export async function getProductBySlug(
   prisma: PrismaClient,
-  slug: string
+  slug: string,
+  viewer: PriceViewer = null
 ): Promise<any | null> {
   const product = await prisma.product.findFirst({
     where: { slug, ...ACTIVE },
@@ -572,7 +663,7 @@ export async function getProductBySlug(
 
   if (!product) return null
 
-  const card = buildProductCard(product)
+  const card = buildProductCard(product, viewer)
 
   return {
     ...card,

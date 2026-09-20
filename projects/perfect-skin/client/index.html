@@ -10,6 +10,8 @@
     <title>Perfect Skin — про-косметика из Испании</title>
     <!-- Снимок каталога стартует параллельно с бандлом, а не после него -->
     <link rel="preload" href="/snapshot/catalog.json" as="fetch" crossorigin />
+    <!-- LCP-кадр героя главной: грузим до монтирования React (только десктоп) -->
+    <link rel="preload" as="image" href="/photos/m4.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high" />
     <meta name="description" content="Профессиональная косметика испанских брендов ISSEIMI и GLACÉE Skincare. Назначают врачи. Любит ваша кожа." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

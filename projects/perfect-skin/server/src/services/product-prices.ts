@@ -6,8 +6,9 @@ type Tx = {
 }
 
 export async function recalcProductPrices(tx: Tx, productId?: string): Promise<void> {
-  // Одним SQL вместо цикла: агрегат по активным фасовкам, товары без живых
-  // фасовок получают 0 (в каталоге они всё равно отфильтрованы).
+  // Одним SQL вместо цикла: агрегат по активным, непрофессиональным фасовкам
+  // (isProfessional=false). Товары без живых фасовок получают 0 (в каталоге они
+  // всё равно отфильтрованы).
   if (productId) {
     await tx.$executeRaw`
       UPDATE products p SET
@@ -16,7 +17,7 @@ export async function recalcProductPrices(tx: Tx, productId?: string): Promise<v
       FROM (
         SELECT MIN("retailPrice") AS min_price, MAX("retailPrice") AS max_price
         FROM product_variants
-        WHERE "productId" = ${productId} AND "isActive" AND "deletedAt" IS NULL
+        WHERE "productId" = ${productId} AND "isActive" AND "deletedAt" IS NULL AND "isProfessional" = false
       ) v
       WHERE p.id = ${productId}`
   } else {
@@ -27,7 +28,7 @@ export async function recalcProductPrices(tx: Tx, productId?: string): Promise<v
       FROM (
         SELECT "productId", MIN("retailPrice") AS min_price, MAX("retailPrice") AS max_price
         FROM product_variants
-        WHERE "isActive" AND "deletedAt" IS NULL
+        WHERE "isActive" AND "deletedAt" IS NULL AND "isProfessional" = false
         GROUP BY "productId"
       ) v
       WHERE p.id = v."productId"`
@@ -35,7 +36,7 @@ export async function recalcProductPrices(tx: Tx, productId?: string): Promise<v
       UPDATE products SET "minPrice" = 0, "maxPrice" = 0
       WHERE id NOT IN (
         SELECT DISTINCT "productId" FROM product_variants
-        WHERE "isActive" AND "deletedAt" IS NULL
+        WHERE "isActive" AND "deletedAt" IS NULL AND "isProfessional" = false
       )`
   }
 }

@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom'
 
 const UPDATED_AT = '25 августа 2026 года'
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
-    <section className="mb-8">
+    <section className="mb-8" id={id}>
       <h2 className="text-base font-sans font-semibold uppercase tracking-wide text-foreground mb-3">
         {title}
       </h2>
@@ -17,20 +17,31 @@ export function OfferPage() {
   return (
     <div className="container-app py-12 md:py-16">
       <div className="max-w-prose mx-auto">
-        <h1 className="text-2xl font-heading font-bold uppercase tracking-tight text-foreground mb-3">
+        <h1 className="text-h3 md:text-h2 font-heading font-bold uppercase tracking-tight text-foreground mb-6">
           Публичная оферта
         </h1>
-        <p className="text-muted-foreground leading-relaxed mb-4">
+        <p className="text-muted-foreground leading-relaxed mb-6">
           Редакция от {UPDATED_AT}. Это предложение заключить договор розничной
           купли-продажи на условиях, описанных ниже. Оформляя заказ, вы
           принимаете его целиком.
         </p>
-        <p className="text-sm text-muted-foreground bg-muted rounded-block px-4 py-3 mb-10">
-          Документ подготовлен как проект и требует проверки юристом перед
-          запуском магазина.
-        </p>
 
-        <Section title="1. Стороны договора">
+        {/* Table of Contents */}
+        <nav className="bg-muted rounded-block p-4 mb-8 border border-border">
+          <p className="text-xs font-semibold text-foreground mb-3">Разделы:</p>
+          <ul className="space-y-2 text-sm">
+            <li><a href="#section-1" className="text-primary hover:underline">1. Стороны договора</a></li>
+            <li><a href="#section-2" className="text-primary hover:underline">2. Как заключается договор</a></li>
+            <li><a href="#section-3" className="text-primary hover:underline">3. Товар, цена и оплата</a></li>
+            <li><a href="#section-4" className="text-primary hover:underline">4. Доставка</a></li>
+            <li><a href="#section-5" className="text-primary hover:underline">5. Отказ от товара, обмен и возврат</a></li>
+            <li><a href="#section-6" className="text-primary hover:underline">6. Ответственность</a></li>
+            <li><a href="#section-7" className="text-primary hover:underline">7. Персональные данные</a></li>
+            <li><a href="#section-8" className="text-primary hover:underline">8. Контакты и споры</a></li>
+          </ul>
+        </nav>
+
+        <Section id="section-1" title="1. Стороны договора">
           <p>
             Продавец — индивидуальный предприниматель Рыбко Анна Александровна,
             ОГРНИП 321508100460474. Покупатель — любое дееспособное лицо,
@@ -41,7 +52,7 @@ export function OfferPage() {
           </p>
         </Section>
 
-        <Section title="2. Как заключается договор">
+        <Section id="section-2" title="2. Как заключается договор">
           <p>
             Договор считается заключённым с момента оформления заказа на сайте:
             покупатель добавляет товары в корзину, указывает способ доставки и
@@ -54,7 +65,7 @@ export function OfferPage() {
           </p>
         </Section>
 
-        <Section title="3. Товар, цена и оплата">
+        <Section id="section-3" title="3. Товар, цена и оплата">
           <p>
             К продаже предлагается косметическая продукция брендов ISSEIMI и
             GLACÉE Skincare производства фармконцерна Heber Farma (Испания).
@@ -69,7 +80,7 @@ export function OfferPage() {
           </p>
         </Section>
 
-        <Section title="4. Доставка">
+        <Section id="section-4" title="4. Доставка">
           <p>Доступные способы получения заказа:</p>
           <ul className="list-disc pl-5 space-y-2">
             <li>
@@ -91,7 +102,7 @@ export function OfferPage() {
           </p>
         </Section>
 
-        <Section title="5. Отказ от товара, обмен и возврат">
+        <Section id="section-5" title="5. Отказ от товара, обмен и возврат">
           <p>
             Парфюмерно-косметические товары надлежащего качества обмену и
             возврату не подлежат (Постановление Правительства РФ №55 от
@@ -110,7 +121,7 @@ export function OfferPage() {
           </p>
         </Section>
 
-        <Section title="6. Ответственность">
+        <Section id="section-6" title="6. Ответственность">
           <p>
             Продавец отвечает за соответствие товара описанию и его
             надлежащее качество. Косметическая продукция не является
@@ -120,7 +131,7 @@ export function OfferPage() {
           </p>
         </Section>
 
-        <Section title="7. Персональные данные">
+        <Section id="section-7" title="7. Персональные данные">
           <p>
             Оформляя заказ, покупатель даёт согласие на обработку персональных
             данных (имя, телефон, email, адрес доставки) в объёме, необходимом
@@ -131,7 +142,7 @@ export function OfferPage() {
           </p>
         </Section>
 
-        <Section title="8. Контакты и споры">
+        <Section id="section-8" title="8. Контакты и споры">
           <p>
             Телефон:{' '}
             <a href="tel:+74951832848" className="underline underline-offset-2 hover:text-primary transition-colors">

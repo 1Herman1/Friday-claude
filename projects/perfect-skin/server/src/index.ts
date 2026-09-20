@@ -17,6 +17,10 @@ import promoRoutes from './routes/promo/index.js'
 import deliveryRoutes from './routes/delivery/index.js'
 import ordersRoutes from './routes/orders/index.js'
 import authRoutes from './routes/auth/index.js'
+import postsRoutes from './routes/posts/index.js'
+import proRoutes from './routes/pro/index.js'
+import adminRoutes from './routes/admin/index.js'
+import exchange1cRoutes from './routes/exchange-1c.js'
 
 const app = Fastify({
   logger: true,
@@ -94,6 +98,9 @@ app.get('/api/v1/health', async (request, reply) => {
   return { ok: true, timestamp: new Date().toISOString() }
 })
 
+// Register exchange routes
+await app.register(exchange1cRoutes)
+
 // Register catalog routes
 await app.register(productsRoutes, { prefix: '/api/v1/products' })
 await app.register(categoriesRoutes, { prefix: '/api/v1/categories' })
@@ -106,6 +113,13 @@ await app.register(deliveryRoutes)
 await app.register(promoRoutes)
 await app.register(ordersRoutes)
 await app.register(authRoutes)
+await app.register(proRoutes)
+
+// Register posts routes
+await app.register(postsRoutes, { prefix: '/api/v1' })
+
+// Register admin routes
+await app.register(adminRoutes)
 
 const start = async () => {
   try {

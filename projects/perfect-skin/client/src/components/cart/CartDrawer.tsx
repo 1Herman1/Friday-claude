@@ -155,47 +155,52 @@ export default function CartDrawer({ open, onClose }: Props) {
           return (
             <li
               key={item.id}
-              className={`flex flex-wrap gap-3 py-4 transition-opacity duration-200 ${
+              className={`flex flex-col gap-3 py-4 transition-opacity duration-200 ${
                 isUnavailable ? 'opacity-60' : ''
               }`}
             >
-              {/* Image */}
-              <Link
-                to={`/product/${item.product.slug}`}
-                onClick={onClose}
-                className="flex-shrink-0 w-16 h-16 rounded-media bg-muted flex items-center justify-center overflow-hidden"
-              >
-                {item.product.image ? (
-                  <img
-                    src={item.product.image}
-                    alt={item.product.name}
-                    className="max-h-full max-w-full object-contain"
-                  />
-                ) : (
-                  <IconCart className="w-6 h-6 text-muted-foreground" />
-                )}
-              </Link>
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
+              {/* Header: Image + Name + Quantity */}
+              <div className="flex gap-3">
+                {/* Image */}
                 <Link
                   to={`/product/${item.product.slug}`}
                   onClick={onClose}
-                  className="block text-sm font-semibold text-foreground leading-snug line-clamp-2 hover:text-primary transition-colors"
+                  className="flex-shrink-0 w-16 h-16 rounded-media bg-muted flex items-center justify-center overflow-hidden"
                 >
-                  {item.product.name}
+                  {item.product.image ? (
+                    <img
+                      src={item.product.image}
+                      alt={item.product.name}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  ) : (
+                    <IconCart className="w-6 h-6 text-muted-foreground" />
+                  )}
                 </Link>
 
-                {/* Volume Label */}
-                <p className="text-xs text-muted-foreground mt-1">{item.variant.volumeLabel}</p>
+                {/* Name */}
+                <div className="flex-1 min-w-0">
+                  <Link
+                    to={`/product/${item.product.slug}`}
+                    onClick={onClose}
+                    className="block text-sm font-semibold text-foreground leading-snug line-clamp-2 hover:text-primary transition-colors min-w-0 hyphens-auto"
+                  >
+                    {item.product.name}
+                  </Link>
+                </div>
+              </div>
 
-                {/* Stock Warning */}
-                {warning?.code === 'STOCK_REDUCED' && (
-                  <p className="text-xs text-urgency mt-1 font-medium">{warning.message}</p>
-                )}
+              {/* Volume Label */}
+              <p className="text-xs text-muted-foreground">{item.variant.volumeLabel}</p>
 
-                {/* Price */}
-                <div className="mt-2 flex items-center justify-between gap-2">
+              {/* Stock Warning */}
+              {warning?.code === 'STOCK_REDUCED' && (
+                <p className="text-xs text-urgency font-medium">{warning.message}</p>
+              )}
+
+              {/* Price + Quantity */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-foreground tabular-nums">
                     {formatPrice(item.lineTotal)}
                   </span>
@@ -205,16 +210,12 @@ export default function CartDrawer({ open, onClose }: Props) {
                     </span>
                   )}
                 </div>
-              </div>
-
-              {/* Quantity Stepper */}
-              <div className="w-full flex justify-end sm:w-auto sm:block">
-              <QuantityStepper
-                quantity={item.quantity}
-                maxStock={item.variant.stock}
-                onQuantityChange={(newQuantity) => handleUpdateQuantity(item, newQuantity)}
-                disabled={isUnavailable || mutatingId === item.id}
-              />
+                <QuantityStepper
+                  quantity={item.quantity}
+                  maxStock={item.variant.stock}
+                  onQuantityChange={(newQuantity) => handleUpdateQuantity(item, newQuantity)}
+                  disabled={isUnavailable || mutatingId === item.id}
+                />
               </div>
             </li>
           )

@@ -1,108 +1,118 @@
 import { useState } from 'react'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 
 const categories = [
   {
     num: '01',
     title: 'Уход за лицом',
-    shortLabel: 'Лицо',
-    desc: 'Кремы, сыворотки и маски ISSEIMI для домашнего и кабинетного ухода.',
+    eyebrow: 'Кремы, сыворотки и маски ISSEIMI',
     slug: 'kremy-dlya-litsa-i-shei',
+    photo: '/products-optimized/dinamizante-vosstanavlivayushhij-krem/card.webp',
     bgColor: 'bg-accent',
-    textColor: 'text-foreground',
   },
   {
     num: '02',
     title: 'Сыворотки',
-    shortLabel: 'Сыворотки',
-    desc: 'Активные концентраты для интенсивного ухода.',
+    eyebrow: 'Активные концентраты для интенсивного ухода',
     slug: 'syvorotki',
-    bgColor: 'bg-border',
-    textColor: 'text-foreground',
+    photo: '/products-optimized/collagen-booster-vosstanavlivayushhaya-syvorotka/card.webp',
+    bgColor: 'bg-accent/60',
   },
   {
     num: '03',
     title: 'Маски',
-    shortLabel: 'Маски',
-    desc: 'Питающие и очищающие маски для лица.',
+    eyebrow: 'Питающие и очищающие маски для лица',
     slug: 'maski',
-    bgColor: 'bg-primary-foreground',
-    textColor: 'text-foreground',
-    borderClass: 'ring-1 ring-inset ring-border',
+    photo: '/products-optimized/tts-energizing-mask-maska-so-stvolovymi-kletkami/card.webp',
+    bgColor: 'bg-accent/30',
   },
   {
     num: '04',
     title: 'Наборы',
-    shortLabel: 'Наборы',
-    desc: 'Готовые программы ухода и подарочные боксы.',
+    eyebrow: 'Готовые программы ухода и подарочные боксы',
     slug: 'nabory',
+    photo:
+      '/products-optimized/podarochnyj-nabor-bee-venom-s-pchelinym-yadom-dlya-razglazhivaniya-morshhin-i-ustraneniya-tusklosti-kozhi/card.webp',
     bgColor: 'bg-muted',
-    textColor: 'text-foreground',
   },
 ]
 
 export function CategoryAccordion() {
+  // На sm/md: сетка 2×2. На lg: гармошка с раскрытием на hover.
   const [activeIdx, setActiveIdx] = useState(0)
+  // Живой отслеживатель: однократный замер window.innerWidth не переживает
+  // поворот планшета и изменение размера окна.
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
 
   return (
-    <section id="catalog" className="bg-background py-20 md:py-32">
+    <section id="catalog" className="bg-background py-10 md:py-14">
       <div className="container-app">
-        <h2 className="text-h2 font-heading font-bold mb-3 md:mb-16">
+        <h2 className="text-h2 font-heading font-bold mb-3 md:mb-8">
           Категории
         </h2>
 
-        {/* Accordion: Desktop flex-row, mobile flex-col */}
-        <div
-          className="flex flex-col md:flex-row gap-3 md:gap-1 md:h-full"
-          style={{ minHeight: '160px' }}
-        >
-          {categories.map((cat, idx) => (
-            <Link
-              key={cat.slug}
-              to={`/catalog/${cat.slug}`}
-              onMouseEnter={() => setActiveIdx(idx)}
-              onFocus={() => setActiveIdx(idx)}
-              className={`
-                relative flex-1 min-w-0 overflow-hidden rounded-block
-                transition-[flex] duration-300 ease-out
-                group
-                ${cat.bgColor} ${cat.textColor} ${cat.borderClass || ''}
-                md:hover:flex-grow-[2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
-                md:min-h-96 min-h-40
-              `}
-              style={{
-                flex: activeIdx === idx && typeof window !== 'undefined' && window.innerWidth >= 768 ? '1.5 1 0' : '1 1 0',
-              }}
-            >
-              {/* Spine (vertical) - desktop only */}
-              <div className="hidden md:flex absolute left-0 top-0 bottom-0 items-center justify-center w-12 md:w-16 flex-shrink-0 pointer-events-none">
-                <div className="spine-vertical">
-                  {cat.title}
-                </div>
-              </div>
-
-              {/* Number - desktop large, mobile hidden */}
-              <div
-                className="hidden md:flex absolute right-2 bottom-2 text-9xl font-heading font-900 opacity-12 pointer-events-none leading-none"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:flex gap-3 md:gap-2 lg:gap-3 lg:h-[420px]">
+          {categories.map((cat, idx) => {
+            const active = activeIdx === idx
+            return (
+              <Link
+                key={cat.slug}
+                to={`/catalog/${cat.slug}`}
+                onMouseEnter={() => isDesktop && setActiveIdx(idx)}
+                onFocus={() => isDesktop && setActiveIdx(idx)}
+                onClick={() => !isDesktop && setActiveIdx(idx)}
+                onTouchStart={() => !isDesktop && setActiveIdx(idx)}
+                className={`
+                  relative min-w-0 overflow-hidden rounded-block group
+                  transition-[flex-grow] duration-300 ease-out
+                  ${cat.bgColor} text-foreground
+                  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+                  min-h-44 lg:min-h-0
+                  lg:flex-grow
+                `}
+                style={isDesktop ? { flexGrow: active ? 5 : 1, flexBasis: 0 } : {}}
+                aria-expanded={isDesktop ? active : undefined}
               >
-                {cat.num}
-              </div>
-
-              {/* Open content - visible on desktop hover, visible on mobile */}
-              <div className="absolute inset-0 p-4 md:p-10 flex flex-col justify-start opacity-100 md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100 transition-opacity duration-300 pointer-events-none">
-                <div className="text-label font-bold opacity-70 mb-2">
-                  {cat.num} · {cat.shortLabel}
+                {/* Свёрнутый корешок: вертикальная подпись (только десктоп LG) */}
+                <div
+                  className={`hidden lg:flex absolute inset-0 items-center justify-center transition-opacity duration-200 flex-col gap-2 ${
+                    active ? 'opacity-0' : 'opacity-100'
+                  }`}
+                >
+                  <span className="text-label font-semibold">{cat.num}</span>
+                  <span className="spine-vertical">{cat.title}</span>
+                  <span className="text-xl" aria-hidden="true">↓</span>
                 </div>
-                <h3 className="text-h3 font-heading font-bold mb-3">
-                  {cat.title}
-                </h3>
-                <p className="text-body leading-body opacity-90 mb-4">
-                  {cat.desc}
-                </p>
-                <div className="hidden md:block mt-auto text-body font-bold opacity-60">→</div>
-              </div>
-            </Link>
-          ))}
+
+                {/* Раскрытое содержимое */}
+                <div
+                  className={`p-5 md:p-8 flex flex-col h-full transition-opacity duration-300 ${
+                    active ? 'lg:opacity-100' : 'lg:opacity-0'
+                  }`}
+                >
+                  <div className="text-label font-semibold opacity-70 mb-2 lg:whitespace-nowrap">
+                    {cat.eyebrow}
+                  </div>
+                  <h3 className="text-h3 md:text-h2 font-heading font-bold mb-4">
+                    {cat.title}
+                  </h3>
+                  <span
+                    className="w-11 h-11 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl transition-transform duration-200 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                  <img
+                    src={cat.photo}
+                    alt=""
+                    loading="lazy"
+                    className="absolute right-2 bottom-0 w-32 md:w-36 lg:w-64 max-w-[42%] lg:max-w-[55%] object-contain pointer-events-none select-none mix-blend-multiply"
+                  />
+                </div>
+              </Link>
+            )
+          })}
         </div>
       </div>
     </section>

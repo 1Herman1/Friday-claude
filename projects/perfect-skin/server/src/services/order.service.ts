@@ -3,6 +3,7 @@ import { ApiError } from '../lib/errors.js'
 import * as psSharedNs from '@ps/shared'
 const { calcOrderTotals } = ((psSharedNs as any).default ?? psSharedNs) as any
 import { toCalcMethod } from '../lib/delivery.js'
+import { isWholesaleViewer, resolvePrice, type PriceViewer } from '../lib/pricing.js'
 import crypto from 'crypto'
 
 type PrismaDeliveryMethod = $Enums.DeliveryMethod
@@ -46,7 +47,8 @@ export class OrderService {
       promoCode?: string | null
       comment?: string | null
       expectedTotal: number
-    }
+    },
+    viewer: PriceViewer = null
   ) {
     // Find cart by owner (either user or session)
     const cart = await db.cart.findUnique({
@@ -69,16 +71,17 @@ export class OrderService {
     // Filter out unavailable items for calculation
     const availableItems = cart.items.filter((item) => {
       const v = item.productVariant
+      const resolvedPrice = resolvePrice({ retailPrice: v.retailPrice, wholesalePrice: v.wholesalePrice }, viewer)
       return (
         v.isActive &&
         !v.deletedAt &&
         v.product.isActive &&
         !v.product.deletedAt &&
-        v.retailPrice > 0
+        resolvedPrice > 0
       )
     })
 
-    // Check for unavailable items
+    // Check for unavailable items and professional items restrictions
     for (const item of cart.items) {
       const v = item.productVariant
       if (!v.isActive || v.deletedAt || !v.product.isActive || v.product.deletedAt) {
@@ -87,11 +90,35 @@ export class OrderService {
           productName: v.product.name,
         })
       }
+
+      // Check if professional product is accessible
+      if (v.product.isProfessional && !isWholesaleViewer(viewer)) {
+        throw new ApiError(409, 'ITEM_UNAVAILABLE', 'Товар доступен только специалистам', {
+          itemId: item.id,
+          productName: v.product.name,
+        })
+      }
+
+      // Check if professional variant is accessible
+      if (v.isProfessional && !isWholesaleViewer(viewer)) {
+        throw new ApiError(409, 'ITEM_UNAVAILABLE', 'Фасовка доступна только для специалистов', {
+          itemId: item.id,
+          productName: v.product.name,
+        })
+      }
+    }
+
+    // Запретить промокод для оптовых покупателей
+    if (isWholesaleViewer(viewer) && payload.promoCode) {
+      throw new ApiError(409, 'PROMO_NOT_FOR_WHOLESALE', 'Промокод не применяется к оптовым ценам')
     }
 
     // Quick calculation of subtotal to pass to promo validation
     const subtotal = availableItems.reduce(
-      (sum, item) => sum + item.productVariant.retailPrice * item.quantity,
+      (sum, item) => {
+        const resolvedPrice = resolvePrice({ retailPrice: item.productVariant.retailPrice, wholesalePrice: item.productVariant.wholesalePrice }, viewer)
+        return sum + resolvedPrice * item.quantity
+      },
       0
     )
 
@@ -200,14 +227,17 @@ export class OrderService {
       }
 
       // Step 5: Calculate totals using calcOrderTotals
-      const calcItems = availableItems.map((item) => ({
-        price: item.productVariant.retailPrice,
-        quantity: item.quantity,
-      }))
+      const calcItems = availableItems.map((item) => {
+        const resolvedPrice = resolvePrice({ retailPrice: item.productVariant.retailPrice, wholesalePrice: item.productVariant.wholesalePrice }, viewer)
+        return {
+          price: resolvedPrice,
+          quantity: item.quantity,
+        }
+      })
 
       const totals = calcOrderTotals({
         items: calcItems,
-        priceList: 'retail',
+        priceList: isWholesaleViewer(viewer) ? 'professional' : 'retail',
         promo: promoData ? { code: promoData.code, percent: promoData.percent } : null,
         deliveryMethod: toCalcMethod(payload.deliveryMethod),
       })
@@ -252,6 +282,7 @@ export class OrderService {
 
       // Create OrderItems with snapshots
       for (const item of availableItems) {
+        const resolvedPrice = resolvePrice({ retailPrice: item.productVariant.retailPrice, wholesalePrice: item.productVariant.wholesalePrice }, viewer)
         await tx.orderItem.create({
           data: {
             orderId: newOrder.id,
@@ -262,7 +293,7 @@ export class OrderService {
             volumeLabel:
               item.productVariant.volumeLabel ??
               `${item.productVariant.volumeValue} ${{ ml: 'мл', g: 'г', pcs: 'шт' }[item.productVariant.volumeUnit] ?? ''}`,
-            price: item.productVariant.retailPrice,
+            price: resolvedPrice,
             quantity: item.quantity,
           },
         })
@@ -332,7 +363,7 @@ export class OrderService {
       image: string | null
     }>
     subtotal: number
-    promo: { code: string; percent: number; discount: number } | null
+    promo: { code: string; percent: number; discount: number; subtotal: number } | null
     deliveryCost: number
     total: number
     comment: string | null
@@ -374,6 +405,7 @@ export class OrderService {
             code: order.redemption?.promoCode?.code ?? '',
             percent: order.redemption?.promoCode?.percent ?? 0,
             discount: Number(order.promoDiscount),
+            subtotal: Number(order.subtotal),
           }
         : null,
       deliveryCost: Number(order.deliveryCost),

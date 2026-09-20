@@ -27,7 +27,7 @@ async function authenticatePlugin(fastify: FastifyInstance) {
       const user = await fastify.prisma.user.findUnique({
         where: { id: payload.userId },
         // Полная запись тянула бы passwordHash и счётчики в память на каждый запрос.
-        select: { id: true, isActive: true, deletedAt: true, tokenVersion: true, name: true, phone: true, email: true, role: true },
+        select: { id: true, isActive: true, deletedAt: true, tokenVersion: true, name: true, phone: true, email: true, role: true, proStatus: true },
       })
 
       if (!user || !user.isActive || user.deletedAt) {
@@ -44,6 +44,7 @@ async function authenticatePlugin(fastify: FastifyInstance) {
         phone: user.phone || '',
         email: user.email || null,
         role: user.role || 'customer',
+        proStatus: user.proStatus || null,
         tokenVersion: user.tokenVersion,
       }
     } catch (error) {
@@ -109,6 +110,7 @@ declare module 'fastify' {
       phone: string
       email: string | null
       role: string
+      proStatus: string | null
       tokenVersion: number
     }
   }

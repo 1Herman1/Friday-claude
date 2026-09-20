@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { fetchApi, ApiError } from '@/lib/api'
-import { IconSearch, IconPackage } from '@/components/icons'
+import { IconPackage } from '@/components/icons'
 import { OrderView, type OrderDetail } from '@/components/orders/OrderView'
 
 export function TrackOrderPage() {
@@ -40,6 +40,16 @@ export function TrackOrderPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    if (!number.trim()) {
+      setError('Заполните номер заказа')
+      return
+    }
+    if (!email.trim()) {
+      setError('Заполните email')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -126,7 +136,7 @@ export function TrackOrderPage() {
     <div className="container-app py-12 md:py-20">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-heading font-bold text-foreground mb-2 uppercase tracking-tight">
+          <h1 className="text-h3 md:text-h2 font-heading font-bold text-foreground mb-2 uppercase tracking-tight">
             Проверка заказа
           </h1>
           <p className="text-body-sm text-muted-foreground">
@@ -148,7 +158,7 @@ export function TrackOrderPage() {
               value={number}
               onChange={handleNumberChange}
               placeholder="PS-000123"
-              className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+              className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
             />
             <p className="text-xs text-muted-foreground mt-2">
               Допускается ввод без префикса PS-
@@ -169,7 +179,7 @@ export function TrackOrderPage() {
               value={email}
               onChange={handleEmailChange}
               placeholder="your@email.com"
-              className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+              className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
             />
           </div>
 
@@ -186,23 +196,12 @@ export function TrackOrderPage() {
 
           <button
             type="submit"
-            disabled={!number.trim() || !email.trim() || loading}
+            disabled={loading}
             className="w-full px-6 py-3 bg-primary text-primary-foreground font-bold rounded-pill disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors min-h-11"
           >
             {loading ? 'Проверяем…' : 'Проверить'}
           </button>
         </form>
-
-        {!order && (
-          <div className="mt-8 p-6 bg-card border border-border rounded-block text-center">
-            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-              <IconSearch className="w-6 h-6 text-muted-foreground" />
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Введите данные заказа, чтобы проверить статус доставки
-            </p>
-          </div>
-        )}
       </div>
     </div>
   )

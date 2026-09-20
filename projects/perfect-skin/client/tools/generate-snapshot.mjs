@@ -13,7 +13,11 @@ const slugs = list.items.map((p) => p.slug)
 if (list.total !== slugs.length) throw new Error(`expected all products in one page: ${slugs.length}/${list.total}`)
 
 const popular = await get('/api/v1/products?limit=60&sort=popular')
-const popularRank = Object.fromEntries(popular.items.map((p, i) => [p.slug, i]))
+// Pinned items get ranks 0..n-1, unpinned items get ranks starting from pinned count
+const popularRank = {}
+for (let i = 0; i < popular.items.length; i++) {
+  popularRank[popular.items[i].slug] = i
+}
 const newestRank = Object.fromEntries(slugs.map((s, i) => [s, i]))
 
 const products = []

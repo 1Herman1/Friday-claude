@@ -71,6 +71,11 @@ export class DemoCartApi implements CartApi {
           continue
         }
 
+        // Skip items with hidden prices (professional products for non-pros)
+        if (variant.retailPrice === null) {
+          continue
+        }
+
         const lineTotal = variant.retailPrice * finalQuantity
         cartItems.push({
           id: demoItem.variantId,

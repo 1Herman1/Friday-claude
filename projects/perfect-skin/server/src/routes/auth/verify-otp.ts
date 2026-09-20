@@ -103,9 +103,16 @@ export async function verifyOtpRoute(app: FastifyInstance) {
         user: {
           id: user.id,
           name: user.name,
-          phone: user.phone,
-          email: user.email,
+          phone: user.phone || '',
+          email: user.email || null,
           role: user.role,
+          proStatus: user.proStatus || null,
+          companyName: user.companyName || null,
+          inn: user.inn || null,
+          specialization: user.specialization || null,
+          proRequestedAt: user.proRequestedAt ? user.proRequestedAt.toISOString() : null,
+          proReviewedAt: user.proReviewedAt ? user.proReviewedAt.toISOString() : null,
+          proRejectReason: user.proRejectReason || null,
         },
         cartMerged,
       })

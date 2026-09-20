@@ -4,7 +4,7 @@ export function ContactsPage() {
   return (
     <div className="container-app py-12 md:py-20">
       {/* Header */}
-      <h1 className="text-2xl font-heading font-bold uppercase tracking-tight text-foreground mb-12 md:mb-16">
+      <h1 className="text-h3 md:text-h2 font-heading font-bold uppercase tracking-tight text-foreground mb-12 md:mb-16">
         Контакты
       </h1>
 
@@ -22,7 +22,7 @@ export function ContactsPage() {
               </h2>
               <a
                 href="tel:+74951832848"
-                className="text-body font-semibold text-foreground hover:text-primary transition-colors block mb-2"
+                className="text-body font-semibold text-primary hover:underline transition-colors block mb-2"
               >
                 +7 (495) 183-28-48
               </a>
@@ -47,7 +47,7 @@ export function ContactsPage() {
               </h2>
               <a
                 href="mailto:mail@perfect-skin.shop"
-                className="text-body font-semibold text-foreground hover:text-primary transition-colors"
+                className="text-body font-semibold text-primary hover:underline transition-colors"
               >
                 mail@perfect-skin.shop
               </a>

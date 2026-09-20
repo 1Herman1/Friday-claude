@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { cartService } from '../../services/cart.service.js'
 import { promoService } from '../../services/promo.service.js'
 import { ApiError } from '../../lib/errors.js'
+import { resolvePrice } from '../../lib/pricing.js'
 import * as psSharedNs from '@ps/shared'
 const { calcDeliveryCost, FREE_PVZ_THRESHOLD, FREE_COURIER_THRESHOLD, DELIVERY_COST } = ((psSharedNs as any).default ?? psSharedNs) as any
 
@@ -48,9 +49,11 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         throw new ApiError(409, 'CART_EMPTY', 'Корзина пуста')
       }
 
-      // Calculate subtotal
+      // Calculate subtotal using resolved prices
+      const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
       const subtotal = cart.items.reduce((sum: number, item: any) => {
-        return sum + item.productVariant.retailPrice * item.quantity
+        const resolvedPrice = resolvePrice({ retailPrice: item.productVariant.retailPrice, wholesalePrice: item.productVariant.wholesalePrice }, viewer)
+        return sum + resolvedPrice * item.quantity
       }, 0)
 
       // Validate promo if provided

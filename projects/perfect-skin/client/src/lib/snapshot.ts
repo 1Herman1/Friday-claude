@@ -129,6 +129,7 @@ function matches(p: SnapshotProduct, f: Filters, snap: CatalogSnapshot, exclude:
   if (exclude !== 'price' && (f.minPrice !== undefined || f.maxPrice !== undefined)) {
     const inRange = d.variants.some(
       (v) =>
+        v.retailPrice !== null &&
         (f.minPrice === undefined || v.retailPrice >= f.minPrice) &&
         (f.maxPrice === undefined || v.retailPrice <= f.maxPrice)
     )
@@ -141,9 +142,17 @@ function sortProducts(items: SnapshotProduct[], sort: string | null): SnapshotPr
   const byId = (a: SnapshotProduct, b: SnapshotProduct) => a.detail.id.localeCompare(b.detail.id)
   const sorted = [...items]
   if (sort === 'price_asc') {
-    sorted.sort((a, b) => a.detail.minPrice - b.detail.minPrice || byId(a, b))
+    sorted.sort((a, b) => {
+      const priceA = a.detail.minPrice ?? Infinity
+      const priceB = b.detail.minPrice ?? Infinity
+      return priceA - priceB || byId(a, b)
+    })
   } else if (sort === 'price_desc') {
-    sorted.sort((a, b) => b.detail.minPrice - a.detail.minPrice || byId(a, b))
+    sorted.sort((a, b) => {
+      const priceA = a.detail.minPrice ?? -Infinity
+      const priceB = b.detail.minPrice ?? -Infinity
+      return priceB - priceA || byId(a, b)
+    })
   } else if (sort === 'popular') {
     sorted.sort((a, b) => a.meta.popularRank - b.meta.popularRank)
   } else {
@@ -164,6 +173,8 @@ function pickCard(d: ProductCardExtended): ProductCard {
     needs: d.needs,
     minPrice: d.minPrice,
     oldPrice: d.oldPrice,
+    priceHidden: d.priceHidden ?? false,
+    isProfessional: d.isProfessional ?? false,
     inStock: d.inStock,
     variants: d.variants,
   }
@@ -173,7 +184,12 @@ function computeList(sp: URLSearchParams, snap: CatalogSnapshot): ProductsListRe
   const f = parseFilters(sp)
   const limit = Math.min(Math.max(parseInt(sp.get('limit') || '24', 10) || 24, 1), 60)
   const offset = Math.max(parseInt(sp.get('offset') || '0', 10) || 0, 0)
-  const matched = snap.products.filter((p) => matches(p, f, snap, undefined))
+  const proOnly = sp.get('pro') === '1'
+  const matched = snap.products.filter(
+    (p) =>
+      matches(p, f, snap, undefined) &&
+      (!proOnly || p.detail.isProfessional || p.detail.variants.some((v) => v.isProfessional)),
+  )
   const sorted = sortProducts(matched, sp.get('sort'))
   return {
     items: sorted.slice(offset, offset + limit).map((p) => pickCard(p.detail)),
@@ -205,8 +221,10 @@ function computeFacets(sp: URLSearchParams, snap: CatalogSnapshot): Facets {
   let max = 0
   for (const p of priceItems) {
     for (const v of p.detail.variants) {
-      min = Math.min(min, v.retailPrice)
-      max = Math.max(max, v.retailPrice)
+      if (v.retailPrice !== null) {
+        min = Math.min(min, v.retailPrice)
+        max = Math.max(max, v.retailPrice)
+      }
     }
   }
   if (min === Infinity) min = 0
@@ -241,5 +259,34 @@ export async function resolveFromSnapshot<T>(path: string): Promise<T> {
     if (!found) throw new ApiError(404, 'PRODUCT_NOT_FOUND', 'Товар не найден')
     return found.detail as T
   }
+
+  // Stub endpoints for auth and pro features in snapshot mode
+  if (p === '/api/v1/auth/me') {
+    // Return guest user in snapshot mode
+    return {
+      id: 'guest',
+      name: 'Гость',
+      phone: '',
+      role: 'customer',
+      proStatus: 'none',
+    } as T
+  }
+  if (p === '/api/v1/pro/status') {
+    // Return pending status for demo
+    return {
+      proStatus: 'none',
+      companyName: null,
+      inn: null,
+      specialization: null,
+      proRequestedAt: null,
+      proReviewedAt: null,
+      proRejectReason: null,
+    } as T
+  }
+  if (p === '/api/v1/pro/apply') {
+    // Accept application but return pending
+    return { proStatus: 'pending' } as T
+  }
+
   throw new ApiError(404, 'NOT_FOUND', `Эндпоинт недоступен в режиме снимка: ${p}`)
 }

@@ -54,7 +54,7 @@ export function BrandsPage() {
     <div className="container-app py-12 md:py-20">
       {/* Header */}
       <div className="mb-12 md:mb-16">
-        <h1 className="text-2xl font-heading font-bold uppercase tracking-tight text-foreground mb-4">
+        <h1 className="text-h3 md:text-h2 font-heading font-bold uppercase tracking-tight text-foreground mb-4">
           Два бренда, одно производство
         </h1>
         <p className="text-base text-muted-foreground max-w-prose">

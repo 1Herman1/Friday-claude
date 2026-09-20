@@ -60,7 +60,7 @@ export function AuthPage() {
     }
 
     if (!isEmailValid) {
-      setError('Проверьте адрес — похоже, есть опечатка')
+      setError('Введите корректный email')
       return
     }
 
@@ -85,8 +85,12 @@ export function AuthPage() {
     }
   }
 
+  // Определяем, это вход специалиста или обычный
+  const isPro = location.pathname === '/pro/register' || searchParams.get('pro') === '1'
+  const nextUrl = isPro ? '/pro' : (searchParams.get('next') || '/orders')
+
   const handleVerifyCode = async () => {
-    if (code.length < CODE_LENGTH) {
+    if (!code || code.length < CODE_LENGTH) {
       setError('Введите 6-значный код')
       return
     }
@@ -98,7 +102,6 @@ export function AuthPage() {
       await verifyOtp(email.trim().toLowerCase(), code)
 
       // Если корзина была объединена, обновить её на странице-назначении
-      const nextUrl = searchParams.get('next') || '/orders'
       navigate(nextUrl)
     } catch (err) {
       if (err instanceof ApiError) {
@@ -141,21 +144,24 @@ export function AuthPage() {
   const isDemoMode = import.meta.env.VITE_API_MODE === 'snapshot'
 
   return (
-    <div className="min-h-[100dvh] bg-background flex items-center justify-center px-4 py-12">
+    <div className="min-h-[100dvh] bg-background flex items-center justify-center px-4 py-12 lg:py-24">
       <div className="w-full max-w-sm">
-        {/* Логотип */}
-        <div className="flex justify-center mb-10">
-          <img
-            src="/logo/logo-wordmark.webp"
-            alt="Perfect Skin"
-            width={120}
-            height={20}
-            className="h-6 w-auto"
-          />
-        </div>
-
         {/* Карточка входа */}
         <div className="bg-card rounded-block shadow-sm p-8 border border-border">
+          {isPro ? (
+            <div className="mb-6 text-center">
+              <p className="text-sm font-semibold text-foreground mb-1">
+                Регистрация специалиста
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Введите email — пришлём код. После входа заполните короткую заявку на профессиональный доступ
+              </p>
+            </div>
+          ) : (
+            <p className="text-xs text-muted-foreground mb-6 text-center">
+              Вход нужен, чтобы видеть историю заказов — оформить заказ можно и без него
+            </p>
+          )}
           {isDemoMode ? (
             <div className="text-center">
               <IconUser className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -186,9 +192,6 @@ export function AuthPage() {
                   <h1 className="text-lg font-heading font-semibold text-foreground mb-1">
                     Введите email
                   </h1>
-                  <p className="text-body-sm text-muted-foreground mb-6">
-                    Пришлём код для входа
-                  </p>
 
                   <div className="mb-4">
                     <label
@@ -216,7 +219,7 @@ export function AuthPage() {
                         if (error) setError('')
                       }}
                       placeholder="name@example.ru"
-                      className="w-full px-4 py-3 text-base rounded-pill border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus:ring-destructive/20 min-h-11"
+                      className="w-full px-4 py-3 text-base rounded-pill border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus:ring-destructive/20 min-h-11"
                     />
                     <p
                       id={
@@ -239,7 +242,7 @@ export function AuthPage() {
 
                   <button
                     onClick={handleSendCode}
-                    disabled={loading || !email.trim() || !isEmailValid}
+                    disabled={loading}
                     className="w-full px-6 py-3 bg-primary text-primary-foreground font-bold rounded-pill disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors min-h-11 flex items-center justify-center"
                   >
                     {loading ? (
@@ -321,7 +324,7 @@ export function AuthPage() {
                         )
                         if (error) setError('')
                       }}
-                      className="w-full px-4 py-4 rounded-pill border text-center text-2xl font-bold tracking-[0.4em] text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border focus:border-primary focus:ring-2 focus:ring-primary/25 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus:ring-destructive/20 min-h-11"
+                      className="w-full px-4 py-4 rounded-pill border text-center text-2xl font-bold tracking-[0.4em] text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus:ring-destructive/20 min-h-11"
                     />
                     <p
                       id={
@@ -342,7 +345,7 @@ export function AuthPage() {
 
                   <button
                     onClick={handleVerifyCode}
-                    disabled={loading || code.length < CODE_LENGTH}
+                    disabled={loading}
                     className="w-full px-6 py-3 bg-primary text-primary-foreground font-bold rounded-pill disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors min-h-11 flex items-center justify-center mb-4"
                   >
                     {loading ? (

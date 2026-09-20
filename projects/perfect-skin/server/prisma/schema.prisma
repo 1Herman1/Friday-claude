@@ -24,6 +24,15 @@ enum UserRole {
   products_manager
   content_manager
   customer
+  professional
+}
+
+/// Статус заявки косметолога на профессиональный доступ.
+enum ProStatus {
+  none
+  pending
+  approved
+  rejected
 }
 
 enum OtpChannel {
@@ -151,6 +160,17 @@ model User {
   /// обходится запросом нового кода — счётчик попыток обнулялся бы вместе с ним.
   otpFailedCount  Int       @default(0)
   otpBlockedUntil DateTime?
+
+  /// Заявка на профессиональный доступ. Оптовая цена выдаётся ТОЛЬКО при
+  /// role = professional И proStatus = approved — обе проверки на сервере.
+  proStatus       ProStatus @default(none)
+  companyName     String?
+  inn             String?
+  specialization  String?
+  proRequestedAt  DateTime?
+  proReviewedAt   DateTime?
+  proReviewerId   String?
+  proRejectReason String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   deletedAt       DateTime?
@@ -333,6 +353,8 @@ model Product {
   maxPrice           Int        @default(0) // максимальная розничная цена активных фасовок, копейки
   isActive           Boolean    @default(true)
   isFeatured         Boolean    @default(false)
+  popularPin         Int? // позиция в закреплённых популярных товарах (null = не закреплён)
+  isProfessional     Boolean    @default(false) // кабинетная позиция: цену видят только специалисты
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
   deletedAt          DateTime?
@@ -352,6 +374,8 @@ model Product {
   @@index([lineId])
   @@index([isActive, deletedAt, createdAt])
   @@index([minPrice])
+  @@index([popularPin])
+  @@index([isProfessional])
   @@map("products")
 }
 
@@ -365,6 +389,8 @@ model ProductVariant {
   volumeLabel    String? // «набор из 3 средств» — переопределяет вывод
   retailPrice    Int // копейки: 807700 = 8 077 ₽
   oldRetailPrice Int?
+  wholesalePrice Int? // оптовая цена для одобренных косметологов, копейки
+  isProfessional Boolean    @default(false) // фасовка только для кабинета
   stock          Int        @default(0)
   sku            String?    @unique
   barcode        String?
@@ -594,6 +620,21 @@ model Favorite {
 
 // ─────────────────────────────── Промокоды ───────────────────────────────
 
+/// Партнёр (косметолог, реселлер). Для отслеживания выплат по промокодам.
+model Partner {
+  id                 String    @id @default(uuid())
+  name               String    @unique
+  contact            String?
+  commissionPercent  Int       @default(0) // процент от прибыли на его промокодах
+  isActive           Boolean   @default(true)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  promoCodes PromoCode[]
+
+  @@map("partners")
+}
+
 /// Промокод косметолога. У Симбы код захардкожен строкой в расчёте итогов —
 /// поэтому там нельзя ни выключить код, ни собрать статистику, ни завести второй
 /// без выкладки. Здесь это данные.
@@ -601,6 +642,7 @@ model PromoCode {
   id             String    @id @default(uuid())
   code           String // хранится в верхнем регистре; уникальность частичным индексом
   ownerId        String?
+  partnerId      String?
   description    String?
   percent        Int       @default(15) // утверждено заказчиком
   maxRedemptions Int? // null = без лимита
@@ -615,11 +657,13 @@ model PromoCode {
   deletedAt      DateTime?
 
   owner       User?                 @relation("PromoOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  partner     Partner?              @relation(fields: [partnerId], references: [id], onDelete: SetNull)
   redemptions PromoCodeRedemption[]
   orders      Order[]
   offers      Offer[]
 
   @@index([ownerId])
+  @@index([partnerId])
   @@index([isActive, expiresAt])
   @@map("promo_codes")
 }
@@ -785,4 +829,20 @@ model ConsultationRequest {
   @@index([status, createdAt])
   @@index([userId])
   @@map("consultation_requests")
+}
+
+// ──────────────────────── Синхронизация (1С и др.) ────────────────────────
+
+/// Лог синхронизации с внешними системами (1С, склад, бухгалтерия).
+/// Пока плейсхолдер под будущую волну.
+model SyncLog {
+  id         String    @id @default(uuid())
+  direction  String    // "import" | "export"
+  status     String    // "pending" | "success" | "failed"
+  itemsCount Int       @default(0)
+  errorText  String?
+  createdAt  DateTime  @default(now())
+
+  @@index([createdAt])
+  @@map("sync_logs")
 }

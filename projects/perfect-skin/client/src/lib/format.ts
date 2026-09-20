@@ -1,4 +1,7 @@
-export function formatPrice(kopecks: number): string {
+export function formatPrice(kopecks: number | null): string {
+  if (kopecks === null) {
+    return ''
+  }
   const rubles = (kopecks / 100).toFixed(0)
   const parts = rubles.split('')
   const result = []
@@ -10,7 +13,7 @@ export function formatPrice(kopecks: number): string {
     result.unshift(parts[i])
   }
 
-  return result.join('') + ' ₽'
+  return result.join('') + ' ₽'
 }
 
 export function pluralize(

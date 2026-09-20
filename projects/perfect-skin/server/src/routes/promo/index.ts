@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { promoService } from '../../services/promo.service.js'
 import { cartService } from '../../services/cart.service.js'
 import { ApiError } from '../../lib/errors.js'
+import { isWholesaleViewer, resolvePrice } from '../../lib/pricing.js'
 
 export default fastifyPlugin(async (app: FastifyInstance) => {
   app.post<{ Body: { code: string }; Reply: any }>(
@@ -64,9 +65,16 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         throw new ApiError(409, 'CART_EMPTY', 'Корзина пуста')
       }
 
-      // Calculate subtotal
+      // Запретить промокод для оптовых покупателей
+      const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
+      if (isWholesaleViewer(viewer)) {
+        throw new ApiError(409, 'PROMO_NOT_FOR_WHOLESALE', 'Промокод не применяется к оптовым ценам')
+      }
+
+      // Calculate subtotal using resolved prices
       const subtotal = cart.items.reduce((sum: number, item: any) => {
-        return sum + item.productVariant.retailPrice * item.quantity
+        const resolvedPrice = resolvePrice({ retailPrice: item.productVariant.retailPrice, wholesalePrice: item.productVariant.wholesalePrice }, viewer)
+        return sum + resolvedPrice * item.quantity
       }, 0)
 
       // Validate promo

@@ -25,6 +25,7 @@ const querySchema = z.object({
   maxPrice: z.coerce.number().int().min(0).max(100_000_000).optional(),
   q: z.string().trim().min(2).max(64).optional(),
   sort: z.enum(['price_asc', 'price_desc', 'newest', 'popular']).optional().default('newest'),
+  pro: z.enum(['1']).optional(),
   limit: z.coerce.number().int().min(1).max(60).optional().default(24),
   offset: z.coerce.number().int().min(0).max(5000).optional().default(0),
 })
@@ -41,6 +42,7 @@ export default async function listRoute(app: FastifyInstance) {
           500: { $ref: 'ps.error#' },
         },
       },
+      preHandler: app.authenticateOptional,
     },
     async (request, reply) => {
       const parsed = querySchema.safeParse(request.query)
@@ -114,6 +116,8 @@ export default async function listRoute(app: FastifyInstance) {
       // Set cache header
       reply.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
 
+      const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
+
       const result = await getProducts(app.prisma, {
         q: q.q,
         category: q.category,
@@ -124,9 +128,10 @@ export default async function listRoute(app: FastifyInstance) {
         minPrice: q.minPrice,
         maxPrice: q.maxPrice,
         sort: q.sort,
+        pro: q.pro === '1',
         limit: q.limit,
         offset: q.offset,
-      })
+      }, viewer)
 
       return result
     }

@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { formatPrice } from '@/lib/format'
 import { useCart } from '@/context/CartContext'
 import { useDrawer } from '@/context/DrawerContext'
 import { useFavorites } from '@/context/FavoritesContext'
+import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { IconHeart, IconHeartSolid } from '../icons'
+import { PriceTag } from '@/components/product/PriceTag'
 import type { ProductCard as ProductCardType } from '@/types/api'
 
 interface ProductCardProps {
@@ -12,15 +13,19 @@ interface ProductCardProps {
   onAddToCart?: (productId: string) => void
   // Первые карточки над фолдом — часть LCP, им eager + high priority.
   eager?: boolean
+  // Aspect ratio для фото (по умолчанию 3/4, для related используем 4/5)
+  aspectRatio?: '3/4' | '4/5'
 }
 
-export function ProductCard({ product, onAddToCart, eager }: ProductCardProps) {
+export function ProductCard({ product, onAddToCart, eager, aspectRatio = '3/4' }: ProductCardProps) {
   const { addItem } = useCart()
   const { openCart } = useDrawer()
   const { isFavorite, toggle } = useFavorites()
+  const { user } = useAuth()
   const [addingState, setAddingState] = useState<'idle' | 'loading' | 'success'>('idle')
 
   const isFav = isFavorite(product.slug)
+  const isProProduct = product.isProfessional && !isApprovedPro(user)
 
   const handleToggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -52,7 +57,7 @@ export function ProductCard({ product, onAddToCart, eager }: ProductCardProps) {
   }
 
   return (
-    <div className="bg-card rounded-block overflow-hidden transition-transform duration-200 hover:-translate-y-1">
+    <div className="bg-card rounded-block overflow-hidden transition-transform duration-200 hover:-translate-y-1 flex flex-col h-full">
       {/* Image */}
       <div className="relative">
         <Link to={`/product/${product.slug}`} className="block overflow-hidden bg-card">
@@ -68,7 +73,9 @@ export function ProductCard({ product, onAddToCart, eager }: ProductCardProps) {
                 loading={eager ? 'eager' : 'lazy'}
                 fetchPriority={eager ? 'high' : undefined}
                 decoding="async"
-                className="w-full aspect-[3/4] object-contain rounded-media"
+                className={`w-full object-contain rounded-media ${
+                  aspectRatio === '4/5' ? 'aspect-[4/5]' : 'aspect-[3/4]'
+                }`}
               />
             </picture>
           ) : (
@@ -77,6 +84,13 @@ export function ProductCard({ product, onAddToCart, eager }: ProductCardProps) {
             </div>
           )}
         </Link>
+
+        {/* Pro Badge */}
+        {isProProduct && (
+          <div className="absolute bottom-2 left-2 bg-accent px-3 py-1 rounded-pill">
+            <span className="text-xs font-semibold text-accent">Для специалистов</span>
+          </div>
+        )}
 
         {/* Favorite Button */}
         <button
@@ -94,7 +108,7 @@ export function ProductCard({ product, onAddToCart, eager }: ProductCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-2">
+      <div className="p-5 flex flex-col flex-1">
         {/* Brand and Line */}
         {(product.brand || product.line) && (
           <div className="text-xs text-muted-foreground mb-2">
@@ -107,35 +121,47 @@ export function ProductCard({ product, onAddToCart, eager }: ProductCardProps) {
         {/* Name */}
         <Link
           to={`/product/${product.slug}`}
-          className="block text-body font-sans font-bold text-foreground mb-3 hover:text-primary transition-colors"
+          className="block text-body font-sans font-bold text-foreground mb-3 hover:text-primary transition-colors line-clamp-2 h-[3rem] min-w-0 hyphens-auto"
         >
           {product.name}
         </Link>
 
-        {/* Price */}
-        <div className="flex items-baseline gap-2 mb-4">
-          <span className="text-lg font-semibold text-foreground">{formatPrice(product.minPrice)}</span>
-          {product.oldPrice && (
-            <span className="text-sm text-muted-foreground line-through">
-              {formatPrice(product.oldPrice)}
-            </span>
+        {/* Price and Button */}
+        <div className="mt-auto">
+          {/* Price */}
+          <div className="mb-4">
+            <PriceTag
+              price={product.minPrice}
+              oldPrice={product.oldPrice}
+              hidden={product.priceHidden}
+              size="lg"
+            />
+          </div>
+
+          {/* Button or Pro Link */}
+          {isProProduct ? (
+            <Link
+              to="/pro"
+              className="w-full py-3 px-6 bg-accent text-accent text-center font-sans font-semibold rounded-pill hover:opacity-90 transition-opacity duration-200 min-h-11 flex items-center justify-center"
+            >
+              Для специалистов
+            </Link>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              disabled={!product.inStock || addingState === 'loading'}
+              className="w-full py-3 px-6 bg-primary text-primary-foreground font-sans font-semibold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11"
+            >
+              {addingState === 'success'
+                ? 'Добавлено ✓'
+                : addingState === 'loading'
+                  ? 'Добавляю...'
+                  : product.inStock
+                    ? 'В корзину'
+                    : 'Нет в наличии'}
+            </button>
           )}
         </div>
-
-        {/* Button */}
-        <button
-          onClick={handleAddToCart}
-          disabled={!product.inStock || addingState === 'loading'}
-          className="w-full py-3 px-6 bg-primary text-primary-foreground font-sans font-semibold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11"
-        >
-          {addingState === 'success'
-            ? 'Добавлено ✓'
-            : addingState === 'loading'
-              ? 'Добавляю...'
-              : product.inStock
-                ? 'В корзину'
-                : 'Нет в наличии'}
-        </button>
       </div>
     </div>
   )

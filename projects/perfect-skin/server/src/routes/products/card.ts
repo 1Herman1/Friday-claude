@@ -19,6 +19,7 @@ export default async function cardRoute(app: FastifyInstance) {
           500: { $ref: 'ps.error#' },
         },
       },
+      preHandler: app.authenticateOptional,
     },
     async (request, reply) => {
       try {
@@ -32,7 +33,8 @@ export default async function cardRoute(app: FastifyInstance) {
         // Set cache header
         reply.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
 
-        const product = await getProductBySlug(app.prisma, slug)
+        const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
+        const product = await getProductBySlug(app.prisma, slug, viewer)
 
         if (!product) {
           throw new ApiError(404, 'PRODUCT_NOT_FOUND', 'Товар не найден')

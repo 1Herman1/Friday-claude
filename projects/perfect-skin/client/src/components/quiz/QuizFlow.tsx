@@ -6,9 +6,8 @@ import type { QuizResult as QuizResultType } from '@/lib/quiz-match'
 import { QuizProgress } from './QuizProgress'
 import { QuizQuestion } from './QuizQuestion'
 import { QuizResult } from './QuizResult'
-import { IconArrowRight } from '../icons'
 
-type Phase = 'intro' | 'quiz' | 'loading' | 'result'
+type Phase = 'quiz' | 'loading' | 'result'
 
 interface QuizFlowProps {
   onClose: () => void
@@ -18,7 +17,7 @@ const LOADER_DELAY_MS = 250
 const LOADER_MIN_MS = 700
 
 export function QuizFlow({ onClose }: QuizFlowProps) {
-  const [phase, setPhase] = useState<Phase>('intro')
+  const [phase, setPhase] = useState<Phase>('quiz')
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({})
   const [result, setResult] = useState<QuizResultType | null>(null)
   const [loaderStartTime, setLoaderStartTime] = useState(0)
@@ -93,7 +92,7 @@ export function QuizFlow({ onClose }: QuizFlowProps) {
         setPhase('result')
       } catch {
         // error handling
-        setPhase('intro')
+        setPhase('quiz')
         setAnswers({})
       }
     }
@@ -106,33 +105,8 @@ export function QuizFlow({ onClose }: QuizFlowProps) {
   const handleRetry = () => {
     setAnswers({})
     setResult(null)
-    setPhase('intro')
+    setPhase('quiz')
     setStepIndex(0)
-  }
-
-  // Intro
-  if (phase === 'intro') {
-    return (
-      <div className="flex flex-col gap-6">
-        <div>
-          <h2 className="text-h2 font-heading font-bold text-foreground mb-3">
-            Подбор ухода
-          </h2>
-          <p className="text-body leading-body text-muted-foreground mb-6">
-            Ответьте на пять вопросов о типе кожи и задаче — мы соберём программу
-            ухода из средств ISSEIMI и GLACÉE.
-          </p>
-        </div>
-
-        <button
-          onClick={() => setPhase('quiz')}
-          className="inline-flex items-center justify-center bg-primary text-primary-foreground font-heading font-bold px-6 py-3 rounded-pill hover:opacity-90 transition-opacity duration-200 min-h-11 gap-2 self-start"
-        >
-          Начать подбор
-          <IconArrowRight className="w-5 h-5" />
-        </button>
-      </div>
-    )
   }
 
   // Loading
