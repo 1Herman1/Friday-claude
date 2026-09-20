@@ -1,13 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import type { Provider, ModelInfo } from "../core/providers/types.js";
 import type { PricingRecord } from "../core/providers/kie/pricing.js";
 import { getProvider as getCoreProvider } from "../core/providers/index.js";
 import { loadCatalog } from "../core/catalog.js";
+import { getPackageDataDir } from "../core/paths.js";
 
-const dir = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(dir, "../..", "data");
+const dataDir = getPackageDataDir();
 
 interface PricingData {
   verified_at?: string;

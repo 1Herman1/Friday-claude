@@ -13,6 +13,8 @@ import modelsCommand from "./commands/models.js";
 import catalogCommand from "./commands/catalog.js";
 import generateCommand from "./commands/generate.js";
 import uploadCommand from "./commands/upload.js";
+import mcpCommand from "./commands/mcp.js";
+import initCommand from "./commands/init.js";
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(dir, "../..");
@@ -41,6 +43,8 @@ async function main() {
   program.addCommand(catalogCommand);
   program.addCommand(generateCommand);
   program.addCommand(uploadCommand);
+  program.addCommand(mcpCommand);
+  program.addCommand(initCommand);
 
   try {
     await program.parseAsync(process.argv);

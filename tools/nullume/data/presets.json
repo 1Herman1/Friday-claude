@@ -1,0 +1,138 @@
+{
+  "presets": [
+    {
+      "id": "product-photo",
+      "title": "Фото товара 1:1",
+      "category": "image",
+      "task": "Генерация фотографии товара для карточки интернет-магазина",
+      "model": "seedream/5-lite-text-to-image",
+      "fallbackModels": ["bytedance/seedream-v4-text-to-image"],
+      "input": {
+        "aspect_ratio": "1:1",
+        "quality": "basic"
+      },
+      "promptHint": "Добавь детали: материал, освещение, фон. Пример: 'professional product photography, studio lighting, white background'",
+      "notes": "Дешёвая lite-версия для быстрого прототипа. Финал на pro-версии."
+    },
+    {
+      "id": "banner-16x9",
+      "title": "Баннер сайта 16:9",
+      "category": "image",
+      "task": "Генерация баннера для лендинга или главной страницы",
+      "model": "seedream/5-lite-text-to-image",
+      "fallbackModels": ["bytedance/seedream-v4-text-to-image"],
+      "input": {
+        "aspect_ratio": "16:9",
+        "quality": "basic"
+      },
+      "promptHint": "Опиши сцену, атмосферу, цвета. Пример: 'abstract minimal design, gradient background, modern aesthetic'",
+      "notes": "2K для баннеров сайта. Не используй на печать."
+    },
+    {
+      "id": "social-square",
+      "title": "Пост в соцсети 1:1",
+      "category": "image",
+      "task": "Генерация квадратной картинки для Instagram, VK, Facebook",
+      "model": "seedream/5-lite-text-to-image",
+      "fallbackModels": ["bytedance/seedream-v4-text-to-image"],
+      "input": {
+        "aspect_ratio": "1:1",
+        "quality": "basic"
+      },
+      "promptHint": "Делай яркой и заметной. Пример: 'vibrant colorful illustration, social media post, eye-catching design'",
+      "notes": "Быстро и дешёво (lite). Для регулярного контента."
+    },
+    {
+      "id": "social-story",
+      "title": "Сторис/рил 9:16",
+      "category": "image",
+      "task": "Генерация вертикального изображения для сторис, TikTok, YouTube Shorts",
+      "model": "seedream/5-lite-text-to-image",
+      "fallbackModels": ["bytedance/seedream-v4-text-to-image"],
+      "input": {
+        "aspect_ratio": "9:16",
+        "quality": "basic"
+      },
+      "promptHint": "Полноэкранный формат. Пример: 'vertical mobile format, trending aesthetic, bold composition'",
+      "notes": "Вертикальный формат для мобильных платформ."
+    },
+    {
+      "id": "image-edit",
+      "title": "Редактирование фото",
+      "category": "image",
+      "task": "Правка, переколоризация или изменение стиля существующей фотографии",
+      "model": "seedream/5-lite-image-to-image",
+      "fallbackModels": ["bytedance/seedream-v4-edit"],
+      "input": {
+        "quality": "basic"
+      },
+      "promptHint": "Опиши желаемые изменения. Пример: 'change background to sunset, warm tones, cinematic'",
+      "notes": "Требует загрузки картинки через --image. Strength 0.5–0.9 (выше = больше изменений)."
+    },
+    {
+      "id": "upscale",
+      "title": "Увеличение разрешения",
+      "category": "video",
+      "task": "Увеличение разрешения картинки или видео без потери качества",
+      "model": "grok-imagine/upscale",
+      "fallbackModels": [],
+      "input": {
+        "scale": 2
+      },
+      "promptHint": "Укажи масштаб: 2x (1024→2048), 4x (1024→4096)",
+      "notes": "scale 2 или 4. Требует исходную картинку."
+    },
+    {
+      "id": "short-video",
+      "title": "Короткое видео 5–8с",
+      "category": "video",
+      "task": "Генерация короткого видеоклипа из текста (самая дешёвая t2v)",
+      "model": "grok-imagine/text-to-video",
+      "fallbackModels": [],
+      "input": {
+        "duration": 6
+      },
+      "promptHint": "Крупно: сцена, движение, камера. Пример: 'cinematic zoom on cup of coffee, steam rising, morning light'",
+      "notes": "Дешёвая гроки. Результат 5–8 сек @ 24fps. Для соцсетей и АД."
+    },
+    {
+      "id": "image-to-video",
+      "title": "Из картинки в видео",
+      "category": "video",
+      "task": "Оживление статичного изображения в видеоклип с движением",
+      "model": "kling-2.6/image-to-video",
+      "fallbackModels": ["grok-imagine/image-to-video"],
+      "input": {
+        "duration": 6
+      },
+      "promptHint": "Опиши движение: где и как. Пример: 'subtle camera pan, wind effect, ambient motion'",
+      "notes": "Требует картинку через --image. Длина 5–8 сек, aspect_ratio должна совпадать."
+    },
+    {
+      "id": "voiceover",
+      "title": "Озвучка текста (TTS)",
+      "category": "audio",
+      "task": "Преобразование текста в речь высокого качества",
+      "model": "elevenlabs/text-to-speech-turbo-2-5",
+      "fallbackModels": ["elevenlabs/text-to-speech-multilingual-v2"],
+      "input": {
+        "language": "ru"
+      },
+      "promptHint": "Текст автоматически озвучивается. Доступны языки: ru, en, es, fr и др.",
+      "notes": "Быстрая генерация, естественный звук. Укажи язык в input: language."
+    },
+    {
+      "id": "music",
+      "title": "Генерация музыки",
+      "category": "audio",
+      "task": "Создание оригинальной музыки или саундтрека из описания",
+      "model": "suno-v4",
+      "fallbackModels": [],
+      "input": {
+        "duration": 30
+      },
+      "promptHint": "Жанр, настроение, инструменты. Пример: 'upbeat indie pop, catchy chorus, guitar and synth'",
+      "notes": "Suno V5 лучший на рынке. Может быть дорого (обычно 100–200 кр). Ждёт долго (1–2 мин)."
+    }
+  ]
+}

@@ -1,12 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import type { ModelInfo } from "./providers/types.js";
 import { mergeRegistries } from "./providers/kie/registry.js";
 import { SEED_MODELS } from "./providers/kie/models.js";
+import { getPackageDataDir } from "./paths.js";
 
-const dir = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(dir, "../..", "data");
+const dataDir = getPackageDataDir();
 
 export interface CatalogData {
   built_at?: string;

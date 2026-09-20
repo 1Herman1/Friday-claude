@@ -180,9 +180,64 @@ nullume generate create <id> \
 
 **Важно:** `config.json` с ключом — приватный, никогда в git.
 
+## Установка в другой проект
+
+Если нужен Nullume в своём проекте (не в Friday), есть три способа:
+
+### Способ 1: локально из GitHub (рекомендуется для разработки)
+
+```bash
+git clone https://github.com/1Herman1/Friday-claude.git
+cd Friday-claude
+npm install
+cd tools/nullume
+
+# Инициализировать в другом проекте
+node bin/nullume.js init /path/to/other/project
+```
+
+### Способ 2: глобально из npm (когда выйдёт спринт 3)
+
+```bash
+npm install -g nullume@latest
+
+# В своём проекте
+nullume init
+```
+
+### Способ 3: локально в своём проекте
+
+```bash
+cd /path/to/your/project
+npx -y nullume init
+# Или: npm install nullume --save-dev && npx nullume init
+```
+
+**Что делает `init`:**
+1. Обновляет `.mcp.json` с правильной командой запуска Nullume
+2. Копирует `SKILL.md` в `.claude/skills/nullume/` (для агентов Claude Code)
+3. Дополняет `.env.example` строкой `KIE_API_KEY=`
+4. Дополняет `.gitignore` строкой `.env`
+
+**Флаги:**
+- `--dir /path` — целевой каталог (по умолчанию текущий)
+- `--force` — перезаписать существующую запись в `.mcp.json`
+- `--json` — вывод результата JSON
+
+**Пример:**
+```bash
+nullume init /path/to/project --json
+# {
+#   "created": [".mcp.json", "skills/..."],
+#   "updated": [".env.example", ".gitignore"],
+#   "skipped": [],
+#   "errors": []
+# }
+```
+
 ## Подключение к Claude Code
 
-Nullume уже подключен в `.mcp.json`:
+Nullume подключен как MCP-сервер в `.mcp.json`:
 
 ```json
 "nullume": {
@@ -267,14 +322,35 @@ curl -v https://api.kie.ai/api/v1/chat/credit
 
 详 детали — в ADR-007 репозитория Friday.
 
-## Сборка и публикация (спринт 3)
+## Сборка и публикация
+
+### Сборка
 
 ```bash
 npm run build           # TypeScript → dist/
-npm publish --access public   # выложить в npm
+npm test                # Запустить тесты
+npm run typecheck       # Проверить типы
 ```
 
-Скилл будет в пакете для тех, кто использует Nullume вне Friday.
+### Публикация в npm (только для Гермеса)
+
+```bash
+npm login              # Один раз: введи логин/пароль npm
+npm run build && npm test   # Обязательно проверить перед пушем
+npm publish --access public   # Выложить в публичный npm
+
+# Проверка
+npm info nullume  # Должен показать новую версию
+```
+
+Скилл будет в пакете (в `skills/nullume/SKILL.md`) для всех, кто установит Nullume через npm.
+
+**Обновить версию перед публикацией:**
+```bash
+npm version patch    # 0.1.0 → 0.1.1
+# или
+npm version minor    # 0.1.0 → 0.2.0
+```
 
 ## Лицензия
 

@@ -1,15 +1,40 @@
 {
   "name": "nullume",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "description": "CLI + MCP for media generation via kie.ai",
   "type": "module",
+  "license": "MIT",
+  "author": "Hermes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1Herman1/Friday-claude.git",
+    "directory": "tools/nullume"
+  },
+  "keywords": [
+    "media-generation",
+    "kie.ai",
+    "image-generation",
+    "video-generation",
+    "cli",
+    "mcp",
+    "claude-code"
+  ],
   "engines": {
     "node": ">=22.13"
   },
   "bin": {
     "nullume": "bin/nullume.js"
   },
+  "files": [
+    "bin",
+    "dist",
+    "data",
+    "skills",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
   "scripts": {
     "start": "tsx src/cli/index.ts",
     "mcp": "tsx src/mcp/index.ts",
@@ -17,7 +42,9 @@
     "test": "node --import tsx --test 'src/**/*.test.ts'",
     "build": "tsc -p tsconfig.build.json",
     "build:catalog": "tsx scripts/build-catalog.mts",
-    "audit:catalog": "tsx scripts/audit-catalog.mts"
+    "audit:catalog": "tsx scripts/audit-catalog.mts",
+    "sync:skill": "tsx scripts/sync-skill.mts",
+    "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30",

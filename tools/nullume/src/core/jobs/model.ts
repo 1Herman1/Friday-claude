@@ -12,10 +12,12 @@ export interface Job {
     usdMin: number;
     usdMax: number;
   };
+  cost?: number;
   styleFamily?: string;
   resultUrls: string[];
   localPaths: string[];
   failMsg?: string;
+  rerunOf?: string;
   createdAt: string;
   updatedAt: string;
 }

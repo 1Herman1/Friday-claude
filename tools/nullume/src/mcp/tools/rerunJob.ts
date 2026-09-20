@@ -2,26 +2,22 @@ import { z } from "zod";
 import { getProviderInstance } from "../provider.js";
 import { createJobTask } from "../../core/jobs/run.js";
 import { waitJob } from "../../core/jobs/wait.js";
-import { resolvePreset } from "../../core/presets.js";
+import { loadJob, saveJob } from "../../core/jobs/store.js";
 import { formatError, formatPrice } from "../utils.js";
 import { getUsdPerCredit } from "../provider.js";
 
 export const schema = z.object({
-  model: z.string().optional().describe("ID модели (не требуется если указан preset)"),
-  preset: z.string().optional().describe("ID пресета (product-photo, banner-16x9 и т.д.)"),
-  prompt: z.string().optional().describe("Текстовый запрос для генерации"),
-  images: z.array(z.string()).optional().describe("Пути к файлам или URL изображений"),
-  input: z.record(z.string(), z.unknown()).optional().describe("Дополнительные параметры модели"),
-  wait: z.boolean().optional().default(true).describe("Ждать завершения задачи"),
-  wait_timeout_sec: z.number().optional().default(300).describe("Таймаут ожидания в секундах"),
+  job_id: z.string().describe("ID задачи для повтора"),
+  prompt: z.string().optional().describe("Новый промпт (если не указан, используется исходный)"),
+  input: z.record(z.string(), z.unknown()).optional().describe("Новые параметры модели (сливаются с исходными)"),
+  wait: z.boolean().optional().default(true).describe("Ждать завершения"),
+  wait_timeout_sec: z.number().optional().default(300).describe("Таймаут ожидания"),
   confirm_cost: z.boolean().optional().describe("Подтверждение при стоимости > $1"),
 });
 
 export async function handler(args: {
-  model?: string;
-  preset?: string;
+  job_id: string;
   prompt?: string;
-  images?: string[];
   input?: Record<string, unknown>;
   wait?: boolean;
   wait_timeout_sec?: number;
@@ -31,46 +27,25 @@ export async function handler(args: {
     const provider = await getProviderInstance();
     const usdPerCredit = getUsdPerCredit();
 
-    let modelId = args.model;
-    let finalInput = { ...args.input };
+    // Load original job
+    const originalJob = await loadJob(args.job_id);
 
-    // Resolve preset if provided
-    if (args.preset) {
-      const resolved = await resolvePreset(args.preset, await provider.models());
-      if (!resolved) {
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: JSON.stringify({ error: `Пресет не найден: ${args.preset}` }),
-            },
-          ],
-          isError: true,
-        };
-      }
-      modelId = resolved.resolvedModel;
-      finalInput = { ...resolved.input, ...finalInput };
-    }
+    // Build final input
+    const baseInput = { ...originalJob.input };
+    const finalInput = { ...baseInput, ...(args.input || {}) };
 
-    if (!modelId) {
-      return {
-        content: [
-          {
-            type: "text" as const,
-            text: JSON.stringify({ error: "Требуется либо model, либо preset" }),
-          },
-        ],
-        isError: true,
-      };
-    }
+    // Use new prompt or original
+    const prompt = args.prompt || (baseInput.prompt as string) || "";
 
-    // Create job
+    // Create job with rerunOf link
     const job = await createJobTask(provider, {
-      model: modelId,
-      prompt: args.prompt || "",
-      images: args.images,
+      model: originalJob.model,
+      prompt,
       input: finalInput,
     });
+
+    job.rerunOf = args.job_id;
+    await saveJob(job);
 
     // Check cost
     if (job.estimate) {
@@ -84,12 +59,12 @@ export async function handler(args: {
                 {
                   needs_confirmation: true,
                   job_id: job.id,
-                  model: job.model,
+                  rerun_of: args.job_id,
                   estimate: {
                     credits_max: job.estimate.creditsMax,
                     usd_max: usdCost,
                   },
-                  message: "Стоимость > $1, нужно подтверждение. Вызови generate снова с confirm_cost: true",
+                  message: "Стоимость > $1, нужно подтверждение. Вызови rerun_job снова с confirm_cost: true",
                 },
                 null,
                 2
@@ -109,6 +84,7 @@ export async function handler(args: {
             text: JSON.stringify(
               {
                 job_id: job.id,
+                rerun_of: args.job_id,
                 state: job.state,
                 task_id: job.taskId,
                 model: job.model,
@@ -135,6 +111,7 @@ export async function handler(args: {
             text: JSON.stringify(
               {
                 job_id: completed.id,
+                rerun_of: args.job_id,
                 state: completed.state,
                 model: completed.model,
                 result_urls: completed.resultUrls,
@@ -149,7 +126,6 @@ export async function handler(args: {
         ],
       };
     } catch (waitError) {
-      // Timeout or error during wait
       return {
         content: [
           {
@@ -157,6 +133,7 @@ export async function handler(args: {
             text: JSON.stringify(
               {
                 job_id: job.id,
+                rerun_of: args.job_id,
                 state: "pending",
                 task_id: job.taskId,
                 message: "Задача ещё обрабатывается. Вызови get_job чтобы проверить статус",
@@ -171,7 +148,12 @@ export async function handler(args: {
     }
   } catch (error) {
     return {
-      content: [{ type: "text" as const, text: JSON.stringify({ error: formatError(error) }) }],
+      content: [
+        {
+          type: "text" as const,
+          text: JSON.stringify({ error: formatError(error) }),
+        },
+      ],
       isError: true,
     };
   }
