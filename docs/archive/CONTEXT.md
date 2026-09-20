@@ -32,11 +32,12 @@ MCP-сервер + skill для генерации медиа через kie.ai.
 - **Репозиторий — `1Herman1/Friday-claude`** (переименован, не `project_simba`).
   Ветка одна на весь репозиторий — `claude/greeting-nnz368`, объявлена в
   `docs/projects/README.md`; в `project.md` каждого проекта ветка больше не
-  дублируется. 20.09 Nullume влит в неё; пять устаревших веток без общего
-  предка со старым репозиторием (wizardly-thompson, amazing-hamilton,
-  greeting-nnz368-70oi6s, -review-5bif3e, inventory-html) удаляет Гермес
-  в GitHub — из сессии удаление веток запрещено (403). Оставить
-  `deploy/simba` и `backup/simba-local-2026-08-26`.
+  дублируется. 20.09 Nullume влит в неё. Шесть устаревших веток сверены с
+  основной по файлам: всё есть в новых версиях, кроме проекта stroymat —
+  он восстановлен в `projects/stroymat/` (коммит e8cad33). Удалять в GitHub
+  (из сессии запрещено, 403): wizardly-thompson, amazing-hamilton,
+  greeting-nnz368-70oi6s, -review-5bif3e, inventory-html,
+  backup/simba-local-2026-08-26. Оставить только `deploy/simba`.
 - **Дизайн ревьюим по скриншоту, а не по коду** — `.claude/scripts/screenshot.mjs`.
 - **Секреты только в GitHub Secrets и `.env`** — попавшее в чат считается
   утёкшим и подлежит замене без обсуждения.
