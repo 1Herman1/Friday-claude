@@ -148,9 +148,26 @@ jobs:
             cp -r projects/simba/client/dist/* /var/www/simba/client/
             cp -r projects/simba/admin/dist/*  /var/www/simba/admin/
 
-            # startOrReload, не reload: после переезда каталогов процесс поднимается
-            # с новым cwd, а reload оставил бы старый и крутил бы прежнюю сборку.
+            # PM2 ищет приложение по имени и при reload сохраняет СТАРОЕ описание:
+            # после переезда каталогов процесс продолжил крутить прежний dist по
+            # прежнему пути, а health-check отвечал 200 и это скрывал. Поэтому
+            # сверяем путь и пересоздаём процесс, если он смотрит не туда.
+            EXPECTED_SCRIPT="$(pwd)/projects/simba/server/dist/index.js"
+            if pm2 describe simba-server >/dev/null 2>&1 \
+               && ! pm2 describe simba-server | grep -qF "$EXPECTED_SCRIPT"; then
+              echo "   процесс смотрит на другой путь — пересоздаём"
+              pm2 delete simba-server
+            fi
             pm2 startOrReload projects/simba/deploy/ecosystem.config.js --update-env
+            pm2 save
+
+            # Проверка, что проверка что-то проверяет: без неё зелёный health-check
+            # ничего не говорит о том, какая сборка отвечает.
+            if ! pm2 describe simba-server | grep -qF "$EXPECTED_SCRIPT"; then
+              echo "PM2 всё ещё запущен не из $EXPECTED_SCRIPT"
+              pm2 describe simba-server | grep -Ei 'script path|exec cwd'
+              exit 1
+            fi
 
             echo "==> Health check"
             sleep 2
