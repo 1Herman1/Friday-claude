@@ -6,6 +6,7 @@ import rateLimit from '@fastify/rate-limit'
 import prismaPlugin from './plugins/prisma.js'
 import authenticatePlugin from './plugins/authenticate.js'
 import { ApiError, errorResponse } from './lib/errors.js'
+import { isProduction } from './lib/env.js'
 import { registerCommonSchemas } from './schemas/common.js'
 import productsRoutes from './routes/products/index.js'
 import categoriesRoutes from './routes/categories/index.js'
@@ -25,7 +26,7 @@ const app = Fastify({
 
 // Прод без настоящих секретов не поднимается: дефолтные значения означают,
 // что cookie корзины и JWT можно подделать офлайн.
-if (process.env.NODE_ENV === 'production') {
+if (isProduction) {
   const required = ['PS_COOKIE_SECRET', 'JWT_SECRET', 'PS_PROMO_HMAC_SECRET', 'PS_DATABASE_URL', 'PS_CORS_ORIGIN'] as const
   const missing = required.filter((k) => {
     const v = process.env[k]

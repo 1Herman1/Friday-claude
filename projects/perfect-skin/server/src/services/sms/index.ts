@@ -3,6 +3,7 @@
  * In development: prints code to console.
  * In production: delegates to configured provider.
  */
+import { isDevelopment } from '../../lib/env.js'
 
 export interface SmsSender {
   send(phone: string, code: string): Promise<void>
@@ -32,7 +33,7 @@ export class ProductionSmsSender implements SmsSender {
 }
 
 export function createSmsSender(): SmsSender {
-  if (process.env.NODE_ENV === 'development') {
+  if (isDevelopment) {
     return new DevSmsSender()
   }
   return new ProductionSmsSender(

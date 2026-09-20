@@ -3,6 +3,7 @@ import fastifyPlugin from 'fastify-plugin'
 import { z } from 'zod'
 import { cartService } from '../../services/cart.service.js'
 import { ApiError } from '../../lib/errors.js'
+import { isProduction } from '../../lib/env.js'
 
 export default fastifyPlugin(async (app: FastifyInstance) => {
   // GET /cart
@@ -100,7 +101,7 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         reply.setCookie('ps_sid', sessionId, {
           signed: true,
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
+          secure: isProduction,
           sameSite: 'lax',
           path: '/',
           maxAge: 180 * 24 * 3600,

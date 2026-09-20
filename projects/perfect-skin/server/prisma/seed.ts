@@ -1,4 +1,4 @@
-import { PrismaClient, type Concern } from '../../../node_modules/.prisma/ps-client/index.js'
+import { PrismaClient, type Concern } from '../../../../node_modules/.prisma/ps-client/index.js'
 import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'

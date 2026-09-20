@@ -48,15 +48,35 @@ async function authenticatePlugin(fastify: FastifyInstance) {
       }
     } catch (error) {
       if (error instanceof ApiError) throw error
-      throw new ApiError(401, 'UNAUTHORIZED', 'Недействительный токен')
+      // В 401 превращаем только ошибки самого токена. Обращение к базе стоит
+      // в этом же try, и раньше любая её ошибка выглядела как «недействительный
+      // токен»: упавшая база выбрасывала из аккаунтов всех разом, а в логах
+      // читалась как массовая проблема с авторизацией. Остальное пробрасываем —
+      // глобальный обработчик отдаст 500 и напишет правду.
+      if (error instanceof jwt.JsonWebTokenError) {
+        throw new ApiError(401, 'UNAUTHORIZED', 'Недействительный токен')
+      }
+      throw error
     }
   })
 
   fastify.decorate('authenticateOptional', async (request: FastifyRequest) => {
+    // Учётных данных нет вовсе — это гость, обычное дело, молчим.
+    if (!extractBearerToken(request)) return
+
     try {
       await fastify.authenticate(request)
-    } catch {
-      // Silent fail: guest is OK
+    } catch (error) {
+      // Авария инфраструктуры гостем не притворяется.
+      if (!(error instanceof ApiError)) throw error
+
+      // Данные были, но не подошли: просрочен, отозван или подделан. Дальше
+      // работаем как с гостем — но молча этого делать нельзя. Иначе «пропала
+      // корзина» и «заказ ушёл гостевым» невозможно разобрать по логам.
+      request.log.warn(
+        { reason: error.message, path: request.url },
+        'optional auth: credentials present but rejected, continuing as guest'
+      )
     }
   })
 }

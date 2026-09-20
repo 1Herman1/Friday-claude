@@ -4,6 +4,7 @@
  * In production: sends via nodemailer (SMTP).
  */
 import nodemailer from 'nodemailer'
+import { isDevelopment } from '../../lib/env.js'
 
 export interface MailSender {
   send(email: string, code: string): Promise<void>
@@ -44,7 +45,7 @@ export class ProductionMailSender implements MailSender {
 }
 
 export function createMailSender(): MailSender {
-  if (process.env.NODE_ENV === 'development') {
+  if (isDevelopment) {
     return new DevMailSender()
   }
   return new ProductionMailSender()
