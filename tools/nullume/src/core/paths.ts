@@ -65,6 +65,41 @@ export function getSessionsDir(): string {
   return path.join(getDataDir(), "sessions");
 }
 
+/**
+ * Получить путь к каталогу библиотеки вкуса (~/.nullume/library)
+ */
+export function getLibraryDir(): string {
+  return path.join(getDataDir(), "library");
+}
+
+/**
+ * Получить путь к БД библиотеки (~/.nullume/library/library.db)
+ */
+export function getLibraryDbPath(): string {
+  return path.join(getLibraryDir(), "library.db");
+}
+
+/**
+ * Получить путь к каталогу оригиналов референсов (~/.nullume/library/originals)
+ */
+export function getLibraryOriginalsDir(): string {
+  return path.join(getLibraryDir(), "originals");
+}
+
+/**
+ * Получить путь к каталогу превью (~/.nullume/library/previews)
+ */
+export function getLibraryPreviewsDir(): string {
+  return path.join(getLibraryDir(), "previews");
+}
+
+/**
+ * Получить путь к каталогу моделей embeddings (~/.nullume/models)
+ */
+export function getModelsDir(): string {
+  return path.join(getDataDir(), "models");
+}
+
 export async function ensureDir(dir: string): Promise<void> {
   try {
     await fs.promises.mkdir(dir, { recursive: true, mode: 0o700 });

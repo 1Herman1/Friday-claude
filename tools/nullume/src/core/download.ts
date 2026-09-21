@@ -3,7 +3,7 @@ import path from "node:path";
 import { lookup } from "node:dns/promises";
 import { NetworkError } from "./errors.js";
 
-const MAX_SIZE = 512 * 1024 * 1024; // 512 MB
+const DEFAULT_MAX_BYTES = 512 * 1024 * 1024; // 512 MB
 
 async function validateHost(hostname: string): Promise<void> {
   try {
@@ -29,7 +29,21 @@ async function validateHost(hostname: string): Promise<void> {
   }
 }
 
-export async function downloadFile(url: string, dest: string, root: string): Promise<string> {
+/**
+ * Загрузить файл по HTTPS URL с проверкой размера и валидацией хоста
+ * @param url URL файла (только https://)
+ * @param dest Путь назначения (должен быть внутри root)
+ * @param root Корневой каталог для валидации пути
+ * @param maxBytes Максимальный размер в байтах (по умолчанию 512 МБ)
+ * @returns Путь к загруженному файлу
+ * @throws NetworkError при превышении размера, валидации или сетевых ошибках
+ */
+export async function downloadFile(
+  url: string,
+  dest: string,
+  root: string,
+  maxBytes: number = DEFAULT_MAX_BYTES
+): Promise<string> {
   // Only https
   if (!url.startsWith("https://")) {
     throw new NetworkError(`Only https:// allowed, got: ${url}`);
@@ -88,8 +102,8 @@ export async function downloadFile(url: string, dest: string, root: string): Pro
       if (done) break;
 
       totalBytes += value.length;
-      if (totalBytes > MAX_SIZE) {
-        throw new NetworkError(`File exceeds 512MB limit`);
+      if (totalBytes > maxBytes) {
+        throw new NetworkError(`File exceeds ${(maxBytes / 1024 / 1024).toFixed(0)}MB limit`);
       }
 
       writer.write(Buffer.from(value));

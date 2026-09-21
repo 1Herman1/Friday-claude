@@ -49,7 +49,11 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30",
     "commander": "^15",
+    "jimp": "^1.6.1",
     "zod": "^4"
+  },
+  "optionalDependencies": {
+    "@huggingface/transformers": "^4"
   },
   "devDependencies": {
     "@types/node": "^22",

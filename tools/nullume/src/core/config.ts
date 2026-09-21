@@ -4,6 +4,15 @@ import { getConfigPath, ensureDir, getDataDir } from "./paths.js";
 
 export interface NullumeConfig {
   apiKey?: string;
+  /** Явное согласие на использование импортёров с ограничениями (Pinterest, Dribbble, X) */
+  acknowledgedRiskyImporters?: boolean;
+  /** Учётные данные для импортёров: importers[importerId][settingKey] = value */
+  importers?: Record<string, Record<string, string>>;
+  /** Настройки библиотеки вкуса */
+  library?: {
+    /** Модель для embedding палитр и изображений: 'clip' или 'siglip' */
+    embedModel?: 'clip' | 'siglip';
+  };
   [key: string]: unknown;
 }
 
@@ -51,4 +60,28 @@ export async function getApiKey(): Promise<string> {
   throw new ConfigError(
     "API-ключ kie.ai не задан. Выполни `nullume setup --key YOUR_KEY` или установи переменную KIE_API_KEY."
   );
+}
+
+/**
+ * Получить значение из конфига импортёра с fallback на переменную окружения
+ * @param config Конфиг nullume
+ * @param importerId ID импортёра (например 'pexels')
+ * @param key Название поля (например 'token')
+ * @param envName Опциональное имя переменной окружения (по умолчанию NULLUME_<IMPORTER>_<KEY> в верхнем регистре)
+ * @returns Значение из config/env или undefined
+ */
+export function getImporterSetting(
+  config: NullumeConfig,
+  importerId: string,
+  key: string,
+  envName?: string
+): string | undefined {
+  // config.importers[importerId][key] первым приоритетом
+  if (config.importers?.[importerId]?.[key]) {
+    return config.importers[importerId][key];
+  }
+
+  // Затем env переменная
+  const envKey = envName || `NULLUME_${importerId.toUpperCase()}_${key.toUpperCase()}`;
+  return process.env[envKey];
 }

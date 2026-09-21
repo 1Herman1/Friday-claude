@@ -27,8 +27,17 @@ if (hasBuilt) {
   args = [path.join(projectRoot, "src/cli/index.ts"), ...process.argv.slice(2)];
 }
 
+// Добавить NODE_OPTIONS для подавления экспериментальных предупреждений
+const nodeOptions = process.env.NODE_OPTIONS || "";
+const newNodeOptions = nodeOptions
+  .split(" ")
+  .filter((opt) => opt.trim())
+  .concat("--no-warnings=ExperimentalWarning")
+  .join(" ");
+
 const result = spawnSync(cmd, args, {
   stdio: "inherit",
   cwd: process.cwd(),
+  env: { ...process.env, NODE_OPTIONS: newNodeOptions },
 });
 process.exit(result.status ?? 1);

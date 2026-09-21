@@ -3,7 +3,7 @@ import assert from "node:assert";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { loadConfig, saveConfig, mergeConfig, getApiKey } from "./config.js";
+import { loadConfig, saveConfig, mergeConfig, getApiKey, getImporterSetting, NullumeConfig } from "./config.js";
 import { ConfigError } from "./errors.js";
 
 test("loadConfig returns empty object when no config exists", async () => {
@@ -36,4 +36,73 @@ test("getApiKey throws when key not available", async () => {
   } catch (e) {
     assert(e instanceof ConfigError);
   }
+});
+
+test("getImporterSetting: должен вернуть значение из config", () => {
+  const config: NullumeConfig = {
+    importers: {
+      pexels: { token: "abc123" },
+    },
+  };
+
+  const value = getImporterSetting(config, "pexels", "token");
+  assert.strictEqual(value, "abc123");
+});
+
+test("getImporterSetting: должен вернуть значение из env", () => {
+  const config: NullumeConfig = {};
+  const oldEnv = process.env.NULLUME_UNSPLASH_KEY;
+  process.env.NULLUME_UNSPLASH_KEY = "env-value";
+
+  const value = getImporterSetting(config, "unsplash", "key");
+  assert.strictEqual(value, "env-value");
+
+  // Cleanup
+  if (oldEnv === undefined) {
+    delete process.env.NULLUME_UNSPLASH_KEY;
+  } else {
+    process.env.NULLUME_UNSPLASH_KEY = oldEnv;
+  }
+});
+
+test("getImporterSetting: должен приоритизировать config над env", () => {
+  const config: NullumeConfig = {
+    importers: {
+      test: { key: "config-value" },
+    },
+  };
+  const oldEnv = process.env.NULLUME_TEST_KEY;
+  process.env.NULLUME_TEST_KEY = "env-value";
+
+  const value = getImporterSetting(config, "test", "key");
+  assert.strictEqual(value, "config-value");
+
+  // Cleanup
+  if (oldEnv === undefined) {
+    delete process.env.NULLUME_TEST_KEY;
+  } else {
+    process.env.NULLUME_TEST_KEY = oldEnv;
+  }
+});
+
+test("getImporterSetting: должен использовать кастомное имя env", () => {
+  const config: NullumeConfig = {};
+  const oldEnv = process.env.CUSTOM_VAR;
+  process.env.CUSTOM_VAR = "custom-value";
+
+  const value = getImporterSetting(config, "any", "key", "CUSTOM_VAR");
+  assert.strictEqual(value, "custom-value");
+
+  // Cleanup
+  if (oldEnv === undefined) {
+    delete process.env.CUSTOM_VAR;
+  } else {
+    process.env.CUSTOM_VAR = oldEnv;
+  }
+});
+
+test("getImporterSetting: должен вернуть undefined если ничего не найдено", () => {
+  const config: NullumeConfig = {};
+  const value = getImporterSetting(config, "nonexistent", "key");
+  assert.strictEqual(value, undefined);
 });
