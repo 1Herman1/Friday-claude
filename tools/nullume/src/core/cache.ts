@@ -8,13 +8,21 @@ export interface CacheEntry<T> {
   timestamp: number;
 }
 
+/**
+ * Хэшировать ключ кэша
+ */
+function hashCacheKey(key: string): string {
+  return createHash("sha1").update(key).digest("hex").slice(0, 16);
+}
+
 export async function getCached<T>(
   key: string,
   ttlMs: number = 24 * 60 * 60 * 1000 // 24h default
 ): Promise<T | null> {
   try {
     const cacheDir = getCacheDir();
-    const filePath = path.join(cacheDir, `${key}.json`);
+    const hashedKey = hashCacheKey(key);
+    const filePath = path.join(cacheDir, `${hashedKey}.json`);
 
     if (!fs.existsSync(filePath)) {
       return null;
@@ -43,7 +51,8 @@ export async function setCached<T>(key: string, data: T): Promise<void> {
       timestamp: Date.now(),
     };
 
-    const filePath = path.join(cacheDir, `${key}.json`);
+    const hashedKey = hashCacheKey(key);
+    const filePath = path.join(cacheDir, `${hashedKey}.json`);
     fs.writeFileSync(filePath, JSON.stringify(entry, null, 2));
   } catch (e) {
     // Silently fail on cache write

@@ -46,7 +46,7 @@ const PaletteColorSchema = z.object({
 
 const BaseCandidateSchema = z.object({
   /** Прямая ссылка на изображение (https только) */
-  url: z.string().url().optional(),
+  url: z.string().url().refine((u) => u.startsWith("https://"), "URL должен быть https://").optional(),
   /** Локальный путь к файлу (если скачано) */
   filePath: z.string().optional(),
   /** URL страницы источника (где найдено изображение) */

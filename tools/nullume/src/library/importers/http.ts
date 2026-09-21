@@ -1,5 +1,6 @@
-import { RateLimiter, fetchJson } from "../../core/net.js";
+import { RateLimiter, fetchJson, safeFetch, SafeFetchOptions } from "../../core/net.js";
 import { getCached, setCached } from "../../core/cache.js";
+import { RefCandidateSchema } from "./types.js";
 
 /**
  * Элемент RSS ленты
@@ -26,6 +27,8 @@ export interface ImporterFetchJsonOptions {
   ttlMs?: number;
   /** Дополнительные заголовки */
   headers?: Record<string, string>;
+  /** AbortSignal для отмены */
+  signal?: AbortSignal;
 }
 
 /**
@@ -38,7 +41,7 @@ export async function importerFetchJson<T = unknown>(
   url: string,
   options: ImporterFetchJsonOptions = {}
 ): Promise<T> {
-  const { fetchImpl, limiter, cacheKey, ttlMs = 24 * 60 * 60 * 1000, headers } = options;
+  const { fetchImpl, limiter, cacheKey, ttlMs = 24 * 60 * 60 * 1000, headers, signal } = options;
 
   // Проверить кэш
   if (cacheKey) {
@@ -53,8 +56,8 @@ export async function importerFetchJson<T = unknown>(
     await limiter.acquire();
   }
 
-  // Запрос
-  const data = await fetchJson<T>(url, { fetchImpl, headers });
+  // Запрос с signal
+  const data = await fetchJson<T>(url, { fetchImpl, headers, signal });
 
   // Сохранить в кэш
   if (cacheKey) {
@@ -78,6 +81,8 @@ export interface ImporterFetchTextOptions {
   ttlMs?: number;
   /** Дополнительные заголовки */
   headers?: Record<string, string>;
+  /** AbortSignal для отмены */
+  signal?: AbortSignal;
 }
 
 /**
@@ -90,7 +95,7 @@ export async function importerFetchText(
   url: string,
   options: ImporterFetchTextOptions = {}
 ): Promise<string> {
-  const { fetchImpl = fetch, limiter, cacheKey, ttlMs = 24 * 60 * 60 * 1000, headers } = options;
+  const { fetchImpl, limiter, cacheKey, ttlMs = 24 * 60 * 60 * 1000, headers, signal } = options;
 
   // Проверить кэш
   if (cacheKey) {
@@ -105,8 +110,15 @@ export async function importerFetchText(
     await limiter.acquire();
   }
 
-  // Запрос
-  const resp = await fetchImpl(url, { headers, signal: AbortSignal.timeout(60000) });
+  // Запрос через safeFetch (https-only, лимит 5 МБ, таймаут 30 с)
+  const resp = await safeFetch(url, {
+    headers,
+    maxBytes: 5 * 1024 * 1024,
+    timeoutMs: 30000,
+    fetchImpl,
+    signal,
+  });
+
   if (!resp.ok) {
     throw new Error(`HTTP ${resp.status} при загрузке ${url}`);
   }
@@ -200,4 +212,19 @@ export function extractImgSrcs(html: string): string[] {
  */
 export async function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Валидировать кандидата через RefCandidateSchema и логировать ошибки
+ * @param candidate Кандидат для валидации
+ * @param log Функция логирования
+ * @returns Валидный кандидат или null если ошибка
+ */
+export function yieldValid(candidate: unknown, log: (msg: string) => void) {
+  try {
+    return RefCandidateSchema.parse(candidate);
+  } catch (e) {
+    log(`Невалидный кандидат: ${(e as any).message}`);
+    return null;
+  }
 }

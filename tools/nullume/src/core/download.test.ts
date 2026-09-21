@@ -12,7 +12,7 @@ test("downloadFile rejects invalid URLs", async () => {
     await downloadFile("file:///etc/passwd", path.join(tempDir, "test"), tempDir);
     assert.fail("Should reject file:// URLs");
   } catch (e) {
-    assert((e as any).message.includes("Only https://"));
+    assert((e as any).message.includes("https") || (e as any).message.includes("protocol"));
   } finally {
     fs.rmSync(tempDir, { recursive: true });
   }

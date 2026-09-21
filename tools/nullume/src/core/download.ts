@@ -1,33 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import { lookup } from "node:dns/promises";
+import { safeFetch } from "./net.js";
 import { NetworkError } from "./errors.js";
 
 const DEFAULT_MAX_BYTES = 512 * 1024 * 1024; // 512 MB
-
-async function validateHost(hostname: string): Promise<void> {
-  try {
-    const result = await lookup(hostname);
-    const addr = result.address;
-
-    // Deny loopback, private, link-local, ULA
-    if (
-      addr === "127.0.0.1" ||
-      addr === "::1" ||
-      addr.startsWith("10.") ||
-      addr.startsWith("172.16.") ||
-      addr.startsWith("192.168.") ||
-      addr.startsWith("fc") ||
-      addr.startsWith("fd") ||
-      addr.startsWith("169.254.") ||
-      addr.startsWith("fe80:")
-    ) {
-      throw new NetworkError(`Denied host: ${hostname}`);
-    }
-  } catch (e) {
-    throw new NetworkError(`DNS validation failed: ${hostname}`);
-  }
-}
 
 /**
  * Загрузить файл по HTTPS URL с проверкой размера и валидацией хоста
@@ -44,11 +20,6 @@ export async function downloadFile(
   root: string,
   maxBytes: number = DEFAULT_MAX_BYTES
 ): Promise<string> {
-  // Only https
-  if (!url.startsWith("https://")) {
-    throw new NetworkError(`Only https:// allowed, got: ${url}`);
-  }
-
   // Validate destination
   const resolvedDest = path.resolve(dest);
   const resolvedRoot = path.resolve(root);
@@ -57,32 +28,8 @@ export async function downloadFile(
     throw new NetworkError(`Path traversal not allowed: ${dest}`);
   }
 
-  const urlObj = new URL(url);
-  await validateHost(urlObj.hostname || "");
-
-  let resp = await fetch(url, {
-    signal: AbortSignal.timeout(300000),
-    redirect: "manual",
-  });
-
-  // Handle redirects manually
-  while (resp.status >= 300 && resp.status < 400) {
-    const location = resp.headers.get("Location");
-    if (!location) throw new NetworkError(`Redirect without Location header: ${resp.status}`);
-
-    const redirectUrl = new URL(location, url).href;
-    if (!redirectUrl.startsWith("https://")) {
-      throw new NetworkError(`Redirect to non-https: ${redirectUrl}`);
-    }
-
-    const redirectHost = new URL(redirectUrl).hostname || "";
-    await validateHost(redirectHost);
-
-    resp = await fetch(redirectUrl, {
-      signal: AbortSignal.timeout(300000),
-      redirect: "manual",
-    });
-  }
+  // Использовать safeFetch для безопасной загрузки
+  const resp = await safeFetch(url, { maxBytes, timeoutMs: 300000 });
 
   if (!resp.ok) throw new NetworkError(`HTTP ${resp.status} downloading ${url}`);
 

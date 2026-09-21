@@ -21,12 +21,24 @@ test("listImporters: должен вернуть массив local-only имп�
   });
 });
 
-test("listImporters: должен вернуть все импортёры без фильтра", async () => {
-  const all = await listImporters();
+test("listImporters: по умолчанию возвращает только clean", async () => {
+  const defaultImporters = await listImporters();
   const clean = await listImporters("clean");
+
+  assert.strictEqual(defaultImporters.length, clean.length);
+  defaultImporters.forEach((imp) => {
+    assert.strictEqual(imp.kind, "clean");
+  });
+});
+
+test("listImporters: local-only отсутствуют при вызове без параметра", async () => {
+  const defaultImporters = await listImporters();
   const local = await listImporters("local-only");
 
-  assert.strictEqual(all.length, clean.length + local.length);
+  const localIds = new Set(local.map((i) => i.id));
+  for (const imp of defaultImporters) {
+    assert(!localIds.has(imp.id), `Local-only импортёр ${imp.id} вернулся в listImporters() без параметра`);
+  }
 });
 
 test("listImporters: clean импортёры не должны содержать local-only", async () => {

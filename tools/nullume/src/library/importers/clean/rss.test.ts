@@ -1,3 +1,7 @@
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join as joinPath } from "node:path";
+process.env.NULLUME_HOME = mkdtempSync(joinPath(tmpdir(), "nullume-rss-"));
 import { test } from "node:test";
 import assert from "node:assert";
 import fs from "node:fs";
