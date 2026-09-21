@@ -297,30 +297,132 @@ curl -v https://api.kie.ai/api/v1/chat/credit
 2. Если работаешь из песочницы Claude Code — это нормально, используй CLI локально на своей машине
 3. Если нужно работать из песочницы — напроси доступ к kie.ai или используй Artlist/Higgsfield (они работают)
 
-## Импорт референсов: что легально, что на свой риск
+## Библиотека вкуса (спринт 2)
 
-**Спринт 2 добавит библиотеку вкуса.** На данный момент планы:
+Коллекция референсов дизайна с автоматической кластеризацией в семьи стилей. Используешь для подбора и утверждения стилей перед генерацией контента через `--style <slug>`.
 
-### Чистые источники (разрешено везде)
-- **Are.na** — анонимный поиск, публичный API
-- **Unsplash** — открытые изображения, обязательна атрибуция
-- **Land-book, Godly, siteinspire, Awwwards** — галереи с RSS/og:image
+### Пошаговый прогон на машине (10 шагов)
 
-Эти работают в CLI, в MCP, в CI/CD — везде.
+**Система требует:** npm install → lib init → ключи → import → embed → cluster → propose → dashboard → approve → generate --style
 
-### Local-only (только на своей машине Гермеса)
-- **Pinterest** (поиск под собственной сессией) — ToS запрещает автоматизацию, используем cookies вручную
-- **Dribbble** (расширенный скрейп своих шотов) — API не поддерживает, расширение через браузер
-- **X** (платный поиск) — $0.005 за каждый твит
+#### Шаг 1: установка и инициализация
 
-Эти работают только в CLI, когда ты на машине, с явного подтверждения (`NULLUME_LOCAL_IMPORTERS=1`). **Никогда в CI, никогда в MCP.**
+```bash
+cd tools/nullume
+npm install
 
-**Риск:**
-- Pinterest может заблокировать аккаунт
-- X будет списывать по $0.005 за запрос
-- Это твой риск и твоя ответственность
+# Первый запуск (один раз)
+npx tsx src/cli/index.ts lib init
+# Создаст: ~/.nullume/library/, ~/.nullume/models/, БД SQLite
+```
 
-详 детали — в ADR-007 репозитория Friday.
+#### Шаг 2: настроить ключи
+
+Для чистых источников создай `~/.nullume/config.json`:
+
+```json
+{
+  "acknowledgedRiskyImporters": false,
+  "library": {"embedModel": "clip"},
+  "sources": {
+    "raindrop": {"token": "your-raindrop-token"},
+    "unsplash": {"apiKey": "your-unsplash-key"}
+  }
+}
+```
+
+Eagle работает автоматически (локальный API на `localhost:41595`).
+
+#### Шаг 3: импортировать из чистых источников
+
+```bash
+npx tsx src/cli/index.ts lib import eagle --limit 50
+npx tsx src/cli/index.ts lib import raindrop --collection "Design" --limit 30
+npx tsx src/cli/index.ts lib import pinterest-api --limit 40
+npx tsx src/cli/index.ts lib import unsplash --limit 25
+npx tsx src/cli/index.ts lib import pexels --limit 25
+npx tsx src/cli/index.ts lib import rss --limit 30
+npx tsx src/cli/index.ts lib import arena --limit 20
+npx tsx src/cli/index.ts lib import civitai --limit 20
+npx tsx src/cli/index.ts lib import shotcafe --limit 20
+```
+
+#### Шаг 4: local-only с гейтом (опционально)
+
+```bash
+export NULLUME_LOCAL_IMPORTERS=1
+# Требует также config.acknowledgedRiskyImporters=true
+npx tsx src/cli/index.ts lib import pinterest-cookies --dry-run
+```
+
+#### Шаг 5: добавить локальные файлы
+
+```bash
+npx tsx src/cli/index.ts lib add ~/my-refs/*.png ~/my-refs/*.jpg
+```
+
+#### Шаг 6: вычислить эмбеддинги
+
+```bash
+npx tsx src/cli/index.ts lib embed
+# Загрузит CLIP-модель (1–2 мин), затем вычислит эмбеддинги
+```
+
+#### Шаг 7: кластеризовать в семьи
+
+```bash
+npx tsx src/cli/index.ts lib cluster --json
+# {"k": 4, "clusters": [...]}
+```
+
+#### Шаг 8: предложить Claude заполнить дескрипторы
+
+```bash
+npx tsx src/cli/index.ts lib propose --json
+# Claude предложит имена и описания для каждого семейства
+```
+
+#### Шаг 9: открыть дашборд и утвердить
+
+```bash
+npx tsx src/cli/index.ts lib dashboard
+# http://127.0.0.1:12345?token=... (откроется в браузере)
+```
+
+**В дашборде:**
+- Просмотри exemplars каждого кластера
+- Переименуй (slug: `editorial-warm-minimal`)
+- Отредактируй дескриптор (палитра, типографика, motion, dials)
+- Нажми **Approve**
+
+#### Шаг 10: генерировать в стиле
+
+```bash
+nullume generate create flux-pro \
+  --prompt "a cozy office with morning light" \
+  --style editorial-warm-minimal \
+  --wait --json
+```
+
+### Источники и риски
+
+| Источник | Чистый? | Лимит | Риск |
+|---|---|---|---|
+| Eagle | ✓ (локальный) | неограниченно | нет |
+| Raindrop, Pinterest v5, Unsplash, Pexels, Pixabay, Are.na, Civitai, RSS, shot.cafe | ✓ clean | per API | сетевая блокировка |
+| **Pinterest cookies** | ✗ local-only | soft | **блокировка аккаунта** |
+| **Dribbble** | ✗ local-only | свои шоты | ограничение API |
+| **X (платный)** | ✗ local-only | платно ($0.005/запрос) | **траты денег** |
+
+Все local-only требуют `acknowledgedRiskyImporters=true` + `NULLUME_LOCAL_IMPORTERS=1` + отсутствие CI.
+
+### При блокировке
+
+**Pinterest:** удалить `~/.nullume/sessions/pinterest.json`, ждать 24–48 ч, повторить.
+
+**X:** остановить импорты, проверить счёт в Developer Portal, установить месячный лимит.
+
+Полные детали — в `docs/decisions/ADR-007-reference-sources-policy.md` репозитория Friday.
 
 ## Сборка и публикация
 

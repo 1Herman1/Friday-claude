@@ -13,6 +13,13 @@ import { schema as uploadFileSchema, handler as uploadFileHandler } from "./tool
 import { schema as listPresetsSchema, handler as listPresetsHandler } from "./tools/listPresets.js";
 import { schema as rerunJobSchema, handler as rerunJobHandler } from "./tools/rerunJob.js";
 
+import { schema as libSearchSchema, handler as libSearchHandler } from "./tools/libSearch.js";
+import { schema as libFamiliesSchema, handler as libFamiliesHandler } from "./tools/libFamilies.js";
+import { schema as libFamilySchema, handler as libFamilyHandler } from "./tools/libFamily.js";
+import { initSchema as initLibImportSchema, schema as libImportSchema, handler as libImportHandler } from "./tools/libImport.js";
+import { schema as libClustersSchema, handler as libClustersHandler } from "./tools/libClusters.js";
+import { schema as libProposeSchema, handler as libProposeHandler } from "./tools/libPropose.js";
+
 export function createMcpServer() {
   const server = new McpServer({
     name: "nullume",
@@ -152,10 +159,89 @@ export function createMcpServer() {
     rerunJobHandler
   );
 
+  server.registerTool(
+    "lib_search",
+    {
+      title: "Поиск в библиотеке",
+      description:
+        "Поиск похожих рефов по тексту или изображению. " +
+        "Возвращает список рефов с оценкой сходства, пути к превью и информацию об источнике. " +
+        "Требует инициализации: nullume lib init (для эмбеддера).",
+      inputSchema: libSearchSchema,
+    },
+    libSearchHandler
+  );
+
+  server.registerTool(
+    "lib_families",
+    {
+      title: "Список семейств",
+      description:
+        "Список семейств (стилей) в библиотеке с информацией о статусе и размере. " +
+        "Можно фильтровать по статусу (approved или proposed).",
+      inputSchema: libFamiliesSchema,
+    },
+    libFamiliesHandler
+  );
+
+  server.registerTool(
+    "lib_family",
+    {
+      title: "Детали семейства",
+      description:
+        "Получить полную информацию о семействе: дескриптор стиля, палитру, exemplars с путями к превью. " +
+        "Используется перед lib_propose для редактирования дескриптора.",
+      inputSchema: libFamilySchema,
+    },
+    libFamilyHandler
+  );
+
+  server.registerTool(
+    "lib_import",
+    {
+      title: "Импортировать рефы",
+      description:
+        "Импортировать рефы из источника (Eagle, Raindrop, Pinterest API, Pexels и т.д). " +
+        "Запускает импортёр, сохраняет рефы в БД, вычисляет эмбеддинги и палитры. " +
+        "Возвращает статистику и ID импорта.",
+      inputSchema: libImportSchema,
+    },
+    libImportHandler as any
+  );
+
+  server.registerTool(
+    "lib_clusters",
+    {
+      title: "Кластеризовать библиотеку",
+      description:
+        "Кластеризовать рефы на основе эмбеддингов (CLIP/SigLIP) в стили (семейства). " +
+        "Автоматически определяет оптимальное количество кластеров (k) и создаёт семейства. " +
+        "Возвращает контекст для Claude для заполнения дескрипторов семейств.",
+      inputSchema: libClustersSchema,
+    },
+    libClustersHandler as any
+  );
+
+  server.registerTool(
+    "lib_propose",
+    {
+      title: "Применить предложение",
+      description:
+        "Применить предложения Claude (имена, slugs, дескрипторы) к семействам. " +
+        "Обновляет семейства в БД и записывает решения. " +
+        "Далее нужно утвердить в nullume lib dashboard или через CLI.",
+      inputSchema: libProposeSchema,
+    },
+    libProposeHandler as any
+  );
+
   return server;
 }
 
 export async function startMcpServer() {
+  // Инициализировать динамическую схему libImport
+  await initLibImportSchema();
+
   const server = createMcpServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);

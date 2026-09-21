@@ -29,6 +29,8 @@ export interface ImporterFetchJsonOptions {
   headers?: Record<string, string>;
   /** AbortSignal для отмены */
   signal?: AbortSignal;
+  /** Разрешить loopback адреса (localhost, 127.0.0.1, ::1) */
+  allowLoopback?: boolean;
 }
 
 /**
@@ -41,7 +43,7 @@ export async function importerFetchJson<T = unknown>(
   url: string,
   options: ImporterFetchJsonOptions = {}
 ): Promise<T> {
-  const { fetchImpl, limiter, cacheKey, ttlMs = 24 * 60 * 60 * 1000, headers, signal } = options;
+  const { fetchImpl, limiter, cacheKey, ttlMs = 24 * 60 * 60 * 1000, headers, signal, allowLoopback = false } = options;
 
   // Проверить кэш
   if (cacheKey) {
@@ -56,8 +58,25 @@ export async function importerFetchJson<T = unknown>(
     await limiter.acquire();
   }
 
-  // Запрос с signal
-  const data = await fetchJson<T>(url, { fetchImpl, headers, signal });
+  // Для loopback запросов используем safeFetch, иначе fetchJson
+  let data: T;
+  if (allowLoopback) {
+    const resp = await safeFetch(url, {
+      headers,
+      fetchImpl,
+      signal,
+      allowLoopback,
+    });
+
+    if (!resp.ok) {
+      const text = await resp.text().catch(() => "");
+      throw new Error(`HTTP ${resp.status}: ${text.slice(0, 200)}`);
+    }
+
+    data = (await resp.json()) as T;
+  } else {
+    data = await fetchJson<T>(url, { fetchImpl, headers, signal });
+  }
 
   // Сохранить в кэш
   if (cacheKey) {

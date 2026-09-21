@@ -12,7 +12,7 @@
 | Штаб | `core/` | orchestrator, planner, architect, researcher, coder, debugger | Ведут работу: исследовать, спланировать, спроектировать, написать, починить |
 | Ревью кода | `review/` | code-reviewer, typescript-reviewer, react-reviewer, database-reviewer, migration-guard | Проверяют чужой код перед коммитом и выкаткой |
 | Качество | `quality/` | qa-engineer, performance-optimizer, silent-failure-hunter, refactor-cleaner | Тесты, скорость, проглоченные ошибки, чистота |
-| Дизайн и медиа | `design/` | design-department, design-reviewer, brand-guard, icon-curator, motion-curator, component-curator, media-generator | Как выглядит и как движется интерфейс, генерация и проверка ассетов |
+| Дизайн и медиа | `design/` | design-department, design-reviewer, brand-guard, taste-curator, icon-curator, motion-curator, component-curator, media-generator | Визуальный вкус: референсы, стили, как выглядит и как движется интерфейс, генерация и проверка ассетов |
 | Безопасность | `security/` | security-department + 8 специалистов | Техническая защита: доступ, секреты, инфра, логика, поверхность API |
 | Право | `legal/` | rkn-compliance | Правовая обвязка: 152-ФЗ, согласия, cookie, реклама. Намеренно отдельно от `security/` — это не техническая защита |
 | Маркетинг | `marketing/` | marketing-agent, seo-department, seo-specialist | Тексты, классическое SEO, видимость в ИИ-ответах |

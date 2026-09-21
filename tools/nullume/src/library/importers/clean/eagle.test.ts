@@ -50,29 +50,30 @@ test("eagle: run должен вернуть кандидаты с filePath", as
   await fs.promises.mkdir(path.dirname(imagePath), { recursive: true });
   await fs.promises.writeFile(imagePath, "fake image data");
 
-  const mockFetch = async (url: string, opts?: any) => {
-    if (url.includes("/api/library/info")) {
-      return {
-        ok: true,
-        json: async () => ({
+  const mockFetch = async (url: string | URL | Request, opts?: any) => {
+    const urlStr = typeof url === "string" ? url : url instanceof URL ? url.toString() : url.url;
+
+    if (urlStr.includes("/api/library/info")) {
+      return new Response(
+        JSON.stringify({
           data: {
             library: {
               path: libraryPath,
             },
           },
         }),
-      };
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
     }
 
-    if (url.includes("/api/item/list")) {
-      const urlObj = new URL(url);
+    if (urlStr.includes("/api/item/list")) {
+      const urlObj = new URL(urlStr);
       const offset = Number(urlObj.searchParams.get("offset")) || 0;
 
       // Вернуть данные только на первом запросе (offset=0)
       if (offset === 0) {
-        return {
-          ok: true,
-          json: async () => ({
+        return new Response(
+          JSON.stringify({
             data: [
               {
                 id: "test-id",
@@ -89,21 +90,22 @@ test("eagle: run должен вернуть кандидаты с filePath", as
             data_count: 1,
             total_count: 1,
           }),
-        };
+          { status: 200, headers: { "content-type": "application/json" } }
+        );
       }
 
       // На последующих запросах вернуть пустой массив
-      return {
-        ok: true,
-        json: async () => ({
+      return new Response(
+        JSON.stringify({
           data: [],
           data_count: 0,
           total_count: 1,
         }),
-      };
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
     }
 
-    throw new Error(`Unexpected URL: ${url}`);
+    throw new Error(`Unexpected URL: ${urlStr}`);
   };
 
   const config: NullumeConfig = {
@@ -139,28 +141,29 @@ test("eagle: run должен вернуть кандидаты с filePath", as
 test("eagle: run должен пропустить несуществующие файлы", async () => {
   const tmpDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "eagle-test-"));
 
-  const mockFetch = async (url: string, opts?: any) => {
-    if (url.includes("/api/library/info")) {
-      return {
-        ok: true,
-        json: async () => ({
+  const mockFetch = async (url: string | URL | Request, opts?: any) => {
+    const urlStr = typeof url === "string" ? url : url instanceof URL ? url.toString() : url.url;
+
+    if (urlStr.includes("/api/library/info")) {
+      return new Response(
+        JSON.stringify({
           data: {
             library: {
               path: tmpDir,
             },
           },
         }),
-      };
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
     }
 
-    if (url.includes("/api/item/list")) {
-      const urlObj = new URL(url);
+    if (urlStr.includes("/api/item/list")) {
+      const urlObj = new URL(urlStr);
       const offset = Number(urlObj.searchParams.get("offset")) || 0;
 
       if (offset === 0) {
-        return {
-          ok: true,
-          json: async () => ({
+        return new Response(
+          JSON.stringify({
             data: [
               {
                 id: "nonexistent-id",
@@ -173,20 +176,21 @@ test("eagle: run должен пропустить несуществующие 
             data_count: 1,
             total_count: 1,
           }),
-        };
+          { status: 200, headers: { "content-type": "application/json" } }
+        );
       }
 
-      return {
-        ok: true,
-        json: async () => ({
+      return new Response(
+        JSON.stringify({
           data: [],
           data_count: 0,
           total_count: 1,
         }),
-      };
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
     }
 
-    throw new Error(`Unexpected URL: ${url}`);
+    throw new Error(`Unexpected URL: ${urlStr}`);
   };
 
   const config: NullumeConfig = {
@@ -221,28 +225,29 @@ test("eagle: run должен фильтровать по коллекции", a
   await fs.promises.mkdir(path.dirname(imagePath), { recursive: true });
   await fs.promises.writeFile(imagePath, "fake image data");
 
-  const mockFetch = async (url: string, opts?: any) => {
-    if (url.includes("/api/library/info")) {
-      return {
-        ok: true,
-        json: async () => ({
+  const mockFetch = async (url: string | URL | Request, opts?: any) => {
+    const urlStr = typeof url === "string" ? url : url instanceof URL ? url.toString() : url.url;
+
+    if (urlStr.includes("/api/library/info")) {
+      return new Response(
+        JSON.stringify({
           data: {
             library: {
               path: tmpDir,
             },
           },
         }),
-      };
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
     }
 
-    if (url.includes("/api/item/list")) {
-      const urlObj = new URL(url);
+    if (urlStr.includes("/api/item/list")) {
+      const urlObj = new URL(urlStr);
       const offset = Number(urlObj.searchParams.get("offset")) || 0;
 
       if (offset === 0) {
-        return {
-          ok: true,
-          json: async () => ({
+        return new Response(
+          JSON.stringify({
             data: [
               {
                 id: "test-id",
@@ -254,20 +259,21 @@ test("eagle: run должен фильтровать по коллекции", a
             data_count: 1,
             total_count: 1,
           }),
-        };
+          { status: 200, headers: { "content-type": "application/json" } }
+        );
       }
 
-      return {
-        ok: true,
-        json: async () => ({
+      return new Response(
+        JSON.stringify({
           data: [],
           data_count: 0,
           total_count: 1,
         }),
-      };
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
     }
 
-    throw new Error(`Unexpected URL: ${url}`);
+    throw new Error(`Unexpected URL: ${urlStr}`);
   };
 
   const config: NullumeConfig = {
@@ -301,28 +307,29 @@ test("eagle: run должен передавать палитру", async () => 
   await fs.promises.mkdir(path.dirname(imagePath), { recursive: true });
   await fs.promises.writeFile(imagePath, "fake image data");
 
-  const mockFetch = async (url: string, opts?: any) => {
-    if (url.includes("/api/library/info")) {
-      return {
-        ok: true,
-        json: async () => ({
+  const mockFetch = async (url: string | URL | Request, opts?: any) => {
+    const urlStr = typeof url === "string" ? url : url instanceof URL ? url.toString() : url.url;
+
+    if (urlStr.includes("/api/library/info")) {
+      return new Response(
+        JSON.stringify({
           data: {
             library: {
               path: tmpDir,
             },
           },
         }),
-      };
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
     }
 
-    if (url.includes("/api/item/list")) {
-      const urlObj = new URL(url);
+    if (urlStr.includes("/api/item/list")) {
+      const urlObj = new URL(urlStr);
       const offset = Number(urlObj.searchParams.get("offset")) || 0;
 
       if (offset === 0) {
-        return {
-          ok: true,
-          json: async () => ({
+        return new Response(
+          JSON.stringify({
             data: [
               {
                 id: "test-id",
@@ -337,20 +344,21 @@ test("eagle: run должен передавать палитру", async () => 
             data_count: 1,
             total_count: 1,
           }),
-        };
+          { status: 200, headers: { "content-type": "application/json" } }
+        );
       }
 
-      return {
-        ok: true,
-        json: async () => ({
+      return new Response(
+        JSON.stringify({
           data: [],
           data_count: 0,
           total_count: 1,
         }),
-      };
+        { status: 200, headers: { "content-type": "application/json" } }
+      );
     }
 
-    throw new Error(`Unexpected URL: ${url}`);
+    throw new Error(`Unexpected URL: ${urlStr}`);
   };
 
   const config: NullumeConfig = {

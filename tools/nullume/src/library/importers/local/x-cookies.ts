@@ -2,18 +2,20 @@ import { z } from "zod";
 import { Importer, ImportRunOptions, RefCandidate } from "../types.js";
 import { assertLocalOnlyAllowed, LOCAL_ONLY_WARNING } from "../gate.js";
 import { readSession } from "../../sessions.js";
-import { UsageError, ProviderError } from "../../../core/errors.js";
+import { UsageError, ProviderError, ConfigError } from "../../../core/errors.js";
 import { sleep } from "../http.js";
 import { getPackageDataDir } from "../../../core/paths.js";
+import { safeFetch } from "../../../core/net.js";
 import fs from "node:fs";
 import path from "node:path";
 
 type XCollection = "bookmarks" | "likes";
 
 /**
- * Схема для хранения GraphQL operationId
+ * Схема для хранения GraphQL operationId и Bearer token
  */
 const XGraphQLConfigSchema = z.object({
+  bearer: z.string(),
   Bookmarks: z.string(),
   Likes: z.string(),
 });
@@ -134,6 +136,11 @@ export const xCookiesImporter: Importer = {
     assertLocalOnlyAllowed(opts.config, opts.env);
     opts.log("LOCAL_ONLY_WARNING: X API платный ($0.005 за запрос)");
 
+    // При limit === 0 не запрашивать ничего
+    if (opts.limit === 0) {
+      return;
+    }
+
     const collection: XCollection = (opts.collection as XCollection) || "bookmarks";
     if (collection !== "bookmarks" && collection !== "likes") {
       throw new UsageError(
@@ -151,7 +158,7 @@ export const xCookiesImporter: Importer = {
       );
     }
 
-    // Загрузить GraphQL operationId из data/x-graphql.json
+    // Загрузить GraphQL operationId и bearer из data/x-graphql.json
     let graphqlConfig: XGraphQLConfig;
     try {
       const configPath = path.join(getPackageDataDir(), "x-graphql.json");
@@ -169,11 +176,21 @@ export const xCookiesImporter: Importer = {
       if (e instanceof UsageError) throw e;
       throw new UsageError(
         `Не удалось загрузить data/x-graphql.json: ${(e as Error).message}. ` +
-        `Обновите GraphQL operationId в файле.`
+        `Обновите GraphQL operationId и bearer в файле.`
+      );
+    }
+
+    // Получить ct0 из cookies (требуется для x-csrf-token)
+    const ct0 = session.cookies["ct0"];
+    if (!ct0) {
+      throw new ConfigError(
+        `X сессия не содержит ct0 cookie. ` +
+        `Получите ct0 из DevTools → Application → Cookies и обновите ~/.nullume/sessions/x.json`
       );
     }
 
     const operationId = graphqlConfig[collection === "bookmarks" ? "Bookmarks" : "Likes"];
+    const bearer = graphqlConfig.bearer;
     const fetchImpl = opts.fetchImpl ?? fetch;
     let cursor = undefined;
     let pageNum = 0;
@@ -185,6 +202,11 @@ export const xCookiesImporter: Importer = {
       if (pageNum > 0) {
         const delay = opts.env.NULLUME_NO_DELAY === "1" ? 0 : 1500;
         if (delay > 0) await sleep(delay);
+      }
+
+      // Проверить signal перед запросом
+      if (opts.signal?.aborted) {
+        return;
       }
 
       opts.log(`X_QUERY collection="${collection}" page=${pageNum + 1} cost=$0.005`);
@@ -202,18 +224,30 @@ export const xCookiesImporter: Importer = {
         features: {},
       };
 
-      // Выполнить запрос
-      const resp = await fetchImpl("https://x.com/i/api/graphql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          cookie: Object.entries(session.cookies)
-            .map(([k, v]) => `${k}=${v}`)
-            .join("; "),
-          "Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWiKaBjejBBDXtg",
-        },
-        body: JSON.stringify(payload),
-      });
+      // Построить URL операции
+      const operationName = collection === "bookmarks" ? "Bookmarks" : "Likes";
+      const graphqlUrl = `https://x.com/i/api/graphql/${operationId}/${operationName}`;
+
+      // Выполнить запрос через safeFetch
+      let resp: Response;
+      try {
+        resp = await safeFetch(graphqlUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${bearer}`,
+            "x-csrf-token": ct0,
+            cookie: Object.entries(session.cookies)
+              .map(([k, v]) => `${k}=${v}`)
+              .join("; "),
+          },
+          body: JSON.stringify(payload),
+          fetchImpl,
+          signal: opts.signal,
+        } as any);
+      } catch (e) {
+        throw new ProviderError(`Ошибка при запросе к X: ${(e as Error).message}`);
+      }
 
       // Обработить статусы
       if (resp.status === 403 || resp.status === 429) {
@@ -249,7 +283,7 @@ export const xCookiesImporter: Importer = {
       for (const instruction of instructions) {
         const entries = instruction.entries || [];
         for (const entry of entries) {
-          if (opts.signal?.aborted) break;
+          if (opts.signal?.aborted) return;
 
           const tweet = entry.content?.itemContent?.tweet_results?.result?.legacy;
           if (!tweet) continue;

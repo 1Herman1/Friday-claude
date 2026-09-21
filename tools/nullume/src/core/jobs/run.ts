@@ -1,5 +1,5 @@
 import { assertUploadable } from "../files.js";
-import { getDownloadsDir } from "../paths.js";
+import { getDownloadsDir, getLibraryPreviewsDir } from "../paths.js";
 import { randomUUID } from "node:crypto";
 import type { Provider, ModelInfo } from "../providers/types.js";
 import type { Job } from "./model.js";
@@ -15,6 +15,7 @@ export interface CreateJobOptions {
   input?: Record<string, unknown>;
   style?: string;
   fetchImpl?: typeof fetch;
+  libraryStore?: any; // LibraryStore, type only for tests to avoid circular imports
 }
 
 async function fetchLiveSchema(
@@ -70,16 +71,30 @@ export async function createJobTask(
   provider: Provider,
   options: CreateJobOptions
 ): Promise<Job> {
-  const { model: modelId, prompt, images = [], input = {}, style, fetchImpl = fetch } = options;
+  const { model: modelId, prompt, images = [], input = {}, style, fetchImpl = fetch, libraryStore } = options;
 
   // Resolve model
   let modelInfo = await provider.model(modelId);
 
+  // Resolve and prepare style before checking files (so exemplar paths are known)
+  let styleFamily: string | undefined;
+  let resolvedStyle: any; // ResolvedStyle
+  if (style) {
+    const { resolveStyle, applyStyle } = await import("../../library/style/resolve.js");
+    resolvedStyle = await resolveStyle(style, libraryStore);
+    styleFamily = resolvedStyle.family.slug;
+  }
+
   // Локальные файлы проверяем до любого выхода в сеть: отказ по deny-листу
   // должен случиться раньше, чем уйдёт первый запрос.
+  const allowedRoots = [process.cwd(), getDownloadsDir()];
+  if (resolvedStyle) {
+    allowedRoots.push(getLibraryPreviewsDir());
+  }
+
   for (const img of images) {
     if (!/^https?:\/\//.test(img)) {
-      await assertUploadable(img, [process.cwd(), getDownloadsDir()]);
+      await assertUploadable(img, allowedRoots);
     }
   }
 
@@ -119,18 +134,35 @@ export async function createJobTask(
     }
   }
 
-  // Build input
+  // Apply style if provided
+  let finalPrompt = prompt;
+  let finalImages = [...images];
   let finalInput = { ...input };
 
-  // Add prompt
-  if (modelInfo.meta.promptField) {
-    finalInput[modelInfo.meta.promptField] = prompt;
+  if (resolvedStyle) {
+    const { applyStyle } = await import("../../library/style/resolve.js");
+    const applied = applyStyle({
+      prompt: finalPrompt,
+      images: finalImages,
+      input: finalInput,
+      modelMeta: modelInfo.meta,
+      fields: modelInfo.fields,
+      resolved: resolvedStyle,
+    });
+    finalPrompt = applied.prompt;
+    finalImages = applied.images;
+    finalInput = applied.input;
   }
 
-  // Add images
-  if (images.length > 0 && modelInfo.meta.imageField) {
+  // Add prompt (only if not already in input)
+  if (modelInfo.meta.promptField && !(modelInfo.meta.promptField in finalInput)) {
+    finalInput[modelInfo.meta.promptField] = finalPrompt;
+  }
+
+  // Add images (only if not already in input)
+  if (finalImages.length > 0 && modelInfo.meta.imageField && !(modelInfo.meta.imageField in finalInput)) {
     const imageUrls: string[] = [];
-    for (const img of images) {
+    for (const img of finalImages) {
       if (img.startsWith("http://") || img.startsWith("https://")) {
         imageUrls.push(img);
       } else {
@@ -171,7 +203,7 @@ export async function createJobTask(
     usdMax: estimate.usdMax,
   } : undefined);
 
-  if (style) job.styleFamily = style;
+  if (styleFamily) job.styleFamily = styleFamily;
 
   await saveJob(job);
   return job;

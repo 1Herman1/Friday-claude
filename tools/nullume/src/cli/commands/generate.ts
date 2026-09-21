@@ -67,10 +67,6 @@ generateCmd
     const flags = getGlobalFlags();
 
     try {
-      if (options.style) {
-        throw new UsageError("--style появится в спринте 2");
-      }
-
       const providerName = process.env.NULLUME_PROVIDER || "kie";
       const apiKey = providerName === "mock" ? "mock" : await getApiKey();
       const provider = await getProviderWithCatalog(providerName, apiKey);
@@ -123,6 +119,9 @@ generateCmd
         console.log(JSON.stringify({ taskId: job.id, jobId: job.id, state: job.state }, null, 2));
       } else {
         console.log(`Задача создана: ${job.id}`);
+        if (job.styleFamily && !flags.quiet) {
+          console.log(`Стиль: ${job.styleFamily}`);
+        }
       }
 
       // Wait if requested

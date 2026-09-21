@@ -15,6 +15,7 @@ import generateCommand from "./commands/generate.js";
 import uploadCommand from "./commands/upload.js";
 import mcpCommand from "./commands/mcp.js";
 import initCommand from "./commands/init.js";
+import libCommand from "./commands/lib.js";
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(dir, "../..");
@@ -45,6 +46,7 @@ async function main() {
   program.addCommand(uploadCommand);
   program.addCommand(mcpCommand);
   program.addCommand(initCommand);
+  program.addCommand(libCommand);
 
   try {
     await program.parseAsync(process.argv);

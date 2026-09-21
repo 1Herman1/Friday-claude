@@ -18,6 +18,49 @@
 Рабочая ветка здесь НЕ указывается: она одна на весь репозиторий и объявлена
 в `docs/projects/README.md`. Новых веток не заводить.
 
+## Спринт 2 (библиотека вкуса)
+
+### Зависимости и флаги
+
+- `+ jimp` — превью картинок и палитра (чистый JS, без нативных зависимостей)
+- `@huggingface/transformers` в optionalDependencies — эмбеддинги CLIP (динамический импорт, не обязателен)
+- `node:sqlite` с флагом `--no-warnings=ExperimentalWarning` (exp. feature, требует Node ≥ 22.13)
+
+### Каталоги
+
+- `~/.nullume/library/` — SQLite БД с riferenze, эмбеддингами, семействами
+- `~/.nullume/models/` — CLIP-модели (ленивый загруз, cachedir автоматический)
+- `~/.nullume/sessions/` — Pinterest/Dribbble/X токены с правами 0o600
+
+### CLI команды
+
+- `lib init [--model clip|siglip] [--skip-models]` — инициализировать БД и модели
+- `lib sources` — список доступных источников (clean vs. local-only)
+- `lib import <source> [--collection X] [--limit N] [--dry-run]` — импортировать
+- `lib add <files>` — добавить локальные файлы
+- `lib embed` — вычислить эмбеддинги CLIP
+- `lib list` — все референсы в БД
+- `lib search <query>` — поиск по текстовому описанию
+- `lib cluster [--k N|--auto-k]` — кластеризовать в семьи
+- `lib propose [--json]` — Claude заполняет дескрипторы
+- `lib dashboard` — дашборд утверждения семейств (локальный, 127.0.0.1)
+- `lib family list|show <id>|set <id>|merge|discard` — операции с семействами
+- `lib session set <source>` — установить учётные данные для local-only
+- `lib status` — статус библиотеки (count: references, embeddings, families)
+
+### MCP (только clean, не local-only)
+
+- `lib_search` — поиск по запросу
+- `lib_families` — список семейств
+- `lib_family` — детали семейства (exemplars, descriptor)
+- `lib_import` — enum с clean-источниками (не Pinterest cookies/Dribbble/X)
+- `lib_clusters` — результат кластеризации
+- `lib_propose` — предложения Claude
+
+### Агент
+
+Новый агент `.claude/agents/design/taste-curator.md` — куратор референсов, методология заполнения дескрипторов (палитра, типографика, motion, dials, доминирующий паттерн).
+
 ## Пользователь
 
 Имя: Гермес

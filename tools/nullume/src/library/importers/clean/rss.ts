@@ -90,11 +90,15 @@ export const rssImporter: Importer = {
 
         // Стратегия 3: og (Open Graph из страницы)
         if (!imageUrl && feed.imageStrategy === "og") {
+          // Проверить signal перед запросом
+          if (opts.signal?.aborted) {
+            break;
+          }
           try {
             if (!noDelay) {
               await sleep(2000);
             }
-            const pageHtml = await importerFetchText(item.link, { fetchImpl });
+            const pageHtml = await importerFetchText(item.link, { fetchImpl, signal: opts.signal });
             const ogMatch = /<meta\s+property=["']og:image["']\s+content=["']([^"']+)/i.exec(
               pageHtml
             );

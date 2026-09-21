@@ -14,7 +14,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const serverEntry = path.join(dir, "index.ts");
 
-test("MCP: tools/list отдаёт 11 инструментов со схемами, generate работает на mock", async () => {
+test("MCP: tools/list отдаёт 17 инструментов со схемами, generate работает на mock", async () => {
   const home = mkdtempSync(path.join(tmpdir(), "nullume-mcp-"));
   const transport = new StdioClientTransport({
     command: "npx",
@@ -26,7 +26,7 @@ test("MCP: tools/list отдаёт 11 инструментов со схемам
   await client.connect(transport);
   try {
     const { tools } = await client.listTools();
-    assert.equal(tools.length, 11);
+    assert.equal(tools.length, 17);
     for (const tool of tools) {
       assert.ok(tool.inputSchema && typeof tool.inputSchema === "object", `${tool.name}: нет inputSchema`);
       assert.ok("properties" in tool.inputSchema, `${tool.name}: нет properties`);

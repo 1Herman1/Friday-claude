@@ -12,6 +12,7 @@ export const schema = z.object({
   prompt: z.string().optional().describe("Текстовый запрос для генерации"),
   images: z.array(z.string()).optional().describe("Пути к файлам или URL изображений"),
   input: z.record(z.string(), z.unknown()).optional().describe("Дополнительные параметры модели"),
+  style: z.string().optional().describe("Стиль из библиотеки вкуса (slug или ID семейства)"),
   wait: z.boolean().optional().default(true).describe("Ждать завершения задачи"),
   wait_timeout_sec: z.number().optional().default(300).describe("Таймаут ожидания в секундах"),
   confirm_cost: z.boolean().optional().describe("Подтверждение при стоимости > $1"),
@@ -23,6 +24,7 @@ export async function handler(args: {
   prompt?: string;
   images?: string[];
   input?: Record<string, unknown>;
+  style?: string;
   wait?: boolean;
   wait_timeout_sec?: number;
   confirm_cost?: boolean;
@@ -116,6 +118,7 @@ export async function handler(args: {
       prompt: args.prompt || "",
       images: args.images,
       input: finalInput,
+      style: args.style,
     });
 
     // If no wait, return job immediately

@@ -178,14 +178,38 @@ Either:
 2. API key is wrong: `nullume setup --key sk_live_...`
 3. API is unreachable
 
+## Taste Library (Sprint 2)
+
+Organize design references into style families with automatic clustering and description filling. Use approved styles for branded content generation via `--style <slug>`.
+
+**Workflow:** Import references → Embed → Cluster → Propose (Claude) → Approve (Dashboard) → Generate with style
+
+**Sources:** Eagle, Raindrop, Pinterest v5, Unsplash, Pexels, Pixabay, Are.na, Civitai, RSS, shot.cafe (clean); Pinterest cookies, Dribbble, X (local-only with gate).
+
+```bash
+nullume lib init
+nullume lib import eagle --limit 50
+nullume lib embed
+nullume lib cluster
+nullume lib propose
+nullume lib dashboard
+# Approve styles in browser, then:
+nullume generate create flux-pro --prompt "..." --style editorial-warm-minimal --wait
+```
+
+See `.claude/agents/design/taste-curator.md` for curator methodology and `docs/decisions/ADR-007-reference-sources-policy.md` for source policies.
+
 ## File Locations
 
 ```
 ~/.nullume/
-├── config.json       # API key (private, never commit)
-├── cache/            # Model catalog cache (24h TTL)
-├── jobs/             # Generation history
-└── downloads/        # Downloaded results
+├── config.json            # API key & settings (private, never commit)
+├── cache/                 # Model catalog cache (24h TTL)
+├── jobs/                  # Generation history
+├── downloads/             # Downloaded results
+├── library/               # Taste library database (Sprint 2)
+├── models/                # CLIP embeddings cache
+└── sessions/              # Pinterest/Dribbble/X tokens (600)
 ```
 
 ## License
