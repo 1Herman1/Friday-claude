@@ -140,6 +140,61 @@ npm run build --workspace=@ps/client    # tsc --noEmit + vite build
 npm audit --omit=dev                    # уязвимости в зависимостях (workspace общий)
 ```
 
+### Тесты с нуля: шесть шагов, без которых они не пойдут
+
+Тесты **интеграционные** — им нужна живая база с данными. В свежем контейнере
+команда выше падает шесть раз подряд, каждый раз по новой причине, и сообщения
+уводят в сторону («Cannot find module», «Failed to resolve entry»). Порядок
+проверен целиком:
+
+```bash
+# 1. Зависимости (контейнер пересоздаётся без node_modules)
+npm install
+
+# 2. Свой клиент Prisma — у проекта он отдельный, ps-client
+npm exec --workspace=@ps/server -- prisma generate
+
+# 3. Собрать общий пакет: без dist сервер не разрешит импорт @ps/shared
+npm run build --workspace=@ps/shared
+
+# 4. База (в среде стоит PostgreSQL 16, кластер по умолчанию выключен)
+service postgresql start
+su postgres -c "psql -c \"CREATE ROLE ps_test WITH LOGIN PASSWORD 'ps_test' SUPERUSER;\""
+su postgres -c "createdb -O ps_test perfect_skin_test"
+
+# 5. Файл окружения: vitest читает projects/perfect-skin/server/.env сам
+#    (dotenv в зависимостях нет, config читает файл руками).
+#    Значения — тестовые, в git файл не уходит: .env в .gitignore.
+#    Нужны: PS_DATABASE_URL, PS_COOKIE_SECRET, JWT_SECRET,
+#    PS_PROMO_HMAC_SECRET, PS_CORS_ORIGIN, NODE_ENV=development, SMS_PROVIDER=dev
+
+# 6. Схема и данные (seed падает без экспорта переменных — читает их из среды,
+#    а не из .env)
+cd projects/perfect-skin/server && set -a && . ./.env && set +a
+npx prisma migrate deploy && npx tsx prisma/seed.ts
+```
+
+Пропуск шага 3 или 6 даёт не «нет данных», а падение сборки тестов — искать
+причину приходится с нуля. Пустая база без seed роняет восемь тестов из
+двадцати девяти на `Cannot read properties of null`.
+
+### Проверка среды — тремя запусками, а не чтением кода
+
+`lib/env.ts` считает боевым всё, кроме `development` и `test`. Доказывается
+так (ожидаемо: первый стартует, два других отказывают):
+
+```bash
+cd projects/perfect-skin/server
+for env in development production prod; do
+  NODE_ENV=$env PS_COOKIE_SECRET=dev-secret JWT_SECRET=dev-secret \
+  PS_PROMO_HMAC_SECRET=dev-secret PS_DATABASE_URL=... PS_CORS_ORIGIN=... \
+  timeout 12 npx tsx src/index.ts 2>&1 | grep -c 'production start refused'
+done
+```
+
+Третий прогон и есть доказательство: `prod` — значение незнакомое, и раньше
+сервер на нём поднимался с дефолтными секретами.
+
 ## Доступ к боевому серверу
 
 | Что | Как |
