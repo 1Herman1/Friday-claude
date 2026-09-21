@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>One Page Love</title>
+    <link>https://design.example.com</link>
+    <description>Design inspiration</description>
+    <item>
+      <title>Beautiful UI Patterns</title>
+      <link>https://design.example.com/article1</link>
+      <pubDate>Sat, 20 Sep 2026 10:00:00 GMT</pubDate>
+      <content:encoded><![CDATA[
+        <p>Check out these patterns:</p>
+        <img src="https://cdn.example.com/pattern1.jpg" alt="pattern1" />
+        <img src="https://cdn.example.com/pattern2.jpg" alt="pattern2" />
+      ]]></content:encoded>
+    </item>
+    <item>
+      <title>Color Theory Article</title>
+      <link>https://design.example.com/article2</link>
+      <pubDate>Fri, 19 Sep 2026 09:30:00 GMT</pubDate>
+      <content:encoded><![CDATA[
+        <img src="https://cdn.example.com/colors.png" />
+        <p>Comprehensive color guide</p>
+      ]]></content:encoded>
+    </item>
+  </channel>
+</rss>

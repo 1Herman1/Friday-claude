@@ -1,0 +1,45 @@
+{
+  "contents": [
+    {
+      "id": 12345,
+      "class": "Image",
+      "title": "Brutalist Architecture",
+      "image": {
+        "large": {
+          "url": "https://d2w9rnfcy7mm78.cloudfront.net/img1.jpeg"
+        },
+        "display": {
+          "url": "https://d2w9rnfcy7mm78.cloudfront.net/img1_small.jpeg"
+        }
+      },
+      "user": {
+        "full_name": "John Doe"
+      },
+      "channel_title": "Architecture Inspiration"
+    },
+    {
+      "id": 12346,
+      "class": "Text",
+      "title": "Some text block",
+      "content": "This should be skipped"
+    },
+    {
+      "id": 12347,
+      "class": "Image",
+      "title": "Minimalist Design",
+      "image": {
+        "large": {
+          "url": "https://d2w9rnfcy7mm78.cloudfront.net/img2.jpeg"
+        }
+      },
+      "user": {
+        "full_name": "Jane Smith"
+      },
+      "channel_title": "Design Patterns"
+    }
+  ],
+  "length": 3,
+  "current_page": 1,
+  "per": 50,
+  "total_count": 3
+}

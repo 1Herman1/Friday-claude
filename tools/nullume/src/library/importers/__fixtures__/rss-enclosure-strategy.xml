@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Video Feed</title>
+    <link>https://video.example.com</link>
+    <description>Video content</description>
+    <item>
+      <title>Motion Design Demo</title>
+      <link>https://video.example.com/demo1</link>
+      <pubDate>Thu, 18 Sep 2026 14:00:00 GMT</pubDate>
+      <enclosure url="https://cdn.example.com/motion-demo.mp4" type="video/mp4" length="5000000" />
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,42 @@
+{
+  "items": [
+    {
+      "id": 100001,
+      "url": "https://image.civitai.com/xyx/100001.jpeg",
+      "username": "artist123",
+      "width": 1024,
+      "height": 1024,
+      "nsfwLevel": "None",
+      "meta": {
+        "prompt": "beautiful landscape painting with mountains and trees",
+        "negativePrompt": "blurry, low quality",
+        "Model": "stable-diffusion-xl"
+      }
+    },
+    {
+      "id": 100002,
+      "url": "https://image.civitai.com/xyx/100002.jpeg",
+      "username": "creator_ai",
+      "width": 768,
+      "height": 768,
+      "nsfwLevel": "Moderate",
+      "meta": {
+        "prompt": "modern interior design"
+      }
+    },
+    {
+      "id": 100003,
+      "url": "https://image.civitai.com/xyx/100003.jpeg",
+      "username": "digital_artist",
+      "width": 512,
+      "height": 512,
+      "nsfwLevel": "None",
+      "meta": {
+        "prompt": "portrait of a person in sunglasses"
+      }
+    }
+  ],
+  "metadata": {
+    "nextCursor": "cursor123"
+  }
+}

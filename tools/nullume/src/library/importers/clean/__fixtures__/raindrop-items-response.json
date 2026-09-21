@@ -1,0 +1,33 @@
+{
+  "result": true,
+  "items": [
+    {
+      "_id": 5245789123,
+      "link": "https://www.dribbble.com/shots/15234567",
+      "cover": "https://cdn.raindrop.io/thumbs/245/789/12345678.jpg",
+      "domain": "dribbble.com",
+      "tags": ["ui-design", "mobile", "interface"],
+      "title": "Mobile App Dashboard Design",
+      "excerpt": "A beautiful dashboard for a fitness tracking app",
+      "type": "link"
+    },
+    {
+      "_id": 5245789124,
+      "link": "https://www.behance.net/gallery/156789234",
+      "cover": "https://cdn.raindrop.io/thumbs/245/789/12345679.jpg",
+      "domain": "behance.net",
+      "tags": ["branding", "logo", "identity"],
+      "title": "Rebrand Case Study",
+      "excerpt": "Complete rebranding for a tech startup",
+      "type": "link"
+    },
+    {
+      "_id": 5245789125,
+      "link": "https://example.com/article",
+      "domain": "example.com",
+      "tags": ["article"],
+      "title": "Design Without Cover"
+    }
+  ],
+  "count": 3
+}

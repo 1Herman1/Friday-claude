@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "12345678901234567",
+      "title": "Modern Minimalist Kitchen",
+      "description": "Sleek kitchen design with marble countertops",
+      "alt_text": "white kitchen with marble island",
+      "creative_type": "user_created",
+      "media": {
+        "images": {
+          "1200x": {
+            "url": "https://s.pinimg.com/images/user_uploads/12345/kitchen-1200x.jpg"
+          },
+          "600x": {
+            "url": "https://s.pinimg.com/images/user_uploads/12345/kitchen-600x.jpg"
+          }
+        }
+      }
+    },
+    {
+      "id": "98765432109876543",
+      "title": "Urban Garden Design",
+      "description": "Small space garden inspiration",
+      "alt_text": "rooftop garden with plants",
+      "media": {
+        "images": {
+          "1200x": {
+            "url": "https://s.pinimg.com/images/user_uploads/67890/garden-1200x.jpg"
+          }
+        }
+      }
+    },
+    {
+      "id": "55555555555555555",
+      "title": "Color Palette Study",
+      "media": {
+        "images": {
+          "600x": {
+            "url": "https://s.pinimg.com/images/user_uploads/11111/palette-600x.jpg"
+          }
+        }
+      }
+    }
+  ],
+  "bookmark": "eyJvZmZzZXQiOiAzLCAibGltaXQiOiA1MCwgIm9yZGVyIjogIm1vZGlmaWVkIn0"
+}

@@ -1,7 +1,14 @@
 import { Importer } from "../types.js";
+import { pinterestCookiesImporter } from "./pinterest-cookies.js";
+import { xCookiesImporter } from "./x-cookies.js";
+import { dribbbleImporter } from "./dribbble.js";
 
 /**
  * Local-only импортёры: требуют гейт assertLocalOnlyAllowed()
- * Заполняется в волне 1b другими кодерами
+ * Запускаются только в CLI с явным согласием пользователя
  */
-export const localImporters: Importer[] = [];
+export const localImporters: Importer[] = [
+  pinterestCookiesImporter,
+  xCookiesImporter,
+  dribbbleImporter,
+];

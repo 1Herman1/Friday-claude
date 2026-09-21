@@ -1,0 +1,32 @@
+[
+  {
+    "id": "onepagelove",
+    "title": "One Page Love",
+    "url": "https://onepagelove.com/feed",
+    "imageStrategy": "content"
+  },
+  {
+    "id": "minimalgallery",
+    "title": "Minimal Gallery",
+    "url": "https://minimal.gallery/feed/",
+    "imageStrategy": "content"
+  },
+  {
+    "id": "motionographer",
+    "title": "Motionographer",
+    "url": "https://motionographer.com/feed/",
+    "imageStrategy": "content"
+  },
+  {
+    "id": "typewolf",
+    "title": "Typewolf",
+    "url": "https://www.typewolf.com/feed",
+    "imageStrategy": "content"
+  },
+  {
+    "id": "brandnew",
+    "title": "Brand New",
+    "url": "https://feeds.feedburner.com/UnderConsideration/BrandNew",
+    "imageStrategy": "content"
+  }
+]
