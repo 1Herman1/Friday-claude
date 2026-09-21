@@ -30,6 +30,10 @@ npx tsx src/cli/index.ts generate create nano-banana-2-lite \
 - **Ключ kie.ai** (бесплатная регистрация на kie.ai, получить в личном кабинете)
 - Интернет-соединение
 
+## Что в пакете
+
+Полный состав, включая структуру каталогов, требования от получателя и где лежат данные — в `MANIFEST.md`.
+
 ## Установка
 
 ### Вариант 1: локально в проекте (для разработки)
@@ -218,6 +222,17 @@ npx -y nullume init
 2. Копирует `SKILL.md` в `.claude/skills/nullume/` (для агентов Claude Code)
 3. Дополняет `.env.example` строкой `KIE_API_KEY=`
 4. Дополняет `.gitignore` строкой `.env`
+
+**Подключить CI (опционально):**
+```bash
+# Скопировать GitHub Actions workflows в твой проект
+mkdir -p .github/workflows
+cp node_modules/nullume/templates/github/*.yml .github/workflows/
+# или из исходников:
+# cp ~/Friday-claude/tools/nullume/templates/github/*.yml .github/workflows/
+```
+
+Это включит автоматическую проверку типов, тесты и еженедельный аудит каталога моделей kie.ai.
 
 **Флаги:**
 - `--dir /path` — целевой каталог (по умолчанию текущий)

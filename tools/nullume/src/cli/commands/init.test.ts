@@ -89,6 +89,17 @@ async function initProject(targetDir: string, force: boolean = false): Promise<{
       result.created.push(skillDest);
     }
 
+    // Copy taste-curator.md agent if it exists
+    const agentSrc = path.join(pRoot, "agents/taste-curator.md");
+    if (fs.existsSync(agentSrc)) {
+      const agentDestDir = path.join(targetDir, ".claude/agents");
+      const agentDest = path.join(agentDestDir, "taste-curator.md");
+      await fs.promises.mkdir(agentDestDir, { recursive: true });
+      const content = await fs.promises.readFile(agentSrc, "utf-8");
+      await fs.promises.writeFile(agentDest, content);
+      result.created.push(agentDest);
+    }
+
     // Update .env.example
     const envExamplePath = path.join(targetDir, ".env.example");
     let envContent = "";
@@ -155,6 +166,24 @@ test("init copies SKILL.md to .claude/skills/nullume", async () => {
 
     const content = await fs.promises.readFile(skillPath, "utf-8");
     assert(content.includes("Nullume"), "SKILL.md should contain Nullume content");
+  } finally {
+    await fs.promises.rm(testDir, { recursive: true, force: true });
+  }
+});
+
+test("init copies taste-curator.md agent to .claude/agents", async () => {
+  const testDir = path.join(tmpdir(), `nullume-init-test-${simpleUuid()}`);
+  await fs.promises.mkdir(testDir, { recursive: true });
+
+  try {
+    const result = await initProject(testDir);
+
+    const agentPath = path.join(testDir, ".claude/agents/taste-curator.md");
+    assert(fs.existsSync(agentPath), `taste-curator.md should be copied to ${agentPath}`);
+
+    const content = await fs.promises.readFile(agentPath, "utf-8");
+    assert(content.includes("name: taste-curator"), "Agent should have name: taste-curator");
+    assert(content.includes("---"), "Agent should have frontmatter");
   } finally {
     await fs.promises.rm(testDir, { recursive: true, force: true });
   }

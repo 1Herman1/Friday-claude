@@ -27,10 +27,17 @@
     "nullume": "bin/nullume.js"
   },
   "files": [
+    "agents",
     "bin",
-    "dist",
     "data",
+    "dist",
+    "docs",
     "skills",
+    "templates",
+    "scripts/audit-catalog.mts",
+    "scripts/build-catalog.mts",
+    ".env.example",
+    "MANIFEST.md",
     "README.md",
     "README.en.md",
     "LICENSE"
@@ -43,7 +50,7 @@
     "build": "tsc -p tsconfig.build.json && node scripts/copy-assets.mjs",
     "build:catalog": "tsx scripts/build-catalog.mts",
     "audit:catalog": "tsx scripts/audit-catalog.mts",
-    "sync:skill": "tsx scripts/sync-skill.mts",
+    "sync:friday": "tsx scripts/sync-repo.mts",
     "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {

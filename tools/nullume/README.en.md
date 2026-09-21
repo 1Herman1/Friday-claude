@@ -22,6 +22,10 @@ nullume generate create nano-banana-2-lite \
   --wait --json
 ```
 
+## What's in the Package
+
+Full inventory of files, directory structure, recipient requirements, and data locations — see `MANIFEST.md`.
+
 ## Installation
 
 ### Global (recommended)
@@ -150,6 +154,20 @@ If you want to modify the skill instructions for your project:
 ```
 
 The skill controls how Claude's agents use Nullume tools.
+
+## Connect CI (optional)
+
+Enable GitHub Actions workflows for automated testing and catalog audits:
+
+```bash
+# Copy GitHub Actions workflows to your project
+mkdir -p .github/workflows
+cp node_modules/nullume/templates/github/*.yml .github/workflows/
+# or from source:
+# cp ~/Friday-claude/tools/nullume/templates/github/*.yml .github/workflows/
+```
+
+This runs typecheck, tests, and weekly model catalog audits.
 
 ## Common Issues
 

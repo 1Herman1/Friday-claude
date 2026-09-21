@@ -144,6 +144,24 @@ async function initProject(targetDir: string, force: boolean): Promise<InitResul
       result.errors.push(`Source skill file not found: ${skillSrc}`);
     }
 
+    // 2b. Copy taste-curator agent
+    const agentSrc = path.join(pRoot, "agents/taste-curator.md");
+    const agentDestDir = path.join(targetDir, ".claude/agents");
+    const agentDest = path.join(agentDestDir, "taste-curator.md");
+
+    if (fs.existsSync(agentSrc)) {
+      const agentRel = path.relative(targetDir, agentDest);
+      const agentExistedBefore = fs.existsSync(agentDest);
+      const agentResult = await copyFile(agentSrc, agentDest, force);
+      if (agentResult.copied) {
+        (agentExistedBefore ? result.updated : result.created).push(agentRel);
+      } else {
+        result.skipped.push(`${agentRel} (exists, use --force to overwrite)`);
+      }
+    } else {
+      result.errors.push(`Source agent file not found: ${agentSrc}`);
+    }
+
     // 3. Update .env.example
     const envExamplePath = path.join(targetDir, ".env.example");
     let envContent = "";

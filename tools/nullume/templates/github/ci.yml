@@ -1,0 +1,46 @@
+# Copy this file to .github/workflows/nullume-ci.yml in your repo
+# Updates working-directory to "." (this package is a git submodule or installed via npm)
+
+name: Nullume CI
+
+# Проверка пакета при изменениях:
+# типы, тесты, сборка, упаковка (dry-run).
+
+on:
+  push:
+    paths:
+      - '**'
+  pull_request:
+    paths:
+      - '**'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Проверка типов
+        run: npm run typecheck
+
+      - name: Тесты
+        run: npm test
+
+      - name: Сборка
+        run: npm run build
+
+      - name: Проверка упаковки пакета (без публикации)
+        run: npm pack --dry-run
