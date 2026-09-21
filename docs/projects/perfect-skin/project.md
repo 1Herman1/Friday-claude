@@ -118,7 +118,7 @@
 
 | Что | Где |
 |---|---|
-| Сервер | Timeweb Cloud, Россия. Ubuntu 24.04 LTS, 2 vCPU / 4 ГБ / 40 ГБ NVMe |
+| Сервер | Timeweb Cloud, Россия. Ubuntu 26.04 LTS, 2 vCPU / 4 ГБ / 40 ГБ NVMe |
 | Адрес стенда | `new.perfect-skin.shop` (боевой `perfect-skin.shop` пока на старом WordPress) |
 | Конфигурация | `projects/perfect-skin/deploy/`, рунбук — `deploy/DEPLOY.md` |
 | Первичная настройка | workflow `bootstrap-perfect-skin.yml`, запуск вручную |

@@ -1,7 +1,7 @@
 # Деплой Perfect Skin на VPS Timeweb Cloud
 
 Разворачиваем production-версию магазина на собственной базе с полным API.
-Стек: Ubuntu 24.04 LTS, Docker (Postgres), Fastify под PM2, Nginx + Let's Encrypt.
+Стек: Ubuntu 26.04 LTS, Docker (Postgres), Fastify под PM2, Nginx + Let's Encrypt.
 
 Все команды выполняешь по SSH на сервере под root (или через `sudo`).
 Если что-то падает — присылай вывод ошибки.
@@ -11,7 +11,7 @@
 ## 0. Требования к серверу
 
 Заказать на Timeweb Cloud:
-- **ОС:** Ubuntu 24.04 LTS
+- **ОС:** Ubuntu 26.04 LTS
 - **Ресурсы:** 2 vCPU / 4 ГБ RAM / 40 ГБ NVMe SSD
 - **Регион:** Россия (локализация данных, 152-ФЗ)
 - **Доступ:** SSH-ключ (публичный ключ добавить при создании, приватный сохранить локально)
