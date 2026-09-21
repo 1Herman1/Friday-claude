@@ -30,53 +30,52 @@ export async function searchLibrary(
 ): Promise<SearchHit[]> {
   const { text, imagePath, familySlug, limit = 12 } = opts;
 
-  // Если нет запроса (ни text, ни imagePath), возвращаем последние
-  if (!text && !imagePath) {
-    const refs = store.listReferences({
-      status: "active",
-      limit,
-      offset: 0,
-    });
-
-    // Сортируем по createdAt в обратном порядке (новые первыми)
-    refs.sort((a, b) => b.createdAt - a.createdAt);
-
-    const hits: SearchHit[] = refs.slice(0, limit).map((ref) => {
-      let familySlugForHit: string | undefined;
-      if (familySlug) {
-        // Фильтруем по семейству если задан
-        const members = store.getMembers(ref.id);
-        if (!members.some((m) => m.familyId)) {
-          return null as any;
-        }
-      }
-
-      // Пытаемся найти семейство для этого рефа
-      const allFamilies = store.listFamilies();
-      for (const family of allFamilies) {
-        const members = store.getMembers(family.id);
-        if (members.some((m) => m.refId === ref.id)) {
-          familySlugForHit = family.slug;
-          break;
-        }
-      }
-
-      return {
-        refId: ref.id,
-        score: 0, // No scoring without embedding
-        previewPath: ref.previewPath,
-        pageUrl: ref.pageUrl,
-        source: ref.source,
-        familySlug: familySlugForHit,
-      };
-    });
-
-    return hits.filter((h) => h !== null);
+  const familyByRef = new Map<string, string | undefined>();
+  const familyIdBySlug = new Map<string, string>();
+  for (const family of store.listFamilies()) {
+    if (family.slug) familyIdBySlug.set(family.slug, family.id);
+    for (const m of store.getMembers(family.id)) {
+      if (!familyByRef.has(m.refId)) familyByRef.set(m.refId, family.slug);
+    }
   }
+  const familyId = familySlug ? familyIdBySlug.get(familySlug) : undefined;
+  if (familySlug && !familyId) return [];
+  const inFamily = (refId: string): boolean =>
+    !familyId || store.getMembers(familyId).some((m) => m.refId === refId);
 
-  // Если есть текст или изображение, но нет embedder - ошибка
-  if (!embedder) {
-    throw new UsageError("Сначала lib init и lib embed");
+  // Без модели: без запроса — последние; с текстом — подстрочный поиск по
+  // источнику, ссылке, автору и тегам. Поиск по картинке требует модель.
+  if (!embedder || !text && !imagePath) {
+    if (imagePath && !embedder) {
+      throw new UsageError("Поиск по картинке требует модель: сначала lib init и lib embed");
+    }
+    const needle = text?.toLowerCase();
+    const refs = store
+      .listReferences({ status: "active", limit: needle ? 10000 : limit, offset: 0 })
+      .filter((ref) => inFamily(ref.id))
+      .filter((ref) => {
+        if (!needle) return true;
+        const hay = [
+          ref.sourceRef,
+          ref.source,
+          ref.pageUrl,
+          ref.author,
+          ...store.getTags(ref.id),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        return hay.includes(needle);
+      });
+    refs.sort((a, b) => b.createdAt - a.createdAt);
+    return refs.slice(0, limit).map((ref) => ({
+      refId: ref.id,
+      score: 0,
+      previewPath: ref.previewPath,
+      pageUrl: ref.pageUrl,
+      source: ref.source,
+      familySlug: familyByRef.get(ref.id),
+    }));
   }
 
   // Вычисляем эмбеддинг запроса
@@ -108,14 +107,8 @@ export async function searchLibrary(
 
   // Если задан familySlug, фильтруем
   let candidateRefIds = scores.map((s) => s.refId);
-  if (familySlug) {
-    const family = store.getFamilyBySlug(familySlug);
-    if (!family) {
-      return [];
-    }
-    const members = store.getMembers(family.id);
-    const memberRefIds = new Set(members.map((m) => m.refId));
-    candidateRefIds = candidateRefIds.filter((id) => memberRefIds.has(id));
+  if (familyId) {
+    candidateRefIds = candidateRefIds.filter((id) => inFamily(id));
   }
 
   // Берём топ limit и преобразуем в SearchHit
@@ -126,20 +119,7 @@ export async function searchLibrary(
     const ref = store.getReference(refId);
     if (!ref) continue;
 
-    let hitFamilySlug: string | undefined;
-    if (familySlug) {
-      hitFamilySlug = familySlug;
-    } else {
-      // Пытаемся найти семейство для этого рефа
-      const allFamilies = store.listFamilies();
-      for (const family of allFamilies) {
-        const members = store.getMembers(family.id);
-        if (members.some((m) => m.refId === refId)) {
-          hitFamilySlug = family.slug;
-          break;
-        }
-      }
-    }
+    const hitFamilySlug = familySlug ?? familyByRef.get(refId);
 
     hits.push({
       refId,

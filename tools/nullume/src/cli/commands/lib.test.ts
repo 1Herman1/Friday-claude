@@ -134,4 +134,47 @@ describe("lib command", () => {
     assert.notEqual(result.code, 0, "Should fail for nonexistent importer");
     assert.ok(result.stderr.includes("Импортёр не найден") || result.stderr.includes("не найден"));
   });
+
+  it("lib family list --json на пустой библиотеке возвращает []", () => {
+    // Инит
+    runCommand("lib init --skip-models");
+
+    // Список семейств
+    const result = runCommand("lib family list --json");
+    assert.equal(result.code, 0, `family list failed: ${result.stderr}`);
+
+    // Парсить JSON
+    const data = JSON.parse(result.stdout);
+    assert.ok(Array.isArray(data));
+    assert.equal(data.length, 0);
+  });
+
+  it("lib propose --json на пустой библиотеке возвращает валидный JSON", () => {
+    // Инит
+    runCommand("lib init --skip-models");
+
+    // Propose
+    const result = runCommand("lib propose --json");
+    assert.equal(result.code, 0, `propose failed: ${result.stderr}`);
+
+    // Парсить JSON - должен быть массив контекстов
+    const data = JSON.parse(result.stdout);
+    assert.ok(Array.isArray(data));
+  });
+
+  it("lib cluster без эмбеддингов выдаёт ошибку с подсказкой", () => {
+    // Инит без моделей
+    runCommand("lib init --skip-models");
+
+    // Cluster без эмбеддинга
+    const result = runCommand("lib cluster --json");
+    assert.notEqual(result.code, 0, "Should fail without embeddings");
+    assert.ok(result.stderr.includes("lib embed") || result.stdout.includes("lib embed"));
+  });
+
+  it("lib dashboard --help работает", () => {
+    const result = runCommand("lib dashboard --help");
+    assert.equal(result.code, 0, `dashboard help failed: ${result.stderr}`);
+    assert.ok(result.stdout.includes("dashboard"));
+  });
 });

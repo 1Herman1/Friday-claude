@@ -158,16 +158,15 @@ test("searchLibrary with image path calls embedImage", async () => {
   assert(results.length > 0);
 });
 
-test("searchLibrary throws when text search without embedder", async () => {
+test("searchLibrary without embedder falls back to substring search", async () => {
   const store = setupStore();
-
-  await assert.rejects(
-    () =>
-      searchLibrary(store, null, {
-        text: "test",
-      }),
-    /Сначала lib init и lib embed/
-  );
+  const all = await searchLibrary(store, null, { limit: 100 });
+  assert.ok(all.length > 0);
+  const hits = await searchLibrary(store, null, { text: all[0].source });
+  assert.ok(hits.length > 0);
+  assert.ok(hits.every((h) => h.source === all[0].source));
+  const none = await searchLibrary(store, null, { text: "zzz-no-such-ref" });
+  assert.equal(none.length, 0);
 });
 
 test("searchLibrary filters by familySlug", async () => {

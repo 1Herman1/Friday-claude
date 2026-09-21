@@ -7,6 +7,7 @@ import { assertUploadable } from "../../core/files.js";
 import { getLibraryOriginalsDir, getLibraryPreviewsDir } from "../../core/paths.js";
 import { IngestDeps } from "./deps.js";
 import { sha256File, dhash64, hamming, isDegenerateDhash } from "./hash.js";
+import { safeFetch } from "../../core/net.js";
 import { makePreview, IngestError } from "./preview.js";
 import { extractPalette } from "./palette.js";
 
@@ -213,9 +214,12 @@ export async function ingest(candidate: RefCandidate, deps: IngestDeps): Promise
     }
 
     // Fire-and-forget Unsplash download notification
-    if (candidate.meta?.downloadLocation) {
-      const fetchFn = deps.fetchImpl || fetch;
-      fetchFn(candidate.meta.downloadLocation as string).catch((e) => {
+    if (typeof candidate.meta?.downloadLocation === "string") {
+      safeFetch(candidate.meta.downloadLocation, {
+        timeoutMs: 10000,
+        maxBytes: 64 * 1024,
+        fetchImpl: deps.fetchImpl,
+      }).catch((e) => {
         log(`Warning: Unsplash notification failed: ${(e as Error).message}`);
       });
     }

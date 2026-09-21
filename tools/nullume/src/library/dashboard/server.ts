@@ -1,10 +1,13 @@
 import { createServer, IncomingMessage, ServerResponse } from "node:http";
-import { randomBytes } from "node:crypto";
+import { randomBytes, timingSafeEqual } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { readFileSync } from "node:fs";
 import type { LibraryStore } from "../store/types.js";
+import type { NullumeConfig } from "../../core/config.js";
+import type { Embedder } from "../embed/index.js";
 import { handleApi } from "./api.js";
+import { UsageError } from "../../core/errors.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,6 +17,8 @@ export interface DashboardOptions {
   port?: number;
   idleMs?: number;
   onDone?: (decisions: any[]) => void;
+  config?: NullumeConfig;
+  embedder?: Embedder | null;
 }
 
 export interface DashboardServer {
@@ -88,7 +93,9 @@ export async function startDashboard(
 
     // Token validation
     const tokenMatch = pathname.match(/^\/t\/([^/]+)\//);
-    if (!tokenMatch || tokenMatch[1] !== token) {
+    const presented = tokenMatch ? Buffer.from(tokenMatch[1]) : Buffer.alloc(0);
+    const expected = Buffer.from(token);
+    if (!tokenMatch || presented.length !== expected.length || !timingSafeEqual(presented, expected)) {
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Not Found" }));
       return;
@@ -113,12 +120,24 @@ export async function startDashboard(
       }
     }
 
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("Referrer-Policy", "no-referrer");
+    res.setHeader("Cache-Control", "no-store");
+
     // Generate nonce for CSP
     const nonce = randomBytes(16).toString("base64");
 
     try {
-      await handleApi(store, req, res, apiPath, pageHtml, nonce, doneResolve, token);
+      await handleApi(store, req, res, apiPath, pageHtml, nonce, doneResolve, token, options.config, options.embedder);
     } catch (err) {
+      if (err instanceof UsageError) {
+        const tooLarge = err.message.includes("1 МБ");
+        res.writeHead(tooLarge ? 413 : 400, { "Content-Type": "application/json", Connection: "close" });
+        res.end(JSON.stringify({ error: err.message }), () => {
+          if (tooLarge) req.destroy();
+        });
+        return;
+      }
       console.error("Dashboard error:", err);
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: "Internal Server Error" }));

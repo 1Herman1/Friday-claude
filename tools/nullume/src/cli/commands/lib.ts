@@ -2,12 +2,14 @@ import { Command } from "commander";
 import fs from "node:fs";
 import path from "node:path";
 import { stderr, stdout } from "node:process";
+import { spawn } from "node:child_process";
 import { UsageError, ConfigError } from "../../core/errors.js";
 import { emit, table } from "../output.js";
 import { getGlobalFlags } from "../context.js";
 import { loadConfig, mergeConfig } from "../../core/config.js";
 import { ensureDir, getLibraryDir, getLibraryDbPath, getLibraryOriginalsDir, getLibraryPreviewsDir } from "../../core/paths.js";
 import { openStore } from "../../library/store/sqlite.js";
+import type { LibraryStore } from "../../library/store/types.js";
 import { getImporter, listImporters } from "../../library/importers/registry.js";
 import { ingest } from "../../library/ingest/ingest.js";
 import { createIngestStore } from "../../library/ingest/adapter.js";
@@ -16,6 +18,17 @@ import { downloadModels } from "../../library/embed/init.js";
 import { readSession, writeSession, redactSession, parseCookieFile } from "../../library/sessions.js";
 import { assertLocalOnlyAllowed, LOCAL_ONLY_WARNING } from "../../library/importers/gate.js";
 import type { RefCandidate } from "../../library/importers/types.js";
+import { clusterLibrary } from "../../library/cluster/index.js";
+import { searchLibrary } from "../../library/search.js";
+import { buildProposalContext, applyProposal } from "../../library/families/propose.js";
+import { startDashboard } from "../../library/dashboard/server.js";
+import {
+  getFamilyBySlugOrId,
+  approveFamily,
+  renameFamily,
+  mergeFamilies,
+  discardFamily,
+} from "../../library/families/index.js";
 
 const libCmd = new Command("lib").description("Управление библиотекой вкуса");
 
@@ -240,7 +253,7 @@ libCmd
             embedder: embedder ? { embedImage: (p: string) => embedder.embedImage(p) } : undefined,
             fetchImpl: fetch,
             log,
-            allowedRoots: [process.cwd()],
+            allowedRoots: [process.cwd(), ...(config.library?.importDirs ?? [])],
           });
 
           if (result.status === "ingested") {
@@ -334,7 +347,7 @@ libCmd
           embedder: embedder ? { embedImage: (p: string) => embedder.embedImage(p) } : undefined,
           fetchImpl: fetch,
           log,
-          allowedRoots: [process.cwd()],
+          allowedRoots: [process.cwd(), ...(config.library?.importDirs ?? [])],
         });
 
         if (result.status === "ingested") {
@@ -618,6 +631,420 @@ libCmd
       emit(flags, { data: saved }, () => `✓ Сессия сохранена для ${importerId}`);
     } catch (error) {
       throw error;
+    }
+  });
+
+// lib cluster [--k <n>] [--k-min] [--k-max] [--min-size] [--seed] [--json]
+libCmd
+  .command("cluster")
+  .option("--k <n>", "Количество кластеров (автоматическое если не задано)")
+  .option("--k-min <n>", "Минимум кластеров", "3")
+  .option("--k-max <n>", "Максимум кластеров", "12")
+  .option("--min-size <n>", "Минимальный размер кластера", "4")
+  .option("--seed <n>", "Seed для K-means", "42")
+  .description("Кластеризовать библиотеку")
+  .action(async function (options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+      const config = await loadConfig();
+      const embedConfig = config.library;
+
+      if (!embedConfig?.embedModel) {
+        throw new UsageError("Сначала nullume lib embed");
+      }
+
+      const embedder = await getEmbedder({ model: embedConfig.embedModel as "clip" | "siglip" });
+      if (!embedder) {
+        throw new UsageError("Сначала nullume lib embed");
+      }
+
+      const result = clusterLibrary(store, {
+        k: options.k ? parseInt(options.k as string, 10) : undefined,
+        kMin: parseInt(options["k-min"] as string, 10),
+        kMax: parseInt(options["k-max"] as string, 10),
+        minSize: parseInt(options["min-size"] as string, 10),
+        seed: parseInt(options.seed as string, 10),
+        model: embedder.model,
+      });
+
+      const rows = result.families.map((f) => ({
+        id: f.familyId.slice(0, 8),
+        size: f.size.toString(),
+        exemplars: f.exemplarRefIds.length.toString(),
+        silhouette: result.silhouette.toFixed(3),
+      }));
+
+      emit(
+        flags,
+        { data: { k: result.k, silhouette: result.silhouette, families: result.families.length, unassigned: result.unassigned.length } },
+        () => {
+          let msg = `✓ Кластеризация завершена: ${result.k} кластеров, silhouette: ${result.silhouette.toFixed(3)}`;
+          if (result.families.length > 0) {
+            msg += "\n\n" + table(rows, [
+              { key: "id", header: "ID семейства" },
+              { key: "size", header: "Размер" },
+              { key: "exemplars", header: "Exemplars" },
+              { key: "silhouette", header: "Silhouette" },
+            ]);
+          }
+          return msg;
+        }
+      );
+
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib search <text> [--image <path>] [--family <slug>] [--limit] [--json]
+libCmd
+  .command("search [text]")
+  .option("--image <path>", "Путь к изображению для поиска")
+  .option("--family <slug>", "Фильтр по семейству")
+  .option("--limit <n>", "Максимум результатов", "12")
+  .description("Поиск в библиотеке")
+  .action(async function (text: string | undefined, options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+      const config = await loadConfig();
+      const embedConfig = config.library;
+
+      const embedder = embedConfig?.embedModel
+        ? await getEmbedder({ model: embedConfig.embedModel as "clip" | "siglip" })
+        : null;
+
+      const results = await searchLibrary(store, embedder, {
+        text,
+        imagePath: options.image as string | undefined,
+        familySlug: options.family as string | undefined,
+        limit: parseInt(options.limit as string, 10) || 12,
+      });
+
+      const rows = results.map((r) => ({
+        id: r.refId.slice(0, 8),
+        source: r.source,
+        score: r.score.toFixed(3),
+        family: r.familySlug || "—",
+      }));
+
+      emit(flags, { data: results }, () => {
+        if (results.length === 0) {
+          return "Результаты не найдены";
+        }
+        return table(rows, [
+          { key: "id", header: "ID" },
+          { key: "source", header: "Источник" },
+          { key: "score", header: "Score" },
+          { key: "family", header: "Семейство" },
+        ]);
+      });
+
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib propose [--apply <file.json>] [--json]
+libCmd
+  .command("propose")
+  .option("--apply <file>", "Применить предложение из JSON файла")
+  .description("Построить контекст предложения для Claude")
+  .action(async function (options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+
+      if (options.apply) {
+        // Применить предложение из файла
+        const filePath = options.apply as string;
+        const content = await fs.promises.readFile(filePath, "utf-8");
+        const proposal = JSON.parse(content);
+
+        applyProposal(store, proposal);
+
+        const familyCount = proposal.families?.length || 0;
+        emit(flags, { data: { applied: familyCount } }, () => {
+          return `✓ Применено семейств: ${familyCount}`;
+        });
+      } else {
+        // Построить контекст
+        const context = buildProposalContext(store, { exemplarsPerFamily: 6 });
+
+        emit(flags, { data: context }, () => {
+          return JSON.stringify(context, null, 2);
+        });
+      }
+
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib dashboard [--port <n>] [--idle <min>] [--open]
+libCmd
+  .command("dashboard")
+  .option("--port <n>", "Порт сервера")
+  .option("--idle <min>", "Минуты неактивности перед завершением", "30")
+  .option("--open", "Открыть в браузере")
+  .description("Запустить интерактивный дашборд")
+  .action(async function (options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+
+      const idleMs = (parseInt(options.idle as string, 10) || 30) * 60 * 1000;
+      const config = await loadConfig();
+      const embedder = config.library?.embedModel
+        ? await getEmbedder({ model: config.library.embedModel as "clip" | "siglip" })
+        : null;
+      const server = await startDashboard(store, {
+        port: options.port ? parseInt(options.port as string, 10) : undefined,
+        idleMs,
+        config,
+        embedder,
+      });
+
+      emit(flags, { data: { url: server.url, port: server.port } }, () => {
+        return `✓ Дашборд запущен\n  URL: ${server.url}\n  Закрыть: Ctrl+C`;
+      });
+
+      // Открыть в браузере если --open
+      if (options.open) {
+        const openCmd = process.platform === "win32" ? "start" : process.platform === "darwin" ? "open" : "xdg-open";
+        try {
+          spawn(openCmd, [server.url], { detached: true, stdio: "ignore" });
+        } catch {
+          // Ignore if browser open fails
+        }
+      }
+
+      // Ждем завершения дашборда или SIGINT
+      await server.done;
+      await server.close();
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib family <subcommand>
+const familyCmd = libCmd
+  .command("family")
+  .description("Управление семействами");
+
+// lib family list [--status <s>] [--json]
+familyCmd
+  .command("list")
+  .option("--status <s>", "Фильтр по статусу (approved, proposed)")
+  .description("Список семейств")
+  .action(async function (options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+
+      const db = store;
+      const families = db.listFamilies(options.status as "approved" | "proposed" | undefined);
+
+      const rows = families.map((f) => ({
+        id: f.id.slice(0, 8),
+        slug: f.slug,
+        name: f.name,
+        status: f.status,
+        members: db.getMembers(f.id).length.toString(),
+      }));
+
+      emit(flags, { data: families }, () => {
+        if (families.length === 0) {
+          return "Семейств не найдено";
+        }
+        return table(rows, [
+          { key: "id", header: "ID" },
+          { key: "slug", header: "Slug" },
+          { key: "name", header: "Имя" },
+          { key: "status", header: "Статус" },
+          { key: "members", header: "Членов" },
+        ]);
+      });
+
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib family show <slug|id> [--json]
+familyCmd
+  .command("show <id>")
+  .description("Показать детали семейства")
+  .action(async function (id: string, options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+
+      const family = getFamilyBySlugOrId(store, id);
+      if (!family) {
+        throw new UsageError(`Семейство "${id}" не найдено`);
+      }
+
+      const db = store;
+      const members = db.getMembers(family.id);
+      const exemplars = members
+        .filter((m) => m.isExemplar)
+        .slice(0, 6)
+        .map((m) => {
+          const ref = db.getReference(m.refId);
+          return ref?.previewPath || null;
+        })
+        .filter((p) => p !== null);
+
+      const data = {
+        id: family.id,
+        slug: family.slug,
+        name: family.name,
+        status: family.status,
+        size: members.length,
+        descriptor: family.descriptor || null,
+        exemplarCount: exemplars.length,
+      };
+
+      emit(flags, { data }, () => {
+        return (
+          `📦 Семейство: ${family.name}\n` +
+          `   ID: ${family.id}\n` +
+          `   Slug: ${family.slug}\n` +
+          `   Статус: ${family.status}\n` +
+          `   Членов: ${members.length}\n` +
+          `   Exemplars: ${exemplars.length}`
+        );
+      });
+
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib family set <slug|id> [--name] [--slug] [--status]
+familyCmd
+  .command("set <id>")
+  .option("--name <n>", "Новое имя")
+  .option("--slug <s>", "Новый slug")
+  .option("--status <s>", "Новый статус: approved или discarded")
+  .description("Обновить семейство")
+  .action(async function (id: string, options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+
+      const family = getFamilyBySlugOrId(store, id);
+      if (!family) {
+        throw new UsageError(`Семейство "${id}" не найдено`);
+      }
+
+      if (options.name && options.slug) {
+        renameFamily(store, id, options.name as string, options.slug as string);
+      } else if (options.name) {
+        renameFamily(store, id, options.name as string);
+      }
+
+      if (options.status === "approved") {
+        approveFamily(store, family.id);
+      } else if (options.status === "discarded") {
+        discardFamily(store, family.id);
+      } else if (options.status) {
+        throw new UsageError(`--status принимает approved или discarded, получено: ${options.status}`);
+      }
+
+      const updated = getFamilyBySlugOrId(store, id);
+      emit(flags, { data: { id: updated?.id, slug: updated?.slug, name: updated?.name, status: updated?.status } }, () => {
+        return `✓ Семейство обновлено: ${updated?.name}`;
+      });
+
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib family merge <from> <into>
+familyCmd
+  .command("merge <from> <into>")
+  .description("Объединить семейства")
+  .action(async function (from: string, into: string) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+
+      const fromFamily = getFamilyBySlugOrId(store, from);
+      const intoFamily = getFamilyBySlugOrId(store, into);
+
+      if (!fromFamily) {
+        throw new UsageError(`Семейство "${from}" не найдено`);
+      }
+      if (!intoFamily) {
+        throw new UsageError(`Семейство "${into}" не найдено`);
+      }
+
+      const result = mergeFamilies(store, from, into);
+      const fromMembers = store.getMembers(fromFamily.id);
+
+      emit(
+        flags,
+        { data: { from: fromFamily.id, into: intoFamily.id, movedCount: fromMembers.length } },
+        () => `✓ Объединено: ${fromMembers.length} членов переместо в ${result.name}`
+      );
+
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib family discard <slug|id>
+familyCmd
+  .command("discard <id>")
+  .description("Отменить семейство")
+  .action(async function (id: string) {
+    const flags = getGlobalFlags();
+
+    let store: LibraryStore | undefined;
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+
+      const family = getFamilyBySlugOrId(store, id);
+      if (!family) {
+        throw new UsageError(`Семейство "${id}" не найдено`);
+      }
+
+      const result = discardFamily(store, id);
+      emit(flags, { data: { id: result.id, slug: result.slug, status: result.status } }, () => {
+        return `✓ Семейство отменено: ${family.name}`;
+      });
+
+    } finally {
+      store?.close();
     }
   });
 

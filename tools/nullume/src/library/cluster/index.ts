@@ -118,6 +118,7 @@ export function clusterLibrary(
       const centroid = kmeansResult.centroids[clusterIdx];
       const family = store.createFamily({
         name: `cluster-${clusterIdx}`,
+        slug: `cluster-${runId.slice(0, 6)}-${clusterIdx}`,
         status: "proposed",
         proposedBy: "cluster",
         clusterRunId: runId,

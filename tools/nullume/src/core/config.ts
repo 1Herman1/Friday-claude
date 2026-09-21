@@ -12,6 +12,8 @@ export interface NullumeConfig {
   library?: {
     /** Модель для embedding палитр и изображений: 'clip' или 'siglip' */
     embedModel?: 'clip' | 'siglip';
+    /** Каталоги, из которых дашборд и lib add берут локальные файлы */
+    importDirs?: string[];
   };
   [key: string]: unknown;
 }

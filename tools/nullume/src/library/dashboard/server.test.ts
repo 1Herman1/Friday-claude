@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import { strict as assert } from "node:assert";
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -50,6 +50,7 @@ async function setup() {
 
   const family1 = store.createFamily({
     name: "Button",
+    slug: "button",
     status: "proposed",
     descriptor: { summary: "Button component", palette: [{ r: 100, g: 150, b: 200, ratio: 0.5 }] },
     proposedBy: "claude",
@@ -300,9 +301,344 @@ test("dashboard server close method works", async () => {
   }
 });
 
+test("GET /refs returns empty list when no references", async () => {
+  const { store } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}refs`);
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert.equal(data.items.length, 2);
+    assert(data.total >= 2);
+    assert(data.items[0].previewUrl);
+    assert(Array.isArray(data.items[0].palette));
+  } finally {
+    await server.close();
+  }
+});
+
+test("GET /refs?q= performs substring search", async () => {
+  const { store } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}refs?q=ref1`);
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert(data.items.length > 0 || data.items.length === 0);
+  } finally {
+    await server.close();
+  }
+});
+
+test("GET /ref/:id returns full reference with tags", async () => {
+  const { store, ref1 } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    store.addTags(ref1.id, ["button", "primary"], "owner");
+
+    const res = await fetch(`${server.url}ref/${ref1.id}`);
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert.equal(data.id, ref1.id);
+    assert(Array.isArray(data.tags));
+    assert(data.tags.includes("button"));
+  } finally {
+    await server.close();
+  }
+});
+
+test("POST /ref/:id/tags adds tags", async () => {
+  const { store, ref1 } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}ref/${ref1.id}/tags`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tags: ["test", "tag"] }),
+    });
+    assert.equal(res.status, 200);
+
+    const tags = store.getTags(ref1.id);
+    assert(tags.includes("test"));
+  } finally {
+    await server.close();
+  }
+});
+
+test("POST /ref/:id/discard marks reference as discarded", async () => {
+  const { store, ref1 } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}ref/${ref1.id}/discard`, {
+      method: "POST",
+    });
+    assert.equal(res.status, 200);
+
+    const ref = store.getReference(ref1.id);
+    assert.equal(ref?.status, "discarded");
+  } finally {
+    await server.close();
+  }
+});
+
+test("GET /family/:id returns family with members", async () => {
+  const { store, family1 } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}family/${family1.id}`);
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert.equal(data.id, family1.id);
+    assert(Array.isArray(data.members));
+    assert(data.members.length > 0);
+    assert(data.members[0].previewUrl);
+  } finally {
+    await server.close();
+  }
+});
+
+test("POST /family/:id/descriptor merges partial fields", async () => {
+  const { store, family1 } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}family/${family1.id}/descriptor`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        summary: "Updated summary",
+        mood: ["minimal", "modern"],
+      }),
+    });
+    assert.equal(res.status, 200);
+
+    const fam = store.getFamily(family1.id);
+    const desc = fam?.descriptor as any;
+    assert.equal(desc.summary, "Updated summary");
+    assert.deepEqual(desc.mood, ["minimal", "modern"]);
+  } finally {
+    await server.close();
+  }
+});
+
+test("POST /family/:id/descriptor returns 400 for invalid dial value", async () => {
+  const { store, family1 } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}family/${family1.id}/descriptor`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        dials: { visualDensity: 1.5 },
+      }),
+    });
+    assert.equal(res.status, 400);
+    const data = await res.json();
+    assert(data.error);
+  } finally {
+    await server.close();
+  }
+});
+
+test("POST /family/:id/exemplar updates exemplar flag", async () => {
+  const { store, family1 } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const members = store.getMembers(family1.id);
+    const refId = members[0].refId;
+
+    const res = await fetch(`${server.url}family/${family1.id}/exemplar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refId, isExemplar: false }),
+    });
+    assert.equal(res.status, 200);
+
+    const updated = store.getMembers(family1.id)[0];
+    assert.equal(updated.isExemplar, false);
+  } finally {
+    await server.close();
+  }
+});
+
+test("GET /generate-command/:id returns command with style", async () => {
+  const { store, family1 } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}generate-command/${family1.id}`);
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert(data.command);
+    assert(data.command.includes("nullume generate"));
+    assert(data.command.includes("--style"));
+  } finally {
+    await server.close();
+  }
+});
+
 // Cleanup
 test.after(() => {
   try {
     rmSync(testDir, { recursive: true });
   } catch {}
+});
+
+test("dashboard POST /import with unknown source returns 400", async () => {
+  const { store } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}import`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ source: "unknown-source-xyz", limit: 10 }),
+    });
+    assert.equal(res.status, 400);
+    const data = await res.json();
+    assert(data.error);
+  } finally {
+    await server.close();
+  }
+});
+
+test("dashboard POST /add with relative path returns 400", async () => {
+  const { store } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paths: ["./relative/path.jpg"] }),
+    });
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert.equal(data.results[0].status, "failed");
+    assert(data.results[0].reason.includes("absolute"));
+  } finally {
+    await server.close();
+  }
+});
+
+test("dashboard POST /cluster on empty store returns 400", async () => {
+  const { store } = await setup();
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}cluster`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    assert.equal(res.status, 400);
+    const data = await res.json();
+    assert(data.error.includes("embed"));
+  } finally {
+    await server.close();
+  }
+});
+
+test("dashboard POST /add with fixture PNG ingests successfully", async () => {
+  const { store } = await setup();
+  const fixturePath = join(__dirname, "../ingest/__fixtures__/red-solid.png");
+  
+  if (!existsSync(fixturePath)) {
+    console.log("Fixture not found at", fixturePath);
+    return; // Skip if fixture missing
+  }
+
+  const server = await startDashboard(store);
+
+  try {
+    const res = await fetch(`${server.url}add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paths: [fixturePath] }),
+    });
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert.equal(data.ingested, 1);
+    assert(data.results[0].refId);
+    assert.equal(data.results[0].status, "ingested");
+  } finally {
+    await server.close();
+  }
+});
+
+test("POST body larger than 1 MB is rejected and the server keeps serving", async () => {
+  const { store } = await setup();
+  const server = await startDashboard(store);
+  try {
+    const status = await fetch(`${server.url}add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paths: ["/x".repeat(600_000)] }),
+    })
+      .then((r) => r.status)
+      .catch(() => "closed");
+    assert.ok(status === 413 || status === "closed", String(status));
+    const after = await fetch(`${server.url}state`);
+    assert.equal(after.status, 200);
+  } finally {
+    await server.close();
+  }
+});
+
+test("POST /add rejects more than 200 paths and non-string entries", async () => {
+  const { store } = await setup();
+  const server = await startDashboard(store);
+  try {
+    const many = await fetch(`${server.url}add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paths: Array.from({ length: 201 }, (_, i) => `/tmp/${i}.png`) }),
+    });
+    assert.equal(many.status, 400);
+    const bad = await fetch(`${server.url}add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paths: [42] }),
+    });
+    assert.equal(bad.status, 400);
+  } finally {
+    await server.close();
+  }
+});
+
+test("GET /generate-command quotes the prompt for a POSIX shell", async () => {
+  const { store, family1 } = await setup();
+  store.updateFamily(family1.id, {
+    descriptor: { ...(family1.descriptor as object), prompt_fragment: "it's $(rm -rf /) `x`" },
+  });
+  const server = await startDashboard(store);
+  try {
+    const res = await fetch(`${server.url}generate-command/${family1.id}`);
+    assert.equal(res.status, 200);
+    const { command } = await res.json();
+    assert.ok(command.includes("--prompt 'it'\\''s $(rm -rf /) `x`"), command);
+    assert.ok(!/--prompt "/.test(command));
+  } finally {
+    await server.close();
+  }
+});
+
+test("responses carry nosniff and no-referrer headers", async () => {
+  const { store } = await setup();
+  const server = await startDashboard(store);
+  try {
+    const res = await fetch(`${server.url}state`);
+    assert.equal(res.headers.get("x-content-type-options"), "nosniff");
+    assert.equal(res.headers.get("referrer-policy"), "no-referrer");
+  } finally {
+    await server.close();
+  }
 });

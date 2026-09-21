@@ -333,12 +333,19 @@ npx tsx src/cli/index.ts lib init
 
 #### Шаг 2: настроить ключи
 
+`library.importDirs` — каталоги, из которых `lib add` и дашборд («Собрать →
+Добавить свои файлы») берут локальные картинки. Без него разрешён только
+текущий рабочий каталог.
+
 Для чистых источников создай `~/.nullume/config.json`:
 
 ```json
 {
   "acknowledgedRiskyImporters": false,
-  "library": {"embedModel": "clip"},
+  "library": {
+    "embedModel": "clip",
+    "importDirs": ["/Users/you/Pictures/refs"]
+  },
   "sources": {
     "raindrop": {"token": "your-raindrop-token"},
     "unsplash": {"apiKey": "your-unsplash-key"}

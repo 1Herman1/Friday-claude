@@ -117,7 +117,7 @@ export const StyleDescriptorSchema = z
       .regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens")
       .min(1)
       .max(100),
-    summary: z.string().max(300, "Summary must be ≤ 300 characters"),
+    summary: z.string().max(300, "Summary must be ≤ 300 characters").optional(),
     palette: z.array(PaletteEntrySchema).min(2, "Palette requires at least 2 colors"),
     type: TypographySchema,
     spacing: SpacingSchema,
@@ -129,7 +129,8 @@ export const StyleDescriptorSchema = z
     dominant_pattern: z.string().min(1, "Dominant pattern required"),
     divergences: z.array(z.string()).min(0),
     prompt_fragment: z.string().max(600, "Prompt fragment must be ≤ 600 characters"),
-    negative_fragment: z.string().max(400, "Negative fragment must be ≤ 400 characters"),
+    negative_fragment: z.string().max(400, "Negative fragment must be ≤ 400 characters").optional(),
+    mood: z.array(z.string()).optional(),
     exemplars: z
       .array(z.string().uuid())
       .min(1, "At least 1 exemplar required")
@@ -177,11 +178,12 @@ export function validateDescriptor(json: unknown): StyleDescriptor {
  * Convert descriptor to prompt fragments
  */
 export function descriptorToPrompt(d: StyleDescriptor): { prompt: string; negative: string } {
-  const prompt = `${d.prompt_fragment}\n\nПалитра: ${d.palette.map((p) => `${p.role} ${p.hex}`).join(", ")}. Шрифт: ${d.type.display}/${d.type.body}. Интенсивность движения: ${d.motion.character}.`;
+  const moodText = d.mood && d.mood.length > 0 ? `\nМасти: ${d.mood.join(", ")}.` : "";
+  const prompt = `${d.prompt_fragment}${moodText}\n\nПалитра: ${d.palette.map((p) => `${p.role} ${p.hex}`).join(", ")}. Шрифт: ${d.type.display}/${d.type.body}. Интенсивность движения: ${d.motion.character}.`;
 
   return {
     prompt,
-    negative: d.negative_fragment,
+    negative: d.negative_fragment || "",
   };
 }
 
