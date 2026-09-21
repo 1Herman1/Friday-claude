@@ -5,7 +5,7 @@
 export interface IngestStore {
   findBySha(sha256: string): Promise<{ id: string } | null>;
   findBySourceRef(source: string, sourceRef: string): Promise<{ id: string } | null>;
-  findByDhash(dhash: bigint, threshold: number): Promise<{ id: string }[]>;
+  findByDhash(dhash: bigint, threshold: number): Promise<Array<{ id: string; dhash?: bigint | null }>>;
   insertReference(data: {
     sha256: string;
     dhash: bigint;
@@ -15,6 +15,12 @@ export interface IngestStore {
     previewPath?: string;
     width: number;
     height: number;
+    bytes?: number;
+    pageUrl?: string;
+    imageUrl?: string;
+    author?: string;
+    license?: string;
+    meta?: Record<string, unknown>;
   }): Promise<{ id: string }>;
   putPalette(refId: string, palette: Array<[number, number, number, number]>): Promise<void>;
   addTags(refId: string, tags: string[]): Promise<void>;

@@ -10,8 +10,9 @@ import type {
   ImportRun,
   Decision,
   PaletteEntry,
-} from "./types";
-import { applyMigrations } from "./schema";
+} from "./types.js";
+import { applyMigrations } from "./schema.js";
+import { getLibraryDbPath } from "../../core/paths.js";
 
 function generateId(): string {
   return randomUUID();
@@ -417,13 +418,23 @@ export class SqliteStore implements LibraryStore {
     }));
   }
 
-  deleteProposedFamilies(clusterRunId?: string): void {
+  deleteProposedFamilies(opts?: { clusterRunId?: string; proposedBy?: "cluster" | "claude" }): void {
     let query = 'DELETE FROM "families" WHERE status = ?';
     const params: any[] = ["proposed"];
 
-    if (clusterRunId) {
+    // Filter by proposedBy if specified (default: only cluster)
+    if (opts?.proposedBy) {
+      query += " AND proposedBy = ?";
+      params.push(opts.proposedBy);
+    } else {
+      // If not specified, delete only cluster-proposed families
+      query += " AND proposedBy = ?";
+      params.push("cluster");
+    }
+
+    if (opts?.clusterRunId) {
       query += " AND clusterRunId = ?";
-      params.push(clusterRunId);
+      params.push(opts.clusterRunId);
     }
 
     const stmt = this.db.prepare(query);
@@ -585,14 +596,7 @@ export class SqliteStore implements LibraryStore {
 }
 
 export function openStore(path?: string): SqliteStore {
-  const finalPath = path || (() => {
-    try {
-      const { getLibraryDbPath } = require("../core/paths");
-      return getLibraryDbPath();
-    } catch {
-      throw new Error("Must provide path or call from nullume package");
-    }
-  })();
+  const finalPath = path || getLibraryDbPath();
 
   const db = new DatabaseSync(finalPath);
 

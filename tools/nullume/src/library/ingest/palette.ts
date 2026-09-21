@@ -5,6 +5,8 @@ export interface PaletteEntry {
   ratio: number;
 }
 
+type JimpImage = Awaited<ReturnType<typeof Jimp.read>>;
+
 /**
  * Convert sRGB to linear RGB
  */
@@ -86,7 +88,7 @@ function labDistance(c1: [number, number, number], c2: [number, number, number])
  * @returns Array of PaletteEntry sorted by ratio
  */
 export async function extractPalette(
-  image: any,
+  image: JimpImage,
   k: number = 6,
   seed: number = 42
 ): Promise<PaletteEntry[]> {

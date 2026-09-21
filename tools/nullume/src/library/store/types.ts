@@ -113,7 +113,7 @@ export interface LibraryStore {
   listFamilies(status?: Family["status"]): Family[];
   setMembers(familyId: string, members: FamilyMember[]): void;
   getMembers(familyId: string): FamilyMember[];
-  deleteProposedFamilies(clusterRunId?: string): void;
+  deleteProposedFamilies(opts?: { clusterRunId?: string; proposedBy?: "cluster" | "claude" }): void;
 
   // Imports and decisions
   beginImport(importer: string, kind: string, query: string): string;

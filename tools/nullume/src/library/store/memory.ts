@@ -269,15 +269,18 @@ export class MemoryStore implements LibraryStore {
     return this.familyMembers.get(familyId) || [];
   }
 
-  deleteProposedFamilies(clusterRunId?: string): void {
+  deleteProposedFamilies(opts?: { clusterRunId?: string; proposedBy?: "cluster" | "claude" }): void {
     const toDelete: string[] = [];
+    const proposedByFilter = opts?.proposedBy || "cluster";
+
     for (const [id, family] of this.families) {
-      if (family.status === "proposed") {
-        if (!clusterRunId || family.clusterRunId === clusterRunId) {
+      if (family.status === "proposed" && family.proposedBy === proposedByFilter) {
+        if (!opts?.clusterRunId || family.clusterRunId === opts.clusterRunId) {
           toDelete.push(id);
         }
       }
     }
+
     for (const id of toDelete) {
       const family = this.families.get(id);
       if (family?.slug) {

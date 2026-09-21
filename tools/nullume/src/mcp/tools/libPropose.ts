@@ -17,12 +17,14 @@ export const schema = z.object({
     .describe("Список семейств с дескрипторами для применения"),
 });
 
+type StyleDescriptor = z.infer<typeof StyleDescriptorSchema>;
+
 export function handler(args: {
   families: Array<{
     family_id: string;
     name: string;
     slug: string;
-    descriptor: any;
+    descriptor: StyleDescriptor;
   }>;
 }) {
   try {

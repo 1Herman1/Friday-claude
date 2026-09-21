@@ -10,7 +10,7 @@ import { ensureDir, getLibraryDir, getLibraryDbPath, getLibraryOriginalsDir, get
 import { openStore } from "../../library/store/sqlite.js";
 import { getImporter, listImporters } from "../../library/importers/registry.js";
 import { ingest } from "../../library/ingest/ingest.js";
-import type { IngestStore } from "../../library/ingest/deps.js";
+import { createIngestStore } from "../../library/ingest/adapter.js";
 import { getEmbedder, modelNotInstalledHint } from "../../library/embed/index.js";
 import { downloadModels } from "../../library/embed/init.js";
 import { readSession, writeSession, redactSession, parseCookieFile } from "../../library/sessions.js";
@@ -18,50 +18,6 @@ import { assertLocalOnlyAllowed, LOCAL_ONLY_WARNING } from "../../library/import
 import type { RefCandidate } from "../../library/importers/types.js";
 
 const libCmd = new Command("lib").description("Управление библиотекой вкуса");
-
-/**
- * Создать адаптер IngestStore из SqliteStore
- */
-function createIngestStoreAdapter(sqliteStore: ReturnType<typeof openStore>): IngestStore {
-  const adapter: IngestStore = {
-    findBySourceRef: async (source: string, sourceRef: string) => {
-      const ref = sqliteStore.findBySourceRef(source, sourceRef);
-      return ref ? { id: ref.id } : null;
-    },
-    findBySha: async (sha256: string) => {
-      const ref = sqliteStore.findBySha256(sha256);
-      return ref ? { id: ref.id } : null;
-    },
-    findByDhash: async (dhash: bigint, threshold: number) => {
-      const refs = sqliteStore.findByDhash(dhash, threshold);
-      return refs.map((r) => ({ id: r.id }));
-    },
-    insertReference: async (data: any) => {
-      const ref = sqliteStore.insertReference(data);
-      return { id: ref.id };
-    },
-    putPalette: async () => {
-      // Not implemented for CLI
-    },
-    addTags: async (refId: string, tags: string[]) => {
-      sqliteStore.addTags(refId, tags, "cli");
-    },
-    putEmbedding: async (refId: string, embedding: Float32Array) => {
-      sqliteStore.putEmbedding(refId, "default", embedding);
-    },
-    listEmbeddings: async () => {
-      return sqliteStore.listEmbeddings("default").map((e) => ({
-        refId: e.refId,
-        embedding: e.vec,
-      }));
-    },
-    transaction: async (fn) => {
-      // SqliteStore doesn't have async transactions, so just run sequentially
-      return fn(adapter);
-    },
-  };
-  return adapter;
-}
 
 // lib init [--model clip|siglip] [--skip-models]
 libCmd
@@ -89,6 +45,12 @@ libCmd
       // Записать модель в конфиг
       const modelType = options.model === "siglip" ? "siglip" : "clip";
       await mergeConfig({ library: { embedModel: modelType } });
+
+      // Получить фактический ID модели и сохранить в БД
+      const embedder = await getEmbedder({ model: modelType as "clip" | "siglip" });
+      if (embedder) {
+        store.setMeta("embed_model", embedder.model);
+      }
 
       emit(flags, { data: { dirs: [libDir, origDir, prevDir], model: modelType, db: dbPath } }, () => {
         return `✓ Библиотека инициализирована\n  Каталоги: ${libDir}\n  Модель: ${modelType}\n  БД: ${dbPath}`;
@@ -235,7 +197,12 @@ libCmd
       // Открыть store и создать адаптер
       const dbPath = getLibraryDbPath();
       const sqliteStore = openStore(dbPath);
-      const storeAdapter = createIngestStoreAdapter(sqliteStore);
+
+      const embedModelId = embedder?.model || (sqliteStore.getMeta("embed_model") as string | undefined) || "default";
+      const storeAdapter = createIngestStore(sqliteStore, {
+        embedModel: embedModelId,
+        tagOrigin: "source",
+      });
 
       let ingested = 0,
         dedup = 0,
@@ -301,7 +268,14 @@ libCmd
           sqliteStore.finishImport(importRunId, { count: ingested, skipped: dedup, errors: failed });
         }
 
-        emit(flags, { data: { ingested, dedup, failed } }, () => {
+        const output = {
+          ingested,
+          dedup,
+          failed,
+          results,
+        };
+
+        emit(flags, { data: output }, () => {
           return `✓ Импорт завершён: ${ingested} добавлено, ${dedup} дубликатов, ${failed} ошибок`;
         });
       }
@@ -330,11 +304,16 @@ libCmd
         : null;
 
       // Создать адаптер store
-      const storeAdapter = createIngestStoreAdapter(sqliteStore);
+      const embedModelId = embedder?.model || (sqliteStore.getMeta("embed_model") as string | undefined) || "default";
+      const storeAdapter = createIngestStore(sqliteStore, {
+        embedModel: embedModelId,
+        tagOrigin: "owner",
+      });
 
       let ingested = 0,
         dedup = 0,
         failed = 0;
+      const results: Array<{ file: string; status: string; reason?: string; refId?: string }> = [];
 
       const log = (msg: string) => {
         if (!flags.quiet) stderr.write(`  ${msg}\n`);
@@ -365,12 +344,37 @@ libCmd
         } else {
           failed++;
         }
+
+        results.push({
+          file,
+          status: result.status,
+          reason: result.reason,
+          refId: result.refId,
+        });
       }
+
+      const output = {
+        ingested,
+        dedup,
+        failed,
+        total: files.length,
+        results,
+      };
 
       emit(
         flags,
-        { data: { ingested, dedup, failed, total: files.length } },
-        () => `✓ Добавлено: ${ingested} файлов, ${dedup} дубликатов, ${failed} ошибок`
+        { data: output },
+        () => {
+          let msg = `✓ Добавлено: ${ingested} файлов, ${dedup} дубликатов, ${failed} ошибок`;
+          if (failed > 0) {
+            const errors = results.filter((r) => r.status === "failed");
+            msg += "\n\nОшибки:";
+            for (const err of errors) {
+              msg += `\n  ${err.file}: ${err.reason || "Unknown error"}`;
+            }
+          }
+          return msg;
+        }
       );
     } catch (error) {
       throw error;
@@ -401,6 +405,9 @@ libCmd
         stderr.write(modelNotInstalledHint() + "\n");
         throw new UsageError("Модель не установлена");
       }
+
+      // Сохранить ID модели в мета
+      store.setMeta("embed_model", embedder.model);
 
       const batchSize = parseInt(options.batch as string, 10) || 32;
       let refIds: string[];
@@ -477,7 +484,8 @@ libCmd
         dims: `${ref.width}×${ref.height}`,
       }));
 
-      emit(flags, { data: refs }, () => {
+      const data = refs.map((ref) => ({ ...ref, dhash: ref.dhash === null || ref.dhash === undefined ? null : ref.dhash.toString(16) }));
+      emit(flags, { data }, () => {
         return table(rows, [
           { key: "id", header: "ID" },
           { key: "source", header: "Источник" },
@@ -505,8 +513,11 @@ libCmd
       const embedConfig = config.library;
 
       const allRefs = store.listReferences({ status: "active" });
-      const withEmbedding = embedConfig?.embedModel
-        ? store.listEmbeddings(embedConfig.embedModel).length
+
+      // Get actual embed model from store metadata or config
+      let embedModelId = (store.getMeta("embed_model") as string) || embedConfig?.embedModel;
+      const withEmbedding = embedModelId
+        ? store.listEmbeddings(embedModelId).length
         : 0;
 
       // Размер на диске
@@ -536,7 +547,7 @@ libCmd
         embedded: withEmbedding,
         families: families.length,
         diskUsage: Math.round(totalBytes / (1024 * 1024)),
-        embedModel: embedConfig?.embedModel || "none",
+        embedModel: embedModelId || "none",
       };
 
       emit(flags, { data }, () => {

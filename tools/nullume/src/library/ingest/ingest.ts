@@ -1,14 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
-import { Jimp } from "jimp";
+import { Jimp, type JimpInstance } from "jimp";
 import { RefCandidate } from "../../library/importers/types.js";
 import { downloadFile } from "../../core/download.js";
 import { assertUploadable } from "../../core/files.js";
 import { getLibraryOriginalsDir, getLibraryPreviewsDir } from "../../core/paths.js";
 import { IngestDeps } from "./deps.js";
-import { sha256File, dhash64, hamming } from "./hash.js";
+import { sha256File, dhash64, hamming, isDegenerateDhash } from "./hash.js";
 import { makePreview, IngestError } from "./preview.js";
 import { extractPalette } from "./palette.js";
+
+type JimpImage = Awaited<ReturnType<typeof Jimp.read>>;
 
 export type IngestStatus = "ingested" | "dedup" | "failed";
 
@@ -83,7 +85,7 @@ export async function ingest(candidate: RefCandidate, deps: IngestDeps): Promise
     }
 
     // Decode image and get dimensions
-    let image: any;
+    let image: JimpImage;
     try {
       image = await Jimp.read(filePath);
     } catch (e) {
@@ -112,8 +114,13 @@ export async function ingest(candidate: RefCandidate, deps: IngestDeps): Promise
     // Compute dHash
     const dhash = await dhash64(image);
 
-    // Dedup by dHash
-    const byDhash = await deps.store.findByDhash(dhash, DHASH_THRESHOLD);
+    // Dedup by dHash. Flat or monotone images collapse to all-zero/all-one
+    // hashes that say nothing about similarity, so they skip this check.
+    const byDhash = isDegenerateDhash(dhash)
+      ? []
+      : (await deps.store.findByDhash(dhash, DHASH_THRESHOLD)).filter(
+          (r) => r.dhash === undefined || r.dhash === null || !isDegenerateDhash(r.dhash)
+        );
     if (byDhash.length > 0) {
       log(`Dedup: dhash ${dhash.toString(16)} (found ${byDhash.length} similar)`);
       return { status: "dedup", reason: "dhash", refId: byDhash[0].id };
@@ -154,11 +161,11 @@ export async function ingest(candidate: RefCandidate, deps: IngestDeps): Promise
     if (embedding) {
       try {
         const existing = await deps.store.listEmbeddings();
-        for (const { embedding: existing_emb } of existing) {
+        for (const { refId: existingRefId, embedding: existing_emb } of existing) {
           const similarity = cosineSimilarity(embedding, existing_emb);
           if (similarity > COSINE_SIMILARITY_THRESHOLD) {
             log(`Dedup: cosine similarity ${similarity.toFixed(3)}`);
-            return { status: "dedup", reason: "cosine", refId: "" };
+            return { status: "dedup", reason: "cosine", refId: existingRefId };
           }
         }
       } catch (e) {
@@ -178,6 +185,12 @@ export async function ingest(candidate: RefCandidate, deps: IngestDeps): Promise
         previewPath,
         width,
         height,
+        bytes: (await fs.promises.stat(originalPath)).size,
+        pageUrl: candidate.pageUrl,
+        imageUrl: candidate.url,
+        author: candidate.author,
+        license: candidate.license,
+        meta: candidate.meta,
       });
       refId = ref.id;
     } catch (e) {

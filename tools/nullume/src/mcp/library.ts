@@ -44,6 +44,9 @@ export async function getEmbedderInstance(): Promise<Embedder | null> {
  * Close all resources
  */
 export function closeLibrary(): void {
+  if (store) {
+    store.close();
+  }
   store = null;
   embedder = undefined;
 }

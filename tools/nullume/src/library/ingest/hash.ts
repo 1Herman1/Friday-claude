@@ -2,6 +2,8 @@ import fs from "node:fs";
 import { createHash } from "node:crypto";
 import { Jimp } from "jimp";
 
+type JimpImage = Awaited<ReturnType<typeof Jimp.read>>;
+
 /**
  * Compute SHA256 hash of a file
  */
@@ -20,7 +22,7 @@ export async function sha256File(path: string): Promise<string> {
  * Compute dhash (difference hash) for an image
  * Returns a 64-bit hash as BigInt by comparing 9×8 grayscale grid
  */
-export async function dhash64(image: any): Promise<bigint> {
+export async function dhash64(image: JimpImage): Promise<bigint> {
   // Resize to 9×8 and convert to grayscale
   const resized = image.clone().resize({ w: 9, h: 8 });
   let hash = 0n;
@@ -41,12 +43,19 @@ export async function dhash64(image: any): Promise<bigint> {
 /**
  * Get grayscale value of a pixel
  */
-function getPixelGrayscale(image: any, x: number, y: number): number {
+function getPixelGrayscale(image: { bitmap: { width: number; data: Uint8Array } }, x: number, y: number): number {
   const idx = (image.bitmap.width * y + x) << 2;
   const r = image.bitmap.data[idx];
   const g = image.bitmap.data[idx + 1];
   const b = image.bitmap.data[idx + 2];
   return Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+}
+
+const ALL_ONES = (1n << 64n) - 1n;
+
+/** dhash of a flat or monotone image carries no similarity signal */
+export function isDegenerateDhash(hash: bigint): boolean {
+  return hash === 0n || hash === ALL_ONES;
 }
 
 /**

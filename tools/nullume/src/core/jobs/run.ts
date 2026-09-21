@@ -3,6 +3,7 @@ import { getDownloadsDir, getLibraryPreviewsDir } from "../paths.js";
 import { randomUUID } from "node:crypto";
 import type { Provider, ModelInfo } from "../providers/types.js";
 import type { Job } from "./model.js";
+import type { LibraryStore } from "../../library/store/types.js";
 import { createJob } from "./model.js";
 import { saveJob } from "./store.js";
 import { extractInputSchema, deriveModelMeta } from "../providers/kie/schema.js";
@@ -15,7 +16,7 @@ export interface CreateJobOptions {
   input?: Record<string, unknown>;
   style?: string;
   fetchImpl?: typeof fetch;
-  libraryStore?: any; // LibraryStore, type only for tests to avoid circular imports
+  libraryStore?: LibraryStore; // type only for tests to avoid circular imports
 }
 
 async function fetchLiveSchema(

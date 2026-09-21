@@ -3,6 +3,7 @@ import { getStore, getEmbedderInstance } from "../library.js";
 import { formatError } from "../utils.js";
 import { getImporter, listImporters } from "../../library/importers/registry.js";
 import { ingest } from "../../library/ingest/ingest.js";
+import { createIngestStore } from "../../library/ingest/adapter.js";
 import { loadConfig } from "../../core/config.js";
 import { UsageError } from "../../core/errors.js";
 
@@ -12,47 +13,6 @@ import { UsageError } from "../../core/errors.js";
 async function buildImporterEnum(): Promise<string[]> {
   const importers = await listImporters("clean");
   return importers.map((i) => i.id);
-}
-
-/**
- * Create adapter for ingest
- */
-function createIngestStoreAdapter(store: any) {
-  const adapter = {
-    findBySourceRef: async (source: string, sourceRef: string) => {
-      const ref = store.findBySourceRef(source, sourceRef);
-      return ref ? { id: ref.id } : null;
-    },
-    findBySha: async (sha256: string) => {
-      const ref = store.findBySha256(sha256);
-      return ref ? { id: ref.id } : null;
-    },
-    findByDhash: async (dhash: bigint, threshold: number) => {
-      const refs = store.findByDhash(dhash, threshold);
-      return refs.map((r: any) => ({ id: r.id }));
-    },
-    insertReference: async (data: any) => {
-      const ref = store.insertReference(data);
-      return { id: ref.id };
-    },
-    putPalette: async () => {},
-    addTags: async (refId: string, tags: string[]) => {
-      store.addTags(refId, tags, "mcp");
-    },
-    putEmbedding: async (refId: string, embedding: Float32Array) => {
-      store.putEmbedding(refId, "default", embedding);
-    },
-    listEmbeddings: async () => {
-      return store.listEmbeddings("default").map((e: any) => ({
-        refId: e.refId,
-        embedding: e.vec,
-      }));
-    },
-    transaction: async (fn: any) => {
-      return fn(adapter);
-    },
-  };
-  return adapter;
 }
 
 export let schema: z.ZodSchema;
@@ -92,7 +52,11 @@ export async function handler(args: {
     }
 
     // Создать адаптер
-    const storeAdapter = createIngestStoreAdapter(store);
+    const embedModelId = embedder?.model || (store.getMeta("embed_model") as string | undefined) || "default";
+    const storeAdapter = createIngestStore(store, {
+      embedModel: embedModelId,
+      tagOrigin: "source",
+    });
 
     let ingested = 0,
       dedup = 0,

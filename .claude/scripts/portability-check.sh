@@ -34,8 +34,10 @@ if [ -f '.mcp.json' ]; then
 fi
 [ -z "$MCP_NAMES" ] && MCP_NAMES='__нет_mcp__'
 
+# Проект, чьё имя совпадает с MCP-сервером из .mcp.json, — инструмент самого
+# репозитория (живёт в tools/<имя>/), поэтому его имя не считается привязкой.
 PROJECT_NAMES=$(find docs/projects -maxdepth 1 -mindepth 1 -type d -printf '%f\n' 2>/dev/null \
-                | grep -v '^_template$' | paste -sd'|' -)
+                | grep -v '^_template$' | grep -Ev "^($MCP_NAMES)$" | paste -sd'|' -)
 [ -z "$PROJECT_NAMES" ] && PROJECT_NAMES='__нет_проектов__'
 
 # Корни кода — из реестра проектов, а не «все каталоги верхнего уровня».

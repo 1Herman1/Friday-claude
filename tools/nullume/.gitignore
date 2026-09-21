@@ -3,3 +3,10 @@ dist
 .env
 .env.local
 *.log
+
+# Library and runtime
+/sessions/
+*.db
+/.nullume/
+/library/
+/models/
