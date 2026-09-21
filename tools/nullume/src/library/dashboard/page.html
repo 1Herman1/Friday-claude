@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Families Dashboard</title>
+  <!-- Internal tool: system font acceptable, no external resources -->
+  <style nonce="">
+    /* CSS variables for light/dark mode */
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --text-primary: #000000;
+      --text-secondary: #666666;
+      --border: #e0e0e0;
+      --accent: #0066cc;
+      --accent-hover: #0052a3;
+      --success: #22863a;
+      --error: #cb2431;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 12px;
+      --spacing-lg: 16px;
+      --spacing-xl: 24px;
+      --radius: 4px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #1e1e1e;
+        --bg-secondary: #2d2d2d;
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+        --border: #404040;
+        --accent: #4a90e2;
+        --accent-hover: #357abd;
+        --success: #28a745;
+        --error: #f85149;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: var(--spacing-lg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      background-color: var(--bg-primary);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body {
+        transition: none;
+      }
+    }
+
+    h1 {
+      margin: 0 0 var(--spacing-lg) 0;
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-xl);
+      flex-wrap: wrap;
+      gap: var(--spacing-lg);
+    }
+
+    .stats {
+      display: flex;
+      gap: var(--spacing-lg);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .family-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--spacing-lg);
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .family-card {
+        transition: none;
+      }
+    }
+
+    .family-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .family-card.selected {
+      border-color: var(--accent);
+      background-color: var(--bg-primary);
+      box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+    }
+
+    .family-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--spacing-md);
+      gap: var(--spacing-md);
+    }
+
+    .family-name {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      word-break: break-word;
+      flex: 1;
+    }
+
+    .family-status {
+      display: inline-block;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      background-color: var(--border);
+      color: var(--text-secondary);
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .family-status.approved {
+      background-color: rgba(34, 134, 58, 0.2);
+      color: var(--success);
+    }
+
+    .family-status.discarded {
+      background-color: rgba(203, 36, 49, 0.2);
+      color: var(--error);
+    }
+
+    .family-summary {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-md);
+      word-break: break-word;
+    }
+
+    .palette {
+      display: flex;
+      gap: var(--spacing-xs);
+      margin-bottom: var(--spacing-md);
+      height: 20px;
+    }
+
+    .palette-item {
+      flex: 1;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+    }
+
+    .exemplars {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      gap: var(--spacing-xs);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .exemplar {
+      width: 100%;
+      aspect-ratio: 1;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .exemplar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .family-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-md);
+      padding-top: var(--spacing-md);
+      border-top: 1px solid var(--border);
+    }
+
+    .family-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-sm);
+    }
+
+    button {
+      padding: var(--spacing-md) var(--spacing-lg);
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      button {
+        transition: none;
+      }
+    }
+
+    button:hover:not(:disabled) {
+      background-color: var(--bg-secondary);
+      border-color: var(--accent);
+    }
+
+    button.primary {
+      background-color: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    button.primary:hover {
+      background-color: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    button.danger {
+      background-color: rgba(203, 36, 49, 0.1);
+      color: var(--error);
+      border-color: var(--error);
+    }
+
+    button.danger:hover {
+      background-color: rgba(203, 36, 49, 0.2);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .footer {
+      margin-top: var(--spacing-xl);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: var(--spacing-lg);
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .done-message {
+      display: none;
+      padding: var(--spacing-lg);
+      background-color: rgba(34, 134, 58, 0.1);
+      border: 1px solid var(--success);
+      border-radius: var(--radius);
+      color: var(--success);
+      text-align: center;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .done-message.show {
+      display: block;
+    }
+
+    dialog {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      padding: var(--spacing-xl);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      dialog {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      }
+    }
+
+    dialog::backdrop {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .dialog-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-lg);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input, select {
+      padding: var(--spacing-md) var(--spacing-lg);
+      font-size: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 44px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+    }
+
+    .dialog-buttons {
+      display: flex;
+      gap: var(--spacing-lg);
+      justify-content: flex-end;
+    }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    @media (max-width: 640px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stats {
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .family-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="done-message" id="doneMessage">
+    Done! You can close this tab.
+  </div>
+
+  <div class="header">
+    <h1>Component Families</h1>
+    <div class="stats" id="stats"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="footer">
+    <div class="hint">
+      <strong>Hotkeys:</strong> a=approve, r=rename, m=merge, d=discard
+    </div>
+    <button class="primary" id="doneBtn">Done</button>
+  </div>
+
+  <dialog id="renameDialog">
+    <form class="dialog-form" id="renameForm">
+      <h2>Rename Family</h2>
+      <div class="form-group">
+        <label for="renameNameInput">Name</label>
+        <input type="text" id="renameNameInput" required>
+      </div>
+      <div class="form-group">
+        <label for="renameSlugInput">Slug</label>
+        <input type="text" id="renameSlugInput" required>
+      </div>
+      <div class="dialog-buttons">
+        <button type="button" onclick="document.getElementById('renameDialog').close()">Cancel</button>
+        <button type="submit" class="primary">Rename</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="mergeDialog">
+    <form class="dialog-form" id="mergeForm">
+      <h2>Merge Family</h2>
+      <div class="form-group">
+        <label for="mergeSelectInput">Merge into</label>
+        <select id="mergeSelectInput" required></select>
+      </div>
+      <div class="dialog-buttons">
+        <button type="button" onclick="document.getElementById('mergeDialog').close()">Cancel</button>
+        <button type="submit" class="primary">Merge</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script nonce="">
+    // Dashboard state
+    let state = { families: [], stats: {} };
+    let selectedFamilyId = null;
+
+    // Fetch and render state
+    async function loadState() {
+      try {
+        const response = await fetch('./state');
+        if (!response.ok) throw new Error('Failed to load state');
+        state = await response.json();
+        render();
+      } catch (err) {
+        console.error('Error loading state:', err);
+      }
+    }
+
+    function render() {
+      renderStats();
+      renderGrid();
+    }
+
+    function renderStats() {
+      const statsEl = document.getElementById('stats');
+      const s = state.stats;
+      statsEl.innerHTML = `
+        <div class="stat-item">
+          <div class="stat-value">${s.totalFamilies || 0}</div>
+          <div>Families</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${s.totalReferences || 0}</div>
+          <div>References</div>
+        </div>
+      `;
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = state.families
+        .map(f => `
+          <div class="family-card ${selectedFamilyId === f.id ? 'selected' : ''}" data-id="${f.id}" onclick="selectFamily('${f.id}')">
+            <div class="family-header">
+              <h3 class="family-name">${escapeHtml(f.name)}</h3>
+              <span class="family-status ${f.status}">${f.status}</span>
+            </div>
+            ${f.summary ? `<div class="family-summary">${escapeHtml(f.summary)}</div>` : ''}
+            ${f.palette.length > 0 ? `
+              <div class="palette">
+                ${f.palette.map(c => `<div class="palette-item" style="background-color: ${c}" title="${c}"></div>`).join('')}
+              </div>
+            ` : ''}
+            ${f.exemplars.length > 0 ? `
+              <div class="exemplars">
+                ${f.exemplars.slice(0, 8).map(e => `
+                  <div class="exemplar">
+                    <img src="${e.previewUrl}" alt="exemplar" loading="lazy">
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+            <div class="family-meta">
+              <span>Size: ${f.size}</span>
+              <span>ID: ${f.id.slice(0, 8)}…</span>
+            </div>
+            <div class="family-actions">
+              <button onclick="event.stopPropagation(); approve('${f.id}')" class="primary">Approve</button>
+              <button onclick="event.stopPropagation(); rename('${f.id}')">Rename</button>
+              <button onclick="event.stopPropagation(); merge('${f.id}')">Merge</button>
+              <button onclick="event.stopPropagation(); discard('${f.id}')" class="danger">Discard</button>
+            </div>
+          </div>
+        `)
+        .join('');
+    }
+
+    function selectFamily(familyId) {
+      selectedFamilyId = familyId;
+      renderGrid();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    async function decide(familyId, action, payload = {}) {
+      try {
+        const response = await fetch('./decide', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ familyId, action, ...payload })
+        });
+        if (!response.ok) throw new Error('Decision failed');
+        await loadState();
+      } catch (err) {
+        console.error('Error:', err);
+        alert('Error: ' + err.message);
+      }
+    }
+
+    function approve(familyId) {
+      decide(familyId, 'approve');
+    }
+
+    function rename(familyId) {
+      const dialog = document.getElementById('renameDialog');
+      dialog.dataset.familyId = familyId;
+      document.getElementById('renameNameInput').value = '';
+      document.getElementById('renameSlugInput').value = '';
+      dialog.showModal();
+    }
+
+    function merge(familyId) {
+      const dialog = document.getElementById('mergeDialog');
+      const select = document.getElementById('mergeSelectInput');
+      dialog.dataset.familyId = familyId;
+
+      select.innerHTML = state.families
+        .filter(f => f.id !== familyId && f.status !== 'discarded')
+        .map(f => `<option value="${f.id}">${escapeHtml(f.name)}</option>`)
+        .join('');
+
+      if (select.options.length === 0) {
+        alert('No target families available to merge into');
+        return;
+      }
+
+      dialog.showModal();
+    }
+
+    function discard(familyId) {
+      if (confirm('Discard this family?')) {
+        decide(familyId, 'discard');
+      }
+    }
+
+    document.getElementById('renameForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const familyId = document.getElementById('renameDialog').dataset.familyId;
+      const name = document.getElementById('renameNameInput').value;
+      const slug = document.getElementById('renameSlugInput').value;
+      if (name && slug) {
+        decide(familyId, 'rename', { name, slug });
+        document.getElementById('renameDialog').close();
+      }
+    });
+
+    document.getElementById('mergeForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const familyId = document.getElementById('mergeDialog').dataset.familyId;
+      const mergeInto = document.getElementById('mergeSelectInput').value;
+      if (mergeInto) {
+        decide(familyId, 'merge', { mergeInto });
+        document.getElementById('mergeDialog').close();
+      }
+    });
+
+    document.getElementById('doneBtn').addEventListener('click', async () => {
+      try {
+        await fetch('./done', { method: 'POST' });
+        document.getElementById('doneMessage').classList.add('show');
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if (!selectedFamilyId || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+
+      if (e.key === 'a') approve(selectedFamilyId);
+      if (e.key === 'r') rename(selectedFamilyId);
+      if (e.key === 'm') merge(selectedFamilyId);
+      if (e.key === 'd') discard(selectedFamilyId);
+    });
+
+    // Initial load
+    loadState();
+  </script>
+</body>
+</html>
