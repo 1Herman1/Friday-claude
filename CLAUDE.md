@@ -52,8 +52,10 @@ friday/                         # репозиторий Friday (1Herman1/Friday
     │   ├── .active             # Имя активного проекта (одна строка)
     │   ├── _template/          # Шаблон нового проекта (project.md + brand.md)
     │   ├── hb-landing/         # Лендинг, код в projects/hb-landing/
+    │   ├── nullume/            # CLI + MCP генерации медиа, код в tools/nullume/
     │   ├── perfect-skin/       # Код в projects/perfect-skin/
     │   ├── simba/              # Зоомагазин, код в projects/simba/
+    │   ├── stroymat/           # Статическая страница, код в projects/stroymat/
     │   └── vet-clinic/         # Ветклиника: аналитика SEO/GEO, сайта пока нет
     │       # У каждого внутри одинаковый набор:
     │       ├── project.md          # Контекст, стек, ветка, выкатка, правовой контур

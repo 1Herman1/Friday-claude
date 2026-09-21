@@ -162,6 +162,7 @@ if (withSplit.length !== withThreshold.length) {
   const REVIEW_DEPTS = ["review", "quality", "design", "security", "legal"];
   const NOT_REVIEWERS = new Set([
     "component-curator", "icon-curator", "media-generator", "motion-curator",
+  "taste-curator",
   ]);
   const reviewers = agents.filter((f) => {
     const dept = f.includes("/") ? f.split("/")[0] : "";
@@ -244,6 +245,25 @@ console.log("\n[11] Проекты укомплектованы по реест�
     if (missing.length) { wrn(`${proj.docs}: нет ${missing.join(", ")}`); holes += missing.length; }
   }
   if (!holes) ok(`состав каталога соответствует реестру у всех проектов`);
+
+  // Схема репозитория в CLAUDE.md — такая же карта, как карта департаментов,
+  // и устаревает так же тихо: Nullume и stroymat уже были в реестре, но не в
+  // схеме, и никто этого не видел. Сверяем список проектов в дереве с реестром.
+  const tree = (claude.match(/├── projects\/[\s\S]*?├── decisions\//) || [""])[0];
+  if (!tree) {
+    wrn("в CLAUDE.md не найден блок структуры projects/ — сверить схему с реестром вручную");
+  } else {
+    // Ровно три пробела после «│» — это верхний уровень внутри projects/.
+    // Более глубокий отступ — содержимое одного проекта (design-system, pages).
+    const drawn = new Set([...tree.matchAll(/^\s*│ {3}[├└]── ([a-z0-9_-]+)\//gm)].map((m) => m[1]));
+    drawn.delete("_template");
+    const real = new Set(projects().map((x) => x.docs).filter((d) => d !== "_template"));
+    const missed = [...real].filter((d) => !drawn.has(d));
+    const extra = [...drawn].filter((d) => !real.has(d));
+    if (missed.length || extra.length) {
+      bad(`схема projects/ в CLAUDE.md разошлась с реестром${missed.length ? ` — нет в схеме: ${missed.join(", ")}` : ""}${extra.length ? ` — нет в реестре: ${extra.join(", ")}` : ""}`);
+    } else ok(`схема projects/ в CLAUDE.md перечисляет те же ${real.size} проектов, что и реестр`);
+  }
 }
 
 console.log("\n[12] Переносимость универсальной базы");

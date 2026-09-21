@@ -24,6 +24,7 @@ const AGENTS = ".claude/agents";
 const REVIEW_DEPTS = ["review", "quality", "design", "security", "legal"];
 const NOT_REVIEWERS = new Set([
   "component-curator", "icon-curator", "media-generator", "motion-curator",
+  "taste-curator",
 ]);
 
 const THRESHOLD_HEADING = "## Порог уверенности: два разных случая";
