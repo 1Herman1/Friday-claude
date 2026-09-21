@@ -12,7 +12,7 @@
       --bg-tertiary: #efefef;
       --text-primary: #000000;
       --text-secondary: #666666;
-      --text-tertiary: #999999;
+      --text-tertiary: #6e6e6e;
       --border: #e0e0e0;
       --accent: #0066cc;
       --accent-hover: #0052a3;
@@ -48,12 +48,20 @@
 
     body {
       margin: 0;
-      padding: var(--spacing-lg);
+      padding: 32px 24px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       font-size: 14px;
       line-height: 1.5;
       color: var(--text-primary);
       background-color: var(--bg-primary);
+    }
+
+    header,
+    .tabs,
+    [role="tabpanel"],
+    .footer {
+      max-width: 1180px;
+      margin-inline: auto;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -108,6 +116,18 @@
       color: var(--text-primary);
       min-height: 44px;
       transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="number"] {
+      max-width: 140px;
+    }
+
+    #cluster-k {
+      max-width: 200px;
+    }
+
+    [role="tabpanel"] > button {
+      margin: 4px 0 28px;
     }
 
     input:focus, select:focus, textarea:focus {
@@ -176,6 +196,17 @@
       gap: var(--spacing-lg);
     }
 
+    @media (max-width: 640px) {
+      .tabs {
+        gap: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
     [role="tab"] {
       padding: var(--spacing-md) var(--spacing-lg);
       border: none;
@@ -186,6 +217,14 @@
       border-bottom: 2px solid transparent;
       margin-bottom: -1px;
       transition: color 0.2s, border-color 0.2s;
+    }
+
+    @media (max-width: 640px) {
+      [role="tab"] {
+        padding: 12px;
+        white-space: nowrap;
+        flex: 0 0 auto;
+      }
     }
 
     [role="tab"]:hover {
@@ -208,8 +247,13 @@
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: var(--spacing-md);
-      margin-bottom: var(--spacing-lg);
+      gap: 6px;
+      margin-bottom: 24px;
+      max-width: 560px;
+    }
+
+    .form-group > button {
+      align-self: flex-start;
     }
 
     .form-row {
@@ -232,7 +276,8 @@
     }
 
     .ref-card {
-      aspect-ratio: 1;
+      display: grid;
+      grid-template-rows: 1fr auto;
       background-color: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -246,10 +291,26 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .ref-card img {
+    .ref-thumb {
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+
+    .ref-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    .ref-caption {
+      padding: 6px 8px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .side-panel {
@@ -462,32 +523,30 @@
     .family-status {
       display: inline-block;
       padding: var(--spacing-xs) var(--spacing-sm);
-      background-color: var(--bg-tertiary);
-      color: var(--text-secondary);
       border-radius: 2px;
-      font-size: 11px;
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 600;
       white-space: nowrap;
     }
 
     .family-status.approved {
-      background-color: rgba(34, 134, 58, 0.2);
-      color: var(--success);
+      background-color: #e6f4ea;
+      color: #12622b;
     }
 
     .family-status.proposed {
-      background-color: rgba(0, 102, 204, 0.2);
-      color: var(--accent);
+      background-color: #e4eefb;
+      color: #004c99;
     }
 
     .family-status.discarded {
-      background-color: rgba(203, 36, 49, 0.2);
-      color: var(--error);
+      background-color: #fdeaec;
+      color: #a31621;
     }
 
     .family-status.merged {
-      background-color: rgba(128, 128, 128, 0.2);
-      color: var(--text-secondary);
+      background-color: #ededed;
+      color: #5a5a5a;
     }
 
     .family-size {
@@ -593,6 +652,13 @@
       align-items: center;
       cursor: pointer;
       width: 100%;
+      position: relative;
+    }
+
+    .exemplar-label::after {
+      content: "";
+      position: absolute;
+      inset: -11px;
     }
 
     .exemplar-preview {
@@ -612,18 +678,26 @@
 
     .exemplar-toggle {
       appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border: 2px solid var(--border);
       border-radius: 2px;
       background-color: var(--bg-secondary);
       cursor: pointer;
       transition: background-color 0.2s, border-color 0.2s;
+      position: absolute;
+      top: 6px;
+      right: 6px;
     }
 
     .exemplar-toggle:checked {
       background-color: var(--accent);
       border-color: var(--accent);
+    }
+
+    .exemplar-label:has(.exemplar-toggle:checked) .exemplar-preview {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
     }
 
     .sr-only {
@@ -950,6 +1024,14 @@
     }
 
     // === Status messages ===
+    async function apiError(res, fallback) {
+      try {
+        const data = await res.json();
+        if (data && typeof data.error === 'string') return data.error;
+      } catch {}
+      return fallback;
+    }
+
     function showStatus(elementId, message, type = 'error') {
       const el = document.getElementById(elementId);
       el.textContent = message;
@@ -976,7 +1058,8 @@
       } else if (action === 'save-descriptor') {
         await saveDescriptor();
       } else if (action === 'copy-generate-command') {
-        await copyGenerateCommand();
+        const familyId = e.target.getAttribute('data-id');
+        await copyGenerateCommand(familyId);
       } else if (action === 'close-editor') {
         closeEditor();
       } else if (action === 'run-cluster') {
@@ -1041,7 +1124,7 @@
     async function loadSources() {
       try {
         const res = await fetch('./sources');
-        if (!res.ok) throw new Error('Failed to load sources');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to load sources'));
         const data = await res.json();
 
         sourceReadiness = {};
@@ -1103,7 +1186,7 @@
 
       try {
         const res = await fetch(`./refs?${params}`);
-        if (!res.ok) throw new Error('Failed to load references');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to load references'));
         const data = await res.json();
 
         const grid = document.getElementById('refs-grid');
@@ -1115,11 +1198,23 @@
           const card = document.createElement('div');
           card.className = 'ref-card';
 
+          const thumb = document.createElement('div');
+          thumb.className = 'ref-thumb';
           const img = document.createElement('img');
           img.src = ref.previewUrl;
           img.alt = ref.sourceRef;
           img.loading = 'lazy';
-          card.appendChild(img);
+          thumb.appendChild(img);
+          card.appendChild(thumb);
+
+          // Add caption with sourceRef and source+family
+          const caption = document.createElement('div');
+          caption.className = 'ref-caption';
+          const basename = ref.sourceRef.split('/').pop().split('.')[0];
+          const familyText = ref.familySlug ? ` / ${ref.familySlug}` : '';
+          // Show: line 1 = basename, line 2 = source + family (combined as text-overflow)
+          caption.textContent = basename + '  |  ' + ref.source + familyText;
+          card.appendChild(caption);
 
           card.addEventListener('click', () => showRefPanel(ref));
           grid.appendChild(card);
@@ -1248,7 +1343,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ tags: [tag] }),
         });
-        if (!res.ok) throw new Error('Failed to add tag');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to add tag'));
         input.value = '';
         updateRefTags();
       } catch (err) {
@@ -1279,7 +1374,7 @@
       if (!currentRefInPanel) return;
       try {
         const res = await fetch(`./ref/${currentRefInPanel.id}/discard`, { method: 'POST' });
-        if (!res.ok) throw new Error('Failed to discard');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to discard'));
         closeRefPanel();
         await loadReferences();
       } catch (err) {
@@ -1308,7 +1403,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error('Import failed');
+        if (!res.ok) throw new Error(await apiError(res, 'Import failed'));
         const data = await res.json();
 
         // Show detailed results
@@ -1355,7 +1450,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ paths }),
         });
-        if (!res.ok) throw new Error('Add failed');
+        if (!res.ok) throw new Error(await apiError(res, 'Add failed'));
         const data = await res.json();
         showStatus('local-status', `Добавлено: ${data.ingested}, дубликатов: ${data.dedup}, ошибок: ${data.failed}`, 'success');
         document.getElementById('local-paths').value = '';
@@ -1368,7 +1463,7 @@
     async function loadFamilies() {
       try {
         const res = await fetch('./state');
-        if (!res.ok) throw new Error('Failed to load state');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to load state'));
         const data = await res.json();
 
         const list = document.getElementById('families-list');
@@ -1501,6 +1596,15 @@
           editBtn.setAttribute('data-id', f.id);
           actions.appendChild(editBtn);
 
+          // Add command button for approved families
+          if (f.status === 'approved') {
+            const cmdBtn = document.createElement('button');
+            cmdBtn.textContent = 'Команда генерации';
+            cmdBtn.setAttribute('data-action', 'copy-generate-command');
+            cmdBtn.setAttribute('data-id', f.id);
+            actions.appendChild(cmdBtn);
+          }
+
           card.appendChild(actions);
           list.appendChild(card);
         });
@@ -1531,7 +1635,7 @@
     async function editFamily(familyId) {
       try {
         const res = await fetch(`./family/${familyId}`);
-        if (!res.ok) throw new Error('Failed to load family');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to load family'));
         const family = await res.json();
 
         currentFamilyId = familyId;
@@ -1644,7 +1748,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ refId, isExemplar }),
         });
-        if (!res.ok) throw new Error('Failed to update exemplar');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to update exemplar'));
       } catch (err) {
         console.error('Error updating exemplar:', err);
       }
@@ -1653,33 +1757,63 @@
     async function saveDescriptor() {
       if (!currentFamilyId) return;
 
-      const descriptor = {
-        summary: document.getElementById('editor-summary').value,
-        mood: moodChips.length > 0 ? moodChips : undefined,
-        dials: {
-          visualDensity: parseFloat(document.getElementById('editor-density').value),
-          designVariance: parseFloat(document.getElementById('editor-variance').value),
-          decorLevel: parseFloat(document.getElementById('editor-decor').value),
-          symmetry: parseFloat(document.getElementById('editor-symmetry').value),
-        },
-        spacing: {
-          density: document.getElementById('editor-spacing-density').value,
-        },
-        motion: {
-          character: document.getElementById('editor-motion-char').value,
-        },
-        prompt_fragment: document.getElementById('editor-prompt').value,
-        negative_fragment: document.getElementById('editor-negative').value || undefined,
-      };
+      const newName = document.getElementById('editor-name').value.trim();
+      const newSlug = document.getElementById('editor-slug').value.trim();
 
       try {
+        // If both name and slug are provided, send rename first
+        if (newName && newSlug) {
+          // Validate slug format
+          if (!/^[a-z0-9-]*$/.test(newSlug)) {
+            throw new Error('Слаг должен содержать только буквы, цифры и дефисы');
+          }
+
+          const res = await fetch('./decide', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              familyId: currentFamilyId,
+              action: 'rename',
+              name: newName,
+              slug: newSlug
+            }),
+          });
+          if (!res.ok) {
+            const text = await res.text();
+            const err = JSON.parse(text);
+            throw new Error(err.error || 'Failed to rename');
+          }
+        } else if (newName || newSlug) {
+          throw new Error('Укажите обе опции: название и слаг');
+        }
+
+        const descriptor = {
+          summary: document.getElementById('editor-summary').value,
+          mood: moodChips.length > 0 ? moodChips : undefined,
+          dials: {
+            visualDensity: parseFloat(document.getElementById('editor-density').value),
+            designVariance: parseFloat(document.getElementById('editor-variance').value),
+            decorLevel: parseFloat(document.getElementById('editor-decor').value),
+            symmetry: parseFloat(document.getElementById('editor-symmetry').value),
+          },
+          spacing: {
+            density: document.getElementById('editor-spacing-density').value,
+          },
+          motion: {
+            character: document.getElementById('editor-motion-char').value,
+          },
+          prompt_fragment: document.getElementById('editor-prompt').value,
+          negative_fragment: document.getElementById('editor-negative').value || undefined,
+        };
+
         const res = await fetch(`./family/${currentFamilyId}/descriptor`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(descriptor),
         });
         if (!res.ok) {
-          const err = await res.json();
+          const text = await res.text();
+          const err = JSON.parse(text);
           throw new Error(err.error || 'Failed to save');
         }
         closeEditor();
@@ -1689,11 +1823,12 @@
       }
     }
 
-    async function copyGenerateCommand() {
-      if (!currentFamilyId) return;
+    async function copyGenerateCommand(familyId = null) {
+      const fid = familyId || currentFamilyId;
+      if (!fid) return;
       try {
-        const res = await fetch(`./generate-command/${currentFamilyId}`);
-        if (!res.ok) throw new Error('Failed to get command');
+        const res = await fetch(`./generate-command/${fid}`);
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to get command'));
         const data = await res.json();
 
         try {
@@ -1727,7 +1862,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error('Failed to decide');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to decide'));
         await loadFamilies();
       } catch (err) {
         console.error('Error deciding family:', err);
@@ -1743,7 +1878,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ k: k ? parseInt(k) : undefined }),
         });
-        if (!res.ok) throw new Error('Clustering failed');
+        if (!res.ok) throw new Error(await apiError(res, 'Clustering failed'));
         const data = await res.json();
         showStatus('cluster-status', `Создано ${data.families.length} кластеров`, 'success');
         await loadFamilies();
@@ -1758,7 +1893,7 @@
     async function copyClusterContext() {
       try {
         const res = await fetch('./propose');
-        if (!res.ok) throw new Error('Failed to get context');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed to get context'));
         const data = await res.json();
         const text = JSON.stringify(data, null, 2);
 
@@ -1783,7 +1918,7 @@
     async function markDone() {
       try {
         const res = await fetch('./done', { method: 'POST' });
-        if (!res.ok) throw new Error('Failed');
+        if (!res.ok) throw new Error(await apiError(res, 'Failed'));
         showStatus('families-panel', 'Завершено!', 'success');
       } catch (err) {
         console.error('Error:', err);
