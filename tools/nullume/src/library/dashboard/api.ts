@@ -146,7 +146,7 @@ export async function handleApi(
 
     res.writeHead(200, {
       "Content-Type": "text/html; charset=utf-8",
-      "Content-Security-Policy": `default-src 'none'; img-src 'self'; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}'; connect-src 'self'`,
+      "Content-Security-Policy": `default-src 'none'; img-src 'self' data:; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}'; connect-src 'self'`,
     });
     res.end(htmlWithNonce);
     return;
@@ -426,32 +426,36 @@ export async function handleApi(
   // GET /sources
   if (path === "/sources" && req.method === "GET") {
     try {
-      const cleanImporters = await listImporters("clean");
-      const cleanDtos = cleanImporters.map((i) => ({
-        id: i.id,
-        name: i.title,
-        description: i.description,
-        kind: "clean" as const,
-        readiness: "ready" as const,
-      }));
-
-      let localImporters: any[] = [];
+      const cfg = config ?? { acknowledgedRiskyImporters: false };
+      const probe = async (kind: "clean" | "local-only") => {
+        const list = await listImporters(kind);
+        const out = [];
+        for (const i of list) {
+          let readiness: "ready" | "needs-config" = "ready";
+          let reason: string | undefined;
+          try {
+            await i.configure(cfg, process.env);
+          } catch (e) {
+            readiness = "needs-config";
+            reason = (e as Error).message;
+          }
+          out.push({ id: i.id, name: i.title, description: i.description, kind, readiness, reason });
+        }
+        return out;
+      };
+      const cleanImporters = await probe("clean");
+      let gateReason: string | undefined;
       try {
-        assertLocalOnlyAllowed(config ?? { acknowledgedRiskyImporters: false }, process.env);
-        const local = await listImporters("local-only");
-        localImporters = local.map((i) => ({
-          id: i.id,
-          name: i.title,
-          description: i.description,
-          kind: "local-only" as const,
-          readiness: "ready" as const,
-        }));
+        assertLocalOnlyAllowed(cfg, process.env);
       } catch (e) {
-        // Local not available
+        gateReason = (e as Error).message;
       }
+      const localImporters = (await probe("local-only")).map((i) =>
+        gateReason ? { ...i, readiness: "gated" as const, reason: gateReason } : i
+      );
 
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ cleanImporters: cleanDtos, localImporters }));
+      res.end(JSON.stringify({ cleanImporters, localImporters }));
     } catch (e) {
       res.writeHead(400, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: (e as Error).message }));

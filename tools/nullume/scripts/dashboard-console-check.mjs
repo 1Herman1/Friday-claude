@@ -8,5 +8,5 @@ await p.goto(process.argv[2]); await p.waitForTimeout(1500);
 console.log("cards:", await p.locator(".ref-card, .card, img").count());
 await p.click("[aria-controls='families-panel']"); await p.waitForTimeout(300);
 await p.click("text=Редактировать").catch(e=>console.log("click fail", e.message.slice(0,100))); await p.waitForTimeout(800);
-await p.screenshot({ path: "process.argv[3] || "/tmp/dashboard-editor.png"", fullPage: true });
+await p.screenshot({ path: process.argv[3] || "/tmp/dashboard-editor.png", fullPage: true });
 await b.close();
