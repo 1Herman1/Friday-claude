@@ -219,6 +219,25 @@ describe('planNewProduct()', () => {
 
 // ────────────────────────────── planVariantForExisting ────────────────────────
 
+describe('planVariantForExisting(): существующая фасовка по externalId', () => {
+  const item = {
+    article: 2020,
+    siteName: 'EMULSION HIGIENIZANTE',
+    volume: { value: 1000, unit: 'ml' as const, label: '1000 мл' },
+    wholesaleKopecks: 950000,
+  }
+  const variant = { id: 'v-1', volumeValue: 1000, volumeUnit: 'ml' as const, externalId: 'bmg-2020', wholesalePrice: 950000, isProfessional: true }
+
+  it('тот же опт и признак — без изменений', () => {
+    expect(planVariantForExisting(item, { id: 'p', variants: [variant] })).toEqual({ kind: 'none', reason: 'Без изменений' })
+  })
+
+  it('опт изменился — обновление только опта и признака', () => {
+    const plan = planVariantForExisting(item, { id: 'p', variants: [{ ...variant, wholesalePrice: 900000 }] })
+    expect(plan).toEqual({ kind: 'update', variantId: 'v-1', data: { wholesalePrice: 950000, isProfessional: true } })
+  })
+})
+
 describe('planVariantForExisting()', () => {
   const baseProduct = {
     id: 'prod-123',
@@ -262,6 +281,8 @@ describe('planVariantForExisting()', () => {
           volumeValue: 1000,
           volumeUnit: 'ml' as const,
           externalId: 'bmg-2020', // Совпадает
+          wholesalePrice: 950000,
+          isProfessional: true,
         },
       ],
     }

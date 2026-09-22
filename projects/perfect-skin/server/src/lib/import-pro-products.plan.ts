@@ -172,7 +172,17 @@ export function planNewProduct(item: ProProduct, ctx: PlanContext): ProductPlan 
  */
 export function planVariantForExisting(
   item: VariantForExisting,
-  product: { id: string; variants: Array<{ volumeValue: number; volumeUnit: VolumeUnit; externalId?: string | null }> }
+  product: {
+    id: string
+    variants: Array<{
+      id?: string
+      volumeValue: number
+      volumeUnit: VolumeUnit
+      externalId?: string | null
+      wholesalePrice?: number | null
+      isProfessional?: boolean
+    }>
+  }
 ): VariantPlan {
   // Проверяем конфликт: уже есть фасовка с такой же объёмом и другим externalId?
   const volumeKey = `${item.volume.value}${item.volume.unit}`
@@ -193,10 +203,17 @@ export function planVariantForExisting(
   if (variantByExternalId) {
     // Фасовка уже есть — обновляем
     if (variantByExternalId.volumeValue === item.volume.value && variantByExternalId.volumeUnit === item.volume.unit) {
-      // Без изменений объёма
+      // Объём тот же — сравниваем опт и признак: повторный прогон с тем же
+      // прайсом ничего не пишет, новый прайс обновляет только эти два поля.
+      const unchanged =
+        variantByExternalId.wholesalePrice === item.wholesaleKopecks && variantByExternalId.isProfessional === true
+      if (unchanged || !variantByExternalId.id) {
+        return { kind: 'none', reason: 'Без изменений' }
+      }
       return {
-        kind: 'none',
-        reason: 'Без изменений',
+        kind: 'update',
+        variantId: variantByExternalId.id,
+        data: { wholesalePrice: item.wholesaleKopecks, isProfessional: true },
       }
     } else {
       // Конфликт: объём не совпадает

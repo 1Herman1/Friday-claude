@@ -27,10 +27,35 @@ interface ReportRecord {
  * Находит товар по названию используя нормализацию (как в import-prices.match.ts).
  * Требует ровно одного кандидата.
  */
-async function findProductByName(siteName: string): Promise<{ id: string; name: string } | null> {
-  const productsDb = await prisma.product.findMany({
-    select: { id: true, name: true },
+type ProductWithVariants = {
+  id: string
+  name: string
+  variants: Array<{
+    id: string
+    volumeValue: number
+    volumeUnit: 'ml' | 'g' | 'pcs'
+    externalId: string | null
+    wholesalePrice: number | null
+    isProfessional: boolean
+  }>
+}
+
+async function findProductByName(siteName: string): Promise<ProductWithVariants | null> {
+  const rows = await prisma.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      variants: {
+        where: { deletedAt: null },
+        select: { id: true, volumeValue: true, volumeUnit: true, externalId: true, wholesalePrice: true, isProfessional: true },
+      },
+    },
   })
+  // Decimal из Prisma не сравнить с числом напрямую
+  const productsDb: ProductWithVariants[] = rows.map((p) => ({
+    ...p,
+    variants: p.variants.map((v) => ({ ...v, volumeValue: Number(v.volumeValue) })),
+  }))
 
   const normalized = replaceCyrillicLookalikes(siteName)
   const siteNormalized = normalize(normalized)
@@ -93,7 +118,11 @@ async function run() {
     } else {
       pilingiCategoryId = 'DRY_RUN_CATEGORY_ID'
     }
-    console.log(`  ✨ Created category "Пилинги и эликсиры" with sortOrder ${newSortOrder}`)
+    console.log(
+      dryRun
+        ? `  ✨ Категория «Пилинги и эликсиры» будет создана (sortOrder ${newSortOrder})`
+        : `  ✨ Создана категория «Пилинги и эликсиры» (sortOrder ${newSortOrder})`
+    )
     categoriesMap.set('pilingi-i-eliksiry', { id: pilingiCategoryId, maxSortOrder: newSortOrder })
   }
 
