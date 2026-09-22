@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { validateTaxId } from '@ps/shared'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { fetchApi, ApiError } from '@/lib/api'
 
@@ -172,10 +173,6 @@ export function ProPage() {
     }
   }
 
-  const validateInn = (inn: string): boolean => {
-    const cleaned = inn.replace(/\D/g, '')
-    return cleaned.length === 10 || cleaned.length === 12 || cleaned.length === 15
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -187,8 +184,9 @@ export function ProPage() {
       return
     }
 
-    if (!validateInn(formData.inn)) {
-      setError('ИНН должен содержать 10, 12 или 15 цифр')
+    const taxIdValidation = validateTaxId(formData.inn)
+    if (!taxIdValidation.ok) {
+      setError(taxIdValidation.reason || 'ИНН, ОГРН или ОГРНИП с ошибкой в цифрах — проверьте реквизит')
       return
     }
 
@@ -282,7 +280,7 @@ export function ProPage() {
 
           <div>
             <label htmlFor="inn" className="block text-sm font-semibold text-foreground mb-2">
-              ИНН или ОГРНИП <span className="text-destructive">*</span>
+              ИНН, ОГРН или ОГРНИП <span className="text-destructive">*</span>
             </label>
             <input
               type="text"
@@ -293,7 +291,7 @@ export function ProPage() {
               inputMode="numeric"
               maxLength={15}
               className="w-full px-4 py-3 border border-border-strong rounded-block focus:outline-ring focus:ring-2 focus:ring-ring bg-card text-foreground font-mono"
-              placeholder="10, 12 или 15 цифр"
+              placeholder="ИНН (10–12 цифр), ОГРН (13 цифр) или ОГРНИП (15 цифр)"
               required
             />
             <p className="text-xs text-muted-foreground mt-1">

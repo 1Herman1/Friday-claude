@@ -387,9 +387,46 @@ describe('Professional (wholesale) Integration Tests', () => {
     expect(JSON.parse(orderRes.body).error.code).toBe('PROMO_NOT_FOR_WHOLESALE')
   })
 
-  // 8. Full application flow: apply → admin approves → wholesale catalog
-  it('(8) Заявка на статус: подача, повтор, валидация, админ одобряет → опт', async () => {
-    const user = await createUser('apply-8')
+  // 8. ОГРН 13 digits accepted; invalid checksum rejected
+  it('(8) ОГРН 13 цифр принимается; некорректная контрольная сумма — отказ', async () => {
+    const user = await createUser('apply-ogn')
+    const token = tokenFor(user)
+
+    // Корректный ОГРН 13 цифр
+    const validOgrnRes = await app.inject({
+      method: 'POST',
+      url: '/api/v1/pro/apply',
+      payload: {
+        companyName: 'ООО Тест',
+        inn: '1027700132195', // Корректный ОГРН (Сбербанк)
+        specialization: 'косметолог',
+      },
+      headers: { authorization: `Bearer ${token}` },
+    })
+    expect(validOgrnRes.statusCode).toBe(200)
+    expect(JSON.parse(validOgrnRes.body).proStatus).toBe('pending')
+
+    // ИНН 10 с неверной контрольной суммой
+    const user2 = await createUser('apply-checksum')
+    const token2 = tokenFor(user2)
+    const badChecksumRes = await app.inject({
+      method: 'POST',
+      url: '/api/v1/pro/apply',
+      payload: {
+        companyName: 'ООО Тест',
+        inn: '7707083892', // Последняя цифра 3->2, контрольная сумма неверна
+        specialization: 'косметолог',
+      },
+      headers: { authorization: `Bearer ${token2}` },
+    })
+    expect(badChecksumRes.statusCode).toBe(400)
+    const errorBody = JSON.parse(badChecksumRes.body)
+    expect(errorBody.error.code).toBe('VALIDATION_ERROR')
+  })
+
+  // 9. Full application flow: apply → admin approves → wholesale catalog
+  it('(9) Заявка на статус: подача, повтор, валидация, админ одобряет → опт', async () => {
+    const user = await createUser('apply-9')
     expect(user.acceptedTermsAt).toBeNull()
 
     const token = tokenFor(user)

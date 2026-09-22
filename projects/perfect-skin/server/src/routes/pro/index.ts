@@ -1,10 +1,26 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
+import { validateTaxId } from '@ps/shared'
 import { ApiError } from '../../lib/errors.js'
 
 const applySchema = z.object({
   companyName: z.string().min(2).max(120),
-  inn: z.string().regex(/^\d{10}$|^\d{12}$|^\d{15}$/, 'ИНН должен быть 10, 12 или 15 цифр'),
+  inn: z
+    .string()
+    .refine(
+      (value) => {
+        const validation = validateTaxId(value)
+        return validation.ok
+      },
+      (value) => {
+        const validation = validateTaxId(value)
+        return {
+          message: validation.ok
+            ? 'ИНН должен быть 10, 12 или 15 цифр'
+            : validation.reason,
+        }
+      }
+    ),
   specialization: z.string().min(2).max(120),
   comment: z.string().max(500).optional(),
 })
