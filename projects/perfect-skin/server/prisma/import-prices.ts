@@ -13,6 +13,9 @@ interface PriceImportItem {
   wholesaleKopecks: number
   retailKopecks: number | null
   isProfessional: boolean
+  siteName?: string
+  forceSingleVariant?: boolean
+  skip?: string
 }
 
 interface PriceImportData {
@@ -89,7 +92,12 @@ async function main() {
     const matches: MatchResult[] = []
     const unmatched: { item: PriceImportItem; reason: string }[] = []
     const ambiguous: { item: PriceImportItem; candidates: string[] }[] = []
+    const skipped: { item: PriceImportItem; reason: string }[] = []
+    const conflicts: { item: PriceImportItem; reason: string }[] = []
     const retailMismatches: { product: string; variant: string; item: PriceImportItem; old: number; new: number }[] = []
+
+    // Отслеживание фасовок для обнаружения конфликтов
+    const variantMatches = new Map<string, { itemIndex: number; productId: string; variantId: string }>()
 
     // Преобразовать товары в формат для matchProduct
     const simplifiedProducts = products.map((p) => ({
@@ -105,7 +113,8 @@ async function main() {
     }))
 
     // Сопоставление
-    for (const item of importData.items) {
+    for (let itemIndex = 0; itemIndex < importData.items.length; itemIndex++) {
+      const item = importData.items[itemIndex]
       const result = matchProduct(item, simplifiedProducts)
 
       if (result.kind === 'match') {
@@ -113,6 +122,29 @@ async function main() {
         const variant = product?.variants.find((v) => v.id === result.variantId)
 
         if (!product || !variant) continue
+
+        // Проверка конфликта: две записи на одну фасовку
+        const variantKey = `${result.productId}:${result.variantId}`
+        const existingMatch = variantMatches.get(variantKey)
+        if (existingMatch) {
+          // Конфликт: обе записи отправляем в conflicts
+          const prevItem = importData.items[existingMatch.itemIndex]
+          conflicts.push({
+            item: prevItem,
+            reason: `Конфликт: две записи (${prevItem.name}, ${item.name}) на одну фасовку`,
+          })
+          conflicts.push({
+            item,
+            reason: `Конфликт: две записи (${prevItem.name}, ${item.name}) на одну фасовку`,
+          })
+          // Удалить предыдущий match
+          matches.splice(
+            matches.findIndex((m) => m.product.id === result.productId && m.variant.id === result.variantId),
+            1
+          )
+          continue
+        }
+        variantMatches.set(variantKey, { itemIndex, productId: result.productId, variantId: result.variantId })
 
         // Проверка расхождения в розничной цене
         const retailMismatch =
@@ -145,6 +177,16 @@ async function main() {
           item,
           candidates: result.candidates,
         })
+      } else if (result.kind === 'skip') {
+        skipped.push({
+          item,
+          reason: result.reason,
+        })
+      } else if (result.kind === 'conflict') {
+        conflicts.push({
+          item,
+          reason: result.reason,
+        })
       } else if (result.kind === 'none') {
         unmatched.push({
           item,
@@ -164,6 +206,24 @@ async function main() {
           'Pro': `${m.changes.isProfessional.old} → ${m.changes.isProfessional.new}`,
         })),
       )
+      console.log()
+    }
+
+    // Вывод пропущённых
+    if (skipped.length > 0) {
+      console.log(`⏭️ ПРОПУЩЕНО (${skipped.length}):`)
+      skipped.forEach((s) => {
+        console.log(`  • ${s.item.name} (${s.item.volume}) — ${s.reason}`)
+      })
+      console.log()
+    }
+
+    // Вывод конфликтов
+    if (conflicts.length > 0) {
+      console.log(`⚡ КОНФЛИКТЫ (${conflicts.length}):`)
+      conflicts.forEach((c) => {
+        console.log(`  • ${c.item.name} (${c.item.volume}) — ${c.reason}`)
+      })
       console.log()
     }
 
@@ -200,6 +260,8 @@ async function main() {
     const total = importData.items.length
     console.log(`📊 СВОДКА:`)
     console.log(`  Сопоставлено: ${matches.length}/${total}`)
+    console.log(`  Пропущено: ${skipped.length}`)
+    console.log(`  Конфликты: ${conflicts.length}`)
     console.log(`  Несопоставлено: ${unmatched.length}`)
     console.log(`  Неоднозначные: ${ambiguous.length}`)
     console.log(`  Расхождения розницы: ${retailMismatches.length}\n`)

@@ -255,6 +255,146 @@ describe('matchProduct()', () => {
   })
 })
 
+describe('Подсказки и опции (siteName, forceSingleVariant, skip)', () => {
+  it('siteName: сопоставляет по явному имени товара (ПЕРВОЕ правило)', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'CREMA ELITE Ультра увлажняющий крем',
+        variants: [
+          { id: 'var-1', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    const result = matchProduct(
+      {
+        name: 'crema elite ультраувлажняющий крем',
+        volume: '50 мл',
+        siteName: 'CREMA ELITE Ультра увлажняющий крем',
+      },
+      products
+    )
+
+    expect(result.kind).toBe('match')
+  })
+
+  it('siteName: не применяет latinKey, если siteName не найден', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'CREMA ELITE Ультра увлажняющий крем',
+        variants: [
+          { id: 'var-1', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    const result = matchProduct(
+      {
+        name: 'crema elite ультраувлажняющий крем',
+        volume: '50 мл',
+        siteName: 'NOT FOUND',
+      },
+      products
+    )
+
+    expect(result.kind).toBe('none')
+    if (result.kind === 'none') {
+      expect(result.reason).toContain('siteName не найден')
+    }
+  })
+
+  it('forceSingleVariant: берёт единственную фасовку без сверки', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'AquaO3 Antiaging',
+        variants: [
+          { id: 'var-1', volumeValue: 25, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    // Объём 5x5 мл не совпадает, но forceSingleVariant=true берёт её
+    const result = matchProduct(
+      {
+        name: 'AquaO3 Antiaging',
+        volume: '5x5 мл',
+        forceSingleVariant: true,
+      },
+      products
+    )
+
+    expect(result.kind).toBe('match')
+  })
+
+  it('forceSingleVariant: ошибка если фасовок несколько', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'Крем A',
+        variants: [
+          { id: 'var-1', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+          { id: 'var-2', volumeValue: 100, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    const result = matchProduct(
+      {
+        name: 'Крем A',
+        volume: '5x5 мл',
+        forceSingleVariant: true,
+      },
+      products
+    )
+
+    expect(result.kind).toBe('none')
+    if (result.kind === 'none') {
+      expect(result.reason).toContain('forceSingleVariant')
+    }
+  })
+
+  it('skip: пропускает запись', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'Крем A',
+        variants: [
+          { id: 'var-1', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    const result = matchProduct(
+      {
+        name: 'Крем A',
+        volume: '50 мл',
+        skip: 'тестовая пропуска',
+      },
+      products
+    )
+
+    expect(result.kind).toBe('skip')
+    if (result.kind === 'skip') {
+      expect(result.reason).toBe('тестовая пропуска')
+    }
+  })
+
+  it('диакритика: снимает Ó→O для латинских букв', () => {
+    expect(normalize('Ó')).toBe('o')
+    expect(normalize('Crèmé')).toBe('creme')
+  })
+
+  it('гомоглиф Т: кириллическая Т → T латинская в latinKey', () => {
+    // Balance Тoner: кириллическая Т в прайсе
+    const priceKey = latinKey('Balance Тoner освежающий')
+    expect(priceKey).toContain('balance')
+    expect(priceKey).toContain('toner') // должна быть латинская T
+  })
+})
+
 describe('Интеграция: сопоставление с реальными данными', () => {
   it('сопоставляет 82 записи прайса с 57 товарами каталога', () => {
     // Загрузить реальные данные

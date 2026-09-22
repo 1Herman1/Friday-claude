@@ -19,20 +19,33 @@ const CYRILLIC_TO_LATIN: Record<string, string> = {
   Х: 'X',
 }
 
-// Нормализация: нижний регистр, ё→е, убрать кавычки и спецсимволы, лишние пробелы
+// Нормализация: нижний регистр, ё→е, снять диакритику для латинских букв, убрать кавычки и спецсимволы, лишние пробелы
 export function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ё/g, 'е')
+  let normalized = text.toLowerCase().replace(/ё/g, 'е')
+
+  // Разложить диакритику, но сохранить й (не разлагать й на и + диакритика)
+  // Временно заменим й на плейсхолдер
+  normalized = normalized.replace(/й/g, '\x00Y\x00')
+  normalized = normalized.normalize('NFD')
+  // Удалить диакритику (теперь й уже не будет разложен)
+  normalized = normalized.replace(/\p{M}/gu, '')
+  // Вернуть й
+  normalized = normalized.replace(/\x00Y\x00/g, 'й')
+
+  return normalized
     .replace(/[«»""]/g, '')
     .replace(/[^\p{L}\p{N}\s]/gu, ' ')
     .replace(/\s+/g, ' ')
     .trim()
 }
 
-// Замена кириллических двойников на латиницу
+// Замена кириллических двойников на латиницу (включая Т кириллическую → T)
 function replaceCyrillicLookalikes(text: string): string {
-  return text.replace(/./gu, (char) => CYRILLIC_TO_LATIN[char] || char)
+  const extended: Record<string, string> = {
+    ...CYRILLIC_TO_LATIN,
+    'Т': 'T', // Кириллическая Т → латинская T (добавить, если не в таблице)
+  }
+  return text.replace(/./gu, (char) => extended[char] || char)
 }
 
 // Извлечение ведущего латинского ключа: последовательность токенов (латиница, цифры, +, &)
@@ -137,16 +150,45 @@ interface SimplifiedProduct {
 interface PriceImportItem {
   name: string
   volume: string
+  siteName?: string // Явное имя товара на сайте: точное совпадение или none
+  forceSingleVariant?: boolean // Взять единственную фасовку без сверки объёма
+  skip?: string // Пропустить запись (не обрабатывать)
 }
 
 export type MatchResult =
   | { kind: 'match'; productId: string; variantId: string }
   | { kind: 'ambiguous'; candidates: string[] }
+  | { kind: 'conflict'; reason: string } // Две записи прайса на одну фасовку
   | { kind: 'none'; reason: string }
+  | { kind: 'skip'; reason: string }
 
 // Основная функция сопоставления: принимает упрощённые объекты, возвращает результат
 export function matchProduct(item: PriceImportItem, products: SimplifiedProduct[]): MatchResult {
-  // Этап 1: сопоставление по latinKey
+  // Правило 0: skip
+  if (item.skip) {
+    return { kind: 'skip', reason: item.skip }
+  }
+
+  // Правило 1: siteName (ПЕРВЫЙ и единственный)
+  if (item.siteName) {
+    const normalized = replaceCyrillicLookalikes(item.siteName)
+    const siteNormalized = normalize(normalized)
+
+    const found = products.find((p) => {
+      const pNormalized = replaceCyrillicLookalikes(p.name)
+      const pNorm = normalize(pNormalized)
+      return siteNormalized === pNorm
+    })
+
+    if (!found) {
+      return { kind: 'none', reason: `siteName не найден: ${item.siteName}` }
+    }
+
+    // Найден по siteName — используем forceSingleVariant, если задано
+    return matchVariant(item, found, { forceSingleVariant: item.forceSingleVariant })
+  }
+
+  // Правило 2: latinKey (стандартный алгоритм)
   const itemKey = latinKey(item.name)
 
   if (itemKey) {
@@ -158,14 +200,14 @@ export function matchProduct(item: PriceImportItem, products: SimplifiedProduct[
     if (keyMatches.length === 1) {
       // Ровно один кандидат по ключу — ищем фасовку
       const product = keyMatches[0]
-      return matchVariant(item, product)
+      return matchVariant(item, product, { forceSingleVariant: item.forceSingleVariant })
     }
 
     if (keyMatches.length > 1) {
       // Несколько кандидатов по ключу — пытаемся сузить по полному имени
       let narrowed = keyMatches.filter((p) => isMatch(item.name, p.name))
       if (narrowed.length === 1) {
-        return matchVariant(item, narrowed[0])
+        return matchVariant(item, narrowed[0], { forceSingleVariant: item.forceSingleVariant })
       }
       if (narrowed.length > 1) {
         return {
@@ -176,7 +218,7 @@ export function matchProduct(item: PriceImportItem, products: SimplifiedProduct[
     }
   }
 
-  // Этап 2: если по ключу ничего не нашли — старые правила полного имени
+  // Правило 3: если по ключу ничего не нашли — старые правила полного имени
   const nameMatches = products.filter((p) => isMatch(item.name, p.name))
 
   if (nameMatches.length === 0) {
@@ -190,11 +232,15 @@ export function matchProduct(item: PriceImportItem, products: SimplifiedProduct[
     }
   }
 
-  return matchVariant(item, nameMatches[0])
+  return matchVariant(item, nameMatches[0], { forceSingleVariant: item.forceSingleVariant })
 }
 
 // Вспомогательная: сопоставление фасовки для конкретного товара
-function matchVariant(item: PriceImportItem, product: SimplifiedProduct): MatchResult {
+interface MatchVariantOptions {
+  forceSingleVariant?: boolean
+}
+
+function matchVariant(item: PriceImportItem, product: SimplifiedProduct, options: MatchVariantOptions = {}): MatchResult {
   const activeVariants = product.variants.filter((v) => v.isActive && !v.deletedAt)
   const parsed = parseVolume(item.volume)
 
@@ -211,10 +257,16 @@ function matchVariant(item: PriceImportItem, product: SimplifiedProduct): MatchR
   })
 
   if (!variant && activeVariants.length === 1) {
-    // Брать единственную фасовку без сверки ТОЛЬКО если:
+    const singleVariant = activeVariants[0]
+
+    // Если forceSingleVariant задан — просто взять её
+    if (options.forceSingleVariant) {
+      return { kind: 'match', productId: product.id, variantId: singleVariant.id }
+    }
+
+    // Иначе: брать единственную фасовку без сверки ТОЛЬКО если:
     // 1. Объём прайса не распознан (5x5 мл)
     // 2. ИЛИ у фасовки объём не задан (null)
-    const singleVariant = activeVariants[0]
     const volumeNotRecognized = !parsed
     const variantVolumeUnknown = singleVariant.volumeValue === null || singleVariant.volumeValue === undefined
 
@@ -222,14 +274,23 @@ function matchVariant(item: PriceImportItem, product: SimplifiedProduct): MatchR
       variant = singleVariant
     } else {
       // Объём распознан и у фасовки есть объём — они должны совпадать
+      const siteUnit = singleVariant.volumeUnit
       return {
         kind: 'none',
-        reason: `Объём не совпадает: прайс ${item.volume}, сайт ${singleVariant.volumeValue || '?'}`,
+        reason: `Объём не совпадает: прайс ${item.volume}, сайт ${singleVariant.volumeValue} ${siteUnit}`,
       }
     }
   }
 
   if (!variant) {
+    // Если forceSingleVariant задан, но фасовок несколько — ошибка
+    if (options.forceSingleVariant && activeVariants.length !== 1) {
+      return {
+        kind: 'none',
+        reason: `forceSingleVariant, но фасовок ${activeVariants.length}`,
+      }
+    }
+
     if (!parsed && activeVariants.length > 1) {
       return {
         kind: 'none',

@@ -2,7 +2,7 @@
   "_meta": {
     "source": "BeautyMedGroup — прайс для косметологов (xlsx)",
     "date": "2026-09-22",
-    "note": "82 позиции; имена взяты с учётом объединённых ячеек; isProfessional = только ПРОФ или без РРЦ; розницу скрипт не перезаписывает, только сверяет"
+    "note": "82 позиции; имена взяты с учётом объединённых ячеек; isProfessional = только ПРОФ или без РРЦ; розницу скрипт не перезаписывает, только сверяет; siteName — явное имя товара на сайте, когда латинское имя расходится (опечатки, переводы); forceSingleVariant — фасовка сайта записана без единицы (маски), берём единственную; skip — запись не переносится, причина в значении"
   },
   "items": [
     {
@@ -66,7 +66,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 630000,
       "retailKopecks": 1130000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "KERATHOR PLUS"
     },
     {
       "article": 2064,
@@ -174,7 +175,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 730000,
       "retailKopecks": 1310000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "REGENERATIVO CELLULAR"
     },
     {
       "article": 2041,
@@ -201,7 +203,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 680000,
       "retailKopecks": 1220000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "ВEEVENOM SERUM"
     },
     {
       "article": 2027,
@@ -210,7 +213,9 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 570000,
       "retailKopecks": 1020000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "TTS ENERGIZING MASK",
+      "forceSingleVariant": true
     },
     {
       "article": 2028,
@@ -219,7 +224,9 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 570000,
       "retailKopecks": 1020000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "TTS MOISTURIZING MASK",
+      "forceSingleVariant": true
     },
     {
       "article": 2031,
@@ -237,7 +244,9 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 570000,
       "retailKopecks": 1020000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "TTS ESSENTIAL MASK",
+      "forceSingleVariant": true
     },
     {
       "article": 2005,
@@ -354,7 +363,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 790000,
       "retailKopecks": 1420000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "NUTRIESTIMUL"
     },
     {
       "article": 2045,
@@ -399,7 +409,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 376100,
       "retailKopecks": 714600,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "KORPO SLIM GEL"
     },
     {
       "article": 10073,
@@ -408,7 +419,8 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 820000,
       "retailKopecks": 1470000,
-      "isProfessional": false
+      "isProfessional": false,
+      "skip": "на сайте только упаковка 3 шт (арт. 10074)"
     },
     {
       "article": 10074,
@@ -417,7 +429,9 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 280000,
       "retailKopecks": 510000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "SENITUL",
+      "forceSingleVariant": true
     },
     {
       "article": 10075,
@@ -426,7 +440,9 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 280000,
       "retailKopecks": 500000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "OXIODERM",
+      "forceSingleVariant": true
     },
     {
       "article": 10071,
@@ -444,7 +460,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 560000,
       "retailKopecks": 1000000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "FLUVIX"
     },
     {
       "article": 2002,
@@ -480,7 +497,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 370000,
       "retailKopecks": 670000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "NATURAL CLEANSING MILK"
     },
     {
       "article": 2032,
@@ -570,7 +588,8 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 330000,
       "retailKopecks": 590000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "JOJOBA OIL + O3"
     },
     {
       "article": 2133,
@@ -579,7 +598,8 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 340000,
       "retailKopecks": 610000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "ROSE HIP OIL + O3"
     },
     {
       "article": 2126,
@@ -588,7 +608,8 @@
       "care": "ПРОФ ДОМ",
       "wholesaleKopecks": 350000,
       "retailKopecks": 630000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "BAOBAB OIL ILLUMINATOR AND REPAIRER"
     },
     {
       "article": 10128,
@@ -642,7 +663,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 820000,
       "retailKopecks": 1560000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "SERUM TRIPLE ACCIÓN"
     },
     {
       "article": 10052,
@@ -678,7 +700,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 880000,
       "retailKopecks": 1670000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "GEN ADN"
     },
     {
       "article": 10121,
@@ -723,7 +746,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 290000,
       "retailKopecks": 550000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "BALANCE TONER"
     },
     {
       "article": 10126,
