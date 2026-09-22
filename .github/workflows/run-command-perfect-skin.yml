@@ -1,0 +1,33 @@
+name: Run Command on Perfect Skin VPS
+
+# Ручной запуск произвольной команды на сервере Perfect Skin через SSH.
+# Только по явному workflow_dispatch (никогда на push) — тот же уровень
+# доверия, что и у push-доступа в репозиторий, т.к. secrets те же, что у
+# выкатки. Нужен для разовых работ: выпуск сертификата, бэкфиллы, чистки.
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Команда для выполнения на сервере (рабочая директория — /var/www/ps-src)'
+        required: true
+        type: string
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          RUN_COMMAND: ${{ inputs.command }}
+        with:
+          host: ${{ secrets.PS_DEPLOY_HOST }}
+          username: ${{ secrets.PS_DEPLOY_USER }}
+          key: ${{ secrets.PS_DEPLOY_SSH_KEY }}
+          envs: RUN_COMMAND
+          command_timeout: 15m
+          script: |
+            set -euo pipefail
+            cd /var/www/ps-src
+            eval "$RUN_COMMAND"
