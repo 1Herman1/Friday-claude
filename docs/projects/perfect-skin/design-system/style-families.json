@@ -1,0 +1,416 @@
+{
+  "project": "perfect-skin",
+  "page": "home",
+  "collectedAt": "2026-09-22T19:53:47.380Z",
+  "families": [
+    {
+      "slug": "editorial-slab",
+      "name": "Редакционная плита",
+      "status": "proposed",
+      "descriptor": {
+        "name": "Редакционная плита",
+        "slug": "editorial-slab",
+        "summary": "Заголовок во весь экран поверх фото, плашки наложены на снимок, асимметричная сетка с пустым полем сбоку.",
+        "palette": [
+          {
+            "hex": "#f4f2ec",
+            "role": "bg",
+            "ratio": 0.5
+          },
+          {
+            "hex": "#14202e",
+            "role": "text",
+            "ratio": 0.22,
+            "contrastOn": "#f4f2ec"
+          },
+          {
+            "hex": "#e4d3ac",
+            "role": "accent",
+            "ratio": 0.16
+          },
+          {
+            "hex": "#1f3a5f",
+            "role": "accent-ink",
+            "ratio": 0.08,
+            "contrastOn": "#f4f2ec"
+          },
+          {
+            "hex": "#8c8578",
+            "role": "muted",
+            "ratio": 0.04
+          }
+        ],
+        "type": {
+          "display": "Druk Wide, Archivo Black, Inter Tight",
+          "body": "Inter, Helvetica Neue",
+          "scale": [
+            12,
+            14,
+            16,
+            20,
+            28,
+            44,
+            72,
+            112
+          ],
+          "weightDisplay": 800,
+          "tracking": -0.03,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            40,
+            64,
+            96
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 999,
+          "pattern": "pill-vs-square"
+        },
+        "shadows": "flat",
+        "motion": {
+          "duration": [
+            160,
+            260
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "dials": {
+          "visualDensity": 0.45,
+          "designVariance": 0.75,
+          "decorLevel": 0.15,
+          "symmetry": 0.25
+        },
+        "decor": [
+          "наложение плашки на фото",
+          "переносы строк как приём",
+          "мелкие капс-подписи"
+        ],
+        "dominant_pattern": "Крупный гротеск поверх полноэкранного фото, карточка с ценой или подписью наложена на снимок со смещением",
+        "divergences": [
+          "Driftime ведёт заголовок градиентом, у нас заливка старого золота",
+          "Goodside ставит антикву, у нас гротеск"
+        ],
+        "prompt_fragment": "editorial hero, oversized heavy grotesque headline with tight tracking over a full-bleed photograph, card overlapping the image off-centre, old-gold fill block, deep navy ink, warm paper ground, small uppercase captions",
+        "negative_fragment": "purple blue gradient, gold text on light, rounded card grid, emoji, stock smiling faces, glossy 3d",
+        "mood": [
+          "редакционный",
+          "уверенный",
+          "крупный",
+          "асимметричный"
+        ],
+        "exemplars": [
+          "ff2ec99b-1c51-4dab-b599-67d25011191d",
+          "6540d5bd-4a24-47c4-a2a5-102bd020fab8",
+          "bde5269c-4b5f-444a-852f-0f37f09b45b3",
+          "a0fb7840-fd5d-40bc-be98-b5323806b872"
+        ],
+        "antiRefCheck": [
+          "нет фиолетово-синего градиента",
+          "золото только заливкой, не текстом",
+          "нет вложенных карточек"
+        ]
+      },
+      "references": [
+        {
+          "source": "rss",
+          "sourceRef": "onepagelove:https://onepagelove.com/spatial",
+          "pageUrl": "https://onepagelove.com/spatial"
+        },
+        {
+          "source": "rss",
+          "sourceRef": "minimalgallery:https://minimal.gallery/driftime-impact-report/",
+          "pageUrl": "https://minimal.gallery/driftime-impact-report/"
+        },
+        {
+          "source": "rss",
+          "sourceRef": "minimalgallery:https://minimal.gallery/watts-pet/",
+          "pageUrl": "https://minimal.gallery/watts-pet/"
+        },
+        {
+          "source": "rss",
+          "sourceRef": "minimalgallery:https://minimal.gallery/goodside/",
+          "pageUrl": "https://minimal.gallery/goodside/"
+        },
+        {
+          "source": "rss",
+          "sourceRef": "onepagelove:https://onepagelove.com/colosse",
+          "pageUrl": "https://onepagelove.com/colosse"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-clarity",
+      "name": "Клиническая ясность",
+      "status": "proposed",
+      "descriptor": {
+        "name": "Клиническая ясность",
+        "slug": "clinical-clarity",
+        "summary": "Строгая симметричная сетка, много воздуха, один акцент на экран, факты вместо обещаний.",
+        "palette": [
+          {
+            "hex": "#ffffff",
+            "role": "bg",
+            "ratio": 0.56
+          },
+          {
+            "hex": "#14202e",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#ffffff"
+          },
+          {
+            "hex": "#f4f2ec",
+            "role": "surface",
+            "ratio": 0.14
+          },
+          {
+            "hex": "#1f3a5f",
+            "role": "accent-ink",
+            "ratio": 0.07,
+            "contrastOn": "#ffffff"
+          },
+          {
+            "hex": "#d8d4c9",
+            "role": "line",
+            "ratio": 0.03
+          }
+        ],
+        "type": {
+          "display": "Inter Tight, Helvetica Neue",
+          "body": "Inter, system-ui",
+          "scale": [
+            12,
+            14,
+            16,
+            18,
+            24,
+            32,
+            48,
+            64
+          ],
+          "weightDisplay": 600,
+          "tracking": -0.015,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56,
+            88,
+            128
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 4,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "shadows": "none",
+        "motion": {
+          "duration": [
+            120,
+            200
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "static"
+        },
+        "dials": {
+          "visualDensity": 0.3,
+          "designVariance": 0.2,
+          "decorLevel": 0.05,
+          "symmetry": 0.9
+        },
+        "decor": [
+          "тонкая линия-разделитель",
+          "числовые подписи составов"
+        ],
+        "dominant_pattern": "Один заголовок по центру колонки, под ним факт с числом, широкие поля, изображение продукта на ровном фоне без тени",
+        "divergences": [
+          "QMS уходит в чистый чёрно-белый, у нас морская синь вместо чёрного"
+        ],
+        "prompt_fragment": "clinical product page, centred column, generous white space, thin rule separators, deep navy ink on white, single product photographed on a flat neutral ground, no shadow, small technical captions with numbers",
+        "negative_fragment": "warm filter, lifestyle collage, gradient, ornament, overlapping cards, before-after imagery",
+        "mood": [
+          "точный",
+          "спокойный",
+          "доказательный",
+          "аптечный"
+        ],
+        "exemplars": [
+          "554acb5f-94a1-4f97-9030-1acbcba6313b",
+          "ec2dc139-a431-469b-8011-62dbafbb11f8",
+          "30ce9ed5-e745-4e71-9ff5-5f9d967f3e78",
+          "ca3f530c-738e-40c4-9de5-41911d1d241a"
+        ],
+        "antiRefCheck": [
+          "нет градиента",
+          "контраст текста ≥ 4.5:1",
+          "нет декоративных иконок-тайлов"
+        ]
+      },
+      "references": [
+        {
+          "source": "rss",
+          "sourceRef": "onepagelove:https://onepagelove.com/rows",
+          "pageUrl": "https://onepagelove.com/rows"
+        },
+        {
+          "source": "rss",
+          "sourceRef": "minimalgallery:https://minimal.gallery/takecontrol/",
+          "pageUrl": "https://minimal.gallery/takecontrol/"
+        },
+        {
+          "source": "rss",
+          "sourceRef": "minimalgallery:https://minimal.gallery/united-flags-of-fashion/",
+          "pageUrl": "https://minimal.gallery/united-flags-of-fashion/"
+        },
+        {
+          "source": "rss",
+          "sourceRef": "minimalgallery:https://minimal.gallery/linkletter/",
+          "pageUrl": "https://minimal.gallery/linkletter/"
+        }
+      ]
+    },
+    {
+      "slug": "warm-mineral",
+      "name": "Тёплый минерал",
+      "status": "proposed",
+      "descriptor": {
+        "name": "Тёплый минерал",
+        "slug": "warm-mineral",
+        "summary": "Тёплое дневное фото, антиква в заголовке, песочный фон, золото крупной заливкой — испанское солнце без глянца.",
+        "palette": [
+          {
+            "hex": "#f4f2ec",
+            "role": "bg",
+            "ratio": 0.44
+          },
+          {
+            "hex": "#14202e",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f4f2ec"
+          },
+          {
+            "hex": "#e4d3ac",
+            "role": "accent",
+            "ratio": 0.2
+          },
+          {
+            "hex": "#e9e2d4",
+            "role": "surface",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#1f3a5f",
+            "role": "accent-ink",
+            "ratio": 0.06,
+            "contrastOn": "#f4f2ec"
+          }
+        ],
+        "type": {
+          "display": "Playfair Display, Lora, Georgia",
+          "body": "Inter, system-ui",
+          "scale": [
+            12,
+            14,
+            16,
+            20,
+            26,
+            36,
+            52,
+            76
+          ],
+          "weightDisplay": 500,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            28,
+            48,
+            72,
+            112
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 6,
+          "large": 20,
+          "pattern": "uniform"
+        },
+        "shadows": "soft",
+        "motion": {
+          "duration": [
+            200,
+            320
+          ],
+          "easing": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+          "character": "calm"
+        },
+        "dials": {
+          "visualDensity": 0.35,
+          "designVariance": 0.45,
+          "decorLevel": 0.25,
+          "symmetry": 0.6
+        },
+        "decor": [
+          "фактура бумаги",
+          "крупная заливка старого золота",
+          "подпись курсивом"
+        ],
+        "dominant_pattern": "Тёплый дневной кадр на всю ширину, поверх него спокойный заголовок антиквой, ниже блок из двух колонок на песочном фоне",
+        "divergences": [
+          "Le Mousse уводит в пудрово-розовый, у нас песок и старое золото"
+        ],
+        "prompt_fragment": "warm daylight interior still life, sandy paper ground, restrained serif headline, old-gold fill panel, deep navy accents, soft natural shadow, Mediterranean light, unhurried composition",
+        "negative_fragment": "neon, cold blue light, heavy grotesque, glitter, gold text, dense grid",
+        "mood": [
+          "тёплый",
+          "неспешный",
+          "минеральный",
+          "испанское солнце"
+        ],
+        "exemplars": [
+          "64313cb6-4d84-42dc-b1b1-29beff9f0041",
+          "b391d24d-6914-458c-b2e0-e9941e25f34b",
+          "c1c982da-5640-441b-9aae-f6d2d97e0192",
+          "e3dfaf52-38b0-4c9d-b8e6-db39094d09e3"
+        ],
+        "antiRefCheck": [
+          "золото не как текст",
+          "нет фиолетово-синего градиента",
+          "тени мягкие, не резкие"
+        ]
+      },
+      "references": [
+        {
+          "source": "rss",
+          "sourceRef": "onepagelove:https://onepagelove.com/poetry-camera",
+          "pageUrl": "https://onepagelove.com/poetry-camera"
+        },
+        {
+          "source": "rss",
+          "sourceRef": "minimalgallery:https://minimal.gallery/sonderdays/",
+          "pageUrl": "https://minimal.gallery/sonderdays/"
+        }
+      ]
+    }
+  ]
+}

@@ -126,8 +126,8 @@ generateCmd
 
       // Wait if requested
       if (options.wait) {
-        const timeoutSec = parseInt(options["wait-timeout"] as string, 10);
-        const intervalSec = parseInt(options["wait-interval"] as string, 10);
+        const timeoutSec = parseInt(options.waitTimeout as string, 10);
+        const intervalSec = parseInt(options.waitInterval as string, 10);
 
         let lastMsg = "";
         const completedJob = await waitJob(provider, job.id, {
@@ -237,8 +237,8 @@ generateCmd
       const apiKey = providerName === "mock" ? "mock" : await getApiKey();
       const provider = await getProviderWithCatalog(providerName, apiKey);
 
-      const timeoutSec = parseInt(options["wait-timeout"] as string, 10);
-      const intervalSec = parseInt(options["wait-interval"] as string, 10);
+      const timeoutSec = parseInt(options.waitTimeout as string, 10);
+      const intervalSec = parseInt(options.waitInterval as string, 10);
 
       const completedJob = await waitJob(provider, jobId, {
         timeoutSec,
@@ -413,8 +413,8 @@ generateCmd
 
       // Wait if requested
       if (options.wait) {
-        const timeoutSec = parseInt(options["wait-timeout"] as string, 10);
-        const intervalSec = parseInt(options["wait-interval"] as string, 10);
+        const timeoutSec = parseInt(options.waitTimeout as string, 10);
+        const intervalSec = parseInt(options.waitInterval as string, 10);
 
         let lastMsg = "";
         const completedJob = await waitJob(provider, job.id, {
@@ -590,8 +590,8 @@ generateCmd
 
       // Wait if requested
       if (options.wait) {
-        const timeoutSec = parseInt(options["wait-timeout"] as string, 10);
-        const intervalSec = parseInt(options["wait-interval"] as string, 10);
+        const timeoutSec = parseInt(options.waitTimeout as string, 10);
+        const intervalSec = parseInt(options.waitInterval as string, 10);
 
         let lastMsg = "";
         const completedJob = await waitJob(provider, job.id, {

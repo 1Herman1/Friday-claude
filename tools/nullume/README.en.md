@@ -52,6 +52,65 @@ npm run build
 npm link  # make available as 'nullume' command
 ```
 
+## API Keys and Sessions
+
+Nullume works with multiple sources. Keys and tokens are stored in different ways depending on the service.
+
+### kie.ai — three ways to pass the key
+
+| Method | Location | Usage | When |
+|--------|----------|-------|------|
+| Environment | `$KIE_API_KEY` | `export KIE_API_KEY=sk_live_...` | CI/CD, Docker, testing |
+| Config file | `~/.nullume/config.json` | `nullume setup` | Local machine (recommended) |
+| GitHub Actions secret | `KIE_API_KEY` | Settings → Secrets → Actions | Automated repository checks |
+
+**Set up locally (recommended):**
+```bash
+# Interactive setup (one-time)
+nullume setup
+
+# Or manually
+export KIE_API_KEY=sk_live_...
+nullume balance --json
+```
+
+### Pinterest API (official, no cookies)
+
+Official way using Pinterest API v5. Works everywhere: locally, MCP, CI.
+
+```bash
+# Get token at developer.pinterest.com (request boards:read and pins:read scopes)
+
+# Set via environment
+export PINTEREST_ACCESS_TOKEN=AbCdEf...
+
+# Or in config (~/.nullume/config.json)
+{
+  "importers": {
+    "pinterest": {
+      "accessToken": "AbCdEf..."
+    }
+  }
+}
+```
+
+### Local sessions: Pinterest, X, Dribbble
+
+These sources work through browser sessions stored in `~/.nullume/sessions/` (permissions 0600).
+
+**Triple gate: all three conditions required or disabled:**
+1. `acknowledgedRiskyImporters: true` in `~/.nullume/config.json`
+2. `export NULLUME_LOCAL_IMPORTERS=1` in environment
+3. Not in CI (no `CI` or `GITHUB_ACTIONS` variables)
+
+Sessions work **locally only**, never in MCP or CI.
+
+**X:** cookies `auth_token`, `ct0`  
+**Pinterest:** cookies `auth_token`, `c_user`  
+**Dribbble:** access token (via env or session file)
+
+See the Russian README for detailed setup instructions for each service.
+
 ## Five Main Commands
 
 ### 1. Check balance

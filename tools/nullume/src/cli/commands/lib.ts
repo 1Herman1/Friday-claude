@@ -59,28 +59,47 @@ libCmd
       const modelType = options.model === "siglip" ? "siglip" : "clip";
       await mergeConfig({ library: { embedModel: modelType } });
 
-      // Получить фактический ID модели и сохранить в БД
-      const embedder = await getEmbedder({ model: modelType as "clip" | "siglip" });
-      if (embedder) {
-        store.setMeta("embed_model", embedder.model);
-      }
-
-      emit(flags, { data: { dirs: [libDir, origDir, prevDir], model: modelType, db: dbPath } }, () => {
-        return `✓ Библиотека инициализирована\n  Каталоги: ${libDir}\n  Модель: ${modelType}\n  БД: ${dbPath}`;
-      });
-
-      // Загрузить модели если требуется
-      if (!options["skip-models"]) {
-        const embedder = await getEmbedder({ model: modelType as "clip" | "siglip" });
-        if (embedder === null) {
-          stderr.write(modelNotInstalledHint() + "\n");
-          // Продолжить с exit 0
-        } else {
-          emit(flags, { data: { model: embedder.model, dim: embedder.dim } }, () => {
-            return `✓ Модели для ${embedder.model} готовы`;
+      // Скачать веса модели: без этого эмбеддинги не заведутся, потому что
+      // вне init удалённая загрузка выключена намеренно.
+      let modelId: string | undefined;
+      if (!options.skipModels) {
+        try {
+          const downloaded = await downloadModels({
+            model: modelType as "clip" | "siglip",
+            log: (msg) => {
+              if (!flags.quiet && !flags.json) stderr.write(`  ${msg}\n`);
+            },
           });
+          modelId = downloaded.model;
+        } catch (e) {
+          const message = (e as Error).message;
+          if (/@huggingface\/transformers/.test(message)) {
+            stderr.write(modelNotInstalledHint() + "\n");
+          } else {
+            throw e;
+          }
         }
       }
+
+      // Сохранить фактический ID модели, если она доступна
+      if (!modelId) {
+        const embedder = await getEmbedder({ model: modelType as "clip" | "siglip" }).catch(() => null);
+        modelId = embedder?.model;
+      }
+      if (modelId) {
+        store.setMeta("embed_model", modelId);
+      }
+
+      emit(
+        flags,
+        { data: { dirs: [libDir, origDir, prevDir], model: modelId ?? modelType, db: dbPath } },
+        () => {
+          const modelLine = modelId
+            ? `  Модель: ${modelId}`
+            : `  Модель: ${modelType} (веса не загружены — поиск по смыслу и кластеры недоступны)`;
+          return `✓ Библиотека инициализирована\n  Каталоги: ${libDir}\n${modelLine}\n  БД: ${dbPath}`;
+        }
+      );
     } catch (error) {
       throw error;
     }
@@ -187,7 +206,7 @@ libCmd
         kind = "local-only";
         importer = await getImporter(source, kind);
         // Проверить гейт
-        if (!options["dry-run"]) {
+        if (!options.dryRun) {
           assertLocalOnlyAllowed(config, process.env);
         } else {
           stderr.write(LOCAL_ONLY_WARNING + "\n");
@@ -228,7 +247,7 @@ libCmd
       };
 
       let importRunId: string | null = null;
-      if (!options["dry-run"]) {
+      if (!options.dryRun) {
         importRunId = sqliteStore.beginImport(source, kind, (options.query as string) || "");
       }
 
@@ -242,7 +261,7 @@ libCmd
         config,
         env: process.env,
       })) {
-        if (options["dry-run"]) {
+        if (options.dryRun) {
           // Только печать без cookie
           const output = { ...candidate };
           delete (output as any).cookies;
@@ -272,7 +291,7 @@ libCmd
         }
       }
 
-      if (options["dry-run"]) {
+      if (options.dryRun) {
         emit(flags, { data: { mode: "dry-run", candidates: results.length } }, () => {
           return `Режим сухой прогон: ${results.length} кандидатов`;
         });
@@ -337,7 +356,7 @@ libCmd
           filePath: path.resolve(file),
           source: (options.source as string) || "manual",
           sourceRef: file,
-          pageUrl: options["page-url"] as string | undefined,
+          pageUrl: options.pageUrl as string | undefined,
           tags: (options.tag as string[]) || [],
           meta: {},
         };
@@ -579,8 +598,12 @@ libCmd
   });
 
 // lib session set <importer> [--cookie k=v]... [--cookie-file path] [--token t]
-libCmd
-  .command("session set <importer>")
+const sessionCmd = libCmd
+  .command("session")
+  .description("Сессии и токены импортёров");
+
+sessionCmd
+  .command("set <importer>")
   .option("--cookie <kv>", "Cookie (k=v), можно несколько", (v: string, prev: string[] = []) => [...prev, v])
   .option("--cookie-file <path>", "Файл с cookies (Netscape или простой формат)")
   .option("--token <t>", "API токен")
@@ -593,8 +616,8 @@ libCmd
       let token: string | undefined;
 
       // Собрать cookies
-      if (options["cookie-file"]) {
-        const content = await fs.promises.readFile(options["cookie-file"] as string, "utf-8");
+      if (options.cookieFile) {
+        const content = await fs.promises.readFile(options.cookieFile as string, "utf-8");
         cookies = parseCookieFile(content);
       }
 
@@ -610,8 +633,13 @@ libCmd
         token = options.token as string;
       }
 
+      if (cookies && Object.keys(cookies).length === 0) cookies = undefined;
+
       if (!cookies && !token) {
-        throw new UsageError("Укажите --cookie, --cookie-file или --token");
+        throw new UsageError(
+          "Укажите --cookie name=value, --cookie-file <файл> или --token. " +
+            "Файл принимается в формате Netscape cookies.txt или строкой name=value; name2=value2"
+        );
       }
 
       // Записать сессию
@@ -664,9 +692,9 @@ libCmd
 
       const result = clusterLibrary(store, {
         k: options.k ? parseInt(options.k as string, 10) : undefined,
-        kMin: parseInt(options["k-min"] as string, 10),
-        kMax: parseInt(options["k-max"] as string, 10),
-        minSize: parseInt(options["min-size"] as string, 10),
+        kMin: parseInt(options.kMin as string, 10),
+        kMax: parseInt(options.kMax as string, 10),
+        minSize: parseInt(options.minSize as string, 10),
         seed: parseInt(options.seed as string, 10),
         model: embedder.model,
       });
@@ -846,6 +874,93 @@ const familyCmd = libCmd
   .description("Управление семействами");
 
 // lib family list [--status <s>] [--json]
+/** Принимает полные ID и короткие префиксы, отказывает на неоднозначных */
+function resolveRefIds(store: LibraryStore, raw: string): string[] {
+  const wanted = raw.split(",").map((x) => x.trim()).filter(Boolean);
+  if (wanted.length === 0) return [];
+  const all = store.listReferences({ status: "active", limit: 10000, offset: 0 });
+  return wanted.map((prefix) => {
+    const matches = all.filter((r) => r.id === prefix || r.id.startsWith(prefix));
+    if (matches.length === 0) throw new UsageError(`Референс не найден: ${prefix}`);
+    if (matches.length > 1) throw new UsageError(`Неоднозначный префикс: ${prefix}`);
+    return matches[0].id;
+  });
+}
+
+// lib family create --name <n> --slug <s> --refs <id,...>
+familyCmd
+  .command("create")
+  .requiredOption("--name <name>", "Название семейства")
+  .requiredOption("--slug <slug>", "Слаг (a-z, 0-9, дефис)")
+  .option("--refs <ids>", "ID референсов через запятую (можно короткие, 8 символов)")
+  .description("Создать семейство вручную, без кластеризации")
+  .action(async function (options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+    let store: LibraryStore | undefined;
+
+    try {
+      store = openStore(getLibraryDbPath());
+      const db = store;
+      const slug = String(options.slug);
+      if (!/^[a-z0-9-]+$/.test(slug)) {
+        throw new UsageError(`Слаг может содержать только a-z, 0-9 и дефис, получено: ${slug}`);
+      }
+      if (db.getFamilyBySlug(slug)) {
+        throw new UsageError(`Семейство со слагом "${slug}" уже есть`);
+      }
+
+      const refIds = resolveRefIds(db, String(options.refs ?? ""));
+
+      const family = db.createFamily({
+        slug,
+        name: String(options.name),
+        status: "proposed",
+        proposedBy: "owner",
+      });
+      if (refIds.length > 0) {
+        db.setMembers(
+          family.id,
+          refIds.map((refId, i) => ({ familyId: family.id, refId, distance: 0, isExemplar: i < 4 }))
+        );
+      }
+
+      emit(flags, { data: { id: family.id, slug: family.slug, name: family.name, size: refIds.length } }, () => {
+        return `✓ Семейство создано: ${family.name} (${family.slug}), референсов: ${refIds.length}`;
+      });
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib family set-refs <slug|id> --refs <id,...>
+familyCmd
+  .command("set-refs <id>")
+  .requiredOption("--refs <ids>", "ID референсов через запятую (можно короткие, 8 символов)")
+  .description("Заменить состав семейства")
+  .action(async function (idOrSlug: string, options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+    let store: LibraryStore | undefined;
+
+    try {
+      store = openStore(getLibraryDbPath());
+      const db = store;
+      const family = getFamilyBySlugOrId(db, idOrSlug);
+      if (!family) throw new UsageError(`Семейство "${idOrSlug}" не найдено`);
+
+      const refIds = resolveRefIds(db, String(options.refs));
+      db.setMembers(
+        family.id,
+        refIds.map((refId, i) => ({ familyId: family.id, refId, distance: 0, isExemplar: i < 4 }))
+      );
+
+      emit(flags, { data: { id: family.id, slug: family.slug, size: refIds.length } }, () => {
+        return `✓ Состав обновлён: ${family.name} — ${refIds.length} референсов`;
+      });
+    } finally {
+      store?.close();
+    }
+  });
+
 familyCmd
   .command("list")
   .option("--status <s>", "Фильтр по статусу (approved, proposed)")
