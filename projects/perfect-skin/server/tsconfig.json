@@ -13,11 +13,10 @@
     "declarationMap": false,
     "sourceMap": false,
     "outDir": "./dist",
+    "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@ps/shared": ["../shared/src"],
-      "@ps/shared/*": ["../shared/src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"],
