@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 
 describe('cookieInsecure', () => {
   const ORIGINAL = process.env.PS_COOKIE_INSECURE
@@ -6,21 +6,25 @@ describe('cookieInsecure', () => {
   afterEach(() => {
     if (ORIGINAL === undefined) delete process.env.PS_COOKIE_INSECURE
     else process.env.PS_COOKIE_INSECURE = ORIGINAL
+    vi.resetModules()
   })
 
   it('выключен по умолчанию — прод не затрагивается', async () => {
     delete process.env.PS_COOKIE_INSECURE
-    const { cookieInsecure } = await import('../lib/env.js?default')
+    vi.resetModules()
+    const { cookieInsecure } = await import('../lib/env.js')
     expect(cookieInsecure).toBe(false)
   })
 
   it('включается только строкой "1"', async () => {
     process.env.PS_COOKIE_INSECURE = 'true'
-    const { cookieInsecure: notOne } = await import('../lib/env.js?not-one')
+    vi.resetModules()
+    const { cookieInsecure: notOne } = await import('../lib/env.js')
     expect(notOne).toBe(false)
 
     process.env.PS_COOKIE_INSECURE = '1'
-    const { cookieInsecure: enabled } = await import('../lib/env.js?enabled')
+    vi.resetModules()
+    const { cookieInsecure: enabled } = await import('../lib/env.js')
     expect(enabled).toBe(true)
   })
 })
