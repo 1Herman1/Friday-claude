@@ -159,6 +159,19 @@ jobs:
             npm run build --workspace=@ps/shared
             cd "$SRC/projects/perfect-skin/server"
             npx prisma generate
+
+            # Упавшая миграция оставляет в учётной таблице запись без
+            # finished_at и блокирует все следующие попытки. Сам SQL при этом
+            # откатывается транзакцией, поэтому запись — единственный след.
+            # Снимаем её ТОЛЬКО пока база пуста: bootstrap ставит систему с
+            # нуля, а на базе с данными разбирать провал надо руками.
+            TABLES=$(PGPASSWORD="$POSTGRES_PASSWORD" psql -h 127.0.0.1 -U ps -d perfect_skin -tAc \
+              "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' AND table_name <> '_prisma_migrations'")
+            if [ "$TABLES" = "0" ]; then
+              PGPASSWORD="$POSTGRES_PASSWORD" psql -h 127.0.0.1 -U ps -d perfect_skin -tAc \
+                "DELETE FROM \"_prisma_migrations\" WHERE finished_at IS NULL" 2>/dev/null || true
+            fi
+
             npx prisma migrate deploy
 
             echo "==> Ограничения уровня базы"
