@@ -9,9 +9,9 @@ const b = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-119
 const p = await b.newPage();
 const errors = [];
 p.on("console", (m) => { if (m.type() === "error") errors.push(m.text().slice(0, 200)); });
-p.on("pageerror", (e) => errors.push("pageerror " + e.message.slice(0, 200)));
+p.on("pageerror", (e) => errors.push("pageerror " + e.message.slice(0, 900)));
 const step = async (name, fn) => {
-  try { await fn(); console.log("PASS", name); } catch (e) { console.log("FAIL", name, "-", e.message.slice(0, 200)); }
+  try { await fn(); console.log("PASS", name); } catch (e) { console.log("FAIL", name, "-", e.message.slice(0, 900)); }
 };
 
 await p.goto(url);

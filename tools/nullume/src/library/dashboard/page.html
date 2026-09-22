@@ -1090,6 +1090,7 @@
     });
 
     function switchTab(tab) {
+      if (typeof closeRefPanel === 'function') closeRefPanel();
       document.querySelectorAll('[role="tab"]').forEach(t => {
         t.setAttribute('aria-selected', 'false');
         t.setAttribute('tabindex', '-1');
