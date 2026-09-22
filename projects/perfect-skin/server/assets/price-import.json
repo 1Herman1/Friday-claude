@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "source": "BeautyMedGroup price",
+    "date": "2026-09-22",
+    "note": "Пример структуры: реальные данные подставляются отдельно. isProfessional = true означает, что фасовка и товар видны только специалистам."
+  },
+  "items": [
+    {
+      "name": "DINAMIZANTE Восстанавливающий крем",
+      "volume": "50 мл",
+      "wholesaleKopecks": 450000,
+      "retailKopecks": 807700,
+      "isProfessional": false
+    },
+    {
+      "name": "Aqua O3 Whitening",
+      "volume": "100 мл",
+      "wholesaleKopecks": 320000,
+      "retailKopecks": null,
+      "isProfessional": true
+    },
+    {
+      "name": "GEN ADN Крем укрепляющий",
+      "volume": "50 мл",
+      "wholesaleKopecks": 380000,
+      "retailKopecks": 612800,
+      "isProfessional": false
+    }
+  ]
+}
