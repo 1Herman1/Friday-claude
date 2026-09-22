@@ -152,7 +152,10 @@ jobs:
 
             echo "==> Зависимости и схема"
             cd "$SRC"
-            npm install --no-audit --no-fund
+            # --include=dev обязателен: выше подгружен .env с NODE_ENV=production,
+            # а при нём npm пропускает devDependencies — вместе с ними исчезают
+            # tsc, vite, prisma и tsx, которыми и собирается проект.
+            npm install --include=dev --no-audit --no-fund
             npm run build --workspace=@ps/shared
             cd "$SRC/projects/perfect-skin/server"
             npx prisma generate

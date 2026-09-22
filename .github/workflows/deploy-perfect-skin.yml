@@ -75,7 +75,10 @@ jobs:
             git merge --ff-only origin/deploy/perfect-skin
 
             echo "==> Installing dependencies"
-            npm install
+            # --include=dev: сборка идёт на сервере, а tsc/vite/prisma/tsx лежат
+            # в devDependencies. Без флага любой NODE_ENV=production в окружении
+            # тихо выбрасывает их, и падает не установка, а сборка.
+            npm install --include=dev
 
             echo "==> Building @ps/shared"
             npm run build --workspace=@ps/shared
