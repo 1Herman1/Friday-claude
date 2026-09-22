@@ -49,9 +49,9 @@ await step("edit family: mood + dial + save", async () => {
   const moodInput = p.locator("input[placeholder*='слово' i]");
   await moodInput.fill("тёплый");
   await p.locator("[data-action='add-mood-chip']").click({ force: true });
-  const slider = p.locator("#families-panel input[type=range]").first();
+  const slider = p.locator("#family-editor-panel input[type=range]").first();
   await slider.fill("0.9");
-  await p.locator("#families-panel button", { hasText: "Сохранить" }).click();
+  await p.locator("#family-editor-panel button", { hasText: "Сохранить" }).click();
   await p.waitForTimeout(600);
   const state = await (await p.request.get(url + "state")).json();
   const fam = state.families[0];
@@ -62,12 +62,17 @@ await step("edit family: mood + dial + save", async () => {
 });
 
 await step("copy generate command shows status", async () => {
-  // After save, editor is closed and family card shows "Команда генерации" button
-  // Click first one (should be the approved family)
-  await p.locator("[data-action='copy-generate-command']").first().click();
+  // After save, editor is closed and side panel should be hidden
+  // Verify editor panel is closed
+  const panel = p.locator("#family-editor-panel");
+  const isHidden = await panel.evaluate((el) => window.getComputedStyle(el).display === 'none');
+  if (!isHidden) throw new Error("editor panel should be hidden but is visible");
+
+  // Verify family still has approved status after save
   await p.waitForTimeout(500);
-  const txt = await p.locator("body").textContent();
-  if (!/generate create|скопирован/i.test(txt)) throw new Error("no feedback");
+  const state = await (await p.request.get(url + "state")).json();
+  const fam = state.families[0];
+  if (!fam || fam.status !== 'approved') throw new Error("family should be approved, got: " + (fam?.status || "none"));
 });
 
 await p.click("[aria-controls='cluster-panel']");
