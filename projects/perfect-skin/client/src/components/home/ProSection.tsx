@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCatalogList } from '@/hooks/useCatalogList'
 import type { CatalogFilters } from '@/hooks/useCatalogList'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
+import { NoImage } from '@/components/catalog/NoImage'
 
 // Константа вне компонента: новый объект на каждом рендере заставлял хук
 // перезапрашивать каталог бесконечно.
@@ -10,6 +12,7 @@ const PRO_FILTERS: CatalogFilters = { pro: true, limit: 3, offset: 0 }
 export function ProSection() {
   const { user } = useAuth()
   const { data, loading } = useCatalogList(PRO_FILTERS)
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
 
   // Если пользователь уже одобрен как профессионал
   if (isApprovedPro(user)) {
@@ -176,38 +179,51 @@ export function ProSection() {
           ) : (
             // Products + CTA
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {products.map((product, i) => (
-                <div
-                  key={product.id}
-                  className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-4 hover:bg-dark-foreground/10 transition-colors duration-200"
-                >
-                  <div className="w-full aspect-square bg-background rounded-media object-contain p-4 mb-4 flex items-center justify-center overflow-hidden">
-                    <img
-                      src={`/products-optimized/${product.slug}/card.webp`}
-                      alt={product.name}
-                      className="w-full h-full object-contain"
-                      loading={i < 2 ? 'eager' : 'lazy'}
-                    />
+              {products.map((product, i) => {
+                const hasImageError = imageErrors.has(product.id)
+
+                const handleImageError = () => {
+                  setImageErrors(prev => new Set([...prev, product.id]))
+                }
+
+                return (
+                  <div
+                    key={product.id}
+                    className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-4 hover:bg-dark-foreground/10 transition-colors duration-200"
+                  >
+                    <div className="w-full aspect-square bg-background rounded-media object-contain p-4 mb-4 flex items-center justify-center overflow-hidden">
+                      {product.image && !hasImageError ? (
+                        <img
+                          src={`/products-optimized/${product.slug}/card.webp`}
+                          alt={product.name}
+                          className="w-full h-full object-contain"
+                          loading={i < 2 ? 'eager' : 'lazy'}
+                          onError={handleImageError}
+                        />
+                      ) : (
+                        <NoImage tone="dark" aspectRatio="aspect-square" />
+                      )}
+                    </div>
+                    <h4 className="font-semibold text-dark-foreground mb-2 text-body-sm line-clamp-2">
+                      <Link to={`/product/${product.slug}`} className="focus-visible:outline-ring hover:underline underline-offset-4">
+                        {product.name}
+                      </Link>
+                    </h4>
+                    <p className="text-label text-dark-foreground/70 mb-4">
+                      {
+                        product.variants?.find((v) => v.isProfessional)
+                          ?.volumeLabel || product.variants?.[0]?.volumeLabel
+                      }
+                    </p>
+                    <div className="mt-auto">
+                      <span className="text-sm text-dark-foreground/80">Цена для специалистов</span>
+                      <Link to="/pro" className="block text-sm font-semibold text-accent hover:underline underline-offset-4 focus-visible:outline-ring">
+                        Получить доступ →
+                      </Link>
+                    </div>
                   </div>
-                  <h4 className="font-semibold text-dark-foreground mb-2 text-body-sm line-clamp-2">
-                    <Link to={`/product/${product.slug}`} className="focus-visible:outline-ring hover:underline underline-offset-4">
-                      {product.name}
-                    </Link>
-                  </h4>
-                  <p className="text-label text-dark-foreground/70 mb-4">
-                    {
-                      product.variants?.find((v) => v.isProfessional)
-                        ?.volumeLabel || product.variants?.[0]?.volumeLabel
-                    }
-                  </p>
-                  <div className="mt-auto">
-                    <span className="text-sm text-dark-foreground/80">Цена для специалистов</span>
-                    <Link to="/pro" className="block text-sm font-semibold text-accent hover:underline underline-offset-4 focus-visible:outline-ring">
-                      Получить доступ →
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
 
               {/* CTA Tile */}
               <div className="bg-accent text-accent-foreground rounded-block p-6 flex flex-col justify-end">

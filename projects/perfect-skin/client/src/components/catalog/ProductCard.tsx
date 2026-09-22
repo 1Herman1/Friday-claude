@@ -6,6 +6,7 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { IconHeart, IconHeartSolid } from '../icons'
 import { PriceTag } from '@/components/product/PriceTag'
+import { NoImage } from './NoImage'
 import type { ProductCard as ProductCardType } from '@/types/api'
 
 interface ProductCardProps {
@@ -79,9 +80,7 @@ export function ProductCard({ product, onAddToCart, eager, aspectRatio = '3/4' }
               />
             </picture>
           ) : (
-            <div className="w-full aspect-[3/4] flex items-center justify-center bg-muted text-muted-foreground rounded-media">
-              Нет изображения
-            </div>
+            <NoImage aspectRatio={aspectRatio === '4/5' ? 'aspect-[4/5]' : 'aspect-[3/4]'} />
           )}
         </Link>
 

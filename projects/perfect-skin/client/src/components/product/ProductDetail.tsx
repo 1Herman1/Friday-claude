@@ -8,6 +8,7 @@ import { IconHeart, IconHeartSolid } from '../icons'
 import { PriceTag } from './PriceTag'
 import { StickyProductPanel } from './StickyProductPanel'
 import { RelatedProducts } from './RelatedProducts'
+import { NoImage } from '@/components/catalog/NoImage'
 import type { ProductCardExtended } from '@/types/api'
 
 interface ProductDetailProps {
@@ -120,9 +121,7 @@ export function ProductDetail({ product, loading, error }: ProductDetailProps) {
               className="w-full aspect-square object-cover rounded-media bg-card"
             />
           ) : (
-            <div className="w-full aspect-square bg-muted rounded-media flex items-center justify-center text-muted-foreground">
-              Нет изображения
-            </div>
+            <NoImage aspectRatio="aspect-square" />
           )}
         </div>
 
