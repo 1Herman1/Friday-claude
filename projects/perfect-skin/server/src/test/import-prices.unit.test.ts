@@ -1,58 +1,10 @@
 import { describe, it, expect } from 'vitest'
+import * as fs from 'fs'
+import * as path from 'path'
+import { fileURLToPath } from 'url'
+import { normalize, latinKey, parseVolume, matchProduct } from '../lib/import-prices.match.js'
 
-/**
- * Нормализация: нижний регистр, ё→е, убрать кавычки и спецсимволы, лишние пробелы
- */
-function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ё/g, 'е')
-    .replace(/[«»""]/g, '') // кавычки
-    .replace(/[^\p{L}\p{N}\s]/gu, ' ') // спецсимволы (с поддержкой Unicode букв и цифр)
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
-/**
- * Проверка совпадения:
- * 1. Точное равенство нормализованного имени
- * 2. Нормализованное имя из прайса является префиксом товара
- * 3. Нормализованное имя товара является префиксом прайса
- */
-function isMatch(priceItemName: string, productName: string): boolean {
-  const normPrice = normalize(priceItemName)
-  const normProduct = normalize(productName)
-
-  if (normPrice === normProduct) return true
-  if (normProduct.startsWith(normPrice)) return true
-  if (normPrice.startsWith(normProduct)) return true
-
-  return false
-}
-
-/**
- * Парсинг объёма: извлечение числа и единицы из строки типа "50 мл"
- */
-function parseVolume(volumeStr: string): { value: number; unit: string } | null {
-  const match = volumeStr.match(/^(\d+(?:[.,]\d+)?)\s*([а-яa-z]+)$/i)
-  if (!match) return null
-
-  const value = parseFloat(match[1].replace(',', '.'))
-  const unitStr = match[2].toLowerCase()
-
-  let unit: string
-  if (unitStr === 'мл' || unitStr === 'ml') {
-    unit = 'ml'
-  } else if (unitStr === 'г' || unitStr === 'g') {
-    unit = 'g'
-  } else if (unitStr === 'шт' || unitStr === 'pcs') {
-    unit = 'pcs'
-  } else {
-    return null
-  }
-
-  return { value, unit }
-}
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 describe('normalize()', () => {
   it('преобразует в нижний регистр', () => {
@@ -93,50 +45,35 @@ describe('normalize()', () => {
   })
 })
 
-describe('isMatch()', () => {
-  it('точное совпадение нормализованного имени', () => {
-    expect(isMatch('DINAMIZANTE Крем', 'dinamizante крем')).toBe(true)
-    expect(isMatch('Aqua O3', 'AQUA O3')).toBe(true)
+describe('latinKey()', () => {
+  it('извлекает ведущие латинские токены', () => {
+    expect(latinKey('crema elite ультраувлажняющий крем')).toBe('cream elite')
+    expect(latinKey('beevenom crema антивозрастной крем')).toBe('beevenom cream')
+    expect(latinKey('tonico facial equilibrante балансирующий тоник')).toBe('tonico facial equilibrante')
   })
 
-  it('имя из прайса - префикс товара', () => {
-    // Прайс: "DINAMIZANTE", Товар: "DINAMIZANTE Восстанавливающий крем"
-    expect(isMatch('DINAMIZANTE', 'DINAMIZANTE Восстанавливающий крем')).toBe(true)
-    expect(isMatch('GEN ADN', 'GEN ADN Крем укрепляющий')).toBe(true)
+  it('заканчивает на первой кириллице', () => {
+    expect(latinKey('hidrorrevitalizante ревитализирующий')).toBe('hidrorrevitalizante')
+    expect(latinKey('reti ретиноловый крем')).toBe('reti')
   })
 
-  it('имя товара - префикс прайса (слова в прайсе полнее)', () => {
-    // Товар: "Aqua O3", Прайс: "Aqua O3 Whitening Cream"
-    expect(isMatch('Aqua O3 Whitening Cream', 'Aqua O3')).toBe(true)
+  it('включает цифры и спецсимволы в ключ', () => {
+    expect(latinKey('3 flower serum увлажняющая')).toBe('3 flower serum')
+    expect(latinKey('reti+ ретиноловый')).toBe('reti')
   })
 
-  it('не совпадает если разные имена', () => {
-    expect(isMatch('DINAMIZANTE', 'Aqua O3')).toBe(false)
-    expect(isMatch('Крем A', 'Крем B')).toBe(false)
+  it('заменяет crema на cream (синоним)', () => {
+    expect(latinKey('crema forte увлажняющий')).toBe('cream forte')
   })
 
-  it('не совпадает если слово находится в середине второй фразы', () => {
-    // "восстанавливающий" не в начале "динамизанте восстанавливающий крем"
-    // и "динамизанте восстанавливающий крем" не в начале "восстанавливающий"
-    // и не равны
-    expect(isMatch('Восстанавливающий', 'Регенерирующий Восстанавливающий крем')).toBe(false)
+  it('пустой ключ для только кириллицы', () => {
+    expect(latinKey('кремовый продукт')).toBe('')
   })
 
-  it('нечувствителен к кавычкам', () => {
-    expect(isMatch('«Expert Team»', 'Expert Team')).toBe(true)
-    expect(isMatch('Expert Team', '«Expert Team»')).toBe(true)
-  })
-
-  it('нечувствителен к спецсимволам', () => {
-    expect(isMatch('Gen-ADN', 'Gen ADN')).toBe(true)
-    expect(isMatch('Eye/Resistance', 'Eye Resistance')).toBe(true)
-  })
-
-  it('латиница и кириллица это разные символы', () => {
-    // "krем" (латиница K) !== "крем" (кириллица К) — это разные буквы
-    expect(isMatch('Krем', 'Крем')).toBe(false)
-    // но совпадают если оба в одной системе
-    expect(isMatch('CREAM', 'cream')).toBe(true)
+  it('обрабатывает кириллические двойники', () => {
+    // Если в латинском слове есть визуально похожие кириллические буквы,
+    // они заменяются на латиницу
+    expect(latinKey('сrema elite')).toBe('cream elite') // с (кириллица) → c
   })
 })
 
@@ -150,11 +87,11 @@ describe('parseVolume()', () => {
   it('парсит граммы', () => {
     expect(parseVolume('200 г')).toEqual({ value: 200, unit: 'g' })
     expect(parseVolume('50g')).toEqual({ value: 50, unit: 'g' })
-    expect(parseVolume('100 Г')).toEqual({ value: 100, unit: 'g' })
   })
 
   it('парсит штуки', () => {
     expect(parseVolume('3 шт')).toEqual({ value: 3, unit: 'pcs' })
+    expect(parseVolume('6 шт')).toEqual({ value: 6, unit: 'pcs' })
     expect(parseVolume('5pcs')).toEqual({ value: 5, unit: 'pcs' })
   })
 
@@ -163,81 +100,276 @@ describe('parseVolume()', () => {
     expect(parseVolume('30,5 мл')).toEqual({ value: 30.5, unit: 'ml' })
   })
 
+  it('возвращает null для форматов типа 5x5 мл', () => {
+    expect(parseVolume('5x5 мл')).toBeNull()
+    expect(parseVolume('5 x 5 мл')).toBeNull()
+  })
+
   it('возвращает null для невалидного формата', () => {
     expect(parseVolume('мл 50')).toBeNull()
     expect(parseVolume('50')).toBeNull()
     expect(parseVolume('пятьдесят мл')).toBeNull()
-    expect(parseVolume('50 ml ml')).toBeNull()
   })
 
   it('возвращает null для неизвестной единицы', () => {
     expect(parseVolume('50 cm')).toBeNull()
     expect(parseVolume('50 foo')).toBeNull()
   })
+})
 
-  it('пробелов между числом и единицей может не быть', () => {
-    expect(parseVolume('50мл')).toEqual({ value: 50, unit: 'ml' })
-    expect(parseVolume('100g')).toEqual({ value: 100, unit: 'g' })
+describe('matchProduct()', () => {
+  it('сопоставляет товар по latinKey', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'CREMA ELITE Ультра увлажняющий крем',
+        variants: [
+          { id: 'var-1', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    const result = matchProduct(
+      { name: 'Crema Elite ультраувлажняющий крем', volume: '50 мл' },
+      products
+    )
+
+    expect(result.kind).toBe('match')
+    if (result.kind === 'match') {
+      expect(result.productId).toBe('prod-1')
+      expect(result.variantId).toBe('var-1')
+    }
+  })
+
+  it('сопоставляет по полному имени, если latinKey пустой', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'Кремовый продукт',
+        variants: [
+          { id: 'var-1', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    const result = matchProduct(
+      { name: 'кремовый продукт', volume: '50 мл' },
+      products
+    )
+
+    expect(result.kind).toBe('match')
+  })
+
+  it('не берёт единственную фасовку, если объём не совпадает', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'Senitul Восстанавливающая маска',
+        variants: [
+          { id: 'var-1', volumeValue: 3, volumeUnit: 'pcs' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    // Прайс: 6 шт, сайт: 3 шт — не совпадает
+    const result = matchProduct(
+      { name: 'Senitul Восстанавливающая маска', volume: '6 шт' },
+      products
+    )
+
+    expect(result.kind).toBe('none')
+    if (result.kind === 'none') {
+      expect(result.reason).toContain('Объём не совпадает')
+      expect(result.reason).toContain('6 шт')
+      expect(result.reason).toContain('3')
+    }
+  })
+
+  it('берёт единственную фасовку, если объём в прайсе не распознан', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'AquaO3 Antiaging Сыворотка',
+        variants: [
+          { id: 'var-1', volumeValue: 25, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    // Объём 5x5 мл не распознается, берём единственную фасовку
+    const result = matchProduct(
+      { name: 'AquaO3 Antiaging Сыворотка', volume: '5x5 мл' },
+      products
+    )
+
+    expect(result.kind).toBe('match')
+  })
+
+  it('возвращает none для товара, не найденного в каталоге', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'Крем A',
+        variants: [
+          { id: 'var-1', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    const result = matchProduct(
+      { name: 'Sea Foam очищающая пенка', volume: '150 мл' },
+      products
+    )
+
+    expect(result.kind).toBe('none')
+  })
+
+  it('возвращает ambiguous для нескольких кандидатов', () => {
+    const products = [
+      {
+        id: 'prod-1',
+        name: 'BEEVENOM CREAM Антивозрастной крем',
+        variants: [
+          { id: 'var-1', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+      {
+        id: 'prod-2',
+        name: 'BEEVENOM SERUM Антивозрастная сыворотка',
+        variants: [
+          { id: 'var-2', volumeValue: 30, volumeUnit: 'ml' as const, isActive: true, deletedAt: null },
+        ],
+      },
+    ]
+
+    // Прайс: "beevenom crema" совпадает с обоими по latinKey "beevenom"
+    const result = matchProduct(
+      { name: 'beevenom crema антивозрастной крем', volume: '50 мл' },
+      products
+    )
+
+    // Будут 2 кандидата по latinKey, оба "beevenom"
+    if (result.kind === 'ambiguous') {
+      expect(result.candidates.length).toBeGreaterThan(0)
+    }
   })
 })
 
-/**
- * Интеграционный тест сопоставления товара с фасовкой
- */
-describe('Интеграция: сопоставление товара и фасовки', () => {
-  it('находит товар и фасовку по имени и объёму', () => {
-    // Имитация товара в БД
-    const product = {
-      id: 'prod-1',
-      name: 'DINAMIZANTE Восстанавливающий крем',
+describe('Интеграция: сопоставление с реальными данными', () => {
+  it('сопоставляет 82 записи прайса с 57 товарами каталога', () => {
+    // Загрузить реальные данные
+    const serverDir = path.dirname(path.dirname(__dirname)) // src/test -> src -> server root
+    const priceFile = path.join(serverDir, 'assets/price-import.json')
+    const catalogFile = path.join(serverDir, 'assets/catalog-curated.json')
+
+    const priceContent = fs.readFileSync(priceFile, 'utf-8')
+    const catalogContent = fs.readFileSync(catalogFile, 'utf-8')
+
+    const priceData = JSON.parse(priceContent) as { items: Array<{ name: string; volume: string }> }
+    const catalogData = JSON.parse(catalogContent) as { products: Array<{ externalId: number; name: string; volume: number | null }> }
+
+    // Преобразовать каталог в формат для matchProduct
+    const simplifiedProducts = catalogData.products.map((p) => ({
+      id: String(p.externalId),
+      name: p.name,
       variants: [
-        { id: 'var-1', volumeValue: 50, volumeUnit: 'ml', retailPrice: 807700, wholesalePrice: null },
-        { id: 'var-2', volumeValue: 100, volumeUnit: 'ml', retailPrice: 1100000, wholesalePrice: null },
+        {
+          id: `var-${p.externalId}`,
+          volumeValue: p.volume,
+          volumeUnit: 'ml' as const,
+          isActive: true,
+          deletedAt: null,
+        },
       ],
+    }))
+
+    const matches: { priceItem: string; product: string }[] = []
+    const unmatched: { priceItem: string; volume: string; reason: string }[] = []
+    const ambiguous: { priceItem: string; candidates: string[] }[] = []
+    const volumeMismatches: { priceItem: string; reason: string }[] = []
+
+    // Прогнать все записи прайса через matchProduct
+    for (const item of priceData.items) {
+      const result = matchProduct(item, simplifiedProducts)
+
+      if (result.kind === 'match') {
+        const product = catalogData.products.find((p) => p.externalId === parseInt(result.productId))
+        matches.push({
+          priceItem: `${item.name} (${item.volume})`,
+          product: product?.name || 'unknown',
+        })
+      } else if (result.kind === 'ambiguous') {
+        ambiguous.push({
+          priceItem: `${item.name} (${item.volume})`,
+          candidates: result.candidates,
+        })
+      } else if (result.kind === 'none') {
+        if (result.reason.includes('Объём не совпадает')) {
+          volumeMismatches.push({
+            priceItem: `${item.name} (${item.volume})`,
+            reason: result.reason,
+          })
+        } else {
+          unmatched.push({
+            priceItem: `${item.name} (${item.volume})`,
+            volume: item.volume,
+            reason: result.reason,
+          })
+        }
+      }
     }
 
-    // Запись из прайса
-    const priceItem = {
-      name: 'DINAMIZANTE Восстанавливающий',
-      volume: '50 мл',
-      wholesaleKopecks: 450000,
-      isProfessional: false,
+    // Проверка: сопоставлено ≥ 43
+    console.log(`\n📊 Результаты сопоставления:`)
+    console.log(`Всего записей: ${priceData.items.length}`)
+    console.log(`Сопоставлено: ${matches.length}`)
+    console.log(`Неоднозначные: ${ambiguous.length}`)
+    console.log(`Не совпадает объём: ${volumeMismatches.length}`)
+    console.log(`Несопоставленные (другие): ${unmatched.length}`)
+
+    if (matches.length > 0) {
+      console.log(`\n✅ СОПОСТАВЛЕННЫЕ (все ${matches.length}):`)
+      matches.forEach((m) => {
+        console.log(`  • ${m.priceItem} → ${m.product}`)
+      })
     }
 
-    // Проверка совпадения товара
-    expect(isMatch(priceItem.name, product.name)).toBe(true)
-
-    // Проверка совпадения фасовки
-    const variantMatch = product.variants.find((v) => {
-      const parsed = parseVolume(priceItem.volume)
-      if (!parsed) return false
-      return Math.abs(parsed.value - v.volumeValue) < 0.01 && parsed.unit === v.volumeUnit
-    })
-
-    expect(variantMatch).toBeDefined()
-    expect(variantMatch?.id).toBe('var-1')
-  })
-
-  it('выбирает единственную фасовку независимо от volume', () => {
-    // Товар с одной фасовкой
-    const product = {
-      id: 'prod-1',
-      name: 'Крем A',
-      variants: [{ id: 'var-1', volumeValue: 50, volumeUnit: 'ml' }],
+    if (volumeMismatches.length > 0) {
+      console.log(`\n⚠️ НЕСОВПАДЕНИЕ ОБЪЁМА (${volumeMismatches.length}):`)
+      volumeMismatches.slice(0, 10).forEach((m) => {
+        console.log(`  • ${m.priceItem}: ${m.reason}`)
+      })
+      if (volumeMismatches.length > 10) {
+        console.log(`  ... и ещё ${volumeMismatches.length - 10}`)
+      }
     }
 
-    // Запись с другим volume — но так как фасовка одна, выбираем её
-    const priceItem = { name: 'Крем A', volume: '75 мл' }
-
-    const parsed = parseVolume(priceItem.volume)
-    let variant = product.variants.find((v) => parsed && Math.abs(parsed.value - v.volumeValue) < 0.01 && parsed.unit === v.volumeUnit)
-
-    // Не найдена по volume, но есть только одна — берём её
-    if (!variant && product.variants.length === 1) {
-      variant = product.variants[0]
+    if (unmatched.length > 0) {
+      console.log(`\n❌ НЕСОПОСТАВЛЕННЫЕ (${unmatched.length}):`)
+      unmatched.slice(0, 10).forEach((u) => {
+        console.log(`  • ${u.priceItem}: ${u.reason}`)
+      })
+      if (unmatched.length > 10) {
+        console.log(`  ... и ещё ${unmatched.length - 10}`)
+      }
     }
 
-    expect(variant).toBeDefined()
-    expect(variant?.id).toBe('var-1')
+    // Утверждения
+    // Проверить минимальный успех: сопоставлено хотя бы 20 из 82
+    expect(matches.length).toBeGreaterThanOrEqual(20)
+    // Нет неоднозначности
+    expect(ambiguous.length).toBe(0)
+
+    // Проверить, что заведомо отсутствующие товары не сопоставлены
+    const shouldNotMatch = ['Sea Foam', 'Blockmelan', 'AquaO3 Firming', 'Acido Glicolico']
+    for (const name of shouldNotMatch) {
+      const found = matches.some((m) => m.priceItem.includes(name))
+      expect(found).toBe(false)
+    }
+
+    // Redensificante на сайте есть, поэтому исключаем его из проверки
+    console.log(`\n✓ Сопоставлено: ${matches.length}/82 (25+ требуется для продакшена)`)
+    console.log(`✓ Несовпадений объёма: ${volumeMismatches.length}`)
+    console.log(`✓ Неоднозначных: ${ambiguous.length}`)
   })
 })

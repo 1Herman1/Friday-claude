@@ -1,8 +1,9 @@
-import { PrismaClient, type VolumeUnit } from '../../../../node_modules/.prisma/ps-client/index.js'
+import { PrismaClient } from '../../../../node_modules/.prisma/ps-client/index.js'
 import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
 import { recalcProductPrices } from '../src/services/product-prices.js'
+import { matchProduct } from '../src/lib/import-prices.match.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -32,66 +33,6 @@ interface MatchResult {
     isProfessional: { old: boolean; new: boolean }
     retailPriceMismatch?: { old: number; new: number }
   }
-}
-
-// Нормализация: нижний регистр, ё→е, убрать кавычки и спецсимволы, лишние пробелы
-function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ё/g, 'е')
-    .replace(/[«»""]/g, '') // кавычки
-    .replace(/[^\p{L}\p{N}\s]/gu, ' ') // спецсимволы (с поддержкой Unicode букв и цифр)
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
-// Проверка совпадения:
-// 1. Точное равенство нормализованного имени
-// 2. Нормализованное имя из прайса является префиксом товара
-// 3. Нормализованное имя товара является префиксом прайса (слова в прайсе могут быть более полными)
-function isMatch(priceItemName: string, productName: string): boolean {
-  const normPrice = normalize(priceItemName)
-  const normProduct = normalize(productName)
-
-  if (normPrice === normProduct) return true
-  if (normProduct.startsWith(normPrice)) return true
-  if (normPrice.startsWith(normProduct)) return true
-
-  return false
-}
-
-// Парсинг объёма: извлечение числа и единицы из строки типа "50 мл"
-function parseVolume(volumeStr: string): { value: number; unit: VolumeUnit } | null {
-  const match = volumeStr.match(/^(\d+(?:[.,]\d+)?)\s*([а-яa-z]+)$/i)
-  if (!match) return null
-
-  const value = parseFloat(match[1].replace(',', '.'))
-  const unitStr = match[2].toLowerCase()
-
-  let unit: VolumeUnit
-  if (unitStr === 'мл' || unitStr === 'ml') {
-    unit = 'ml'
-  } else if (unitStr === 'г' || unitStr === 'g') {
-    unit = 'g'
-  } else if (unitStr === 'шт' || unitStr === 'pcs') {
-    unit = 'pcs'
-  } else {
-    return null
-  }
-
-  return { value, unit }
-}
-
-// Сопоставление фасовки: сравнивают число и единицу
-function variantMatches(importVolume: string, variant: { volumeValue: any; volumeUnit: VolumeUnit }): boolean {
-  const parsed = parseVolume(importVolume)
-  if (!parsed) return false
-
-  // Сравнение числового значения (с допуском на ошибки округления)
-  const importValue = parseFloat(parsed.value.toFixed(2))
-  const variantValue = parseFloat(variant.volumeValue.toString())
-
-  return Math.abs(importValue - variantValue) < 0.01 && parsed.unit === variant.volumeUnit
 }
 
 async function main() {
@@ -150,85 +91,80 @@ async function main() {
     const ambiguous: { item: PriceImportItem; candidates: string[] }[] = []
     const retailMismatches: { product: string; variant: string; item: PriceImportItem; old: number; new: number }[] = []
 
+    // Преобразовать товары в формат для matchProduct
+    const simplifiedProducts = products.map((p) => ({
+      id: p.id,
+      name: p.name,
+      variants: p.variants.map((v) => ({
+        id: v.id,
+        volumeValue: v.volumeValue ? (typeof v.volumeValue === 'number' ? v.volumeValue : (v.volumeValue as any).toNumber?.()) : null,
+        volumeUnit: v.volumeUnit,
+        isActive: v.isActive,
+        deletedAt: v.deletedAt,
+      })),
+    }))
+
     // Сопоставление
     for (const item of importData.items) {
-      const candidates = products.filter((p) => isMatch(item.name, p.name))
+      const result = matchProduct(item, simplifiedProducts)
 
-      if (candidates.length === 0) {
-        unmatched.push({ item, reason: 'Товар не найден в каталоге' })
-        continue
-      }
+      if (result.kind === 'match') {
+        const product = products.find((p) => p.id === result.productId)
+        const variant = product?.variants.find((v) => v.id === result.variantId)
 
-      if (candidates.length > 1) {
+        if (!product || !variant) continue
+
+        // Проверка расхождения в розничной цене
+        const retailMismatch =
+          item.retailKopecks !== null && item.retailKopecks !== variant.retailPrice
+            ? { old: variant.retailPrice, new: item.retailKopecks }
+            : undefined
+
+        if (retailMismatch) {
+          retailMismatches.push({
+            product: product.name,
+            variant: item.volume,
+            item,
+            old: retailMismatch.old,
+            new: retailMismatch.new,
+          })
+        }
+
+        matches.push({
+          product: { id: product.id, name: product.name },
+          variant: { id: variant.id, volumeLabel: item.volume },
+          item,
+          changes: {
+            wholesalePrice: { old: variant.wholesalePrice, new: item.wholesaleKopecks },
+            isProfessional: { old: variant.isProfessional, new: item.isProfessional },
+            ...(retailMismatch && { retailPriceMismatch: retailMismatch }),
+          },
+        })
+      } else if (result.kind === 'ambiguous') {
         ambiguous.push({
           item,
-          candidates: candidates.map((c) => `${c.name} (${c.id})`),
+          candidates: result.candidates,
         })
-        continue
-      }
-
-      const product = candidates[0]
-
-      // Выбор фасовки
-      let variant = product.variants.find((v) => variantMatches(item.volume, v))
-
-      // Если фасовка одна — брать её независимо от volume
-      if (!variant && product.variants.length === 1) {
-        variant = product.variants[0]
-      }
-
-      if (!variant) {
+      } else if (result.kind === 'none') {
         unmatched.push({
           item,
-          reason: `Товар найден (${product.name}), но нет фасовки ${item.volume}`,
-        })
-        continue
-      }
-
-      // Проверка расхождения в розничной цене
-      const retailMismatch =
-        item.retailKopecks !== null && item.retailKopecks !== variant.retailPrice
-          ? { old: variant.retailPrice, new: item.retailKopecks }
-          : undefined
-
-      if (retailMismatch) {
-        retailMismatches.push({
-          product: product.name,
-          variant: item.volume,
-          item,
-          old: retailMismatch.old,
-          new: retailMismatch.new,
+          reason: result.reason,
         })
       }
-
-      matches.push({
-        product: { id: product.id, name: product.name },
-        variant: { id: variant.id, volumeLabel: item.volume },
-        item,
-        changes: {
-          wholesalePrice: { old: variant.wholesalePrice, new: item.wholesaleKopecks },
-          isProfessional: { old: variant.isProfessional, new: item.isProfessional },
-          ...(retailMismatch && { retailPriceMismatch: retailMismatch }),
-        },
-      })
     }
 
-    // Вывод таблицы сопоставлений
+    // Вывод таблицы сопоставлений (ВСЕ строки)
     if (matches.length > 0) {
-      console.log('✅ СОПОСТАВЛЕНО (вывод первых 10):')
+      console.log(`✅ СОПОСТАВЛЕНО (всего ${matches.length}):`)
       console.table(
-        matches.slice(0, 10).map((m) => ({
+        matches.map((m) => ({
           'Товар': m.product.name,
           'Объём': m.variant.volumeLabel,
           'Оптовая цена': `${m.changes.wholesalePrice.old || '—'} → ${m.changes.wholesalePrice.new} ₽`,
           'Pro': `${m.changes.isProfessional.old} → ${m.changes.isProfessional.new}`,
         })),
       )
-      if (matches.length > 10) {
-        console.log(`... и ещё ${matches.length - 10}\n`)
-      } else {
-        console.log()
-      }
+      console.log()
     }
 
     // Вывод несопоставленных
@@ -254,14 +190,10 @@ async function main() {
     if (retailMismatches.length > 0) {
       console.log(`💰 РАСХОЖДЕНИЯ РОЗНИЧНОЙ ЦЕНЫ (${retailMismatches.length}):`)
       console.log('   (розничную цену не меняем — это отдельное решение)\n')
-      retailMismatches.slice(0, 5).forEach((m) => {
+      retailMismatches.forEach((m) => {
         console.log(`  • ${m.product} (${m.variant}): ${m.old} ₽ → ${m.new} ₽ (прайс)`)
       })
-      if (retailMismatches.length > 5) {
-        console.log(`  ... и ещё ${retailMismatches.length - 5}\n`)
-      } else {
-        console.log()
-      }
+      console.log()
     }
 
     // Сводка
