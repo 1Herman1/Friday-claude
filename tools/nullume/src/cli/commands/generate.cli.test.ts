@@ -5,9 +5,37 @@ import os from "node:os";
 import path from "node:path";
 import { UsageError } from "../../core/errors.js";
 
-const EXPENSIVE_MODEL = "kling/v2-1-master-text-to-video"; // ~$1.6 в data/prices.json
-const CHEAP_MODEL = "google/imagen4-fast"; // < $1, точная цена
-const UNPRICED_MODEL = "google/nano-banana"; // нет записи в data/prices.json
+// Модели берём из каталога по свойствам, а не по имени: каталог обновляется
+// из живой документации, и прибитые id ломали эти тесты на каждом обновлении.
+import { loadCatalog } from "../../core/catalog.js";
+import type { ModelInfo } from "../../core/catalog.js";
+
+const catalogModels = await loadCatalog();
+
+/** Модели, которым для задачи хватает одного промпта */
+function needsOnlyPrompt(m: ModelInfo): boolean {
+  const prompt = m.meta?.promptField ?? "prompt";
+  const defaults = m.meta?.defaults ?? {};
+  return (m.meta?.required ?? []).every((field) => field === prompt || field in defaults);
+}
+
+function pickModel(predicate: (m: ModelInfo) => boolean, what: string): string {
+  const found = catalogModels.find((m) => needsOnlyPrompt(m) && predicate(m));
+  if (!found) throw new Error(`В каталоге нет модели: ${what}`);
+  return found.id;
+}
+
+/** Дороже $1 — включает шлюз подтверждения */
+const EXPENSIVE_MODEL = pickModel((m) => (m.price?.usdMax ?? 0) >= 1, "дороже $1");
+/** Дешевле $1 с точной ценой — шлюз не включается */
+const CHEAP_MODEL = pickModel(
+  (m) => m.price !== undefined && m.price.usdMax < 1 && m.price.approximate === false,
+  "дешевле $1 с точной ценой"
+);
+/** Без цены в каталоге — оценка неизвестна */
+const UNPRICED_MODEL = pickModel((m) => m.price === undefined, "без цены");
+/** Принимает картинку на вход */
+const IMAGE_MODEL_ID = pickModel((m) => Boolean(m.meta?.imageField), "с полем изображения");
 
 let freshCounter = 0;
 
@@ -202,7 +230,16 @@ test("--set: отрицательные числа и экспонента ос�
   assert.strictEqual(job.input.scale, "1e3");
 });
 
-const IMAGE_MODEL = "kling/v2-1-master-image-to-video"; // imageField: image_url
+const IMAGE_MODEL = IMAGE_MODEL_ID;
+const imageModelInfo = catalogModels.find((m) => m.id === IMAGE_MODEL_ID)!;
+const IMAGE_FIELD = imageModelInfo.meta!.imageField!;
+const IMAGE_IS_LIST = Boolean(imageModelInfo.meta!.imageList);
+
+/** Значение, которое модель ждёт в своём поле картинки: строка или список */
+function imageValue(job: { input: Record<string, unknown> }): unknown {
+  const value = job.input[IMAGE_FIELD];
+  return IMAGE_IS_LIST && Array.isArray(value) ? value[0] : value;
+}
 
 function writePngInCwd(name: string): string {
   const file = path.join(process.cwd(), name);
@@ -226,7 +263,7 @@ test("--image: png в рабочей директории загружается
 
     assert.strictEqual(res.error, undefined, `неожиданная ошибка: ${res.error}`);
     const job = readJob(res);
-    assert.strictEqual(job.input.image_url, "https://cdn.example.com/uploaded.png");
+    assert.strictEqual(imageValue(job), "https://cdn.example.com/uploaded.png");
     assert(res.fetchUrls.some((u) => u.includes("file-stream-upload")), res.fetchUrls.join(","));
   } finally {
     fs.rmSync(file, { force: true });
@@ -257,7 +294,7 @@ test("--image: http-URL передаётся как есть, без загру�
   );
 
   assert.strictEqual(res.error, undefined, `неожиданная ошибка: ${res.error}`);
-  assert.strictEqual(readJob(res).input.image_url, "https://example.com/a.png");
+  assert.strictEqual(imageValue(readJob(res)), "https://example.com/a.png");
   assert(!res.fetchUrls.some((u) => u.includes("file-stream-upload")));
 });
 

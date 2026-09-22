@@ -180,15 +180,16 @@ export async function createJobTask(
     }
   }
 
+  // Значения по умолчанию идут ДО проверки: обязательное поле, у которого
+  // каталог знает значение, не должно требовать ручного --set.
+  for (const [key, value] of Object.entries(modelInfo.meta.defaults)) {
+    if (!(key in finalInput)) finalInput[key] = value;
+  }
+
   // Validate required
   const missing = modelInfo.meta.required.filter((f) => !(f in finalInput));
   if (missing.length > 0) {
     throw new Error(`Missing required fields: ${missing.join(", ")}`);
-  }
-
-  // Apply defaults
-  for (const [key, value] of Object.entries(modelInfo.meta.defaults)) {
-    if (!(key in finalInput)) finalInput[key] = value;
   }
 
   // Estimate

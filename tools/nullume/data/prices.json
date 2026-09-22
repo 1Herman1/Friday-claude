@@ -1,7 +1,55 @@
 {
-  "verified_at": "2026-09-20T11:09:12.838Z",
+  "verified_at": "2026-09-22T15:21:02.503Z",
   "usd_per_credit": 0.005,
   "records": [
+    {
+      "id": null,
+      "category": "image",
+      "creditsMin": 8,
+      "creditsMax": 8,
+      "usdMin": 0.04,
+      "usdMax": 0.04,
+      "description": "Qwen-Image-2.1, image to image, 2K",
+      "unit": "per image",
+      "provider": "Alibaba",
+      "approximate": false
+    },
+    {
+      "id": null,
+      "category": "image",
+      "creditsMin": 4,
+      "creditsMax": 4,
+      "usdMin": 0.02,
+      "usdMax": 0.02,
+      "description": "Qwen-Image-2.1, image to image, 1K",
+      "unit": "per image",
+      "provider": "Alibaba",
+      "approximate": false
+    },
+    {
+      "id": null,
+      "category": "image",
+      "creditsMin": 8,
+      "creditsMax": 8,
+      "usdMin": 0.04,
+      "usdMax": 0.04,
+      "description": "Qwen-Image-2.1, text to image, 2K",
+      "unit": "per image",
+      "provider": "Alibaba",
+      "approximate": false
+    },
+    {
+      "id": null,
+      "category": "image",
+      "creditsMin": 4,
+      "creditsMax": 4,
+      "usdMin": 0.02,
+      "usdMax": 0.02,
+      "description": "Qwen-Image-2.1, text to image, 1K",
+      "unit": "per image",
+      "provider": "Alibaba",
+      "approximate": false
+    },
     {
       "id": "gpt-image-2-5-sunburst-image-to-image",
       "category": "image",

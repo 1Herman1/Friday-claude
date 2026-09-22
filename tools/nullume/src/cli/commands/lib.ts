@@ -59,28 +59,47 @@ libCmd
       const modelType = options.model === "siglip" ? "siglip" : "clip";
       await mergeConfig({ library: { embedModel: modelType } });
 
-      // Получить фактический ID модели и сохранить в БД
-      const embedder = await getEmbedder({ model: modelType as "clip" | "siglip" });
-      if (embedder) {
-        store.setMeta("embed_model", embedder.model);
-      }
-
-      emit(flags, { data: { dirs: [libDir, origDir, prevDir], model: modelType, db: dbPath } }, () => {
-        return `✓ Библиотека инициализирована\n  Каталоги: ${libDir}\n  Модель: ${modelType}\n  БД: ${dbPath}`;
-      });
-
-      // Загрузить модели если требуется
-      if (!options["skip-models"]) {
-        const embedder = await getEmbedder({ model: modelType as "clip" | "siglip" });
-        if (embedder === null) {
-          stderr.write(modelNotInstalledHint() + "\n");
-          // Продолжить с exit 0
-        } else {
-          emit(flags, { data: { model: embedder.model, dim: embedder.dim } }, () => {
-            return `✓ Модели для ${embedder.model} готовы`;
+      // Скачать веса модели: без этого эмбеддинги не заведутся, потому что
+      // вне init удалённая загрузка выключена намеренно.
+      let modelId: string | undefined;
+      if (!options.skipModels) {
+        try {
+          const downloaded = await downloadModels({
+            model: modelType as "clip" | "siglip",
+            log: (msg) => {
+              if (!flags.quiet && !flags.json) stderr.write(`  ${msg}\n`);
+            },
           });
+          modelId = downloaded.model;
+        } catch (e) {
+          const message = (e as Error).message;
+          if (/@huggingface\/transformers/.test(message)) {
+            stderr.write(modelNotInstalledHint() + "\n");
+          } else {
+            throw e;
+          }
         }
       }
+
+      // Сохранить фактический ID модели, если она доступна
+      if (!modelId) {
+        const embedder = await getEmbedder({ model: modelType as "clip" | "siglip" }).catch(() => null);
+        modelId = embedder?.model;
+      }
+      if (modelId) {
+        store.setMeta("embed_model", modelId);
+      }
+
+      emit(
+        flags,
+        { data: { dirs: [libDir, origDir, prevDir], model: modelId ?? modelType, db: dbPath } },
+        () => {
+          const modelLine = modelId
+            ? `  Модель: ${modelId}`
+            : `  Модель: ${modelType} (веса не загружены — поиск по смыслу и кластеры недоступны)`;
+          return `✓ Библиотека инициализирована\n  Каталоги: ${libDir}\n${modelLine}\n  БД: ${dbPath}`;
+        }
+      );
     } catch (error) {
       throw error;
     }
@@ -187,7 +206,7 @@ libCmd
         kind = "local-only";
         importer = await getImporter(source, kind);
         // Проверить гейт
-        if (!options["dry-run"]) {
+        if (!options.dryRun) {
           assertLocalOnlyAllowed(config, process.env);
         } else {
           stderr.write(LOCAL_ONLY_WARNING + "\n");
@@ -228,7 +247,7 @@ libCmd
       };
 
       let importRunId: string | null = null;
-      if (!options["dry-run"]) {
+      if (!options.dryRun) {
         importRunId = sqliteStore.beginImport(source, kind, (options.query as string) || "");
       }
 
@@ -242,7 +261,7 @@ libCmd
         config,
         env: process.env,
       })) {
-        if (options["dry-run"]) {
+        if (options.dryRun) {
           // Только печать без cookie
           const output = { ...candidate };
           delete (output as any).cookies;
@@ -272,7 +291,7 @@ libCmd
         }
       }
 
-      if (options["dry-run"]) {
+      if (options.dryRun) {
         emit(flags, { data: { mode: "dry-run", candidates: results.length } }, () => {
           return `Режим сухой прогон: ${results.length} кандидатов`;
         });
@@ -337,7 +356,7 @@ libCmd
           filePath: path.resolve(file),
           source: (options.source as string) || "manual",
           sourceRef: file,
-          pageUrl: options["page-url"] as string | undefined,
+          pageUrl: options.pageUrl as string | undefined,
           tags: (options.tag as string[]) || [],
           meta: {},
         };
@@ -673,9 +692,9 @@ libCmd
 
       const result = clusterLibrary(store, {
         k: options.k ? parseInt(options.k as string, 10) : undefined,
-        kMin: parseInt(options["k-min"] as string, 10),
-        kMax: parseInt(options["k-max"] as string, 10),
-        minSize: parseInt(options["min-size"] as string, 10),
+        kMin: parseInt(options.kMin as string, 10),
+        kMax: parseInt(options.kMax as string, 10),
+        minSize: parseInt(options.minSize as string, 10),
         seed: parseInt(options.seed as string, 10),
         model: embedder.model,
       });
