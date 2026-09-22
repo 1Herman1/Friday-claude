@@ -40,7 +40,7 @@ export function normalize(text: string): string {
 }
 
 // Замена кириллических двойников на латиницу (включая Т кириллическую → T)
-function replaceCyrillicLookalikes(text: string): string {
+export function replaceCyrillicLookalikes(text: string): string {
   const extended: Record<string, string> = {
     ...CYRILLIC_TO_LATIN,
     'Т': 'T', // Кириллическая Т → латинская T (добавить, если не в таблице)

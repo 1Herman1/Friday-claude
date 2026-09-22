@@ -3,37 +3,10 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
 import { recalcProductPrices } from '../src/services/product-prices.js'
+import { NEEDS_MAP, SKIN_TYPES_MAP } from '../src/lib/catalog-seed-maps.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const prisma = new PrismaClient()
-
-// Таблица соответствия keyNeeds → Concern
-const NEEDS_MAP: Record<string, Concern> = {
-  'Увлажнение': 'hydration',
-  'Укрепление и лифтинг': 'firming',
-  'Регенерация': 'regeneration',
-  'Придание сияния коже': 'radiance',
-  'Выравнивание цвета и рельефа': 'pigmentation',
-  'Себорегуляция': 'sebum_control',
-  'Глубокое очищение и детоксикация': 'cleansing',
-  'Гигиена': 'hygiene',
-  'Снятие признаков раздражения кожи': 'sensitivity',
-  'Повышение защитных свойств кожи': 'barrier',
-  'Ежедневный уход': 'daily_care',
-  'Экспресс-уход': 'express_care',
-  'Интенсивный уход': 'intensive_care',
-  'Питание': 'nourishing',
-}
-
-// Таблица skinTypes
-const SKIN_TYPES_MAP: Record<string, string[]> = {
-  'Нормальная': ['normal'],
-  'Сухая': ['dry'],
-  'Чувствительная': ['sensitive'],
-  'Жирная / Проблемная / Комбинированная': ['oily', 'combination'],
-  'Возрастная': ['mature'],
-  'Для всех типов кожи': ['all_types'],
-}
 
 async function slugify(text: string): Promise<string> {
   return text

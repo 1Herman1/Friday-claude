@@ -1,0 +1,517 @@
+{
+  "_meta": {
+    "source": "BeautyMedGroup — прайс для косметологов (xlsx)",
+    "date": "2026-09-22",
+    "note": "Кабинетные позиции (только ПРОФ или без РРЦ). Имена в стиле сайта: ЛАТИНСКОЕ ИМЯ + русское описание из прайса. Линия — по разделу листа, категория — по типу продукта в названии; пилинги/эликсиры/нейтрализатор — новая категория pilingi-i-eliksiry. Фото нет намеренно (images: []) — до материалов клиента. variantsForExisting — вторые фасовки уже существующих товаров."
+  },
+  "variantsForExisting": [
+    {
+      "article": 2020,
+      "siteName": "EMULSION HIGIENIZANTE",
+      "volume": {
+        "value": 1000,
+        "unit": "ml",
+        "label": "1000 мл"
+      },
+      "wholesaleKopecks": 950000
+    },
+    {
+      "article": 2021,
+      "siteName": "TONICO FACIAL EQUILIBRANTE",
+      "volume": {
+        "value": 1000,
+        "unit": "ml",
+        "label": "1000 мл"
+      },
+      "wholesaleKopecks": 940000
+    },
+    {
+      "article": 2024,
+      "siteName": "CREMA ELITE",
+      "volume": {
+        "value": 200,
+        "unit": "ml",
+        "label": "200 мл"
+      },
+      "wholesaleKopecks": 1050000
+    },
+    {
+      "article": 10071,
+      "siteName": "FLUVIX",
+      "volume": {
+        "value": 30,
+        "unit": "ml",
+        "label": "30 мл"
+      },
+      "wholesaleKopecks": 820000
+    },
+    {
+      "article": 22009,
+      "siteName": "NATURAL CLEANSING MILK",
+      "volume": {
+        "value": 500,
+        "unit": "ml",
+        "label": "500 мл"
+      },
+      "wholesaleKopecks": 700000
+    }
+  ],
+  "products": [
+    {
+      "article": 2064,
+      "name": "AQUAO3 (GF) ANTIAGING Сыворотка с озоном / омолаживающий концентрат",
+      "slug": "aquao3-gf-antiaging-syvorotka-s-ozonom-omolazhivayuschiy-kontsentrat",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "антивозрастной коктейль для кожи с признаками хроно- и фотостарения\nуплотняет и подтягивает кожу, разглаживает морщины\nобновляет межклеточный состав кожи, насыщает ее кислородом\nулучшает цвет лица и качество кожи",
+      "shortDescription": "антивозрастной коктейль для кожи с признаками хроно- и фотостарения",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 5,
+        "unit": "pcs",
+        "label": "5 × 5 мл"
+      },
+      "wholesaleKopecks": 1240000
+    },
+    {
+      "article": 2063,
+      "name": "AQUA O3 WHITENING Депигментирующая сыворотка с озоном",
+      "slug": "aqua-o3-whitening-depigmentiruyuschaya-syvorotka-s-ozonom",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "Депигментирующая сыворотка с озоном",
+      "shortDescription": "Депигментирующая сыворотка с озоном",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 5,
+        "unit": "pcs",
+        "label": "5 × 5 мл"
+      },
+      "wholesaleKopecks": 1240000
+    },
+    {
+      "article": 2062,
+      "name": "AQUAO3 FIRMING Сыворотка с озоном / лифтинговый концентрат",
+      "slug": "aquao3-firming-syvorotka-s-ozonom-liftingovyy-kontsentrat",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "ревитализирует дермальный матрикс\nповышает эластичность и гладкость кожи\nустраняет дегидраатацию, гиперкертози дряблость кожи",
+      "shortDescription": "ревитализирует дермальный матрикс",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 5,
+        "unit": "pcs",
+        "label": "5 × 5 мл"
+      },
+      "wholesaleKopecks": 1060000
+    },
+    {
+      "article": 2061,
+      "name": "AQUAO3 REPAIR Сыворотка с озоном / восстанавливающий концентрат",
+      "slug": "aquao3-repair-syvorotka-s-ozonom-vosstanavlivayuschiy-kontsentrat",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "насыщает клетки кислородом\nулучшает межклеточную коммуникацию, восстанавливая кожу\nстимулирует образование коллагена, эластина, ГАГ",
+      "shortDescription": "насыщает клетки кислородом",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 5,
+        "unit": "pcs",
+        "label": "5 × 5 мл"
+      },
+      "wholesaleKopecks": 1240000
+    },
+    {
+      "article": 2060,
+      "name": "AQUAO3 LIPO Сыворотка с озоном / липолитический концентрат",
+      "slug": "aquao3-lipo-syvorotka-s-ozonom-lipoliticheskiy-kontsentrat",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "активизирует метаболизм\nускоряет расщепление жировых клеток\nвыравнивает рельеф кожи, устраняя эффект «апельсиновой корки»",
+      "shortDescription": "активизирует метаболизм",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 5,
+        "unit": "pcs",
+        "label": "5 × 5 мл"
+      },
+      "wholesaleKopecks": 810000
+    },
+    {
+      "article": 2014,
+      "name": "EGF HIDROSOLUBLE Сыворотка с Эпидермальным Фактором Роста",
+      "slug": "egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "нормализует эпидермальный гомеостаз\nоказывает регенерирующее и восстанавливающее действие\n«стирает» поверхностные морщинки",
+      "shortDescription": "нормализует эпидермальный гомеостаз",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 50,
+        "unit": "ml",
+        "label": "50 мл"
+      },
+      "wholesaleKopecks": 1100000
+    },
+    {
+      "article": 2015,
+      "name": "FGF HIDROSOLUBLE Сыворотка с Фактором Роста Фибробластов",
+      "slug": "fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "поддерживает дермальный гомеостаз, повышает жизнеспособность фибробластов\nактивизирует производство коллагена/эластина\nподтягивает и разглаживает кожу",
+      "shortDescription": "поддерживает дермальный гомеостаз, повышает жизнеспособность фибробластов",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 50,
+        "unit": "ml",
+        "label": "50 мл"
+      },
+      "wholesaleKopecks": 1100000
+    },
+    {
+      "article": 2016,
+      "name": "ACIDO HIALURONICO + PEPTIDOS HIDROSOLUBLE Сыворотка с гиалуроновой кислотой",
+      "slug": "acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoy-kislotoy",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "насыщает кожу гиалуроновой кислотой (HMW/LMW)\nподдерживает стабильно высокий уровень увлажнения\nомолаживает и разглаживает кожу",
+      "shortDescription": "насыщает кожу гиалуроновой кислотой (HMW/LMW)",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 50,
+        "unit": "ml",
+        "label": "50 мл"
+      },
+      "wholesaleKopecks": 930000
+    },
+    {
+      "article": 2017,
+      "name": "SILICIO ORGANICO + PEPTIDOS HIDROSOLUBLE Сыворотка с органическим кремнием",
+      "slug": "silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "укрепляет кожу, усиливая межклеточное взаимодействие\nрегенерирует дермальный матрикс\nвосстанавливает гладкость и упругость кожи",
+      "shortDescription": "укрепляет кожу, усиливая межклеточное взаимодействие",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 50,
+        "unit": "ml",
+        "label": "50 мл"
+      },
+      "wholesaleKopecks": 850000
+    },
+    {
+      "article": 2018,
+      "name": "VITAMINA C + PEPTIDOS HIDROSOLUBLE Сыворотка с витамином С",
+      "slug": "vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "syvorotki",
+      "description": "омолаживает и витаминизирует уставшую асфиктичную кожу\nоказывает сосудоукрепляющее и антиоксидантное действие\nосветляет, придает коже эффект сияния",
+      "shortDescription": "омолаживает и витаминизирует уставшую асфиктичную кожу",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 50,
+        "unit": "ml",
+        "label": "50 мл"
+      },
+      "wholesaleKopecks": 930000
+    },
+    {
+      "article": 2005,
+      "name": "PEELING INTENSIVO Интенсивный физико-химический пилинг",
+      "slug": "peeling-intensivo-intensivnyy-fiziko-himicheskiy-piling",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "pilingi-i-eliksiry",
+      "description": "Интенсивный физико-химический пилинг",
+      "shortDescription": "Интенсивный физико-химический пилинг",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 100,
+        "unit": "ml",
+        "label": "100 мл"
+      },
+      "wholesaleKopecks": 850000
+    },
+    {
+      "article": 2006,
+      "name": "ACIDO PIRUVICO Эксфолиирующий эликсир с пировиноградной кислотой",
+      "slug": "acido-piruvico-eksfoliiruyuschiy-eliksir-s-pirovinogradnoy-kislotoy",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "pilingi-i-eliksiry",
+      "description": "Эксфолиирующий эликсир с пировиноградной кислотой",
+      "shortDescription": "Эксфолиирующий эликсир с пировиноградной кислотой",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 30,
+        "unit": "ml",
+        "label": "30 мл"
+      },
+      "wholesaleKopecks": 650000
+    },
+    {
+      "article": 2007,
+      "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+      "slug": "acido-mandelico-eksfoliiruyuschiy-eliksir-s-mindalnoy-kislotoy",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "pilingi-i-eliksiry",
+      "description": "Эксфолиирующий эликсир с миндальной кислотой",
+      "shortDescription": "Эксфолиирующий эликсир с миндальной кислотой",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 30,
+        "unit": "ml",
+        "label": "30 мл"
+      },
+      "wholesaleKopecks": 650000
+    },
+    {
+      "article": 2008,
+      "name": "ACIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+      "slug": "acido-glicolico-eksfoliiruyuschiy-eliksir-s-glikolevoy-kislotoy",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "pilingi-i-eliksiry",
+      "description": "Эксфолиирующий эликсир с гликолевой кислотой",
+      "shortDescription": "Эксфолиирующий эликсир с гликолевой кислотой",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 30,
+        "unit": "ml",
+        "label": "30 мл"
+      },
+      "wholesaleKopecks": 650000
+    },
+    {
+      "article": 2009,
+      "name": "ACIDO LACTICO Эксфолиирующий эликсир с молочной кислотой",
+      "slug": "acido-lactico-eksfoliiruyuschiy-eliksir-s-molochnoy-kislotoy",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "pilingi-i-eliksiry",
+      "description": "Эксфолиирующий эликсир с молочной кислотой",
+      "shortDescription": "Эксфолиирующий эликсир с молочной кислотой",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 30,
+        "unit": "ml",
+        "label": "30 мл"
+      },
+      "wholesaleKopecks": 650000
+    },
+    {
+      "article": 2011,
+      "name": "ACIDO KOJICO Эксфолиирующий эликсир с койевой кислотой",
+      "slug": "acido-kojico-eksfoliiruyuschiy-eliksir-s-koyevoy-kislotoy",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "pilingi-i-eliksiry",
+      "description": "Эксфолиирующий эликсир с койевой кислотой",
+      "shortDescription": "Эксфолиирующий эликсир с койевой кислотой",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 30,
+        "unit": "ml",
+        "label": "30 мл"
+      },
+      "wholesaleKopecks": 760000
+    },
+    {
+      "article": 2012,
+      "name": "SOLUCION NEUTRALIZANTE Нейтрализующий раствор",
+      "slug": "solucion-neutralizante-neytralizuyuschiy-rastvor",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "pilingi-i-eliksiry",
+      "description": "Нейтрализующий раствор",
+      "shortDescription": "Нейтрализующий раствор",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 50,
+        "unit": "ml",
+        "label": "50 мл"
+      },
+      "wholesaleKopecks": 450000
+    },
+    {
+      "article": 2013,
+      "name": "KGF GEL ACONDICIONADOR Восстанавливающий гель для кожи",
+      "slug": "kgf-gel-acondicionador-vosstanavlivayuschiy-gel-dlya-kozhi",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "kremy-dlya-litsa-i-shei",
+      "description": "стимулирует пролиферацию и дифференцировку эпителиальных клеток\nоказывает регенерирующее, сосудоукрепляющее и антиоксидантное действие\nэффективен в борьбе с признаками фото- и хроностарения",
+      "shortDescription": "стимулирует пролиферацию и дифференцировку эпителиальных клеток",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 200,
+        "unit": "ml",
+        "label": "200 мл"
+      },
+      "wholesaleKopecks": 920000
+    },
+    {
+      "article": 2143,
+      "name": "ADVANCE REPAIR Обновляющий крем",
+      "slug": "advance-repair-obnovlyayuschiy-krem",
+      "brand": "isseimi",
+      "line": "isseimi-base",
+      "category": "kremy-dlya-litsa-i-shei",
+      "description": "укрепляет и увлажняет кожу, насыщает кислородом\nстимулирует выработку коллагена, эластина и гликопротеинов\nконтролирует выработку сального секрета",
+      "shortDescription": "укрепляет и увлажняет кожу, насыщает кислородом",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 200,
+        "unit": "ml",
+        "label": "200 мл"
+      },
+      "wholesaleKopecks": 1100000
+    },
+    {
+      "article": 2032,
+      "name": "MASCARILLA ATP + ALABASTRO «алебастровая» маска с АТФ",
+      "slug": "mascarilla-atp-alabastro-alebastrovaya-maska-s-atf",
+      "brand": "isseimi",
+      "line": "isseimi-md",
+      "category": "maski",
+      "description": "насыщает кожу энергией, поддерживая ее основные биологические функции\nактивизирует клеточный метаболизм и ферментативные процессы\nповышает тонус кожи и разглаживает морщины\nвосстанавливает здоровый внешний вид кожи",
+      "shortDescription": "насыщает кожу энергией, поддерживая ее основные биологические функции",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 200,
+        "unit": "ml",
+        "label": "200 мл"
+      },
+      "wholesaleKopecks": 920000
+    },
+    {
+      "article": 22002,
+      "name": "MASCARILLA PEEL OFF VITAMINA C Маска с витамином С / альгинатная",
+      "slug": "mascarilla-peel-off-vitamina-c-maska-s-vitaminom-s-alginatnaya",
+      "brand": "isseimi",
+      "line": "isseimi-md",
+      "category": "maski",
+      "description": "увлажняет и выравнивает стрессовую, уставшую кожу\nуплотняет и подтягивае, придает коже здоровое сияние",
+      "shortDescription": "увлажняет и выравнивает стрессовую, уставшую кожу",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 200,
+        "unit": "ml",
+        "label": "200 мл"
+      },
+      "wholesaleKopecks": 780000
+    },
+    {
+      "article": 22003,
+      "name": "CHARCOAL MASK Маска с угольным порошком / альгинатная",
+      "slug": "charcoal-mask-maska-s-ugolnym-poroshkom-alginatnaya",
+      "brand": "isseimi",
+      "line": "isseimi-md",
+      "category": "maski",
+      "description": "увлажняет и детоксицирует кожу\nуспокаивает, снимает раздражение\nоказывает антиоксидантное и противовоспалительное действием (акне, розацеа)",
+      "shortDescription": "увлажняет и детоксицирует кожу",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 200,
+        "unit": "ml",
+        "label": "200 мл"
+      },
+      "wholesaleKopecks": 780000
+    },
+    {
+      "article": 22001,
+      "name": "K&B BUTTER CREAM Крем с маслами баобаба и карите для базового закрытия процедуры и массажа",
+      "slug": "k-b-butter-cream-krem-s-maslami-baobaba-i-karite-dlya-bazovogo-zakrytiya-protsedury-i-massazha",
+      "brand": "isseimi",
+      "line": "isseimi-nat-collection",
+      "category": "kremy-dlya-litsa-i-shei",
+      "description": "глубоко питает и увлажняет ткани\nразглаживает морщины и регенерирует кожу, скомпроментированную экспозом-факторами",
+      "shortDescription": "глубоко питает и увлажняет ткани",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 300,
+        "unit": "ml",
+        "label": "300 мл"
+      },
+      "wholesaleKopecks": 770000
+    },
+    {
+      "article": 22010,
+      "name": "ORANGE ESENTIAL OIL Цитрусовое масло, чистое эфирное масло",
+      "slug": "orange-esential-oil-tsitrusovoe-maslo-chistoe-efirnoe-maslo",
+      "brand": "isseimi",
+      "line": "isseimi-nat-collection",
+      "category": "masla",
+      "description": "Работает в 3-х основных направлениях:\nнормализует работу сальных желез, предотвращая акне\nингибирует тирозиназу, осветляя кожу\nрегенерирует кожу, уменьшая признаки старения",
+      "shortDescription": "нормализует работу сальных желез, предотвращая акне",
+      "skinTypes": [
+        "Для всех типов кожи"
+      ],
+      "volume": {
+        "value": 15,
+        "unit": "ml",
+        "label": "15 мл"
+      },
+      "wholesaleKopecks": 320000
+    }
+  ]
+}

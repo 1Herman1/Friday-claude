@@ -13,6 +13,7 @@
     "migrate:deploy": "prisma migrate deploy",
     "seed": "NODE_ENV=development tsx prisma/seed.ts",
     "import:prices": "tsx prisma/import-prices.ts",
+    "import:pro-products": "tsx prisma/import-pro-products.ts",
     "studio": "prisma studio",
     "test": "vitest run",
     "test:watch": "vitest",

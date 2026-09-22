@@ -196,6 +196,15 @@ jobs:
               echo "В каталоге уже $PRODUCTS товаров — сид пропущен."
             fi
 
+            echo "==> Цены и кабинетные позиции из прайса"
+            # Оба скрипта идемпотентны: на живой базе повтор ничего не меняет,
+            # а установка с нуля без них получила бы каталог без оптовых цен и
+            # без кабинетных товаров — то есть не тот магазин, что на проде.
+            cd "$SRC"
+            npm run import:prices --workspace=@ps/server -- --apply --apply-retail
+            npm run import:pro-products --workspace=@ps/server -- --apply
+            cd "$SRC/projects/perfect-skin/server"
+
             echo "==> Nginx"
             cp "$SRC/projects/perfect-skin/deploy/nginx-perfect-skin.conf" \
                /etc/nginx/sites-available/perfect-skin

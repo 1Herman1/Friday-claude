@@ -4,6 +4,7 @@ import * as path from 'path'
 import { fileURLToPath } from 'url'
 import { recalcProductPrices } from '../src/services/product-prices.js'
 import { matchProduct } from '../src/lib/import-prices.match.js'
+import { planVariantUpdate } from '../src/lib/import-prices.plan.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -45,6 +46,7 @@ async function main() {
   const args = process.argv.slice(2)
   let filePath = path.join(__dirname, '../assets/price-import.json')
   let isApply = false
+  let applyRetail = false
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--file' && args[i + 1]) {
@@ -52,7 +54,15 @@ async function main() {
       i++
     } else if (args[i] === '--apply') {
       isApply = true
+    } else if (args[i] === '--apply-retail') {
+      applyRetail = true
     }
+  }
+
+  // Валидация: --apply-retail допустим только с --apply
+  if (applyRetail && !isApply) {
+    console.error('❌ Ошибка: флаг --apply-retail допустим только вместе с --apply')
+    process.exit(1)
   }
 
   try {
@@ -95,6 +105,7 @@ async function main() {
     const skipped: { item: PriceImportItem; reason: string }[] = []
     const conflicts: { item: PriceImportItem; reason: string }[] = []
     const retailMismatches: { product: string; variant: string; item: PriceImportItem; old: number; new: number }[] = []
+    const retailUpdates: { product: string; variant: string; old: number; new: number }[] = []
 
     // Отслеживание фасовок для обнаружения конфликтов
     const variantMatches = new Map<string, { itemIndex: number; productId: string; variantId: string }>()
@@ -153,13 +164,24 @@ async function main() {
             : undefined
 
         if (retailMismatch) {
-          retailMismatches.push({
-            product: product.name,
-            variant: item.volume,
-            item,
-            old: retailMismatch.old,
-            new: retailMismatch.new,
-          })
+          if (applyRetail) {
+            // При --apply-retail добавляем в список обновлений
+            retailUpdates.push({
+              product: product.name,
+              variant: item.volume,
+              old: retailMismatch.old,
+              new: retailMismatch.new,
+            })
+          } else {
+            // Без флага — в список расхождений
+            retailMismatches.push({
+              product: product.name,
+              variant: item.volume,
+              item,
+              old: retailMismatch.old,
+              new: retailMismatch.new,
+            })
+          }
         }
 
         matches.push({
@@ -246,10 +268,20 @@ async function main() {
       console.log()
     }
 
-    // Вывод расхождений в розничной цене
+    // Вывод обновлений розничной цены (при --apply-retail)
+    if (retailUpdates.length > 0) {
+      console.log(`💰 РОЗНИЦА ОБНОВЛЕНА (${retailUpdates.length}):`)
+      console.log('   (oldRetailPrice обнулена — PriceTag не будет зачёркивать при повышении цены)\n')
+      retailUpdates.forEach((m) => {
+        console.log(`  • ${m.product} (${m.variant}): ${m.old} ₽ → ${m.new} ₽`)
+      })
+      console.log()
+    }
+
+    // Вывод расхождений в розничной цене (без --apply-retail)
     if (retailMismatches.length > 0) {
       console.log(`💰 РАСХОЖДЕНИЯ РОЗНИЧНОЙ ЦЕНЫ (${retailMismatches.length}):`)
-      console.log('   (розничную цену не меняем — это отдельное решение)\n')
+      console.log('   (розничную цену не меняем — используйте --apply-retail, если нужно)\n')
       retailMismatches.forEach((m) => {
         console.log(`  • ${m.product} (${m.variant}): ${m.old} ₽ → ${m.new} ₽ (прайс)`)
       })
@@ -274,43 +306,82 @@ async function main() {
       await prisma.$transaction(async (tx) => {
         // Отследить товары, которые будут обновлены
         const productsToUpdatePrices = new Set<string>()
+        let updatedCount = 0
+        let unchangedCount = 0
 
         for (const match of matches) {
-          const variant = await tx.productVariant.update({
+          // Загружаем текущий вариант для проверки
+          const currentVariant = await tx.productVariant.findUniqueOrThrow({
             where: { id: match.variant.id },
-            data: {
-              wholesalePrice: match.changes.wholesalePrice.new,
-              isProfessional: match.changes.isProfessional.new,
-            },
+          })
+
+          // Планируем обновление
+          const plan = planVariantUpdate(currentVariant, match.item, { applyRetail })
+
+          if (plan.data === null) {
+            // Ничего не изменилось
+            unchangedCount++
+            continue
+          }
+
+          // Выполняем обновление
+          await tx.productVariant.update({
+            where: { id: match.variant.id },
+            data: plan.data,
           })
 
           productsToUpdatePrices.add(match.product.id)
+          updatedCount++
 
-          // Вывод каждого обновления
-          console.log(`  ✓ ${match.product.name} (${match.variant.volumeLabel}): оптовая ${match.changes.wholesalePrice.new}, pro=${match.changes.isProfessional.new}`)
+          // Вывод обновления
+          const changes: string[] = []
+          if ((plan.data as any).wholesalePrice !== undefined) {
+            changes.push(`оптовая ${(plan.data as any).wholesalePrice}`)
+          }
+          if ((plan.data as any).isProfessional !== undefined) {
+            changes.push(`pro=${(plan.data as any).isProfessional}`)
+          }
+          if ((plan.data as any).retailPrice !== undefined) {
+            changes.push(`розница ${(plan.data as any).retailPrice}`)
+          }
+
+          console.log(`  ✓ ${match.product.name} (${match.variant.volumeLabel}): ${changes.join(', ')}`)
         }
 
-        // Пересчёт Product.isProfessional и min/max цен
-        const affectedProducts = await tx.product.findMany({
-          where: { id: { in: Array.from(productsToUpdatePrices) } },
-          include: { variants: { where: { isActive: true, deletedAt: null } } },
-        })
-
-        for (const product of affectedProducts) {
-          const allProfessional = product.variants.length > 0 && product.variants.every((v) => v.isProfessional)
-
-          await tx.product.update({
-            where: { id: product.id },
-            data: { isProfessional: allProfessional },
+        // Пересчёт Product.isProfessional и min/max цен (только если есть обновления)
+        if (updatedCount > 0) {
+          const affectedProducts = await tx.product.findMany({
+            where: { id: { in: Array.from(productsToUpdatePrices) } },
+            include: { variants: { where: { isActive: true, deletedAt: null } } },
           })
+
+          for (const product of affectedProducts) {
+            const allProfessional = product.variants.length > 0 && product.variants.every((v) => v.isProfessional)
+
+            await tx.product.update({
+              where: { id: product.id },
+              data: { isProfessional: allProfessional },
+            })
+          }
+
+          // Пересчёт min/max цен
+          await recalcProductPrices(tx)
         }
 
-        // Пересчёт min/max цен
-        await recalcProductPrices(tx)
+        // Вывод сводки
+        console.log()
+        console.log('📊 РЕЗУЛЬТАТ:')
+        console.log(`  Обновлено: ${updatedCount}`)
+        console.log(`  Без изменений: ${unchangedCount}`)
+        if (updatedCount === 0) {
+          console.log('  Изменений нет')
+        }
+        if (updatedCount > 0) {
+          console.log('  🔄 Пересчитаны Product.minPrice, maxPrice и isProfessional')
+        }
       })
 
-      console.log(`\n✅ Успешно обновлено ${matches.length} записей`)
-      console.log('🔄 Пересчитаны Product.minPrice, maxPrice и isProfessional\n')
+      console.log()
     } else if (isApply) {
       console.log('⚠️ Нечего применять (нет сопоставленных записей)\n')
     } else {
