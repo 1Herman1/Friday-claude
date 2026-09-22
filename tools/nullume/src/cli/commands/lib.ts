@@ -874,6 +874,93 @@ const familyCmd = libCmd
   .description("Управление семействами");
 
 // lib family list [--status <s>] [--json]
+/** Принимает полные ID и короткие префиксы, отказывает на неоднозначных */
+function resolveRefIds(store: LibraryStore, raw: string): string[] {
+  const wanted = raw.split(",").map((x) => x.trim()).filter(Boolean);
+  if (wanted.length === 0) return [];
+  const all = store.listReferences({ status: "active", limit: 10000, offset: 0 });
+  return wanted.map((prefix) => {
+    const matches = all.filter((r) => r.id === prefix || r.id.startsWith(prefix));
+    if (matches.length === 0) throw new UsageError(`Референс не найден: ${prefix}`);
+    if (matches.length > 1) throw new UsageError(`Неоднозначный префикс: ${prefix}`);
+    return matches[0].id;
+  });
+}
+
+// lib family create --name <n> --slug <s> --refs <id,...>
+familyCmd
+  .command("create")
+  .requiredOption("--name <name>", "Название семейства")
+  .requiredOption("--slug <slug>", "Слаг (a-z, 0-9, дефис)")
+  .option("--refs <ids>", "ID референсов через запятую (можно короткие, 8 символов)")
+  .description("Создать семейство вручную, без кластеризации")
+  .action(async function (options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+    let store: LibraryStore | undefined;
+
+    try {
+      store = openStore(getLibraryDbPath());
+      const db = store;
+      const slug = String(options.slug);
+      if (!/^[a-z0-9-]+$/.test(slug)) {
+        throw new UsageError(`Слаг может содержать только a-z, 0-9 и дефис, получено: ${slug}`);
+      }
+      if (db.getFamilyBySlug(slug)) {
+        throw new UsageError(`Семейство со слагом "${slug}" уже есть`);
+      }
+
+      const refIds = resolveRefIds(db, String(options.refs ?? ""));
+
+      const family = db.createFamily({
+        slug,
+        name: String(options.name),
+        status: "proposed",
+        proposedBy: "owner",
+      });
+      if (refIds.length > 0) {
+        db.setMembers(
+          family.id,
+          refIds.map((refId, i) => ({ familyId: family.id, refId, distance: 0, isExemplar: i < 4 }))
+        );
+      }
+
+      emit(flags, { data: { id: family.id, slug: family.slug, name: family.name, size: refIds.length } }, () => {
+        return `✓ Семейство создано: ${family.name} (${family.slug}), референсов: ${refIds.length}`;
+      });
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib family set-refs <slug|id> --refs <id,...>
+familyCmd
+  .command("set-refs <id>")
+  .requiredOption("--refs <ids>", "ID референсов через запятую (можно короткие, 8 символов)")
+  .description("Заменить состав семейства")
+  .action(async function (idOrSlug: string, options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+    let store: LibraryStore | undefined;
+
+    try {
+      store = openStore(getLibraryDbPath());
+      const db = store;
+      const family = getFamilyBySlugOrId(db, idOrSlug);
+      if (!family) throw new UsageError(`Семейство "${idOrSlug}" не найдено`);
+
+      const refIds = resolveRefIds(db, String(options.refs));
+      db.setMembers(
+        family.id,
+        refIds.map((refId, i) => ({ familyId: family.id, refId, distance: 0, isExemplar: i < 4 }))
+      );
+
+      emit(flags, { data: { id: family.id, slug: family.slug, size: refIds.length } }, () => {
+        return `✓ Состав обновлён: ${family.name} — ${refIds.length} референсов`;
+      });
+    } finally {
+      store?.close();
+    }
+  });
+
 familyCmd
   .command("list")
   .option("--status <s>", "Фильтр по статусу (approved, proposed)")

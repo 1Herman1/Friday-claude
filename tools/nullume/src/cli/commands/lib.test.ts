@@ -201,4 +201,39 @@ describe("lib command", () => {
     assert.match(result.stderr + result.stdout, /Netscape|name=value/);
   });
 
+  it("lib family create создаёт семейство и принимает короткие ID", () => {
+    runCommand("lib init --skip-models");
+    runCommand(`lib add ${fixtureFile}`);
+
+    const refs = JSON.parse(runCommand("lib list --json").stdout);
+    assert.ok(refs.length > 0, "нужен хотя бы один референс");
+    const shortId = refs[0].id.slice(0, 8);
+
+    const created = runCommand(`lib family create --name "Проба" --slug proba --refs ${shortId}`);
+    assert.equal(created.code, 0, created.stderr);
+
+    const families = JSON.parse(runCommand("lib family list --json").stdout);
+    const family = families.find((f: { slug: string }) => f.slug === "proba");
+    assert.ok(family, "семейство не создано");
+
+    const duplicate = runCommand('lib family create --name "Ещё" --slug proba');
+    assert.notEqual(duplicate.code, 0, "дубль слага должен отклоняться");
+
+    const badSlug = runCommand('lib family create --name "Плохой" --slug "Не Слаг"');
+    assert.notEqual(badSlug.code, 0, "слаг с пробелами должен отклоняться");
+  });
+
+  it("lib family set-refs заменяет состав", () => {
+    runCommand("lib init --skip-models");
+    runCommand(`lib add ${fixtureFile}`);
+    const refs = JSON.parse(runCommand("lib list --json").stdout);
+    runCommand(`lib family create --name "Состав" --slug sostav --refs ${refs[0].id}`);
+
+    const replaced = runCommand(`lib family set-refs sostav --refs ${refs[0].id.slice(0, 8)}`);
+    assert.equal(replaced.code, 0, replaced.stderr);
+
+    const missing = runCommand("lib family set-refs sostav --refs deadbeef");
+    assert.notEqual(missing.code, 0, "несуществующий референс должен отклоняться");
+  });
+
 });
