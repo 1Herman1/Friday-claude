@@ -88,14 +88,23 @@
       margin-top: var(--spacing-sm);
     }
 
+    h1 {
+      margin-bottom: 4px;
+    }
+
+    .header-subtitle {
+      margin: 0 0 24px;
+    }
+
     h2 {
-      font-size: 18px;
+      font-size: 20px;
       margin-bottom: var(--spacing-lg);
     }
 
     h3 {
       font-size: 16px;
       margin-bottom: var(--spacing-md);
+      margin-top: 32px;
     }
 
     label {
@@ -487,9 +496,44 @@
       background-color: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: var(--spacing-lg);
-      margin-bottom: var(--spacing-lg);
+      padding: 20px 24px;
+      margin-bottom: 20px;
       transition: border-color 0.2s;
+    }
+
+    fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0 0 32px;
+    }
+
+    fieldset > legend {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .dials {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(240px, 320px));
+      gap: 20px 32px;
+    }
+
+    .range-control {
+      max-width: 320px;
+    }
+
+    .range-value {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .hint {
+      max-width: 68ch;
+      margin: 12px 0 0;
     }
 
     .family-card:hover {
@@ -596,6 +640,48 @@
       display: flex;
       gap: var(--spacing-md);
       flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .merge-group {
+      display: flex;
+      gap: 0;
+      margin-left: 24px;
+    }
+
+    .merge-group select {
+      width: 220px;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .merge-group button {
+      border-radius: 0 4px 4px 0;
+      margin-left: -1px;
+    }
+
+    [data-action="family-discard"] {
+      margin-left: 16px;
+    }
+
+    [data-action="edit-family"] {
+      margin-left: auto;
+    }
+
+    [data-action="copy-generate-command"] {
+      flex: 0 0 auto;
+      min-width: 160px;
+    }
+
+    @media (max-width: 480px) {
+      .family-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .merge-group, [data-action="edit-family"] {
+        grid-column: 1 / -1;
+        margin: 0;
+      }
     }
 
     .hr {
@@ -950,8 +1036,8 @@
 
     <div class="form-group">
       <label for="cluster-prompt">Контекст для Claude</label>
-      <textarea id="cluster-prompt" readonly></textarea>
-      <button data-action="copy-cluster-context">Скопировать</button>
+      <textarea id="cluster-prompt" readonly placeholder="Появится после запуска кластеризации"></textarea>
+      <button id="copy-cluster-btn" data-action="copy-cluster-context" disabled>Скопировать</button>
     </div>
   </div>
 
@@ -1225,6 +1311,16 @@
           moreBtn.classList.add('show');
         } else {
           moreBtn.classList.remove('show');
+        }
+
+        // Empty state
+        if (grid.innerHTML === '') {
+          const empty = document.createElement('div');
+          empty.style.setProperty('padding', '40px 20px');
+          empty.style.setProperty('text-align', 'center');
+          empty.style.setProperty('color', 'var(--text-secondary)');
+          empty.textContent = 'Ничего не найдено. Измените фильтры или загляните во вкладку «Собрать».';
+          grid.appendChild(empty);
         }
       } catch (err) {
         showStatus('refs-status', err.message, 'error');
@@ -1538,7 +1634,7 @@
             card.appendChild(exemplars);
           }
 
-          // Action buttons
+          // Action buttons in order: approve → merge → discard → copy-command → edit
           const actions = document.createElement('div');
           actions.className = 'family-actions';
 
@@ -1549,19 +1645,10 @@
           approveBtn.setAttribute('data-id', f.id);
           actions.appendChild(approveBtn);
 
-          const discardBtn = document.createElement('button');
-          discardBtn.textContent = 'Отклонить';
-          discardBtn.className = 'danger';
-          discardBtn.setAttribute('data-action', 'family-discard');
-          discardBtn.setAttribute('data-id', f.id);
-          actions.appendChild(discardBtn);
-
           // Merge select + button (only if not merged)
           if (f.status !== 'merged') {
             const mergeContainer = document.createElement('div');
-            mergeContainer.style.setProperty('display', 'flex');
-            mergeContainer.style.setProperty('gap', 'var(--spacing-sm)');
-            mergeContainer.style.setProperty('align-items', 'center');
+            mergeContainer.className = 'merge-group';
 
             const mergeSelect = document.createElement('select');
             mergeSelect.setAttribute('data-family-id', f.id);
@@ -1590,11 +1677,12 @@
             actions.appendChild(mergeContainer);
           }
 
-          const editBtn = document.createElement('button');
-          editBtn.textContent = 'Редактировать';
-          editBtn.setAttribute('data-action', 'edit-family');
-          editBtn.setAttribute('data-id', f.id);
-          actions.appendChild(editBtn);
+          const discardBtn = document.createElement('button');
+          discardBtn.textContent = 'Отклонить';
+          discardBtn.className = 'danger';
+          discardBtn.setAttribute('data-action', 'family-discard');
+          discardBtn.setAttribute('data-id', f.id);
+          actions.appendChild(discardBtn);
 
           // Add command button for approved families
           if (f.status === 'approved') {
@@ -1605,9 +1693,25 @@
             actions.appendChild(cmdBtn);
           }
 
+          const editBtn = document.createElement('button');
+          editBtn.textContent = 'Редактировать';
+          editBtn.setAttribute('data-action', 'edit-family');
+          editBtn.setAttribute('data-id', f.id);
+          actions.appendChild(editBtn);
+
           card.appendChild(actions);
           list.appendChild(card);
         });
+
+        // Empty state for families
+        if (data.families.length === 0) {
+          const empty = document.createElement('div');
+          empty.style.setProperty('padding', '40px 20px');
+          empty.style.setProperty('text-align', 'center');
+          empty.style.setProperty('color', 'var(--text-secondary)');
+          empty.textContent = 'Семейств пока нет — запустите кластеризацию или добавьте референсы.';
+          list.appendChild(empty);
+        }
 
         // Update family select in refs
         const familySelect = document.getElementById('refs-family');
@@ -1908,6 +2012,7 @@
           document.body.removeChild(textarea);
         }
         document.getElementById('cluster-prompt').value = text;
+        document.getElementById('copy-cluster-btn').disabled = false;
         showStatus('cluster-status', 'Контекст скопирован', 'success');
       } catch (err) {
         showStatus('cluster-status', err.message, 'error');
