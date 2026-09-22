@@ -150,7 +150,7 @@ interface SimplifiedProduct {
 interface PriceImportItem {
   name: string
   volume: string
-  siteName?: string // Явное имя товара на сайте: точное совпадение или none
+  siteName?: string // Явное начало имени товара на сайте; не нашлось — none, без отката к другим правилам
   forceSingleVariant?: boolean // Взять единственную фасовку без сверки объёма
   skip?: string // Пропустить запись (не обрабатывать)
 }
@@ -174,15 +174,21 @@ export function matchProduct(item: PriceImportItem, products: SimplifiedProduct[
     const normalized = replaceCyrillicLookalikes(item.siteName)
     const siteNormalized = normalize(normalized)
 
-    const found = products.find((p) => {
-      const pNormalized = replaceCyrillicLookalikes(p.name)
-      const pNorm = normalize(pNormalized)
-      return siteNormalized === pNorm
+    // Подсказка — это начало имени на сайте (латинская часть), а не имя целиком:
+    // русский хвост у сайта свой. Совпадение по началу слова, кандидат должен
+    // быть единственным — иначе подсказка неточная, и мы это показываем.
+    const candidates = products.filter((p) => {
+      const pNorm = normalize(replaceCyrillicLookalikes(p.name))
+      return pNorm === siteNormalized || pNorm.startsWith(siteNormalized + ' ')
     })
 
-    if (!found) {
+    if (candidates.length === 0) {
       return { kind: 'none', reason: `siteName не найден: ${item.siteName}` }
     }
+    if (candidates.length > 1) {
+      return { kind: 'ambiguous', candidates: candidates.map((p) => p.name) }
+    }
+    const found = candidates[0]
 
     // Найден по siteName — используем forceSingleVariant, если задано
     return matchVariant(item, found, { forceSingleVariant: item.forceSingleVariant })

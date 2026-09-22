@@ -279,6 +279,24 @@ describe('Подсказки и опции (siteName, forceSingleVariant, skip)'
     expect(result.kind).toBe('match')
   })
 
+  it('siteName: достаточно начала имени на сайте, русский хвост не нужен', () => {
+    const products = [
+      { id: 'p1', name: 'KERATHOR PLUS Изотонический тоник', variants: [{ id: 'v1', volumeValue: 200, volumeUnit: 'ml' as const, isActive: true, deletedAt: null }] },
+      { id: 'p2', name: 'KERADETOX Кератолитический тоник', variants: [{ id: 'v2', volumeValue: 200, volumeUnit: 'ml' as const, isActive: true, deletedAt: null }] },
+    ]
+    const result = matchProduct({ name: 'Kerathor 50 Plus – Изотонический тоник', volume: '200 мл', siteName: 'KERATHOR PLUS' }, products)
+    expect(result).toMatchObject({ kind: 'match', productId: 'p1' })
+  })
+
+  it('siteName: начало, подходящее двум товарам, — неоднозначность, а не первый попавшийся', () => {
+    const products = [
+      { id: 'p1', name: 'CONTORNO DE OJOS Крем для век', variants: [{ id: 'v1', volumeValue: 30, volumeUnit: 'ml' as const, isActive: true, deletedAt: null }] },
+      { id: 'p2', name: 'CONTORNO DE OJOS MD Крем с пептидами', variants: [{ id: 'v2', volumeValue: 50, volumeUnit: 'ml' as const, isActive: true, deletedAt: null }] },
+    ]
+    const result = matchProduct({ name: 'Contorno', volume: '30 мл', siteName: 'CONTORNO DE OJOS' }, products)
+    expect(result.kind).toBe('ambiguous')
+  })
+
   it('siteName: не применяет latinKey, если siteName не найден', () => {
     const products = [
       {
