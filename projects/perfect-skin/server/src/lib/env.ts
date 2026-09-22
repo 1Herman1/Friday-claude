@@ -15,3 +15,8 @@ export const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 export const isProduction = !isDevelopment
+
+// Временный ручной флаг для доступа по голому IP без сертификата: секьюрность
+// кук на «боевом» протоколе иначе всегда true и браузер режет Set-Cookie по
+// http://. Ничего в проде не трогает, пока переменная не выставлена явно.
+export const cookieInsecure = process.env.PS_COOKIE_INSECURE === '1'

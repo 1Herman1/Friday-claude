@@ -5,7 +5,7 @@ const { sign } = jwt
 import { otpService } from '../../services/otp.service.js'
 import { cartService } from '../../services/cart.service.js'
 import { ApiError } from '../../lib/errors.js'
-import { isProduction } from '../../lib/env.js'
+import { isProduction, cookieInsecure } from '../../lib/env.js'
 
 const verifySchema = z.object({
   email: z
@@ -92,7 +92,7 @@ export async function verifyOtpRoute(app: FastifyInstance) {
       // Set auth cookie if needed
       reply.setCookie('ps_auth', token, {
         httpOnly: true,
-        secure: isProduction,
+        secure: isProduction && !cookieInsecure,
         sameSite: 'lax',
         path: '/',
         maxAge: 7 * 24 * 3600,

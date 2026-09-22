@@ -105,6 +105,46 @@ pm2 logs ps-server --lines 100
 
 ---
 
+## 3.1. Временный доступ по IP (без домена)
+
+Иногда нужно показать прогресс до того, как заведён домен — например, пока
+разработка ещё не готова к переезду на боевой сервер. Сайт технически
+доступен по IP сервера, но из коробки не работает: адрес API вшит в сборку
+клиента на этапе `npm run build`, CORS разрешает только `new.perfect-skin.shop`,
+а куки авторизации и корзины стоят с `secure: true` — браузер их не примет по
+`http://`.
+
+Через workflow «Run Command on Perfect Skin VPS»:
+
+```bash
+# 1. Дописать в projects/perfect-skin/server/.env (замените <IP>):
+echo 'PS_CORS_ORIGIN=https://new.perfect-skin.shop,http://<IP>' >> projects/perfect-skin/server/.env
+echo 'PS_COOKIE_INSECURE=1' >> projects/perfect-skin/server/.env
+cd projects/perfect-skin && pm2 restart ps-server --update-env
+
+# 2. Пересобрать клиента с адресом по IP и разложить
+cd /var/www/ps-src
+VITE_API_URL=http://<IP> npm run build --workspace=@ps/client
+rsync -a --delete projects/perfect-skin/client/dist/ /var/www/perfect-skin/client/
+```
+
+Дальше сайт открывается по `http://<IP>/` — каталог, вход по коду, корзина,
+профи-цены работают. Это только для внутренней проверки: без сертификата,
+ссылку не рассылать; `X-Robots-Tag: noindex` уже стоит в конфиге.
+
+**Откат перед переездом на домен** — обязателен, иначе `PS_COOKIE_INSECURE`
+останется висеть на проде:
+
+```bash
+# Убрать обе строки из .env вручную (nano/sed), затем:
+cd projects/perfect-skin && pm2 restart ps-server --update-env
+```
+
+Клиент пересоберётся сам обычной выкаткой `deploy-perfect-skin.yml` — она
+всегда использует боевой `VITE_API_URL`.
+
+---
+
 ## 4. Переезд на боевой домен `perfect-skin.shop`
 
 Когда сайт готов, переезжаем с тестового домена на боевой. **Порядок важен.**
