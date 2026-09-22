@@ -73,6 +73,229 @@ export KIE_API_KEY=sk_live_...
 npx tsx src/cli/index.ts balance --json
 ```
 
+## Ключи и сессии
+
+Nullume может работать с разными источниками медиа. Ключи и токены для каждого хранятся по-разному: одни в конфиге, другие в защищённых файлах сессий, третьи в переменных окружения.
+
+### kie.ai — три способа передачи ключа
+
+Ключ kie.ai нужен для генерации. Передать его можно тремя способами, в порядке приоритета:
+
+| Способ | Где | Как задать | Когда использовать |
+|--------|-----|-----------|-------------------|
+| Переменная окружения | `$KIE_API_KEY` | `export KIE_API_KEY=sk_live_...` | В CI/CD, Docker, при тестировании |
+| Конфиг | `~/.nullume/config.json` | `npm run setup` или вручную | На локальной машине (основной способ) |
+| GitHub Actions | `KIE_API_KEY` secret | Settings → Secrets and variables → Actions | Для автоматической проверки в репозитории |
+
+**Как задать ключ:**
+
+1. **Локально (один раз, рекомендуется):**
+```bash
+npm run setup
+# Интерактивно спросит ключ и сохранит в ~/.nullume/config.json
+```
+
+2. **Вручную отредактировать конфиг:**
+```bash
+cat > ~/.nullume/config.json << EOF
+{
+  "apiKey": "sk_live_..."
+}
+EOF
+chmod 600 ~/.nullume/config.json
+```
+
+3. **Через переменную окружения (временно):**
+```bash
+export KIE_API_KEY=sk_live_...
+nullume balance --json
+```
+
+4. **Для GitHub Actions (деплой + live-check):**
+   - Перейди в Settings репозитория → Secrets and variables → Actions
+   - Создай новый secret `KIE_API_KEY` со значением ключа
+   - Workflow `nullume-live-check.yml` прочитает его автоматически
+
+**Защита:** Конфиг сохраняется с правами `0600` (только владелец может читать). Никогда не коммитай `.env` или `config.json` в git.
+
+### Pinterest API (официальный, без cookies)
+
+Самый надёжный способ — использовать Pinterest API v5 с официальным токеном доступа. Это "чистый" источник, доступный везде: локально, в MCP, в CI.
+
+**Получить токен:**
+1. Перейди на [developer.pinterest.com](https://developer.pinterest.com)
+2. Создай приложение (если ещё нет)
+3. В настройках приложения запроси права: `boards:read` и `pins:read`
+4. Скопируй access token
+
+**Способы передачи:**
+
+1. **Переменная окружения (быстро):**
+```bash
+export PINTEREST_ACCESS_TOKEN=AbCdEf...
+nullume lib import pinterest-api --limit 50
+```
+
+2. **В конфиг (постоянно):**
+```bash
+# Отредактируй ~/.nullume/config.json:
+{
+  "importers": {
+    "pinterest": {
+      "accessToken": "AbCdEf..."
+    }
+  }
+}
+```
+
+3. **В GitHub Actions (для CI):**
+   - Создай secret `PINTEREST_ACCESS_TOKEN` в Settings репозитория
+   - Workflow сам его подхватит через `getImporterSetting`
+
+### Pinterest, X, Dribbble — локальные сессии (риск на тебя)
+
+Три сервиса работают через локальные браузер-сессии: Pinterest (поиск), X (закладки/лайки), Dribbble (шоты). Сессии сохраняются в `~/.nullume/sessions/` с правами `0600`.
+
+**Тройной гейт: все три условия сразу или не работает:**
+1. `acknowledgedRiskyImporters: true` в `~/.nullume/config.json`
+2. `export NULLUME_LOCAL_IMPORTERS=1` в окружении
+3. Не в CI (нет переменных `CI` или `GITHUB_ACTIONS`)
+
+Сессии работают только локально, никогда не пойдут в MCP или CI.
+
+#### X (auth_token и ct0)
+
+**Риск:** Автоматизация под своей учётной записью нарушает Terms of Service X. Риск блокировки аккаунта. Используй на свой риск.
+
+**Какие cookies нужны:**
+- `auth_token` — токен авторизации
+- `ct0` — CSRF-токен
+
+**Как получить:**
+
+1. Открой [x.com](https://x.com) в браузере под своей учётной записью
+2. Открой DevTools (F12), вкладка Application → Cookies → x.com
+3. Найди `auth_token` и `ct0`, скопируй их значения
+4. Сохрани в сессию одним из двух способов:
+
+**Вариант А: Через JSON файл (надёжнее):**
+```bash
+cat > ~/.nullume/sessions/x.json << 'EOF'
+{
+  "cookies": {
+    "auth_token": "AbCdEf...",
+    "ct0": "1234567890abcdef"
+  },
+  "createdAt": "2026-09-21T00:00:00Z",
+  "note": "X закладки и лайки"
+}
+EOF
+chmod 600 ~/.nullume/sessions/x.json
+```
+
+**Вариант Б: Через CLI (интерактивно):**
+```bash
+nullume lib session set x --cookie auth_token=AbCdEf... --cookie ct0=1234567890abcdef
+```
+
+**Включить гейт:**
+```bash
+# Отредактируй ~/.nullume/config.json:
+{
+  "acknowledgedRiskyImporters": true
+}
+
+# И в оболочке:
+export NULLUME_LOCAL_IMPORTERS=1
+```
+
+**Использование:**
+```bash
+nullume lib import x-cookies --collection bookmarks --limit 20
+# или:
+nullume lib import x-cookies --collection likes --limit 20
+```
+
+#### Pinterest (auth_token и c_user)
+
+**Риск:** Pinterest заблокирует аккаунт при обнаружении автоматизации. Если заблокируешь, удали `~/.nullume/sessions/pinterest.json`, жди 24–48 часов, повтори.
+
+**Какие cookies нужны:**
+- `auth_token` — токен сессии
+- `c_user` — ID пользователя
+
+**Как получить:**
+
+1. Открой [pinterest.com](https://pinterest.com) под своей учётной записью
+2. DevTools → Application → Cookies → pinterest.com
+3. Найди `auth_token` и `c_user`
+
+**Сохранить:**
+
+```bash
+cat > ~/.nullume/sessions/pinterest.json << 'EOF'
+{
+  "cookies": {
+    "auth_token": "AbCdEf...",
+    "c_user": "123456789"
+  },
+  "createdAt": "2026-09-21T00:00:00Z",
+  "note": "Pinterest поиск по собственной сессии"
+}
+EOF
+chmod 600 ~/.nullume/sessions/pinterest.json
+```
+
+**Включить гейт и использовать:**
+```bash
+export NULLUME_LOCAL_IMPORTERS=1
+nullume lib import pinterest-cookies --query "design" --limit 50
+```
+
+#### Dribbble (access token)
+
+**Риск:** Низкий — API Dribbble поддерживает токены. Но лимиты могут быть строгими.
+
+**Как получить токен:**
+1. Перейди в Settings → Integrations → Create new token
+2. Выбери права: read
+
+**Сохранить:**
+
+```bash
+cat > ~/.nullume/sessions/dribbble.json << 'EOF'
+{
+  "token": "AbCdEf...",
+  "createdAt": "2026-09-21T00:00:00Z"
+}
+EOF
+chmod 600 ~/.nullume/sessions/dribbble.json
+```
+
+**Или через env (проще):**
+```bash
+export DRIBBBLE_ACCESS_TOKEN=AbCdEf...
+nullume lib import dribbble --limit 20
+```
+
+**Включить гейт (если хочешь из сессии):**
+```bash
+export NULLUME_LOCAL_IMPORTERS=1
+nullume lib import dribbble --limit 20
+```
+
+### Краткая таблица: что где нужно
+
+| Источник | Тип | Способ 1 | Способ 2 | Гейт | Где лежит |
+|----------|-----|----------|----------|------|-----------|
+| **kie.ai** | API ключ | `npm run setup` | env `KIE_API_KEY` | — | `~/.nullume/config.json` |
+| **Pinterest API** | Access token | env `PINTEREST_ACCESS_TOKEN` | config `importers.pinterest.accessToken` | — | любой способ |
+| **X** | Cookies | JSON файл | CLI `lib session set` | `acknowledgedRiskyImporters: true` + `NULLUME_LOCAL_IMPORTERS=1` | `~/.nullume/sessions/x.json` |
+| **Pinterest** | Cookies | JSON файл | CLI `lib session set` | `acknowledgedRiskyImporters: true` + `NULLUME_LOCAL_IMPORTERS=1` | `~/.nullume/sessions/pinterest.json` |
+| **Dribbble** | Token | env `DRIBBBLE_ACCESS_TOKEN` | JSON файл `~/.nullume/sessions/dribbble.json` | опционально | env или сессия |
+
+**Важно:** Все файлы сессий (`~/.nullume/sessions/*.json`) должны иметь права `0600` (только владелец). CLI автоматически устанавливает эти права.
+
 ## Пять главных команд
 
 ### 1. Баланс и кредиты

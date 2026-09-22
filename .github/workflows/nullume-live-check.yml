@@ -1,0 +1,121 @@
+name: Nullume live check
+
+# Живая проверка того, что нельзя проверить тестами: настоящий ответ kie.ai,
+# настоящая модель эмбеддингов, настоящая цена. Запускается вручную.
+#
+# Что нужно один раз: секрет KIE_API_KEY в настройках репозитория
+# (Settings → Secrets and variables → Actions → New repository secret).
+#
+# Проверка каталога и библиотеки бесплатна. Генерация тратит деньги со счёта
+# kie.ai, поэтому она выключена по умолчанию и не запустится, если оценка
+# окажется дороже заданного потолка.
+
+on:
+  workflow_dispatch:
+    inputs:
+      generate:
+        description: 'Сделать платную генерацию (тратит кредиты kie.ai)'
+        type: boolean
+        default: false
+      model:
+        description: 'Модель для генерации'
+        type: string
+        default: 'nano-banana-2'
+      prompt:
+        description: 'Промпт'
+        type: string
+        default: 'single ripe apple on a linen cloth, soft daylight, editorial still life'
+      max_credits:
+        description: 'Потолок расхода в кредитах — дороже не запустится'
+        type: string
+        default: '6'
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/nullume
+    env:
+      KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
+      NULLUME_HOME: ${{ github.workspace }}/.nullume-run
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: tools/nullume/package-lock.json
+
+      - name: Установить зависимости и собрать
+        run: |
+          npm ci
+          npm run build
+
+      - name: Проверить, что ключ задан
+        run: |
+          if [ -z "$KIE_API_KEY" ]; then
+            echo "::error::Секрет KIE_API_KEY не задан. Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Баланс kie.ai
+        run: node bin/nullume.js balance
+
+      - name: Сверить каталог моделей с живой документацией
+        continue-on-error: true
+        run: npm run audit:catalog
+
+      - name: Оценить стоимость генерации
+        id: cost
+        run: |
+          node bin/nullume.js generate cost "${{ inputs.model }}" --json > cost.json
+          cat cost.json
+          echo "credits=$(node -p "require('./cost.json').creditsMax")" >> "$GITHUB_OUTPUT"
+          echo "source=$(node -p "require('./cost.json').source")" >> "$GITHUB_OUTPUT"
+
+      - name: Живая генерация
+        if: ${{ inputs.generate }}
+        run: |
+          CREDITS="${{ steps.cost.outputs.credits }}"
+          LIMIT="${{ inputs.max_credits }}"
+          SOURCE="${{ steps.cost.outputs.source }}"
+          echo "Оценка: $CREDITS кредитов, источник цены: $SOURCE, потолок: $LIMIT"
+          if [ "$SOURCE" = "unknown" ] || [ "$SOURCE" = "fuzzy" ]; then
+            echo "::error::Цена не подтверждена каталогом (источник $SOURCE). Генерация отменена."
+            exit 1
+          fi
+          if [ "$CREDITS" -gt "$LIMIT" ]; then
+            echo "::error::Оценка $CREDITS кредитов выше потолка $LIMIT. Генерация отменена."
+            exit 1
+          fi
+          node bin/nullume.js generate create "${{ inputs.model }}" \
+            --prompt "${{ inputs.prompt }}" \
+            --wait --yes --out "$GITHUB_WORKSPACE/live-out"
+
+      - name: Поставить модель эмбеддингов и прогнать библиотеку
+        run: |
+          npm install --no-save @huggingface/transformers
+          node bin/nullume.js lib init
+          if ls src/library/ingest/__fixtures__/*.png >/dev/null 2>&1; then
+            node bin/nullume.js lib add src/library/ingest/__fixtures__/*.png
+          else
+            echo "Фикстуры недоступны (пакет установлен из npm) — библиотека остаётся пустой"
+          fi
+          node bin/nullume.js lib embed
+          node bin/nullume.js lib status --json
+          node bin/nullume.js lib cluster --k 2 --json
+          node bin/nullume.js lib family list --json
+
+      - name: Сложить результаты
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nullume-live-check
+          path: |
+            tools/nullume/cost.json
+            live-out/
+          if-no-files-found: ignore
+          retention-days: 7

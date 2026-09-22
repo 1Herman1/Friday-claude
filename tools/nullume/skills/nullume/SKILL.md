@@ -303,6 +303,33 @@ nullume lib dashboard --open
 
 Детали, риски и гейты — в `docs/decisions/ADR-007-reference-sources-policy.md`.
 
+### Ключи и сессии для источников
+
+Каждый источник требует ключ или токен. Они хранятся по-разному в зависимости от типа:
+
+**kie.ai (основной):**
+- Переменная `KIE_API_KEY` (приоритет 1) или конфиг `~/.nullume/config.json`
+- Получить на kie.ai → личный кабинет → скопировать ключ
+
+**Чистые источники — токены в конфиге или env:**
+- **Pinterest API v5:** `PINTEREST_ACCESS_TOKEN` или `config.importers.pinterest.accessToken` (developer.pinterest.com → создать приложение → права boards:read, pins:read)
+- **Raindrop:** `RAINDROP_TOKEN` или `config.importers.raindrop.token` (raindrop.io → Settings → Integrations)
+- **Unsplash:** `UNSPLASH_API_KEY` или `config.importers.unsplash.apiKey` (unsplash.com → API → создать приложение)
+- **Pexels, Pixabay:** открыты, токен не требуется
+- **Eagle:** локальный API на `localhost:41595`, ключей не требует
+
+**Local-only источники — сессии в `~/.nullume/sessions/` (права 600):**
+- **X:** `~/.nullume/sessions/x.json` с cookies `auth_token` и `ct0` (получить из DevTools → Application → Cookies)
+- **Pinterest cookies:** `~/.nullume/sessions/pinterest.json` с cookies `auth_token` и `c_user`
+- **Dribbble:** `~/.nullume/sessions/dribbble.json` с токеном или env `DRIBBBLE_ACCESS_TOKEN`
+
+**Гейт для local-only:** требует три условия одновременно:
+1. `acknowledgedRiskyImporters: true` в `~/.nullume/config.json`
+2. `NULLUME_LOCAL_IMPORTERS=1` в окружении
+3. Не в CI (нет `CI` или `GITHUB_ACTIONS`)
+
+Полная инструкция — в `tools/nullume/README.md`, раздел «Ключи и сессии».
+
 ### Owner workflow — кто и когда что делает
 
 **Владелец → CLI или дашборд:**

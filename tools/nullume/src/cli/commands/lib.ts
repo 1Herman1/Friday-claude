@@ -579,8 +579,12 @@ libCmd
   });
 
 // lib session set <importer> [--cookie k=v]... [--cookie-file path] [--token t]
-libCmd
-  .command("session set <importer>")
+const sessionCmd = libCmd
+  .command("session")
+  .description("Сессии и токены импортёров");
+
+sessionCmd
+  .command("set <importer>")
   .option("--cookie <kv>", "Cookie (k=v), можно несколько", (v: string, prev: string[] = []) => [...prev, v])
   .option("--cookie-file <path>", "Файл с cookies (Netscape или простой формат)")
   .option("--token <t>", "API токен")
@@ -593,8 +597,8 @@ libCmd
       let token: string | undefined;
 
       // Собрать cookies
-      if (options["cookie-file"]) {
-        const content = await fs.promises.readFile(options["cookie-file"] as string, "utf-8");
+      if (options.cookieFile) {
+        const content = await fs.promises.readFile(options.cookieFile as string, "utf-8");
         cookies = parseCookieFile(content);
       }
 
@@ -610,8 +614,13 @@ libCmd
         token = options.token as string;
       }
 
+      if (cookies && Object.keys(cookies).length === 0) cookies = undefined;
+
       if (!cookies && !token) {
-        throw new UsageError("Укажите --cookie, --cookie-file или --token");
+        throw new UsageError(
+          "Укажите --cookie name=value, --cookie-file <файл> или --token. " +
+            "Файл принимается в формате Netscape cookies.txt или строкой name=value; name2=value2"
+        );
       }
 
       // Записать сессию

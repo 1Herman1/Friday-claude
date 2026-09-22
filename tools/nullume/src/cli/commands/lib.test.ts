@@ -177,4 +177,28 @@ describe("lib command", () => {
     assert.equal(result.code, 0, `dashboard help failed: ${result.stderr}`);
     assert.ok(result.stdout.includes("dashboard"));
   });
+  it("lib session set --cookie-file читает файл cookies", () => {
+    const cookieFile = path.join(tmpHome, "cookies.txt");
+    fs.writeFileSync(
+      cookieFile,
+      "# Netscape HTTP Cookie File\n" +
+        ".x.com\tTRUE\t/\tTRUE\t0\tauth_token\tsecret-auth\n" +
+        ".x.com\tTRUE\t/\tTRUE\t0\tct0\tsecret-ct0\n"
+    );
+
+    const result = runCommand(`lib session set x-cookies --cookie-file ${cookieFile}`);
+    assert.equal(result.code, 0, `session set failed: ${result.stderr}`);
+
+    const saved = JSON.parse(fs.readFileSync(path.join(tmpHome, "sessions/x-cookies.json"), "utf-8"));
+    assert.equal(saved.cookies.auth_token, "secret-auth");
+    assert.equal(saved.cookies.ct0, "secret-ct0");
+    assert.ok(!result.stdout.includes("secret-auth"), "значения cookie не должны печататься");
+  });
+
+  it("lib session set без аргументов подсказывает форматы", () => {
+    const result = runCommand("lib session set x-cookies");
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr + result.stdout, /Netscape|name=value/);
+  });
+
 });
