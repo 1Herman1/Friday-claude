@@ -40,16 +40,29 @@
 - `lib init [--model clip|siglip] [--skip-models]` — инициализировать БД и модели
 - `lib sources` — список доступных источников (clean vs. local-only)
 - `lib import <source> [--collection X] [--limit N] [--dry-run]` — импортировать
-- `lib add <files>` — добавить локальные файлы
-- `lib embed` — вычислить эмбеддинги CLIP
-- `lib list` — все референсы в БД
-- `lib search <query>` — поиск по текстовому описанию
-- `lib cluster [--k N|--auto-k]` — кластеризовать в семьи
-- `lib propose [--json]` — Claude заполняет дескрипторы
-- `lib dashboard` — дашборд утверждения семейств (локальный, 127.0.0.1)
-- `lib family list|show <id>|set <id>|merge|discard` — операции с семействами
-- `lib session set <source>` — установить учётные данные для local-only
-- `lib status` — статус библиотеки (count: references, embeddings, families)
+- `lib add <files...> [--tag t] [--page-url url]` — добавить локальные файлы (только из текущей директории и `library.importDirs`)
+- `lib list [--family X] [--source X] [--status active] [--limit N]` — все референсы в БД
+- `lib embed [--reindex] [--batch 32]` — вычислить эмбеддинги CLIP
+- `lib status` — статус библиотеки (count: references, embeddings, families, disk usage)
+- `lib search [text] [--image path] [--family slug] [--limit 12]` — поиск по вектору или текстовому описанию
+- `lib cluster [--k N] [--k-min 3] [--k-max 12] [--seed 42]` — кластеризовать в семьи
+- `lib session set <source> [--token t] [--cookie k=v]...` — установить токен/cookies для импортёра
+- `lib propose [--apply file.json]` — Claude заполняет дескрипторы (или применяет их)
+- `lib dashboard [--port N] [--idle 30] [--open]` — интерактивный дашборд (четыре таба: Референсы, Собрать, Семейства, Кластеризация)
+- `lib family list [--status approved|proposed]` — список семейств
+- `lib family show <slug|id>` — детали семейства
+- `lib family set <slug|id> [--name N] [--slug S] [--status approved|discarded]` — изменить семейство
+- `lib family merge <from> <into>` — объединить семейства
+- `lib family discard <slug|id>` — отменить семейство
+
+### Дашборд (четыре таба)
+
+1. **Референсы** — сетка, фильтры по источнику/тегам, поиск, боковая панель
+2. **Собрать** — статус готовности импортёров, кнопки импорта, добавление локальных файлов (из текущей директории и `library.importDirs`)
+3. **Семейства** — editor для каждого (name, slug, summary, mood, dials, exemplars, prompt/negative fragments), кнопка Approve и Copy command
+4. **Кластеризация** — пересчёт, результат (k, silhouette), контекст для Claude
+
+Дашборд запущен локально (127.0.0.1), закрыт от интернета.
 
 ### MCP (только clean, не local-only)
 

@@ -29,15 +29,23 @@ npx nullume <команда> <опции>
 - `nullume generate create <id> --prompt "..." [--image file.jpg] [--set k=v] --wait --json` — запустить генерацию и дождаться результата
 
 **Библиотека вкуса (спринт 2):**
-- `nullume lib init` — инициализировать БД и модели CLIP
-- `nullume lib import <source>` — импортировать из источника (eagle, raindrop, pinterest-api и т.д.)
-- `nullume lib add <файлы>` — добавить локальные файлы
-- `nullume lib embed` — вычислить эмбеддинги для всех картинок
-- `nullume lib cluster [--k <n>]` — кластеризовать в семейства
-- `nullume lib search <текст>` — поиск в библиотеке (по вектору или последние N)
-- `nullume lib propose [--apply <file.json>]` — Claude заполняет описания семейств (или применяет их)
-- `nullume lib dashboard [--open]` — интерактивный дашборд для утверждения семейств
-- `nullume lib family list|show|set|merge|discard` — управление семействами
+- `nullume lib init [--model clip|siglip] [--skip-models]` — инициализировать БД и модели для эмбеддингов
+- `nullume lib sources` — список доступных импортёров (clean vs. local-only)
+- `nullume lib import <source> [--limit 50] [--collection X] [--dry-run]` — импортировать из источника
+- `nullume lib add <файлы...> [--tag t] [--page-url url]` — добавить локальные файлы (только из текущей директории и `library.importDirs`)
+- `nullume lib list [--family X] [--source X] [--status active] [--limit 50]` — список всех референсов в БД
+- `nullume lib embed [--reindex] [--batch 32]` — вычислить эмбеддинги CLIP для картинок
+- `nullume lib status` — статус библиотеки: count referencias, embeddings, families, disk usage
+- `nullume lib search [text] [--image path] [--family slug] [--limit 12]` — поиск по вектору или текстовому описанию
+- `nullume lib cluster [--k N] [--k-min 3] [--k-max 12]` — кластеризовать в семейства (k выбирается автоматически через силуэты)
+- `nullume lib session set <importer> [--token t] [--cookie k=v]...` — сохранить токен/cookies для импортёра
+- `nullume lib propose [--apply file.json]` — Claude предлагает имена и описания семейств (или применяет их из JSON)
+- `nullume lib dashboard [--port N] [--idle 30] [--open]` — локальный дашборд на 127.0.0.1 (четыре таба: Референсы, Собрать, Семейства, Кластеризация)
+- `nullume lib family list [--status approved|proposed]` — список семейств со статусом
+- `nullume lib family show <slug|id>` — детали семейства (размер, exemplars, дескриптор)
+- `nullume lib family set <slug|id> [--name N] [--slug S] [--status approved|discarded]` — изменить семейство
+- `nullume lib family merge <from> <into>` — объединить два семейства
+- `nullume lib family discard <slug|id>` — отменить семейство
 
 ### Дорога 2: MCP-инструменты (для агентов Claude Code)
 
@@ -219,10 +227,62 @@ nullume models list --category image --search upscale --json
 
 ## Библиотека вкуса
 
-Локальные файлы (`lib add`, дашборд → «Собрать») принимаются только из текущего
-каталога и из `library.importDirs` в `~/.nullume/config.json`. (спринт 2)
+Коллекция референсов дизайна с автоматической кластеризацией в семейства стилей: импортируешь картинки → система группирует по стилям → Claude заполняет описания → ты утверждаешь в дашборде → генерируешь контент в этом стиле через `--style <slug>`.
 
-Коллекция референсов дизайна с автоматической кластеризацией в семейства стилей и моторикой: импортируешь картинки → система группирует по стилям → Claude заполняет описания → ты утверждаешь в дашборде → генерируешь контент в этом стиле через `--style <slug>`.
+### Настройка конфигурации
+
+Создай или отредактируй `~/.nullume/config.json`:
+
+```json
+{
+  "library": {
+    "embedModel": "clip",
+    "importDirs": ["/Users/you/Pictures/refs", "/path/to/another/dir"]
+  },
+  "sources": {
+    "raindrop": {"token": "your-token"},
+    "unsplash": {"apiKey": "your-key"}
+  }
+}
+```
+
+**`library.importDirs`** — каталоги, откуда `lib add` и дашборд («Собрать → Добавить свои файлы») берут локальные картинки. Без него разрешён только текущий рабочий каталог. Это защита от случайных ошибок с правами на файлы.
+
+### Интерактивный дашборд
+
+```bash
+nullume lib dashboard --open
+# Открывается на http://127.0.0.1:PORT?token=...
+```
+
+**Четыре таба в дашборде:**
+
+1. **Референсы** — сетка всех импортированных и добавленных картинок
+   - Фильтры: по источнику, по тегам
+   - Поиск: по описанию, по картинке
+   - Боковая панель: теги, скрыть, отметить exemplar для семейства
+
+2. **Собрать** — запуск импортёров и добавление локальных файлов
+   - Статус готовности каждого источника (green = готов, red = не настроен)
+   - Кнопки импорта для каждого чистого источника (eagle, raindrop, pinterest-api и т.д.)
+   - Local-only источники (Pinterest cookies, Dribbble, X) закрыты гейтом ADR-007; видна причина
+   - Добавление локальных файлов: по абсолютному пути (только из текущей директории и `library.importDirs`)
+
+3. **Семейства** — одобрение, редактирование и утверждение стилей
+   - Список всех семейств (pending, approved, discarded)
+   - Для каждого — editor: name, slug, summary, mood words, дескриптор (palette, typography, dials, motion, spacing)
+   - Четыре dial'я: DESIGN_VARIANCE, MOTION_INTENSITY, VISUAL_DENSITY, symmetry (0–1)
+   - Exemplars: пути к репрезентативным картинкам, можно выбрать вручную
+   - Prompt/negative fragments для генерации
+   - Кнопка **Approve** переводит статус в approved; затем доступно `generate create --style <slug>`
+   - Кнопка **Копировать команду** собирает готовый `nullume generate create <model> --style <slug>` в буфер обмена
+
+4. **Кластеризация** — пересчёт и анализ
+   - Кнопка пересчёта: `lib cluster` с автоматическим k
+   - Вывод: k, silhouette score, распределение по кластерам
+   - Контекст для Claude: копируется вся информация о кластерах для предложений
+
+Дашборд запущен локально и закрыт от интернета — никаких данных не уходят.
 
 ### Источники данных
 
@@ -243,16 +303,25 @@ nullume models list --category image --search upscale --json
 
 Детали, риски и гейты — в `docs/decisions/ADR-007-reference-sources-policy.md`.
 
-### Цикл работы
+### Owner workflow — кто и когда что делает
 
-1. **`lib init`** — инициализировать БД и модели CLIP
-2. **`lib import <source>`** — импортировать из источника (eagle, raindrop, pinterest-api, pexels, pixabay, unsplash, rss, arena, civitai, shotcafe, а также pinterest-cookies/dribbble/x с гейтом)
-3. **`lib add <файлы>`** — добавить локальные файлы вручную
-4. **`lib embed`** — вычислить эмбеддинги CLIP для всех картинок (автоматический кэш, ленивый)
-5. **`lib cluster --k 5`** — кластеризовать в семейства (автоматический выбор k через силуэты)
-6. **`lib propose`** — Claude предлагает имена и описания семейств (методика: доминирующий паттерн, расхождения вслух, не усреднять)
-7. **`lib dashboard`** — открыть локальный дашборд на 127.0.0.1:*; ты утверждаешь или переименовываешь семейства и их дескрипторы
-8. **`generate create --style <slug>`** — генерировать контент в этом стиле (семейство должно быть `approved`)
+**Владелец → CLI или дашборд:**
+
+1. **`lib init`** — один раз, инициализировать БД и модели CLIP (может занять 1–2 мин при первом запуске embed)
+2. **Настроить ключи** в `~/.nullume/config.json`: токены для источников, `library.importDirs`
+3. **`lib import <source>`** или **дашборд → Собрать → кнопка источника** — импортировать из доступных источников (clean: eagle, raindrop, pinterest-api, pexels, pixabay, unsplash, rss, arena, civitai, shotcafe; local-only: pinterest-cookies, dribbble, x)
+4. **`lib add <файлы>`** или **дашборд → Собрать → Добавить свои файлы** — добавить локальные картинки вручную
+5. **`lib embed`** — вычислить CLIP-эмбеддинги для всех картинок (1–5 мин на современном GPU, без GPU медленнее)
+6. **`lib cluster`** — кластеризовать картинки в семьи (автоматический выбор количества кластеров через силуэты)
+
+**Claude (taste-curator) → MCP инструменты:**
+
+7. **`lib propose`** — Claude анализирует каждый кластер и предлагает: имя семейства (slug), описание, полный дескриптор (палитра, типографика, motion, dials, prompt fragments)
+
+**Владелец → Дашборд:**
+
+8. **Дашборд → Семейства → editor** — пересмотреть/отредактировать дескрипторы, выбрать exemplars, нажать **Approve**
+9. **`generate create --style <slug>`** — генерировать контент в стиле этого семейства (семейство должно быть `approved`)
 
 ### Таблица источников
 

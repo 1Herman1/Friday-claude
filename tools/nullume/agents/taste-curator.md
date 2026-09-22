@@ -29,11 +29,12 @@ model: sonnet
 nullume lib import eagle --limit 50
 nullume lib import raindrop --collection "Design Inspiration" --limit 30
 nullume lib import pinterest-api --limit 40
+nullume lib import rss --limit 20
 
-# Поиск в импортированных (MCP или CLI)
-mcp__nullume__lib_search --query "editorial design"
+# Поиск в импортированных (MCP)
+mcp__nullume__lib_search --query "editorial design" --limit 20
 # или через CLI:
-nullume lib search "editorial design" --json
+nullume lib search "editorial design" --limit 20 --json
 ```
 
 Результат — набор картинок с метаданными. Визуально просмотрите первые 10–15 результатов, отметьте визуально устойчивые паттерны.
@@ -45,9 +46,9 @@ nullume lib search "editorial design" --json
 nullume lib embed
 
 # Кластеризовать в семьи (k выбирается автоматически через силуэты)
-mcp__nullume__lib_clusters --auto-k
-# или задать вручную:
-# mcp__nullume__lib_clusters --k 4
+nullume lib cluster
+# или с явным k:
+# nullume lib cluster --k 4
 ```
 
 Получаете список кластеров с exemplars (рипрезентативные картинки). Посмотрите exemplars каждого кластера — что общего, чем отличаются.
@@ -72,15 +73,16 @@ mcp__nullume__lib_clusters --auto-k
 ### Шаг 4: предложить Claude заполнить дескрипторы
 
 ```bash
+# MCP (только для clean источников)
 mcp__nullume__lib_propose
 # или через CLI:
-# nullume lib propose --json
+nullume lib propose --json
 ```
 
-Claude получит ваш анализ и предложит:
+Claude получит контекст со всеми кластерами и их exemplars, затем предложит:
 - Имя семейства (slug вида `editorial-warm-minimal`)
 - Описание (2–3 предложения)
-- Полный дескриптор (палитра, типографика, motion, dials, prompt_fragment, negative_fragment)
+- Полный дескриптор (палитра, типографика, motion, dials, mood words, prompt_fragment, negative_fragment)
 
 ### Шаг 5: структурировать дескриптор
 

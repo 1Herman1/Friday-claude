@@ -48,7 +48,9 @@ nullume/
 │   ├── build-catalog.mts        # Собирает models.json из docs.kie.ai
 │   ├── audit-catalog.mts        # Проверяет расхождения в каталоге
 │   ├── sync-skill.mts           # Синхронизирует SKILL.md в Friday
-│   └── copy-assets.mjs          # Копирует данные в dist после сборки
+│   ├── copy-assets.mjs          # Копирует данные в dist после сборки
+│   ├── dashboard-console-check.mjs  # Dev-check: логирование консоли дашборда (playwright-core)
+│   └── dashboard-flow-check.mjs     # Dev-check: E2E-проверка дашборда (playwright-core)
 │
 ├── src/
 │   ├── cli/                     # CLI команды (balance, generate, models, lib)

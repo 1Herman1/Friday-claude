@@ -316,9 +316,21 @@ curl -v https://api.kie.ai/api/v1/chat/credit
 
 Коллекция референсов дизайна с автоматической кластеризацией в семьи стилей. Используешь для подбора и утверждения стилей перед генерацией контента через `--style <slug>`.
 
-### Пошаговый прогон на машине (10 шагов)
+### Пошаговый workflow
 
-**Система требует:** npm install → lib init → ключи → import → embed → cluster → propose → dashboard → approve → generate --style
+**Этапы:** init → ключи → import/add → embed → cluster → propose → dashboard approve → generate --style
+
+**Владелец:**
+1. Инициализация (один раз)
+2. Импорт из источников (CLI или дашборд)
+3. Кластеризация (автоматический выбор количества групп)
+
+**Claude (taste-curator):**
+4. Анализ и предложение дескрипторов
+
+**Владелец:**
+5. Утверждение в дашборде
+6. Генерация контента в стиле
 
 #### Шаг 1: установка и инициализация
 
@@ -331,20 +343,16 @@ npx tsx src/cli/index.ts lib init
 # Создаст: ~/.nullume/library/, ~/.nullume/models/, БД SQLite
 ```
 
-#### Шаг 2: настроить ключи
+#### Шаг 2: настроить ключи и импорт-директории
 
-`library.importDirs` — каталоги, из которых `lib add` и дашборд («Собрать →
-Добавить свои файлы») берут локальные картинки. Без него разрешён только
-текущий рабочий каталог.
-
-Для чистых источников создай `~/.nullume/config.json`:
+Отредактируй `~/.nullume/config.json`:
 
 ```json
 {
   "acknowledgedRiskyImporters": false,
   "library": {
     "embedModel": "clip",
-    "importDirs": ["/Users/you/Pictures/refs"]
+    "importDirs": ["/Users/you/Pictures/refs", "/path/to/design/folder"]
   },
   "sources": {
     "raindrop": {"token": "your-raindrop-token"},
@@ -353,7 +361,9 @@ npx tsx src/cli/index.ts lib init
 }
 ```
 
-Eagle работает автоматически (локальный API на `localhost:41595`).
+**`library.importDirs`** — каталоги, откуда `lib add` и дашборд («Собрать → Добавить свои файлы») берут локальные картинки. Без него разрешён только текущий рабочий каталог. Это защита от случайных ошибок с правами.
+
+**Eagle** работает автоматически через локальный API на `localhost:41595`.
 
 #### Шаг 3: импортировать из чистых источников
 
@@ -407,15 +417,23 @@ npx tsx src/cli/index.ts lib propose --json
 #### Шаг 9: открыть дашборд и утвердить
 
 ```bash
-npx tsx src/cli/index.ts lib dashboard
-# http://127.0.0.1:12345?token=... (откроется в браузере)
+npx tsx src/cli/index.ts lib dashboard --open
+# Открывается на http://127.0.0.1:PORT?token=...
 ```
 
-**В дашборде:**
-- Просмотри exemplars каждого кластера
-- Переименуй (slug: `editorial-warm-minimal`)
-- Отредактируй дескриптор (палитра, типографика, motion, dials)
-- Нажми **Approve**
+**Четыре таба дашборда:**
+
+1. **Референсы** — сетка всех картинок, фильтры, поиск, боковая панель с тегами
+2. **Собрать** — запуск импортёров (статус готовности), добавление локальных файлов через абсолютный путь
+3. **Семейства** — список с editor'ом для каждого семейства:
+   - name, slug, summary
+   - mood words (теги)
+   - дескриптор: palette, typography, dials (DESIGN_VARIANCE, MOTION_INTENSITY, VISUAL_DENSITY, symmetry), motion, spacing
+   - exemplars (выбрать репрезентативные картинки)
+   - prompt_fragment и negative_fragment для генерации
+   - **Approve** — перевести статус в approved
+   - **Копировать команду** — скопировать готовый `nullume generate create --style <slug>` в буфер обмена
+4. **Кластеризация** — пересчёт, результат (k, silhouette score, распределение), контекст для Claude
 
 #### Шаг 10: генерировать в стиле
 
@@ -456,7 +474,7 @@ npm test                # Запустить тесты
 npm run typecheck       # Проверить типы
 ```
 
-### Публикация в npm (только для Гермеса)
+### Публикация в npm (только владелец)
 
 ```bash
 npm login              # Один раз: введи логин/пароль npm

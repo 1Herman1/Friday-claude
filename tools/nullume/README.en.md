@@ -200,22 +200,45 @@ Either:
 
 Organize design references into style families with automatic clustering and description filling. Use approved styles for branded content generation via `--style <slug>`.
 
-**Workflow:** Import references → Embed → Cluster → Propose (Claude) → Approve (Dashboard) → Generate with style
+**Workflow:** init → import/add → embed → cluster → propose (Claude) → dashboard approve → generate with style
 
-**Sources:** Eagle, Raindrop, Pinterest v5, Unsplash, Pexels, Pixabay, Are.na, Civitai, RSS, shot.cafe (clean); Pinterest cookies, Dribbble, X (local-only with gate).
+**Config:** Set `library.importDirs` in `~/.nullume/config.json` to allow local file imports from specific directories.
+
+**Dashboard:** Four tabs:
+1. **References** — grid with filters and search
+2. **Gather** — import from sources, add local files
+3. **Families** — edit and approve style descriptors (name, slug, palette, motion, dials, exemplars, prompt fragments)
+4. **Clustering** — recompute and analyze
+
+**Sources:** Eagle (local), Raindrop, Pinterest v5, Unsplash, Pexels, Pixabay, Are.na, Civitai, RSS, shot.cafe (clean); Pinterest cookies, Dribbble, X (local-only with gate).
 
 ```bash
 nullume lib init
 nullume lib import eagle --limit 50
+nullume lib add ~/my-refs/*.jpg
 nullume lib embed
 nullume lib cluster
 nullume lib propose
-nullume lib dashboard
+nullume lib dashboard --open
 # Approve styles in browser, then:
 nullume generate create flux-pro --prompt "..." --style editorial-warm-minimal --wait
 ```
 
-See `.claude/agents/design/taste-curator.md` for curator methodology and `docs/decisions/ADR-007-reference-sources-policy.md` for source policies.
+**Commands:**
+- `lib init [--model clip|siglip] [--skip-models]` — init database
+- `lib sources` — list available importers
+- `lib import <source> [--limit 50]` — import from source
+- `lib add <files...>` — add local files (only from cwd and `library.importDirs`)
+- `lib list [--status active] [--limit 50]` — all references
+- `lib embed [--reindex]` — compute CLIP embeddings
+- `lib cluster [--k N]` — cluster into families
+- `lib search <text> [--limit 12]` — search by description or image
+- `lib session set <source> [--token t]` — set importer credentials
+- `lib propose [--apply file.json]` — Claude proposes descriptors
+- `lib dashboard [--port N] [--open]` — interactive dashboard
+- `lib family list|show|set|merge|discard` — family management
+
+See `.claude/agents/design/taste-curator.md` for methodology and `docs/decisions/ADR-007-reference-sources-policy.md` for source policies.
 
 ## File Locations
 
