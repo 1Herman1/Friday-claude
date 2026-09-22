@@ -86,6 +86,13 @@ jobs:
             echo "==> Generating Prisma client"
             (cd projects/perfect-skin/server && npx prisma generate)
 
+            # docker compose подставляет POSTGRES_PASSWORD в описание сервиса
+            # даже для чтения дампа, а psql ниже требует его напрямую. Берём из
+            # .env, созданного при первичной установке: ключ живёт только там.
+            set -a
+            . projects/perfect-skin/server/.env
+            set +a
+
             echo "==> Backing up database before any migration"
             mkdir -p /var/backups/perfect-skin
             BACKUP_FILE="/var/backups/perfect-skin/ps_backup_$(date +%Y%m%d_%H%M%S).dump"
@@ -105,7 +112,7 @@ jobs:
             # следующей первичной установке, то есть никогда. Выражения
             # идемпотентны, «already exists» — ожидаемый ответ; любая другая
             # ошибка валит выкатку.
-            CONSTRAINTS_OUT="$(cd projects/perfect-skin/server && PGPASSWORD="$(grep -m1 '^POSTGRES_PASSWORD=' .env | cut -d= -f2-)" \
+            CONSTRAINTS_OUT="$(cd projects/perfect-skin/server && PGPASSWORD="$POSTGRES_PASSWORD" \
               psql -h 127.0.0.1 -U ps -d perfect_skin -v ON_ERROR_STOP=0 -f prisma/sql/01-constraints.sql 2>&1)"
             echo "$CONSTRAINTS_OUT"
             if echo "$CONSTRAINTS_OUT" | grep "ERROR:" | grep -qv "already exists"; then
