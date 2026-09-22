@@ -198,6 +198,28 @@ sudo nginx -t && sudo systemctl reload nginx
 Либо, если правка мелкая, внести её на сервере руками через
 workflow «Run Command on Perfect Skin VPS» и не забыть повторить в репозитории.
 
+### Оптовые цены и признак «профессиональный» из прайса
+
+Скрипт `server/prisma/import-prices.ts`, вход — `server/assets/price-import.json`
+(записи `name`, `volume`, `wholesaleKopecks`, `retailKopecks`, `isProfessional`).
+Сопоставляет с каталогом по названию (точно или по префиксу) и объёму;
+несколько кандидатов — в «неоднозначные», ничего не выбирается наугад.
+Розничную цену не перезаписывает — расхождения только показывает.
+
+На сервере через workflow «Run Command on Perfect Skin VPS»:
+
+```bash
+# сухой прогон — таблица «запись → товар/фасовка → что изменится»
+npm run import:prices --workspace=@ps/server
+# запись одной транзакцией + пересчёт цен товаров; повторный запуск ничего не меняет
+npm run import:prices --workspace=@ps/server -- --apply
+# другой входной файл
+npm run import:prices --workspace=@ps/server -- --file путь.json --apply
+```
+
+Сначала всегда сухой прогон: разобрать несопоставленные и неоднозначные,
+поправить JSON, и только затем `--apply`.
+
 ### Где искать логи
 
 **API:**
