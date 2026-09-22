@@ -176,10 +176,16 @@ jobs:
 
             echo "==> Ограничения уровня базы"
             # Не часть миграций. Повторный прогон упрётся в «already exists» —
-            # это нормально, поэтому гасим только его, а не любые ошибки.
-            PGPASSWORD="$POSTGRES_PASSWORD" psql -h 127.0.0.1 -U ps -d perfect_skin \
-              -v ON_ERROR_STOP=0 -f prisma/sql/01-constraints.sql 2>&1 \
-              | grep -v "already exists" || true
+            # это нормально и единственная прощаемая ошибка. Любая другая
+            # валит прогон: раньше вывод уходил в grep, и не применившиеся
+            # ограничения выглядели успехом — зелёная галочка без проверки.
+            CONSTRAINTS_OUT="$(PGPASSWORD="$POSTGRES_PASSWORD" psql -h 127.0.0.1 -U ps -d perfect_skin \
+              -v ON_ERROR_STOP=0 -f prisma/sql/01-constraints.sql 2>&1)"
+            echo "$CONSTRAINTS_OUT"
+            if echo "$CONSTRAINTS_OUT" | grep "ERROR:" | grep -qv "already exists"; then
+              echo "Ограничения применились не полностью — смотри ошибки выше."
+              exit 1
+            fi
 
             echo "==> Каталог товаров"
             PRODUCTS=$(PGPASSWORD="$POSTGRES_PASSWORD" psql -h 127.0.0.1 -U ps -d perfect_skin -tAc "SELECT COUNT(*) FROM products")

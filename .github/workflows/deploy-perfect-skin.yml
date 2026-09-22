@@ -99,6 +99,20 @@ jobs:
             echo "==> Applying migrations"
             (cd projects/perfect-skin/server && npx prisma migrate deploy)
 
+            echo "==> Applying database constraints"
+            # Файл ограничений не входит в миграции, поэтому его надо применять
+            # и здесь: иначе новое ограничение доедет до сервера только при
+            # следующей первичной установке, то есть никогда. Выражения
+            # идемпотентны, «already exists» — ожидаемый ответ; любая другая
+            # ошибка валит выкатку.
+            CONSTRAINTS_OUT="$(cd projects/perfect-skin/server && PGPASSWORD="$(grep -m1 '^POSTGRES_PASSWORD=' .env | cut -d= -f2-)" \
+              psql -h 127.0.0.1 -U ps -d perfect_skin -v ON_ERROR_STOP=0 -f prisma/sql/01-constraints.sql 2>&1)"
+            echo "$CONSTRAINTS_OUT"
+            if echo "$CONSTRAINTS_OUT" | grep "ERROR:" | grep -qv "already exists"; then
+              echo "Ограничения применились не полностью — смотри ошибки выше."
+              exit 1
+            fi
+
             echo "==> Building server"
             npm run build --workspace=@ps/server
 
