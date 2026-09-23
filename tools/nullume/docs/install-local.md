@@ -132,13 +132,19 @@ nullume lib status
 
 ```
 nullume lib sources
-nullume lib import unsplash --query "warm minimal skincare still life" --limit 30
+nullume lib import rss --limit 40
 nullume lib embed
 nullume lib cluster
 ```
 
-По порядку: посмотреть доступные источники, натащить 30 картинок с Unsplash,
+По порядку: посмотреть доступные источники, натащить картинки из дизайн-лент,
 посчитать для них «отпечаток стиля», разложить по семействам.
+
+Без регистрации работают три источника: `rss`, `shotcafe`, `civitai`.
+Остальным нужен бесплатный ключ — Unsplash (unsplash.com/oauth/applications),
+Pexels (pexels.com/api), Pixabay (pixabay.com/api/docs). Ключ вставляется
+один раз: `nullume lib session set unsplash --token ВАШ_КЛЮЧ`. Для тёплого
+предметного фото лучший из трёх — Unsplash.
 
 Затем открыть рабочее место:
 
