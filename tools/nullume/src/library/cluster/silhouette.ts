@@ -54,7 +54,10 @@ export function silhouette(vectors: Float32Array[], labels: Int32Array): number 
         intraCount++;
       }
     }
-    const a = intraCount > 0 ? intraSum / intraCount : 0;
+    // Одиночка: по определению силуэт равен нулю. Иначе a=0 даёт s=1, и
+    // подбор K вознаграждает вырождение «каждый реф — своё семейство».
+    if (intraCount === 0) continue;
+    const a = intraSum / intraCount;
 
     // Минимальное среднее расстояние до других кластеров
     const clusterDists = new Map<number, { sum: number; count: number }>();
@@ -100,12 +103,15 @@ export function pickK(
   if (kMin <= 0 || kMax < kMin) throw new Error("Invalid k range");
   if (kMin > vectors.length) throw new Error("kMin cannot be greater than vector count");
 
+  // Кластер меньше двух точек бессмыслен, поэтому K не может превышать n/2.
+  const effectiveKMax = Math.max(kMin, Math.min(kMax, Math.floor(vectors.length / 2)));
+
   const rng = mulberry32(seed);
   const scores = new Map<number, number>();
   let bestK = kMin;
   let bestScore = -Infinity;
 
-  for (let k = kMin; k <= kMax; k++) {
+  for (let k = kMin; k <= effectiveKMax; k++) {
     if (k > vectors.length) break;
 
     // Быстрый K-means для оценки

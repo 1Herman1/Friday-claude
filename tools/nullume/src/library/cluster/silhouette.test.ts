@@ -172,3 +172,16 @@ test("pickK: детерминированный по seed", () => {
     assert.ok(Math.abs(s1 - s2) < 1e-5);
   }
 });
+
+test("silhouette: одиночные кластеры не дают идеальную оценку", () => {
+  // Десять точек, каждая в своём кластере — вырождение, а не идеальное разбиение
+  const vectors = Array.from({ length: 10 }, (_, i) => new Float32Array([i, 0]));
+  const labels = Int32Array.from({ length: 10 }, (_, i) => i);
+  assert.strictEqual(silhouette(vectors, labels), 0);
+});
+
+test("pickK: K не превышает половину числа точек", () => {
+  const vectors = Array.from({ length: 10 }, (_, i) => new Float32Array([i % 2, Math.floor(i / 2)]));
+  const { k } = pickK(vectors, { kMin: 3, kMax: 12 });
+  assert.ok(k <= 5, `K=${k} больше половины выборки`);
+});
