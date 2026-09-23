@@ -14,23 +14,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const fixturesDir = path.join(__dirname, "../__fixtures__");
 
-test("rss: should print feeds list when no collection", async () => {
-  const logs: string[] = [];
+test("rss: should fail with the feeds list when no collection", async () => {
   const opts = {
-    log: (msg: string) => logs.push(msg),
+    log: () => {},
     limit: 10,
     fetchImpl: fetch,
     config: mockConfig(),
     env: {},
   };
 
-  // @ts-ignore - intentional partial opts for testing
-  for await (const _ of rssImporter.run(opts)) {
-    // Should not yield anything
-  }
-
-  assert(logs.some((l) => l.includes("Доступные ленты")));
-  assert(logs.some((l) => l.includes("--collection")));
+  await assert.rejects(
+    async () => {
+      // @ts-ignore - intentional partial opts for testing
+      for await (const _ of rssImporter.run(opts)) {
+        // Should not yield anything
+      }
+    },
+    (e: Error) => e.message.includes("--collection") && e.message.includes("onepagelove")
+  );
 });
 
 test("rss: should parse content strategy and extract first image", async () => {
@@ -120,12 +121,11 @@ test("rss: should respect limit", async () => {
     env: { NULLUME_NO_DELAY: "1" },
   };
 
-  // @ts-ignore
-  let count = 0;
-  for await (const _ of rssImporter.run(opts)) {
-    count++;
-  }
-
-  // No collection, so no items
-  assert.strictEqual(count, 0);
+  // No collection, so it must refuse rather than quietly import nothing
+  await assert.rejects(async () => {
+    // @ts-ignore
+    for await (const _ of rssImporter.run(opts)) {
+      // no items expected
+    }
+  });
 });

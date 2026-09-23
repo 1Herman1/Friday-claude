@@ -37,13 +37,10 @@ export const rssImporter: Importer = {
       throw new ProviderError(`Не удалось загрузить feeds.json: ${(e as Error).message}`);
     }
 
-    // Если нет collection, вывести список лент и выход
+    // Без collection импортировать нечего: это ошибка, а не пустой успех
     if (!collection) {
-      log("Доступные ленты:");
-      for (const feed of feeds) {
-        log(`  --collection ${feed.id}  # ${feed.title}`);
-      }
-      return;
+      const list = feeds.map((f) => `  --collection ${f.id}  # ${f.title}`).join("\n");
+      throw new UsageError(`RSS требует --collection. Доступные ленты:\n${list}`);
     }
 
     // Найти выбранную ленту
