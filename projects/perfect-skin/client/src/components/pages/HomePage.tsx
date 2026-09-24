@@ -5,6 +5,7 @@ import { CategoryAccordion } from '@/components/home/CategoryAccordion'
 import { BestsellerSection } from '@/components/home/BestsellerSection'
 import { ProSection } from '@/components/home/ProSection'
 import { About } from '@/components/home/About'
+import { FaqSection } from '@/components/home/FaqSection'
 
 export function HomePage() {
   return (
@@ -29,6 +30,9 @@ export function HomePage() {
 
       {/* About */}
       <About />
+
+      {/* FAQ */}
+      <FaqSection />
     </>
   )
 }
