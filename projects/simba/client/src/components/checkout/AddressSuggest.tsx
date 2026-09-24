@@ -185,12 +185,12 @@ export default function AddressSuggest({
         {/* Индикатор загрузки или выпадающей стрелки */}
         {isLoading ? (
           <div
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 border-2 border-navy-300 border-t-primary rounded-full animate-spin"
+            data-layout-transform className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 border-2 border-navy-300 border-t-primary rounded-full animate-spin"
             aria-hidden="true"
           />
         ) : (
           <ChevronDownIcon
-            className={`absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-300 transition-transform ${
+            data-layout-transform className={`absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-300 transition-transform ${
               isOpen ? 'rotate-180' : ''
             }`}
             aria-hidden="true"

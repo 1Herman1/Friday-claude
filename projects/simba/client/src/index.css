@@ -76,7 +76,12 @@
   /* Lottie-сцены исключены: их конечности стоят на SVG-атрибуте transform,
      и CSS `transform: none` разбирал собаку на части. Плеер под reduced-motion
      и так стоит на первом кадре — целом. */
-  :not(.lottie-host):not(.lottie-host *), *::before, *::after {
+  /* `data-layout-transform` — опт-аут для элементов, у которых сдвиг держит
+     ПОЛОЖЕНИЕ, а не движение: центровка `left-1/2 -translate-x-1/2`, лента
+     карусели. Без него правило ниже обнуляло им transform, и логотип уезжал
+     углом в центр пилюли, а лента переставала подводить слайд. Гасим движение,
+     не вёрстку. */
+  :not(.lottie-host):not(.lottie-host *):not([data-layout-transform]), *::before, *::after {
     transform: none !important;
     transition-property: opacity, color, background-color, border-color !important;
     animation-duration: 0.01ms !important;

@@ -191,7 +191,11 @@ export default function BannerCarousel() {
     return () => el.removeEventListener('scroll', handleScroll)
   }, [isMobile, banners.length])
 
-  // Measure container width and track changes with ResizeObserver
+  // Зависимости обязательны: на первом рендере баннеров ещё нет, компонент
+  // выходит по `banners.length === 0` и ленты в DOM не существует — эффект с
+  // пустым списком уходил по `return` и больше не запускался никогда. Из-за
+  // этого containerWidth навсегда оставался нулём, а ResizeObserver не
+  // создавался, и ширина окна не пересчитывалась при ресайзе.
   useEffect(() => {
     const track = trackRef.current
     if (!track?.parentElement) return
@@ -205,7 +209,7 @@ export default function BannerCarousel() {
     resizeObserver.observe(container)
 
     return () => resizeObserver.disconnect()
-  }, [])
+  }, [banners.length, isMobile])
 
   // Listen to pointer events on document to catch pointerup outside element
   useEffect(() => {
@@ -376,8 +380,12 @@ export default function BannerCarousel() {
   const gapPercent = isMobile ? 0 : 5.5
   const slideWidthPercent = 100 - peekPercent * 2 - gapPercent * 2
 
-  // Use measured containerWidth from state, fallback to window width if not measured yet
-  const effectiveContainerW = containerWidth || window.innerWidth
+  // Запасное значение — clientWidth, а НЕ innerWidth: ширина слайда задана в
+  // CSS процентами от реальной ленты, то есть без полосы прокрутки, а
+  // innerWidth её включает. На macOS полоса плавающая и числа совпадают, на
+  // Windows расходятся на 15–17px — композиция уезжала влево, и левый сосед
+  // становился уже правого. Обе величины должны считаться от одной ширины.
+  const effectiveContainerW = containerWidth || document.documentElement.clientWidth
   const peekPx = (peekPercent / 100) * effectiveContainerW
   const gapPx = isMobile ? 16 : (gapPercent / 100) * effectiveContainerW
   const slideWidthPx = (slideWidthPercent / 100) * effectiveContainerW
@@ -487,6 +495,7 @@ export default function BannerCarousel() {
       <div className="overflow-hidden">
         <div
           ref={trackRef}
+          data-layout-transform
           className="flex cursor-grab active:cursor-grabbing select-none"
           style={{
             touchAction: 'pan-y',

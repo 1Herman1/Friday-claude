@@ -204,7 +204,7 @@ export default function SearchModal({ open, onClose }: Props) {
                         pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-4">
           <form onSubmit={handleSubmit} className="relative flex-1">
             <label htmlFor="search-modal-input" className="sr-only">Поиск по каталогу</label>
-            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400 pointer-events-none" />
+            <SearchIcon data-layout-transform className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-navy-400 pointer-events-none" />
             <input
               id="search-modal-input"
               ref={inputRef}
@@ -232,7 +232,7 @@ export default function SearchModal({ open, onClose }: Props) {
                 type="button"
                 onClick={clear}
                 aria-label="Очистить поле"
-                className="btn-press absolute right-1 top-1/2 -translate-y-1/2 w-11 h-11
+                data-layout-transform className="btn-press absolute right-1 top-1/2 -translate-y-1/2 w-11 h-11
                            flex items-center justify-center text-navy-400 hover:text-navy-700 rounded-full"
               >
                 <CloseIcon className="w-5 h-5" />

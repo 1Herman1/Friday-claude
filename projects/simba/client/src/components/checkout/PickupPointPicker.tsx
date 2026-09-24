@@ -264,7 +264,7 @@ export function PickupPointPicker({ provider, city, cityCoords, selected, onSele
             Найти пункт по адресу или названию
           </label>
           <div className="relative">
-            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 w-4 h-4 -translate-y-1/2 text-navy-400" />
+            <SearchIcon data-layout-transform className="pointer-events-none absolute left-3 top-1/2 w-4 h-4 -translate-y-1/2 text-navy-400" />
             <input
               id="pickup-search"
               type="search"

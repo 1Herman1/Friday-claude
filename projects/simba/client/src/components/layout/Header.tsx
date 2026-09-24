@@ -100,7 +100,7 @@ export default function Header() {
           {/* PNG обрезан по «чернилам» (было 1968×520 с пустыми полями справа и снизу),
               поэтому логотип центруется без сдвигов на любой ширине. Видимый размер тот,
               что владелец выставил в тюнере: 240px старого файла = 154px обрезанного. */}
-          <Link to="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center flex-shrink-0 header-logo">
+          <Link to="/" data-layout-transform className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center flex-shrink-0 header-logo">
             <img src="/logo-header.png" alt="Симба" className="w-[62px] lg:w-[154px] h-auto header-pill-logo" />
           </Link>
 
@@ -203,7 +203,7 @@ export default function Header() {
           </button>
 
           {/* Логотип по центру */}
-          <Link to="/" className="flex items-center flex-shrink-0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Link to="/" data-layout-transform className="flex items-center flex-shrink-0 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <img src="/logo-header.png" alt="Симба" className="w-[96px] h-auto header-pill-logo" />
           </Link>
 

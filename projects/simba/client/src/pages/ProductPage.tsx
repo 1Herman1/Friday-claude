@@ -164,7 +164,7 @@ export default function ProductPage() {
               </div>
 
               {product.images.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 pointer-events-none group-hover:opacity-100 lg:opacity-0 transition-opacity">
+                <div data-layout-transform className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 pointer-events-none group-hover:opacity-100 lg:opacity-0 transition-opacity">
                   {product.images.map((_, i) => (
                     <div
                       key={i}
