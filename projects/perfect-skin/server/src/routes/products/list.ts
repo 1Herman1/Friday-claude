@@ -114,7 +114,8 @@ export default async function listRoute(app: FastifyInstance) {
       }
 
       // Set cache header
-      reply.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+      // Состав и цены зависят от того, кто смотрит — в общий кэш нельзя.
+      reply.header('Cache-Control', 'private, max-age=60')
 
       const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
 

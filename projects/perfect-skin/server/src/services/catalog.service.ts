@@ -114,7 +114,9 @@ export function buildProductCard(product: ProductWithRelations, viewer: PriceVie
   let minPrice: number | null = null
   let oldPrice: number | null = null
 
-  if (cheapest) {
+  // Товар кабинетный, а смотрит не специалист (секция на главной, ?pro=1):
+  // ни одна цена не уходит — ни через minPrice/oldPrice, ни через фасовки.
+  if (cheapest && !productPriceHidden) {
     // Видимая цена — используем resolved prices
     const resolvedPrice = resolvePrice({ retailPrice: decimalToNumber(cheapest.retailPrice), wholesalePrice: cheapest.wholesalePrice }, viewer)
     minPrice = resolvedPrice
@@ -127,7 +129,7 @@ export function buildProductCard(product: ProductWithRelations, viewer: PriceVie
   }
 
   // Check if in stock (только видимые варианты)
-  const inStock = visibleVariants.some((v) => (v.stock || 0) > 0)
+  const inStock = !productPriceHidden && visibleVariants.some((v) => (v.stock || 0) > 0)
 
   // Если нет видимых вариантов — товар целиком скрыт
   const finalProductPriceHidden = productPriceHidden || visibleVariants.length === 0
@@ -150,8 +152,9 @@ export function buildProductCard(product: ProductWithRelations, viewer: PriceVie
         volumeLabel: buildVolumeLabel(decimalToNumber(v.volumeValue), v.volumeUnit, v.volumeLabel),
         retailPrice: null,
         oldRetailPrice: null,
-        stock: v.stock || 0,
-        sku: v.sku || null,
+        // Складские данные скрытой позиции — тоже не для гостя.
+        stock: 0,
+        sku: null,
         isProfessional: v.isProfessional,
         priceHidden: true,
       }
@@ -191,11 +194,27 @@ export function buildProductCard(product: ProductWithRelations, viewer: PriceVie
   }
 }
 
+const PRO_SHOWCASE_LIMIT = 6
+
 export async function getProducts(
   prisma: PrismaClient,
   filters: CatalogFilters,
   viewer: PriceViewer = null
 ): Promise<{ items: ProductCardDTO[]; total: number; limit: number; offset: number }> {
+  // ?pro=1 для не-специалиста — это витрина секции на главной, а не поиск по
+  // кабинетному каталогу: поиск и фильтры отбрасываем, выдачу ограничиваем.
+  if (filters.pro && !canSeeProfessional(viewer)) {
+    filters = {
+      ...filters,
+      q: undefined,
+      category: undefined,
+      brand: undefined,
+      line: undefined,
+      limit: Math.min(filters.limit, PRO_SHOWCASE_LIMIT),
+      offset: 0,
+    }
+  }
+
   // Build where clause
   const where: any = {
     ...ACTIVE,
@@ -534,7 +553,7 @@ export async function getFacets(
       skinTypes: true,
       concerns: true,
       categories: { select: { categoryId: true } },
-      variants: { where: ACTIVE, select: { retailPrice: true } },
+      variants: { where: variantVisibleFor(viewer), select: { retailPrice: true } },
     },
   })
 
@@ -634,7 +653,9 @@ export async function getFacets(
   const priceWhere = buildBaseWhere('price')
   const priceData = await prisma.product.findMany({
     where: priceWhere,
-    select: { variants: { where: ACTIVE, select: { retailPrice: true } } },
+    // Диапазон цен — только по фасовкам, которые зритель видит: иначе цена
+    // литровой кабинетной фасовки проступала бы в price.max у гостя.
+    select: { variants: { where: variantVisibleFor(viewer), select: { retailPrice: true } } },
   })
   let minPrice = Infinity
   let maxPrice = 0
@@ -672,8 +693,10 @@ export async function getProductBySlug(
   slug: string,
   viewer: PriceViewer = null
 ): Promise<any | null> {
+  // Видимость — тем же правилом, что и листинг: товар без единой видимой
+  // фасовки для гостя не существует (404), а не «пустая карточка».
   const product = await prisma.product.findFirst({
-    where: { slug, ...ACTIVE },
+    where: { slug, ...ACTIVE, ...productVisibleFor(viewer) },
     include: {
       brand: true,
       line: true,
@@ -688,11 +711,6 @@ export async function getProductBySlug(
 
   if (!product) return null
 
-  // Check if product is visible to this viewer
-  const isStaff = canSeeProfessional(viewer) && !isWholesaleViewer(viewer)
-  const canSeeProduct = isWholesaleViewer(viewer) || isStaff || !product.isProfessional
-
-  if (!canSeeProduct) return null
 
   const card = buildProductCard(product, viewer)
 

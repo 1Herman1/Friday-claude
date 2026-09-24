@@ -1,5 +1,6 @@
 import { db, type Prisma } from '../lib/db.js'
-import { isWholesaleViewer, canSeeProfessional, type PriceViewer } from '../lib/pricing.js'
+import { type PriceViewer } from '../lib/pricing.js'
+import { ACTIVE, productVisibleFor } from '../lib/prisma-filters.js'
 import { ApiError } from '../lib/errors.js'
 
 export interface ListPostsOptions {
@@ -114,16 +115,13 @@ export class PostService {
   async getProductsBySlug(slugs: string[], viewer: PriceViewer = null): Promise<ProductCard[]> {
     if (slugs.length === 0) return []
 
-    const isStaff = canSeeProfessional(viewer) && !isWholesaleViewer(viewer)
-
-    // Non-wholesale viewers and non-staff see only non-professional products
-    const isProfessionalsOnly = !isWholesaleViewer(viewer) && !isStaff
-
+    // То же правило видимости, что у каталога; раньше здесь не проверялись
+    // фасовки и deletedAt.
     const products = await db.product.findMany({
       where: {
         slug: { in: slugs },
-        isActive: true,
-        ...(isProfessionalsOnly && { isProfessional: false }),
+        ...ACTIVE,
+        ...productVisibleFor(viewer),
       },
       select: {
         id: true,
