@@ -98,6 +98,12 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
   const showEmpty = query.trim() && results.length === 0
   const showNoConnection = isLoading && results.length === 0 && query.trim().length >= 2
 
+  // Закрытое окно не монтируем вовсе: раньше его панель оставалась в DOM с
+  // opacity-0 и pointer-events-auto — невидимая, но кликабельная, ровно на
+  // высоте меню хедера, и перехватывала клики по пунктам навигации. На время
+  // затухания при закрытии `open` ещё true, так что анимация сохраняется.
+  if (!open) return null
+
   return createPortal(
     <>
       {/* Backdrop */}
