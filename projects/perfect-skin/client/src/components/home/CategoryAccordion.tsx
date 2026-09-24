@@ -65,7 +65,7 @@ export function CategoryAccordion() {
                 onTouchStart={() => !isDesktop && setActiveIdx(idx)}
                 className={`
                   relative min-w-0 overflow-hidden rounded-block group
-                  transition-[flex-grow] duration-300 ease-out
+                  transition-[flex-grow] duration-300 ease-out motion-reduce:transition-none
                   ${cat.bgColor} text-foreground
                   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
                   min-h-44 lg:min-h-0
@@ -74,6 +74,23 @@ export function CategoryAccordion() {
                 style={isDesktop ? { flexGrow: active ? 5 : 1, flexBasis: 0 } : {}}
                 aria-expanded={isDesktop ? active : undefined}
               >
+                {/* Картинка товара — вне анимируемого контейнера: без прозрачности
+                    и без проявления, загружается сразу. У свёрнутой плитки на
+                    десктопе скрыта мгновенно (display), иначе легла бы поверх
+                    вертикальной подписи узкого корешка. */}
+                <img
+                  src={cat.photo}
+                  alt=""
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority={idx === 0 ? 'high' : 'auto'}
+                  width={256}
+                  height={256}
+                  className={`absolute right-2 bottom-0 w-32 md:w-36 lg:w-64 max-w-[42%] lg:max-w-[55%] object-contain pointer-events-none select-none mix-blend-multiply ${
+                    active ? '' : 'lg:hidden'
+                  }`}
+                />
+
                 {/* Свёрнутый корешок: вертикальная подпись (только десктоп LG) */}
                 <div
                   className={`hidden lg:flex absolute inset-0 items-center justify-center transition-opacity duration-200 flex-col gap-2 ${
@@ -103,12 +120,6 @@ export function CategoryAccordion() {
                   >
                     →
                   </span>
-                  <img
-                    src={cat.photo}
-                    alt=""
-                    loading="lazy"
-                    className="absolute right-2 bottom-0 w-32 md:w-36 lg:w-64 max-w-[42%] lg:max-w-[55%] object-contain pointer-events-none select-none mix-blend-multiply"
-                  />
                 </div>
               </Link>
             )
