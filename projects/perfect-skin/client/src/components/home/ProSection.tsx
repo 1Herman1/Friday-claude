@@ -40,7 +40,7 @@ export function ProSection() {
         <div className="bg-dark text-dark-foreground rounded-block p-6 md:p-12">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
             {/* Left Column */}
-            <div className="lg:col-span-5 flex flex-col">
+            <div className="lg:col-span-5 flex flex-col lg:self-center">
               <p className="text-label font-semibold uppercase tracking-wide text-accent mb-3">
                 Для косметологов и салонов
               </p>
@@ -48,12 +48,12 @@ export function ProSection() {
                 Специалистам
               </h2>
               <p className="text-body text-dark-foreground/85 max-w-prose mb-6">
-                Оптовые цены на весь каталог и кабинетные фасовки до 1000 мл.
+                Оптовые цены на весь каталог и кабинетные фасовки до 1000 мл.
               </p>
 
               <Link
                 to="/pro/register"
-                className="inline-flex items-center justify-center w-full sm:w-auto bg-accent text-accent-foreground rounded-pill min-h-11 px-6 py-3 font-heading font-bold hover:bg-accent/90 transition-colors duration-200 focus-visible:outline-accent"
+                className="inline-flex items-center justify-center w-full sm:w-auto sm:self-start bg-accent text-accent-foreground rounded-pill min-h-11 px-6 py-3 font-heading font-bold hover:bg-accent/90 transition-colors duration-200 focus-visible:outline-accent"
               >
                 Подать заявку
               </Link>
@@ -86,13 +86,13 @@ export function ProSection() {
                 </p>
 
                 {loading ? (
-                  <div className="grid grid-cols-2 gap-4 md:gap-6">
+                  <div className="grid grid-cols-2 gap-3 md:gap-6">
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div
                         key={i}
-                        className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-5"
+                        className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-3 md:p-5"
                       >
-                        <div className="w-full aspect-square bg-dark-foreground/10 rounded-media mb-3 animate-pulse motion-reduce:animate-none" />
+                        <div className="w-full aspect-square lg:aspect-[4/3] bg-dark-foreground/10 rounded-media mb-3 animate-pulse motion-reduce:animate-none" />
                         <div className="h-4 bg-dark-foreground/10 rounded mb-2 animate-pulse motion-reduce:animate-none w-3/4" />
                         <div className="h-4 bg-dark-foreground/10 rounded mb-3 animate-pulse motion-reduce:animate-none w-1/2" />
                         <div className="mt-auto h-5 bg-dark-foreground/10 rounded animate-pulse motion-reduce:animate-none w-2/3" />
@@ -100,7 +100,7 @@ export function ProSection() {
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-4 md:gap-6">
+                  <div className="grid grid-cols-2 gap-3 md:gap-6">
                     {products.map((product) => {
                       const hasImageError = imageErrors.has(product.id)
                       const handleImageError = () => {
@@ -112,10 +112,10 @@ export function ProSection() {
                       return (
                         <div
                           key={product.id}
-                          className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-5"
+                          className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-3 md:p-5"
                         >
                           {/* Image */}
-                          <div className="w-full aspect-square rounded-media overflow-hidden mb-3">
+                          <div className="w-full aspect-square lg:aspect-[4/3] rounded-media overflow-hidden mb-3">
                             {product.image && !hasImageError ? (
                               <div className="bg-card p-3 flex items-center justify-center w-full h-full">
                                 <img
@@ -130,7 +130,7 @@ export function ProSection() {
                                 />
                               </div>
                             ) : (
-                              <div aria-hidden="true" className="bg-dark-foreground/5 border border-dark-foreground/15 flex flex-col items-center justify-center gap-2 w-full h-full">
+                              <div aria-hidden="true" className="bg-dark-foreground/10 flex flex-col items-center justify-center gap-2 w-full h-full">
                                 {product.brand && (
                                   <span className="text-label font-semibold uppercase tracking-[0.08em] text-accent text-center px-2">
                                     {product.brand.name}
@@ -153,7 +153,7 @@ export function ProSection() {
                           )}
 
                           {/* Name */}
-                          <p className="text-body-sm font-semibold text-dark-foreground line-clamp-2">
+                          <p className="text-body-sm font-semibold text-dark-foreground line-clamp-3 md:line-clamp-2">
                             {product.name}
                           </p>
 
