@@ -3,35 +3,25 @@ import { Link } from 'react-router-dom'
 import { useCatalogList } from '@/hooks/useCatalogList'
 import type { CatalogFilters } from '@/hooks/useCatalogList'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
-import { NoImage } from '@/components/catalog/NoImage'
 
-// Константа вне компонента: новый объект на каждом рендере заставлял хук
-// перезапрашивать каталог бесконечно.
-const PRO_FILTERS: CatalogFilters = { pro: true, limit: 3, offset: 0 }
+const PRO_FILTERS: CatalogFilters = { pro: true, limit: 4, offset: 0 }
 
 export function ProSection() {
   const { user } = useAuth()
   const { data, loading } = useCatalogList(PRO_FILTERS)
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
 
-  // Если пользователь уже одобрен как профессионал
   if (isApprovedPro(user)) {
     return (
-      <section
-        id="pro"
-        className="py-10 md:py-14 bg-background"
-      >
+      <section id="pro" className="py-10 md:py-14 bg-background">
         <div className="container-app">
-          <div className="bg-dark text-dark-foreground rounded-block p-6 md:p-12 lg:p-16">
-            <h2 className="text-h2 font-heading font-bold mb-3 text-dark-foreground">
-              Вы специалист
-            </h2>
-            <p className="text-body text-dark-foreground/85 mb-8 max-w-prose">
-              Оптовые цены уже показаны в каталоге
+          <div className="bg-dark text-dark-foreground rounded-block px-6 md:px-12 py-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <p className="text-body text-dark-foreground">
+              Вы подтверждённый специалист — оптовые цены уже в каталоге.
             </p>
             <Link
               to="/catalog?pro=1"
-              className="text-accent underline-offset-4 hover:underline font-semibold transition-colors duration-200 focus-visible:outline-ring"
+              className="inline-flex items-center min-h-11 font-semibold text-accent underline-offset-4 hover:underline focus-visible:outline-accent"
             >
               Товары для кабинета →
             </Link>
@@ -42,206 +32,145 @@ export function ProSection() {
   }
 
   const products = data?.items || []
+  const showRightColumn = products.length > 0 || loading
 
   return (
-    <section
-      id="pro"
-      className="py-10 md:py-14 bg-background"
-    >
+    <section id="pro" className="py-10 md:py-14 bg-background">
       <div className="container-app">
-        <div className="bg-dark text-dark-foreground rounded-block p-6 md:p-12 lg:p-16">
-          {/* Header */}
-          <h2 className="text-h2 font-heading font-bold mb-3 text-dark-foreground">
-            Специалистам
-          </h2>
-          <p className="text-body text-dark-foreground/85 max-w-prose mb-8">
-            Оптовые цены на весь каталог и профессиональные фасовки для кабинета. Доступ открывается после подтверждения статуса — проверка занимает один рабочий день.
-          </p>
-
-          {/* Three Steps */}
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="flex flex-col">
-              <span className="text-label font-semibold text-accent mb-2">01</span>
-              <h3 className="font-heading font-semibold text-dark-foreground mb-2">
-                Регистрация
-              </h3>
-              <p className="text-body-sm text-dark-foreground/70">
-                Email и код — без пароля
+        <div className="bg-dark text-dark-foreground rounded-block p-6 md:p-12">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+            {/* Left Column */}
+            <div className="lg:col-span-5 flex flex-col">
+              <p className="text-label font-semibold uppercase tracking-wide text-accent mb-3">
+                Для косметологов и салонов
               </p>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-label font-semibold text-accent mb-2">02</span>
-              <h3 className="font-heading font-semibold text-dark-foreground mb-2">
-                Заявка
-              </h3>
-              <p className="text-body-sm text-dark-foreground/70">
-                ИНН или ОГРНИП, салон, специализация. Документы загружать не нужно
+              <h2 className="text-h2 font-heading font-bold text-dark-foreground mb-3">
+                Специалистам
+              </h2>
+              <p className="text-body text-dark-foreground/85 max-w-prose mb-6">
+                Оптовые цены на весь каталог и кабинетные фасовки до 1000 мл.
               </p>
-            </div>
 
-            <div className="flex flex-col">
-              <span className="text-label font-semibold text-accent mb-2">03</span>
-              <h3 className="font-heading font-semibold text-dark-foreground mb-2">
-                Доступ
-              </h3>
-              <p className="text-body-sm text-dark-foreground/70">
-                После проверки в каталоге открываются профессиональные цены
+              <Link
+                to="/pro/register"
+                className="inline-flex items-center justify-center w-full sm:w-auto bg-accent text-accent-foreground rounded-pill min-h-11 px-6 py-3 font-heading font-bold hover:bg-accent/90 transition-colors duration-200 focus-visible:outline-accent"
+              >
+                Подать заявку
+              </Link>
+
+              <p className="mt-3 text-body-sm text-dark-foreground/70">
+                Нужен только ИНН или ОГРНИП — документы загружать не нужно. Вход по коду на email, без пароля.
               </p>
-            </div>
-          </div>
 
-          {/* Conditions Table */}
-          <div className="grid md:grid-cols-2 gap-x-8 mb-12">
-            <div className="flex justify-between items-baseline gap-4 py-4 border-t border-dark-foreground/15 text-body-sm">
-              <span>Профессиональные фасовки</span>
-              <b className="text-accent font-semibold tabular-nums whitespace-nowrap">
-                до 1000 мл
-              </b>
-            </div>
-
-            <div className="flex justify-between items-baseline gap-4 py-4 border-t border-dark-foreground/15 text-body-sm">
-              <span>Бесплатная доставка СДЭК в ПВЗ</span>
-              <b className="text-accent font-semibold tabular-nums whitespace-nowrap">
-                от 6 000 ₽
-              </b>
+              <ol className="mt-8 flex flex-col gap-2 text-body-sm text-dark-foreground/70">
+                <li className="flex gap-3">
+                  <span className="text-accent font-semibold tabular-nums">01</span>
+                  <span>Регистрация по email</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-accent font-semibold tabular-nums">02</span>
+                  <span>Заявка с ИНН или ОГРНИП</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-accent font-semibold tabular-nums">03</span>
+                  <span>Цены открываются в каталоге после проверки</span>
+                </li>
+              </ol>
             </div>
 
-            <div className="flex justify-between items-baseline gap-4 py-4 border-t border-dark-foreground/15 text-body-sm">
-              <span>Курьером</span>
-              <b className="text-accent font-semibold tabular-nums whitespace-nowrap">
-                от 10 000 ₽
-              </b>
-            </div>
-
-            <div className="flex justify-between items-baseline gap-4 py-4 border-t border-dark-foreground/15 text-body-sm">
-              <span>Производитель — Heber Farma, Испания</span>
-              <b className="text-accent font-semibold tabular-nums whitespace-nowrap">
-                с 2017 года
-              </b>
-            </div>
-          </div>
-
-          {/* Product Lines Chips */}
-          <ul className="flex flex-wrap gap-2 mb-12">
-            <li className="px-3 py-1.5 rounded-pill border border-dark-foreground/25 text-label font-semibold text-dark-foreground">
-              ISSEIMI Base
-            </li>
-            <li className="px-3 py-1.5 rounded-pill border border-dark-foreground/25 text-label font-semibold text-dark-foreground">
-              ISSEIMI MD
-            </li>
-            <li className="px-3 py-1.5 rounded-pill border border-dark-foreground/25 text-label font-semibold text-dark-foreground">
-              ISSEIMI Nat Collection
-            </li>
-            <li className="px-3 py-1.5 rounded-pill border border-dark-foreground/25 text-label font-semibold text-dark-foreground">
-              GLACÉE Skincare
-            </li>
-          </ul>
-
-          {/* Products Grid */}
-          <h3 className="text-h3 font-heading font-bold text-dark-foreground mb-6">
-            Примеры товаров для закупки
-          </h3>
-
-          {loading ? (
-            // Skeletons
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-4 min-h-80"
-                >
-                  <div className="w-full aspect-square bg-dark-foreground/10 rounded-media mb-4 animate-pulse" />
-                  <div className="h-4 bg-dark-foreground/10 rounded mb-3 animate-pulse w-3/4" />
-                  <div className="h-4 bg-dark-foreground/10 rounded mb-6 animate-pulse w-1/2" />
-                  <div className="h-6 bg-dark-foreground/10 rounded mt-auto animate-pulse" />
-                </div>
-              ))}
-            </div>
-          ) : products.length === 0 ? (
-            // No products, CTA only
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-md">
-              <div className="bg-accent text-accent-foreground rounded-block p-6 flex flex-col justify-end col-span-1 sm:col-span-2 lg:col-span-4 lg:max-w-md">
-                <h4 className="font-heading font-bold text-lg lg:text-xl uppercase mb-2 text-accent-foreground">
-                  Стать специалистом
-                </h4>
-                <p className="text-body-sm mb-4 text-accent-foreground/90">
-                  Проверка — один рабочий день
+            {/* Right Column */}
+            {showRightColumn && (
+              <div className="lg:col-span-7">
+                <p className="text-label font-semibold uppercase tracking-wide text-dark-foreground/70 mb-4">
+                  Для кабинета · цены после проверки
                 </p>
-                <Link
-                  to="/pro/register"
-                  className="bg-primary text-primary-foreground rounded-pill px-6 py-3 min-h-11 font-heading font-bold self-start hover:bg-primary/90 transition-colors duration-200 focus-visible:outline-ring"
-                >
-                  Подать заявку
-                </Link>
-              </div>
-            </div>
-          ) : (
-            // Products + CTA
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {products.map((product, i) => {
-                const hasImageError = imageErrors.has(product.id)
 
-                const handleImageError = () => {
-                  setImageErrors(prev => new Set([...prev, product.id]))
-                }
-
-                return (
-                  <div
-                    key={product.id}
-                    className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-4 hover:bg-dark-foreground/10 transition-colors duration-200"
-                  >
-                    <div className="w-full aspect-square bg-background rounded-media object-contain p-4 mb-4 flex items-center justify-center overflow-hidden">
-                      {product.image && !hasImageError ? (
-                        <img
-                          src={`/products-optimized/${product.slug}/card.webp`}
-                          alt={product.name}
-                          className="w-full h-full object-contain"
-                          loading={i < 2 ? 'eager' : 'lazy'}
-                          onError={handleImageError}
-                        />
-                      ) : (
-                        <NoImage tone="dark" aspectRatio="aspect-square" />
-                      )}
-                    </div>
-                    <h4 className="font-semibold text-dark-foreground mb-2 text-body-sm line-clamp-2">
-                      <Link to={`/product/${product.slug}`} className="focus-visible:outline-ring hover:underline underline-offset-4">
-                        {product.name}
-                      </Link>
-                    </h4>
-                    <p className="text-label text-dark-foreground/70 mb-4">
-                      {
-                        product.variants?.find((v) => v.isProfessional)
-                          ?.volumeLabel || product.variants?.[0]?.volumeLabel
-                      }
-                    </p>
-                    <div className="mt-auto">
-                      <span className="text-sm text-dark-foreground/80">Цена для специалистов</span>
-                      <Link to="/pro" className="block text-sm font-semibold text-accent hover:underline underline-offset-4 focus-visible:outline-ring">
-                        Получить доступ →
-                      </Link>
-                    </div>
+                {loading ? (
+                  <div className="grid grid-cols-2 gap-4 md:gap-6">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-5"
+                      >
+                        <div className="w-full aspect-square bg-dark-foreground/10 rounded-media mb-3 animate-pulse motion-reduce:animate-none" />
+                        <div className="h-4 bg-dark-foreground/10 rounded mb-2 animate-pulse motion-reduce:animate-none w-3/4" />
+                        <div className="h-4 bg-dark-foreground/10 rounded mb-3 animate-pulse motion-reduce:animate-none w-1/2" />
+                        <div className="mt-auto h-5 bg-dark-foreground/10 rounded animate-pulse motion-reduce:animate-none w-2/3" />
+                      </div>
+                    ))}
                   </div>
-                )
-              })}
+                ) : (
+                  <div className="grid grid-cols-2 gap-4 md:gap-6">
+                    {products.map((product) => {
+                      const hasImageError = imageErrors.has(product.id)
+                      const handleImageError = () => {
+                        setImageErrors((prev) => new Set([...prev, product.id]))
+                      }
+                      const proVariant = product.variants?.find((v) => v.isProfessional)
+                      const volumeLabel = proVariant?.volumeLabel || product.variants?.[0]?.volumeLabel
 
-              {/* CTA Tile */}
-              <div className="bg-accent text-accent-foreground rounded-block p-6 flex flex-col justify-end">
-                <h4 className="font-heading font-bold text-lg lg:text-xl uppercase mb-2 text-accent-foreground">
-                  Стать специалистом
-                </h4>
-                <p className="text-body-sm mb-4 text-accent-foreground/90">
-                  Проверка — один рабочий день
-                </p>
-                <Link
-                  to="/pro/register"
-                  className="bg-primary text-primary-foreground rounded-pill px-6 py-3 min-h-11 font-heading font-bold self-start hover:bg-primary/90 transition-colors duration-200 focus-visible:outline-ring"
-                >
-                  Подать заявку
-                </Link>
+                      return (
+                        <div
+                          key={product.id}
+                          className="flex flex-col rounded-block border border-dark-foreground/15 bg-dark-foreground/5 p-5"
+                        >
+                          {/* Image */}
+                          <div className="w-full aspect-square rounded-media overflow-hidden mb-3">
+                            {product.image && !hasImageError ? (
+                              <div className="bg-card p-3 flex items-center justify-center w-full h-full">
+                                <img
+                                  src={`/products-optimized/${product.slug}/card.webp`}
+                                  alt={product.name}
+                                  className="w-full h-full object-contain"
+                                  loading="lazy"
+                                  decoding="async"
+                                  width={256}
+                                  height={256}
+                                  onError={handleImageError}
+                                />
+                              </div>
+                            ) : (
+                              <div aria-hidden="true" className="bg-dark-foreground/5 border border-dark-foreground/15 flex flex-col items-center justify-center gap-2 w-full h-full">
+                                {product.brand && (
+                                  <span className="text-label font-semibold uppercase tracking-[0.08em] text-accent text-center px-2">
+                                    {product.brand.name}
+                                  </span>
+                                )}
+                                {volumeLabel && (
+                                  <span className="font-heading font-semibold text-h3 text-dark-foreground/85">
+                                    {volumeLabel}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Brand */}
+                          {product.brand && product.image && !hasImageError && (
+                            <p className="text-label text-dark-foreground/60 mb-1">
+                              {product.brand.name}
+                            </p>
+                          )}
+
+                          {/* Name */}
+                          <p className="text-body-sm font-semibold text-dark-foreground line-clamp-2">
+                            {product.name}
+                          </p>
+
+                          {/* Volume */}
+                          {volumeLabel && product.image && !hasImageError && (
+                            <p className="mt-auto pt-2 text-label font-semibold text-accent tabular-nums">
+                              {volumeLabel}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </section>
