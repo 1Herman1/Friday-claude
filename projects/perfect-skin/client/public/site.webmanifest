@@ -1,0 +1,23 @@
+{
+  "name": "Perfect Skin — про-косметика из Испании",
+  "short_name": "Perfect Skin",
+  "description": "Профессиональная косметика испанских брендов ISSEIMI и GLACÉE Skincare",
+  "icons": [
+    {
+      "src": "/logo/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#F4F2EC",
+  "background_color": "#F4F2EC",
+  "display": "standalone",
+  "start_url": "/"
+}
