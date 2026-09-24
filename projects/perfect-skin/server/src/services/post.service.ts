@@ -1,4 +1,5 @@
 import { db, type Prisma } from '../lib/db.js'
+import { isWholesaleViewer, canSeeProfessional, type PriceViewer } from '../lib/pricing.js'
 import { ApiError } from '../lib/errors.js'
 
 export interface ListPostsOptions {
@@ -108,12 +109,22 @@ export class PostService {
 
   /**
    * Get products by slugs. Used to embed in post response.
+   * Filters out professional products for non-wholesale viewers.
    */
-  async getProductsBySlug(slugs: string[]): Promise<ProductCard[]> {
+  async getProductsBySlug(slugs: string[], viewer: PriceViewer = null): Promise<ProductCard[]> {
     if (slugs.length === 0) return []
 
+    const isStaff = canSeeProfessional(viewer) && !isWholesaleViewer(viewer)
+
+    // Non-wholesale viewers and non-staff see only non-professional products
+    const isProfessionalsOnly = !isWholesaleViewer(viewer) && !isStaff
+
     const products = await db.product.findMany({
-      where: { slug: { in: slugs }, isActive: true },
+      where: {
+        slug: { in: slugs },
+        isActive: true,
+        ...(isProfessionalsOnly && { isProfessional: false }),
+      },
       select: {
         id: true,
         slug: true,

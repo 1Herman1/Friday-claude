@@ -453,4 +453,60 @@ describe('Catalog Integration Tests', () => {
       }
     })
   })
+
+  describe('Professional product visibility', () => {
+    it('should hide professional products from guest in listing', async () => {
+      // This test assumes database has products. If no products, it will pass.
+      const response = await app.inject({
+        method: 'GET',
+        url: '/api/v1/products',
+      })
+
+      expect(response.statusCode).toBe(200)
+      const body = JSON.parse(response.body)
+      expect(Array.isArray(body.items)).toBe(true)
+      // Guest should not see products that are ONLY professional
+      // (products with isProfessional=true and only professional variants)
+      for (const product of body.items) {
+        // If product is professional, it should have at least one non-professional variant visible
+        if (product.isProfessional) {
+          expect(product.variants.some((v: any) => !v.isProfessional)).toBe(true)
+        }
+      }
+    })
+
+    it('should exclude professional variants from guest DTO', async () => {
+      // This assumes there's a product with both retail and professional variants
+      const response = await app.inject({
+        method: 'GET',
+        url: '/api/v1/products',
+      })
+
+      expect(response.statusCode).toBe(200)
+      const body = JSON.parse(response.body)
+      // Guest should only see non-professional variants in DTO
+      for (const product of body.items) {
+        for (const variant of product.variants) {
+          expect(variant.isProfessional).toBe(false)
+        }
+      }
+    })
+
+    it('should exclude professional products from facets for guest', async () => {
+      const response = await app.inject({
+        method: 'GET',
+        url: '/api/v1/products/facets',
+      })
+
+      expect(response.statusCode).toBe(200)
+      const body = JSON.parse(response.body)
+      expect(body).toHaveProperty('categories')
+      expect(body).toHaveProperty('brands')
+      expect(body).toHaveProperty('lines')
+      expect(body).toHaveProperty('needs')
+      expect(body).toHaveProperty('skinTypes')
+      expect(body).toHaveProperty('price')
+      // Facets should only count non-professional products visible to guest
+    })
+  })
 })

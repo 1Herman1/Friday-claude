@@ -1,9 +1,9 @@
 import type { PrismaClient, Prisma } from '../lib/db.js'
-import { ACTIVE } from '../lib/prisma-filters.js'
+import { ACTIVE, productVisibleFor, variantVisibleFor } from '../lib/prisma-filters.js'
 import { CONCERNS, SKIN_TYPES } from '../lib/dictionaries.js'
 import type { Concern, SkinType } from '../lib/db.js'
 import { getPopularProductsMap } from './popular.service.js'
-import { isWholesaleViewer, resolvePrice, type PriceViewer } from '../lib/pricing.js'
+import { isWholesaleViewer, canSeeProfessional, resolvePrice, type PriceViewer } from '../lib/pricing.js'
 
 export interface CatalogFilters {
   q?: string
@@ -90,18 +90,22 @@ export function buildProductCard(product: ProductWithRelations, viewer: PriceVie
     ? { id: product.line.id, name: product.line.name, slug: product.line.slug }
     : null
 
-  // Определяем видна ли цена: скрыта если товар профессиональный И viewer не оптовый покупатель
-  const productPriceHidden = product.isProfessional && !isWholesaleViewer(viewer)
+  const isStaff = canSeeProfessional(viewer) && !isWholesaleViewer(viewer)
+
+  // Определяем видна ли цена: скрыта если товар профессиональный И viewer не оптовый покупатель и не сотрудник
+  const productPriceHidden = product.isProfessional && !isWholesaleViewer(viewer) && !isStaff
 
   // Filter active variants (already pre-filtered by ProductGetPayload)
   const activeVariants = (product.variants || [])
 
-  // Отфильтруем видимые варианты (учитываем как профессиональный статус товара, так и варианта)
+  // Отфильтруем видимые варианты: скрываем профессиональные фасовки от розничных пользователей
   const visibleVariants = activeVariants.filter((v) => {
-    // Вариант видимый если товар не скрывает все цены И вариант не профессиональный ИЛИ viewer оптовый
-    if (productPriceHidden) return false
-    const variantHidden = v.isProfessional && !isWholesaleViewer(viewer)
-    return !variantHidden
+    // Для розничных пользователей (не оптовые, не сотрудники) показываем только розничные фасовки
+    if (!isWholesaleViewer(viewer) && !isStaff) {
+      return !v.isProfessional
+    }
+    // Для оптовиков и сотрудников показываем все
+    return true
   })
 
   // Find cheapest visible variant
@@ -129,8 +133,13 @@ export function buildProductCard(product: ProductWithRelations, viewer: PriceVie
   const finalProductPriceHidden = productPriceHidden || visibleVariants.length === 0
 
   // Convert variants to DTO
-  const variants: VariantDTO[] = activeVariants.map((v) => {
-    const variantPriceHidden = v.isProfessional && !isWholesaleViewer(viewer)
+  // For regular users, exclude professional variants entirely
+  const variantsForDto = (!isWholesaleViewer(viewer) && !isStaff)
+    ? activeVariants.filter((v) => !v.isProfessional)
+    : activeVariants
+
+  const variants: VariantDTO[] = variantsForDto.map((v) => {
+    const variantPriceHidden = v.isProfessional && !isWholesaleViewer(viewer) && !isStaff
     const shouldHidePrice = productPriceHidden || variantPriceHidden
 
     if (shouldHidePrice) {
@@ -213,6 +222,7 @@ export async function getProducts(
   }
 
   // Professional products filter: товар профессиональный ИЛИ имеет профессиональные варианты
+  // When pro=true, filter for professional products even for non-wholesale viewers (securely)
   if (filters.pro) {
     andConditions.push({
       OR: [
@@ -220,6 +230,12 @@ export async function getProducts(
         { variants: { some: { isProfessional: true, isActive: true, deletedAt: null } } },
       ]
     })
+  } else {
+    // Apply visibility filter: non-pro requests see only visible products
+    const visibilityFilter = productVisibleFor(viewer)
+    if (Object.keys(visibilityFilter).length > 0) {
+      andConditions.push(visibilityFilter)
+    }
   }
 
   if (andConditions.length > 0) {
@@ -405,7 +421,8 @@ export async function getProducts(
 
 export async function getFacets(
   prisma: PrismaClient,
-  filters: Omit<CatalogFilters, 'sort' | 'limit' | 'offset'>
+  filters: Omit<CatalogFilters, 'sort' | 'limit' | 'offset'>,
+  viewer: PriceViewer = null
 ): Promise<any> {
   // Resolve slugs → IDs once before all groups
   let categoryIds: string[] | null = null
@@ -493,6 +510,14 @@ export async function getFacets(
           },
         },
       }
+    }
+
+    // Apply visibility filter for non-wholesale viewers
+    const visibilityFilter = productVisibleFor(viewer)
+    if (Object.keys(visibilityFilter).length > 0) {
+      // Через AND, а не Object.assign: у where уже может быть свой ключ
+      // variants (фильтр по цене), и слияние молча заменило бы его.
+      where.AND = [...(where.AND ?? []), visibilityFilter]
     }
 
     return where
@@ -662,6 +687,12 @@ export async function getProductBySlug(
   })
 
   if (!product) return null
+
+  // Check if product is visible to this viewer
+  const isStaff = canSeeProfessional(viewer) && !isWholesaleViewer(viewer)
+  const canSeeProduct = isWholesaleViewer(viewer) || isStaff || !product.isProfessional
+
+  if (!canSeeProduct) return null
 
   const card = buildProductCard(product, viewer)
 

@@ -30,8 +30,8 @@ export default async function cardRoute(app: FastifyInstance) {
 
         const { slug } = parsed.data
 
-        // Set cache header
-        reply.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+        // Set cache header (private because response depends on viewer)
+        reply.header('Cache-Control', 'private, max-age=60')
 
         const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
         const product = await getProductBySlug(app.prisma, slug, viewer)

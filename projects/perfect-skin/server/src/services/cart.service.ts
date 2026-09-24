@@ -164,6 +164,16 @@ export class CartService {
           }
         }
 
+        // Check if product is professional and viewer is not wholesale
+        if (cartItem.productVariant.product.isProfessional && !isWholesaleViewer(viewer)) {
+          return {
+            code: 'PRO_ONLY',
+            itemId: cartItem.id,
+            available: 0,
+            message: 'Товар доступен только для специалистов',
+          }
+        }
+
         // Check if professional variant and viewer is not wholesale
         if (cartItem.productVariant.isProfessional && !isWholesaleViewer(viewer)) {
           return {

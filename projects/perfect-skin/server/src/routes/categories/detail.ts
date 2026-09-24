@@ -1,13 +1,14 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { ACTIVE } from '../../lib/prisma-filters.js'
+import { ACTIVE, productVisibleFor } from '../../lib/prisma-filters.js'
+import { viewerFromRequest } from '../../lib/pricing.js'
 import { ApiError } from '../../lib/errors.js'
 
 const paramsSchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]{1,64}$/),
 })
 
-async function countCategoryProducts(prisma: any, categoryId: string): Promise<number> {
+async function countCategoryProducts(prisma: any, categoryId: string, viewerFilter: any = {}): Promise<number> {
   const getCategoryIds = async (id: string): Promise<string[]> => {
     const ids = [id]
     const children = await prisma.category.findMany({
@@ -28,6 +29,7 @@ async function countCategoryProducts(prisma: any, categoryId: string): Promise<n
       product: {
         ...ACTIVE,
         variants: { some: ACTIVE },
+        ...viewerFilter,
       },
     },
   })
@@ -39,6 +41,9 @@ export default async function detailRoute(app: FastifyInstance) {
   app.get(
     '/:slug',
     {
+      // Счётчики и состав зависят от того, кто смотрит: без этого одобренный
+      // специалист получал бы гостевые цифры и не видел своих категорий.
+      preHandler: app.authenticateOptional,
       schema: {
         response: {
           200: { $ref: 'ps.categoryDetail#' },
@@ -56,8 +61,11 @@ export default async function detailRoute(app: FastifyInstance) {
 
       const { slug } = parsed.data
 
-      // Set cache header
-      reply.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+      // Set cache header (private because response depends on viewer)
+      reply.header('Cache-Control', 'private, max-age=60')
+
+      const viewer = viewerFromRequest(request)
+      const viewerFilter = productVisibleFor(viewer)
 
       const category = await app.prisma.category.findFirst({
         where: { slug, ...ACTIVE },
@@ -68,7 +76,7 @@ export default async function detailRoute(app: FastifyInstance) {
         throw new ApiError(404, 'CATEGORY_NOT_FOUND', 'Категория не найдена')
       }
 
-      const productCount = await countCategoryProducts(app.prisma, category.id)
+      const productCount = await countCategoryProducts(app.prisma, category.id, viewerFilter)
 
       return {
         id: category.id,

@@ -93,8 +93,18 @@ function knownSubset(values: string[], known: Record<string, string>): string[] 
 
 type Group = 'category' | 'brand' | 'line' | 'need' | 'skin' | 'price' | undefined
 
-function matches(p: SnapshotProduct, f: Filters, snap: CatalogSnapshot, exclude: Group): boolean {
+function matches(p: SnapshotProduct, f: Filters, snap: CatalogSnapshot, exclude: Group, isPro: boolean = false): boolean {
   const d = p.detail
+
+  // In snapshot mode, viewer is always a guest (customer role)
+  // Professional products are only visible when pro=1 (for showcase sections)
+  if (!isPro) {
+    // For regular catalog: hide professional products
+    if (d.isProfessional) return false
+    // Also hide products that only have professional variants
+    if (d.variants.length > 0 && d.variants.every((v) => v.isProfessional)) return false
+  }
+
   // Search query: first check
   if (f.q) {
     const q = f.q.toLowerCase()
@@ -184,11 +194,10 @@ function computeList(sp: URLSearchParams, snap: CatalogSnapshot): ProductsListRe
   const f = parseFilters(sp)
   const limit = Math.min(Math.max(parseInt(sp.get('limit') || '24', 10) || 24, 1), 60)
   const offset = Math.max(parseInt(sp.get('offset') || '0', 10) || 0, 0)
-  const proOnly = sp.get('pro') === '1'
+  const isPro = sp.get('pro') === '1'
   const matched = snap.products.filter(
-    (p) =>
-      matches(p, f, snap, undefined) &&
-      (!proOnly || p.detail.isProfessional || p.detail.variants.some((v) => v.isProfessional)),
+    (p) => matches(p, f, snap, undefined, isPro) &&
+      (isPro ? (p.detail.isProfessional || p.detail.variants.some((v) => v.isProfessional)) : true),
   )
   const sorted = sortProducts(matched, sp.get('sort'))
   return {
@@ -207,21 +216,23 @@ function toGroups(counts: Map<string, number>, labels: Record<string, string>): 
 
 function computeFacets(sp: URLSearchParams, snap: CatalogSnapshot): Facets {
   const f = parseFilters(sp)
+  // In snapshot mode, facets are for regular (non-pro) catalog only
+  const isPro = false
   const count = (exclude: Group, key: (p: SnapshotProduct) => string[]) => {
     const map = new Map<string, number>()
     for (const p of snap.products) {
-      if (!matches(p, f, snap, exclude)) continue
+      if (!matches(p, f, snap, exclude, isPro)) continue
       for (const v of key(p)) map.set(v, (map.get(v) || 0) + 1)
     }
     return map
   }
 
-  const priceItems = snap.products.filter((p) => matches(p, f, snap, 'price'))
+  const priceItems = snap.products.filter((p) => matches(p, f, snap, 'price', isPro))
   let min = Infinity
   let max = 0
   for (const p of priceItems) {
     for (const v of p.detail.variants) {
-      if (v.retailPrice !== null) {
+      if (v.retailPrice !== null && !v.isProfessional) {
         min = Math.min(min, v.retailPrice)
         max = Math.max(max, v.retailPrice)
       }
@@ -257,6 +268,10 @@ export async function resolveFromSnapshot<T>(path: string): Promise<T> {
   if (productMatch) {
     const found = snap.products.find((sp) => sp.detail.slug === productMatch[1])
     if (!found) throw new ApiError(404, 'PRODUCT_NOT_FOUND', 'Товар не найден')
+    // In snapshot mode, viewer is always a guest, so professional products return 404
+    if (found.detail.isProfessional) {
+      throw new ApiError(404, 'PRODUCT_NOT_FOUND', 'Товар не найден')
+    }
     return found.detail as T
   }
 

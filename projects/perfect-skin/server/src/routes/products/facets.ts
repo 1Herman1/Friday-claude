@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { getFacets } from '../../services/catalog.service.js'
+import { viewerFromRequest } from '../../lib/pricing.js'
 import { ApiError } from '../../lib/errors.js'
 
 const querySchema = z.object({
@@ -33,6 +34,9 @@ export default async function facetsRoute(app: FastifyInstance) {
   app.get(
     '/facets',
     {
+      // Счётчики и состав зависят от того, кто смотрит: без этого одобренный
+      // специалист получал бы гостевые цифры и не видел своих категорий.
+      preHandler: app.authenticateOptional,
       schema: {
         response: {
           200: { $ref: 'ps.facets#' },
@@ -112,8 +116,10 @@ export default async function facetsRoute(app: FastifyInstance) {
         }
       }
 
-      // Set cache header
-      reply.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+      // Set cache header (private because response depends on viewer)
+      reply.header('Cache-Control', 'private, max-age=60')
+
+      const viewer = viewerFromRequest(request)
 
       const result = await getFacets(app.prisma, {
         category: q.category,
@@ -123,7 +129,7 @@ export default async function facetsRoute(app: FastifyInstance) {
         skin: q.skin,
         minPrice: q.minPrice,
         maxPrice: q.maxPrice,
-      })
+      }, viewer)
 
       return result
     }

@@ -191,8 +191,8 @@ describe('Professional (wholesale) Integration Tests', () => {
     await app.close()
   })
 
-  // 1. Guest sees retail price; professional product is price-hidden
-  it('(1) Гость видит розничную цену, профи-товар — со скрытой ценой', async () => {
+  // 1. Guest sees retail price; professional product returns 404
+  it('(1) Гость видит розничный товар, профи-товар по прямой ссылке → 404', async () => {
     const res = await app.inject({ method: 'GET', url: `/api/v1/products/${product.slug}` })
     expect(res.statusCode).toBe(200)
     const card = JSON.parse(res.body)
@@ -201,11 +201,8 @@ describe('Professional (wholesale) Integration Tests', () => {
     expect(card.variants[0].retailPrice).toBe(RETAIL_PRICE)
 
     const proRes = await app.inject({ method: 'GET', url: `/api/v1/products/${proProduct.slug}` })
-    expect(proRes.statusCode).toBe(200)
-    const proCard = JSON.parse(proRes.body)
-    expect(proCard.priceHidden).toBe(true)
-    expect(proCard.minPrice).toBeNull()
-    expect(proCard.variants[0].retailPrice).toBeNull()
+    expect(proRes.statusCode).toBe(404)
+    expect(JSON.parse(proRes.body).error.code).toBe('PRODUCT_NOT_FOUND')
   })
 
   // 2. Retail customer: retail price; professional product in cart → 403 PRO_ONLY
@@ -525,8 +522,8 @@ describe('Professional (wholesale) Integration Tests', () => {
     expect(card.variants[0].oldRetailPrice).toBe(RETAIL_PRICE)
   })
 
-  // 9.1. Professional variants: guest sees retail variant, pro variant with priceHidden=true
-  it('(9.1) Гость видит розничный вариант с ценой и профи-вариант со скрытой ценой', async () => {
+  // 9.1. Professional variants: guest sees only retail variants
+  it('(9.1) Гость видит только розничные варианты, профи-варианты исключены из DTO', async () => {
     const stamp = Date.now()
     const testProduct = await db.product.create({
       data: {
@@ -553,7 +550,7 @@ describe('Professional (wholesale) Integration Tests', () => {
       },
     })
 
-    // Профессиональный вариант той же фасовки
+    // Профессиональный вариант
     const proVar = await db.productVariant.create({
       data: {
         productId: testProduct.id,
@@ -575,19 +572,17 @@ describe('Professional (wholesale) Integration Tests', () => {
     expect(card.minPrice).toBe(100000)
     expect(card.priceHidden).toBe(false)
 
-    // Розничный вариант видимый
-    const retail = card.variants.find((v: any) => v.id === retailVar.id)
-    expect(retail).toBeDefined()
+    // Только розничный вариант видимый
+    expect(card.variants).toHaveLength(1)
+    const retail = card.variants[0]
+    expect(retail.id).toBe(retailVar.id)
     expect(retail.retailPrice).toBe(100000)
     expect(retail.isProfessional).toBe(false)
     expect(retail.priceHidden).toBe(false)
 
-    // Профи-вариант скрытый
+    // Профи-вариант совсем не в DTO
     const pro = card.variants.find((v: any) => v.id === proVar.id)
-    expect(pro).toBeDefined()
-    expect(pro.retailPrice).toBeNull()
-    expect(pro.isProfessional).toBe(true)
-    expect(pro.priceHidden).toBe(true)
+    expect(pro).toBeUndefined()
   })
 
   // 9.2. Retail customer adds pro variant to cart → 403 PRO_ONLY

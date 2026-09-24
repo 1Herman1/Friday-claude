@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { postService } from '../../services/post.service.js'
 import { ApiError } from '../../lib/errors.js'
+import { viewerFromRequest } from '../../lib/pricing.js'
 
 const listSchema = z.object({
   limit: z.coerce.number().int().min(1).max(60).optional().default(12),
@@ -76,6 +77,8 @@ export default async function postsRoutes(app: FastifyInstance) {
   app.get(
     '/posts/:slug',
     {
+      // Товары в статье показываются с учётом того, кто читает.
+      preHandler: app.authenticateOptional,
       schema: {
         params: {
           type: 'object',
@@ -136,7 +139,7 @@ export default async function postsRoutes(app: FastifyInstance) {
 
       // Extract and fetch embedded products
       const productSlugs = postService.extractProductSlugs(post.body)
-      const products = await postService.getProductsBySlug(productSlugs)
+      const products = await postService.getProductsBySlug(productSlugs, viewerFromRequest(request))
 
       reply.code(200)
       return {

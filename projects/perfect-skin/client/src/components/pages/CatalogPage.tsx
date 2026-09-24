@@ -1,5 +1,6 @@
-import { useParams, useSearchParams } from 'react-router-dom'
-import { useMemo } from 'react'
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
+import { useMemo, useEffect } from 'react'
+import { useAuth, STAFF_ROLES } from '@/context/AuthContext'
 import { CatalogGrid } from '@/components/catalog/CatalogGrid'
 import { ProductGrid } from '@/components/catalog/ProductGrid'
 import { Filters } from '@/components/catalog/Filters'
@@ -12,6 +13,25 @@ import type { CatalogFilters } from '@/hooks/useCatalogList'
 export function CatalogPage() {
   const { slug } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const { user, isLoading } = useAuth()
+
+  // Check if pro section is requested
+  const isPro = searchParams.get('pro') === '1'
+
+  // Redirect if accessing pro section without proper access
+  useEffect(() => {
+    if (isLoading) return // Wait for auth to load
+    if (!isPro) return // Only check for pro section
+
+    // Check if user has access to pro section
+    const isWholesaleViewer = user?.role === 'professional' && user?.proStatus === 'approved'
+    const isStaff = user && STAFF_ROLES.includes(user.role)
+
+    if (!isWholesaleViewer && !isStaff) {
+      navigate('/pro', { replace: true })
+    }
+  }, [isPro, user, isLoading, navigate])
 
   // Parse filters from URL
   const filters = useMemo<CatalogFilters>(() => {
@@ -23,12 +43,13 @@ export function CatalogPage() {
       skin: searchParams.getAll('skin'),
       minPrice: searchParams.get('minPrice') ? parseInt(searchParams.get('minPrice')!) : undefined,
       maxPrice: searchParams.get('maxPrice') ? parseInt(searchParams.get('maxPrice')!) : undefined,
+      pro: isPro,
       q: searchParams.get('q') || undefined,
       sort: (searchParams.get('sort') as 'newest' | 'price_asc' | 'price_desc' | 'popular') || 'newest',
       limit: 24,
       offset: searchParams.get('offset') ? parseInt(searchParams.get('offset')!) : 0,
     }
-  }, [slug, searchParams])
+  }, [slug, searchParams, isPro])
 
   const facetFilters = useMemo<Omit<CatalogFilters, 'sort' | 'limit' | 'offset'>>(() => {
     const { sort, limit, offset, ...rest } = filters

@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { ACTIVE } from '../../lib/prisma-filters.js'
+import { ACTIVE, productVisibleFor } from '../../lib/prisma-filters.js'
+import { viewerFromRequest } from '../../lib/pricing.js'
 import { ApiError } from '../../lib/errors.js'
 
 const querySchema = z.object({
@@ -11,6 +12,9 @@ export default async function linesRoute(app: FastifyInstance) {
   app.get(
     '/',
     {
+      // Счётчики и состав зависят от того, кто смотрит: без этого одобренный
+      // специалист получал бы гостевые цифры и не видел своих категорий.
+      preHandler: app.authenticateOptional,
       schema: {
         response: {
           200: {
@@ -31,8 +35,11 @@ export default async function linesRoute(app: FastifyInstance) {
 
       const q = parsed.data
 
-      // Set cache header
-      reply.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+      // Set cache header (private because response depends on viewer)
+      reply.header('Cache-Control', 'private, max-age=60')
+
+      const viewer = viewerFromRequest(request)
+      const viewerFilter = productVisibleFor(viewer)
 
       // Build where clause
       const where: any = {
@@ -41,6 +48,7 @@ export default async function linesRoute(app: FastifyInstance) {
           some: {
             ...ACTIVE,
             variants: { some: ACTIVE },
+            ...viewerFilter,
           },
         },
       }
@@ -81,6 +89,7 @@ export default async function linesRoute(app: FastifyInstance) {
               lineId: line.id,
               ...ACTIVE,
               variants: { some: ACTIVE },
+              ...viewerFilter,
             },
           })
 

@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify'
-import { ACTIVE } from '../../lib/prisma-filters.js'
+import { ACTIVE, productVisibleFor } from '../../lib/prisma-filters.js'
+import { viewerFromRequest } from '../../lib/pricing.js'
 
 interface CategoryWithChildren {
   id: string
@@ -10,7 +11,7 @@ interface CategoryWithChildren {
   children: CategoryWithChildren[]
 }
 
-async function countCategoryProducts(prisma: any, categoryId: string): Promise<number> {
+async function countCategoryProducts(prisma: any, categoryId: string, viewerFilter: any = {}): Promise<number> {
   // Count products in this category and all descendants
   const getCategoryIds = async (id: string): Promise<string[]> => {
     const ids = [id]
@@ -32,6 +33,7 @@ async function countCategoryProducts(prisma: any, categoryId: string): Promise<n
       product: {
         ...ACTIVE,
         variants: { some: ACTIVE },
+        ...viewerFilter,
       },
     },
   })
@@ -39,7 +41,7 @@ async function countCategoryProducts(prisma: any, categoryId: string): Promise<n
   return count
 }
 
-async function buildCategoryTree(prisma: any): Promise<CategoryWithChildren[]> {
+async function buildCategoryTree(prisma: any, viewerFilter: any = {}): Promise<CategoryWithChildren[]> {
   // Get all root categories
   const roots = await prisma.category.findMany({
     where: { parentId: null, ...ACTIVE },
@@ -52,7 +54,7 @@ async function buildCategoryTree(prisma: any): Promise<CategoryWithChildren[]> {
       orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
     })
 
-    const productCount = await countCategoryProducts(prisma, cat.id)
+    const productCount = await countCategoryProducts(prisma, cat.id, viewerFilter)
 
     return {
       id: cat.id,
@@ -73,6 +75,9 @@ export default async function treeRoute(app: FastifyInstance) {
   app.get(
     '/tree',
     {
+      // Счётчики и состав зависят от того, кто смотрит: без этого одобренный
+      // специалист получал бы гостевые цифры и не видел своих категорий.
+      preHandler: app.authenticateOptional,
       schema: {
         response: {
           200: {
@@ -84,10 +89,12 @@ export default async function treeRoute(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      // Set cache header
-      reply.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+      // Set cache header (private because response depends on viewer)
+      reply.header('Cache-Control', 'private, max-age=60')
 
-      const tree = await buildCategoryTree(app.prisma)
+      const viewer = viewerFromRequest(request)
+      const viewerFilter = productVisibleFor(viewer)
+      const tree = await buildCategoryTree(app.prisma, viewerFilter)
       return tree
     }
   )
