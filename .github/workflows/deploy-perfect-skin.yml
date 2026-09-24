@@ -151,8 +151,16 @@ jobs:
             fi
 
             echo "==> Health check"
-            sleep 2
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/v1/health)
+            # До 30 секунд с повторами: под нагрузкой после сборки сервер
+            # поднимается дольше двух секунд. `|| true` обязателен — при
+            # set -e неудачный curl внутри $(...) обрывал скрипт раньше, чем
+            # печатались сообщение и логи, и в отчёте оставался голый код 7.
+            STATUS=000
+            for i in $(seq 1 15); do
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/v1/health || true)
+              [ "$STATUS" = "200" ] && break
+              sleep 2
+            done
             if [ "$STATUS" != "200" ]; then
               echo "Health check FAILED: HTTP $STATUS"
               pm2 logs ps-server --lines 40 --nostream --err
