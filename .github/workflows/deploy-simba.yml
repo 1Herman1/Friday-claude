@@ -80,6 +80,13 @@ jobs:
             echo "==> Fetching deploy/simba"
             git fetch origin deploy/simba
             git checkout deploy/simba
+            # `npm install` ниже переписывает package-lock.json прямо в рабочем
+            # чекауте, и следующая выкатка упирается в «local changes would be
+            # overwritten by merge». Лок-файл на сервере — след установки, а не
+            # источник истины, поэтому возвращаем его к версии ветки. Остальное
+            # грязное не трогаем: пусть merge падает и мы это увидим.
+            git status --porcelain
+            git checkout -- package-lock.json
             git merge --ff-only origin/deploy/simba
 
             echo "==> Installing dependencies"
