@@ -1,55 +1,57 @@
-export function About() {
+import { Link } from 'react-router-dom'
+
+export function About({ variant = 'home' }: { variant?: 'home' | 'page' }) {
   return (
     <section id="about" className="bg-background py-10 md:py-14">
       <div className="container-app">
-        <div className="max-w-prose mb-16 md:mb-24">
-          <h2 className="text-h2 font-heading font-bold mb-6">О компании</h2>
-          <p className="text-body leading-body text-foreground mb-6">
-            Perfect Skin — официальный дистрибьютор испанского фармацевтического
-            концерна Heber Farma с 2017 года. Концерн занимается разработкой и
-            производством премиум-косметики более 30 лет.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {/* Stat 1: 30+ years */}
-          <div>
-            <div className="text-display font-heading font-bold text-foreground mb-2">
-              30+
-            </div>
-            <p className="text-body-sm text-muted-foreground">
-              Лет исследований
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+          <div className="lg:col-span-7">
+            {variant === 'home' && (
+              <h2 className="text-h2 font-heading font-bold mb-4">О компании</h2>
+            )}
+            <p className="text-body text-foreground max-w-prose mb-6">
+              Продаём испанскую фармацевтическую косметику ISSEIMI и GLACÉE Skincare — для домашнего ухода и косметологических кабинетов.
             </p>
+            {variant === 'home' && (
+              <Link
+                to="/about"
+                className="mt-6 inline-flex items-center gap-1 min-h-11 text-body-sm font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-ring"
+              >
+                Подробнее о компании <span aria-hidden>→</span>
+              </Link>
+            )}
           </div>
 
-          {/* Stat 2: 100% certified */}
-          <div>
-            <div className="text-display font-heading font-bold text-foreground mb-2">
-              100%
-            </div>
-            <p className="text-body-sm text-muted-foreground">
-              Сертифицировано
-            </p>
-          </div>
-
-          {/* Stat 3: 9+ years on market */}
-          <div>
-            <div className="text-display font-heading font-bold text-foreground mb-2">
-              9+
-            </div>
-            <p className="text-body-sm text-muted-foreground">
-              Лет на рынке
-            </p>
-          </div>
-
-          {/* Stat 4: 40+ countries */}
-          <div>
-            <div className="text-display font-heading font-bold text-foreground mb-2">
-              40+
-            </div>
-            <p className="text-body-sm text-muted-foreground">
-              Стран-партнёров
-            </p>
+          <div className="lg:col-span-5">
+            <dl className="divide-y divide-border border-t border-b border-border">
+              <div className="py-4">
+                <dt className="text-label font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                  Производитель
+                </dt>
+                <dd className="mt-1 text-body font-heading font-semibold text-foreground">
+                  Heber Farma, Испания
+                </dd>
+              </div>
+              <div className="py-4">
+                <dt className="text-label font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                  Поставщик
+                </dt>
+                <dd className="mt-1 text-body font-heading font-semibold text-foreground">
+                  Официальный дистрибьютор в России, с 2017 года
+                </dd>
+              </div>
+              <div className="py-4">
+                <dt className="text-label font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                  Продавец
+                </dt>
+                <dd className="mt-1 text-body font-heading font-semibold text-foreground">
+                  ИП Рыбко А. А., Москва
+                  <span className="block mt-1 text-body-sm font-sans font-normal text-muted-foreground">
+                    Звенигородское шоссе, 3Ас1 · самовывоз бесплатно
+                  </span>
+                </dd>
+              </div>
+            </dl>
           </div>
         </div>
       </div>
