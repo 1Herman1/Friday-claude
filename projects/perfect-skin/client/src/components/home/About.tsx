@@ -9,13 +9,13 @@ export function About({ variant = 'home' }: { variant?: 'home' | 'page' }) {
             {variant === 'home' && (
               <h2 className="text-h2 font-heading font-bold mb-4">О компании</h2>
             )}
-            <p className="text-body text-foreground max-w-prose mb-6">
+            <p className={`${variant === 'page' ? 'text-h3 font-heading font-semibold' : 'text-body'} text-foreground max-w-prose`}>
               Продаём испанскую фармацевтическую косметику ISSEIMI и GLACÉE Skincare — для домашнего ухода и косметологических кабинетов.
             </p>
             {variant === 'home' && (
               <Link
                 to="/about"
-                className="mt-6 inline-flex items-center gap-1 min-h-11 text-body-sm font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-ring"
+                className="mt-3 inline-flex items-center gap-1 min-h-11 text-body-sm font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-ring"
               >
                 Подробнее о компании <span aria-hidden>→</span>
               </Link>
