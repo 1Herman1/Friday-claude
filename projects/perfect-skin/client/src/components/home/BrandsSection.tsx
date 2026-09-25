@@ -13,6 +13,7 @@ interface BrandData {
     alt: string
     w: number
     h: number
+    position: string
   }
 }
 
@@ -34,6 +35,7 @@ const BRANDS: BrandData[] = [
       alt: 'Сыворотки ISSEIMI FGF',
       w: 1122,
       h: 1402,
+      position: 'object-center',
     },
   },
   {
@@ -47,8 +49,9 @@ const BRANDS: BrandData[] = [
       png: '/photos/m1.png',
       webp: '/photos/m1.webp',
       alt: 'GLACÉE Skincare: крем GEN ADN и сыворотка Triple Acción',
-      w: 1200,
-      h: 1200,
+      w: 1254,
+      h: 1254,
+      position: 'object-[50%_70%]',
     },
   },
 ]
@@ -71,7 +74,7 @@ export function BrandsSection() {
             <Link
               key={b.slug}
               to={b.to}
-              className="group block rounded-block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+              className="group flex flex-col rounded-block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
             >
               <picture>
                 {b.photo.webp && (
@@ -84,7 +87,7 @@ export function BrandsSection() {
                   height={b.photo.h}
                   loading="lazy"
                   decoding="async"
-                  className="w-full aspect-[3/2] object-cover rounded-block"
+                  className={`w-full aspect-[3/2] object-cover rounded-block ring-1 ring-border ${b.photo.position}`}
                 />
               </picture>
 
@@ -92,7 +95,7 @@ export function BrandsSection() {
                 {b.audience}
               </p>
 
-              <h3 className="mt-2 text-h3 font-heading font-bold uppercase group-hover:underline underline-offset-4 decoration-1">
+              <h3 className="mt-2 text-h3 font-heading font-bold group-hover:underline underline-offset-4 decoration-1">
                 {b.name}
               </h3>
 
@@ -103,14 +106,16 @@ export function BrandsSection() {
               <p className="mt-3 text-body-sm text-foreground">
                 {b.lines.map((line, idx) => (
                   <span key={idx}>
-                    {idx > 0 && <span> · </span>}
-                    <span className="font-semibold">{line[0]}</span>
-                    <span className="text-muted-foreground"> — {line[1]}</span>
+                    {idx > 0 && ' · '}
+                    <span className="whitespace-nowrap">
+                      <span className="font-semibold">{line[0]}</span>
+                      <span className="text-muted-foreground"> — {line[1]}</span>
+                    </span>
                   </span>
                 ))}
               </p>
 
-              <span className="mt-4 inline-flex items-center gap-1 text-body-sm font-semibold text-primary">
+              <span className="mt-auto pt-4 self-start inline-flex items-center gap-1 text-body-sm font-semibold text-primary">
                 Смотреть каталог{' '}
                 <span
                   aria-hidden
