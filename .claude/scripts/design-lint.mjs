@@ -105,25 +105,43 @@ const RULES = [
 // --- Слой 2: сверка с зафиксированной дизайн-системой проекта ---
 // Читает docs/projects/*/design-system/MASTER.md. Если его нет — правила молча
 // пропускаются, поведение скрипта не меняется.
-// Активный проект: env ACTIVE_PROJECT → docs/projects/.active → единственный
-// найденный. При нескольких кандидатах без явного указателя — предупредить и
-// не сверять (иначе линтер молча сверит код с чужой палитрой).
-function resolveActiveProject() {
-  const root = "docs/projects";
-  if (!fs.existsSync(root)) return null;
+// Проект определяется ПО ПУТИ ПРОВЕРЯЕМОГО ФАЙЛА (projects/<имя>/…,
+// tools/<имя>/…), и только если путь ничего не сказал — по ACTIVE_PROJECT или
+// docs/projects/.active. Иначе смена активного проекта заставляла линтер
+// сверять код одного продукта с палитрой другого: файл лежит в projects/simba,
+// а .active говорит perfect-skin — и все цвета Симбы становились «вне палитры».
+const PROJECTS_ROOT = "docs/projects";
 
-  const projects = fs
-    .readdirSync(root, { withFileTypes: true })
+function knownProjects() {
+  if (!fs.existsSync(PROJECTS_ROOT)) return [];
+  return fs
+    .readdirSync(PROJECTS_ROOT, { withFileTypes: true })
     .filter((e) => e.isDirectory() && !e.name.startsWith("_"))
     .map((e) => e.name)
-    .filter((n) => fs.existsSync(path.join(root, n, "design-system", "MASTER.md")));
+    .filter((n) => fs.existsSync(path.join(PROJECTS_ROOT, n, "design-system", "MASTER.md")));
+}
 
+function projectFromPath(filePath) {
+  const m = path
+    .normalize(filePath)
+    .replace(/\\/g, "/")
+    .match(/(?:^|\/)(?:projects|tools)\/([^/]+)\//);
+  return m ? m[1] : null;
+}
+
+function resolveActiveProject(filePath) {
+  const projects = knownProjects();
   if (projects.length === 0) return null;
+
+  const fromPath = filePath ? projectFromPath(filePath) : null;
+  if (fromPath && projects.includes(fromPath)) {
+    return path.join(PROJECTS_ROOT, fromPath, "design-system", "MASTER.md");
+  }
 
   const explicit =
     process.env.ACTIVE_PROJECT ||
-    (fs.existsSync(path.join(root, ".active"))
-      ? fs.readFileSync(path.join(root, ".active"), "utf8").trim()
+    (fs.existsSync(path.join(PROJECTS_ROOT, ".active"))
+      ? fs.readFileSync(path.join(PROJECTS_ROOT, ".active"), "utf8").trim()
       : null);
 
   if (explicit) {
@@ -131,7 +149,7 @@ function resolveActiveProject() {
       console.error(`design-lint: активный проект "${explicit}" не найден или без MASTER.md`);
       return null;
     }
-    return path.join(root, explicit, "design-system", "MASTER.md");
+    return path.join(PROJECTS_ROOT, explicit, "design-system", "MASTER.md");
   }
 
   if (projects.length > 1) {
@@ -140,12 +158,15 @@ function resolveActiveProject() {
     );
     return null;
   }
-  return path.join(root, projects[0], "design-system", "MASTER.md");
+  return path.join(PROJECTS_ROOT, projects[0], "design-system", "MASTER.md");
 }
 
-function loadDesignSystem() {
-  const masterPath = resolveActiveProject();
+const dsCache = new Map();
+
+function loadDesignSystem(filePath) {
+  const masterPath = resolveActiveProject(filePath);
   if (!masterPath) return null;
+  if (dsCache.has(masterPath)) return dsCache.get(masterPath);
 
   const master = fs.readFileSync(masterPath, "utf8");
   const hexes = new Set(
@@ -158,30 +179,30 @@ function loadDesignSystem() {
       fonts.add(m[1].replace(/^["']|["']$/g, ""));
     }
   }
-  return { masterPath, hexes, fonts };
+  const ds = { masterPath, hexes, fonts };
+  dsCache.set(masterPath, ds);
+  return ds;
 }
-
-const DS = loadDesignSystem();
 
 const MASTER_RULES = [
   {
     name: "offbrand-hex",
-    test: (line) => {
-      if (!DS || DS.hexes.size === 0) return false;
+    test: (line, ds) => {
+      if (!ds || ds.hexes.size === 0) return false;
       const found = line.match(/#[0-9A-Fa-f]{6}\b/g);
       if (!found) return false;
-      return found.some((h) => !DS.hexes.has(h.toUpperCase()));
+      return found.some((h) => !ds.hexes.has(h.toUpperCase()));
     },
     hint: "цвет вне палитры проекта — сверься с design-system/MASTER.md",
     level: "WARNING",
   },
   {
     name: "offbrand-font",
-    test: (line) => {
-      if (!DS || DS.fonts.size === 0) return false;
+    test: (line, ds) => {
+      if (!ds || ds.fonts.size === 0) return false;
       const m = line.match(/font-\[['"]?([A-Za-z][\w\s-]*)/);
       if (!m) return false;
-      return !DS.fonts.has(m[1].trim());
+      return !ds.fonts.has(m[1].trim());
     },
     hint: "шрифт вне дизайн-системы — сверься с design-system/MASTER.md",
     level: "WARNING",
@@ -201,10 +222,12 @@ function lintFile(filePath) {
   const content = fs.readFileSync(filePath, "utf8");
   const lines = content.split("\n");
   const findings = [];
+  const ds = loadDesignSystem(filePath);
 
   lines.forEach((line, idx) => {
     for (const rule of [...RULES, ...MASTER_RULES]) {
-      const matched = typeof rule.test === "function" ? rule.test(line) : rule.test.test(line);
+      const matched =
+        typeof rule.test === "function" ? rule.test(line, ds) : rule.test.test(line);
       if (matched) {
         findings.push({
           file: filePath,

@@ -51,12 +51,20 @@ if [ -z "$BRANCH" ]; then
 fi
 
 CURRENT=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+ON_BRANCH=1
 if [ -n "$CURRENT" ] && [ "$CURRENT" != "$BRANCH" ]; then
-  git checkout "$BRANCH" 2>/dev/null || \
+  git checkout "$BRANCH" 2>/dev/null || {
     echo "session-start: не удалось переключиться на $BRANCH (текущая: $CURRENT)" >&2
+    ON_BRANCH=0
+  }
 fi
 
-git pull origin "$BRANCH" --ff-only 2>/dev/null || true
+# Тянем только если действительно стоим на рабочей ветке. Безусловный pull
+# после провалившегося checkout перематывал ЧУЖУЮ ветку на рабочую: --ff-only
+# от merge-коммита спасает, но от молчаливой перемотки HEAD — нет.
+if [ "$ON_BRANCH" -eq 1 ]; then
+  git pull origin "$BRANCH" --ff-only 2>/dev/null || true
+fi
 
 # ── 2а. Сторож одной ветки ──────────────────────────────────────────────────
 # Среда выдаёт каждому чату свою ветку claude/<имя>; писать в неё нельзя.
@@ -67,8 +75,12 @@ if [ -n "$NOW" ] && [ "$NOW" != "$BRANCH" ]; then
   echo "session-start: ВНИМАНИЕ — текущая ветка $NOW, рабочая $BRANCH. Переключись перед любой правкой." >&2
 fi
 DEPLOY_BRANCHES=$(grep -oP '^\|[^|]*\|[^|]*\|[^|]*\|[^|]*\|\s*`\K[^`]+' docs/projects/README.md 2>/dev/null | paste -sd'|' -)
+# Ветку, в которой сессия стоит прямо сейчас, в список не берём: среда выдаёт
+# её каждому чату, и подсказка «удали эту ветку на GitHub» про ветку живой
+# параллельной сессии — прямой путь к потере чужой работы.
 EXTRA=$(git ls-remote --heads origin 2>/dev/null | awk '{print $2}' | sed 's|refs/heads/||' \
-        | grep -vxF "$BRANCH" | grep -vE "^(${DEPLOY_BRANCHES:-__none__})$" | paste -sd' ' -)
+        | grep -vxF "$BRANCH" | grep -vxF "${NOW:-__none__}" \
+        | grep -vE "^(${DEPLOY_BRANCHES:-__none__})$" | paste -sd' ' -)
 if [ -n "$EXTRA" ]; then
   echo "session-start: лишние ветки на GitHub (удалить в интерфейсе GitHub, из среды нельзя): $EXTRA" >&2
 fi
