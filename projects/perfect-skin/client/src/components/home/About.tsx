@@ -1,4 +1,28 @@
 import { Link } from 'react-router-dom'
+import { useCountUp } from '@/hooks/useCountUp'
+
+function CountUpItem({
+  target,
+  label,
+}: {
+  target: number
+  label: string
+}) {
+  const { ref, value } = useCountUp(target)
+
+  return (
+    <div>
+      <div
+        ref={ref}
+        className="text-display font-heading font-bold tabular-nums text-foreground"
+      >
+        <span aria-hidden="true">{value}+</span>
+        <span className="sr-only">{target}+ {label}</span>
+      </div>
+      <p className="text-body-sm text-muted-foreground mt-2">{label}</p>
+    </div>
+  )
+}
 
 export function About({ variant = 'home' }: { variant?: 'home' | 'page' }) {
   return (
@@ -12,6 +36,10 @@ export function About({ variant = 'home' }: { variant?: 'home' | 'page' }) {
             <p className={`${variant === 'page' ? 'text-h3 font-heading font-semibold' : 'text-body'} text-foreground max-w-prose`}>
               Продаём испанскую фармацевтическую косметику ISSEIMI и GLACÉE Skincare — для домашнего ухода и косметологических кабинетов.
             </p>
+            <div className="grid grid-cols-2 gap-6 max-w-md mt-8">
+              <CountUpItem target={30} label="Лет исследований" />
+              <CountUpItem target={9} label="Лет на рынке" />
+            </div>
             {variant === 'home' && (
               <Link
                 to="/about"
