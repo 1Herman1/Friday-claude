@@ -7,6 +7,7 @@ import {
   extractPrice,
   matchVariants,
   normalizeArticle,
+  planHiding,
   type PlanEntry,
   type SyncReport,
   type VariantForSync,
@@ -16,6 +17,7 @@ const MOYSKLAD_MIN_ITEMS = parseInt(process.env.MOYSKLAD_MIN_ITEMS || '300', 10)
 const MOYSKLAD_MAX_CHANGE_PERCENT = parseInt(process.env.MOYSKLAD_MAX_CHANGE_PERCENT || '30', 10)
 const MOYSKLAD_MAX_PRICE_DROP_PERCENT = parseInt(process.env.MOYSKLAD_MAX_PRICE_DROP_PERCENT || '50', 10)
 const MOYSKLAD_PRICE_TYPE = process.env.MOYSKLAD_PRICE_TYPE || 'Цена (Сайт)'
+const MOYSKLAD_MAX_HIDE_PERCENT = parseInt(process.env.MOYSKLAD_MAX_HIDE_PERCENT || '15', 10)
 
 /** Прогон с записью в историю: занимает лок, пишет результат, помечает падение. */
 export async function runMoyskladSyncTracked(opts: {
@@ -87,6 +89,7 @@ export async function runMoyskladSync(opts: {
   const matchResult = matchVariants(variantsForSync, msItems)
 
   const plan = buildPlan(matchResult.matched, stockById, MOYSKLAD_PRICE_TYPE, MOYSKLAD_MAX_PRICE_DROP_PERCENT)
+  const hide = planHiding(matchResult.unmatchedOurs, matchResult.matched, variantsForSync.length, MOYSKLAD_MAX_HIDE_PERCENT)
 
   // ─── ФАЗА 5: ПРОВЕРКА АНОМАЛИИ ───────────────────────────────────────────
 
@@ -101,6 +104,9 @@ export async function runMoyskladSync(opts: {
     skippedZeroPrice: 0,
     skippedPriceDrop: 0,
     notFoundInMs: matchResult.unmatchedOurs.length,
+    variantsHidden: 0,
+    productsHidden: 0,
+    hideSkippedReason: hide.skippedReason,
     examples: {
       skippedZeroPrice: [],
       skippedPriceDrop: [],
@@ -139,6 +145,14 @@ export async function runMoyskladSync(opts: {
       select: { id: true },
     })
     report.productsActivated = hiddenIds.length
+
+    // Сколько СКРОЕТСЯ — только то, что сейчас видно покупателю.
+    report.variantsHidden = await prisma.productVariant.count({
+      where: { id: { in: hide.variantIds }, isActive: true },
+    })
+    report.productsHidden = await prisma.product.count({
+      where: { id: { in: hide.productIds }, isActive: true },
+    })
 
     // Порог аномалии проверяем и в предпросмотре: иначе боевой прогон
     // остановится, а человек не поймёт почему.
@@ -237,6 +251,27 @@ export async function runMoyskladSync(opts: {
     })
 
     report.productsActivated = activated.count
+  }
+
+  // Скрытие того, чего нет в МоёмСкладе. Не удаление: на товар ссылаются
+  // заказы и подписки, а появится пара — активация выше вернёт его сама
+  // (hiddenManually не ставится). Остаток обнуляется, чтобы вариант не висел
+  // «в наличии» с цифрой из старого CSV.
+  if (hide.variantIds.length > 0) {
+    report.variantsHidden = await prisma.productVariant.count({
+      where: { id: { in: hide.variantIds }, isActive: true },
+    })
+    await prisma.productVariant.updateMany({
+      where: { id: { in: hide.variantIds }, OR: [{ isActive: true }, { stock: { not: 0 } }] },
+      data: { isActive: false, stock: 0 },
+    })
+  }
+  if (hide.productIds.length > 0) {
+    const hidden = await prisma.product.updateMany({
+      where: { id: { in: hide.productIds }, isActive: true },
+      data: { isActive: false },
+    })
+    report.productsHidden = hidden.count
   }
 
   // Посчитаем пропущенные

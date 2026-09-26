@@ -67,6 +67,12 @@ export type SyncReport = {
   skippedZeroPrice: number
   skippedPriceDrop: number
   notFoundInMs: number
+  /** Варианты без пары в МоёмСкладе, скрытые этим прогоном (в предпросмотре — будут скрыты). */
+  variantsHidden: number
+  /** Товары, у которых не нашлось пары ни у одного варианта, скрытые этим прогоном. */
+  productsHidden: number
+  /** Почему скрытие пропущено целиком: без пары слишком большая доля каталога. */
+  hideSkippedReason?: string
   examples: {
     skippedZeroPrice: PlanEntry[]
     skippedPriceDrop: PlanEntry[]
@@ -254,4 +260,46 @@ export function checkAnomaly(
     changed,
     total,
   }
+}
+
+// ─── СКРЫТИЕ ТОГО, ЧЕГО НЕТ В МОЁМСКЛАДЕ ──────────────────────────────────────
+
+export type HidePlan = {
+  variantIds: string[]
+  productIds: string[]
+  skippedReason?: string
+}
+
+/**
+ * МойСклад — источник правды о том, что продаётся. Вариант без пары
+ * скрывается; товар скрывается, только если пары нет ни у одного его варианта,
+ * — иначе на сайте остаются сопоставленные фасовки.
+ *
+ * Если без пары слишком большая доля каталога, это скорее сбой ответа или
+ * массовая смена артикулов, чем реальный вывод товаров: тогда не скрывается
+ * ничего, а причина уходит в отчёт.
+ */
+export function planHiding(
+  unmatched: VariantForSync[],
+  matched: MatchResult['matched'],
+  totalVariants: number,
+  maxHidePercent: number
+): HidePlan {
+  if (unmatched.length === 0) return { variantIds: [], productIds: [] }
+
+  const percent = totalVariants > 0 ? (unmatched.length / totalVariants) * 100 : 100
+  if (percent > maxHidePercent) {
+    return {
+      variantIds: [],
+      productIds: [],
+      skippedReason:
+        `Без пары в МоёмСкладе ${unmatched.length} вариантов из ${totalVariants} ` +
+        `(${percent.toFixed(0)}%) — выше порога ${maxHidePercent}%. Скрытие пропущено: ` +
+        `похоже на сбой ответа или массовую смену артикулов, проверьте МойСклад.`,
+    }
+  }
+
+  const productsWithMatch = new Set(matched.map((m) => m.variant.productId))
+  const productIds = [...new Set(unmatched.map((v) => v.productId))].filter((id) => !productsWithMatch.has(id))
+  return { variantIds: unmatched.map((v) => v.id), productIds }
 }

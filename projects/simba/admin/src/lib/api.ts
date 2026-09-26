@@ -492,6 +492,9 @@ export interface SyncRunReport {
   skippedZeroPriceCount: number
   skippedPriceDropCount: number
   notFoundInMs: number
+  variantsHidden?: number
+  productsHidden?: number
+  hideSkippedReason?: string
   examples: {
     zeroCost: Array<{ variantId: string; name: string }>
     skippedPriceDrop: SyncRunExample[]

@@ -5,6 +5,7 @@ import {
   extractPrice,
   buildPlan,
   checkAnomaly,
+  planHiding,
   type VariantForSync,
 } from './plan'
 import type { MsAssortmentItem } from './types'
@@ -423,5 +424,40 @@ describe('checkAnomaly', () => {
 
     expect(Number.isNaN(r.changedPercent)).toBe(false)
     expect(r).toEqual({ ok: true, changedPercent: 0, changed: 0, total: 0 })
+  })
+})
+
+describe('planHiding', () => {
+  const matchedOf = (variant: VariantForSync) => [{ variant, ms: ms({ id: `ms-${variant.id}` }) }]
+
+  it('скрывает товар, у которого пары нет ни у одного варианта', () => {
+    const lonely = [ourVariant({ id: 'v1', productId: 'gone' }), ourVariant({ id: 'v2', productId: 'gone' })]
+    const res = planHiding(lonely, matchedOf(ourVariant({ id: 'v3', productId: 'kept' })), 100, 15)
+    expect(res.variantIds).toEqual(['v1', 'v2'])
+    expect(res.productIds).toEqual(['gone'])
+    expect(res.skippedReason).toBeUndefined()
+  })
+
+  it('оставляет товар с частичной парой, скрывая только несопоставленный вариант', () => {
+    const res = planHiding(
+      [ourVariant({ id: 'v1', productId: 'p1' })],
+      matchedOf(ourVariant({ id: 'v2', productId: 'p1' })),
+      100,
+      15
+    )
+    expect(res.variantIds).toEqual(['v1'])
+    expect(res.productIds).toEqual([])
+  })
+
+  it('не скрывает ничего, если без пары слишком большая доля каталога', () => {
+    const unmatched = Array.from({ length: 20 }, (_, i) => ourVariant({ id: `v${i}`, productId: `p${i}` }))
+    const res = planHiding(unmatched, [], 100, 15)
+    expect(res.variantIds).toEqual([])
+    expect(res.productIds).toEqual([])
+    expect(res.skippedReason).toMatch(/20 вариантов из 100/)
+  })
+
+  it('ничего не делает, когда всё сопоставлено', () => {
+    expect(planHiding([], [], 100, 15)).toEqual({ variantIds: [], productIds: [] })
   })
 })

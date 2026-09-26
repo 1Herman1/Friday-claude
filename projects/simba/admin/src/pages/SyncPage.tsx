@@ -206,6 +206,13 @@ export default function SyncPage() {
             </div>
           )}
 
+          {displayRun.report?.hideSkippedReason && (
+            <div className="rounded-lg border border-orange-200 bg-orange-50 p-4">
+              <p className="font-semibold text-orange-800 mb-1">Скрытие товаров пропущено</p>
+              <p className="text-sm text-orange-700">{displayRun.report.hideSkippedReason}</p>
+            </div>
+          )}
+
           {/* Stats grid */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             <div className="rounded-lg border border-gray-200 bg-white p-4">
@@ -227,6 +234,10 @@ export default function SyncPage() {
             <div className="rounded-lg border border-gray-200 bg-white p-4">
               <p className="text-xs text-gray-500 mb-1">Активировано товаров</p>
               <p className="text-xl font-bold text-gray-900">{displayRun.productsActivated}</p>
+            </div>
+            <div className="rounded-lg border border-gray-200 bg-white p-4">
+              <p className="text-xs text-gray-500 mb-1">Скрыто товаров (нет в МоёмСкладе)</p>
+              <p className="text-xl font-bold text-gray-900">{displayRun.report?.productsHidden ?? 0}</p>
             </div>
             <div className="rounded-lg border border-gray-200 bg-white p-4">
               <p className="text-xs text-gray-500 mb-1">Пропущено</p>
