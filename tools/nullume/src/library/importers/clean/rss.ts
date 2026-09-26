@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -56,7 +57,8 @@ export const rssImporter: Importer = {
       // Загрузить RSS ленту с кэшем 1 час
       const rssText = await importerFetchText(feed.url, {
         fetchImpl,
-        cacheKey: `rss-${feed.id}`,
+        // Адрес входит в ключ: сменив URL ленты, мы не должны час читать старый
+        cacheKey: `rss-${feed.id}-${createHash("sha1").update(feed.url).digest("hex").slice(0, 12)}`,
         ttlMs: 60 * 60 * 1000, // 1 hour
       });
 
