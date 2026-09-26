@@ -25,3 +25,13 @@ export function maskPhone(phone: string): string {
   // Показываем префикс (+7) и последние 4 цифры
   return phone.slice(0, 3) + '***' + phone.slice(-4)
 }
+
+/**
+ * Маскирует ИНН для логов.
+ * Пример: 123456789012 → 1234***9012
+ */
+export function maskInn(inn: string): string {
+  if (!inn || inn.length < 6) return '***'
+  // Показываем первые 4 и последние 2 цифры
+  return inn.slice(0, 4) + '***' + inn.slice(-2)
+}

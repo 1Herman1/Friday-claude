@@ -144,6 +144,12 @@ enum ConsentPurpose {
   marketing         // рекламная рассылка
 }
 
+/// Источник решения по заявке: автоматическая или ручная обработка.
+enum ProDecisionSource {
+  auto_msp          // автоматическое одобрение по реестру МСП
+  manual            // ручная обработка менеджером
+}
+
 // ──────────────────────── Пользователи и доступ ────────────────────────
 
 model User {
@@ -168,17 +174,20 @@ model User {
 
   /// Заявка на профессиональный доступ. Оптовая цена выдаётся ТОЛЬКО при
   /// role = professional И proStatus = approved — обе проверки на сервере.
-  proStatus       ProStatus @default(none)
-  companyName     String?
-  inn             String?
-  specialization  String?
-  proRequestedAt  DateTime?
-  proReviewedAt   DateTime?
-  proReviewerId   String?
-  proRejectReason String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  deletedAt       DateTime?
+  proStatus         ProStatus @default(none)
+  companyName       String?
+  inn               String?
+  ogrnip            String?   // опциональный ОГРНИП/ОГРН (15 или 13 цифр) для ИП/ООО
+  specialization    String?
+  proRequestedAt    DateTime?
+  proReviewedAt     DateTime?
+  proReviewerId     String?
+  proRejectReason   String?
+  proDecisionSource ProDecisionSource? // источник последнего решения (auto_msp или manual)
+  proCheck          Json?     // результат автопроверки для менеджера: { lane, registry, npd, checkedAt }
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
 
   addresses        Address[]
   orders           Order[]
@@ -191,6 +200,7 @@ model User {
   skinSurveys      SkinSurvey[]
   consultations    ConsultationRequest[]
   consents         ConsentRecord[]
+  proDocuments     ProDocument[]
 
   @@index([email])
   @@index([phone])
@@ -881,7 +891,7 @@ enum RegistryKind {
 /// или начинается с префикса + '.', запись профильная.
 model RegistryProfile {
   inn         String       @id           // ИННЮЛ (10) или ИННФЛ (12)
-  ogrn        String                     // ОГРН (13) или ОГРНИП (15)
+  ogrn        String       @unique       // ОГРН (13) или ОГРНИП (15)
   kind        RegistryKind
   name        String                     // НаимОргСокр или «ИП Фамилия И. О.»
   okvedMain   String?                    // основной ОКВЭД из СвОКВЭДОсн, версия 2014
@@ -906,3 +916,33 @@ model RegistryRelease {
   @@index([releaseDate])
   @@map("registry_releases")
 }
+
+// ──────────────────────── Документы для проверки ПРО ────────────────────────
+
+/// Загруженный документ (фото сертификата или диплома косметолога).
+/// После решения (одобрение/отклонение) файл удаляется:
+/// - при автоодобрении сразу же (deleteAfter = now, deletedAt = now);
+/// - при ручном решении через 30 дней (deleteAfter = now + 30 дней).
+/// В БД остаётся запись о документе без файла: тип, размер, sha256, когда загружен, когда удалён.
+model ProDocument {
+  id          String     @id @default(uuid())
+  userId      String
+  storageKey  String?    // имя файла (uuid) в PS_PRO_DOCS_DIR; null после удаления файла
+  mime        String     // image/jpeg | image/png | application/pdf — по сигнатуре байтов
+  sizeBytes   Int
+  sha256      String
+  uploadedAt  DateTime   @default(now())
+  deleteAfter DateTime?  // когда удалить файл; null пока решения нет
+  deletedAt   DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([deleteAfter])
+  @@index([userId])
+  @@map("pro_documents")
+}
+
+// ВАЖНО: Уникальность ИНН среди одобренных — на уровне БД в SQL миграции.
+// Prisma не выражает условные уникальные индексы, поэтому индекс создан в миграции:
+// CREATE UNIQUE INDEX "users_inn_approved_key" ON "users"("inn")
+//   WHERE "proStatus" = 'approved' AND "deletedAt" IS NULL;

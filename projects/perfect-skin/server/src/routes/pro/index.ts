@@ -1,35 +1,39 @@
-import type { FastifyInstance } from 'fastify'
+import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import type { MultipartFile } from '@fastify/multipart'
 import { z } from 'zod'
 import { validateTaxId } from '@ps/shared'
 import { ApiError } from '../../lib/errors.js'
 import { CONSENT_TEXT_VERSION } from '../../lib/consents.js'
+import { sniffMime, stripJpegMetadata, hashBuffer, saveProDocument, deleteStoredFile } from '../../lib/pro-docs.js'
+import { checkSelfEmployed } from '../../lib/fns-npd.js'
+import { decide, isInnTakenError } from '../../lib/pro-decision.js'
+import { proDocs, proNotifyEmail } from '../../lib/env.js'
+import { maskInn } from '../../lib/masks.js'
+import { createMailSender } from '../../services/mail/index.js'
 
 const applySchema = z.object({
   companyName: z.string().min(2).max(120),
-  inn: z
+  inn: z.string().regex(/^\d{10,12}$/, 'ИНН должен быть 10 или 12 цифр'),
+  ogrnip: z
     .string()
+    .optional()
     .refine(
       (value) => {
-        const validation = validateTaxId(value)
-        return validation.ok
+        if (!value) return true // опционально
+        return /^\d{13,15}$/.test(value) // 13 (ОГРН) или 15 (ОГРНИП) цифр
       },
-      (value) => {
-        const validation = validateTaxId(value)
-        return {
-          message: validation.ok
-            ? 'ИНН должен быть 10, 12 или 15 цифр'
-            : validation.reason,
-        }
-      }
+      'ОГРНИП/ОГРН должен быть 13 или 15 цифр'
     ),
   specialization: z.string().min(2).max(120),
   comment: z.string().max(500).optional(),
-  consentPd: z.literal(true), // обязательное согласие на ПДн
-  consentMarketing: z.boolean().optional(), // опциональное согласие на рассылку
+  consentPd: z.enum(['true'], {
+    errorMap: () => ({ message: 'Согласие на обработку ПДн обязательно' }),
+  }),
+  consentMarketing: z.enum(['true', 'false']).optional(),
 })
 
 export default async function proRoute(app: FastifyInstance) {
-  // POST /api/v1/pro/apply
+  // POST /api/v1/pro/apply — multipart upload с документом
   app.post(
     '/api/v1/pro/apply',
     {
@@ -45,9 +49,10 @@ export default async function proRoute(app: FastifyInstance) {
           200: {
             type: 'object',
             additionalProperties: false,
-            required: ['proStatus'],
+            required: ['proStatus', 'lane'],
             properties: {
-              proStatus: { type: 'string', enum: ['pending', 'approved', 'rejected', 'none'] },
+              proStatus: { type: 'string', enum: ['pending', 'approved'] },
+              lane: { type: 'string', enum: ['green', 'yellow'] },
             },
           },
           400: { $ref: 'ps.error#' },
@@ -57,21 +62,10 @@ export default async function proRoute(app: FastifyInstance) {
       },
       preHandler: app.authenticate,
     },
-    async (request, reply) => {
-      const result = applySchema.safeParse(request.body)
-      if (!result.success) {
-        throw new ApiError(
-          400,
-          'VALIDATION_ERROR',
-          'Ошибка валидации',
-          { field: result.error.issues[0]?.path[0] }
-        )
-      }
-
-      const { companyName, inn, specialization, comment, consentPd, consentMarketing } = result.data
+    async (request: FastifyRequest, reply: FastifyReply) => {
       const userId = request.user!.id
 
-      // Check if user already has a professional status request pending or approved
+      // Проверяем состояние пользователя
       const user = await app.prisma.user.findUnique({
         where: { id: userId },
         select: { proStatus: true, acceptedTermsAt: true },
@@ -85,56 +79,229 @@ export default async function proRoute(app: FastifyInstance) {
         throw new ApiError(409, 'PRO_ALREADY_APPROVED', 'Ваш статус специалиста уже подтвержден')
       }
 
-      // обновление профиля и создание записей согласий в одной транзакции
-      const updatedUser = await app.prisma.$transaction(async (tx) => {
-        // Update user with professional request data
-        const updateData: any = {
-          proStatus: 'pending',
-          companyName,
-          inn,
-          specialization,
-          proRequestedAt: new Date(),
-          proRejectReason: null,
-          proReviewedAt: null,
+      // Парсим multipart данные
+      const parts = request.parts()
+      const fields: Record<string, string> = {}
+      let documentPart: MultipartFile | null = null
+
+      for await (const part of parts) {
+        if (part.type === 'field') {
+          fields[part.fieldname] = part.value as string
+        } else if (part.type === 'file') {
+          if (part.fieldname !== 'document') {
+            throw new ApiError(400, 'VALIDATION_ERROR', 'Неправильное имя поля файла')
+          }
+          if (documentPart) {
+            throw new ApiError(400, 'VALIDATION_ERROR', 'Ровно один файл')
+          }
+          documentPart = part
+        }
+      }
+
+      if (!documentPart) {
+        throw new ApiError(400, 'VALIDATION_ERROR', 'Файл документа обязателен')
+      }
+
+      // Валидируем поля
+      const fieldValidation = applySchema.safeParse(fields)
+      if (!fieldValidation.success) {
+        throw new ApiError(
+          400,
+          'VALIDATION_ERROR',
+          'Ошибка валидации',
+          { field: fieldValidation.error.issues[0]?.path[0] }
+        )
+      }
+
+      const { companyName, inn, ogrnip, specialization, comment, consentPd, consentMarketing } = fieldValidation.data
+
+      // Дополнительно валидируем inn через validateTaxId
+      const innValidation = validateTaxId(inn)
+      if (!innValidation.ok) {
+        throw new ApiError(400, 'VALIDATION_ERROR', innValidation.reason)
+      }
+
+      // Читаем файл в память
+      const fileBuffer = await documentPart.toBuffer()
+
+      let storageKey: string | null = null
+      try {
+        // Определяем MIME-тип по сигнатуре
+        const mime = sniffMime(fileBuffer)
+
+        // Для JPEG убираем EXIF/XMP и IPTC
+        let processedBuffer = fileBuffer
+        if (mime === 'image/jpeg') {
+          processedBuffer = stripJpegMetadata(fileBuffer)
         }
 
-        // Mark consent date on first pro request only (if not already marked)
-        if (!user?.acceptedTermsAt) {
-          updateData.acceptedTermsAt = new Date()
-        }
+        // Вычисляем SHA256
+        const sha256 = hashBuffer(processedBuffer)
 
-        const updated = await tx.user.update({
-          where: { id: userId },
-          data: updateData,
-          select: { proStatus: true },
+        // Сохраняем файл
+        storageKey = await saveProDocument(proDocs, processedBuffer, mime)
+
+        // Ищем в реестре МСП
+        let registryHit = await app.prisma.registryProfile.findUnique({
+          where: { inn },
+          select: { name: true, okvedMain: true, releaseDate: true },
         })
 
-        // Создаём запись о согласии на ПДн (обязательно)
-        await tx.consentRecord.create({
-          data: {
-            userId,
-            purpose: 'pro_application',
-            textVersion: CONSENT_TEXT_VERSION.pro_application,
-          },
-        })
-
-        // Создаём запись о согласии на рассылку (если дал)
-        if (consentMarketing) {
-          await tx.consentRecord.create({
-            data: {
-              userId,
-              purpose: 'marketing',
-              textVersion: CONSENT_TEXT_VERSION.marketing,
-            },
+        // Если не найден по INN, пробуем по ОГРНИП
+        if (!registryHit && ogrnip) {
+          registryHit = await app.prisma.registryProfile.findUnique({
+            where: { ogrn: ogrnip },
+            select: { name: true, okvedMain: true, releaseDate: true },
           })
         }
 
-        return updated
-      })
+        // Проверяем ИП в НПД, если INN 12-значный и не найден в реестре
+        let npd: 'self_employed' | 'not_self_employed' | 'unavailable' | 'not_checked' = 'not_checked'
+        if (!registryHit && inn.length === 12) {
+          npd = await checkSelfEmployed(inn)
+        }
 
-      reply.status(200).send({
-        proStatus: updatedUser.proStatus,
-      })
+        // Принимаем решение
+        const decision = decide({
+          registryHit,
+          npd: npd === 'not_checked' ? 'unavailable' : npd,
+        })
+
+        // Транзакция: обновляем пользователя, создаём документ, создаём согласия
+        try {
+          await app.prisma.$transaction(async (tx) => {
+            const updateData: any = {
+              proStatus: decision.status,
+              companyName,
+              inn,
+              ogrnip: ogrnip || null,
+              specialization,
+              proRequestedAt: new Date(),
+              proReviewedAt: decision.status === 'approved' ? new Date() : null,
+              proDecisionSource: decision.source,
+              proCheck: decision.check,
+              proRejectReason: null,
+            }
+
+            // При одобрении выставляем роль professional
+            if (decision.status === 'approved') {
+              updateData.role = 'professional'
+            }
+
+            // Отмечаем согласие на обработку ПДн, если это первый запрос
+            if (!user?.acceptedTermsAt) {
+              updateData.acceptedTermsAt = new Date()
+            }
+
+            await tx.user.update({
+              where: { id: userId },
+              data: updateData,
+            })
+
+            // Создаём документ
+            const now = new Date()
+            const deleteAfter = decision.status === 'approved' ? now : new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // +30 дней при pending
+            const deletedAt = decision.status === 'approved' ? now : null
+
+            await tx.proDocument.create({
+              data: {
+                userId,
+                storageKey: decision.status === 'approved' ? null : storageKey, // file будет удалён сразу
+                mime,
+                sizeBytes: processedBuffer.length,
+                sha256,
+                deleteAfter,
+                deletedAt,
+              },
+            })
+
+            // Создаём согласие на ПДн
+            await tx.consentRecord.create({
+              data: {
+                userId,
+                purpose: 'pro_application',
+                textVersion: CONSENT_TEXT_VERSION.pro_application,
+              },
+            })
+
+            // Создаём согласие на рассылку, если дал
+            if (consentMarketing === 'true') {
+              await tx.consentRecord.create({
+                data: {
+                  userId,
+                  purpose: 'marketing',
+                  textVersion: CONSENT_TEXT_VERSION.marketing,
+                },
+              })
+            }
+          })
+        } catch (err) {
+          // Нарушение уникального индекса на INN для approved статуса
+          if (isInnTakenError(err)) {
+            if (storageKey) {
+              await deleteStoredFile(proDocs, storageKey)
+            }
+            throw new ApiError(409, 'PRO_INN_TAKEN', 'Этот ИНН уже подтверждён для другого аккаунта. Напишите нам')
+          }
+          throw err
+        }
+
+        // После успешного коммита: если одобрено, удаляем файл
+        if (decision.status === 'approved' && storageKey) {
+          try {
+            await deleteStoredFile(proDocs, storageKey)
+            // Обновляем storageKey в БД
+            await app.prisma.proDocument.updateMany({
+              where: { userId, storageKey },
+              data: { storageKey: null, deletedAt: new Date() },
+            })
+          } catch (err) {
+            // Файл удалится при purge, не валим ответ
+            app.log.warn({ err }, `Failed to delete pro document immediately for user ${userId}`)
+          }
+        }
+
+        // Если pending, отправляем уведомление менеджеру
+        if (decision.status === 'pending' && proNotifyEmail) {
+          try {
+            const mailSender = createMailSender()
+            const checkText = decision.check.registry
+              ? `\nНайдено в реестре МСП: ${decision.check.registry.name} (${decision.check.registry.okvedMain || 'н/а'})`
+              : `\nВ реестре МСП не найдено. НПД статус: ${decision.check.npd}`
+
+            const message = `Новая заявка специалиста на проверку
+
+Салон: ${companyName}
+ИНН: ${maskInn(inn)}${checkText}
+Ссылка: /admin/pro-requests
+
+Обработана: ${decision.check.checkedAt.toISOString()}`
+
+            await mailSender.sendPlain(
+              proNotifyEmail,
+              'Новая заявка специалиста на проверку',
+              message
+            )
+          } catch (err) {
+            app.log.warn({ err, user_id: userId }, 'Failed to send pro request notification email')
+          }
+        }
+
+        reply.status(200).send({
+          proStatus: decision.status,
+          lane: decision.lane,
+        })
+      } catch (err) {
+        // При ошибке удаляем сохранённый файл
+        if (storageKey) {
+          try {
+            await deleteStoredFile(proDocs, storageKey)
+          } catch (cleanupErr) {
+            app.log.error({ cleanupErr, storageKey }, 'Failed to cleanup pro document file')
+          }
+        }
+        throw err
+      }
     }
   )
 

@@ -20,3 +20,23 @@ export const isProduction = !isDevelopment
 // кук на «боевом» протоколе иначе всегда true и браузер режет Set-Cookie по
 // http://. Ничего в проде не трогает, пока переменная не выставлена явно.
 export const cookieInsecure = process.env.PS_COOKIE_INSECURE === '1'
+
+// Каталог для хранения загруженных документов при подаче заявки на профессиональный доступ.
+// В разработке по умолчанию ./var/pro-docs, в боевом окружении обязателен.
+export const proDocs = getDirWithDefault('PS_PRO_DOCS_DIR', isDevelopment ? './var/pro-docs' : null)
+
+// Email адрес для уведомлений менеджера о новых заявках на проверку.
+// Пусто = без уведомлений (опционально).
+export const proNotifyEmail = process.env.PS_PRO_NOTIFY_EMAIL || ''
+
+function getDirWithDefault(key: string, defaultValue: string | null): string {
+  const value = process.env[key]
+  if (!value) {
+    if (defaultValue === null) {
+      console.error(`Error: environment variable ${key} is required in production`)
+      process.exit(1)
+    }
+    return defaultValue
+  }
+  return value
+}

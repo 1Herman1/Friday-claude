@@ -3,6 +3,7 @@ import cookie from '@fastify/cookie'
 import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
 import rateLimit from '@fastify/rate-limit'
+import multipart from '@fastify/multipart'
 import prismaPlugin from './plugins/prisma.js'
 import authenticatePlugin from './plugins/authenticate.js'
 import { ApiError, errorResponse } from './lib/errors.js'
@@ -60,6 +61,16 @@ await app.register(cors, {
 await app.register(rateLimit, {
   max: 120,
   timeWindow: '1 minute',
+})
+// Multipart form data for file uploads
+await app.register(multipart, {
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10 МБ
+    files: 1,
+    fields: 12,
+    fieldSize: 2048,
+    parts: 14, // файл + 12 полей + граница = 14 частей
+  },
 })
 await app.register(authenticatePlugin)
 

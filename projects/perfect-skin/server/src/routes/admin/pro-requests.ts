@@ -2,6 +2,9 @@ import type { FastifyInstance, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { ApiError } from '../../lib/errors.js'
 import { createMailSender } from '../../services/mail/index.js'
+import { proDocs } from '../../lib/env.js'
+import { readStoredFile } from '../../lib/pro-docs.js'
+import { isInnTakenError } from '../../lib/pro-decision.js'
 
 const listQuerySchema = z.object({
   status: z.enum(['pending', 'approved', 'rejected', 'all']).optional().default('pending'),
@@ -32,7 +35,7 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
                 items: {
                   type: 'object',
                   additionalProperties: false,
-                  required: ['id', 'name', 'email', 'phone', 'companyName', 'inn', 'specialization', 'proStatus', 'proRequestedAt', 'proReviewedAt', 'proRejectReason'],
+                  required: ['id', 'name', 'email', 'phone', 'companyName', 'inn', 'ogrnip', 'specialization', 'proStatus', 'proDecisionSource', 'proCheck', 'proRequestedAt', 'proReviewedAt', 'proRejectReason', 'document'],
                   properties: {
                     id: { type: 'string', format: 'uuid' },
                     name: { type: 'string' },
@@ -40,11 +43,23 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
                     phone: { type: ['string', 'null'] },
                     companyName: { type: 'string' },
                     inn: { type: 'string' },
+                    ogrnip: { type: ['string', 'null'] },
                     specialization: { type: 'string' },
                     proStatus: { type: 'string', enum: ['pending', 'approved', 'rejected'] },
+                    proDecisionSource: { type: ['string', 'null'], enum: ['auto_msp', 'manual'] },
+                    proCheck: { type: ['object', 'null'] },
                     proRequestedAt: { type: 'string', format: 'date-time' },
                     proReviewedAt: { type: ['string', 'null'], format: 'date-time' },
                     proRejectReason: { type: ['string', 'null'] },
+                    document: {
+                      type: ['object', 'null'],
+                      properties: {
+                        mime: { type: 'string' },
+                        sizeBytes: { type: 'integer' },
+                        uploadedAt: { type: 'string', format: 'date-time' },
+                        available: { type: 'boolean' },
+                      },
+                    },
                   },
                 },
               },
@@ -85,11 +100,24 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
             phone: true,
             companyName: true,
             inn: true,
+            ogrnip: true,
             specialization: true,
             proStatus: true,
+            proDecisionSource: true,
+            proCheck: true,
             proRequestedAt: true,
             proReviewedAt: true,
             proRejectReason: true,
+            proDocuments: {
+              select: {
+                mime: true,
+                sizeBytes: true,
+                uploadedAt: true,
+                storageKey: true,
+              },
+              orderBy: { uploadedAt: 'desc' },
+              take: 1,
+            },
           },
           orderBy: { proRequestedAt: 'desc' },
           skip,
@@ -98,19 +126,33 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
         app.prisma.user.count({ where }),
       ])
 
-      const formattedItems = items.map((u) => ({
-        id: u.id,
-        name: u.name,
-        email: u.email || null,
-        phone: u.phone || null,
-        companyName: u.companyName || '',
-        inn: u.inn || '',
-        specialization: u.specialization || '',
-        proStatus: u.proStatus,
-        proRequestedAt: u.proRequestedAt?.toISOString() || '',
-        proReviewedAt: u.proReviewedAt ? u.proReviewedAt.toISOString() : null,
-        proRejectReason: u.proRejectReason || null,
-      }))
+      const formattedItems = items.map((u) => {
+        const latestDoc = u.proDocuments[0]
+        return {
+          id: u.id,
+          name: u.name,
+          email: u.email || null,
+          phone: u.phone || null,
+          companyName: u.companyName || '',
+          inn: u.inn || '',
+          ogrnip: u.ogrnip || null,
+          specialization: u.specialization || '',
+          proStatus: u.proStatus,
+          proDecisionSource: u.proDecisionSource || null,
+          proCheck: u.proCheck || null,
+          proRequestedAt: u.proRequestedAt?.toISOString() || '',
+          proReviewedAt: u.proReviewedAt ? u.proReviewedAt.toISOString() : null,
+          proRejectReason: u.proRejectReason || null,
+          document: latestDoc
+            ? {
+                mime: latestDoc.mime,
+                sizeBytes: latestDoc.sizeBytes,
+                uploadedAt: latestDoc.uploadedAt.toISOString(),
+                available: !!latestDoc.storageKey,
+              }
+            : null,
+        }
+      })
 
       reply.status(200).send({
         items: formattedItems,
@@ -205,16 +247,40 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
         throw new ApiError(400, 'VALIDATION_ERROR', 'При отклонении требуется указать причину', { field: 'reason' })
       }
 
-      // Update user
-      const updatedUser = await app.prisma.user.update({
+      // Update user in transaction: set decision source to manual and schedule documents for deletion
+      const now = new Date()
+      const deleteAfter = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // +30 дней
+
+      try {
+        await app.prisma.$transaction(async (tx) => {
+          await tx.user.update({
+            where: { id },
+            data: {
+              proStatus: action === 'approve' ? 'approved' : 'rejected',
+              role: action === 'approve' ? 'professional' : (user.role === 'professional' ? 'customer' : user.role),
+              proReviewedAt: new Date(),
+              proReviewerId: request.user!.id,
+              proRejectReason: action === 'reject' ? reason : null,
+              proDecisionSource: 'manual',
+            },
+          })
+
+          // Set deleteAfter for all documents without deletedAt
+          await tx.proDocument.updateMany({
+            where: { userId: id, deletedAt: null },
+            data: { deleteAfter },
+          })
+        })
+      } catch (err) {
+        // Нарушение уникального индекса на INN для approved
+        if (isInnTakenError(err)) {
+          throw new ApiError(409, 'PRO_INN_TAKEN', 'Этот ИНН уже подтверждён для другого аккаунта')
+        }
+        throw err
+      }
+
+      const updatedUser = await app.prisma.user.findUnique({
         where: { id },
-        data: {
-          proStatus: action === 'approve' ? 'approved' : 'rejected',
-          role: action === 'approve' ? 'professional' : (user.role === 'professional' ? 'customer' : user.role),
-          proReviewedAt: new Date(),
-          proReviewerId: request.user!.id,
-          proRejectReason: action === 'reject' ? reason : null,
-        },
         select: {
           id: true,
           name: true,
@@ -229,6 +295,10 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
           proRejectReason: true,
         },
       })
+
+      if (!updatedUser) {
+        throw new ApiError(404, 'USER_NOT_FOUND', 'Пользователь не найден')
+      }
 
       // Send email to user
       if (updatedUser.email) {
@@ -260,6 +330,64 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
         proReviewedAt: updatedUser.proReviewedAt ? updatedUser.proReviewedAt.toISOString() : null,
         proRejectReason: updatedUser.proRejectReason || null,
       })
+    }
+  )
+
+  // GET /api/v1/admin/pro-requests/:userId/document
+  app.get(
+    '/pro-requests/:userId/document',
+    {
+      preHandler: preHandlers,
+      schema: {
+        response: {
+          200: {
+            type: 'string',
+            format: 'binary',
+          },
+          400: { $ref: 'ps.error#' },
+          401: { $ref: 'ps.error#' },
+          403: { $ref: 'ps.error#' },
+          404: { $ref: 'ps.error#' },
+        },
+      },
+    },
+    async (request, reply) => {
+      const { userId } = request.params as { userId: string }
+
+      // Валидируем userId как UUID
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) {
+        throw new ApiError(400, 'VALIDATION_ERROR', 'Неверный формат userId')
+      }
+
+      // Получаем последний документ пользователя с файлом
+      const doc = await app.prisma.proDocument.findFirst({
+        where: {
+          userId,
+          storageKey: { not: null },
+        },
+        orderBy: { uploadedAt: 'desc' },
+      })
+
+      if (!doc || !doc.storageKey) {
+        throw new ApiError(404, 'DOCUMENT_NOT_FOUND', 'Документ удалён по сроку хранения или не загружался')
+      }
+
+      // Читаем файл
+      const fileBuffer = await readStoredFile(proDocs, doc.storageKey)
+
+      // Устанавливаем заголовки
+      reply.header('Content-Type', doc.mime)
+      reply.header('Cache-Control', 'no-store')
+      reply.header('X-Content-Type-Options', 'nosniff')
+
+      // Для PDF — attachment (скачать), для картинок — inline (просмотр)
+      const disposition = doc.mime === 'application/pdf' ? 'attachment' : 'inline'
+      reply.header('Content-Disposition', `${disposition}; filename="document"`)
+
+      // CSP для безопасности: запрещаем JS в PDF
+      reply.header('Content-Security-Policy', "default-src 'none'; img-src 'self'; sandbox")
+
+      reply.type(doc.mime).send(fileBuffer)
     }
   )
 }
