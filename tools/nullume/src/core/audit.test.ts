@@ -194,3 +194,23 @@ test("auditCatalog ignores price comparison when one is missing", () => {
   // Should not detect price change when only one has price
   assert.strictEqual(report.summary.priceChanged, 0);
 });
+
+test("auditCatalog: страница, которую обход не прочитал, не даёт model_missing", () => {
+  const docUrl = "https://docs.kie.ai/market/unread.md";
+  const vendored = [createModel({ id: "model-1", docUrl })];
+
+  const withoutUnread = auditCatalog(vendored, [], [], []);
+  assert.strictEqual(
+    withoutUnread.discrepancies.filter((d) => d.type === "model_missing").length,
+    1,
+    "без списка непрочитанных модель считается удалённой"
+  );
+
+  const withUnread = auditCatalog(vendored, [], [], [], [docUrl]);
+  assert.strictEqual(
+    withUnread.discrepancies.filter((d) => d.type === "model_missing").length,
+    0,
+    "страница не прочитана — про модель нечего сказать"
+  );
+  assert.strictEqual(withUnread.summary.missing, 0, "сводка тоже не должна её считать");
+});

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { fetchLiveCatalog } from "../src/core/providers/kie/registry.js";
+import { fetchLiveCatalogDetailed } from "../src/core/providers/kie/registry.js";
 import { buildModelFromLiveEntry } from "../src/core/providers/kie/build.js";
 import { fetchPricing, priceForModel } from "../src/core/providers/kie/pricing.js";
 import { auditCatalog } from "../src/core/audit.js";
@@ -21,8 +21,11 @@ async function auditCatalogCommand() {
 
     // Fetch live catalog
     console.log("Fetching live catalog from docs.kie.ai...");
-    const liveEntries = await fetchLiveCatalog();
+    const { entries: liveEntries, unread } = await fetchLiveCatalogDetailed();
     console.log(`Found ${liveEntries.length} live models`);
+    if (unread.length > 0) {
+      console.log(`Unread pages: ${unread.length}`);
+    }
 
     // Build live models with schemas
     console.log("Building live model schemas...");
@@ -59,18 +62,19 @@ async function auditCatalogCommand() {
       }
     }
 
-    // Run audit
-    const report = auditCatalog(vendoredModels, liveModels, vendoredPrices, pricingRecords);
+    const report = auditCatalog(vendoredModels, liveModels, vendoredPrices, pricingRecords, unread);
+    const filteredDiscrepancies = report.discrepancies;
+    const filteredSummary = report.summary;
 
     // Print report
     console.log("=== AUDIT REPORT ===\n");
     console.log(`Vendored models: ${report.vendoredCount}`);
     console.log(`Live models: ${report.liveCount}`);
-    console.log(`Discrepancies found: ${report.discrepancies.length}\n`);
+    console.log(`Discrepancies found: ${filteredDiscrepancies.length}\n`);
 
-    if (report.discrepancies.length > 0) {
+    if (filteredDiscrepancies.length > 0) {
       console.log("DISCREPANCIES:");
-      for (const disc of report.discrepancies) {
+      for (const disc of filteredDiscrepancies) {
         console.log(`\n  ${disc.modelId}: ${disc.type}`);
         console.log(`    ${disc.description}`);
         if (disc.vendored) console.log(`    Vendored: ${disc.vendored}`);
@@ -79,12 +83,22 @@ async function auditCatalogCommand() {
     }
 
     console.log(`\n\nSUMMARY:`);
-    console.log(`  Missing models (removed): ${report.summary.missing}`);
-    console.log(`  New models: ${report.summary.new}`);
-    console.log(`  Metadata changes: ${report.summary.metaChanged}`);
-    console.log(`  Price changes: ${report.summary.priceChanged}`);
+    console.log(`  Missing models (removed): ${filteredSummary.missing}`);
+    console.log(`  New models: ${filteredSummary.new}`);
+    console.log(`  Metadata changes: ${filteredSummary.metaChanged}`);
+    console.log(`  Price changes: ${filteredSummary.priceChanged}`);
 
-    if (report.discrepancies.length > 0) {
+    if (unread.length > 0) {
+      console.log(`\n\nНЕ ПРОЧИТАНО: ${unread.length} страниц (проверка по ним не проводилась)`);
+      for (const url of unread.slice(0, 5)) {
+        console.log(`  ${url}`);
+      }
+      if (unread.length > 5) {
+        console.log(`  … и ещё ${unread.length - 5}`);
+      }
+    }
+
+    if (filteredDiscrepancies.length > 0) {
       process.exit(1);
     }
   } catch (e) {

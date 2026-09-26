@@ -26,8 +26,16 @@ export function auditCatalog(
   vendored: ModelInfo[],
   live: ModelInfo[],
   vendoredPrices: PricingRecord[],
-  livePrices: PricingRecord[]
+  livePrices: PricingRecord[],
+  /**
+   * Страницы документации, которые обход не прочитал. Модель с такой страницы
+   * не «удалена» — про неё просто нечего сказать, поэтому она не становится
+   * находкой. Фильтр живёт здесь, а не у каждого вызывающего: иначе три копии
+   * одного правила разойдутся.
+   */
+  unreadDocUrls: readonly string[] = []
 ): AuditReport {
+  const unread = new Set(unreadDocUrls);
   const discrepancies: AuditDiscrepancy[] = [];
   const vendoredMap = new Map(vendored.map((m) => [m.id, m]));
   const liveMap = new Map(live.map((m) => [m.id, m]));
@@ -45,6 +53,7 @@ export function auditCatalog(
     // Семейства со своим API (veo, suno…) в market-документации не значатся —
     // их отсутствие там не «пропажа».
     if (vendoredModel.schemaSource === "seed" && vendoredModel.api !== "jobs") continue;
+    if (vendoredModel.docUrl && unread.has(vendoredModel.docUrl)) continue;
     if (!liveMap.has(modelId)) {
       discrepancies.push({
         modelId,

@@ -86,6 +86,11 @@ export interface LiveCatalogEntry {
   docUrl: string;
 }
 
+export interface LiveCatalogResult {
+  entries: LiveCatalogEntry[];
+  unread: string[];
+}
+
 export function mergeRegistries(
   liveEntries: LiveCatalogEntry[],
   seed: Record<string, any> = SEED_MODELS
@@ -135,30 +140,68 @@ export function mergeRegistries(
   return merged;
 }
 
-export async function fetchLiveCatalog(): Promise<LiveCatalogEntry[]> {
-  const llmsTxt = await fetch(LLMS_TXT_URL).then((r) => r.text());
-  const pages = parseLlmsTxt(llmsTxt);
+/** Одна попытка повтора: 429 на середине обхода — обычное дело */
+async function fetchPage(url: string): Promise<string> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const resp = await fetch(url);
+    if (resp.ok) return resp.text();
+    if (attempt === 0) {
+      await new Promise((r) => setTimeout(r, 1500));
+      continue;
+    }
+    throw new Error(`HTTP ${resp.status}`);
+  }
+  throw new Error("unreachable");
+}
+
+/**
+ * Каталог собирается обходом страниц документации. Непрочитанные страницы
+ * накапливаются в unread без броска. Ошибка при недоступном llms.txt
+ * остаётся — там читать нечего.
+ */
+export async function fetchLiveCatalogDetailed(): Promise<LiveCatalogResult> {
+  const llmsResp = await fetch(LLMS_TXT_URL);
+  if (!llmsResp.ok) {
+    throw new Error(`Не удалось прочитать ${LLMS_TXT_URL}: HTTP ${llmsResp.status}`);
+  }
+  const pages = parseLlmsTxt(await llmsResp.text());
 
   const entries: LiveCatalogEntry[] = [];
+  const unread: string[] = [];
 
   for (const page of pages) {
     try {
-      const markdown = await fetch(page.url).then((r) => r.text());
-      const ids = extractModelIds(markdown);
-
-      for (const id of ids) {
-        entries.push({
-          id,
-          category: page.category,
-          description: page.description,
-          docUrl: page.url,
-        });
-        break; // Один ID на страницу
+      // Страница может ответить 200 и отдать заглушку без модели — это тоже
+      // неудача, просто тихая. Поэтому повторяем и по пустому разбору.
+      let ids: string[] = [];
+      for (let attempt = 0; attempt < 3 && ids.length === 0; attempt++) {
+        if (attempt > 0) await new Promise((r) => setTimeout(r, 1500));
+        ids = extractModelIds(await fetchPage(page.url));
       }
-    } catch {
-      // Пропускаем на ошибке
+
+      if (ids.length === 0) {
+        unread.push(page.url);
+        continue;
+      }
+
+      entries.push({
+        id: ids[0],
+        category: page.category,
+        description: page.description,
+        docUrl: page.url,
+      });
+    } catch (e) {
+      unread.push(page.url);
     }
   }
 
-  return entries;
+  return { entries, unread };
+}
+
+/**
+ * Обёртка для совместимости: возвращает только entries.
+ */
+export async function fetchLiveCatalog(): Promise<LiveCatalogEntry[]> {
+  const result = await fetchLiveCatalogDetailed();
+  return result.entries;
 }
