@@ -26,7 +26,7 @@
   {
     "id": "brandnew",
     "title": "Brand New",
-    "url": "https://feeds.feedburner.com/UnderConsideration/BrandNew",
+    "url": "https://www.underconsideration.com/brandnew/atom.xml",
     "imageStrategy": "content"
   }
 ]

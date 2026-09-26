@@ -75,3 +75,36 @@ test("sleep: должен ждать указанное время", async () =>
 
   assert(elapsed >= 40, `Ожидалось не менее 40ms, получено ${elapsed}ms`);
 });
+
+test("parseRssItems: CDATA в title и description", () => {
+  const xml = `<rss><channel><item>
+    <title><![CDATA[Daylight]]></title>
+    <link>https://example.com/a</link>
+    <description><![CDATA[ <img src="https://example.com/i.png" /> ]]></description>
+  </item></channel></rss>`;
+  const [item] = parseRssItems(xml);
+  assert.strictEqual(item.title, "Daylight");
+  assert.ok(item.description?.includes("i.png"));
+});
+
+test("parseRssItems: Atom entry со ссылкой в href", () => {
+  const xml = `<feed xmlns="http://www.w3.org/2005/Atom"><entry>
+    <title type="html">Recycling</title>
+    <link rel="alternate" type="text/html" href="https://example.com/b" />
+    <published>2026-09-01T00:00:00Z</published>
+    <content type="html"><![CDATA[<img src="https://example.com/j.png" />]]></content>
+  </entry></feed>`;
+  const [item] = parseRssItems(xml);
+  assert.strictEqual(item.title, "Recycling");
+  assert.strictEqual(item.link, "https://example.com/b");
+  assert.ok(item.description?.includes("j.png"));
+});
+
+test("parseRssItems: media:content как источник картинки", () => {
+  const xml = `<rss><channel><item>
+    <title>Post</title><link>https://example.com/c</link>
+    <media:content url="https://example.com/k.gif" type="image/gif" />
+  </item></channel></rss>`;
+  const [item] = parseRssItems(xml);
+  assert.strictEqual(item.enclosureUrl, "https://example.com/k.gif");
+});

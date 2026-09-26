@@ -61,6 +61,11 @@ export const rssImporter: Importer = {
       });
 
       const items = parseRssItems(rssText);
+      if (items.length === 0) {
+        throw new ProviderError(
+          `Лента ${feed.id} не отдала ни одной записи (${feed.url}) — вероятно, адрес устарел`
+        );
+      }
 
       for (const item of items) {
         if (foundCount >= limit) break;
@@ -83,6 +88,11 @@ export const rssImporter: Importer = {
           if (srcs.length > 0) {
             imageUrl = srcs[0];
           }
+        }
+
+        // Часть лент держит картинку не в тексте, а в enclosure/media:content
+        if (!imageUrl && item.enclosureUrl?.startsWith("https://")) {
+          imageUrl = item.enclosureUrl;
         }
 
         // Стратегия 3: og (Open Graph из страницы)

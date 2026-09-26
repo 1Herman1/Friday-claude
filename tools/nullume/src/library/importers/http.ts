@@ -158,44 +158,61 @@ export async function importerFetchText(
  * @param xml Текст RSS/Atom
  * @returns Массив элементов
  */
+/** Текст тега с распаковкой CDATA: половина лент оборачивает в него всё. */
+function tagText(xml: string, tag: string): string | undefined {
+  const re = new RegExp(
+    `<${tag}(?:\\s[^>]*)?>(?:<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>|([\\s\\S]*?))</${tag}>`,
+    "i"
+  );
+  const m = re.exec(xml);
+  if (!m) return undefined;
+  const value = (m[1] ?? m[2] ?? "").trim();
+  return value || undefined;
+}
+
 export function parseRssItems(xml: string): RssItem[] {
   const items: RssItem[] = [];
 
-  // Найти все <item> теги
-  const itemRegex = /<item[^>]*>([\s\S]*?)<\/item>/gi;
+  // RSS 2.0: <item>
+  const itemRegex = /<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi;
   let itemMatch;
 
   while ((itemMatch = itemRegex.exec(xml)) !== null) {
-    const itemContent = itemMatch[1];
+    const c = itemMatch[1];
     const item: RssItem = {};
 
-    // Извлечь title
-    const titleMatch = /<title[^>]*>([^<]*)<\/title>/i.exec(itemContent);
-    if (titleMatch) item.title = titleMatch[1].trim();
+    item.title = tagText(c, "title");
+    item.link = tagText(c, "link");
+    item.pubDate = tagText(c, "pubDate");
+    // content:encoded точнее description, поэтому идёт вторым и перекрывает
+    item.description = tagText(c, "content:encoded") ?? tagText(c, "description");
 
-    // Извлечь link
-    const linkMatch = /<link[^>]*>([^<]*)<\/link>/i.exec(itemContent);
-    if (linkMatch) item.link = linkMatch[1].trim();
+    // enclosure и media:content несут одно и то же: прямой адрес медиа
+    const mediaMatch =
+      /<enclosure[^>]*url=["']([^"']*)/i.exec(c) ?? /<media:content[^>]*url=["']([^"']*)/i.exec(c);
+    if (mediaMatch) item.enclosureUrl = mediaMatch[1].trim();
 
-    // Извлечь pubDate
-    const pubDateMatch = /<pubDate[^>]*>([^<]*)<\/pubDate>/i.exec(itemContent);
-    if (pubDateMatch) item.pubDate = pubDateMatch[1].trim();
+    items.push(item);
+  }
 
-    // Извлечь description (обычная)
-    const descMatch = /<description[^>]*>([^<]*)<\/description>/i.exec(itemContent);
-    if (descMatch) item.description = descMatch[1].trim();
+  if (items.length > 0) return items;
 
-    // Извлечь content:encoded (приоритет над description, включая CDATA)
-    const contentRegex = /<content:encoded[^>]*>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([^<]*?))<\/content:encoded>/i;
-    const contentMatch = contentRegex.exec(itemContent);
-    if (contentMatch) {
-      // CDATA в группе 1, обычный текст в группе 2
-      item.description = (contentMatch[1] || contentMatch[2] || "").trim();
-    }
+  // Atom: <entry>, ссылка живёт в атрибуте href, а не в тексте тега
+  const entryRegex = /<entry(?:\s[^>]*)?>([\s\S]*?)<\/entry>/gi;
+  let entryMatch;
 
-    // Извлечь enclosure URL
-    const enclosureMatch = /<enclosure[^>]*url=["']([^"']*)/i.exec(itemContent);
-    if (enclosureMatch) item.enclosureUrl = enclosureMatch[1].trim();
+  while ((entryMatch = entryRegex.exec(xml)) !== null) {
+    const c = entryMatch[1];
+    const item: RssItem = {};
+
+    item.title = tagText(c, "title");
+    item.pubDate = tagText(c, "published") ?? tagText(c, "updated");
+    item.description = tagText(c, "content") ?? tagText(c, "summary");
+
+    const alt = /<link[^>]*rel=["']alternate["'][^>]*href=["']([^"']+)/i.exec(c);
+    const anyLink = /<link[^>]*href=["']([^"']+)/i.exec(c);
+    const href = alt?.[1] ?? anyLink?.[1];
+    if (href) item.link = href.trim();
 
     items.push(item);
   }

@@ -162,16 +162,16 @@ test("shotcafe: страница без картинок завершает ге
   assert.equal(calls.length, 1);
 });
 
-test("rss: лента без items завершает генератор", async () => {
+test("rss: пустая лента — ошибка, а не тихий ноль", async () => {
   await withTempHome(async () => {
     const { impl } = recordingFetch(
       () => new Response(`<?xml version="1.0"?><rss><channel><title>t</title></channel></rss>`, { status: 200 })
     );
-    const candidates = await collect(
-      rssImporter,
-      baseOpts({ collection: "onepagelove", limit: 50, fetchImpl: impl })
+    await assert.rejects(
+      () =>
+        collect(rssImporter, baseOpts({ collection: "onepagelove", limit: 50, fetchImpl: impl })),
+      (e: Error) => /ни одной записи/.test(e.message)
     );
-    assert.equal(candidates.length, 0);
   });
 });
 

@@ -572,12 +572,14 @@ libCmd
         // Ignore
       }
 
-      const families = store.listFamilies("approved");
+      const approvedFamilies = store.listFamilies("approved");
+      const proposedFamilies = store.listFamilies("proposed");
 
       const data = {
         references: allRefs.length,
         embedded: withEmbedding,
-        families: families.length,
+        families: approvedFamilies.length,
+        proposedFamilies: proposedFamilies.length,
         diskUsage: Math.round(totalBytes / (1024 * 1024)),
         embedModel: embedModelId || "none",
       };
@@ -587,7 +589,7 @@ libCmd
           `📚 Статус библиотеки\n` +
           `  Референсы: ${data.references}\n` +
           `  С векторами: ${data.embedded}\n` +
-          `  Семейства: ${data.families}\n` +
+          `  Семейства: ${data.families} утверждено, ${data.proposedFamilies} предложено\n` +
           `  На диске: ${data.diskUsage} МБ\n` +
           `  Модель: ${data.embedModel}`
         );
@@ -703,20 +705,27 @@ libCmd
         id: f.familyId.slice(0, 8),
         size: f.size.toString(),
         exemplars: f.exemplarRefIds.length.toString(),
-        silhouette: result.silhouette.toFixed(3),
       }));
+      const dropped = result.k - result.families.length;
 
       emit(
         flags,
         { data: { k: result.k, silhouette: result.silhouette, families: result.families.length, unassigned: result.unassigned.length } },
         () => {
-          let msg = `✓ Кластеризация завершена: ${result.k} кластеров, silhouette: ${result.silhouette.toFixed(3)}`;
+          let msg =
+            `✓ Кластеризация завершена: ${result.families.length} семейств из ${result.k} кластеров` +
+            `, silhouette ${result.silhouette.toFixed(3)}`;
+          if (dropped > 0) {
+            msg += `\n  Отброшено как слишком мелкие: ${dropped} (порог --min-size)`;
+          }
+          if (result.unassigned.length > 0) {
+            msg += `\n  Референсов вне семейств: ${result.unassigned.length}`;
+          }
           if (result.families.length > 0) {
             msg += "\n\n" + table(rows, [
               { key: "id", header: "ID семейства" },
               { key: "size", header: "Размер" },
-              { key: "exemplars", header: "Exemplars" },
-              { key: "silhouette", header: "Silhouette" },
+              { key: "exemplars", header: "Образцы" },
             ]);
           }
           return msg;
