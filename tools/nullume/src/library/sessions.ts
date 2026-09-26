@@ -90,6 +90,41 @@ export async function writeSession(id: string, data: SessionFile): Promise<void>
  * @param text Текст cookies
  * @returns Record<string, string> {name: value, ...}
  */
+/** Домен строки cookies.txt подходит, если равен одному из доменов или вложен в него */
+function cookieDomainMatches(raw: string, domains: readonly string[]): boolean {
+  const host = raw.replace(/^#HttpOnly_/, "").replace(/^\./, "").toLowerCase();
+  return domains.some((d) => host === d || host.endsWith(`.${d}`));
+}
+
+/**
+ * Разобрать cookies.txt, оставив cookie только нужных доменов.
+ * Формат «name=value; …» домена не несёт — его владелец вводит сам под
+ * конкретный импортёр, он принимается целиком.
+ */
+export function parseCookieFileForDomains(
+  text: string,
+  domains: readonly string[]
+): { cookies: Record<string, string>; dropped: number } {
+  const lines = text
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith("# "));
+  const isNetscape = lines.some((line) => line.split(/\t+/).length >= 7);
+  if (!isNetscape) return { cookies: parseCookieFile(text), dropped: 0 };
+
+  const cookies: Record<string, string> = {};
+  let dropped = 0;
+  for (const line of lines) {
+    const parts = line.split(/\t+/);
+    if (parts.length < 7) continue;
+    const [domain, , , , , name, value] = parts;
+    if (!name || !value) continue;
+    if (cookieDomainMatches(domain, domains)) cookies[name] = value;
+    else dropped++;
+  }
+  return { cookies, dropped };
+}
+
 export function parseCookieFile(text: string): Record<string, string> {
   const cookies: Record<string, string> = {};
 

@@ -28,7 +28,13 @@ export async function handler(args: {
     const usdPerCredit = getUsdPerCredit();
 
     // Load original job
-    const originalJob = await loadJob(args.job_id);
+    let originalJob;
+    try {
+      originalJob = await loadJob(args.job_id);
+    } catch (e) {
+      if ((e as NodeJS.ErrnoException).code !== "ENOENT") throw e;
+      throw new Error(`Задачи ${args.job_id} нет в истории — повторять нечего. Список: list_jobs`);
+    }
 
     // Build final input
     const baseInput = { ...originalJob.input };

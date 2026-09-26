@@ -151,14 +151,16 @@ test("pinterest-cookies: ошибка если отсутствует _pinterest
 /* Headers: Cookie и X-CSRFToken                                      */
 /* ------------------------------------------------------------------ */
 
-test("pinterest-cookies: заголовок Cookie содержит все cookies из сессии", async () => {
+test("pinterest-cookies: на pinterest.com уходят только его cookie, чужие — нет", async () => {
   await withSessions(
     {
       "pinterest-cookies": {
         cookies: {
           _pinterest_sess: "sess_value",
-          _b: "another_value",
-          unknown: "third_value",
+          csrftoken: "csrf_value",
+          // Так выглядит сессия, собранная из выгрузки всего браузера
+          session_id: "bank_session",
+          user_session: "github_session",
         },
         createdAt: "2026-01-01T00:00:00Z",
       },
@@ -166,13 +168,63 @@ test("pinterest-cookies: заголовок Cookie содержит все cooki
     async () => {
       const { impl, calls } = recordingFetch(() => json({ resource_response: { data: { results: [] } } }));
       await collect(opts({ fetchImpl: impl }));
-      assert.equal(calls.length, 1);
       const cookieHeader = calls[0].headers.cookie;
-      assert.ok(cookieHeader.includes("_pinterest_sess=sess_value"), `cookie header должен содержать _pinterest_sess`);
-      assert.ok(cookieHeader.includes("_b=another_value"), `cookie header должен содержать _b`);
-      assert.ok(cookieHeader.includes("unknown=third_value"), `cookie header должен содержать unknown`);
+      assert.ok(cookieHeader.includes("_pinterest_sess=sess_value"));
+      assert.ok(cookieHeader.includes("csrftoken=csrf_value"));
+      assert.ok(!cookieHeader.includes("bank_session"), "сессия банка не должна уйти в Pinterest");
+      assert.ok(!cookieHeader.includes("github_session"), "сессия GitHub не должна уйти в Pinterest");
     }
   );
+});
+
+/** Страница выдачи с одним пином и закладкой следующей */
+function page(id: string, bookmark?: string) {
+  return json({
+    resource_response: {
+      data: { results: [{ id, images: { orig: { url: `https://i.pinimg.com/${id}.jpg` } } }] },
+      ...(bookmark ? { bookmark } : {}),
+    },
+  });
+}
+
+const SESSION = { "pinterest-cookies": { cookies: { _pinterest_sess: "s" }, createdAt: "2026-01-01T00:00:00Z" } };
+
+test("pinterest-cookies: закладка -end- останавливает выдачу", async () => {
+  await withSessions(SESSION, async () => {
+    const { impl, calls } = recordingFetch(() => page("p", "-end-"));
+    await collect(opts({ fetchImpl: impl, limit: 100 }));
+    assert.equal(calls.length, 1);
+  });
+});
+
+test("pinterest-cookies: зациклившаяся закладка не даёт бесконечных запросов", async () => {
+  await withSessions(SESSION, async () => {
+    let n = 0;
+    // A → B → A → … : каждая страница со «свежим» пином, лимит не спасает
+    const { impl, calls } = recordingFetch(() => page(`p${n++}`, n % 2 ? "A" : "B"));
+    await collect(opts({ fetchImpl: impl, limit: 1000 }));
+    assert.ok(calls.length <= 3, `запросов ${calls.length}, ожидали остановку на повторе закладки`);
+  });
+});
+
+test("pinterest-cookies: страница без результатов останавливает выдачу", async () => {
+  await withSessions(SESSION, async () => {
+    const { impl, calls } = recordingFetch(() =>
+      json({ resource_response: { data: { results: [] }, bookmark: `b${Math.random()}` } })
+    );
+    await collect(opts({ fetchImpl: impl, limit: 100 }));
+    assert.equal(calls.length, 1);
+  });
+});
+
+test("pinterest-cookies: потолок страниц на запрос", async () => {
+  await withSessions(SESSION, async () => {
+    let n = 0;
+    // Каждый раз новая закладка и новый пин — остановить может только потолок
+    const { impl, calls } = recordingFetch(() => page(`p${n}`, `b${n++}`));
+    await collect(opts({ fetchImpl: impl, limit: 10_000 }));
+    assert.equal(calls.length, 20);
+  });
 });
 
 test("pinterest-cookies: X-CSRFToken передаётся если csrftoken есть в cookies", async () => {

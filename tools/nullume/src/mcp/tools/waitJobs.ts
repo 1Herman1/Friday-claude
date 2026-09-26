@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { waitJobs, WaitJobsResult } from "../../core/jobs/wait.js";
+import { waitJobs } from "../../core/jobs/wait.js";
+import type { Job } from "../../core/jobs/model.js";
 import { getProviderInstance } from "../provider.js";
 import { formatError } from "../utils.js";
 
@@ -49,12 +50,12 @@ export async function handler(args: {
       concurrency: args.concurrency || 3,
     });
 
-    const formatJob = (job: any): JobResult => ({
+    const formatJob = (job: Job): JobResult => ({
       job_id: job.id,
       state: job.state,
       model: job.model,
-      result_urls: job.resultUrls || [],
-      local_paths: job.localPaths || [],
+      result_urls: job.resultUrls ?? [],
+      local_paths: job.localPaths ?? [],
       fail_msg: job.failMsg,
     });
 
@@ -73,7 +74,13 @@ export async function handler(args: {
       group: "pending" as const,
     }));
 
-    const output: any = {
+    const output: {
+      summary: { done_count: number; failed_count: number; pending_count: number; total: number };
+      done: JobResult[];
+      failed: JobResult[];
+      pending: JobResult[];
+      errors?: Record<string, string>;
+    } = {
       summary: {
         done_count: done.length,
         failed_count: failed.length,

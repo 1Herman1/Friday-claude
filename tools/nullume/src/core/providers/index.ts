@@ -6,6 +6,9 @@ export interface MockProviderOptions {
   models?: ModelInfo[];
 }
 
+/** Mock-модель за $2 — выше порога подтверждения ($1) */
+export const MOCK_EXPENSIVE_MODEL = "mock/expensive";
+
 export class MockProvider implements Provider {
   name = "mock";
   private modelList: ModelInfo[];
@@ -34,6 +37,16 @@ export class MockProvider implements Provider {
         schemaSource: "seed",
         source: "seed",
       },
+      {
+        id: MOCK_EXPENSIVE_MODEL,
+        category: "video",
+        api: "jobs",
+        fields: {},
+        meta: { promptField: "prompt", required: ["prompt"], defaults: {} },
+        description: "Mock: дорогая модель — проверка шлюза подтверждения цены",
+        schemaSource: "seed",
+        source: "seed",
+      },
     ];
   }
 
@@ -51,7 +64,10 @@ export class MockProvider implements Provider {
     return m;
   }
 
-  async estimate() {
+  async estimate(modelId: string) {
+    if (modelId === MOCK_EXPENSIVE_MODEL) {
+      return { creditsMin: 400, creditsMax: 400, usdMin: 2, usdMax: 2, approximate: false, source: "vendored" as const };
+    }
     return {
       creditsMin: 10,
       creditsMax: 20,

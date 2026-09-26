@@ -99,9 +99,19 @@ const XGraphQLResponseSchema = z.object({
 /**
  * X импортёр через закладки/лайки
  */
+/** Сессию пишет `lib session set x-cookies`; старое имя `x` — для заведённых руками */
+async function readXSession() {
+  try {
+    return await readSession("x-cookies");
+  } catch {
+    return await readSession("x");
+  }
+}
+
 export const xCookiesImporter: Importer = {
   id: "x-cookies",
   kind: "local-only",
+  cookieDomains: ["x.com", "twitter.com"],
   title: "X (закладки и лайки)",
   description: `Импорт закладок и лайков из X (Twitter).
 Требует: ~/.nullume/sessions/x.json с auth_token cookie и acknowledgedRiskyImporters=true`,
@@ -111,7 +121,7 @@ export const xCookiesImporter: Importer = {
 
     // Попытаться прочитать сессию
     try {
-      await readSession("x");
+      await readXSession();
     } catch (e) {
       throw new UsageError(
         `X сессия не найдена.\n` +
@@ -149,7 +159,7 @@ export const xCookiesImporter: Importer = {
       );
     }
 
-    const session = await readSession("x");
+    const session = await readXSession();
 
     if (!session.cookies || !session.cookies.auth_token) {
       throw new UsageError(

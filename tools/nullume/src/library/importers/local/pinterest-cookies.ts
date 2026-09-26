@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Importer, ImportRunOptions, RefCandidate } from "../types.js";
 import { assertLocalOnlyAllowed, LOCAL_ONLY_WARNING } from "../gate.js";
-import { readSession, parseCookieFile } from "../../sessions.js";
+import { readSession } from "../../sessions.js";
 import { UsageError, ProviderError } from "../../../core/errors.js";
 import { sleep } from "../http.js";
 
@@ -51,10 +51,20 @@ type PinterestResponse = z.infer<typeof PinterestResponseSchema>;
  * Pinterest импортёр через cookies
  * Требует собственную сессию с _pinterest_sess cookie
  */
+/**
+ * Уходят на pinterest.com только эти cookie. Всё остальное в файле сессии —
+ * не дело Pinterest, даже если туда попало.
+ */
+const SENT_COOKIES = ["_pinterest_sess", "csrftoken", "_auth"] as const;
+
+/** Потолок страниц на запрос: бесконечная пагинация — прямой путь к блокировке аккаунта */
+const MAX_PAGES = 20;
+
 export const pinterestCookiesImporter: Importer = {
   id: "pinterest-cookies",
   kind: "local-only",
   supportsQuery: true,
+  cookieDomains: ["pinterest.com"],
   title: "Pinterest (поиск по собственной сессии)",
   description: `Поиск пинов через вашу учётную запись Pinterest.
 Требует: ~/.nullume/sessions/pinterest-cookies.json с cookies и acknowledgedRiskyImporters=true`,
@@ -122,8 +132,9 @@ export const pinterestCookiesImporter: Importer = {
 
     const fetchImpl = opts.fetchImpl ?? fetch;
     const query = opts.query || "design";
-    let bookmark = undefined;
+    let bookmark: string | undefined;
     let pageNum = 0;
+    const seenBookmarks = new Set<string>();
     let candidateCount = 0;
 
     opts.log(`PINTEREST_QUERY_START query="${query}"`);
@@ -151,8 +162,8 @@ export const pinterestCookiesImporter: Importer = {
 
       // Выполнить запрос
       const headers: Record<string, string> = {
-        cookie: Object.entries(session.cookies)
-          .map(([k, v]) => `${k}=${v}`)
+        cookie: SENT_COOKIES.filter((name) => session.cookies?.[name])
+          .map((name) => `${name}=${session.cookies![name]}`)
           .join("; "),
         "X-Requested-With": "XMLHttpRequest",
       };
@@ -257,13 +268,21 @@ export const pinterestCookiesImporter: Importer = {
         }
       }
 
-      // Пагинация
-      if (!data.resource_response?.bookmark) {
-        opts.log(`PINTEREST_DONE query="${query}" total=${results.length}`);
+      // Пагинация: конец выдачи, повтор закладки, пустая страница или потолок
+      const next = data.resource_response?.bookmark;
+      const stop =
+        !next ||
+        next === "-end-" ||
+        seenBookmarks.has(next) ||
+        results.length === 0 ||
+        pageNum + 1 >= MAX_PAGES;
+      if (stop) {
+        opts.log(`PINTEREST_DONE query="${query}" total=${results.length} pages=${pageNum + 1}`);
         break;
       }
 
-      bookmark = data.resource_response.bookmark;
+      seenBookmarks.add(next);
+      bookmark = next;
       pageNum++;
     }
   },

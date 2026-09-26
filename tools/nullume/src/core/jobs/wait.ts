@@ -67,7 +67,7 @@ export class TransientStatusError extends Error {
 async function checkJobOnce(provider: Provider, job: Job): Promise<boolean> {
   try {
     const status = await provider.status(job.taskId);
-    job.state = status.state as any;
+    job.state = status.state;
     if (status.urls) job.resultUrls = status.urls;
     if (status.failMsg) job.failMsg = status.failMsg;
     job.updatedAt = new Date().toISOString();

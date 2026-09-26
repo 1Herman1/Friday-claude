@@ -23,7 +23,9 @@ export async function getProviderInstance() {
   const providerName = process.env.NULLUME_PROVIDER || "kie";
 
   if (providerName === "mock") {
-    const provider = await getProvider("mock");
+    // Каталог тот же, что у настоящего провайдера: иначе пресеты и рецепты
+    // не резолвятся на mock, и проверки на нём ничего не проверяют.
+    const provider = await getProvider("mock", undefined, await loadCatalog());
     cachedProvider = provider;
     return provider;
   }

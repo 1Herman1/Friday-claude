@@ -15,7 +15,7 @@ import { ingest } from "../../library/ingest/ingest.js";
 import { createIngestStore } from "../../library/ingest/adapter.js";
 import { getEmbedder, modelNotInstalledHint } from "../../library/embed/index.js";
 import { downloadModels } from "../../library/embed/init.js";
-import { readSession, writeSession, redactSession, parseCookieFile } from "../../library/sessions.js";
+import { readSession, writeSession, redactSession, parseCookieFileForDomains } from "../../library/sessions.js";
 import { assertLocalOnlyAllowed, LOCAL_ONLY_WARNING } from "../../library/importers/gate.js";
 import type { RefCandidate } from "../../library/importers/types.js";
 import { clusterLibrary } from "../../library/cluster/index.js";
@@ -618,10 +618,21 @@ sessionCmd
       let cookies: Record<string, string> | undefined;
       let token: string | undefined;
 
-      // Собрать cookies
+      // Собрать cookies. Файл, выгруженный из браузера, несёт сессии всех
+      // сайтов владельца — сохраняем только домены самого импортёра.
+      let dropped = 0;
       if (options.cookieFile) {
+        const importer =
+          (await listImporters("local-only")).find((i) => i.id === importerId) ??
+          (await listImporters("clean")).find((i) => i.id === importerId);
+        if (!importer?.cookieDomains?.length) {
+          throw new UsageError(
+            `Импортёр ${importerId} не объявляет домены cookie — файл браузера для него не принимается. ` +
+              `Передайте нужные значения через --cookie name=value.`
+          );
+        }
         const content = await fs.promises.readFile(options.cookieFile as string, "utf-8");
-        cookies = parseCookieFile(content);
+        ({ cookies, dropped } = parseCookieFileForDomains(content, importer.cookieDomains));
       }
 
       if (options.cookie) {
@@ -659,7 +670,10 @@ sessionCmd
         createdAt: new Date().toISOString(),
       };
 
-      emit(flags, { data: saved }, () => `✓ Сессия сохранена для ${importerId}`);
+      emit(flags, { data: { ...saved, droppedForeignCookies: dropped } }, () =>
+        `✓ Сессия сохранена для ${importerId}` +
+          (dropped > 0 ? `\n  Отброшено cookie чужих сайтов: ${dropped} — они в сессию не попали` : "")
+      );
     } catch (error) {
       throw error;
     }

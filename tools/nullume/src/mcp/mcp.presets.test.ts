@@ -1,75 +1,46 @@
-import { test } from "node:test";
-import assert from "node:assert";
+import { test, before } from "node:test";
+import assert from "node:assert/strict";
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { handler as listPresetsHandler } from "./tools/listPresets.js";
 import { handler as rerunJobHandler } from "./tools/rerunJob.js";
+import { handler as generateHandler } from "./tools/generate.js";
+import { handler as listJobsHandler } from "./tools/listJobs.js";
 import { loadPresets } from "../core/presets.js";
+import { MOCK_EXPENSIVE_MODEL } from "../core/providers/index.js";
 
-test("list_presets MCP tool returns array", async () => {
-  try {
-    const result = await listPresetsHandler();
+// Mock-провайдер на настоящем каталоге, история задач — во временном каталоге.
+// Никаких обёрток, глотающих провал: тест либо проверяет, либо падает.
+before(() => {
+  process.env.NULLUME_PROVIDER = "mock";
+  process.env.NULLUME_HOME = mkdtempSync(path.join(tmpdir(), "nullume-mcp-presets-"));
+});
 
-    assert(result.content, "Should return content");
-    assert(result.content.length > 0, "Should have content items");
+const textOf = (r: { content: Array<{ text: string }> }) => r.content[0].text;
 
-    const content = result.content[0];
-    assert.strictEqual(content.type, "text");
-
-    const json = JSON.parse(content.text);
-    assert(Array.isArray(json), "Should return array of presets");
-    assert(json.length > 0, "Should have presets");
-
-    // Check structure
-    const first = json[0];
-    assert(first.id);
-    assert(first.title);
-    assert(first.category);
-    assert(first.model || first.substituted !== undefined);
-  } catch (e) {
-    // Mock provider might not be available, skip detailed assertions
-    assert(true, "Test completed (provider may not be available)");
+test("list_presets: все пресеты с обязательными полями", async () => {
+  const result = await listPresetsHandler();
+  assert.ok(!result.isError, textOf(result));
+  const json = JSON.parse(textOf(result));
+  const presets = await loadPresets();
+  assert.equal(json.length, presets.length);
+  for (const p of json) {
+    assert.ok(p.id && p.title && p.category && p.task, `пресет ${p.id}: не хватает полей`);
+    assert.ok(p.prompt_hint ?? p.promptHint, `пресет ${p.id}: нет подсказки промпта`);
   }
 });
 
-test("list_presets returns expected preset fields", async () => {
-  try {
-    const result = await listPresetsHandler();
-    const content = result.content[0];
-    const json = JSON.parse(content.text);
-
-    if (json.length > 0) {
-      const preset = json[0];
-      assert(preset.id, "Should have id");
-      assert(preset.title, "Should have title");
-      assert(preset.category, "Should have category");
-      assert(preset.task, "Should have task");
-      assert(preset.prompt_hint || preset.promptHint, "Should have prompt hint");
-      assert(preset.notes, "Should have notes");
-    }
-  } catch (e) {
-    assert(true, "Test completed");
-  }
-});
-
-test("rerun_job requires job_id", async () => {
-  try {
-    const result = await rerunJobHandler({
-      job_id: "non-existent-uuid",
-    });
-
-    // Should error or return incomplete result
-    assert(result.isError || result.content, "Should handle missing job");
-  } catch (e) {
-    // Expected to error when job not found
-    assert(true, "Correctly errored on missing job");
-  }
+test("rerun_job: несуществующая задача — понятная ошибка без пути на диске", async () => {
+  const result = await rerunJobHandler({ job_id: "00000000-0000-0000-0000-000000000000" });
+  assert.ok(result.isError);
+  const text = textOf(result);
+  assert.match(text, /нет в истории/);
+  assert.doesNotMatch(text, /ENOENT|\/jobs\//, "путь файловой системы не должен уходить наружу");
 });
 
 test("presets load from data directory", async () => {
   const presets = await loadPresets();
-  assert(Array.isArray(presets), "Should return array");
-  assert(presets.length >= 9, "Should have at least 9 presets");
-
-  // Check all expected ids exist
   const expectedIds = [
     "product-photo",
     "banner-16x9",
@@ -81,32 +52,38 @@ test("presets load from data directory", async () => {
     "voiceover",
     "music",
   ];
-
   for (const id of expectedIds) {
-    const found = presets.find((p) => p.id === id);
-    assert(found, `Should have preset ${id}`);
+    assert.ok(presets.find((p) => p.id === id), `нет пресета ${id}`);
   }
 });
 
-test("MCP: generate cost gate before createJobTask (no job on expensive without confirm)", async () => {
-  try {
-    const { handler: generateHandler } = await import("./tools/generate.js");
+async function jobCount(): Promise<number> {
+  const r = await listJobsHandler({});
+  const { total } = JSON.parse(textOf(r)) as { total: number };
+  assert.equal(typeof total, "number", "list_jobs должен отдавать total");
+  return total;
+}
 
-    const result = await generateHandler({
-      model: "mock/expensive-model",
-      prompt: "test",
-      wait: false,
-      confirm_cost: false,
-    });
+test("generate: дороже $1 без подтверждения — задача не создаётся", async () => {
+  const before = await jobCount();
+  const result = await generateHandler({ model: MOCK_EXPENSIVE_MODEL, prompt: "test", wait: false, confirm_cost: false });
+  const out = JSON.parse(textOf(result));
+  // Прежний тест принимал любую ошибку — и проходил на «модель не найдена»,
+  // ни разу не дойдя до шлюза. Теперь требуем именно запрос подтверждения.
+  assert.equal(out.needs_confirmation, true, textOf(result));
+  assert.equal(await jobCount(), before, "задача создана без подтверждения");
+});
 
-    const content = JSON.parse(result.content[0].text);
+test("generate: дороже $1 с подтверждением — задача создаётся", async () => {
+  const before = await jobCount();
+  const result = await generateHandler({ model: MOCK_EXPENSIVE_MODEL, prompt: "test", wait: false, confirm_cost: true });
+  assert.ok(!result.isError, textOf(result));
+  assert.equal(await jobCount(), before + 1);
+});
 
-    // Should NOT create job: either needs confirmation or error
-    assert(
-      content.needs_confirmation || content.error,
-      "Should request confirmation without creating job"
-    );
-  } catch (e) {
-    assert(true, "Test completed");
-  }
+test("generate: дешёвая модель без подтверждения — запускается", async () => {
+  const before = await jobCount();
+  const result = await generateHandler({ model: "mock/image", prompt: "test", wait: false, confirm_cost: false });
+  assert.ok(!result.isError, textOf(result));
+  assert.equal(await jobCount(), before + 1);
 });

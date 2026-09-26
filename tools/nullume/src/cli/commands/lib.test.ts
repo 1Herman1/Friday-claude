@@ -87,11 +87,6 @@ describe("lib command", () => {
     assert.ok(cleanImporters.length > 0, "Should have clean importers");
   });
 
-  it("lib session set создаёт файл с правами 0600", () => {
-    // Session set command is tested via module integration
-    // Shell escaping in test environment is complex, but the code is verified
-    assert.ok(true);
-  });
 
   it("lib session set не печатает секреты", () => {
     const result = runCommand('lib session set another-importer --token "mysecret456"');

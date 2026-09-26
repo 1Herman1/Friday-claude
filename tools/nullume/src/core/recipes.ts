@@ -6,7 +6,6 @@ import type { Provider } from "./providers/types.js";
 import { getPreset, resolvePreset } from "./presets.js";
 import { createJobTask } from "./jobs/run.js";
 import { waitJobs, type WaitJobsResult } from "./jobs/wait.js";
-import type { Job } from "./jobs/model.js";
 import { getDownloadsDir } from "./paths.js";
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
@@ -266,12 +265,8 @@ export async function runRecipe(
   };
 
   // Шаги без источника — сразу и пачкой
-  const independent: string[] = [];
-  for (const step of plan.steps.filter((s) => !s.from)) {
-    const id = await launch(step);
-    if (id) independent.push(id);
-  }
-  await settle(independent);
+  const launched = await Promise.all(plan.steps.filter((s) => !s.from).map((step) => launch(step)));
+  await settle(launched.filter((id): id is string => id !== undefined));
 
   // Шаги от результата другого шага — по порядку рецепта, когда источник готов
   for (const step of plan.steps.filter((s) => s.from)) {

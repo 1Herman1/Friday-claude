@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert";
+import { loadCatalog } from "./catalog.js";
 import { loadPresets, getPreset, resolvePreset } from "./presets.js";
 import type { ModelInfo } from "./providers/types.js";
 
@@ -137,43 +138,52 @@ test("preset input parameters are objects", async () => {
   }
 });
 
-test("preset required fields guard: all required (except prompt/image) are in input", async () => {
+test("пресеты годны для своих моделей: обязательные поля есть, значения входят в перечисления", async () => {
+  // Проверка по каталогу из пакета: ни ключа, ни сети не нужно. Раньше тест
+  // шёл через живого провайдера, без ключа падал на первой строке, падение
+  // глоталось — и он не выполнялся ни разу.
   const presets = await loadPresets();
-  const { getProviderInstance } = await import("../mcp/provider.js");
+  const catalog = await loadCatalog();
+  const byId = new Map(catalog.map((m) => [m.id, m]));
+  const unknownSchema: string[] = [];
 
-  try {
-    const provider = await getProviderInstance();
+  for (const preset of presets) {
+    const modelId = [preset.model, ...(preset.fallbackModels ?? [])].find((id) => byId.has(id));
+    assert.ok(modelId, `Пресет ${preset.id}: ни основной, ни запасной модели нет в каталоге`);
+    const model = byId.get(modelId)!;
+    const promptField = model.meta.promptField || "prompt";
+    const imageField = model.meta.imageField || "image";
+    const defaults = model.meta.defaults ?? {};
 
-    for (const preset of presets) {
-      const modelInfo = await provider.model(preset.model);
-      const promptField = modelInfo.meta.promptField || "prompt";
-      const imageField = modelInfo.meta.imageField || "image";
-
-      // Check required fields
-      const requiredExceptPromptImage = modelInfo.meta.required.filter(
-        (f) => f !== promptField && f !== imageField
+    // Значение по умолчанию каталог подставит сам — его в пресете может не быть
+    for (const field of model.meta.required) {
+      if (field === promptField || field === imageField) continue;
+      assert.ok(
+        field in preset.input || field in defaults,
+        `Пресет ${preset.id} (${modelId}): обязательное поле "${field}" не задано и не имеет значения по умолчанию`
       );
+    }
 
-      for (const requiredField of requiredExceptPromptImage) {
-        assert(
-          requiredField in preset.input,
-          `Preset ${preset.id}: required field "${requiredField}" missing from input`
+    // Схема «посевной» модели (Suno, Veo…) в разбираемой документации не описана:
+    // полей не знаем — проверить их нечем, и это пробел, а не успех.
+    if (Object.keys(model.fields).length === 0) {
+      unknownSchema.push(`${preset.id} (${modelId})`);
+      continue;
+    }
+
+    for (const [key, value] of Object.entries(preset.input)) {
+      const field = model.fields[key];
+      assert.ok(field, `Пресет ${preset.id} (${modelId}): у модели нет поля "${key}"`);
+      if (field.enum?.length) {
+        assert.ok(
+          field.enum.includes(String(value)),
+          `Пресет ${preset.id} (${modelId}): "${key}"="${value}" не из [${field.enum.join(", ")}]`
         );
       }
-
-      // Check enum constraints
-      for (const [key, value] of Object.entries(preset.input)) {
-        const field = modelInfo.fields[key];
-        if (field && field.enum && field.enum.length > 0) {
-          assert(
-            field.enum.includes(String(value)),
-            `Preset ${preset.id}: field "${key}" value "${value}" not in enum [${field.enum.join(", ")}]`
-          );
-        }
-      }
     }
-  } catch (e) {
-    // Mock provider might not be available
-    assert(true, "Test completed");
   }
+
+  // Пробел держим на виду: новый пресет на модели без схемы должен быть осознанным
+  assert.deepStrictEqual(unknownSchema, ["music (suno-v4)"], "пресеты, чьи параметры проверить нечем");
 });
+
