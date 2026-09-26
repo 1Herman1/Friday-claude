@@ -131,6 +131,9 @@ jobs:
             # Product.species и пропускает unknown, поэтому вид, определённый после
             # него, попадал в меню только следующей выкаткой.
             (cd projects/simba/server && npx tsx src/scripts/backfill-species.ts --apply --only-unknown)
+            # Формат корма — тоже до дерева: «Сухой» и «Влажный корм» собираются по
+            # format:*, и без него корм оставался только в корне вида.
+            (cd projects/simba/server && npx tsx src/scripts/backfill-format.ts --apply)
             echo "==> Category tree: preview, then apply"
             (cd projects/simba/server && npx tsx src/scripts/backfill-category-tree.ts)
             (cd projects/simba/server && npx tsx src/scripts/backfill-category-tree.ts --apply)

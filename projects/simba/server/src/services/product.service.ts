@@ -3,7 +3,21 @@ import { isSellable, type Variant } from '@simba/shared'
 import { buildTagCondition, isCatalogTag } from '../lib/catalog-tags'
 
 /** Ветеринарные линейки, представленные в каталоге. */
-export const MEDICAL_LINES = ['Vet Life', 'VetSolution', 'Prescription Diet']
+// Названия — как они реально написаны в каталоге, включая опечатку «Gactroenteric»:
+// сверка ведётся по вхождению без учёта регистра, и здесь, и в фильтре каталога.
+export const MEDICAL_LINES = [
+  'Vet Life',
+  'VetSolution',
+  'Prescription Diet',
+  'VET Diet',
+  'VetDiet',
+  'Forza 10 Intestinal',
+  'Forza10 Intestinal',
+  'Gastroenteric',
+  'Gactroenteric',
+  'Integra Protect',
+  'Royal Canin Renal',
+]
 /** Узлы «Лечебное питание» в дереве категорий (backfill-category-tree.ts). Фиксированные slug'и,
     а не суффикс: переименование категории в админке не должно молча ломать фильтр. */
 export const MEDICAL_CATEGORY_SLUGS = ['dogs-medical', 'cats-medical']

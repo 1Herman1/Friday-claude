@@ -8,7 +8,7 @@ export interface TypedProduct {
   autoQuizTags: string[]
 }
 
-export const VET_WORDS = ['антипаразит', 'капли', 'витамин', 'таблет', 'суспенз', 'ошейник']
+export const VET_WORDS = ['антипаразит', 'капли', 'витамин', 'таблет', 'суспенз', 'ошейник', 'лечебные травы', 'глистогон']
 
 export const CARE_WORDS = [
   'шампунь',
@@ -20,7 +20,22 @@ export const CARE_WORDS = [
   'спрей',
   'нейтрализатор запаха',
   'салфетк',
+  'бальзам',
+  'кондиционер',
+  'расческ',
+  'когтерез',
+  'зубная щетк',
+  'перчатка для вычесыв',
+  'воск для лап',
 ]
+
+/** Влажный корм по названию: в каталоге его подписывают, сухой — нет. */
+export const WET_NAME = /влажн|консерв|пауч|паштет|в желе|в соусе|кусочки в|рагу|мусс|mousse/i
+
+export function isMedicalLine(name: string): boolean {
+  const lower = name.toLowerCase()
+  return MEDICAL_LINES.some((line) => lower.includes(line.toLowerCase()))
+}
 
 function hasTag(product: TypedProduct, tag: string): boolean {
   return product.quizTags.includes(tag) || product.autoQuizTags.includes(tag)
@@ -28,7 +43,7 @@ function hasTag(product: TypedProduct, tag: string): boolean {
 
 /** Тип товара для дерева «Вид → Тип → Назначение»; null — товар остаётся только в корне вида. */
 export function classifyType(product: TypedProduct): ProductType | null {
-  if (MEDICAL_LINES.some((line) => product.name.includes(line))) return 'medical'
+  if (isMedicalLine(product.name)) return 'medical'
   if (/лакомств|лакомый|snack|treat/i.test(product.name)) return 'treats'
 
   const lower = product.name.toLowerCase()

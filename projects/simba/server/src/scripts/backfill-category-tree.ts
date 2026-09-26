@@ -500,7 +500,7 @@ async function main() {
   }
 
   if (stats.unclassified.length > 0) {
-    console.log(`\n--- Не классифицированы (${stats.unclassified.length}), первые 30 ---`)
+    console.log(`\n--- Без типа, только в корне вида (${stats.unclassified.length}), первые 30 ---`)
     for (const name of stats.unclassified.slice(0, 30)) {
       console.log(`  • ${name.slice(0, 70)}`)
     }

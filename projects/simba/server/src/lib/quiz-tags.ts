@@ -35,3 +35,8 @@ export function withSpeciesTag(quizTags: string[], species: 'cat' | 'dog' | 'bot
   }
   return filtered
 }
+
+/** Ставит формат корма в quizTags, заменяя прежний format:*. */
+export function withFormatTag(quizTags: string[], format: 'dry' | 'wet'): string[] {
+  return [...quizTags.filter((tag) => !tag.startsWith('format:')), `format:${format}`]
+}
