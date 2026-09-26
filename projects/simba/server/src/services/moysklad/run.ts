@@ -113,6 +113,7 @@ export async function runMoyskladSync(opts: {
       notFoundInMs: matchResult.unmatchedOurs.slice(0, 50),
       onlyInMs: matchResult.onlyInMs.slice(0, 50),
       ambiguous: matchResult.ambiguous,
+      productsHidden: [],
     },
   }
 
@@ -150,9 +151,11 @@ export async function runMoyskladSync(opts: {
     report.variantsHidden = await prisma.productVariant.count({
       where: { id: { in: hide.variantIds }, isActive: true },
     })
-    report.productsHidden = await prisma.product.count({
+    report.examples.productsHidden = await prisma.product.findMany({
       where: { id: { in: hide.productIds }, isActive: true },
+      select: { id: true, name: true },
     })
+    report.productsHidden = report.examples.productsHidden.length
 
     // Порог аномалии проверяем и в предпросмотре: иначе боевой прогон
     // остановится, а человек не поймёт почему.
@@ -267,11 +270,15 @@ export async function runMoyskladSync(opts: {
     })
   }
   if (hide.productIds.length > 0) {
-    const hidden = await prisma.product.updateMany({
+    report.examples.productsHidden = await prisma.product.findMany({
       where: { id: { in: hide.productIds }, isActive: true },
+      select: { id: true, name: true },
+    })
+    await prisma.product.updateMany({
+      where: { id: { in: report.examples.productsHidden.map((p) => p.id) } },
       data: { isActive: false },
     })
-    report.productsHidden = hidden.count
+    report.productsHidden = report.examples.productsHidden.length
   }
 
   // Посчитаем пропущенные

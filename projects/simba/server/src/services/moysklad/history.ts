@@ -50,6 +50,7 @@ function trimReport(report: SyncReport) {
       notFoundInMs: cut(report.examples.notFoundInMs),
       onlyInMs: cut(report.examples.onlyInMs),
       ambiguous: cut(report.examples.ambiguous),
+      productsHidden: cut(report.examples.productsHidden ?? []),
     },
   }
 }

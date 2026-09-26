@@ -287,6 +287,13 @@ export default function SyncPage() {
               />
 
               <ExpandableList
+                title="Скрыты: нет в МойСкладе"
+                count={displayRun.report.productsHidden ?? 0}
+                items={displayRun.report.examples.productsHidden ?? []}
+                renderItem={(item) => <p className="font-medium">{item.name}</p>}
+              />
+
+              <ExpandableList
                 title="Только в МойСкладе"
                 count={displayRun.report.examples.onlyInMs.length}
                 items={displayRun.report.examples.onlyInMs}

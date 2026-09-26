@@ -28,6 +28,11 @@ function formatReport(report: Awaited<ReturnType<typeof runMoyskladSync>>) {
   lines.push(`✅ Обновлено цен: ${report.pricesUpdated}`)
   lines.push(`📦 Обновлено остатков: ${report.stocksUpdated}`)
   lines.push(`🏪 Активировано товаров: ${report.productsActivated}`)
+  lines.push(`🙈 Скрыто (нет в МоёмСкладе): товаров ${report.productsHidden}, вариантов ${report.variantsHidden}`)
+  if (report.hideSkippedReason) lines.push(`⚠️  ${report.hideSkippedReason}`)
+  if (process.argv.includes('--list-hidden')) {
+    report.examples.productsHidden.forEach((p) => lines.push(`  🙈 ${p.name}`))
+  }
 
   if (report.aborted && report.abortReason) {
     lines.push('')

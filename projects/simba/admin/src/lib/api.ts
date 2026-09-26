@@ -501,6 +501,7 @@ export interface SyncRunReport {
     notFoundInMs: Array<{ variantId: string; name: string }>
     onlyInMs: Array<{ variantId: string; name: string }>
     ambiguous: Array<{ variantId: string; name: string; matches: string[] }>
+    productsHidden?: Array<{ id: string; name: string }>
   }
 }
 

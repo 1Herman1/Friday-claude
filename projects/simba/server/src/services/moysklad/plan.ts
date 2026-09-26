@@ -79,6 +79,7 @@ export type SyncReport = {
     notFoundInMs: VariantForSync[]
     onlyInMs: MsAssortmentItem[]
     ambiguous: MatchResult['ambiguous']
+    productsHidden: { id: string; name: string }[]
   }
 }
 
