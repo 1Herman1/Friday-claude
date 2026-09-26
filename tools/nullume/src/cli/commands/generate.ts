@@ -236,12 +236,13 @@ generateCmd
   });
 
 generateCmd
-  .command("wait <jobId>")
+  .command("wait <jobIds...>")
   .option("--out <dir>", "Скопировать результаты в этот каталог")
   .option("--wait-timeout <sec>", "Таймаут ожидания в секундах", "600")
   .option("--wait-interval <sec>", "Интервал проверки статуса в секундах", "2")
-  .description("Дождаться завершения задачи")
-  .action(async function (jobId: string, options: Record<string, unknown>) {
+  .option("--concurrency <n>", "Одновременных запросов статуса", "3")
+  .description("Дождаться завершения задачи(й)")
+  .action(async function (jobIds: string[], options: Record<string, unknown>) {
     const flags = getGlobalFlags();
 
     try {
@@ -251,22 +252,78 @@ generateCmd
 
       const timeoutSec = parseInt(options.waitTimeout as string, 10);
       const intervalSec = parseInt(options.waitInterval as string, 10);
+      const concurrency = parseInt(options.concurrency as string, 10);
 
-      const completedJob = await waitJob(provider, jobId, {
+      // Single job: use waitJob for backward compatibility
+      if (jobIds.length === 1) {
+        const completedJob = await waitJob(provider, jobIds[0], {
+          timeoutSec,
+          intervalSec,
+        });
+
+        if (options.out && completedJob.localPaths.length > 0) {
+          await fs.promises.mkdir(options.out as string, { recursive: true });
+          for (const localPath of completedJob.localPaths) {
+            const filename = path.basename(localPath);
+            const dest = path.join(options.out as string, filename);
+            await fs.promises.copyFile(localPath, dest);
+          }
+        }
+
+        emit(flags, { data: completedJob }, () => `Задача завершена: ${completedJob.localPaths.join(", ")}`);
+        return;
+      }
+
+      // Multiple jobs: use waitJobs
+      const { waitJobs } = await import("../../core/jobs/wait.js");
+      const result = await waitJobs(provider, jobIds, {
         timeoutSec,
         intervalSec,
+        concurrency,
       });
 
-      if (options.out && completedJob.localPaths.length > 0) {
+      // Copy results if requested
+      if (options.out) {
         await fs.promises.mkdir(options.out as string, { recursive: true });
-        for (const localPath of completedJob.localPaths) {
-          const filename = path.basename(localPath);
-          const dest = path.join(options.out as string, filename);
-          await fs.promises.copyFile(localPath, dest);
+        for (const job of [...result.done, ...result.failed, ...result.pending]) {
+          for (const localPath of job.localPaths) {
+            const filename = path.basename(localPath);
+            const dest = path.join(options.out as string, filename);
+            await fs.promises.copyFile(localPath, dest);
+          }
         }
       }
 
-      emit(flags, { data: completedJob }, () => `Задача завершена: ${completedJob.localPaths.join(", ")}`);
+      const output: Record<string, unknown> = {
+        done: result.done.map((j) => ({
+          job_id: j.id,
+          state: j.state,
+          model: j.model,
+          results: j.localPaths.length ? j.localPaths : j.resultUrls,
+        })),
+        failed: result.failed.map((j) => ({
+          job_id: j.id,
+          state: j.state,
+          model: j.model,
+          error: j.failMsg,
+        })),
+        pending: result.pending.map((j) => ({
+          job_id: j.id,
+          state: j.state,
+          model: j.model,
+        })),
+      };
+
+      if (result.errors) {
+        output.errors = result.errors;
+      }
+
+      emit(
+        flags,
+        { data: output },
+        () =>
+          `Завершено: ${result.done.length} успешно, ${result.failed.length} ошибок, ${result.pending.length} в очереди`
+      );
     } catch (error) {
       throw error;
     }

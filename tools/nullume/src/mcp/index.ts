@@ -8,6 +8,7 @@ import { schema as recommendModelsSchema, handler as recommendModelsHandler } fr
 import { schema as estimateCostSchema, handler as estimateCostHandler } from "./tools/estimateCost.js";
 import { schema as generateSchema, handler as generateHandler } from "./tools/generate.js";
 import { schema as getJobSchema, handler as getJobHandler } from "./tools/getJob.js";
+import { schema as waitJobsSchema, handler as waitJobsHandler } from "./tools/waitJobs.js";
 import { schema as listJobsSchema, handler as listJobsHandler } from "./tools/listJobs.js";
 import { schema as uploadFileSchema, handler as uploadFileHandler } from "./tools/uploadFile.js";
 import { schema as listPresetsSchema, handler as listPresetsHandler } from "./tools/listPresets.js";
@@ -109,6 +110,19 @@ export function createMcpServer() {
       inputSchema: getJobSchema,
     },
     getJobHandler
+  );
+
+  server.registerTool(
+    "wait_jobs",
+    {
+      title: "Ожидание нескольких задач",
+      description:
+        "Дождаться завершения нескольких задач одновременно (группировка). " +
+        "Сортирует результаты на done (успешные с скачанными файлами), failed (ошибка провайдера), pending (не успели к таймауту). " +
+        "Для одной задачи используй get_job; для цикла нескольких — этот инструмент вместо повторяющихся get_job.",
+      inputSchema: waitJobsSchema,
+    },
+    waitJobsHandler
   );
 
   server.registerTool(

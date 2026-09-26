@@ -14,7 +14,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const serverEntry = path.join(dir, "index.ts");
 
-test("MCP: tools/list отдаёт 17 инструментов со схемами, generate работает на mock", async () => {
+test("MCP: tools/list отдаёт 18 инструментов со схемами, generate работает на mock", async () => {
   const home = mkdtempSync(path.join(tmpdir(), "nullume-mcp-"));
   const transport = new StdioClientTransport({
     command: "npx",
@@ -26,7 +26,7 @@ test("MCP: tools/list отдаёт 17 инструментов со схемам
   await client.connect(transport);
   try {
     const { tools } = await client.listTools();
-    assert.equal(tools.length, 17);
+    assert.equal(tools.length, 18);
     for (const tool of tools) {
       assert.ok(tool.inputSchema && typeof tool.inputSchema === "object", `${tool.name}: нет inputSchema`);
       assert.ok("properties" in tool.inputSchema, `${tool.name}: нет properties`);
@@ -61,6 +61,48 @@ test("MCP: upload_file отказывает на config.json и .env", async () 
     const envPath = path.join(process.cwd(), ".env");
     const res2 = await client.callTool({ name: "upload_file", arguments: { path: envPath } });
     assert.ok(res2.isError, "должен отказать на .env");
+  } finally {
+    await client.close();
+  }
+});
+
+test("MCP: wait_jobs дожидается пачки одним вызовом", async () => {
+  const home = mkdtempSync(path.join(tmpdir(), "nullume-mcp-"));
+  const transport = new StdioClientTransport({
+    command: "npx",
+    args: ["tsx", serverEntry],
+    env: { ...process.env, NULLUME_PROVIDER: "mock", NULLUME_HOME: home } as Record<string, string>,
+    stderr: "pipe",
+  });
+  const client = new Client({ name: "smoke", version: "0" });
+  await client.connect(transport);
+  const textOf = (res: { content: unknown }) =>
+    (res.content as Array<{ type: string; text?: string }>).find((c) => c.type === "text")?.text ?? "";
+  try {
+    const ids: string[] = [];
+    for (let i = 0; i < 2; i++) {
+      const res = await client.callTool({
+        name: "generate",
+        arguments: { model: "mock/image", prompt: `test ${i}`, confirm_cost: true, wait: false },
+      });
+      assert.ok(!res.isError, textOf(res));
+      const job = JSON.parse(textOf(res));
+      ids.push(job.job_id ?? job.id);
+    }
+
+    const res = await client.callTool({ name: "wait_jobs", arguments: { job_ids: ids, timeout_sec: 30 } });
+    assert.ok(!res.isError, textOf(res));
+    const out = JSON.parse(textOf(res));
+    assert.deepEqual(
+      out.done.map((j: { job_id: string }) => j.job_id).sort(),
+      [...ids].sort(),
+      "обе задачи в done"
+    );
+    assert.equal(out.failed.length, 0);
+    assert.equal(out.pending.length, 0);
+
+    const tooMany = await client.callTool({ name: "wait_jobs", arguments: { job_ids: ids, concurrency: 50 } });
+    assert.ok(tooMany.isError, "одновременность сверх 5 отклоняется схемой");
   } finally {
     await client.close();
   }
