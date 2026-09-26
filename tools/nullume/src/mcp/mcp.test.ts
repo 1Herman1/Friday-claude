@@ -26,7 +26,7 @@ test("MCP: tools/list отдаёт 18 инструментов со схемам
   await client.connect(transport);
   try {
     const { tools } = await client.listTools();
-    assert.equal(tools.length, 18);
+    assert.equal(tools.length, 21);
     for (const tool of tools) {
       assert.ok(tool.inputSchema && typeof tool.inputSchema === "object", `${tool.name}: нет inputSchema`);
       assert.ok("properties" in tool.inputSchema, `${tool.name}: нет properties`);

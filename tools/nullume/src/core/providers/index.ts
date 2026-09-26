@@ -51,8 +51,15 @@ export class MockProvider implements Provider {
     return m;
   }
 
-  async estimate(): Promise<null> {
-    return null;
+  async estimate() {
+    return {
+      creditsMin: 10,
+      creditsMax: 20,
+      usdMin: 0.05,
+      usdMax: 0.1,
+      approximate: false,
+      source: "vendored" as const,
+    };
   }
 
   async create(): Promise<{ taskId: string; api: string }> {

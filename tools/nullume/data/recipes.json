@@ -1,0 +1,138 @@
+{
+  "recipes": [
+    {
+      "id": "product-card",
+      "title": "Карточка товара: три ракурса",
+      "goal": "Три снимка товара — спереди, в три четверти и крупная деталь — для карточки магазина",
+      "steps": [
+        {
+          "id": "front",
+          "preset": "product-photo",
+          "prompt": "{subject}, front view, centered on seamless white background, studio lighting, product photography",
+          "input": {}
+        },
+        {
+          "id": "three-quarter",
+          "preset": "product-photo",
+          "prompt": "{subject}, three-quarter view angle, seamless background, professional studio setup, highlight form and texture",
+          "input": {}
+        },
+        {
+          "id": "detail",
+          "preset": "product-photo",
+          "prompt": "{subject}, extreme close-up of key detail, macro photography, white background, sharp focus, professional lighting",
+          "input": {}
+        }
+      ],
+      "notes": "Используй для карточек товаров в каталоге. Проверь что все три ракурса согласованы по стилю и фону."
+    },
+    {
+      "id": "hero-banner",
+      "title": "Главный баннер и мобильная версия",
+      "goal": "Один сюжет в двух форматах: горизонтальный 16:9 для компьютера и вертикальный 9:16 для телефона",
+      "steps": [
+        {
+          "id": "desktop",
+          "preset": "banner-16x9",
+          "prompt": "{subject}, wide landscape composition, suitable for website hero section, empty space for text overlay on left or center, professional photography style",
+          "input": {}
+        },
+        {
+          "id": "mobile",
+          "preset": "social-story",
+          "prompt": "{subject}, vertical mobile composition, text-safe area in center, same scene as desktop version, full-screen format",
+          "input": {}
+        }
+      ],
+      "notes": "Два независимых поколения разных пропорций. Используй для лендингов и главных страниц сайтов."
+    },
+    {
+      "id": "social-trio",
+      "title": "Три поста для соцсетей",
+      "goal": "Три квадратных поста в одном стиле: товар, атмосфера, деталь",
+      "steps": [
+        {
+          "id": "product",
+          "preset": "social-square",
+          "prompt": "{subject}, centered product shot for social media, vibrant colors, engaging composition, square format, Instagram aesthetic",
+          "input": {}
+        },
+        {
+          "id": "atmosphere",
+          "preset": "social-square",
+          "prompt": "lifestyle scene featuring {subject}, process or environment, atmospheric lighting, same color palette as product shot, social media ready",
+          "input": {}
+        },
+        {
+          "id": "detail",
+          "preset": "social-square",
+          "prompt": "close-up detail of {subject}, texture and craftsmanship, macro style, same aesthetic as other posts, square format",
+          "input": {}
+        }
+      ],
+      "notes": "Все три в одном стиле и палитре. Планируй в календарь: день 1 (товар), день 2 (атмосфера), день 3 (деталь)."
+    },
+    {
+      "id": "before-after",
+      "title": "До и после",
+      "goal": "Снимок «до» и тот же кадр «после» — изменение показано на одном изображении",
+      "steps": [
+        {
+          "id": "before",
+          "preset": "product-photo",
+          "prompt": "{subject}, natural state, minimal styling, neutral background, clear documentation",
+          "input": {}
+        },
+        {
+          "id": "after",
+          "preset": "image-edit",
+          "prompt": "apply effect, transformation or improvement, enhanced colors, polished finish, highlight benefits",
+          "input": {},
+          "from": "before"
+        }
+      ],
+      "notes": "Первый шаг генерирует картинку, второй её редактирует. Использовать для демонстрации косметики, ухода, интерьера."
+    },
+    {
+      "id": "landing-hero",
+      "title": "Фон лендинга и отдельный объект",
+      "goal": "Фон с пустым местом под текст и товар на однотонном фоне — чтобы собрать первый экран в макете",
+      "steps": [
+        {
+          "id": "background",
+          "preset": "banner-16x9",
+          "prompt": "minimalist landscape or abstract background, warm tones, subtle texture, empty upper third for text, no subjects or people",
+          "input": {}
+        },
+        {
+          "id": "product",
+          "preset": "product-photo",
+          "prompt": "{subject}, isolated on white background, clean professional photography, suitable for layering over backgrounds",
+          "input": {}
+        }
+      ],
+      "notes": "Два независимых поколения. Комбинируй их в Figma или макете: фон снизу, товар сверху с текстом рядом."
+    },
+    {
+      "id": "product-video",
+      "title": "Ролик из кадра",
+      "goal": "Снимок товара, который затем оживает в коротком видео с движением камеры",
+      "steps": [
+        {
+          "id": "frame",
+          "preset": "product-photo",
+          "prompt": "{subject}, static professional product photograph, centered composition, clear subject, suitable for animation",
+          "input": {}
+        },
+        {
+          "id": "video",
+          "preset": "image-to-video",
+          "prompt": "subtle camera pan around subject, smooth zoom, reveal details, 5-second duration",
+          "input": {},
+          "from": "frame"
+        }
+      ],
+      "notes": "Кадр генерируется, потом оживляется. Результат 5–10 сек. Идеален для соцсетей и лендингов."
+    }
+  ]
+}

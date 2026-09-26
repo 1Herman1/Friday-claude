@@ -21,6 +21,10 @@ import { initSchema as initLibImportSchema, schema as libImportSchema, handler a
 import { schema as libClustersSchema, handler as libClustersHandler } from "./tools/libClusters.js";
 import { schema as libProposeSchema, handler as libProposeHandler } from "./tools/libPropose.js";
 
+import { schema as listRecipesSchema, handler as listRecipesHandler } from "./tools/listRecipes.js";
+import { schema as getRecipeSchema, handler as getRecipeHandler } from "./tools/getRecipe.js";
+import { schema as runRecipeSchema, handler as runRecipeHandler } from "./tools/runRecipe.js";
+
 export function createMcpServer() {
   const server = new McpServer({
     name: "nullume",
@@ -247,6 +251,42 @@ export function createMcpServer() {
       inputSchema: libProposeSchema,
     },
     libProposeHandler as any
+  );
+
+  server.registerTool(
+    "list_recipes",
+    {
+      title: "Список рецептов",
+      description:
+        "Доступные рецепты для типовых задач (product-card, hero-banner, social-trio, before-after, landing-hero, product-video). " +
+        "Каждый рецепт содержит пошаговый план генерации нескольких ассетов в одном стиле.",
+      inputSchema: listRecipesSchema,
+    },
+    listRecipesHandler
+  );
+
+  server.registerTool(
+    "get_recipe",
+    {
+      title: "План рецепта",
+      description:
+        "Получить детальный план рецепта: какие шаги выполнятся, модели, промпты, цена в кредитах и USD. " +
+        "Ничего не создаёт, только показывает план. Сначала используй это, затем run_recipe.",
+      inputSchema: getRecipeSchema,
+    },
+    getRecipeHandler
+  );
+
+  server.registerTool(
+    "run_recipe",
+    {
+      title: "Запустить рецепт",
+      description:
+        "Запустить рецепт: создать все генерации по плану, дождаться завершения, скачать результаты. " +
+        "Требует max_credits для безопасности. При стоимости выше лимита или неподтверждённой цене выбросит ошибку.",
+      inputSchema: runRecipeSchema,
+    },
+    runRecipeHandler
   );
 
   return server;
