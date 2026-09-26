@@ -868,3 +868,41 @@ model ConsentRecord {
   @@index([userId, purpose])
   @@map("consent_records")
 }
+
+// ──────────────────── Реестр МСП (справочник из ФНС) ────────────────────
+
+enum RegistryKind {
+  legal       // юрлицо (1 → ОргВклМСП, ИННЮЛ 10 цифр)
+  individual  // ИП (2 → ИПВклМСП, ИННФЛ 12 цифр)
+}
+
+/// Профильный бизнес из открытого реестра МСП ФНС.
+/// Отбираются по кодам ОКВЭД: если ANY код из СвОКВЭД совпадает с префиксом
+/// или начинается с префикса + '.', запись профильная.
+model RegistryProfile {
+  inn         String       @id           // ИННЮЛ (10) или ИННФЛ (12)
+  ogrn        String                     // ОГРН (13) или ОГРНИП (15)
+  kind        RegistryKind
+  name        String                     // НаимОргСокр или «ИП Фамилия И. О.»
+  okvedMain   String?                    // основной ОКВЭД из СвОКВЭДОсн, версия 2014
+  okveds      String[]                   // все коды из СвОКВЭД (основной + доп.), версия 2014, без дублей
+  releaseDate DateTime                   // ДатаСост выпуска архива
+  createdAt   DateTime     @default(now())
+
+  @@index([ogrn])
+  @@index([releaseDate])
+  @@map("registry_profiles")
+}
+
+/// Запись о выпуске и импорте реестра: для отслеживания версий.
+model RegistryRelease {
+  id          String   @id @default(uuid())
+  sourceUrl   String
+  releaseDate DateTime                   // ДатаСост из XML
+  scanned     Int                        // сколько Документов прочитано
+  matched     Int                        // сколько профильных записали в БД
+  importedAt  DateTime @default(now())
+
+  @@index([releaseDate])
+  @@map("registry_releases")
+}
