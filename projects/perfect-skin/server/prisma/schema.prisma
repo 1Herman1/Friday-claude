@@ -139,6 +139,11 @@ enum ConsultationStatus {
   cancelled
 }
 
+enum ConsentPurpose {
+  pro_application   // обработка данных заявки специалиста, включая копию документа
+  marketing         // рекламная рассылка
+}
+
 // ──────────────────────── Пользователи и доступ ────────────────────────
 
 model User {
@@ -185,6 +190,7 @@ model User {
   offerAssignments OfferAssignment[]
   skinSurveys      SkinSurvey[]
   consultations    ConsultationRequest[]
+  consents         ConsentRecord[]
 
   @@index([email])
   @@index([phone])
@@ -845,4 +851,20 @@ model SyncLog {
 
   @@index([createdAt])
   @@map("sync_logs")
+}
+
+// ──────────────────────────── Согласия на ПДн ───────────────────────────
+
+model ConsentRecord {
+  id          String         @id @default(uuid())
+  userId      String
+  purpose     ConsentPurpose
+  textVersion String         // версия текста согласия, который видел человек
+  grantedAt   DateTime       @default(now())
+  revokedAt   DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose])
+  @@map("consent_records")
 }

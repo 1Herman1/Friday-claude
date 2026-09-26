@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { validateTaxId } from '@ps/shared'
 import { ApiError } from '../../lib/errors.js'
+import { CONSENT_TEXT_VERSION } from '../../lib/consents.js'
 
 const applySchema = z.object({
   companyName: z.string().min(2).max(120),
@@ -23,6 +24,8 @@ const applySchema = z.object({
     ),
   specialization: z.string().min(2).max(120),
   comment: z.string().max(500).optional(),
+  consentPd: z.literal(true), // обязательное согласие на ПДн
+  consentMarketing: z.boolean().optional(), // опциональное согласие на рассылку
 })
 
 export default async function proRoute(app: FastifyInstance) {
@@ -65,11 +68,12 @@ export default async function proRoute(app: FastifyInstance) {
         )
       }
 
-      const { companyName, inn, specialization, comment } = result.data
+      const { companyName, inn, specialization, comment, consentPd, consentMarketing } = result.data
+      const userId = request.user!.id
 
       // Check if user already has a professional status request pending or approved
       const user = await app.prisma.user.findUnique({
-        where: { id: request.user!.id },
+        where: { id: userId },
         select: { proStatus: true, acceptedTermsAt: true },
       })
 
@@ -81,26 +85,51 @@ export default async function proRoute(app: FastifyInstance) {
         throw new ApiError(409, 'PRO_ALREADY_APPROVED', 'Ваш статус специалиста уже подтвержден')
       }
 
-      // Update user with professional request data
-      const updateData: any = {
-        proStatus: 'pending',
-        companyName,
-        inn,
-        specialization,
-        proRequestedAt: new Date(),
-        proRejectReason: null,
-        proReviewedAt: null,
-      }
+      // обновление профиля и создание записей согласий в одной транзакции
+      const updatedUser = await app.prisma.$transaction(async (tx) => {
+        // Update user with professional request data
+        const updateData: any = {
+          proStatus: 'pending',
+          companyName,
+          inn,
+          specialization,
+          proRequestedAt: new Date(),
+          proRejectReason: null,
+          proReviewedAt: null,
+        }
 
-      // Mark consent date on first pro request only (if not already marked)
-      if (!user?.acceptedTermsAt) {
-        updateData.acceptedTermsAt = new Date()
-      }
+        // Mark consent date on first pro request only (if not already marked)
+        if (!user?.acceptedTermsAt) {
+          updateData.acceptedTermsAt = new Date()
+        }
 
-      const updatedUser = await app.prisma.user.update({
-        where: { id: request.user!.id },
-        data: updateData,
-        select: { proStatus: true },
+        const updated = await tx.user.update({
+          where: { id: userId },
+          data: updateData,
+          select: { proStatus: true },
+        })
+
+        // Создаём запись о согласии на ПДн (обязательно)
+        await tx.consentRecord.create({
+          data: {
+            userId,
+            purpose: 'pro_application',
+            textVersion: CONSENT_TEXT_VERSION.pro_application,
+          },
+        })
+
+        // Создаём запись о согласии на рассылку (если дал)
+        if (consentMarketing) {
+          await tx.consentRecord.create({
+            data: {
+              userId,
+              purpose: 'marketing',
+              textVersion: CONSENT_TEXT_VERSION.marketing,
+            },
+          })
+        }
+
+        return updated
       })
 
       reply.status(200).send({

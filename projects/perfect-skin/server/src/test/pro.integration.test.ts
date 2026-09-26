@@ -397,6 +397,7 @@ describe('Professional (wholesale) Integration Tests', () => {
         companyName: 'ООО Тест',
         inn: '1027700132195', // Корректный ОГРН (Сбербанк)
         specialization: 'косметолог',
+        consentPd: true,
       },
       headers: { authorization: `Bearer ${token}` },
     })
@@ -413,12 +414,34 @@ describe('Professional (wholesale) Integration Tests', () => {
         companyName: 'ООО Тест',
         inn: '7707083892', // Последняя цифра 3->2, контрольная сумма неверна
         specialization: 'косметолог',
+        consentPd: true,
       },
       headers: { authorization: `Bearer ${token2}` },
     })
     expect(badChecksumRes.statusCode).toBe(400)
     const errorBody = JSON.parse(badChecksumRes.body)
     expect(errorBody.error.code).toBe('VALIDATION_ERROR')
+  })
+
+  // 8.1. Missing consentPd → 400 VALIDATION_ERROR
+  it('(8.1) Заявка без consentPd → 400 VALIDATION_ERROR', async () => {
+    const user = await createUser('apply-no-consent')
+    const token = tokenFor(user)
+
+    const noConsentRes = await app.inject({
+      method: 'POST',
+      url: '/api/v1/pro/apply',
+      payload: {
+        companyName: 'ООО Тест',
+        inn: '1234567890',
+        specialization: 'косметолог',
+      },
+      headers: { authorization: `Bearer ${token}` },
+    })
+    expect(noConsentRes.statusCode).toBe(400)
+    const errorBody = JSON.parse(noConsentRes.body)
+    expect(errorBody.error.code).toBe('VALIDATION_ERROR')
+    expect(errorBody.error.details.field).toBe('consentPd')
   })
 
   // 9. Full application flow: apply → admin approves → wholesale catalog
@@ -438,7 +461,7 @@ describe('Professional (wholesale) Integration Tests', () => {
     const badInnRes = await app.inject({
       method: 'POST',
       url: '/api/v1/pro/apply',
-      payload: { companyName: 'ООО Тест', inn: '123', specialization: 'косметолог' },
+      payload: { companyName: 'ООО Тест', inn: '123', specialization: 'косметолог', consentPd: true },
       headers: { authorization: `Bearer ${token}` },
     })
     expect(badInnRes.statusCode).toBe(400)
@@ -451,6 +474,8 @@ describe('Professional (wholesale) Integration Tests', () => {
         inn: '1234567890',
         specialization: 'косметолог',
         comment: 'Работаю в салоне',
+        consentPd: true,
+        consentMarketing: true,
       },
       headers: { authorization: `Bearer ${token}` },
     })
@@ -473,7 +498,7 @@ describe('Professional (wholesale) Integration Tests', () => {
     const repeatRes = await app.inject({
       method: 'POST',
       url: '/api/v1/pro/apply',
-      payload: { companyName: 'ООО Тест', inn: '1234567890', specialization: 'косметолог' },
+      payload: { companyName: 'ООО Тест', inn: '1234567890', specialization: 'косметолог', consentPd: true },
       headers: { authorization: `Bearer ${token}` },
     })
     expect(repeatRes.statusCode).toBe(409)
@@ -678,7 +703,7 @@ describe('Professional (wholesale) Integration Tests', () => {
     await app.inject({
       method: 'POST',
       url: '/api/v1/pro/apply',
-      payload: { companyName: 'ООО Отказ', inn: '123456789012', specialization: 'массажист' },
+      payload: { companyName: 'ООО Отказ', inn: '123456789012', specialization: 'массажист', consentPd: true },
       headers: { authorization: `Bearer ${token}` },
     })
 

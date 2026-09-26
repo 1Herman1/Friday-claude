@@ -299,7 +299,7 @@ export async function resolveFromSnapshot<T>(path: string): Promise<T> {
     } as T
   }
   if (p === '/api/v1/pro/apply') {
-    // Accept application but return pending
+    // Accept application with consents but return pending
     return { proStatus: 'pending' } as T
   }
 

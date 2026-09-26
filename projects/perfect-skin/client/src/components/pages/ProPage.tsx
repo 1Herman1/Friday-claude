@@ -11,7 +11,8 @@ export function ProPage() {
     inn: user?.inn || '',
     specialization: user?.specialization || '',
     comment: '',
-    agreedToTerms: false,
+    consentPd: false,
+    consentMarketing: false,
   })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -195,8 +196,8 @@ export function ProPage() {
       return
     }
 
-    if (!formData.agreedToTerms) {
-      setError('Примите условия обработки данных')
+    if (!formData.consentPd) {
+      setError('Примите условия обработки персональных данных')
       return
     }
 
@@ -209,6 +210,8 @@ export function ProPage() {
           inn: formData.inn.replace(/\D/g, ''),
           specialization: formData.specialization,
           comment: formData.comment || undefined,
+          consentPd: true,
+          consentMarketing: formData.consentMarketing,
         }),
       })
 
@@ -329,19 +332,37 @@ export function ProPage() {
             />
           </div>
 
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              name="agreedToTerms"
-              checked={formData.agreedToTerms}
-              onChange={handleChange}
-              className="mt-1 w-5 h-5 rounded border-border-strong focus:ring-2 focus:ring-ring cursor-pointer"
-              required
-            />
-            <span className="text-sm text-muted-foreground">
-              Я согласен на обработку персональных данных и получение информации о предложениях
-            </span>
-          </label>
+          <div className="space-y-4">
+            <label className="flex items-start gap-3 cursor-pointer min-h-11">
+              <input
+                type="checkbox"
+                name="consentPd"
+                checked={formData.consentPd}
+                onChange={handleChange}
+                className="mt-1 w-5 h-5 rounded border-border-strong focus:ring-2 focus:ring-ring cursor-pointer flex-shrink-0"
+                required
+              />
+              <span className="text-sm text-muted-foreground">
+                Согласен на обработку персональных данных для проверки статуса специалиста{' '}
+                <Link to="/privacy" className="text-primary font-semibold hover:underline">
+                  Политика обработки данных
+                </Link>
+              </span>
+            </label>
+
+            <label className="flex items-start gap-3 cursor-pointer min-h-11">
+              <input
+                type="checkbox"
+                name="consentMarketing"
+                checked={formData.consentMarketing}
+                onChange={handleChange}
+                className="mt-1 w-5 h-5 rounded border-border-strong focus:ring-2 focus:ring-ring cursor-pointer flex-shrink-0"
+              />
+              <span className="text-sm text-muted-foreground">
+                Хочу получать новости и предложения для специалистов
+              </span>
+            </label>
+          </div>
 
           <button
             type="submit"
