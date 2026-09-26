@@ -120,7 +120,7 @@ async function main() {
       console.log('Запустите с флагом --apply чтобы применить изменения:\n')
       const flags = report.aborted ? '--apply --force' : '--apply'
       console.log(`  npx tsx --env-file=.env src/scripts/sync-moysklad.ts ${flags}\n`)
-    } else if (report.pricesUpdated === 0 && report.stocksUpdated === 0) {
+    } else if (report.pricesUpdated === 0 && report.stocksUpdated === 0 && report.productsHidden === 0 && report.variantsHidden === 0) {
       console.log('\n⚠️  Нечего обновлять.\n')
     } else {
       console.log('\n✅ Синхронизация завершена.\n')
