@@ -10,6 +10,12 @@ describe('classifyType', () => {
     expect(classifyType(p('Forza10 Active VetDiet URINARY Cat'))).toBe('medical')
     expect(classifyType(p('Forza10 Intestinal Colon Fase II Dog (Рыба)'))).toBe('medical')
     expect(classifyType(p('Royal Canin Renal'))).toBe('medical')
+    expect(classifyType(p('Royal Canin Gastrointestinal Low Fat для собак'))).toBe('medical')
+    expect(classifyType(p('Royal Canin Urinary S/O Feline'))).toBe('medical')
+  })
+
+  it('не путает обычный Urinary Health с лечебной диетой', () => {
+    expect(classifyType(p("Hill's Science Plan Urinary Health (курица)"))).toBeNull()
   })
 
   it('не считает лечебным обычный корм для чувствительного пищеварения', () => {

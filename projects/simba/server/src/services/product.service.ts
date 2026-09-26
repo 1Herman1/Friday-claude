@@ -17,6 +17,8 @@ export const MEDICAL_LINES = [
   'Gactroenteric',
   'Integra Protect',
   'Royal Canin Renal',
+  'Royal Canin Gastrointestinal',
+  'Urinary S/O',
 ]
 /** Узлы «Лечебное питание» в дереве категорий (backfill-category-tree.ts). Фиксированные slug'и,
     а не суффикс: переименование категории в админке не должно молча ломать фильтр. */
