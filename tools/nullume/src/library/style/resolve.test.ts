@@ -368,6 +368,47 @@ test("applyStyle: exemplars limited to 1 when imageList false", () => {
   assert(result.applied.includes("exemplars(1)"));
 });
 
+test("applyStyle: palette description added to prompt", () => {
+  const store = new MemoryStore();
+  const descriptor: StyleDescriptor = {
+    ...DESCRIPTOR_TEMPLATE,
+    palette: [
+      { hex: "#ffffff", role: "bg", ratio: 1.0 },
+      { hex: "#000000", role: "text", ratio: 0.95 },
+      { hex: "#ff0000", role: "accent", ratio: 0.7 },
+      { hex: "#00ff00", role: "surface", ratio: 0.8 },
+    ],
+  };
+
+  const family = store.createFamily({
+    name: "Test",
+    slug: "test",
+    status: "approved",
+    descriptor,
+    proposedBy: "owner",
+  });
+
+  const result = applyStyle({
+    prompt: "Generate",
+    images: [],
+    input: {},
+    modelMeta: {
+      promptField: "prompt",
+      required: [],
+      defaults: {},
+    },
+    resolved: {
+      family,
+      descriptor,
+      exemplarPaths: [],
+    },
+  });
+
+  assert(result.prompt.includes("Colour palette:"));
+  assert(result.prompt.includes("white background"));
+  assert(result.prompt.includes("red accents"));
+});
+
 test("applyStyle: returns new objects without mutation", () => {
   const store = new MemoryStore();
   const family = store.createFamily({

@@ -133,7 +133,7 @@ export const StyleDescriptorSchema = z
     mood: z.array(z.string()).optional(),
     exemplars: z
       .array(z.string().uuid())
-      .min(1, "At least 1 exemplar required")
+      .min(0, "Exemplars array required")
       .max(8, "Max 8 exemplars"),
     antiRefCheck: z.array(z.string()).min(0),
   })

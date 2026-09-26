@@ -31,7 +31,7 @@ export function getFamilyBySlugOrId(store: LibraryStore, x: string): Family | un
 }
 
 /**
- * Approve a family (requires a valid descriptor already set)
+ * Approve a family (requires a valid descriptor already set with exemplars)
  */
 export function approveFamily(store: LibraryStore, idOrSlug: string): Family {
   const family = getFamilyBySlugOrId(store, idOrSlug);
@@ -41,6 +41,14 @@ export function approveFamily(store: LibraryStore, idOrSlug: string): Family {
 
   if (!family.descriptor) {
     throw new UsageError(`Family "${idOrSlug}" does not have a descriptor. Set one before approving.`);
+  }
+
+  // Check that descriptor has exemplars
+  const descriptor = family.descriptor as any;
+  if (!descriptor.exemplars || descriptor.exemplars.length === 0) {
+    throw new UsageError(
+      `Нельзя утвердить стиль без образцов: соберите референсы — nullume lib style collect ${family.slug}`
+    );
   }
 
   store.updateFamily(family.id, {

@@ -41,6 +41,7 @@ const pixabayLimiter = new RateLimiter(100, 60 * 1000); // 100 requests per minu
 export const pixabay: Importer = {
   id: "pixabay",
   kind: "clean",
+  supportsQuery: true,
   title: "Pixabay",
   description:
     "Бесплатная стоковая фотография от сообщества Pixabay. " +

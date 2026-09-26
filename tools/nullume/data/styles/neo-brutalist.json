@@ -1,0 +1,57 @@
+{
+  "descriptor": {
+    "name": "Необрутализм",
+    "slug": "neo-brutalist",
+    "summary": "Толстые чёрные обводки, плоские яркие плашки, жёсткие тени-смещения, крупный текст.",
+    "palette": [
+      { "hex": "#f5f3f0", "role": "bg", "ratio": 1.0 },
+      { "hex": "#000000", "role": "text", "ratio": 1.0 },
+      { "hex": "#ffeb00", "role": "accent", "ratio": 0.8 },
+      { "hex": "#0099ff", "role": "accent-ink", "ratio": 0.75 },
+      { "hex": "#ff00aa", "role": "muted", "ratio": 0.7 }
+    ],
+    "type": {
+      "display": "Montserrat",
+      "body": "Open Sans",
+      "scale": [0.75, 0.875, 1, 1.25, 1.5, 1.875, 2.5, 3.5],
+      "weightDisplay": 800,
+      "tracking": 0.02,
+      "caseAccent": "all-caps"
+    },
+    "spacing": {
+      "base": 12,
+      "rhythm": [4, 8, 12, 16, 24, 32, 48, 64],
+      "density": "dense"
+    },
+    "radii": {
+      "small": 0,
+      "large": 0,
+      "pattern": "sharp"
+    },
+    "shadows": "hard",
+    "motion": {
+      "duration": [200, 300],
+      "easing": "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+      "character": "snappy"
+    },
+    "dials": {
+      "visualDensity": 0.7,
+      "designVariance": 0.8,
+      "decorLevel": 0.6,
+      "symmetry": 0.3
+    },
+    "decor": ["heavy-borders", "hard-shadows"],
+    "dominant_pattern": "толстые чёрные обводки, плоские яркие блоки",
+    "divergences": ["не все элементы имеют границы", "цвета варьируются"],
+    "prompt_fragment": "Необрутальный дизайн. Толстые чёрные обводки вокруг элементов. Плоские яркие неоновые плашки: жёлтый, электрический синий, ярко-розовый. Жёсткие смещённые тени, создающие глубину. Крупный смелый текст. Асимметричная, беспорядочная компоновка. Дерзкий, громкий стиль. Высокий контраст.",
+    "negative_fragment": "Мягкие тени, скруглённые углы, пастель, минимализм, спокойные тона",
+    "mood": ["дерзкий", "громкий", "молодой"],
+    "exemplars": [],
+    "antiRefCheck": ["high-contrast", "bold-typography", "hard-geometry"]
+  },
+  "queries": [
+    "Neo brutalist design black borders bold typography",
+    "Brutalism graphic design harsh shadows yellow neon",
+    "Bold graphic layout thick strokes digital art posters"
+  ]
+}

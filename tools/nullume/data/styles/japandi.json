@@ -1,0 +1,57 @@
+{
+  "descriptor": {
+    "name": "Японди",
+    "slug": "japandi",
+    "summary": "Пустота как элемент, светлое дерево, низкие предметы, рассеянный свет, очень мало цвета.",
+    "palette": [
+      { "hex": "#f5f2ed", "role": "bg", "ratio": 1.0 },
+      { "hex": "#26221f", "role": "text", "ratio": 0.96 },
+      { "hex": "#9d8b7e", "role": "accent", "ratio": 0.45 },
+      { "hex": "#eae5dd", "role": "surface", "ratio": 0.9 },
+      { "hex": "#d9d0c4", "role": "line", "ratio": 0.3 }
+    ],
+    "type": {
+      "display": "Manrope",
+      "body": "Inter",
+      "scale": [0.75, 0.875, 1, 1.125, 1.25, 1.5, 1.875, 2.25],
+      "weightDisplay": 500,
+      "tracking": 0.005,
+      "caseAccent": "none"
+    },
+    "spacing": {
+      "base": 20,
+      "rhythm": [10, 20, 30, 40, 60, 80, 100, 120],
+      "density": "airy"
+    },
+    "radii": {
+      "small": 4,
+      "large": 8,
+      "pattern": "uniform"
+    },
+    "shadows": "soft",
+    "motion": {
+      "duration": [400, 600],
+      "easing": "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+      "character": "calm"
+    },
+    "dials": {
+      "visualDensity": 0.2,
+      "designVariance": 0.25,
+      "decorLevel": 0.05,
+      "symmetry": 0.6
+    },
+    "decor": [],
+    "dominant_pattern": "пустота, минималистичные предметы, низкие композиции",
+    "divergences": [],
+    "prompt_fragment": "Японди минимализм. Пустота как активный элемент дизайна. Светлое натуральное дерево. Низко расположенные предметы. Рассеянный мягкий свет, создающий лёгкие тени. Минимум цвета, почти монохром. Естественная текстура дерева. Созерцательное, спокойное пространство. Баланс между японской простотой и скандинавским дизайном.",
+    "negative_fragment": "Яркие цвета, много элементов, клаттер, активные тени, сложная композиция",
+    "mood": ["тихий", "созерцательный", "чистый"],
+    "exemplars": [],
+    "antiRefCheck": ["minimalist", "whitespace-heavy", "low-contrast"]
+  },
+  "queries": [
+    "Japandi minimal interior wood soft light zen",
+    "Scandinavian Japanese design empty space wood texture",
+    "Minimalist aesthetic low furniture natural light calm"
+  ]
+}

@@ -41,6 +41,7 @@ interface ArenaSearchResponse {
 export const arenaImporter: Importer = {
   id: "arena",
   kind: "clean",
+  supportsQuery: true,
   title: "Are.na",
   description: "Импорт изображений из канала Are.na (v2 API) или поиск по запросу",
 

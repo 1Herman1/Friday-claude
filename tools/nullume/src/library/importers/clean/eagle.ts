@@ -70,6 +70,7 @@ function assertEagleLoopback(url: string): void {
 export const eagleImporter: Importer = {
   id: "eagle",
   kind: "clean",
+  supportsQuery: true,
   title: "Eagle.cool",
   description: "Импорт изображений из локального приложения Eagle.cool по API",
 

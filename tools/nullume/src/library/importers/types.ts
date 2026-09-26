@@ -92,6 +92,8 @@ export interface Importer {
   title: string;
   /** Описание и инструкции */
   description: string;
+  /** Ищет по свободному запросу (--query). Остальные работают по коллекции или ленте. */
+  supportsQuery?: boolean;
   /**
    * Настройка импортёра: проверка учётных данных, сессий.
    * Для local-only импортёров ДОЛЖЕН вызвать assertLocalOnlyAllowed()

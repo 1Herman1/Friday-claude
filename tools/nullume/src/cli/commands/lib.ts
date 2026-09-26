@@ -7,7 +7,7 @@ import { UsageError, ConfigError } from "../../core/errors.js";
 import { emit, table } from "../output.js";
 import { getGlobalFlags } from "../context.js";
 import { loadConfig, mergeConfig } from "../../core/config.js";
-import { ensureDir, getLibraryDir, getLibraryDbPath, getLibraryOriginalsDir, getLibraryPreviewsDir } from "../../core/paths.js";
+import { ensureDir, getLibraryDir, getLibraryDbPath, getLibraryOriginalsDir, getLibraryPreviewsDir, getPackageDataDir } from "../../core/paths.js";
 import { openStore } from "../../library/store/sqlite.js";
 import type { LibraryStore } from "../../library/store/types.js";
 import { getImporter, listImporters } from "../../library/importers/registry.js";
@@ -22,6 +22,7 @@ import { clusterLibrary } from "../../library/cluster/index.js";
 import { searchLibrary } from "../../library/search.js";
 import { buildProposalContext, applyProposal } from "../../library/families/propose.js";
 import { startDashboard } from "../../library/dashboard/server.js";
+import { collectStyle } from "../../library/style/collect.js";
 import {
   getFamilyBySlugOrId,
   approveFamily,
@@ -1167,6 +1168,286 @@ familyCmd
         return `✓ Семейство отменено: ${family.name}`;
       });
 
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib style <subcommand>
+const styleCmd = libCmd
+  .command("style")
+  .description("Управление базовыми стилями");
+
+// lib style list [--json]
+styleCmd
+  .command("list")
+  .description("Список базовых стилей")
+  .action(async function () {
+    const flags = getGlobalFlags();
+
+    try {
+      const dbPath = getLibraryDbPath();
+      const store = openStore(dbPath);
+      const dataDir = getPackageDataDir();
+      const stylesDir = path.join(dataDir, "styles");
+
+      // Read style files from data/styles/
+      const files = await fs.promises.readdir(stylesDir);
+      const rows: Array<{ slug: string; name: string; mood: string; status: string }> = [];
+
+      for (const file of files) {
+        if (!file.endsWith(".json")) continue;
+
+        const filePath = path.join(stylesDir, file);
+        const content = await fs.promises.readFile(filePath, "utf-8");
+        const data = JSON.parse(content);
+        const descriptor = data.descriptor;
+
+        const slug = descriptor.slug;
+        const existing = store.getFamilyBySlug(slug);
+        let status = "не заведён";
+        if (existing) {
+          status = existing.status;
+        }
+
+        rows.push({
+          slug,
+          name: descriptor.name || "Unnamed",
+          mood: (descriptor.mood || []).slice(0, 2).join(", ") || "—",
+          status,
+        });
+      }
+
+      store.close();
+
+      emit(flags, { data: rows }, () => {
+        if (rows.length === 0) {
+          return "Стилей не найдено";
+        }
+        return table(rows, [
+          { key: "slug", header: "Slug" },
+          { key: "name", header: "Имя" },
+          { key: "mood", header: "Настроение" },
+          { key: "status", header: "Статус" },
+        ]);
+      });
+    } catch (error) {
+      throw error;
+    }
+  });
+
+// lib style seed [slugs...] [--force]
+styleCmd
+  .command("seed [slugs...]")
+  .option("--force", "Перезаписать дескриптор для proposed семейств")
+  .description("Завести стили из data/styles/ как семейства")
+  .action(async function (slugs: string[], options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+
+    try {
+      const dbPath = getLibraryDbPath();
+      const store = openStore(dbPath);
+      const dataDir = getPackageDataDir();
+      const stylesDir = path.join(dataDir, "styles");
+
+      // Determine which slugs to seed
+      let stylesToSeed: string[] = [];
+      if (slugs && slugs.length > 0) {
+        stylesToSeed = slugs;
+      } else {
+        // Seed all
+        const files = await fs.promises.readdir(stylesDir);
+        stylesToSeed = files.filter((f) => f.endsWith(".json")).map((f) => f.replace(".json", ""));
+      }
+
+      let created = 0,
+        skipped = 0,
+        updated = 0;
+
+      for (const slug of stylesToSeed) {
+        const filePath = path.join(stylesDir, `${slug}.json`);
+        if (!fs.existsSync(filePath)) {
+          if (!flags.quiet && !flags.json) {
+            stderr.write(`  ⚠ Стиль ${slug} не найден\n`);
+          }
+          skipped++;
+          continue;
+        }
+
+        const content = await fs.promises.readFile(filePath, "utf-8");
+        const data = JSON.parse(content);
+        const descriptor = data.descriptor;
+        const queries = data.queries || [];
+
+        // Check if family exists
+        let family = store.getFamilyBySlug(slug);
+        if (family) {
+          // Only update if proposed and --force is set
+          if (family.status === "proposed" && options.force) {
+            store.updateFamily(family.id, {
+              name: descriptor.name,
+              descriptor: descriptor as unknown,
+            });
+            updated++;
+            if (!flags.quiet && !flags.json) {
+              stderr.write(`  ✓ Стиль обновлён: ${slug}\n`);
+            }
+          } else {
+            if (!flags.quiet && !flags.json) {
+              stderr.write(`  ⊘ Стиль уже есть: ${slug} (${family.status})\n`);
+            }
+            skipped++;
+          }
+          continue;
+        }
+
+        // Create new family
+        family = store.createFamily({
+          name: descriptor.name,
+          slug,
+          status: "proposed",
+          proposedBy: "owner",
+          descriptor: descriptor as unknown,
+        });
+
+        // Note: queries are stored in data/styles/<slug>.json, not in family
+
+        created++;
+        if (!flags.quiet && !flags.json) {
+          stderr.write(`  ✓ Создан стиль: ${slug}\n`);
+        }
+      }
+
+      store.close();
+
+      emit(
+        flags,
+        { data: { created, updated, skipped } },
+        () => `✓ Заведено: ${created} новых, ${updated} обновлено, ${skipped} пропущено`
+      );
+    } catch (error) {
+      throw error;
+    }
+  });
+
+// lib style collect <slug> [--source <importer>] [--limit <n>]
+styleCmd
+  .command("collect <slug>")
+  .option("--source <source>", "Источник импорта (pinterest-cookies, pexels, unsplash, arena)", "pinterest-cookies")
+  .option("--limit <n>", "Максимум результатов всего (делится между запросами)", "40")
+  .description("Собрать референсы для стиля по его queries")
+  .action(async function (slug: string, options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+    let store: LibraryStore | undefined;
+
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+      const dataDir = getPackageDataDir();
+      const stylesDir = path.join(dataDir, "styles");
+
+      // Load style descriptor from data/styles/<slug>.json
+      const filePath = path.join(stylesDir, `${slug}.json`);
+      if (!fs.existsSync(filePath)) {
+        throw new UsageError(`Стиль ${slug} не найден. Запусти: nullume lib style seed ${slug}`);
+      }
+
+      const content = await fs.promises.readFile(filePath, "utf-8");
+      const styleData = JSON.parse(content);
+      const queries = styleData.queries || [];
+
+      if (queries.length === 0) {
+        throw new UsageError(`Для стиля ${slug} не определены queries`);
+      }
+
+      // Find family
+      const family = store.getFamilyBySlug(slug);
+      if (!family) {
+        throw new UsageError(`Семейство ${slug} не найдено. Запусти: nullume lib style seed ${slug}`);
+      }
+
+      const source = String(options.source);
+
+      // Get importer
+      let importer;
+      let kind: "clean" | "local-only" = "clean";
+      try {
+        importer = await getImporter(source, "clean");
+      } catch (e) {
+        // Try local-only
+        try {
+          kind = "local-only";
+          importer = await getImporter(source, kind);
+        } catch {
+          // If both fail, throw original error (importer not found)
+          throw e;
+        }
+      }
+
+      if (!importer.supportsQuery) {
+        const searchable = [...(await listImporters("clean")), ...(await listImporters("local-only"))]
+          .filter((i) => i.supportsQuery)
+          .map((i) => i.id);
+        throw new UsageError(
+          `Источник ${source} не ищет по запросу, а стиль собирается поиском. Подходят: ${searchable.join(", ")}`
+        );
+      }
+
+      const config = await loadConfig();
+      try {
+        await importer.configure(config, process.env);
+      } catch (e) {
+        throw new ConfigError(`Не удалось настроить ${source}: ${(e as Error).message}`);
+      }
+
+      // Get embedder if available
+      const embedConfig = config.library;
+      const embedder = embedConfig?.embedModel
+        ? await getEmbedder({ model: embedConfig.embedModel as "clip" | "siglip" })
+        : null;
+
+      // Create ingest adapter
+      const embedModelId = embedder?.model || (store.getMeta("embed_model") as string | undefined) || "default";
+      const storeAdapter = createIngestStore(store, {
+        embedModel: embedModelId,
+        tagOrigin: "source",
+      });
+
+      const log = (msg: string) => {
+        if (!flags.quiet) stderr.write(`  ${msg}\n`);
+      };
+      const allowedRoots = [process.cwd(), ...(config.library?.importDirs ?? [])];
+
+      const result = await collectStyle({
+        store,
+        familyId: family.id,
+        queries,
+        limit: parseInt(options.limit as string, 10) || 40,
+        log,
+        search: (query, limit) =>
+          importer.run({ query, limit, fetchImpl: fetch, log, config, env: process.env }),
+        ingest: (candidate) =>
+          ingest(candidate, {
+            store: storeAdapter,
+            embedder: embedder ? { embedImage: (p: string) => embedder.embedImage(p) } : undefined,
+            fetchImpl: fetch,
+            log,
+            allowedRoots,
+          }),
+      });
+
+      const totalAdded = result.memberIds.length;
+      emit(
+        flags,
+        { data: { totalAdded, exemplarsSet: result.exemplarsSet, queries: result.queries } },
+        () =>
+          `✓ Привязано к стилю ${slug}: ${totalAdded} референсов` +
+          (result.exemplarsSet > 0 ? `, образцов проставлено: ${result.exemplarsSet}` : ", образцы не менялись") +
+          "\n" +
+          result.queries.map((q) => `  «${q.query}»: найдено ${q.found}, привязано ${q.added} (лимит ${q.limit})`).join("\n")
+      );
+    } catch (error) {
+      throw error;
     } finally {
       store?.close();
     }

@@ -1,0 +1,57 @@
+{
+  "descriptor": {
+    "name": "Швейцарская сетка",
+    "slug": "swiss-grid",
+    "summary": "Строгая модульная сетка, крупный гротеск, один яркий акцент, фото чёрно-белое или предметное на белом.",
+    "palette": [
+      { "hex": "#ffffff", "role": "bg", "ratio": 1.0 },
+      { "hex": "#111111", "role": "text", "ratio": 0.95 },
+      { "hex": "#d52b1e", "role": "accent", "ratio": 0.7 },
+      { "hex": "#cccccc", "role": "line", "ratio": 0.3 },
+      { "hex": "#f0f0f0", "role": "surface", "ratio": 0.9 }
+    ],
+    "type": {
+      "display": "Manrope",
+      "body": "Inter",
+      "scale": [0.75, 0.875, 1, 1.125, 1.25, 1.5, 1.875, 2.25],
+      "weightDisplay": 700,
+      "tracking": 0,
+      "caseAccent": "all-caps"
+    },
+    "spacing": {
+      "base": 8,
+      "rhythm": [4, 8, 16, 24, 32, 48, 64, 96],
+      "density": "balanced"
+    },
+    "radii": {
+      "small": 0,
+      "large": 0,
+      "pattern": "sharp"
+    },
+    "shadows": "none",
+    "motion": {
+      "duration": [200, 400],
+      "easing": "cubic-bezier(0.4, 0.0, 0.2, 1.0)",
+      "character": "snappy"
+    },
+    "dials": {
+      "visualDensity": 0.45,
+      "designVariance": 0.3,
+      "decorLevel": 0.1,
+      "symmetry": 0.7
+    },
+    "decor": [],
+    "dominant_pattern": "модульная сетка с жёсткой симметрией",
+    "divergences": [],
+    "prompt_fragment": "Модульная швейцарская типографическая сетка. Чёткие линии, жёсткая геометрия, асимметричная укладка на белом фоне. Один яркий красный акцент. Чёрно-белая фотография предметов или холодный минимализм. Студийный свет без теней. Минимальные украшения.",
+    "negative_fragment": "Градиент, скруглённые углы, украшения, плавные переходы, много цветов, теплый тон, AI-слоп",
+    "mood": ["точный", "рациональный", "уверенный"],
+    "exemplars": [],
+    "antiRefCheck": ["no-rounded-corners", "high-contrast", "grid-based"]
+  },
+  "queries": [
+    "Swiss modernist grid layout typography red white",
+    "Grid system modular design minimalist 1960s",
+    "Product photography stark white background red accent"
+  ]
+}

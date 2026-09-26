@@ -38,6 +38,7 @@ const pexelsLimiter = new RateLimiter(200, 60 * 60 * 1000); // 200 requests per 
 export const pexels: Importer = {
   id: "pexels",
   kind: "clean",
+  supportsQuery: true,
   title: "Pexels",
   description:
     "Бесплатная стоковая фотография от сообщества Pexels. " +

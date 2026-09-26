@@ -82,6 +82,7 @@ const unsplashLimiter = new RateLimiter(50, 60 * 60 * 1000); // 50 requests per 
 export const unsplash: Importer = {
   id: "unsplash",
   kind: "clean",
+  supportsQuery: true,
   title: "Unsplash",
   description:
     "Бесплатная стоковая фотография от сообщества Unsplash. " +

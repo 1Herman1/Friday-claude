@@ -1,0 +1,57 @@
+{
+  "descriptor": {
+    "name": "Тихая роскошь",
+    "slug": "quiet-luxury",
+    "summary": "Глубокие нейтрали, мягкий боковой свет, фактура ткани и камня, ни одного логотипа крупно.",
+    "palette": [
+      { "hex": "#e8e4df", "role": "bg", "ratio": 1.0 },
+      { "hex": "#2a211c", "role": "text", "ratio": 0.95 },
+      { "hex": "#a89080", "role": "accent", "ratio": 0.5 },
+      { "hex": "#d4cfc8", "role": "surface", "ratio": 0.85 },
+      { "hex": "#c0b8b0", "role": "muted", "ratio": 0.35 }
+    ],
+    "type": {
+      "display": "Playfair Display",
+      "body": "Inter",
+      "scale": [0.75, 0.875, 1, 1.125, 1.25, 1.5, 1.875, 2.25],
+      "weightDisplay": 400,
+      "tracking": -0.005,
+      "caseAccent": "none"
+    },
+    "spacing": {
+      "base": 16,
+      "rhythm": [8, 16, 24, 32, 48, 64, 80, 96],
+      "density": "airy"
+    },
+    "radii": {
+      "small": 2,
+      "large": 8,
+      "pattern": "uniform"
+    },
+    "shadows": "soft",
+    "motion": {
+      "duration": [400, 600],
+      "easing": "cubic-bezier(0.33, 0.66, 0.66, 1.0)",
+      "character": "calm"
+    },
+    "dials": {
+      "visualDensity": 0.25,
+      "designVariance": 0.35,
+      "decorLevel": 0.1,
+      "symmetry": 0.6
+    },
+    "decor": ["textile-texture"],
+    "dominant_pattern": "глубокие нейтрали с мягким боковым светом",
+    "divergences": [],
+    "prompt_fragment": "Quiet luxury design. Глубокие естественные тона: слоновая кость, тёмный шоколад, камень. Мягкий боковой свет, создающий глубину. Фактура ткани, дерева, камня. Фотографии высокого качества премиум-товаров. Нет крупных логотипов. Много белого пространства. Сдержанные украшения. Надежное ощущение стоимости.",
+    "negative_fragment": "Яркие цвета, градиент, глянец, много контраста, активная типографика, современный стиль",
+    "mood": ["сдержанный", "дорогой", "тихий"],
+    "exemplars": [],
+    "antiRefCheck": ["high-contrast-avoided", "subtle-textures", "premium-feel"]
+  },
+  "queries": [
+    "Luxury minimalist interior design soft lighting",
+    "Quiet luxury aesthetic neutral tones textile",
+    "Premium product photography natural materials leather"
+  ]
+}

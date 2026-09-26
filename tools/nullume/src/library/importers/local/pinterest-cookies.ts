@@ -54,6 +54,7 @@ type PinterestResponse = z.infer<typeof PinterestResponseSchema>;
 export const pinterestCookiesImporter: Importer = {
   id: "pinterest-cookies",
   kind: "local-only",
+  supportsQuery: true,
   title: "Pinterest (поиск по собственной сессии)",
   description: `Поиск пинов через вашу учётную запись Pinterest.
 Требует: ~/.nullume/sessions/pinterest-cookies.json с cookies и acknowledgedRiskyImporters=true`,

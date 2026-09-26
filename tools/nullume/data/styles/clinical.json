@@ -1,0 +1,57 @@
+{
+  "descriptor": {
+    "name": "Клинический",
+    "slug": "clinical",
+    "summary": "Белый фон, продукт без тени, числа и составы, строгая симметрия, холодно-нейтральный свет.",
+    "palette": [
+      { "hex": "#ffffff", "role": "bg", "ratio": 1.0 },
+      { "hex": "#1e2a33", "role": "text", "ratio": 0.96 },
+      { "hex": "#4a7ba7", "role": "accent", "ratio": 0.75 },
+      { "hex": "#f5f7fa", "role": "surface", "ratio": 0.95 },
+      { "hex": "#e0e5ea", "role": "line", "ratio": 0.25 }
+    ],
+    "type": {
+      "display": "Lexend",
+      "body": "Source Sans 3",
+      "scale": [0.75, 0.875, 1, 1.125, 1.25, 1.5, 1.875, 2.25],
+      "weightDisplay": 700,
+      "tracking": 0.01,
+      "caseAccent": "all-caps"
+    },
+    "spacing": {
+      "base": 8,
+      "rhythm": [4, 8, 12, 16, 24, 32, 48, 64],
+      "density": "dense"
+    },
+    "radii": {
+      "small": 2,
+      "large": 4,
+      "pattern": "uniform"
+    },
+    "shadows": "flat",
+    "motion": {
+      "duration": [150, 300],
+      "easing": "cubic-bezier(0.4, 0.0, 0.2, 1.0)",
+      "character": "snappy"
+    },
+    "dials": {
+      "visualDensity": 0.3,
+      "designVariance": 0.2,
+      "decorLevel": 0.05,
+      "symmetry": 0.9
+    },
+    "decor": [],
+    "dominant_pattern": "строгая симметричная сетка данных",
+    "divergences": [],
+    "prompt_fragment": "Медицинский клинический дизайн. Белый фон. Холодный нейтральный свет. Продукты и ингредиенты без теней на белом. Чёткие числа и составы. Строгая симметрия. Аксессуары и компоненты в центре. Минимальная фоновая информация. Доказательный, научный подход. Дата, статистика, таблицы.",
+    "negative_fragment": "Теплые тона, округлые углы, много украшений, мягкие тени, сложная типографика",
+    "mood": ["точный", "доказательный", "спокойный"],
+    "exemplars": [],
+    "antiRefCheck": ["high-contrast", "no-shadows", "data-focused"]
+  },
+  "queries": [
+    "Medical product photography white background clinical",
+    "Scientific data presentation minimalist symmetry",
+    "Healthcare UI design sans serif typography clean"
+  ]
+}

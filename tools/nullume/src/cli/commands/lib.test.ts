@@ -236,4 +236,79 @@ describe("lib command", () => {
     assert.notEqual(missing.code, 0, "несуществующий референс должен отклоняться");
   });
 
+  it("lib style list показывает базовые стили", () => {
+    runCommand("lib init --skip-models");
+
+    const result = runCommand("lib style list --json");
+    assert.equal(result.code, 0, `style list failed: ${result.stderr}`);
+
+    const data = JSON.parse(result.stdout);
+    assert.ok(Array.isArray(data));
+    assert.ok(data.length >= 8, "Should have at least 8 base styles");
+
+    // Проверить что есть ожидаемые слаги
+    const slugs = data.map((s: any) => s.slug);
+    assert.ok(slugs.includes("swiss-grid"));
+    assert.ok(slugs.includes("editorial"));
+    assert.ok(slugs.includes("playful-soft"));
+  });
+
+  it("lib style seed без аргументов заводит все 8 стилей", () => {
+    runCommand("lib init --skip-models");
+
+    const result = runCommand("lib style seed");
+    assert.equal(result.code, 0, `style seed failed: ${result.stderr}`);
+
+    // Проверить что семейства созданы
+    const families = JSON.parse(runCommand("lib family list --json").stdout);
+    const baseStyleSlugs = ["swiss-grid", "editorial", "quiet-luxury", "clinical",
+                            "warm-organic", "japandi", "neo-brutalist", "playful-soft"];
+
+    for (const slug of baseStyleSlugs) {
+      assert.ok(families.some((f: any) => f.slug === slug), `Style ${slug} not created`);
+    }
+  });
+
+  it("lib style seed с флагом --force обновляет proposed семейства", () => {
+    runCommand("lib init --skip-models");
+
+    // Первый seed
+    runCommand("lib style seed swiss-grid");
+
+    let families = JSON.parse(runCommand("lib family list --json").stdout);
+    const original = families.find((f: any) => f.slug === "swiss-grid");
+    assert.equal(original.status, "proposed");
+
+    // Seed с --force (должен обновить)
+    const result = runCommand("lib style seed swiss-grid --force");
+    assert.equal(result.code, 0, `style seed --force failed: ${result.stderr}`);
+
+    families = JSON.parse(runCommand("lib family list --json").stdout);
+    const updated = families.find((f: any) => f.slug === "swiss-grid");
+    assert.equal(updated.status, "proposed");
+  });
+
+  it("lib style collect без семейства выдаёт ошибку", () => {
+    runCommand("lib init --skip-models");
+
+    const result = runCommand("lib style collect swiss-grid");
+    assert.notEqual(result.code, 0, "Should fail without seeded family");
+  });
+
+  it("lib style collect несуществующего стиля выдаёт ошибку", () => {
+    runCommand("lib init --skip-models");
+    runCommand("lib style seed swiss-grid");
+
+    const result = runCommand("lib style collect nonexistent");
+    assert.notEqual(result.code, 0, "Should fail for nonexistent style");
+  });
+
+  it("lib style collect с импортёром без поиска (rss) выдаёт ошибку", () => {
+    runCommand("lib init --skip-models");
+    runCommand("lib style seed swiss-grid");
+
+    const result = runCommand("lib style collect swiss-grid --source rss");
+    assert.notEqual(result.code, 0, "Should fail for query-less importer");
+  });
+
 });

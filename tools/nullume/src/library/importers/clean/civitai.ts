@@ -30,6 +30,7 @@ interface CivitaiResponse {
 export const civitaiImporter: Importer = {
   id: "civitai",
   kind: "clean",
+  supportsQuery: true,
   title: "Civitai",
   description: "Импорт изображений с Civitai (AI-generated artwork) по рейтингам",
 

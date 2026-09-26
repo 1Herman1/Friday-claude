@@ -1,0 +1,57 @@
+{
+  "descriptor": {
+    "name": "Тёплый органический",
+    "slug": "warm-organic",
+    "summary": "Дневной свет, лён, дерево, глина, растения, мягкие тени, землистая палитра.",
+    "palette": [
+      { "hex": "#efe6d8", "role": "bg", "ratio": 1.0 },
+      { "hex": "#4a4038", "role": "text", "ratio": 0.95 },
+      { "hex": "#c87137", "role": "accent", "ratio": 0.65 },
+      { "hex": "#a8945c", "role": "accent-ink", "ratio": 0.6 },
+      { "hex": "#8db580", "role": "muted", "ratio": 0.5 }
+    ],
+    "type": {
+      "display": "Nunito",
+      "body": "Nunito Sans",
+      "scale": [0.75, 0.875, 1, 1.125, 1.25, 1.5, 1.875, 2.25],
+      "weightDisplay": 600,
+      "tracking": 0,
+      "caseAccent": "none"
+    },
+    "spacing": {
+      "base": 16,
+      "rhythm": [8, 12, 16, 24, 32, 48, 64, 80],
+      "density": "balanced"
+    },
+    "radii": {
+      "small": 6,
+      "large": 12,
+      "pattern": "uniform"
+    },
+    "shadows": "soft",
+    "motion": {
+      "duration": [250, 400],
+      "easing": "cubic-bezier(0.34, 1.56, 0.64, 1.0)",
+      "character": "calm"
+    },
+    "dials": {
+      "visualDensity": 0.4,
+      "designVariance": 0.45,
+      "decorLevel": 0.3,
+      "symmetry": 0.5
+    },
+    "decor": ["botanical-elements"],
+    "dominant_pattern": "органичные формы с природными материалами",
+    "divergences": ["цвета немного варьируются", "неправильные формы"],
+    "prompt_fragment": "Органический тёплый дизайн. Дневной естественный свет. Лён, дерево, глина, керамика. Растения и ботанические элементы. Землистая палитра: песок, охра, оливка, мягкий зелёный. Мягкие тени и рассеянный свет. Текстуры натуральных материалов. Дружелюбное, живое ощущение. Рукотворный стиль.",
+    "negative_fragment": "Синтетические материалы, холодные тона, жёсткие тени, геометрический минимализм, пластик",
+    "mood": ["тёплый", "натуральный", "живой"],
+    "exemplars": [],
+    "antiRefCheck": ["natural-materials", "warm-palette", "organic-shapes"]
+  },
+  "queries": [
+    "Warm organic design natural materials daylight pottery",
+    "Botanical aesthetic earth tones linen wood texture",
+    "Organic living photography plants ceramic handmade"
+  ]
+}

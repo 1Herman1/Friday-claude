@@ -1,0 +1,57 @@
+{
+  "descriptor": {
+    "name": "Мягкий игривый",
+    "slug": "playful-soft",
+    "summary": "Округлые формы, пастель, мягкий свет, дружелюбные предметы и животные, без агрессивного контраста.",
+    "palette": [
+      { "hex": "#fffaf6", "role": "bg", "ratio": 1.0 },
+      { "hex": "#4a3d50", "role": "text", "ratio": 0.93 },
+      { "hex": "#ffc2b3", "role": "accent", "ratio": 0.7 },
+      { "hex": "#a8ddb8", "role": "accent-ink", "ratio": 0.65 },
+      { "hex": "#dfc9e8", "role": "muted", "ratio": 0.6 }
+    ],
+    "type": {
+      "display": "Rubik",
+      "body": "Nunito Sans",
+      "scale": [0.75, 0.875, 1, 1.125, 1.25, 1.5, 1.875, 2.25],
+      "weightDisplay": 600,
+      "tracking": -0.005,
+      "caseAccent": "none"
+    },
+    "spacing": {
+      "base": 16,
+      "rhythm": [8, 12, 16, 24, 32, 48, 64, 80],
+      "density": "balanced"
+    },
+    "radii": {
+      "small": 12,
+      "large": 24,
+      "pattern": "pill-vs-square"
+    },
+    "shadows": "soft",
+    "motion": {
+      "duration": [300, 500],
+      "easing": "cubic-bezier(0.34, 1.56, 0.64, 1.0)",
+      "character": "expressive"
+    },
+    "dials": {
+      "visualDensity": 0.5,
+      "designVariance": 0.55,
+      "decorLevel": 0.45,
+      "symmetry": 0.5
+    },
+    "decor": ["rounded-corners", "playful-icons"],
+    "dominant_pattern": "округлые мягкие формы с пастельными цветами",
+    "divergences": ["некоторые элементы более закругленные"],
+    "prompt_fragment": "Playful soft design. Округлые мягкие формы, мягкие углы. Пастельная палитра: молочный фон, мягкий персик, светлая мята, лаванда. Дружелюбные предметы и животные. Мягкий рассеянный свет. Без агрессивного контраста. Весёлые иконки и иллюстрации. Тёплое, приветливое ощущение. Семейный, дружелюбный стиль.",
+    "negative_fragment": "Жёсткие углы, холодные тона, высокий контраст, минимализм, серьёзный тон",
+    "mood": ["дружелюбный", "тёплый", "лёгкий"],
+    "exemplars": [],
+    "antiRefCheck": ["soft-palette", "rounded-shapes", "friendly-tone"]
+  },
+  "queries": [
+    "Playful soft design rounded shapes pastel colors",
+    "Cute illustration style friendly aesthetic soft pastels",
+    "Warm welcoming UI design rounded buttons playful icons"
+  ]
+}

@@ -24,6 +24,7 @@ interface RaindropResponse {
 export const raindropImporter: Importer = {
   id: "raindrop",
   kind: "clean",
+  supportsQuery: true,
   title: "Raindrop.io",
   description: "Импорт закладок изображений из Raindrop.io",
 

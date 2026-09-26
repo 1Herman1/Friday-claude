@@ -31,6 +31,33 @@ test("descriptor: valid descriptor passes validation", () => {
   assert.strictEqual(valid.palette.length, 7);
 });
 
+test("descriptor: empty exemplars array is valid", () => {
+  const noExemplars = {
+    ...DESCRIPTOR_TEMPLATE,
+    exemplars: [],
+  };
+  const valid = validateDescriptor(noExemplars);
+  assert.strictEqual(valid.exemplars.length, 0);
+});
+
+test("descriptor: exemplars with 0-8 items valid", () => {
+  for (let i = 0; i <= 8; i++) {
+    // Create valid UUIDs (format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+    const validExemplars = Array.from({ length: i }, (_, j) => {
+      const hex = String(j).padStart(36, "0");
+      // Format: 8-4-4-4-12
+      return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+    });
+
+    const desc = {
+      ...DESCRIPTOR_TEMPLATE,
+      exemplars: validExemplars,
+    };
+    const valid = validateDescriptor(desc);
+    assert.strictEqual(valid.exemplars.length, i);
+  }
+});
+
 test("descriptor: contrast 2:1 fails validation", () => {
   const bad = {
     ...DESCRIPTOR_TEMPLATE,
@@ -233,6 +260,41 @@ test("families: approveFamily requires descriptor", () => {
     () => approveFamily(store, family.id),
     (err) => err instanceof UsageError && err.message.includes("descriptor")
   );
+});
+
+test("families: approveFamily requires exemplars in descriptor", () => {
+  const store = new MemoryStore();
+
+  const descriptorWithoutExemplars = {
+    ...DESCRIPTOR_TEMPLATE,
+    exemplars: [],
+  };
+
+  const family = store.createFamily({
+    name: "No Exemplars",
+    status: "proposed",
+    proposedBy: "cluster",
+    descriptor: descriptorWithoutExemplars,
+  });
+
+  assert.throws(
+    () => approveFamily(store, family.id),
+    (err) => err instanceof UsageError && (err.message.includes("exemplars") || err.message.includes("образцов"))
+  );
+});
+
+test("families: approveFamily succeeds with exemplars", () => {
+  const store = new MemoryStore();
+
+  const family = store.createFamily({
+    name: "With Exemplars",
+    status: "proposed",
+    proposedBy: "cluster",
+    descriptor: DESCRIPTOR_TEMPLATE, // Has exemplars
+  });
+
+  const approved = approveFamily(store, family.id);
+  assert.strictEqual(approved.status, "approved");
 });
 
 test("families: mergeFamilies transfers members and records decision", () => {

@@ -1,0 +1,57 @@
+{
+  "descriptor": {
+    "name": "Журнальный",
+    "slug": "editorial",
+    "summary": "Крупная антиква поверх фото, асимметрия, много воздуха, подписи капсом.",
+    "palette": [
+      { "hex": "#f4f1ea", "role": "bg", "ratio": 1.0 },
+      { "hex": "#1b1b1b", "role": "text", "ratio": 0.95 },
+      { "hex": "#b8552e", "role": "accent", "ratio": 0.6 },
+      { "hex": "#e0d5c7", "role": "surface", "ratio": 0.8 },
+      { "hex": "#d0c0b0", "role": "line", "ratio": 0.4 }
+    ],
+    "type": {
+      "display": "Playfair Display",
+      "body": "Inter",
+      "scale": [0.75, 0.875, 1, 1.25, 1.5, 1.75, 2.25, 3],
+      "weightDisplay": 500,
+      "tracking": -0.01,
+      "caseAccent": "caps-labels"
+    },
+    "spacing": {
+      "base": 12,
+      "rhythm": [8, 12, 16, 24, 32, 48, 64, 80],
+      "density": "airy"
+    },
+    "radii": {
+      "small": 0,
+      "large": 0,
+      "pattern": "sharp"
+    },
+    "shadows": "soft",
+    "motion": {
+      "duration": [300, 500],
+      "easing": "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+      "character": "calm"
+    },
+    "dials": {
+      "visualDensity": 0.4,
+      "designVariance": 0.7,
+      "decorLevel": 0.2,
+      "symmetry": 0.3
+    },
+    "decor": ["serif-dividers", "drop-caps"],
+    "dominant_pattern": "крупная антиква поверх полной ширины фотографии",
+    "divergences": ["подписи меньше основного текста", "асимметричная укладка"],
+    "prompt_fragment": "Редакционная журнальная вёрстка. Крупный серифный шрифт поверх качественной фотографии в полную ширину. Много белого пространства. Асимметричный баланс. Тёплая бумажная палитра. Рассеянный дневной свет на фотографии. Элегантная типографика. Классический дизайн.",
+    "negative_fragment": "Ярких цветов, градиент, современные шрифты, симметричный layout, минимализм без воздуха",
+    "mood": ["редакционный", "неторопливый", "дорогой"],
+    "exemplars": [],
+    "antiRefCheck": ["serif-typography", "high-readability", "asymmetric"]
+  },
+  "queries": [
+    "Editorial design magazine layout serif typography",
+    "Luxury magazine spread Playfair Display elegant",
+    "Warm editorial layout photography white space"
+  ]
+}
