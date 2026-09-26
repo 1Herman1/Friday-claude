@@ -47,6 +47,18 @@ function parseSetOption(setStrings: string[]): Record<string, unknown> {
 
 const generateCmd = new Command("generate").description("Генерация медиа");
 
+/**
+ * Куда лёг результат и откуда он взят. Локальный путь бесполезен там, где
+ * машина исчезает после прогона (CI), поэтому адрес источника печатаем тоже.
+ */
+function describeResults(job: { localPaths: string[]; resultUrls?: string[] }): string {
+  const lines = [`Результаты сохранены:\n${job.localPaths.join("\n")}`];
+  if (job.resultUrls?.length) {
+    lines.push(`Источник:\n${job.resultUrls.join("\n")}`);
+  }
+  return lines.join("\n");
+}
+
 generateCmd
   .command("create <model>")
   .requiredOption("--prompt <text>", "Текст промпта")
@@ -166,7 +178,7 @@ generateCmd
             )
           );
         } else if (completedJob.localPaths.length > 0) {
-          console.log(`Результаты сохранены:\n${completedJob.localPaths.join("\n")}`);
+          console.log(describeResults(completedJob));
         }
       }
     } catch (error) {
@@ -445,7 +457,7 @@ generateCmd
           );
         } else if (completedJob.localPaths.length > 0) {
           console.log(
-            `Результаты сохранены:\n${completedJob.localPaths.join("\n")}`
+            describeResults(completedJob)
           );
         }
       }
@@ -623,7 +635,7 @@ generateCmd
           );
         } else if (completedJob.localPaths.length > 0) {
           console.log(
-            `Результаты сохранены:\n${completedJob.localPaths.join("\n")}`
+            describeResults(completedJob)
           );
         }
       }

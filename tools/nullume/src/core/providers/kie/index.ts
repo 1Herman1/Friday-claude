@@ -1,3 +1,4 @@
+import { ProviderError } from "../../errors.js";
 import type { Provider, ModelInfo, CostEstimate, NormalizedStatus } from "../types.js";
 import { KieClient, CASCADE_ORDER, TaskNotFound } from "./client.js";
 import { normalizeStatus } from "./status.js";
@@ -25,14 +26,28 @@ export class KieProvider implements Provider {
   }
 
   async balance(): Promise<{ total: number; used: number }> {
-    const resp = await this.client.credits();
-    // API returns { code: 401, data: { total, used } } when no balance
-    // or { code: 200, data: { total, used } } when balance exists
-    const data = (resp as any).data || {};
-    return {
-      total: Number((data as any).total) || 0,
-      used: Number((data as any).used) || 0,
+    const resp = (await this.client.credits()) as {
+      code?: number;
+      msg?: string;
+      message?: string;
+      data?: { total?: unknown; used?: unknown };
     };
+
+    // Код ответа игнорировать нельзя: при 401 тело пустое, и «0 кредитов»
+    // выглядит как честный ответ, хотя это проглоченная ошибка доступа.
+    if (resp.code !== undefined && resp.code !== 200) {
+      throw new ProviderError(
+        `kie.ai не отдал баланс: код ${resp.code}${resp.msg || resp.message ? ` — ${resp.msg ?? resp.message}` : ""}`
+      );
+    }
+
+    const total = Number(resp.data?.total);
+    const used = Number(resp.data?.used);
+    if (!Number.isFinite(total)) {
+      throw new ProviderError("kie.ai вернул ответ без поля total — баланс неизвестен");
+    }
+
+    return { total, used: Number.isFinite(used) ? used : 0 };
   }
 
   async models(): Promise<ModelInfo[]> {
