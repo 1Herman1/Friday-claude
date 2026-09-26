@@ -256,18 +256,16 @@ export async function runMoyskladSync(opts: {
     report.productsActivated = activated.count
   }
 
-  // Скрытие того, чего нет в МоёмСкладе. Не удаление: на товар ссылаются
-  // заказы и подписки, а появится пара — активация выше вернёт его сама
-  // (hiddenManually не ставится). Остаток обнуляется, чтобы вариант не висел
-  // «в наличии» с цифрой из старого CSV.
+  // Скрытие того, чего нет в МоёмСкладе. Только скрытие, решение владельца
+  // 26.09: товары и фасовки остаются в базе как есть — без удаления и без
+  // правки остатков. Появится пара — активация выше вернёт товар сама
+  // (hiddenManually не ставится).
   if (hide.variantIds.length > 0) {
-    report.variantsHidden = await prisma.productVariant.count({
+    const hidden = await prisma.productVariant.updateMany({
       where: { id: { in: hide.variantIds }, isActive: true },
+      data: { isActive: false },
     })
-    await prisma.productVariant.updateMany({
-      where: { id: { in: hide.variantIds }, OR: [{ isActive: true }, { stock: { not: 0 } }] },
-      data: { isActive: false, stock: 0 },
-    })
+    report.variantsHidden = hidden.count
   }
   if (hide.productIds.length > 0) {
     report.examples.productsHidden = await prisma.product.findMany({
