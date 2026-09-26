@@ -62,7 +62,7 @@ async function withSessions<T>(
 
 const DRIBBBLE_SESSION = { token: "tok", createdAt: "2026-01-01T00:00:00Z" };
 const PINTEREST_SESSION = {
-  cookies: { auth_token: "tok" },
+  cookies: { _pinterest_sess: "sess_tok" },
   createdAt: "2026-01-01T00:00:00Z",
 };
 const X_SESSION = { cookies: { auth_token: "tok" }, createdAt: "2026-01-01T00:00:00Z" };
@@ -132,7 +132,7 @@ for (const status of [429, 403]) {
   });
 
   test(`pinterest-cookies: HTTP ${status} даёт ProviderError без единого ретрая`, async () => {
-    await withSessions({ pinterest: PINTEREST_SESSION }, async () => {
+    await withSessions({ "pinterest-cookies": PINTEREST_SESSION }, async () => {
       const { impl, calls } = recordingFetch(() => new Response("rate limited", { status }));
       await assert.rejects(
         () => collect(pinterestCookiesImporter, opts({ query: "design", fetchImpl: impl })),
@@ -175,7 +175,7 @@ test("dribbble: битый JSON даёт понятную ProviderError", async 
 });
 
 test("pinterest-cookies: битый JSON даёт понятную ProviderError", async () => {
-  await withSessions({ pinterest: PINTEREST_SESSION }, async () => {
+  await withSessions({ "pinterest-cookies": PINTEREST_SESSION }, async () => {
     const { impl } = recordingFetch(() => new Response("{это не json", { status: 200 }));
     await assert.rejects(
       () => collect(pinterestCookiesImporter, opts({ query: "design", fetchImpl: impl })),
@@ -186,7 +186,7 @@ test("pinterest-cookies: битый JSON даёт понятную ProviderError
 });
 
 test("pinterest-cookies: изменившийся формат ответа даёт ProviderError, а не исключение zod", async () => {
-  await withSessions({ pinterest: PINTEREST_SESSION }, async () => {
+  await withSessions({ "pinterest-cookies": PINTEREST_SESSION }, async () => {
     const { impl } = recordingFetch(() =>
       json({ resource_response: { data: { results: [{ id: 42 }] } } })
     );
@@ -212,7 +212,7 @@ test("dribbble: пустой массив шотов завершает гене
 });
 
 test("pinterest-cookies: пустые results без bookmark завершают генератор", async () => {
-  await withSessions({ pinterest: PINTEREST_SESSION }, async () => {
+  await withSessions({ "pinterest-cookies": PINTEREST_SESSION }, async () => {
     const { impl, calls } = recordingFetch(() => json(pinterestBody([])));
     const candidates = await collect(
       pinterestCookiesImporter,
@@ -259,7 +259,7 @@ test("dribbble: шот без изображений пропускается", 
 });
 
 test("pinterest-cookies: пин без изображений пропускается", async () => {
-  await withSessions({ pinterest: PINTEREST_SESSION }, async () => {
+  await withSessions({ "pinterest-cookies": PINTEREST_SESSION }, async () => {
     const logs: string[] = [];
     const { impl } = recordingFetch(() => json(pinterestBody([{ id: "p1", images: {} }, pin("p2")])));
     const candidates = await collect(
@@ -291,7 +291,7 @@ test("dribbble: sourceRef уникальны в пределах ответа", 
 });
 
 test("pinterest-cookies: sourceRef уникальны в пределах ответа", async () => {
-  await withSessions({ pinterest: PINTEREST_SESSION }, async () => {
+  await withSessions({ "pinterest-cookies": PINTEREST_SESSION }, async () => {
     const { impl } = recordingFetch(() => json(pinterestBody([pin("p1"), pin("p2"), pin("p3")])));
     assertUniqueRefs(await collect(pinterestCookiesImporter, opts({ query: "design", fetchImpl: impl })));
   });
@@ -315,7 +315,7 @@ test("dribbble: уже прерванный signal не отдаёт ни одн
 });
 
 test("pinterest-cookies: уже прерванный signal не отдаёт ни одного кандидата", async () => {
-  await withSessions({ pinterest: PINTEREST_SESSION }, async () => {
+  await withSessions({ "pinterest-cookies": PINTEREST_SESSION }, async () => {
     const controller = new AbortController();
     controller.abort();
     const { impl } = recordingFetch(() => json(pinterestBody([pin("p1"), pin("p2")])));
@@ -361,16 +361,16 @@ test("dribbble: run без гейта падает до единого сете�
   assert.deepEqual(calls, []);
 });
 
-test("pinterest-cookies: сессия без auth_token даёт UsageError без запроса", async () => {
+test("pinterest-cookies: сессия без _pinterest_sess даёт UsageError без запроса", async () => {
   await withSessions(
-    { pinterest: { cookies: { other: "x" }, createdAt: "2026-01-01T00:00:00Z" } },
+    { "pinterest-cookies": { cookies: { other: "x" }, createdAt: "2026-01-01T00:00:00Z" } },
     async () => {
       const { impl, calls } = recordingFetch(() => {
         throw new Error("fetch не должен вызываться");
       });
       await assert.rejects(
         () => collect(pinterestCookiesImporter, opts({ query: "design", fetchImpl: impl })),
-        (err: unknown) => err instanceof UsageError && /auth_token/.test((err as Error).message)
+        (err: unknown) => err instanceof UsageError && /_pinterest_sess/.test((err as Error).message)
       );
       assert.deepEqual(calls, []);
     }

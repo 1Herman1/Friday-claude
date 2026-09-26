@@ -49,38 +49,45 @@ type PinterestResponse = z.infer<typeof PinterestResponseSchema>;
 
 /**
  * Pinterest импортёр через cookies
- * Требует собственную сессию с auth_token cookie
+ * Требует собственную сессию с _pinterest_sess cookie
  */
 export const pinterestCookiesImporter: Importer = {
   id: "pinterest-cookies",
   kind: "local-only",
   title: "Pinterest (поиск по собственной сессии)",
   description: `Поиск пинов через вашу учётную запись Pinterest.
-Требует: ~/.nullume/sessions/pinterest.json с cookies и acknowledgedRiskyImporters=true`,
+Требует: ~/.nullume/sessions/pinterest-cookies.json с cookies и acknowledgedRiskyImporters=true`,
 
   async configure(config, env) {
     // Проверить гейт для local-only импортёров
     assertLocalOnlyAllowed(config, env);
 
-    // Попытаться прочитать сессию
+    // Попытаться прочитать сессию (новое имя, с запасным)
+    let session;
     try {
-      await readSession("pinterest");
+      session = await readSession("pinterest-cookies");
     } catch (e) {
-      throw new UsageError(
-        `Pinterest сессия не найдена.\n` +
-          `Создайте ~/.nullume/sessions/pinterest.json с cookies:
-
-{
-  "cookies": {
-    "auth_token": "<your_token>",
-    "c_user": "<your_id>"
-  },
-  "createdAt": "2026-09-21T00:00:00Z",
-  "note": "Получите cookies из DevTools"
-}
-
-Риск: Pinterest может заблокировать аккаунт за автоматизацию.\n${LOCAL_ONLY_WARNING}`
-      );
+      // Попробовать старое имя для обратной совместимости
+      try {
+        session = await readSession("pinterest");
+      } catch {
+        throw new UsageError(
+          `Pinterest сессия не найдена.\n\n` +
+            `Создайте сессию командой:\n\n` +
+            `  nullume lib session set pinterest-cookies --cookie "_pinterest_sess=ЗНАЧЕНИЕ"\n\n` +
+            `Инструкция:\n` +
+            `1. Откройте Pinterest в браузере и войдите в аккаунт\n` +
+            `2. Откройте Developer Tools (F12)\n` +
+            `3. Перейдите на вкладку «Application» (Приложение)\n` +
+            `4. В левом меню выберите «Cookies» → pinterest.com\n` +
+            `5. Найдите cookie с именем _pinterest_sess\n` +
+            `6. Скопируйте её значение\n` +
+            `7. Выполните команду выше, заменив ЗНАЧЕНИЕ\n\n` +
+            `Дополнительно (опционально):\n` +
+            `  --cookie "csrftoken=ЗНАЧЕНИЕ" если нужен CSRF-токен\n\n` +
+            `Риск: Pinterest может заблокировать аккаунт за автоматизацию.\n${LOCAL_ONLY_WARNING}`
+        );
+      }
     }
   },
 
@@ -89,12 +96,26 @@ export const pinterestCookiesImporter: Importer = {
     assertLocalOnlyAllowed(opts.config, opts.env);
     opts.log("LOCAL_ONLY_WARNING: Pinterest может заблокировать аккаунт");
 
-    const session = await readSession("pinterest");
+    // Попытаться прочитать сессию (новое имя, с запасным)
+    let session;
+    try {
+      session = await readSession("pinterest-cookies");
+    } catch (e) {
+      // Попробовать старое имя для обратной совместимости
+      try {
+        session = await readSession("pinterest");
+      } catch {
+        throw new UsageError(
+          `Pinterest сессия не найдена. ` +
+            `Выполните: nullume lib session set pinterest-cookies --cookie "_pinterest_sess=ЗНАЧЕНИЕ"`
+        );
+      }
+    }
 
-    if (!session.cookies || !session.cookies.auth_token) {
+    if (!session.cookies || !session.cookies._pinterest_sess) {
       throw new UsageError(
-        `Pinterest сессия не содержит auth_token. ` +
-          `Обновите ~/.nullume/sessions/pinterest.json`
+        `Pinterest сессия не содержит cookie _pinterest_sess.\n` +
+          `Обновите сессию: nullume lib session set pinterest-cookies --cookie "_pinterest_sess=ЗНАЧЕНИЕ"`
       );
     }
 
@@ -128,17 +149,30 @@ export const pinterestCookiesImporter: Importer = {
       opts.log(`PINTEREST_PAGE query="${query}" page=${pageNum + 1}`);
 
       // Выполнить запрос
-      const resp = await fetchImpl(url, {
-        headers: {
-          cookie: Object.entries(session.cookies)
-            .map(([k, v]) => `${k}=${v}`)
-            .join("; "),
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      });
+      const headers: Record<string, string> = {
+        cookie: Object.entries(session.cookies)
+          .map(([k, v]) => `${k}=${v}`)
+          .join("; "),
+        "X-Requested-With": "XMLHttpRequest",
+      };
+
+      // Добавить X-CSRFToken если есть csrftoken в cookies
+      if (session.cookies.csrftoken) {
+        headers["X-CSRFToken"] = session.cookies.csrftoken;
+      }
+
+      const resp = await fetchImpl(url, { headers });
 
       // Обработать статусы
-      if (resp.status === 403 || resp.status === 429) {
+      if (resp.status === 401 || resp.status === 403) {
+        throw new ProviderError(
+          `Pinterest: сессия устарела или недействительна (${resp.status}). ` +
+            `Обновите cookie: nullume lib session set pinterest-cookies --cookie "_pinterest_sess=НОВОЕ_ЗНАЧЕНИЕ"`,
+          resp.status
+        );
+      }
+
+      if (resp.status === 429) {
         throw new ProviderError(
           `Pinterest ограничил доступ (${resp.status}). Подожди и повтори; продолжение грозит блокировкой аккаунта.`,
           resp.status
@@ -170,8 +204,15 @@ export const pinterestCookiesImporter: Importer = {
         );
       }
 
+      // Проверить что response_resource есть
+      if (!data.resource_response) {
+        throw new ProviderError(
+          `Формат ответа Pinterest изменился: отсутствует resource_response`
+        );
+      }
+
       // Обработить результаты
-      const results = data.resource_response?.data?.results ?? [];
+      const results = data.resource_response.data?.results ?? [];
       for (const pin of results) {
         if (opts.signal?.aborted) break;
 

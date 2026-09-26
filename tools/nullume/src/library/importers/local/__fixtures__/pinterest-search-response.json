@@ -1,0 +1,54 @@
+{
+  "resource_response": {
+    "data": {
+      "results": [
+        {
+          "id": "pin-001",
+          "images": {
+            "orig": {
+              "url": "https://i.pinimg.com/originals/aa/bb/cc/aabbccdd.jpg"
+            },
+            "736x": {
+              "url": "https://i.pinimg.com/736x/aa/bb/cc/aabbccdd.jpg"
+            }
+          },
+          "pinner": {
+            "username": "designer-jane"
+          },
+          "title": "Modern UI Design Patterns",
+          "description": "Minimalist design with clean typography",
+          "board": {
+            "name": "Design Inspiration"
+          }
+        },
+        {
+          "id": "pin-002",
+          "images": {
+            "736x": {
+              "url": "https://i.pinimg.com/736x/dd/ee/ff/ddeeff.jpg"
+            }
+          },
+          "pinner": {
+            "username": "color-explorer"
+          },
+          "title": "Color Palettes for Web",
+          "board": {
+            "name": "Colors"
+          }
+        },
+        {
+          "id": "pin-003",
+          "images": {
+            "orig": {
+              "url": "https://i.pinimg.com/originals/11/22/33/112233.jpg"
+            }
+          },
+          "pinner": {
+            "username": "brand-builder"
+          },
+          "description": "Typography trends 2026"
+        }
+      ]
+    }
+  }
+}
