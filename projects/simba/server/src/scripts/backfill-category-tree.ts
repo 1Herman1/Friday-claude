@@ -1,6 +1,6 @@
 import { PrismaClient, CategoryKind, ProductSpecies } from '@prisma/client'
 import { QUIZ_TAGS } from '../lib/quiz-tags'
-import { MEDICAL_LINES } from '../services/product.service'
+import { classifyType } from '../lib/product-type'
 
 const prisma = new PrismaClient()
 const BATCH_SIZE = 200
@@ -39,51 +39,6 @@ interface CategoryData {
 /** Вспомогательная функция: проверяет, есть ли тег у товара. */
 function hasTag(product: ProductData, tag: string): boolean {
   return product.quizTags.includes(tag) || product.autoQuizTags.includes(tag)
-}
-
-/** Классифицирует товар по типу категории. */
-function classifyType(product: ProductData): 'medical' | 'treats' | 'vet' | 'care' | 'dry' | 'wet' | null {
-  // 1. Медицинские линейки по названию
-  if (MEDICAL_LINES.some((line) => product.name.includes(line))) {
-    return 'medical'
-  }
-
-  // 2. Лакомства по названию
-  if (/лакомств|лакомый|snack|treat/i.test(product.name)) {
-    return 'treats'
-  }
-
-  // 3. Ветаптека по словам
-  const vetWords = ['антипаразит', 'капли', 'витамин', 'таблет', 'суспенз', 'ошейник']
-  if (vetWords.some((word) => product.name.toLowerCase().includes(word))) {
-    return 'vet'
-  }
-
-  // 4. Уход по словарю из backfill-care-category.ts
-  const careWords = [
-    'шампунь',
-    'лосьон',
-    'крем',
-    'гель-мыло',
-    'зубная паста',
-    'паста для вывода шерсти',
-    'спрей',
-    'нейтрализатор запаха',
-    'салфетк',
-  ]
-  if (careWords.some((word) => product.name.toLowerCase().includes(word))) {
-    return 'care'
-  }
-
-  // 5. Сухой/влажный корм по тегам
-  if (hasTag(product, 'format:dry')) {
-    return 'dry'
-  }
-  if (hasTag(product, 'format:wet')) {
-    return 'wet'
-  }
-
-  return null
 }
 
 /** Определяет назначение (purpose) для товаров dry/wet по тегам и полям. */
