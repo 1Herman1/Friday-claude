@@ -40,6 +40,10 @@ on:
         description: 'Предмет для рецепта: что снимаем'
         type: string
         default: ''
+      details:
+        description: 'Что меняется — для Метаморфозы (before-after)'
+        type: string
+        default: ''
 
 jobs:
   live:
@@ -92,6 +96,7 @@ jobs:
         env:
           RECIPE: ${{ inputs.recipe }}
           SUBJECT: ${{ inputs.subject }}
+          DETAILS: ${{ inputs.details }}
           MAX_CREDITS: ${{ inputs.max_credits }}
         run: |
           if [ -z "$SUBJECT" ]; then
@@ -100,7 +105,7 @@ jobs:
           fi
           # Потолок и проверка источника цены — внутри runRecipe: при превышении
           # или неподтверждённой цене не создаётся ни одной задачи.
-          node bin/nullume.js recipe run "$RECIPE" --subject "$SUBJECT" --max-credits "$MAX_CREDITS"
+          node bin/nullume.js recipe run "$RECIPE" --subject "$SUBJECT" ${DETAILS:+--details "$DETAILS"} --max-credits "$MAX_CREDITS"
           mkdir -p "$GITHUB_WORKSPACE/live-out"
           cp "$NULLUME_HOME"/downloads/* "$GITHUB_WORKSPACE/live-out/" 2>/dev/null || true
 

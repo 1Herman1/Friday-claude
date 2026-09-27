@@ -109,14 +109,22 @@ export async function planRecipe(
   id: string,
   options: {
     subject: string;
+    /** Что меняется или уточняется — подставляется в {details}; обязателен, если рецепт его ждёт */
+    details?: string;
     style?: string;
     catalog: ModelInfo[];
     provider: Provider;
   }
 ): Promise<RecipePlan | null> {
-  const { subject, style, catalog, provider } = options;
+  const { subject, details, style, catalog, provider } = options;
   const recipe = await getRecipe(id);
   if (!recipe) return null;
+
+  if (recipe.steps.some((s) => s.prompt.includes("{details}")) && !details?.trim()) {
+    throw new Error(
+      `Рецепту «${recipe.codename}» нужно указать, что меняется (details) — иначе модель придумает изменение сама`
+    );
+  }
 
   const usdPerCredit = 0.005; // Standard rate
 
@@ -138,7 +146,7 @@ export async function planRecipe(
     const modelInfo = await provider.model(resolved.resolvedModel);
 
     // Substitute {subject} in prompt
-    const prompt = step.prompt.replaceAll("{subject}", subject);
+    const prompt = step.prompt.replaceAll("{subject}", subject).replaceAll("{details}", details ?? "");
 
     // Merge input: preset defaults + step overrides
     const input = { ...preset.input, ...step.input };

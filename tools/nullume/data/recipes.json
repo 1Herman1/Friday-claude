@@ -99,18 +99,18 @@
         {
           "id": "before",
           "preset": "product-photo",
-          "prompt": "{subject}, natural state, minimal styling, neutral background, clear documentation",
+          "prompt": "{subject}, natural state, minimal styling, neutral background, even light, documentary product photography",
           "input": {}
         },
         {
           "id": "after",
           "preset": "image-edit",
-          "prompt": "apply effect, transformation or improvement, enhanced colors, polished finish, highlight benefits",
-          "input": {},
-          "from": "before"
+          "from": "before",
+          "prompt": "the same {subject} from the reference image, changed in exactly one way: {details}. Everything else identical — same object, angle, background, framing and light",
+          "input": {}
         }
       ],
-      "notes": "Первый шаг генерирует картинку, второй её редактирует. Использовать для демонстрации косметики, ухода, интерьера."
+      "notes": "Второй кадр меняет в первом ровно одно — то, что указано в details. Без details рецепт не запускается."
     },
     {
       "id": "landing-hero",

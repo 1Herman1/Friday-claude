@@ -325,3 +325,21 @@ test("у каждого рецепта своё имя, и по нему рец�
     assert.strictEqual((await getRecipe(r.codename.toLowerCase()))?.id, r.id, "регистр не важен");
   }
 });
+
+test("Метаморфоза: без details не планируется, с details — подставляет изменение", async () => {
+  const catalog = await loadCatalog();
+  await assert.rejects(
+    () => planRecipe("Метаморфоза", { subject: "white mug", catalog, provider: fakeProvider() }),
+    /что меняется/
+  );
+  const plan = await planRecipe("Метаморфоза", {
+    subject: "white mug",
+    details: "hand-painted blue floral pattern",
+    catalog,
+    provider: fakeProvider(),
+  });
+  assert.strictEqual(plan!.recipe_id, "before-after", "план по имени хранит настоящий id");
+  const after = plan!.steps.find((s) => s.id === "after")!;
+  assert.match(after.prompt, /hand-painted blue floral pattern/);
+  assert.ok(!after.prompt.includes("{details}"));
+});

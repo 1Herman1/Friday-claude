@@ -42,6 +42,7 @@ recipeCmd
 recipeCmd
   .command("show <id>")
   .requiredOption("--subject <text>", "Что генерировать (e.g., ceramic vase)")
+  .option("--details <text>", "Что меняется — для Метаморфозы обязательно")
   .option("--style <slug>", "Стиль пресета (опционально)")
   .description("Показать план рецепта с оценкой стоимости")
   .action(
@@ -59,6 +60,7 @@ recipeCmd
 
         const plan = await planRecipe(id, {
           subject: options.subject as string,
+          details: options.details as string | undefined,
           style: options.style as string | undefined,
           catalog,
           provider,
@@ -109,6 +111,7 @@ recipeCmd
 recipeCmd
   .command("run <id>")
   .requiredOption("--subject <text>", "Что генерировать (e.g., ceramic vase)")
+  .option("--details <text>", "Что меняется — для Метаморфозы обязательно")
   .option("--style <slug>", "Стиль пресета (опционально)")
   .requiredOption(
     "--max-credits <number>",
@@ -138,6 +141,7 @@ recipeCmd
 
         const plan = await planRecipe(id, {
           subject: options.subject as string,
+          details: options.details as string | undefined,
           style: options.style as string | undefined,
           catalog,
           provider,

@@ -5,19 +5,21 @@ import { loadCatalog } from "../../core/catalog.js";
 
 export const schema = z.object({
   id: z.string().describe("Recipe ID (e.g., product-card)"),
-  subject: z.string().describe("Subject to generate (e.g., ceramic vase)"),
+  subject: z.string().describe("Что генерировать (e.g., ceramic vase)"),
+  details: z.string().optional().describe("Что меняется — обязательно для Метаморфозы (before-after)"),
   style: z.string().optional().describe("Style preset slug (optional)"),
 });
 
 export async function handler(input: z.infer<typeof schema>) {
   try {
-    const { id, subject, style } = input;
+    const { id, subject, details, style } = input;
 
     const provider = await getProviderInstance();
     const catalog = await loadCatalog();
 
     const plan = await planRecipe(id, {
       subject,
+      details,
       style,
       catalog,
       provider,
