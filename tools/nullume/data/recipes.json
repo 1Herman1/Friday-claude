@@ -17,7 +17,7 @@
           "id": "three-quarter",
           "preset": "image-edit",
           "from": "front",
-          "prompt": "the same {subject} from the reference image, standing upright on the same surface, turned about its vertical axis so the camera sees it from a 45-degree angle; not tilted, not floating, soft contact shadow beneath it; keep its exact shape, proportions, material and lid; same white background and lighting",
+          "prompt": "the same {subject} from the reference image, photographed from a higher camera position looking down at about 30 degrees, so the top of the lid is visible; the object itself does not move: perfectly upright, vertical sides, base flat on the surface, soft contact shadow beneath it; keep its exact shape, proportions, material and lid; same white background and lighting",
           "input": {}
         },
         {
