@@ -20,6 +20,7 @@ import ordersRoutes from './routes/orders/index.js'
 import authRoutes from './routes/auth/index.js'
 import postsRoutes from './routes/posts/index.js'
 import proRoutes from './routes/pro/index.js'
+import consultationsRoutes from './routes/consultations.js'
 import { reviewRoutes } from './routes/review.js'
 import adminRoutes from './routes/admin/index.js'
 import exchange1cRoutes from './routes/exchange-1c.js'
@@ -154,6 +155,7 @@ await app.register(promoRoutes)
 await app.register(ordersRoutes)
 await app.register(authRoutes)
 await app.register(proRoutes)
+await app.register(consultationsRoutes)
 
 // Register posts routes
 await app.register(postsRoutes, { prefix: '/api/v1' })

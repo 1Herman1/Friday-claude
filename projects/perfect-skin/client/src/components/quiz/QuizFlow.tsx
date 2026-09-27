@@ -43,7 +43,18 @@ export function QuizFlow({ onClose }: QuizFlowProps) {
     if (currentQuestionIndex === -1) return
 
     const question = visibleQuestions[currentQuestionIndex]
-    const newAnswers = { ...answers, [question.id]: value }
+    // Специальная обработка для вопроса о беременности
+    let answerValue: any = value
+    if (question.id === 'isPregnant') {
+      if (value === 'yes') {
+        answerValue = true
+      } else if (value === 'no') {
+        answerValue = false
+      } else if (value === 'prefer_not') {
+        answerValue = false // Считаем как "нет" для фильтрации
+      }
+    }
+    const newAnswers = { ...answers, [question.id]: answerValue }
     setAnswers(newAnswers)
     advance()
   }
@@ -124,7 +135,7 @@ export function QuizFlow({ onClose }: QuizFlowProps) {
 
   // Result
   if (phase === 'result' && result) {
-    return <QuizResult result={result} onRetry={handleRetry} onClose={onClose} />
+    return <QuizResult result={result} answers={answers as any} onRetry={handleRetry} onClose={onClose} />
   }
 
   // Quiz

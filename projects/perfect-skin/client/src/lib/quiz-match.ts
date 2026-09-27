@@ -2,6 +2,30 @@ import type { ProductCard, ProductsListResponse } from '@/types/api'
 import { fetchApi } from './api'
 import type { QuizAnswers } from './quiz-config'
 
+// Словарь для преобразования кодов needs/extras в человекочитаемые фразы
+export const NEEDS_LABELS: Record<string, string> = {
+  hydration: 'увлажнение',
+  anti_age: 'лифтинг и упругость',
+  pigmentation: 'выравнивание тона',
+  acne: 'борьба с акне',
+  sensitivity: 'снятие раздражения',
+  redness: 'борьба с красотой',
+  cleansing: 'глубокое очищение',
+  sun_protection: 'защита от солнца',
+  firming: 'укрепление',
+  eye_area: 'уход за веками',
+  post_procedure: 'восстановление после процедур',
+  regeneration: 'регенерация',
+  radiance: 'сияние',
+  sebum_control: 'себорегуляция',
+  hygiene: 'гигиена',
+  barrier: 'восстановление барьера',
+  daily_care: 'ежедневный уход',
+  express_care: 'экспресс-уход',
+  intensive_care: 'интенсивный уход',
+  nourishing: 'питание',
+}
+
 export interface QuizResultStep {
   category: string // slug категории
   title: string // русское имя шага (Очищение, Тоник, и т.д.)
@@ -77,8 +101,15 @@ function selectBestProduct(
   return scored[0].product
 }
 
+// Коды компонентов, противопоказанные при беременности
+const PREGNANCY_CONTRAINDICATED_CODES = [
+  'retinol', // ретинол
+  'acid', // кислоты
+  'anti_age', // анти-эйдж средства часто содержат ретинол
+]
+
 export async function matchProducts(answers: QuizAnswers): Promise<QuizResult> {
-  const { audience, skin, need, extras: rawExtras, format } = answers
+  const { audience, skin, need, extras: rawExtras, format, isPregnant } = answers
 
   // Нормализуем skin
   const normalizedSkin = skin || 'unknown'
@@ -120,7 +151,17 @@ export async function matchProducts(answers: QuizAnswers): Promise<QuizResult> {
     const url = `/api/v1/products${filter}`
     try {
       const response = await fetchApi<ProductsListResponse>(url)
-      categoryToProducts[cat] = response.items
+      // Фильтруем товары при беременности — исключаем контрапоказанные
+      let items = response.items
+      if (isPregnant) {
+        items = items.filter((product) => {
+          const hasContraindicated = product.needs.some((needCode) =>
+            PREGNANCY_CONTRAINDICATED_CODES.some((code) => needCode.includes(code))
+          )
+          return !hasContraindicated
+        })
+      }
+      categoryToProducts[cat] = items
     } catch {
       categoryToProducts[cat] = []
     }
@@ -154,7 +195,8 @@ export async function matchProducts(answers: QuizAnswers): Promise<QuizResult> {
 
     for (const extra of extras) {
       if (product.needs.includes(extra)) {
-        reasonParts.push(extra)
+        const label = NEEDS_LABELS[extra] || extra
+        reasonParts.push(label)
       }
     }
 
@@ -166,7 +208,7 @@ export async function matchProducts(answers: QuizAnswers): Promise<QuizResult> {
       }
     }
 
-    reason = reasonParts.join(', ') || 'лучший выбор'
+    reason = reasonParts.join(', ') || 'подходит для ежедневного ухода'
 
     steps.push({
       category: cat,

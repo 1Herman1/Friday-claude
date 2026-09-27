@@ -8,6 +8,7 @@ import { postsRoutes } from './posts.js'
 import { dashboardRoutes } from './dashboard.js'
 import { syncRoutes } from './sync.js'
 import { proRequestsRoutes } from './pro-requests.js'
+import { consultationsRoutes } from './consultations.js'
 import { telegramRoutes } from './telegram.js'
 
 export default fastifyPlugin(async (app: FastifyInstance) => {
@@ -69,6 +70,15 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
   const proRequestsPreHandlers = [app.authenticate, checkRole(['super_admin', 'orders_manager'])]
   await app.register(
     async (instance) => proRequestsRoutes(instance, proRequestsPreHandlers),
+    {
+      prefix: '/api/v1/admin',
+    }
+  )
+
+  // Consultations routes: super_admin or orders_manager
+  const consultationsPreHandlers = [app.authenticate, checkRole(['super_admin', 'orders_manager'])]
+  await app.register(
+    async (instance) => consultationsRoutes(instance, consultationsPreHandlers),
     {
       prefix: '/api/v1/admin',
     }

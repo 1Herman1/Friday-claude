@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { IconPhone, IconMail, IconStore } from '@/components/icons'
 
 export function ContactsPage() {
@@ -72,6 +73,22 @@ export function ContactsPage() {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Consultation CTA */}
+      <div className="border-t border-border pt-12 md:pt-16 mb-12 md:mb-16">
+        <div className="max-w-2xl">
+          <h2 className="text-h3 font-heading font-bold mb-4">Запишитесь на консультацию</h2>
+          <p className="text-body text-muted-foreground mb-6">
+            Расскажите про вашу кожу и задачу — косметолог перезвонит или напишет в удобном мессенджере.
+          </p>
+          <Link
+            to="/consultation"
+            className="inline-block px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-pill hover:opacity-90 transition-opacity min-h-11 focus-visible:outline-ring"
+          >
+            Записаться на консультацию
+          </Link>
         </div>
       </div>
 

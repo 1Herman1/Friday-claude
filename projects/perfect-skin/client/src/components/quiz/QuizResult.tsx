@@ -7,14 +7,31 @@ import { IconCheck, IconArrowRight } from '../icons'
 
 interface QuizResultProps {
   result: QuizResultType
+  answers?: {
+    isPregnant?: boolean
+    skin?: string
+    need?: string
+  }
   onRetry: () => void
   onClose: () => void
 }
 
-export function QuizResult({ result, onRetry, onClose }: QuizResultProps) {
+export function QuizResult({ result, answers, onRetry, onClose }: QuizResultProps) {
   const { addItem } = useCart()
   const [addedSteps, setAddedSteps] = useState<Set<number>>(new Set())
   const [addingAll, setAddingAll] = useState(false)
+
+  // Формируем URL для консультации на основе ответов
+  const getConsultationUrl = () => {
+    const params = new URLSearchParams({ source: 'quiz' })
+    if (answers?.skin && answers.skin !== 'unknown') {
+      params.set('skin', answers.skin)
+    }
+    if (answers?.need) {
+      params.set('concern', answers.need)
+    }
+    return `/consultation?${params.toString()}`
+  }
 
   const handleAddToCart = async (stepIndex: number, variantId: string) => {
     try {
@@ -60,6 +77,22 @@ export function QuizResult({ result, onRetry, onClose }: QuizResultProps) {
           </p>
         )}
       </div>
+
+      {/* Pregnancy Warning */}
+      {answers?.isPregnant && (
+        <div className="bg-accent/10 border border-accent/30 rounded-block p-6">
+          <p className="text-sm text-foreground">
+            <span className="font-semibold">⚠️ Важно при беременности и кормлении:</span> Некоторые активные компоненты (ретиноиды, кислоты) противопоказаны в этот период. <strong>Перед покупкой обсудите подобранный уход со специалистом.</strong>
+          </p>
+          <Link
+            to={getConsultationUrl()}
+            onClick={onClose}
+            className="mt-4 inline-block px-6 py-3 bg-accent text-accent-foreground font-semibold rounded-pill hover:opacity-90 transition-opacity min-h-11"
+          >
+            Спросить косметолога
+          </Link>
+        </div>
+      )}
 
       {/* Steps */}
       <ol className="flex flex-col gap-4">
@@ -169,6 +202,14 @@ export function QuizResult({ result, onRetry, onClose }: QuizResultProps) {
         >
           Показать похожие в каталоге
           <IconArrowRight className="w-4 h-4" />
+        </Link>
+
+        <Link
+          to={getConsultationUrl()}
+          onClick={onClose}
+          className="w-full py-3 px-6 border border-border text-foreground font-semibold rounded-pill hover:bg-muted transition-colors duration-200 min-h-11 flex items-center justify-center"
+        >
+          Не уверены? Спросите косметолога
         </Link>
 
         <button

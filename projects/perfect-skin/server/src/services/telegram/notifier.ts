@@ -110,6 +110,66 @@ export class TelegramNotifier {
   }
 
   /**
+   * Отправить уведомление о новой заявке на консультацию всем привязанным сотрудникам.
+   */
+  async onNewConsultation(consultationId: string): Promise<void> {
+    if (!tgBotToken) {
+      return
+    }
+
+    try {
+      // Получаем заявку на консультацию
+      const consultation = await this.prisma.consultationRequest.findUnique({
+        where: { id: consultationId },
+        select: {
+          channel: true,
+          createdAt: true,
+        },
+      })
+
+      if (!consultation) {
+        return
+      }
+
+      // Получаем активных сотрудников с нужными ролями
+      const links = await this.prisma.telegramLink.findMany({
+        select: { userId: true, chatId: true },
+      })
+
+      // Проверяем каждого на активность и роль
+      for (const link of links) {
+        const user = await this.prisma.user.findUnique({
+          where: { id: link.userId },
+          select: { role: true, isActive: true },
+        })
+
+        if (!user || !user.isActive || !PRO_REVIEW_ROLES.includes(user.role)) {
+          continue
+        }
+
+        // Получаем количество заявок в очереди
+        const queueCount = await this.prisma.consultationRequest.count({
+          where: { status: 'new' },
+        })
+
+        const channelLabel = consultation.channel === 'phone' ? 'Телефон' : consultation.channel === 'telegram' ? 'Telegram' : 'WhatsApp'
+        const text = `Новая заявка на консультацию\nКанал: ${channelLabel}\nНовых в очереди: ${queueCount}`
+
+        // Кнопка для открытия админки
+        const buttons = publicUrl ? [[{ text: 'Перейти в админку', url: `${publicUrl}/admin/consultations` }]] : []
+
+        try {
+          await this.sendMessage(link.chatId, text, buttons)
+        } catch (err) {
+          this.app.log.warn({ chatId: link.chatId, consultationId, error: err }, 'Failed to send Telegram consultation notification')
+        }
+      }
+    } catch (err) {
+      this.app.log.warn({ consultationId, error: err }, 'Failed to send new consultation notifications')
+    }
+  }
+
+  /**
    * Отредактировать все сообщения по заявке — указать решение.
    */
   async onDecision(applicantId: string, status: string, reviewerName: string): Promise<void> {

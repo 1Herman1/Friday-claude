@@ -3,4 +3,6 @@
 export const CONSENT_TEXT_VERSION = {
   pro_application: '2026-09-26-draft', // обработка ПДн для проверки статуса специалиста
   marketing: '2026-09-26-draft',       // рекламная рассылка для специалистов
+  consultation: '2026-09-27-draft',    // обработка ПДн для обратной связи
+  health_data: '2026-09-27-draft',     // обработка данных о состоянии кожи
 } as const

@@ -140,14 +140,16 @@ enum ConsultationStatus {
 }
 
 enum ConsentPurpose {
-  pro_application   // обработка данных заявки специалиста, включая копию документа
-  marketing         // рекламная рассылка
+  pro_application // обработка данных заявки специалиста, включая копию документа
+  marketing // рекламная рассылка
+  consultation // обработка ПДн для обратной связи (консультация)
+  health_data // обработка данных о состоянии кожи для консультации
 }
 
 /// Источник решения по заявке: автоматическая или ручная обработка.
 enum ProDecisionSource {
-  auto_msp          // автоматическое одобрение по реестру МСП
-  manual            // ручная обработка менеджером
+  auto_msp // автоматическое одобрение по реестру МСП
+  manual // ручная обработка менеджером
 }
 
 // ──────────────────────── Пользователи и доступ ────────────────────────
@@ -174,19 +176,19 @@ model User {
 
   /// Заявка на профессиональный доступ. Оптовая цена выдаётся ТОЛЬКО при
   /// role = professional И proStatus = approved — обе проверки на сервере.
-  proStatus         ProStatus @default(none)
+  proStatus         ProStatus          @default(none)
   companyName       String?
   inn               String?
-  ogrnip            String?   // опциональный ОГРНИП/ОГРН (15 или 13 цифр) для ИП/ООО
+  ogrnip            String? // опциональный ОГРНИП/ОГРН (15 или 13 цифр) для ИП/ООО
   specialization    String?
   proRequestedAt    DateTime?
   proReviewedAt     DateTime?
   proReviewerId     String?
   proRejectReason   String?
   proDecisionSource ProDecisionSource? // источник последнего решения (auto_msp или manual)
-  proCheck          Json?     // результат автопроверки для менеджера: { lane, registry, npd, checkedAt }
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  proCheck          Json? // результат автопроверки для менеджера: { lane, registry, npd, checkedAt }
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   deletedAt         DateTime?
 
   addresses        Address[]
@@ -194,7 +196,7 @@ model User {
   cart             Cart?
   otpCodes         OtpCode[]
   favorites        Favorite[]
-  ownedPromoCodes  PromoCode[]            @relation("PromoOwner")
+  ownedPromoCodes  PromoCode[]           @relation("PromoOwner")
   promoRedemptions PromoCodeRedemption[]
   offerAssignments OfferAssignment[]
   skinSurveys      SkinSurvey[]
@@ -352,29 +354,29 @@ model Ingredient {
 /// Товар. Зоо-полей Симбы (белки, жиры, беззерновой корм) здесь нет —
 /// вместо них характеристики косметики.
 model Product {
-  id                 String     @id @default(uuid())
-  name               String
-  slug               String
-  shortDescription   String?
-  description        String
-  brandId            String?
-  lineId             String?
-  images             String[]
-  skinTypes          SkinType[]
-  concerns           Concern[]
-  usage              String?
-  inciText           String? // полный состав как на этикетке
-  seoTitle           String?
-  seoDescription     String?
-  minPrice           Int        @default(0) // минимальная розничная цена активных фасовок, копейки
-  maxPrice           Int        @default(0) // максимальная розничная цена активных фасовок, копейки
-  isActive           Boolean    @default(true)
-  isFeatured         Boolean    @default(false)
-  popularPin         Int? // позиция в закреплённых популярных товарах (null = не закреплён)
-  isProfessional     Boolean    @default(false) // кабинетная позиция: цену видят только специалисты
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
-  deletedAt          DateTime?
+  id               String     @id @default(uuid())
+  name             String
+  slug             String
+  shortDescription String?
+  description      String
+  brandId          String?
+  lineId           String?
+  images           String[]
+  skinTypes        SkinType[]
+  concerns         Concern[]
+  usage            String?
+  inciText         String? // полный состав как на этикетке
+  seoTitle         String?
+  seoDescription   String?
+  minPrice         Int        @default(0) // минимальная розничная цена активных фасовок, копейки
+  maxPrice         Int        @default(0) // максимальная розничная цена активных фасовок, копейки
+  isActive         Boolean    @default(true)
+  isFeatured       Boolean    @default(false)
+  popularPin       Int? // позиция в закреплённых популярных товарах (null = не закреплён)
+  isProfessional   Boolean    @default(false) // кабинетная позиция: цену видят только специалисты
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  deletedAt        DateTime?
 
   brand        Brand?               @relation(fields: [brandId], references: [id], onDelete: Restrict)
   line         ProductLine?         @relation(fields: [lineId], references: [id], onDelete: SetNull)
@@ -417,7 +419,7 @@ model ProductVariant {
   updatedAt      DateTime   @updatedAt
   deletedAt      DateTime?
 
-  product    Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
   cartItems  CartItem[]
   orderItems OrderItem[]
 
@@ -601,7 +603,7 @@ model Order {
 /// Снапшот позиции: цена и прайс фиксируются на строке, чтобы возврат считался
 /// по той цене, которая была уплачена, а не по текущей.
 model OrderItem {
-  id               String    @id @default(uuid())
+  id               String   @id @default(uuid())
   orderId          String
   productVariantId String
   productId        String
@@ -610,7 +612,7 @@ model OrderItem {
   volumeLabel      String // «50 мл», уже отформатировано
   price            Int
   quantity         Int
-  createdAt        DateTime  @default(now())
+  createdAt        DateTime @default(now())
 
   order          Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productVariant ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Restrict)
@@ -639,13 +641,13 @@ model Favorite {
 
 /// Партнёр (косметолог, реселлер). Для отслеживания выплат по промокодам.
 model Partner {
-  id                 String    @id @default(uuid())
-  name               String    @unique
-  contact            String?
-  commissionPercent  Int       @default(0) // процент от прибыли на его промокодах
-  isActive           Boolean   @default(true)
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  id                String   @id @default(uuid())
+  name              String   @unique
+  contact           String?
+  commissionPercent Int      @default(0) // процент от прибыли на его промокодах
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   promoCodes PromoCode[]
 
@@ -829,17 +831,22 @@ model SkinSurvey {
 
 /// Заявка на консультацию косметолога — вторая плашка на главной.
 model ConsultationRequest {
-  id        String             @id @default(uuid())
-  userId    String?
-  name      String
-  phone     String
-  email     String?
-  channel   String? // phone | telegram | vk
-  message   String?
-  status    ConsultationStatus @default(new)
-  adminNote String?
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  id             String             @id @default(uuid())
+  userId         String?
+  name           String
+  phone          String
+  email          String?
+  channel        String? // phone | telegram | whatsapp
+  message        String?
+  skinType       SkinType?
+  concern        String?
+  source         String? // tile | quiz | contacts
+  status         ConsultationStatus @default(new)
+  adminNote      String?
+  consentVersion String?
+  consentedAt    DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
@@ -853,12 +860,12 @@ model ConsultationRequest {
 /// Лог синхронизации с внешними системами (1С, склад, бухгалтерия).
 /// Пока плейсхолдер под будущую волну.
 model SyncLog {
-  id         String    @id @default(uuid())
-  direction  String    // "import" | "export"
-  status     String    // "pending" | "success" | "failed"
-  itemsCount Int       @default(0)
+  id         String   @id @default(uuid())
+  direction  String // "import" | "export"
+  status     String // "pending" | "success" | "failed"
+  itemsCount Int      @default(0)
   errorText  String?
-  createdAt  DateTime  @default(now())
+  createdAt  DateTime @default(now())
 
   @@index([createdAt])
   @@map("sync_logs")
@@ -870,7 +877,7 @@ model ConsentRecord {
   id          String         @id @default(uuid())
   userId      String
   purpose     ConsentPurpose
-  textVersion String         // версия текста согласия, который видел человек
+  textVersion String // версия текста согласия, который видел человек
   grantedAt   DateTime       @default(now())
   revokedAt   DateTime?
 
@@ -883,21 +890,21 @@ model ConsentRecord {
 // ──────────────────── Реестр МСП (справочник из ФНС) ────────────────────
 
 enum RegistryKind {
-  legal       // юрлицо (1 → ОргВклМСП, ИННЮЛ 10 цифр)
-  individual  // ИП (2 → ИПВклМСП, ИННФЛ 12 цифр)
+  legal // юрлицо (1 → ОргВклМСП, ИННЮЛ 10 цифр)
+  individual // ИП (2 → ИПВклМСП, ИННФЛ 12 цифр)
 }
 
 /// Профильный бизнес из открытого реестра МСП ФНС.
 /// Отбираются по кодам ОКВЭД: если ANY код из СвОКВЭД совпадает с префиксом
 /// или начинается с префикса + '.', запись профильная.
 model RegistryProfile {
-  inn         String       @id           // ИННЮЛ (10) или ИННФЛ (12)
-  ogrn        String       @unique       // ОГРН (13) или ОГРНИП (15)
+  inn         String       @id // ИННЮЛ (10) или ИННФЛ (12)
+  ogrn        String       @unique // ОГРН (13) или ОГРНИП (15)
   kind        RegistryKind
-  name        String                     // НаимОргСокр или «ИП Фамилия И. О.»
-  okvedMain   String?                    // основной ОКВЭД из СвОКВЭДОсн, версия 2014
-  okveds      String[]                   // все коды из СвОКВЭД (основной + доп.), версия 2014, без дублей
-  releaseDate DateTime                   // ДатаСост выпуска архива
+  name        String // НаимОргСокр или «ИП Фамилия И. О.»
+  okvedMain   String? // основной ОКВЭД из СвОКВЭДОсн, версия 2014
+  okveds      String[] // все коды из СвОКВЭД (основной + доп.), версия 2014, без дублей
+  releaseDate DateTime // ДатаСост выпуска архива
   createdAt   DateTime     @default(now())
 
   @@index([ogrn])
@@ -909,9 +916,9 @@ model RegistryProfile {
 model RegistryRelease {
   id          String   @id @default(uuid())
   sourceUrl   String
-  releaseDate DateTime                   // ДатаСост из XML
-  scanned     Int                        // сколько Документов прочитано
-  matched     Int                        // сколько профильных записали в БД
+  releaseDate DateTime // ДатаСост из XML
+  scanned     Int // сколько Документов прочитано
+  matched     Int // сколько профильных записали в БД
   importedAt  DateTime @default(now())
 
   @@index([releaseDate])
@@ -926,14 +933,14 @@ model RegistryRelease {
 /// - при ручном решении через 30 дней (deleteAfter = now + 30 дней).
 /// В БД остаётся запись о документе без файла: тип, размер, sha256, когда загружен, когда удалён.
 model ProDocument {
-  id          String     @id @default(uuid())
+  id          String    @id @default(uuid())
   userId      String
-  storageKey  String?    // имя файла (uuid) в PS_PRO_DOCS_DIR; null после удаления файла
-  mime        String     // image/jpeg | image/png | application/pdf — по сигнатуре байтов
+  storageKey  String? // имя файла (uuid) в PS_PRO_DOCS_DIR; null после удаления файла
+  mime        String // image/jpeg | image/png | application/pdf — по сигнатуре байтов
   sizeBytes   Int
   sha256      String
-  uploadedAt  DateTime   @default(now())
-  deleteAfter DateTime?  // когда удалить файл; null пока решения нет
+  uploadedAt  DateTime  @default(now())
+  deleteAfter DateTime? // когда удалить файл; null пока решения нет
   deletedAt   DateTime?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -952,19 +959,21 @@ model ProDocument {
 
 /// Привязка сотрудника к его приватному чату с ботом.
 model TelegramLink {
-  userId   String   @id         // сотрудник (User с ролью из STAFF)
-  chatId   BigInt   @unique     // приватный чат с ботом = Telegram user id
+  userId   String   @id // сотрудник (User с ролью из STAFF)
+  chatId   BigInt   @unique // приватный чат с ботом = Telegram user id
   linkedAt DateTime @default(now())
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("telegram_links")
 }
 
 /// Одноразовый код привязки из админки (живёт 10 минут).
 model TelegramLinkCode {
-  codeHash  String   @id        // sha256 кода
+  codeHash  String    @id // sha256 кода
   userId    String
   expiresAt DateTime
   usedAt    DateTime?
+
   @@index([userId])
   @@index([expiresAt])
   @@map("telegram_link_codes")
@@ -972,11 +981,12 @@ model TelegramLinkCode {
 
 /// Одноразовая ссылка на просмотр заявки (живёт 10 минут, до 5 обращений).
 model DocViewToken {
-  tokenHash   String   @id      // sha256 токена
+  tokenHash   String   @id // sha256 токена
   applicantId String
   staffUserId String
   expiresAt   DateTime
   uses        Int      @default(0)
+
   @@index([expiresAt])
   @@map("doc_view_tokens")
 }
@@ -988,6 +998,7 @@ model TelegramNotice {
   chatId      BigInt
   messageId   Int
   sentAt      DateTime @default(now())
+
   @@index([applicantId])
   @@map("telegram_notices")
 }

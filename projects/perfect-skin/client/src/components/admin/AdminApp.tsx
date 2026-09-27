@@ -13,6 +13,7 @@ const AdminPostsPage = lazy(() => import('@/components/admin/pages/AdminPostsPag
 const AdminPostEditPage = lazy(() => import('@/components/admin/pages/AdminPostEditPage').then((m) => ({ default: m.AdminPostEditPage })))
 const AdminSyncPage = lazy(() => import('@/components/admin/pages/AdminSyncPage').then((m) => ({ default: m.AdminSyncPage })))
 const AdminProRequestsPage = lazy(() => import('@/components/admin/pages/AdminProRequestsPage').then((m) => ({ default: m.AdminProRequestsPage })))
+const AdminConsultationsPage = lazy(() => import('@/components/admin/pages/AdminConsultationsPage').then((m) => ({ default: m.AdminConsultationsPage })))
 
 import { STAFF_ROLES } from '@/context/AuthContext'
 
@@ -30,6 +31,7 @@ const AdminLayoutWrapper = () => (
       <Route path="products" element={<Suspense fallback={fallback}><AdminProductsPage /></Suspense>} />
       <Route path="promo" element={<Suspense fallback={fallback}><AdminPromoPage /></Suspense>} />
       <Route path="pro-requests" element={<Suspense fallback={fallback}><AdminProRequestsPage /></Suspense>} />
+      <Route path="consultations" element={<Suspense fallback={fallback}><AdminConsultationsPage /></Suspense>} />
       <Route path="posts" element={<Suspense fallback={fallback}><AdminPostsPage /></Suspense>} />
       <Route path="posts/:id" element={<Suspense fallback={fallback}><AdminPostEditPage /></Suspense>} />
       <Route path="sync" element={<Suspense fallback={fallback}><AdminSyncPage /></Suspense>} />

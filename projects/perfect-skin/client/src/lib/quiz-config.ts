@@ -18,6 +18,7 @@ export interface QuizAnswers {
   need?: string // одно из needs labels
   extras?: string[] // подмножество ['eye_area', 'sun_protection', 'cleansing']
   format?: 'full' | 'core'
+  isPregnant?: boolean // только для хранения в состоянии клиента
 }
 
 // Q1. Для кого подбираем уход?
@@ -44,8 +45,19 @@ const q2: QuizQuestion = {
   ],
 }
 
-// Q3. Главная задача
+// Q3. Беременность или кормление
 const q3: QuizQuestion = {
+  id: 'isPregnant',
+  question: 'Вы беременны или кормите грудью?',
+  options: [
+    { value: 'yes', label: 'Да' },
+    { value: 'no', label: 'Нет' },
+    { value: 'prefer_not', label: 'Не хочу отвечать' },
+  ],
+}
+
+// Q4. Главная задача
+const q4: QuizQuestion = {
   id: 'need',
   question: 'Главная задача',
   options: [
@@ -60,8 +72,8 @@ const q3: QuizQuestion = {
   ],
 }
 
-// Q4. Что ещё важно? (multi)
-const q4: QuizQuestion = {
+// Q5. Что ещё важно? (multi)
+const q5: QuizQuestion = {
   id: 'extras',
   question: 'Что ещё важно?',
   multiple: true,
@@ -73,8 +85,8 @@ const q4: QuizQuestion = {
   ],
 }
 
-// Q5. Какой формат?
-const q5: QuizQuestion = {
+// Q6. Какой формат?
+const q6: QuizQuestion = {
   id: 'format',
   question: 'Какой формат?',
   options: [
@@ -83,7 +95,7 @@ const q5: QuizQuestion = {
   ],
 }
 
-export const allQuestions: QuizQuestion[] = [q1, q2, q3, q4, q5]
+export const allQuestions: QuizQuestion[] = [q1, q2, q3, q4, q5, q6]
 
 export function getVisibleQuestions(answers: Partial<QuizAnswers>): QuizQuestion[] {
   return allQuestions.filter((q) => {
