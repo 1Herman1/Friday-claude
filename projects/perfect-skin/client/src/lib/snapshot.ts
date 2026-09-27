@@ -299,8 +299,8 @@ export async function resolveFromSnapshot<T>(path: string): Promise<T> {
     } as T
   }
   if (p === '/api/v1/pro/apply') {
-    // Accept application with consents but return pending
-    return { proStatus: 'pending' } as T
+    // Accept application with consents but return pending; lane is for manager only
+    return { proStatus: 'pending', lane: 'yellow' } as T
   }
 
   throw new ApiError(404, 'NOT_FOUND', `Эндпоинт недоступен в режиме снимка: ${p}`)

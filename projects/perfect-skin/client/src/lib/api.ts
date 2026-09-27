@@ -35,8 +35,12 @@ export async function fetchApi<T>(
   const baseUrl = getApiUrl()
   const url = new URL(path, baseUrl)
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+  const headers: Record<string, string> = {}
+
+  // Если body это FormData, браузер сам добавит Content-Type с boundary.
+  // Для остальных случаев ставим application/json.
+  if (!(options?.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json'
   }
 
   // Токен не хранится на клиенте: вход держится на куке ps_auth с httpOnly,
@@ -82,4 +86,40 @@ export async function fetchApi<T>(
   }
 
   return data as T
+}
+
+export async function fetchBlob(path: string): Promise<Blob> {
+  const baseUrl = getApiUrl()
+  const url = new URL(path, baseUrl)
+
+  let response: Response
+  try {
+    response = await fetch(url.toString(), {
+      credentials: 'include',
+    })
+  } catch {
+    throw new ApiError(0, 'NETWORK_ERROR', 'Нет соединения с сервером')
+  }
+
+  if (!response.ok) {
+    // Пытаемся спарсить JSON для ошибки
+    let errorData: ErrorResponse | null = null
+    try {
+      errorData = await response.json()
+    } catch {
+      // Если не JSON, создаём ошибку с текстом ответа
+      throw new ApiError(response.status, 'BLOB_ERROR', `Ошибка загрузки: ${response.statusText}`)
+    }
+    if (errorData) {
+      throw new ApiError(
+        response.status,
+        errorData.error?.code || 'UNKNOWN_ERROR',
+        errorData.error?.message || 'Ошибка при загрузке файла',
+        errorData.error?.details,
+      )
+    }
+    throw new ApiError(response.status, 'BLOB_ERROR', `Ошибка при загрузке файла`)
+  }
+
+  return response.blob()
 }

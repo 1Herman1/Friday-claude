@@ -1,18 +1,41 @@
-import { useEffect, useState } from 'react'
-import { fetchApi } from '@/lib/api'
+import { useEffect, useState, useRef } from 'react'
+import { fetchApi, ApiError, fetchBlob } from '@/lib/api'
 
 interface ProRequest {
   id: string
+  userId: string
   name: string
   email: string
   phone: string
   companyName: string
   inn: string
+  ogrnip?: string
   specialization: string
+  comment?: string
   proStatus: 'pending' | 'approved' | 'rejected'
   proRequestedAt: string
   proReviewedAt: string | null
   proRejectReason?: string
+  proCheck?: {
+    lane: 'green' | 'yellow'
+    registry: {
+      name: string
+      okvedMain: string
+      releaseDate: string
+    } | null
+    npd: 'self_employed' | 'not_self_employed' | 'unavailable' | 'not_checked'
+    checkedAt: string
+  } | null
+  document?: {
+    mime: string
+    sizeBytes: number
+    uploadedAt: string
+    available: boolean
+  } | null
+  innDuplicates?: {
+    pending: number
+    approved: number
+  }
 }
 
 interface ProRequestsResponse {
@@ -31,6 +54,13 @@ export function AdminProRequestsPage() {
   const [submitting, setSubmitting] = useState<string | null>(null)
   const [rejectionReason, setRejectionReason] = useState<{ [key: string]: string }>({})
   const [showRejectModal, setShowRejectModal] = useState<string | null>(null)
+  const [expandedRequest, setExpandedRequest] = useState<string | null>(null)
+  const [documentPreviewUrl, setDocumentPreviewUrl] = useState<string | null>(null)
+  const [showDocumentModal, setShowDocumentModal] = useState(false)
+  const [documentLoading, setDocumentLoading] = useState(false)
+  const [documentError, setDocumentError] = useState('')
+  const imgModalRef = useRef<HTMLImageElement>(null)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const limit = 20
 
@@ -57,15 +87,32 @@ export function AdminProRequestsPage() {
   }
 
   const handleApprove = async (id: string) => {
+    const request = requests.find((r) => r.id === id)
+    if (!request) return
+
     setSubmitting(id)
+    setErrorMessage('')
     try {
+      const body: any = { action: 'approve' }
+      if (request.proStatus === 'pending') {
+        body.expectedRequestedAt = request.proRequestedAt
+      }
       await fetchApi(`/api/v1/admin/pro-requests/${id}`, {
         method: 'PATCH',
-        body: JSON.stringify({ action: 'approve' }),
+        body: JSON.stringify(body),
       })
       setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, proStatus: 'approved' } : r)))
     } catch (error) {
-      console.error('Failed to approve request:', error)
+      if (error instanceof ApiError) {
+        if (error.code === 'PRO_REQUEST_CHANGED') {
+          setErrorMessage('Заявка изменилась — список обновлён')
+          loadRequests()
+        } else {
+          setErrorMessage(error.message || 'Ошибка при одобрении')
+        }
+      } else {
+        setErrorMessage('Ошибка при одобрении')
+      }
     } finally {
       setSubmitting(null)
     }
@@ -78,21 +125,95 @@ export function AdminProRequestsPage() {
       return
     }
 
+    const request = requests.find((r) => r.id === id)
+    if (!request) return
+
     setSubmitting(id)
+    setErrorMessage('')
     try {
+      const body: any = { action: 'reject', reason }
+      if (request.proStatus === 'pending') {
+        body.expectedRequestedAt = request.proRequestedAt
+      }
       await fetchApi(`/api/v1/admin/pro-requests/${id}`, {
         method: 'PATCH',
-        body: JSON.stringify({ action: 'reject', reason }),
+        body: JSON.stringify(body),
       })
       setRequests((prev) => prev.map((r) => (r.id === id ? { ...r, proStatus: 'rejected' } : r)))
       setShowRejectModal(null)
       setRejectionReason((prev) => ({ ...prev, [id]: '' }))
     } catch (error) {
-      console.error('Failed to reject request:', error)
+      if (error instanceof ApiError) {
+        if (error.code === 'PRO_REQUEST_CHANGED') {
+          setErrorMessage('Заявка изменилась — список обновлён')
+          loadRequests()
+        } else if (error.code === 'PRO_INN_TAKEN') {
+          setErrorMessage(error.message || 'Ошибка при отклонении')
+        } else {
+          setErrorMessage(error.message || 'Ошибка при отклонении')
+        }
+      } else {
+        setErrorMessage('Ошибка при отклонении')
+      }
     } finally {
       setSubmitting(null)
     }
   }
+
+  const handleOpenDocument = async (userId: string, doc: ProRequest['document']) => {
+    if (!doc || !doc.available) return
+
+    setDocumentLoading(true)
+    setDocumentError('')
+    setDocumentPreviewUrl(null)
+    try {
+      const blob = await fetchBlob(`/api/v1/admin/pro-requests/${userId}/document`)
+      const url = URL.createObjectURL(blob)
+
+      if (doc.mime.startsWith('image/')) {
+        setDocumentPreviewUrl(url)
+      } else if (doc.mime === 'application/pdf') {
+        // Для PDF скачиваем
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `document.pdf`
+        a.click()
+        URL.revokeObjectURL(url)
+        return
+      }
+      setShowDocumentModal(true)
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setDocumentError(error.message || 'Ошибка при загрузке документа')
+      } else {
+        setDocumentError('Ошибка при загрузке документа')
+      }
+    } finally {
+      setDocumentLoading(false)
+    }
+  }
+
+  const closeDocumentModal = () => {
+    if (documentPreviewUrl && documentPreviewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(documentPreviewUrl)
+    }
+    setDocumentPreviewUrl(null)
+    setShowDocumentModal(false)
+  }
+
+  useEffect(() => {
+    const handleEscKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showDocumentModal) {
+        closeDocumentModal()
+      }
+    }
+    if (showDocumentModal) {
+      document.addEventListener('keydown', handleEscKey)
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscKey)
+    }
+  }, [showDocumentModal])
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('ru-RU', {
@@ -155,94 +276,170 @@ export function AdminProRequestsPage() {
         ))}
       </div>
 
-      {/* Table */}
-      <div className="bg-card rounded-block overflow-hidden border border-border">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-muted border-b border-border">
-              <tr>
-                <th className="px-4 py-3 text-left font-semibold">Компания</th>
-                <th className="px-4 py-3 text-left font-semibold">Контакт</th>
-                <th className="px-4 py-3 text-left font-semibold">ИНН</th>
-                <th className="px-4 py-3 text-left font-semibold">Специализация</th>
-                <th className="px-4 py-3 text-left font-semibold">Статус</th>
-                <th className="px-4 py-3 text-left font-semibold">Дата</th>
-                <th className="px-4 py-3 text-left font-semibold">Действия</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
-                    Загрузка…
-                  </td>
-                </tr>
-              ) : requests.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
-                    Нет заявок
-                  </td>
-                </tr>
-              ) : (
-                requests.map((req) => (
-                  <tr key={req.id} className="border-b border-border hover:bg-muted/50">
-                    <td className="px-4 py-3">
-                      <div>
-                        <p className="font-semibold text-foreground">{req.companyName}</p>
-                        <p className="text-xs text-muted-foreground">{req.name}</p>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="text-sm">
-                        <p>{req.email}</p>
-                        <p className="text-muted-foreground">{req.phone}</p>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 font-mono text-sm">{req.inn}</td>
-                    <td className="px-4 py-3 text-sm">{req.specialization}</td>
-                    <td className="px-4 py-3">{getStatusBadge(req.proStatus)}</td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">
-                      {formatDate(req.proRequestedAt)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2">
-                        {req.proStatus === 'pending' && (
-                          <>
-                            <button
-                              onClick={() => handleApprove(req.id)}
-                              disabled={submitting === req.id}
-                              className="px-3 py-1 bg-success text-white text-xs font-semibold rounded-pill hover:opacity-90 disabled:opacity-50"
-                            >
-                              Одобрить
-                            </button>
-                            <button
-                              onClick={() => setShowRejectModal(req.id)}
-                              disabled={submitting === req.id}
-                              className="px-3 py-1 bg-destructive text-white text-xs font-semibold rounded-pill hover:opacity-90 disabled:opacity-50"
-                            >
-                              Отклонить
-                            </button>
-                          </>
-                        )}
-                        {req.proStatus === 'rejected' && req.proRejectReason && (
-                          <details className="text-xs">
-                            <summary className="cursor-pointer text-destructive font-semibold">
-                              Причина
-                            </summary>
-                            <p className="mt-2 text-muted-foreground bg-muted p-2 rounded">
-                              {req.proRejectReason}
-                            </p>
-                          </details>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      {errorMessage && (
+        <div className="bg-destructive/10 border border-destructive/30 rounded-block p-4">
+          <p className="text-sm text-destructive">{errorMessage}</p>
         </div>
-      </div>
+      )}
+
+      {/* Requests List */}
+      {loading ? (
+        <div className="text-center text-muted-foreground py-12">Загрузка…</div>
+      ) : requests.length === 0 ? (
+        <div className="text-center text-muted-foreground py-12">Нет заявок</div>
+      ) : (
+        <div className="space-y-4">
+          {requests.map((req) => (
+            <div key={req.id} className="bg-card rounded-block border border-border overflow-hidden">
+              {/* Summary Row - Always Visible */}
+              <button
+                onClick={() => setExpandedRequest(expandedRequest === req.id ? null : req.id)}
+                className="w-full px-6 py-4 flex items-center justify-between hover:bg-muted/50 transition-colors text-left"
+              >
+                <div className="flex-1 flex gap-4 items-start">
+                  <div className="flex-1">
+                    <p className="font-semibold text-foreground">{req.companyName}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{req.name}</p>
+                    <p className="text-xs text-muted-foreground">{req.email} • {req.phone}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-sm font-mono text-foreground">{req.inn}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{formatDate(req.proRequestedAt)}</p>
+                  </div>
+                  <div className="flex-shrink-0">{getStatusBadge(req.proStatus)}</div>
+                </div>
+                <span className="text-muted-foreground ml-4 flex-shrink-0">
+                  {expandedRequest === req.id ? '▲' : '▼'}
+                </span>
+              </button>
+
+              {/* Expanded Details */}
+              {expandedRequest === req.id && (
+                <div className="border-t border-border px-6 py-4 bg-muted/30 space-y-6">
+                  {/* Lane Badge */}
+                  {req.proCheck?.lane && (
+                    <div>
+                      <p className="text-sm font-semibold text-foreground mb-2">Приоритет</p>
+                      <div className={`inline-block px-3 py-1 rounded-pill text-xs font-semibold ${
+                        req.proCheck.lane === 'green'
+                          ? 'bg-success/20 text-success'
+                          : 'bg-urgency/20 text-urgency'
+                      }`}>
+                        {req.proCheck.lane === 'green'
+                          ? '✓ Найден в реестре МСП'
+                          : 'Нет в реестре — проверить вручную'}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Registry Data */}
+                  {req.proCheck?.registry && (
+                    <div>
+                      <p className="text-sm font-semibold text-foreground mb-3">Данные реестра</p>
+                      <div className="bg-card rounded-block p-4 space-y-3">
+                        <div>
+                          <p className="text-xs text-muted-foreground">Название / ФИО</p>
+                          <p className="text-sm text-foreground font-semibold">{req.proCheck.registry.name}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">ОКВЭД</p>
+                          <p className="text-sm text-foreground font-mono">{req.proCheck.registry.okvedMain}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">Дата регистрации</p>
+                          <p className="text-sm text-foreground">{new Date(req.proCheck.registry.releaseDate).toLocaleDateString('ru-RU')}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* NPD Info (for 12-digit INN) */}
+                  {req.inn.replace(/\D/g, '').length === 12 && req.proCheck?.npd && (
+                    <div>
+                      <p className="text-sm font-semibold text-foreground mb-2">Статус НПД</p>
+                      <p className="text-sm text-foreground">
+                        {req.proCheck.npd === 'self_employed'
+                          ? 'Самозанятый'
+                          : req.proCheck.npd === 'not_self_employed'
+                          ? 'Не самозанятый'
+                          : req.proCheck.npd === 'unavailable'
+                          ? 'Сервис ФНС не ответил'
+                          : 'Не проверено'}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* INN Duplicates Warning */}
+                  {req.innDuplicates && (req.innDuplicates.pending > 0 || req.innDuplicates.approved > 0) && (
+                    <div className="bg-urgency/10 border border-urgency/30 rounded-block p-4">
+                      <div className="flex gap-2 items-start">
+                        <span className="text-urgency font-bold mt-1">⚠</span>
+                        <div>
+                          <p className="text-sm text-foreground font-semibold">Дубликаты ИНН</p>
+                          <p className="text-sm text-foreground mt-1">
+                            Этот ИНН заявлен ещё в {req.innDuplicates.pending} заявках, одобрен у {req.innDuplicates.approved} аккаунтов.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Document */}
+                  <div>
+                    <p className="text-sm font-semibold text-foreground mb-2">Документ</p>
+                    {req.document?.available ? (
+                      <button
+                        onClick={() => handleOpenDocument(req.userId, req.document)}
+                        disabled={documentLoading}
+                        className="px-4 py-2 bg-primary text-primary-foreground font-semibold rounded-pill hover:opacity-90 disabled:opacity-50 min-h-11"
+                      >
+                        {documentLoading ? 'Загрузка…' : 'Открыть документ'}
+                      </button>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">Документ удалён по сроку хранения</p>
+                    )}
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Сверьте имя на документе с именем из реестра.
+                    </p>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-3 pt-4 border-t border-border">
+                    {req.proStatus === 'pending' && (
+                      <>
+                        <button
+                          onClick={() => handleApprove(req.id)}
+                          disabled={submitting === req.id}
+                          className="flex-1 px-4 py-2 bg-success text-white font-semibold rounded-pill hover:opacity-90 disabled:opacity-50 min-h-11"
+                        >
+                          {submitting === req.id ? 'Обработка…' : 'Одобрить'}
+                        </button>
+                        <button
+                          onClick={() => setShowRejectModal(req.id)}
+                          disabled={submitting === req.id}
+                          className="flex-1 px-4 py-2 bg-destructive text-white font-semibold rounded-pill hover:opacity-90 disabled:opacity-50 min-h-11"
+                        >
+                          Отклонить
+                        </button>
+                      </>
+                    )}
+                    {req.proStatus === 'rejected' && req.proRejectReason && (
+                      <details className="flex-1">
+                        <summary className="cursor-pointer px-4 py-2 text-sm text-destructive font-semibold hover:bg-destructive/10 rounded-pill">
+                          Показать причину отклонения
+                        </summary>
+                        <p className="mt-3 text-sm text-foreground bg-muted p-3 rounded-block border border-border">
+                          {req.proRejectReason}
+                        </p>
+                      </details>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Pagination */}
       {pages > 1 && (
@@ -286,19 +483,58 @@ export function AdminProRequestsPage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setShowRejectModal(null)}
-                className="flex-1 px-4 py-2 border border-border rounded-pill hover:bg-muted"
+                className="flex-1 px-4 py-2 border border-border rounded-pill hover:bg-muted min-h-11"
               >
                 Отмена
               </button>
               <button
                 onClick={() => handleReject(showRejectModal)}
                 disabled={submitting === showRejectModal}
-                className="flex-1 px-4 py-2 bg-destructive text-white rounded-pill hover:opacity-90 disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-destructive text-white rounded-pill hover:opacity-90 disabled:opacity-50 min-h-11"
               >
                 Отклонить
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Document Modal */}
+      {showDocumentModal && documentPreviewUrl && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={closeDocumentModal}>
+          <div className="bg-card rounded-block max-w-2xl w-full max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-6 border-b border-border">
+              <h3 className="text-lg font-semibold">Документ заявителя</h3>
+              <button
+                onClick={closeDocumentModal}
+                className="text-muted-foreground hover:text-foreground font-semibold"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-6 flex items-center justify-center bg-muted">
+              <img
+                ref={imgModalRef}
+                src={documentPreviewUrl}
+                alt="Документ заявителя"
+                className="max-w-full max-h-[calc(90vh-200px)] object-contain"
+              />
+            </div>
+            <div className="flex justify-end gap-2 p-6 border-t border-border">
+              <button
+                onClick={closeDocumentModal}
+                className="px-4 py-2 border border-border rounded-pill hover:bg-muted min-h-11"
+              >
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {documentError && (
+        <div className="fixed bottom-4 right-4 bg-destructive/10 border border-destructive/30 rounded-block p-4 max-w-md">
+          <p className="text-sm text-destructive">{documentError}</p>
         </div>
       )}
     </div>

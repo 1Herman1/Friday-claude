@@ -59,7 +59,7 @@ export function ProSection() {
               </Link>
 
               <p className="mt-3 text-body-sm text-dark-foreground/70">
-                Нужен только ИНН или ОГРНИП — документы загружать не нужно. Вход по коду на email, без пароля.
+                Нужны ИНН или ОГРНИП и фото сертификата косметолога. Вход по коду на email, без пароля.
               </p>
 
               <ol className="mt-8 flex flex-col gap-2 text-body-sm text-dark-foreground/70">
@@ -69,7 +69,7 @@ export function ProSection() {
                 </li>
                 <li className="flex gap-3">
                   <span className="text-accent font-semibold tabular-nums">02</span>
-                  <span>Заявка с ИНН или ОГРНИП</span>
+                  <span>Заявка с ИНН и сертификатом</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-accent font-semibold tabular-nums">03</span>
