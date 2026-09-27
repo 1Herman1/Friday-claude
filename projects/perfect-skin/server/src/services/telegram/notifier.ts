@@ -51,7 +51,7 @@ export class TelegramNotifier {
         }
 
         // Строим текст уведомления
-        const registryText = applicant.proCheck?.lane === 'registry' ? '✓ найден в реестре МСП' : 'Нет в реестре — проверить внимательно'
+        const registryText = (applicant.proCheck as { lane?: string } | null)?.lane === 'green' ? '✓ найден в реестре МСП' : 'Нет в реестре — проверить внимательно'
         const priorityLine = `Приоритет: ${registryText}`
 
         let duplicatesLine = ''
