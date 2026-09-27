@@ -298,3 +298,14 @@ test("runRecipe: шаги в отчёте в порядке рецепта", asy
   const res = await runRecipe(planOf([{ id: "x" }, { id: "y", from: "x" }, { id: "z" }]), { provider: noProvider, maxCredits: 100, deps });
   assert.deepStrictEqual(res.steps.map((s) => s.id), ["x", "y", "z"]);
 });
+
+test("product-card: ракурсы строятся из первого снимка, иначе на фото три разных предмета", async () => {
+  // Живой прогон 27.09: три независимые генерации дали три разные баночки.
+  const recipe = await getRecipe("product-card");
+  assert.ok(recipe);
+  const [first, ...rest] = recipe.steps;
+  assert.strictEqual(first.from, undefined);
+  for (const step of rest) {
+    assert.strictEqual(step.from, first.id, `шаг ${step.id} должен строиться из ${first.id}`);
+  }
+});

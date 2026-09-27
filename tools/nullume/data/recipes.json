@@ -3,28 +3,30 @@
     {
       "id": "product-card",
       "title": "Карточка товара: три ракурса",
-      "goal": "Три снимка товара — спереди, в три четверти и крупная деталь — для карточки магазина",
+      "goal": "Один и тот же товар с трёх сторон — спереди, в три четверти и крупная деталь — для карточки магазина",
       "steps": [
         {
           "id": "front",
           "preset": "product-photo",
-          "prompt": "{subject}, front view, centered on seamless white background, studio lighting, product photography",
+          "prompt": "{subject}, front view, centred on a seamless white background, soft even studio lighting, product photography",
           "input": {}
         },
         {
           "id": "three-quarter",
-          "preset": "product-photo",
-          "prompt": "{subject}, three-quarter view angle, seamless background, professional studio setup, highlight form and texture",
+          "preset": "image-edit",
+          "from": "front",
+          "prompt": "the same {subject} from the reference image, rotated to a three-quarter view; keep its exact shape, proportions, material and lid; same white background and lighting",
           "input": {}
         },
         {
           "id": "detail",
-          "preset": "product-photo",
-          "prompt": "{subject}, extreme close-up of key detail, macro photography, white background, sharp focus, professional lighting",
+          "preset": "image-edit",
+          "from": "front",
+          "prompt": "macro close-up of the same {subject} from the reference image, showing the lid edge and surface texture; keep its exact material and colour; same white background and lighting",
           "input": {}
         }
       ],
-      "notes": "Используй для карточек товаров в каталоге. Проверь что все три ракурса согласованы по стилю и фону."
+      "notes": "Ракурсы строятся из первого снимка, а не генерируются заново — иначе на трёх фото окажутся три разных предмета. Перед отправкой в магазин сверить глазами, что форма совпадает."
     },
     {
       "id": "hero-banner",
