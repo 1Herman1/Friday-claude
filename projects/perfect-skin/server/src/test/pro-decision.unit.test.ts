@@ -7,7 +7,8 @@ describe('pro-decision', () => {
       const registryHit = {
         name: 'ООО Тестовая компания',
         okvedMain: '85.42.11',
-        releaseDate: new Date('2024-01-01'),
+        okveds: ['85.42.11', '85.42.12'],
+        state: 'ACTIVE',
       }
 
       const result = decide({
@@ -20,7 +21,12 @@ describe('pro-decision', () => {
       expect(result.source).toBeNull()
       // Но lane зелёный: приоритет для менеджера, что найдено в реестре
       expect(result.lane).toBe('green')
-      expect(result.check.registry).toEqual(registryHit)
+      expect(result.check.registry).toEqual({
+        name: registryHit.name,
+        okvedMain: registryHit.okvedMain,
+        state: registryHit.state,
+        source: 'dadata',
+      })
     })
 
     it('should return pending and set yellow lane when registry hit not found', () => {
@@ -45,7 +51,8 @@ describe('pro-decision', () => {
           registryHit: {
             name: 'Test',
             okvedMain: '85.42.11',
-            releaseDate: new Date(),
+            okveds: ['85.42.11'],
+            state: 'ACTIVE',
           },
           npd: 'self_employed' as const,
         },
@@ -75,7 +82,8 @@ describe('pro-decision', () => {
       const registryHit = {
         name: 'ИП Иванов И.И.',
         okvedMain: '85.41.10',
-        releaseDate: new Date('2023-06-15'),
+        okveds: ['85.41.10'],
+        state: 'ACTIVE',
       }
 
       const result = decide({
@@ -86,7 +94,8 @@ describe('pro-decision', () => {
       expect(result.check.registry).toEqual({
         name: 'ИП Иванов И.И.',
         okvedMain: '85.41.10',
-        releaseDate: new Date('2023-06-15'),
+        state: 'ACTIVE',
+        source: 'dadata',
       })
     })
 

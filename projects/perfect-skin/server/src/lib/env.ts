@@ -34,6 +34,10 @@ export const proNotifyEmail = process.env.PS_PRO_NOTIFY_EMAIL || ''
 export const tgBotToken = process.env.PS_TG_BOT_TOKEN || ''
 export const tgBotUsername = process.env.PS_TG_BOT_USERNAME || ''
 
+// DaData API key для проверки ИНН/ОГРНИП в открытых реестрах.
+// Пусто = без проверки в реестре, все заявки получают жёлтый lane (опционально).
+export const dadataApiKey = process.env.PS_DADATA_API_KEY || ''
+
 // Публичный адрес сайта для ссылок в кнопках Telegram (обязателен если включен бот).
 // Без него кнопки не строятся, бот шлёт уведомления без URL-кнопок (warn).
 export const publicUrl = process.env.PS_PUBLIC_URL || ''

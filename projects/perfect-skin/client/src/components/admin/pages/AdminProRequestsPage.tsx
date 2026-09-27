@@ -22,7 +22,8 @@ interface ProRequest {
     registry: {
       name: string
       okvedMain: string
-      releaseDate: string
+      state: string
+      source: string
     } | null
     npd: 'self_employed' | 'not_self_employed' | 'unavailable' | 'not_checked'
     checkedAt: string
@@ -350,8 +351,8 @@ export function AdminProRequestsPage() {
                           <p className="text-sm text-foreground font-mono">{req.proCheck.registry.okvedMain}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground">Дата регистрации</p>
-                          <p className="text-sm text-foreground">{new Date(req.proCheck.registry.releaseDate).toLocaleDateString('ru-RU')}</p>
+                          <p className="text-xs text-muted-foreground">Статус</p>
+                          <p className="text-sm text-foreground">{req.proCheck.registry.state}</p>
                         </div>
                       </div>
                     </div>

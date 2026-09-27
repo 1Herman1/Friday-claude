@@ -1,13 +1,23 @@
 import type { NpdResult } from './fns-npd.js'
 
-export type RegistryHit = { name: string; okvedMain: string | null; releaseDate: Date } | null
+export type RegistryHit = {
+  name: string
+  okvedMain: string | null
+  okveds: string[]
+  state: string
+} | null
 
 export type Lane = 'green' | 'yellow'
 export type DecisionStatus = 'pending'
 
 export interface ProCheck {
   lane: Lane
-  registry: { name: string; okvedMain: string | null; releaseDate: Date } | null
+  registry: {
+    name: string
+    okvedMain: string | null
+    state: string
+    source: 'dadata'
+  } | null
   npd: NpdResult
   checkedAt: Date
 }
@@ -24,7 +34,7 @@ export interface ProDecision {
  *
  * Статус ВСЕГДА 'pending' — автомат не одобряет никогда.
  * Реестр и НПД только заполняют lane (приоритет для менеджера):
- * - Если registryHit найден → зелёный lane (высокий приоритет)
+ * - Если registryHit найден, статус ACTIVE и ОКВЭД профильный → зелёный lane (высокий приоритет)
  * - Иначе → жёлтый lane (обычный приоритет)
  *
  * Функция НИКОГДА не возвращает 'approved' или 'rejected' —
@@ -42,7 +52,7 @@ export function decide(input: {
   const check: ProCheck = {
     lane: registryHit ? 'green' : 'yellow',
     registry: registryHit
-      ? { name: registryHit.name, okvedMain: registryHit.okvedMain, releaseDate: registryHit.releaseDate }
+      ? { name: registryHit.name, okvedMain: registryHit.okvedMain, state: registryHit.state, source: 'dadata' }
       : null,
     npd,
     checkedAt: now,

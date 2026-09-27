@@ -6,8 +6,9 @@ import { CONSENT_TEXT_VERSION } from '../../lib/consents.js'
 import { sniffMime, stripJpegMetadata, hashBuffer, saveProDocument, deleteStoredFile } from '../../lib/pro-docs.js'
 import { checkSelfEmployed } from '../../lib/fns-npd.js'
 import { decide, isInnTakenError } from '../../lib/pro-decision.js'
-import { proDocs, proNotifyEmail } from '../../lib/env.js'
+import { proDocs, proNotifyEmail, dadataApiKey } from '../../lib/env.js'
 import { maskInn } from '../../lib/masks.js'
+import { lookupParty } from '../../lib/registry/dadata.js'
 import { createMailSender } from '../../services/mail/index.js'
 
 const applySchema = z.object({
@@ -140,18 +141,16 @@ export default async function proRoute(app: FastifyInstance) {
         // Сохраняем файл
         storageKey = await saveProDocument(proDocs, processedBuffer, mime)
 
-        // Ищем в реестре МСП
-        let registryHit = await app.prisma.registryProfile.findUnique({
-          where: { inn },
-          select: { name: true, okvedMain: true, releaseDate: true },
-        })
-
-        // Если не найден по INN, пробуем по ОГРНИП
-        if (!registryHit && ogrnip) {
-          registryHit = await app.prisma.registryProfile.findUnique({
-            where: { ogrn: ogrnip },
-            select: { name: true, okvedMain: true, releaseDate: true },
-          })
+        // Проверяем в DaData по INN
+        let registryHit = null
+        const partyLookup = await lookupParty(inn, dadataApiKey)
+        if (partyLookup.status === 'found' && partyLookup.name && partyLookup.state) {
+          registryHit = {
+            name: partyLookup.name,
+            okvedMain: partyLookup.okvedMain || null,
+            okveds: partyLookup.okveds || [],
+            state: partyLookup.state,
+          }
         }
 
         // Проверяем ИП в НПД, если INN 12-значный и не найден в реестре
@@ -257,8 +256,8 @@ export default async function proRoute(app: FastifyInstance) {
             const mailSender = createMailSender()
             const laneMark = decision.lane === 'green' ? '✓ ' : ''
             const checkText = decision.check.registry
-              ? `\nНайдено в реестре МСП: ${decision.check.registry.name} (${decision.check.registry.okvedMain || 'н/а'})`
-              : `\nВ реестре МСП не найдено. НПД статус: ${decision.check.npd}`
+              ? `\nНайдено в реестре: ${decision.check.registry.name} (${decision.check.registry.okvedMain || 'н/а'}, статус: ${decision.check.registry.state})`
+              : `\nВ реестре не найдено. НПД статус: ${decision.check.npd}`
 
             const message = `${laneMark}Новая заявка специалиста на проверку
 
