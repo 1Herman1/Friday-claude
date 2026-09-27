@@ -33,12 +33,14 @@ jobs:
           SVC_SMS_SENDER: ${{ secrets.PS_SMS_SENDER }}
           SVC_PS_1C_LOGIN: ${{ secrets.PS_1C_LOGIN }}
           SVC_PS_1C_PASSWORD: ${{ secrets.PS_1C_PASSWORD }}
+          SVC_PS_TG_BOT_TOKEN: ${{ secrets.PS_TG_BOT_TOKEN }}
+          SVC_PS_TG_BOT_USERNAME: ${{ secrets.PS_TG_BOT_USERNAME }}
         with:
           host: ${{ secrets.PS_DEPLOY_HOST }}
           username: ${{ secrets.PS_DEPLOY_USER }}
           key: ${{ secrets.PS_DEPLOY_SSH_KEY }}
           command_timeout: 15m
-          envs: SVC_SMTP_HOST,SVC_SMTP_PORT,SVC_SMTP_USER,SVC_SMTP_PASS,SVC_SMTP_FROM,SVC_SMTP_SECURE,SVC_SMS_PROVIDER,SVC_SMS_API_KEY,SVC_SMS_SENDER,SVC_PS_1C_LOGIN,SVC_PS_1C_PASSWORD
+          envs: SVC_SMTP_HOST,SVC_SMTP_PORT,SVC_SMTP_USER,SVC_SMTP_PASS,SVC_SMTP_FROM,SVC_SMTP_SECURE,SVC_SMS_PROVIDER,SVC_SMS_API_KEY,SVC_SMS_SENDER,SVC_PS_1C_LOGIN,SVC_PS_1C_PASSWORD,SVC_PS_TG_BOT_TOKEN,SVC_PS_TG_BOT_USERNAME
           script: |
             set -euo pipefail
             cd /var/www/ps-src
@@ -68,6 +70,8 @@ jobs:
             upsert_env SMS_SENDER "$SVC_SMS_SENDER"
             upsert_env PS_1C_LOGIN "$SVC_PS_1C_LOGIN"
             upsert_env PS_1C_PASSWORD "$SVC_PS_1C_PASSWORD"
+            upsert_env PS_TG_BOT_TOKEN "$SVC_PS_TG_BOT_TOKEN"
+            upsert_env PS_TG_BOT_USERNAME "$SVC_PS_TG_BOT_USERNAME"
 
             echo "==> Fetching deploy/perfect-skin"
             git fetch origin deploy/perfect-skin

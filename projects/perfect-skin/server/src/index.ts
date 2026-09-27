@@ -20,8 +20,17 @@ import ordersRoutes from './routes/orders/index.js'
 import authRoutes from './routes/auth/index.js'
 import postsRoutes from './routes/posts/index.js'
 import proRoutes from './routes/pro/index.js'
+import { reviewRoutes } from './routes/review.js'
 import adminRoutes from './routes/admin/index.js'
 import exchange1cRoutes from './routes/exchange-1c.js'
+import { createTelegramNotifier, TelegramNotifier } from './services/telegram/notifier.js'
+import { createTelegramBot } from './services/telegram/bot.js'
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    telegram: TelegramNotifier
+  }
+}
 
 const app = Fastify({
   logger: true,
@@ -109,6 +118,10 @@ app.get('/api/v1/health', async (request, reply) => {
   return { ok: true, timestamp: new Date().toISOString() }
 })
 
+// Инициализируем Telegram-нотификатор ДО регистрации маршрутов
+const notifier = createTelegramNotifier(app.prisma, app)
+app.decorate('telegram', notifier)
+
 // Register exchange routes
 await app.register(exchange1cRoutes)
 
@@ -129,8 +142,26 @@ await app.register(proRoutes)
 // Register posts routes
 await app.register(postsRoutes, { prefix: '/api/v1' })
 
+// Register review routes (for viewing applications via one-time links)
+await app.register(async (instance) => reviewRoutes(instance), { prefix: '/api/v1' })
+
 // Register admin routes
 await app.register(adminRoutes)
+
+// Инициализируем Telegram-бот и запускаем поллер
+const bot = createTelegramBot(app.prisma, app, notifier)
+if (process.env.PS_TG_BOT_TOKEN) {
+  bot.start()
+  app.log.info('Telegram bot started')
+} else {
+  app.log.warn('PS_TG_BOT_TOKEN not set, Telegram bot disabled')
+}
+
+// Останавливаем бот при закрытии сервера
+app.addHook('onClose', async () => {
+  bot.stop()
+  app.log.info('Telegram bot stopped')
+})
 
 // На сервере наружу смотрит только Nginx, поэтому по умолчанию слушаем
 // петлю. 0.0.0.0 остаётся доступен через HOST — он нужен в контейнерах.

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { fetchApi, ApiError, fetchBlob } from '@/lib/api'
+import { TelegramNotificationSettings } from '@/components/admin/TelegramNotificationSettings'
 
 interface ProRequest {
   id: string
@@ -250,6 +251,9 @@ export function AdminProRequestsPage() {
         <h1 className="text-h2 font-heading font-bold mb-2">Заявки специалистов</h1>
         <p className="text-muted-foreground">Всего заявок: {total}</p>
       </div>
+
+      {/* Telegram Notifications */}
+      <TelegramNotificationSettings />
 
       {/* Status Filter */}
       <div className="flex gap-2">

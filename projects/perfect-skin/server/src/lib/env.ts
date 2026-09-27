@@ -29,6 +29,15 @@ export const proDocs = getDirWithDefault('PS_PRO_DOCS_DIR', isDevelopment ? './v
 // Пусто = без уведомлений (опционально).
 export const proNotifyEmail = process.env.PS_PRO_NOTIFY_EMAIL || ''
 
+// Telegram bot: token и username для привязки сотрудников.
+// Пусто = бот отключен, уведомления молча пропускаются (опционально).
+export const tgBotToken = process.env.PS_TG_BOT_TOKEN || ''
+export const tgBotUsername = process.env.PS_TG_BOT_USERNAME || ''
+
+// Публичный адрес сайта для ссылок в кнопках Telegram (обязателен если включен бот).
+// Без него кнопки не строятся, бот шлёт уведомления без URL-кнопок (warn).
+export const publicUrl = process.env.PS_PUBLIC_URL || ''
+
 function getDirWithDefault(key: string, defaultValue: string | null): string {
   const value = process.env[key]
   if (!value) {

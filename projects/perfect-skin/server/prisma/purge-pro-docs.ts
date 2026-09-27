@@ -117,6 +117,40 @@ async function main() {
     }
   }
 
+  // Шаг 3: Удалить истекшие токены привязки и просмотра (старше 1 дня)
+  console.log('[purge-pro-docs] Step 3: Cleaning up expired Telegram tokens...')
+
+  const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
+
+  const expiredLinkCodes = await prisma.telegramLinkCode.findMany({
+    where: { expiresAt: { lt: oneDayAgo } },
+    select: { codeHash: true },
+  })
+
+  const expiredViewTokens = await prisma.docViewToken.findMany({
+    where: { expiresAt: { lt: oneDayAgo } },
+    select: { tokenHash: true },
+  })
+
+  console.log(`[purge-pro-docs] Found ${expiredLinkCodes.length} expired Telegram link codes`)
+  console.log(`[purge-pro-docs] Found ${expiredViewTokens.length} expired doc view tokens`)
+
+  if (!isDryRun) {
+    if (expiredLinkCodes.length > 0) {
+      await prisma.telegramLinkCode.deleteMany({
+        where: { codeHash: { in: expiredLinkCodes.map((c) => c.codeHash) } },
+      })
+      console.log(`[purge-pro-docs] Deleted ${expiredLinkCodes.length} expired link codes`)
+    }
+
+    if (expiredViewTokens.length > 0) {
+      await prisma.docViewToken.deleteMany({
+        where: { tokenHash: { in: expiredViewTokens.map((t) => t.tokenHash) } },
+      })
+      console.log(`[purge-pro-docs] Deleted ${expiredViewTokens.length} expired view tokens`)
+    }
+  }
+
   console.log(`[purge-pro-docs] ${isDryRun ? 'Dry run' : 'Purge'} completed`)
   process.exit(0)
 }

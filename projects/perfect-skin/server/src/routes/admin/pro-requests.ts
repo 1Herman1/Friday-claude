@@ -4,7 +4,7 @@ import { ApiError } from '../../lib/errors.js'
 import { createMailSender } from '../../services/mail/index.js'
 import { proDocs } from '../../lib/env.js'
 import { readStoredFile } from '../../lib/pro-docs.js'
-import { isInnTakenError } from '../../lib/pro-decision.js'
+import { reviewApplication } from '../../services/pro-review.service.js'
 
 const listQuerySchema = z.object({
   status: z.enum(['pending', 'approved', 'rejected', 'all']).optional().default('pending'),
@@ -243,165 +243,18 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
 
       const { action, reason, expectedRequestedAt } = result.data
 
-      // Get user
-      const user = await app.prisma.user.findUnique({
-        where: { id },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          role: true,
-          proStatus: true,
-          proRequestedAt: true,
-          companyName: true,
-          inn: true,
-          specialization: true,
-          createdAt: true,
-        },
-      })
+      // Используем сервис для общей логики
+      const mailSender = createMailSender()
+      const updatedUser = await reviewApplication(app.prisma, {
+        applicantId: id,
+        action,
+        reason,
+        expectedRequestedAt,
+        reviewerId: request.user!.id,
+        via: 'admin',
+      }, mailSender, app.telegram)
 
-      if (!user) {
-        throw new ApiError(404, 'USER_NOT_FOUND', 'Пользователь не найден')
-      }
-
-      // Check if user is staff (has admin/manager role)
-      const staffRoles = ['super_admin', 'orders_manager', 'products_manager', 'content_manager']
-      if (staffRoles.includes(user.role)) {
-        throw new ApiError(409, 'PRO_STAFF_ACCOUNT', 'Сотрудники не могут быть специалистами')
-      }
-
-      // Check if application is pending (or allow reject for approved)
-      if (action === 'reject' && user.proStatus !== 'pending' && user.proStatus !== 'approved') {
-        throw new ApiError(409, 'PRO_NOT_PENDING', 'Заявка не на рассмотрении')
-      }
-
-      if (action === 'approve' && user.proStatus !== 'pending') {
-        throw new ApiError(409, 'PRO_NOT_PENDING', 'Заявка не на рассмотрении')
-      }
-
-      // Check if reject requires reason
-      if (action === 'reject' && !reason) {
-        throw new ApiError(400, 'VALIDATION_ERROR', 'При отклонении требуется указать причину', { field: 'reason' })
-      }
-
-      // Для approve/reject pending требуем expectedRequestedAt
-      // Для reject approved можно без него
-      if (user.proStatus === 'pending' && !expectedRequestedAt) {
-        throw new ApiError(400, 'VALIDATION_ERROR', 'expectedRequestedAt обязателен для заявки в статусе pending', { field: 'expectedRequestedAt' })
-      }
-
-      // Update user in transaction: set decision source to manual and schedule documents for deletion
-      const now = new Date()
-      const deleteAfter = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // +30 дней
-
-      try {
-        await app.prisma.$transaction(async (tx) => {
-          let updateResult
-
-          if (user.proStatus === 'pending') {
-            // Для pending заявок используем updateMany с проверкой на proRequestedAt
-            // чтобы убедиться, что заявка не была подана заново
-            updateResult = await tx.user.updateMany({
-              where: {
-                id,
-                proStatus: 'pending',
-                proRequestedAt: new Date(expectedRequestedAt!),
-              },
-              data: {
-                proStatus: action === 'approve' ? 'approved' : 'rejected',
-                role: action === 'approve' ? 'professional' : (user.role === 'professional' ? 'customer' : user.role),
-                proReviewedAt: new Date(),
-                proReviewerId: request.user!.id,
-                proRejectReason: action === 'reject' ? reason : null,
-                proDecisionSource: 'manual',
-              },
-            })
-
-            if (updateResult.count === 0) {
-              // Заявка изменилась (подана заново) с момента открытия менеджером
-              throw new ApiError(409, 'PRO_REQUEST_CHANGED', 'Заявка изменилась с момента открытия — обновите страницу')
-            }
-          } else {
-            // Для reject уже одобренной (approved) берём стандартный update
-            await tx.user.update({
-              where: { id },
-              data: {
-                proStatus: 'rejected',
-                role: user.role === 'professional' ? 'customer' : user.role,
-                proReviewedAt: new Date(),
-                proReviewerId: request.user!.id,
-                proRejectReason: reason || null,
-                proDecisionSource: 'manual',
-              },
-            })
-          }
-
-          // Set deleteAfter for all documents without deletedAt (только если обновление прошло)
-          await tx.proDocument.updateMany({
-            where: { userId: id, deletedAt: null },
-            data: { deleteAfter },
-          })
-        })
-      } catch (err) {
-        // Нарушение уникального индекса на INN для approved
-        if (isInnTakenError(err)) {
-          throw new ApiError(409, 'PRO_INN_TAKEN', 'Этот ИНН уже подтверждён для другого аккаунта')
-        }
-        throw err
-      }
-
-      const updatedUser = await app.prisma.user.findUnique({
-        where: { id },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          companyName: true,
-          inn: true,
-          specialization: true,
-          proStatus: true,
-          proRequestedAt: true,
-          proReviewedAt: true,
-          proRejectReason: true,
-        },
-      })
-
-      if (!updatedUser) {
-        throw new ApiError(404, 'USER_NOT_FOUND', 'Пользователь не найден')
-      }
-
-      // Send email to user
-      if (updatedUser.email) {
-        const mailSender = createMailSender()
-        const subject = action === 'approve'
-          ? 'Статус специалиста подтвержден'
-          : 'Статус специалиста отклонен'
-        const text = action === 'approve'
-          ? 'Ваш статус специалиста подтвержден. Теперь в каталоге Perfect Skin вам показаны профессиональные цены.'
-          : `Заявка на статус специалиста отклонена. Причина: ${reason}`
-
-        try {
-          await mailSender.sendPlain(updatedUser.email, subject, text)
-        } catch (error) {
-          app.log.warn({ email: updatedUser.email, action, error }, 'Failed to send professional status email')
-        }
-      }
-
-      reply.status(200).send({
-        id: updatedUser.id,
-        name: updatedUser.name,
-        email: updatedUser.email || null,
-        phone: updatedUser.phone || null,
-        companyName: updatedUser.companyName || '',
-        inn: updatedUser.inn || '',
-        specialization: updatedUser.specialization || '',
-        proStatus: updatedUser.proStatus,
-        proRequestedAt: updatedUser.proRequestedAt?.toISOString() || '',
-        proReviewedAt: updatedUser.proReviewedAt ? updatedUser.proReviewedAt.toISOString() : null,
-        proRejectReason: updatedUser.proRejectReason || null,
-      })
+      reply.status(200).send(updatedUser)
     }
   )
 

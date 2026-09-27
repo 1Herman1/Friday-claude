@@ -201,6 +201,7 @@ model User {
   consultations    ConsultationRequest[]
   consents         ConsentRecord[]
   proDocuments     ProDocument[]
+  telegramLink     TelegramLink?
 
   @@index([email])
   @@index([phone])
@@ -946,3 +947,47 @@ model ProDocument {
 // Prisma не выражает условные уникальные индексы, поэтому индекс создан в миграции:
 // CREATE UNIQUE INDEX "users_inn_approved_key" ON "users"("inn")
 //   WHERE "proStatus" = 'approved' AND "deletedAt" IS NULL;
+
+// ─────────────────────────────── Telegram ───────────────────────────────
+
+/// Привязка сотрудника к его приватному чату с ботом.
+model TelegramLink {
+  userId   String   @id         // сотрудник (User с ролью из STAFF)
+  chatId   BigInt   @unique     // приватный чат с ботом = Telegram user id
+  linkedAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("telegram_links")
+}
+
+/// Одноразовый код привязки из админки (живёт 10 минут).
+model TelegramLinkCode {
+  codeHash  String   @id        // sha256 кода
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("telegram_link_codes")
+}
+
+/// Одноразовая ссылка на просмотр заявки (живёт 10 минут, до 5 обращений).
+model DocViewToken {
+  tokenHash   String   @id      // sha256 токена
+  applicantId String
+  staffUserId String
+  expiresAt   DateTime
+  uses        Int      @default(0)
+  @@index([expiresAt])
+  @@map("doc_view_tokens")
+}
+
+/// Какие сообщения отправлены в Telegram по заявке (для редактирования при решении).
+model TelegramNotice {
+  id          String   @id @default(uuid())
+  applicantId String
+  chatId      BigInt
+  messageId   Int
+  sentAt      DateTime @default(now())
+  @@index([applicantId])
+  @@map("telegram_notices")
+}

@@ -278,6 +278,11 @@ export default async function proRoute(app: FastifyInstance) {
           }
         }
 
+        // Отправляем уведомление в Telegram (не блокирует ответ, ошибки → warn)
+        app.telegram.onNewApplication(userId).catch((err) => {
+          app.log.warn({ err, user_id: userId }, 'Failed to send Telegram notification for pro application')
+        })
+
         reply.status(200).send({
           proStatus: decision.status,
           lane: decision.lane,
