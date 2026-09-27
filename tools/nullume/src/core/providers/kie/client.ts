@@ -137,8 +137,20 @@ export class KieClient {
     return this._handle(resp);
   }
 
-  async credits(): Promise<{ code: number; data?: unknown }> {
-    return (await this._get("/api/v1/chat/credit")) as any;
+  /**
+   * Остаток кредитов. _handle разворачивает конверт { code, msg, data } и отдаёт
+   * data — здесь это число. Но `payload.data || payload` при нулевом балансе
+   * отдаёт конверт целиком (0 ложен), поэтому разбираем оба вида.
+   */
+  async credits(): Promise<number> {
+    const raw = await this._get("/api/v1/chat/credit");
+    if (typeof raw === "number") return raw;
+    if (raw && typeof raw === "object" && typeof (raw as { data?: unknown }).data === "number") {
+      return (raw as { data: number }).data;
+    }
+    throw new ProviderError(
+      `kie.ai вернул баланс в неожиданном виде (${JSON.stringify(raw)?.slice(0, 80)}) — формат API мог измениться`
+    );
   }
 
   async upload(filePath: string, uploadPath?: string): Promise<string> {

@@ -1,4 +1,3 @@
-import { ProviderError } from "../../errors.js";
 import type { Provider, ModelInfo, CostEstimate, NormalizedStatus } from "../types.js";
 import { KieClient, CASCADE_ORDER, TaskNotFound } from "./client.js";
 import { normalizeStatus } from "./status.js";
@@ -26,23 +25,10 @@ export class KieProvider implements Provider {
   }
 
   async balance(): Promise<{ total: number; used?: number }> {
-    // Формат из документации kie (GET /api/v1/chat/credit): { code, msg, data: 100 },
-    // data — остаток кредитов числом. Прежний разбор искал data.total, которого нет,
-    // и подставлял 0 — отсюда «Баланс: 0» при живом счёте.
-    const resp = (await this.client.credits()) as { code?: number; msg?: string; data?: unknown };
-
-    if (resp.code !== undefined && resp.code !== 200) {
-      throw new ProviderError(`kie.ai не отдал баланс: код ${resp.code}${resp.msg ? ` — ${resp.msg}` : ""}`);
-    }
-
-    const total = typeof resp.data === "number" ? resp.data : Number.NaN;
-    if (!Number.isFinite(total)) {
-      throw new ProviderError(
-        `kie.ai вернул баланс в неожиданном виде (${JSON.stringify(resp.data)?.slice(0, 80)}) — формат API мог измениться`
-      );
-    }
-    return { total };
+    // kie сообщает только остаток; сколько потрачено — не присылает
+    return { total: await this.client.credits() };
   }
+
 
 
   async models(): Promise<ModelInfo[]> {
