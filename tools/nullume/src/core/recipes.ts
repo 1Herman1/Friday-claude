@@ -21,6 +21,10 @@ export interface RecipeStep {
 
 export interface Recipe {
   id: string;
+  /** Имя, по которому владелец вызывает рецепт: «Витрина», «Афиша»… */
+  codename: string;
+  /** На всех кадрах один и тот же предмет — значит, шаги строятся из первого */
+  sameSubject?: boolean;
   title: string;
   goal: string;
   steps: RecipeStep[];
@@ -29,6 +33,7 @@ export interface Recipe {
 
 export interface RecipeListItem {
   id: string;
+  codename: string;
   title: string;
   goal: string;
   steps_count: number;
@@ -77,31 +82,27 @@ export interface RecipeRunResult {
 }
 
 async function loadRecipes(): Promise<Recipe[]> {
-  try {
-    const recipesPath = path.join(dataDir, "recipes.json");
-    if (fs.existsSync(recipesPath)) {
-      const data = JSON.parse(fs.readFileSync(recipesPath, "utf-8"));
-      return data.recipes || [];
-    }
-  } catch (e) {
-    console.error("Failed to load recipes:", e);
-  }
-  return [];
+  // Битый файл рецептов — ошибка, а не пустой список: иначе рецепты молча исчезают
+  const data = JSON.parse(fs.readFileSync(path.join(dataDir, "recipes.json"), "utf-8"));
+  return data.recipes ?? [];
 }
 
 export async function listRecipes(): Promise<RecipeListItem[]> {
   const recipes = await loadRecipes();
   return recipes.map((r) => ({
     id: r.id,
+    codename: r.codename,
     title: r.title,
     goal: r.goal,
     steps_count: r.steps.length,
   }));
 }
 
-export async function getRecipe(id: string): Promise<Recipe | null> {
+/** Рецепт по id или по имени («Витрина», «витрина»), без учёта регистра */
+export async function getRecipe(idOrName: string): Promise<Recipe | null> {
+  const key = idOrName.trim().toLowerCase();
   const recipes = await loadRecipes();
-  return recipes.find((r) => r.id === id) || null;
+  return recipes.find((r) => r.id === key || r.codename.toLowerCase() === key) ?? null;
 }
 
 export async function planRecipe(
@@ -174,7 +175,7 @@ export async function planRecipe(
   const totalUsd = (totalCredits * usdPerCredit).toFixed(2);
 
   return {
-    recipe_id: id,
+    recipe_id: recipe.id,
     subject,
     style,
     steps: plannedSteps,

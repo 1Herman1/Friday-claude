@@ -2,6 +2,8 @@
   "recipes": [
     {
       "id": "product-card",
+      "codename": "Витрина",
+      "sameSubject": true,
       "title": "Карточка товара: три ракурса",
       "goal": "Один и тот же товар с трёх сторон — спереди, в три четверти и крупная деталь — для карточки магазина",
       "steps": [
@@ -30,52 +32,67 @@
     },
     {
       "id": "hero-banner",
+      "codename": "Афиша",
+      "sameSubject": true,
       "title": "Главный баннер и мобильная версия",
       "goal": "Один сюжет в двух форматах: горизонтальный 16:9 для компьютера и вертикальный 9:16 для телефона",
       "steps": [
         {
           "id": "desktop",
           "preset": "banner-16x9",
-          "prompt": "{subject}, wide landscape composition, suitable for website hero section, empty space for text overlay on left or center, professional photography style",
+          "prompt": "{subject}, wide horizontal hero composition, main object placed off-centre with calm empty space on one side for a headline, natural light, editorial product photography",
           "input": {}
         },
         {
           "id": "mobile",
-          "preset": "social-story",
-          "prompt": "{subject}, vertical mobile composition, text-safe area in center, same scene as desktop version, full-screen format",
-          "input": {}
+          "preset": "image-edit",
+          "from": "desktop",
+          "prompt": "the same scene with the same {subject} from the reference image, recomposed as a tall vertical frame; the main object fully in frame, nothing cropped; keep the exact object, materials, light and colours",
+          "input": {
+            "aspect_ratio": "9:16"
+          }
         }
       ],
-      "notes": "Два независимых поколения разных пропорций. Используй для лендингов и главных страниц сайтов."
+      "notes": "Мобильная версия строится из десктопной, а не рисуется заново — иначе это два разных снимка. Проверить, что объект не обрезан по краям вертикали."
     },
     {
       "id": "social-trio",
+      "codename": "Триптих",
+      "sameSubject": true,
       "title": "Три поста для соцсетей",
       "goal": "Три квадратных поста в одном стиле: товар, атмосфера, деталь",
       "steps": [
         {
           "id": "product",
           "preset": "social-square",
-          "prompt": "{subject}, centered product shot for social media, vibrant colors, engaging composition, square format, Instagram aesthetic",
+          "prompt": "{subject}, hero product shot, centred, soft natural light, clean background",
           "input": {}
         },
         {
           "id": "atmosphere",
-          "preset": "social-square",
-          "prompt": "lifestyle scene featuring {subject}, process or environment, atmospheric lighting, same color palette as product shot, social media ready",
-          "input": {}
+          "preset": "image-edit",
+          "from": "product",
+          "prompt": "the same {subject} from the reference image, now placed in a lived-in setting that tells its story, props around it, same light mood; keep the exact object",
+          "input": {
+            "aspect_ratio": "1:1"
+          }
         },
         {
           "id": "detail",
-          "preset": "social-square",
-          "prompt": "close-up detail of {subject}, texture and craftsmanship, macro style, same aesthetic as other posts, square format",
-          "input": {}
+          "preset": "image-edit",
+          "from": "product",
+          "prompt": "macro close-up of the same {subject} from the reference image, showing texture and one characteristic detail; keep its exact material and colour",
+          "input": {
+            "aspect_ratio": "1:1"
+          }
         }
       ],
-      "notes": "Все три в одном стиле и палитре. Планируй в календарь: день 1 (товар), день 2 (атмосфера), день 3 (деталь)."
+      "notes": "Все три поста — один и тот же товар: атмосфера и деталь строятся из первого снимка."
     },
     {
       "id": "before-after",
+      "codename": "Метаморфоза",
+      "sameSubject": true,
       "title": "До и после",
       "goal": "Снимок «до» и тот же кадр «после» — изменение показано на одном изображении",
       "steps": [
@@ -97,6 +114,7 @@
     },
     {
       "id": "landing-hero",
+      "codename": "Сцена",
       "title": "Фон лендинга и отдельный объект",
       "goal": "Фон с пустым местом под текст и товар на однотонном фоне — чтобы собрать первый экран в макете",
       "steps": [
@@ -117,6 +135,8 @@
     },
     {
       "id": "product-video",
+      "codename": "Оживление",
+      "sameSubject": true,
       "title": "Ролик из кадра",
       "goal": "Снимок товара, который затем оживает в коротком видео с движением камеры",
       "steps": [

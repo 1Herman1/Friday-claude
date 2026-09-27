@@ -299,13 +299,29 @@ test("runRecipe: шаги в отчёте в порядке рецепта", asy
   assert.deepStrictEqual(res.steps.map((s) => s.id), ["x", "y", "z"]);
 });
 
-test("product-card: ракурсы строятся из первого снимка, иначе на фото три разных предмета", async () => {
+test("рецепты с одним предметом строят все шаги из первого — иначе на кадрах разные предметы", async () => {
   // Живой прогон 27.09: три независимые генерации дали три разные баночки.
-  const recipe = await getRecipe("product-card");
-  assert.ok(recipe);
-  const [first, ...rest] = recipe.steps;
-  assert.strictEqual(first.from, undefined);
-  for (const step of rest) {
-    assert.strictEqual(step.from, first.id, `шаг ${step.id} должен строиться из ${first.id}`);
+  let checked = 0;
+  for (const item of await listRecipes()) {
+    const recipe = (await getRecipe(item.id))!;
+    if (!recipe.sameSubject) continue;
+    checked++;
+    const [first, ...rest] = recipe.steps;
+    assert.strictEqual(first.from, undefined, `${recipe.id}: первый шаг рисуется с нуля`);
+    for (const step of rest) {
+      assert.strictEqual(step.from, first.id, `${recipe.id}/${step.id} должен строиться из ${first.id}`);
+    }
+  }
+  assert.ok(checked >= 5, `проверено рецептов: ${checked} — правило не должно тихо ничего не проверять`);
+});
+
+test("у каждого рецепта своё имя, и по нему рецепт находится", async () => {
+  const recipes = await listRecipes();
+  const names = recipes.map((r) => r.codename);
+  assert.ok(names.every((n) => typeof n === "string" && n.length > 0), "у всех рецептов есть имя");
+  assert.strictEqual(new Set(names.map((n) => n.toLowerCase())).size, names.length, "имена не повторяются");
+  for (const r of recipes) {
+    assert.strictEqual((await getRecipe(r.codename))?.id, r.id);
+    assert.strictEqual((await getRecipe(r.codename.toLowerCase()))?.id, r.id, "регистр не важен");
   }
 });

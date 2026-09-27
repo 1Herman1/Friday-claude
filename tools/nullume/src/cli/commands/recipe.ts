@@ -18,6 +18,7 @@ recipeCmd
       const recipes = await listRecipes();
 
       const rows = recipes.map((r) => ({
+        codename: r.codename,
         id: r.id,
         title: r.title,
         goal: r.goal,
@@ -26,6 +27,7 @@ recipeCmd
 
       emit(flags, { data: recipes }, () =>
         table(rows, [
+          { key: "codename", header: "Имя" },
           { key: "id", header: "ID" },
           { key: "title", header: "Название" },
           { key: "goal", header: "Результат" },
