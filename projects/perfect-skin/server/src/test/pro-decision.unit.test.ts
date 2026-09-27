@@ -3,7 +3,7 @@ import { decide, isInnTakenError } from '../lib/pro-decision.js'
 
 describe('pro-decision', () => {
   describe('decide', () => {
-    it('should approve and set green lane when registry hit found', () => {
+    it('should return pending and set green lane when registry hit found', () => {
       const registryHit = {
         name: 'ООО Тестовая компания',
         okvedMain: '85.42.11',
@@ -15,13 +15,15 @@ describe('pro-decision', () => {
         npd: 'unavailable',
       })
 
-      expect(result.status).toBe('approved')
-      expect(result.source).toBe('auto_msp')
+      // Автомат никогда не одобряет — всегда pending
+      expect(result.status).toBe('pending')
+      expect(result.source).toBeNull()
+      // Но lane зелёный: приоритет для менеджера, что найдено в реестре
       expect(result.lane).toBe('green')
       expect(result.check.registry).toEqual(registryHit)
     })
 
-    it('should pend and set yellow lane when registry hit not found', () => {
+    it('should return pending and set yellow lane when registry hit not found', () => {
       const result = decide({
         registryHit: null,
         npd: 'self_employed',
@@ -34,7 +36,7 @@ describe('pro-decision', () => {
       expect(result.check.npd).toBe('self_employed')
     })
 
-    it('should never return rejected status', () => {
+    it('should always return pending status (never approved or rejected)', () => {
       const inputs = [
         { registryHit: null, npd: 'self_employed' as const },
         { registryHit: null, npd: 'not_self_employed' as const },
@@ -51,7 +53,8 @@ describe('pro-decision', () => {
 
       for (const input of inputs) {
         const result = decide(input)
-        expect(result.status).not.toBe('rejected')
+        // Автомат принимает решение в пользу только pending — менеджер решает одобрить/отклонить
+        expect(result.status).toBe('pending')
       }
     })
 

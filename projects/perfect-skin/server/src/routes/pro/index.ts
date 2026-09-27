@@ -51,7 +51,7 @@ export default async function proRoute(app: FastifyInstance) {
             additionalProperties: false,
             required: ['proStatus', 'lane'],
             properties: {
-              proStatus: { type: 'string', enum: ['pending', 'approved'] },
+              proStatus: { type: 'string', enum: ['pending'] },
               lane: { type: 'string', enum: ['green', 'yellow'] },
             },
           },
@@ -177,15 +177,10 @@ export default async function proRoute(app: FastifyInstance) {
               ogrnip: ogrnip || null,
               specialization,
               proRequestedAt: new Date(),
-              proReviewedAt: decision.status === 'approved' ? new Date() : null,
-              proDecisionSource: decision.source,
+              proReviewedAt: null, // Менеджер установит при решении
+              proDecisionSource: null, // Автомат не принимает решения
               proCheck: decision.check,
               proRejectReason: null,
-            }
-
-            // При одобрении выставляем роль professional
-            if (decision.status === 'approved') {
-              updateData.role = 'professional'
             }
 
             // Отмечаем согласие на обработку ПДн, если это первый запрос
@@ -198,20 +193,18 @@ export default async function proRoute(app: FastifyInstance) {
               data: updateData,
             })
 
-            // Создаём документ
-            const now = new Date()
-            const deleteAfter = decision.status === 'approved' ? now : new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // +30 дней при pending
-            const deletedAt = decision.status === 'approved' ? now : null
-
+            // Срок хранения отсчитывается от решения менеджера (его ставит
+            // админка), а не от подачи: иначе заявка, пролежавшая месяц,
+            // потеряла бы скан раньше, чем её кто-то открыл.
             await tx.proDocument.create({
               data: {
                 userId,
-                storageKey: decision.status === 'approved' ? null : storageKey, // file будет удалён сразу
+                storageKey,
                 mime,
                 sizeBytes: processedBuffer.length,
                 sha256,
-                deleteAfter,
-                deletedAt,
+                deleteAfter: null,
+                deletedAt: null,
               },
             })
 
@@ -236,40 +229,27 @@ export default async function proRoute(app: FastifyInstance) {
             }
           })
         } catch (err) {
-          // Нарушение уникального индекса на INN для approved статуса
+          // Нарушение уникального индекса на INN для любого статуса
           if (isInnTakenError(err)) {
             if (storageKey) {
               await deleteStoredFile(proDocs, storageKey)
             }
-            throw new ApiError(409, 'PRO_INN_TAKEN', 'Этот ИНН уже подтверждён для другого аккаунта. Напишите нам')
+            throw new ApiError(409, 'PRO_INN_TAKEN', 'Этот ИНН уже подан заявкой. Напишите нам')
           }
           throw err
         }
 
-        // После успешного коммита: если одобрено, удаляем файл
-        if (decision.status === 'approved' && storageKey) {
-          try {
-            await deleteStoredFile(proDocs, storageKey)
-            // Обновляем storageKey в БД
-            await app.prisma.proDocument.updateMany({
-              where: { userId, storageKey },
-              data: { storageKey: null, deletedAt: new Date() },
-            })
-          } catch (err) {
-            // Файл удалится при purge, не валим ответ
-            app.log.warn({ err }, `Failed to delete pro document immediately for user ${userId}`)
-          }
-        }
-
-        // Если pending, отправляем уведомление менеджеру
-        if (decision.status === 'pending' && proNotifyEmail) {
+        // Отправляем уведомление менеджеру на каждую заявку
+        // Зелёный lane (найдено в реестре) помечается в теме для приоритизации
+        if (proNotifyEmail) {
           try {
             const mailSender = createMailSender()
+            const laneMark = decision.lane === 'green' ? '✓ ' : ''
             const checkText = decision.check.registry
               ? `\nНайдено в реестре МСП: ${decision.check.registry.name} (${decision.check.registry.okvedMain || 'н/а'})`
               : `\nВ реестре МСП не найдено. НПД статус: ${decision.check.npd}`
 
-            const message = `Новая заявка специалиста на проверку
+            const message = `${laneMark}Новая заявка специалиста на проверку
 
 Салон: ${companyName}
 ИНН: ${maskInn(inn)}${checkText}
@@ -279,7 +259,7 @@ export default async function proRoute(app: FastifyInstance) {
 
             await mailSender.sendPlain(
               proNotifyEmail,
-              'Новая заявка специалиста на проверку',
+              `${laneMark}Новая заявка специалиста на проверку`,
               message
             )
           } catch (err) {
