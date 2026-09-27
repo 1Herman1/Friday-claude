@@ -1,0 +1,49 @@
+name: Perfect Skin — monthly FNS small-business registry import
+
+# Реестр МСП ФНС выходит 10-го числа; запускаемся 12-го с запасом.
+# Ссылка на выпуск меняется каждый месяц, а meta.csv набора отстаёт на выпуск,
+# поэтому берём самую свежую по дате ссылку со страницы набора.
+# Сначала сухой прогон, запись — только если он прошёл.
+
+on:
+  schedule:
+    - cron: '0 3 12 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # Та же группа, что у выкатки: импорт не должен идти во время npm install.
+  group: deploy-perfect-skin
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Import over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PS_DEPLOY_HOST }}
+          username: ${{ secrets.PS_DEPLOY_USER }}
+          key: ${{ secrets.PS_DEPLOY_SSH_KEY }}
+          command_timeout: 60m
+          script: |
+            set -euo pipefail
+            cd /var/www/ps-src/projects/perfect-skin/server
+            PAGE=$(curl -fsS --max-time 30 https://www.nalog.gov.ru/opendata/7707329152-rsmp/)
+            URL=$(printf '%s' "$PAGE" \
+              | grep -oE 'https://file\.nalog\.ru/opendata/7707329152-rsmp/data-[0-9]{8}-structure-[0-9]{8}\.zip' \
+              | sort -u \
+              | awk -F'data-' '{d=substr($2,1,8); print substr(d,5,4) substr(d,3,2) substr(d,1,2) " " $0}' \
+              | sort -r | head -1 | cut -d' ' -f2)
+            if [ -z "$URL" ]; then echo "Ссылка на выпуск не найдена на странице набора"; exit 1; fi
+            echo "Выпуск: $URL"
+            set -a; . ./.env; set +a
+            ZIP="${PS_MSP_TMP_DIR:-/var/tmp}/msp-release.zip"
+            trap 'rm -f "$ZIP"' EXIT
+            # Качаем один раз: 2 ГБ, дважды тянуть их с ФНС незачем.
+            curl -fS --retry 3 --retry-delay 30 --max-time 3000 -o "$ZIP" "$URL"
+            npm run import:msp -- --file "$ZIP"
+            npm run import:msp -- --file "$ZIP" --apply

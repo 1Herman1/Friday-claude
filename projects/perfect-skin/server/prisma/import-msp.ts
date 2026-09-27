@@ -234,8 +234,13 @@ async function importZip(
     stats.byPrefix[p] = prefixHits[p].size
   })
 
-  // Если --apply, пишем в БД
-  if (shouldApply && records.length > 0) {
+  // Ноль профильных записей в выпуске на миллионы субъектов — признак того,
+  // что ФНС сменила формат, а не того, что салоны исчезли. Молча выйти с
+  // кодом 0 значило бы оставить старую таблицу и не узнать об этом никогда.
+  if (shouldApply && records.length === 0) {
+    throw new Error(`Не найдено ни одной профильной записи из ${stats.scanned} документов — формат выпуска изменился? Таблица не тронута.`)
+  }
+  if (shouldApply) {
     await writeToDb(records, stats.releaseDate, sourceUrl, stats.scanned)
   }
 
