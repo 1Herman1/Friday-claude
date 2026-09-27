@@ -17,9 +17,10 @@ export async function handler() {
           type: "text" as const,
           text: JSON.stringify({
             credits: balance.total,
-            spent_credits: balance.used,
             usd: formatPrice(balance.total, usdPerCredit),
-            spent_usd: formatPrice(balance.used, usdPerCredit),
+            ...(balance.used !== undefined
+              ? { spent_credits: balance.used, spent_usd: formatPrice(balance.used, usdPerCredit) }
+              : {}),
           }, null, 2),
         },
       ],

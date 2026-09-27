@@ -14,7 +14,8 @@ export default new Command("balance")
     const balance = await provider.balance();
 
     emit(flags, { data: balance }, (data: unknown) => {
-      const b = data as { total: number; used: number };
-      return `Баланс: ${b.total} кредитов (использовано: ${b.used})`;
+      const b = data as { total: number; used?: number };
+      const usd = (b.total * 0.005).toFixed(2);
+      return `Баланс: ${b.total} кредитов (≈ $${usd})` + (b.used !== undefined ? `, использовано: ${b.used}` : "");
     });
   });

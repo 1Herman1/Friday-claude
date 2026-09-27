@@ -25,30 +25,25 @@ export class KieProvider implements Provider {
     this.pricing = pricing;
   }
 
-  async balance(): Promise<{ total: number; used: number }> {
-    const resp = (await this.client.credits()) as {
-      code?: number;
-      msg?: string;
-      message?: string;
-      data?: { total?: unknown; used?: unknown };
-    };
+  async balance(): Promise<{ total: number; used?: number }> {
+    // Формат из документации kie (GET /api/v1/chat/credit): { code, msg, data: 100 },
+    // data — остаток кредитов числом. Прежний разбор искал data.total, которого нет,
+    // и подставлял 0 — отсюда «Баланс: 0» при живом счёте.
+    const resp = (await this.client.credits()) as { code?: number; msg?: string; data?: unknown };
 
-    // Код ответа игнорировать нельзя: при 401 тело пустое, и «0 кредитов»
-    // выглядит как честный ответ, хотя это проглоченная ошибка доступа.
     if (resp.code !== undefined && resp.code !== 200) {
+      throw new ProviderError(`kie.ai не отдал баланс: код ${resp.code}${resp.msg ? ` — ${resp.msg}` : ""}`);
+    }
+
+    const total = typeof resp.data === "number" ? resp.data : Number.NaN;
+    if (!Number.isFinite(total)) {
       throw new ProviderError(
-        `kie.ai не отдал баланс: код ${resp.code}${resp.msg || resp.message ? ` — ${resp.msg ?? resp.message}` : ""}`
+        `kie.ai вернул баланс в неожиданном виде (${JSON.stringify(resp.data)?.slice(0, 80)}) — формат API мог измениться`
       );
     }
-
-    const total = Number(resp.data?.total);
-    const used = Number(resp.data?.used);
-    if (!Number.isFinite(total)) {
-      throw new ProviderError("kie.ai вернул ответ без поля total — баланс неизвестен");
-    }
-
-    return { total, used: Number.isFinite(used) ? used : 0 };
+    return { total };
   }
+
 
   async models(): Promise<ModelInfo[]> {
     return this.modelList;

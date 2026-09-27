@@ -64,7 +64,8 @@ export interface NormalizedStatus {
 
 export interface Provider {
   name: string;
-  balance(): Promise<{ total: number; used: number }>;
+  /** total — остаток кредитов; used — потрачено, если провайдер это сообщает (kie — нет) */
+  balance(): Promise<{ total: number; used?: number }>;
   models(): Promise<ModelInfo[]>;
   model(id: string): Promise<ModelInfo>;
   estimate(model: string, input: Record<string, unknown>): Promise<CostEstimate | null>;
