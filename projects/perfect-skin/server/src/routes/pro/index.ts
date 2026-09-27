@@ -1,5 +1,4 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
-import type { MultipartFile } from '@fastify/multipart'
 import { z } from 'zod'
 import { validateTaxId } from '@ps/shared'
 import { ApiError } from '../../lib/errors.js'
@@ -82,7 +81,7 @@ export default async function proRoute(app: FastifyInstance) {
       // Парсим multipart данные
       const parts = request.parts()
       const fields: Record<string, string> = {}
-      let documentPart: MultipartFile | null = null
+      let fileBuffer: Buffer | null = null
 
       for await (const part of parts) {
         if (part.type === 'field') {
@@ -91,14 +90,17 @@ export default async function proRoute(app: FastifyInstance) {
           if (part.fieldname !== 'document') {
             throw new ApiError(400, 'VALIDATION_ERROR', 'Неправильное имя поля файла')
           }
-          if (documentPart) {
+          if (fileBuffer) {
             throw new ApiError(400, 'VALIDATION_ERROR', 'Ровно один файл')
           }
-          documentPart = part
+          // Поток файла читаем сразу: busboy не отдаёт следующие части формы,
+          // пока текущий файл не вычитан, и форма с файлом не в конце висела бы
+          // до таймаута сокета.
+          fileBuffer = await part.toBuffer()
         }
       }
 
-      if (!documentPart) {
+      if (!fileBuffer) {
         throw new ApiError(400, 'VALIDATION_ERROR', 'Файл документа обязателен')
       }
 
@@ -120,9 +122,6 @@ export default async function proRoute(app: FastifyInstance) {
       if (!innValidation.ok) {
         throw new ApiError(400, 'VALIDATION_ERROR', innValidation.reason)
       }
-
-      // Читаем файл в память
-      const fileBuffer = await documentPart.toBuffer()
 
       let storageKey: string | null = null
       try {
