@@ -219,7 +219,12 @@ function fakeJobs(outcome: Record<string, "done" | "failed" | "pending" | "throw
     },
     waitAll: async (ids) => {
       const job = (id: string): Job =>
-        ({ id, localPaths: [`/out/${byJob.get(id)}.png`], failMsg: "упала на стороне kie" }) as unknown as Job;
+        ({
+          id,
+          localPaths: [`/out/${byJob.get(id)}.png`],
+          resultUrls: [`https://kie.example/${byJob.get(id)}.png`],
+          failMsg: "упала на стороне kie",
+        }) as unknown as Job;
       return {
         done: ids.filter((id) => outcome[byJob.get(id)!] === "done").map(job),
         failed: ids.filter((id) => outcome[byJob.get(id)!] === "failed").map(job),
@@ -256,6 +261,7 @@ test("runRecipe: зависимый шаг получает результат �
   const video = created.find((c) => c.prompt === "p video")!;
   assert.deepStrictEqual(video.images, ["/out/frame.png"]);
   assert.deepStrictEqual(res.steps.map((s) => s.state), ["done", "done"]);
+  assert.deepStrictEqual(res.steps[0].result_urls, ["https://kie.example/frame.png"], "адрес у провайдера в отчёте");
 });
 
 test("runRecipe: источник упал — зависимый пропущен, независимые готовы", async () => {

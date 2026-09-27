@@ -185,11 +185,8 @@ recipeCmd
             }[step.state];
 
             lines.push(`  ${statusIcon} ${step.id}: ${step.state}`);
-            if (step.local_paths.length > 0) {
-              for (const path of step.local_paths) {
-                lines.push(`     → ${path}`);
-              }
-            }
+            for (const path of step.local_paths) lines.push(`     → ${path}`);
+            for (const url of step.result_urls ?? []) lines.push(`     ↗ ${url}`);
             if (step.error) {
               lines.push(`     Ошибка: ${step.error}`);
             }

@@ -62,6 +62,8 @@ export interface RecipeStepResult {
   state: "done" | "failed" | "pending" | "skipped";
   job_id?: string;
   local_paths: string[];
+  /** Адреса у провайдера: локальный путь пропадает вместе с машиной, где шёл прогон */
+  result_urls?: string[];
   error?: string;
   skip_reason?: string;
 }
@@ -255,6 +257,7 @@ export async function runRecipe(
       if (done) {
         r.state = "done";
         r.local_paths = done.localPaths ?? [];
+        r.result_urls = done.resultUrls ?? [];
       } else if (failed) {
         r.state = "failed";
         r.error = failed.failMsg || "задача завершилась ошибкой";

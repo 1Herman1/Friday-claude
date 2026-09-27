@@ -32,6 +32,14 @@ on:
         description: 'Потолок расхода в кредитах — дороже не запустится'
         type: string
         default: '6'
+      recipe:
+        description: 'Рецепт вместо одиночной генерации (product-card, hero-banner…). Пусто — одиночная'
+        type: string
+        default: ''
+      subject:
+        description: 'Предмет для рецепта: что снимаем'
+        type: string
+        default: ''
 
 jobs:
   live:
@@ -79,8 +87,25 @@ jobs:
           echo "credits=$(node -p "require('./cost.json').creditsMax")" >> "$GITHUB_OUTPUT"
           echo "source=$(node -p "require('./cost.json').source")" >> "$GITHUB_OUTPUT"
 
+      - name: Живой прогон рецепта
+        if: ${{ inputs.generate && inputs.recipe != '' }}
+        env:
+          RECIPE: ${{ inputs.recipe }}
+          SUBJECT: ${{ inputs.subject }}
+          MAX_CREDITS: ${{ inputs.max_credits }}
+        run: |
+          if [ -z "$SUBJECT" ]; then
+            echo "::error::Для рецепта нужен subject — что снимаем."
+            exit 1
+          fi
+          # Потолок и проверка источника цены — внутри runRecipe: при превышении
+          # или неподтверждённой цене не создаётся ни одной задачи.
+          node bin/nullume.js recipe run "$RECIPE" --subject "$SUBJECT" --max-credits "$MAX_CREDITS"
+          mkdir -p "$GITHUB_WORKSPACE/live-out"
+          cp "$NULLUME_HOME"/downloads/* "$GITHUB_WORKSPACE/live-out/" 2>/dev/null || true
+
       - name: Живая генерация
-        if: ${{ inputs.generate }}
+        if: ${{ inputs.generate && inputs.recipe == '' }}
         run: |
           CREDITS="${{ steps.cost.outputs.credits }}"
           LIMIT="${{ inputs.max_credits }}"
