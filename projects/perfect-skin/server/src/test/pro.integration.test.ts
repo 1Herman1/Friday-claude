@@ -728,4 +728,82 @@ describe('Professional (wholesale) Integration Tests', () => {
     expect(dbUser!.proStatus).toBe('rejected')
     expect(dbUser!.proRejectReason).toBe('Нет подтверждающих документов')
   })
+
+  // 10. Race condition: approve with wrong expectedRequestedAt → 409 PRO_REQUEST_CHANGED
+  it('(10) PATCH approve с неверным expectedRequestedAt → 409 PRO_REQUEST_CHANGED', async () => {
+    const user = await createUser('race-10')
+    const token = tokenFor(user)
+    const admin = await createUser('admin-10', { role: 'super_admin' })
+    const adminToken = tokenFor(admin)
+
+    // Подаём первую заявку
+    const apply1 = await app.inject({
+      method: 'POST',
+      url: '/api/v1/pro/apply',
+      payload: { companyName: 'ООО Гонка', inn: '1234567890', specialization: 'косметолог', consentPd: true },
+      headers: { authorization: `Bearer ${token}` },
+    })
+    expect(apply1.statusCode).toBe(200)
+    const firstRequestedAt = (await db.user.findUnique({ where: { id: user.id } }))?.proRequestedAt
+
+    // Пытаемся одобрить с неверной датой (как будто заявка подана в другой момент)
+    const wrongDateRes = await app.inject({
+      method: 'PATCH',
+      url: `/api/v1/admin/pro-requests/${user.id}`,
+      payload: {
+        action: 'approve',
+        expectedRequestedAt: new Date(Date.now() + 1000).toISOString(), // будущая дата
+      },
+      headers: { authorization: `Bearer ${adminToken}` },
+    })
+    expect(wrongDateRes.statusCode).toBe(409)
+    expect(JSON.parse(wrongDateRes.body).error.code).toBe('PRO_REQUEST_CHANGED')
+
+    // Теперь одобряем с правильной датой
+    const correctRes = await app.inject({
+      method: 'PATCH',
+      url: `/api/v1/admin/pro-requests/${user.id}`,
+      payload: {
+        action: 'approve',
+        expectedRequestedAt: firstRequestedAt!.toISOString(),
+      },
+      headers: { authorization: `Bearer ${adminToken}` },
+    })
+    expect(correctRes.statusCode).toBe(200)
+    expect(JSON.parse(correctRes.body).proStatus).toBe('approved')
+  })
+
+  // 11. Race condition: two parallel applies → one 200, one 409
+  it('(11) Два параллельных /apply одного пользователя → один 200, другой 409', async () => {
+    const user = await createUser('parallel-11')
+    const token = tokenFor(user)
+
+    // Запускаем два apply параллельно с одинаковыми данными
+    const [res1, res2] = await Promise.all([
+      app.inject({
+        method: 'POST',
+        url: '/api/v1/pro/apply',
+        payload: { companyName: 'ООО Параллель', inn: '9876543210', specialization: 'косметолог', consentPd: true },
+        headers: { authorization: `Bearer ${token}` },
+      }),
+      app.inject({
+        method: 'POST',
+        url: '/api/v1/pro/apply',
+        payload: { companyName: 'ООО Параллель', inn: '9876543210', specialization: 'косметолог', consentPd: true },
+        headers: { authorization: `Bearer ${token}` },
+      }),
+    ])
+
+    // Один должен быть 200, другой 409
+    const codes = [res1.statusCode, res2.statusCode].sort()
+    expect(codes).toEqual([200, 409])
+
+    // Проверяем, что 409 имеет правильный код ошибки
+    const failRes = res1.statusCode === 409 ? res1 : res2
+    expect(JSON.parse(failRes.body).error.code).toBe('PRO_ALREADY_REQUESTED')
+
+    // В БД должен быть ровно одна заявка этого пользователя
+    const docs = await db.proDocument.findMany({ where: { userId: user.id } })
+    expect(docs).toHaveLength(1)
+  })
 })

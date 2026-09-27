@@ -187,10 +187,21 @@ export default async function proRoute(app: FastifyInstance) {
               updateData.acceptedTermsAt = new Date()
             }
 
-            await tx.user.update({
-              where: { id: userId },
+            // Гарантируем, что заявка подана ровно один раз: updateMany с условием
+            // на статус. Если пользователь уже подал заявку (pending/approved),
+            // count будет 0 и мы откатим транзакцию с 409.
+            const updateResult = await tx.user.updateMany({
+              where: {
+                id: userId,
+                proStatus: { in: ['none', 'rejected'] },
+              },
               data: updateData,
             })
+
+            if (updateResult.count === 0) {
+              // Заявка уже подана или одобрена — не допускаем редактирование
+              throw new ApiError(409, 'PRO_ALREADY_REQUESTED', 'Заявка уже подана')
+            }
 
             // Срок хранения отсчитывается от решения менеджера (его ставит
             // админка), а не от подачи: иначе заявка, пролежавшая месяц,
@@ -228,7 +239,8 @@ export default async function proRoute(app: FastifyInstance) {
             }
           })
         } catch (err) {
-          // Нарушение уникального индекса на INN для любого статуса
+          // Нарушение уникального индекса на INN для одобренного — выбросил выше
+          // при updateMany count === 0, этот путь тех. страховка только
           if (isInnTakenError(err)) {
             if (storageKey) {
               await deleteStoredFile(proDocs, storageKey)

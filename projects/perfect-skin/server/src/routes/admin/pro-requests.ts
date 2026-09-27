@@ -15,6 +15,7 @@ const listQuerySchema = z.object({
 const patchSchema = z.object({
   action: z.enum(['approve', 'reject']),
   reason: z.string().max(500).optional(),
+  expectedRequestedAt: z.string().datetime().optional(),
 })
 
 export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]) {
@@ -35,7 +36,7 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
                 items: {
                   type: 'object',
                   additionalProperties: false,
-                  required: ['id', 'name', 'email', 'phone', 'companyName', 'inn', 'ogrnip', 'specialization', 'proStatus', 'proDecisionSource', 'proCheck', 'proRequestedAt', 'proReviewedAt', 'proRejectReason', 'document'],
+                  required: ['id', 'name', 'email', 'phone', 'companyName', 'inn', 'ogrnip', 'specialization', 'proStatus', 'proDecisionSource', 'proCheck', 'proRequestedAt', 'proReviewedAt', 'proRejectReason', 'document', 'innDuplicates'],
                   properties: {
                     id: { type: 'string', format: 'uuid' },
                     name: { type: 'string' },
@@ -58,6 +59,15 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
                         sizeBytes: { type: 'integer' },
                         uploadedAt: { type: 'string', format: 'date-time' },
                         available: { type: 'boolean' },
+                      },
+                    },
+                    innDuplicates: {
+                      type: 'object',
+                      additionalProperties: false,
+                      required: ['pending', 'approved'],
+                      properties: {
+                        pending: { type: 'integer' },
+                        approved: { type: 'integer' },
                       },
                     },
                   },
@@ -126,8 +136,34 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
         app.prisma.user.count({ where }),
       ])
 
+      // Получаем все ИННы с этой страницы и считаем дубликаты одним запросом
+      const inns = items.map(u => u.inn).filter((inn): inn is string => !!inn)
+      let innDuplicatesMap: Map<string, { pending: number; approved: number }> = new Map()
+
+      if (inns.length > 0) {
+        // Дальше для каждого ИНН считаем по отдельности pending и approved
+        for (const inn of inns) {
+          const pending = await app.prisma.user.count({
+            where: {
+              inn,
+              deletedAt: null,
+              proStatus: 'pending',
+            },
+          })
+          const approved = await app.prisma.user.count({
+            where: {
+              inn,
+              deletedAt: null,
+              proStatus: 'approved',
+            },
+          })
+          innDuplicatesMap.set(inn, { pending, approved })
+        }
+      }
+
       const formattedItems = items.map((u) => {
         const latestDoc = u.proDocuments[0]
+        const innDuplicates = innDuplicatesMap.get(u.inn || '') || { pending: 0, approved: 0 }
         return {
           id: u.id,
           name: u.name,
@@ -151,6 +187,7 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
                 available: !!latestDoc.storageKey,
               }
             : null,
+          innDuplicates,
         }
       })
 
@@ -204,7 +241,7 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
         throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации', { field: result.error.issues[0]?.path[0] })
       }
 
-      const { action, reason } = result.data
+      const { action, reason, expectedRequestedAt } = result.data
 
       // Get user
       const user = await app.prisma.user.findUnique({
@@ -216,6 +253,7 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
           phone: true,
           role: true,
           proStatus: true,
+          proRequestedAt: true,
           companyName: true,
           inn: true,
           specialization: true,
@@ -247,25 +285,59 @@ export async function proRequestsRoutes(app: FastifyInstance, preHandlers: any[]
         throw new ApiError(400, 'VALIDATION_ERROR', 'При отклонении требуется указать причину', { field: 'reason' })
       }
 
+      // Для approve/reject pending требуем expectedRequestedAt
+      // Для reject approved можно без него
+      if (user.proStatus === 'pending' && !expectedRequestedAt) {
+        throw new ApiError(400, 'VALIDATION_ERROR', 'expectedRequestedAt обязателен для заявки в статусе pending', { field: 'expectedRequestedAt' })
+      }
+
       // Update user in transaction: set decision source to manual and schedule documents for deletion
       const now = new Date()
       const deleteAfter = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // +30 дней
 
       try {
         await app.prisma.$transaction(async (tx) => {
-          await tx.user.update({
-            where: { id },
-            data: {
-              proStatus: action === 'approve' ? 'approved' : 'rejected',
-              role: action === 'approve' ? 'professional' : (user.role === 'professional' ? 'customer' : user.role),
-              proReviewedAt: new Date(),
-              proReviewerId: request.user!.id,
-              proRejectReason: action === 'reject' ? reason : null,
-              proDecisionSource: 'manual',
-            },
-          })
+          let updateResult
 
-          // Set deleteAfter for all documents without deletedAt
+          if (user.proStatus === 'pending') {
+            // Для pending заявок используем updateMany с проверкой на proRequestedAt
+            // чтобы убедиться, что заявка не была подана заново
+            updateResult = await tx.user.updateMany({
+              where: {
+                id,
+                proStatus: 'pending',
+                proRequestedAt: new Date(expectedRequestedAt!),
+              },
+              data: {
+                proStatus: action === 'approve' ? 'approved' : 'rejected',
+                role: action === 'approve' ? 'professional' : (user.role === 'professional' ? 'customer' : user.role),
+                proReviewedAt: new Date(),
+                proReviewerId: request.user!.id,
+                proRejectReason: action === 'reject' ? reason : null,
+                proDecisionSource: 'manual',
+              },
+            })
+
+            if (updateResult.count === 0) {
+              // Заявка изменилась (подана заново) с момента открытия менеджером
+              throw new ApiError(409, 'PRO_REQUEST_CHANGED', 'Заявка изменилась с момента открытия — обновите страницу')
+            }
+          } else {
+            // Для reject уже одобренной (approved) берём стандартный update
+            await tx.user.update({
+              where: { id },
+              data: {
+                proStatus: 'rejected',
+                role: user.role === 'professional' ? 'customer' : user.role,
+                proReviewedAt: new Date(),
+                proReviewerId: request.user!.id,
+                proRejectReason: reason || null,
+                proDecisionSource: 'manual',
+              },
+            })
+          }
+
+          // Set deleteAfter for all documents without deletedAt (только если обновление прошло)
           await tx.proDocument.updateMany({
             where: { userId: id, deletedAt: null },
             data: { deleteAfter },
