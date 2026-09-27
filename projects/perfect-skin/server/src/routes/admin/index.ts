@@ -75,7 +75,7 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
   )
 
   // Telegram routes: super_admin or orders_manager (for linking staff)
-  const telegramPreHandlers = [app.authenticate, checkRole(['super_admin', 'orders_manager', 'products_manager', 'content_manager'])]
+  const telegramPreHandlers = [app.authenticate, checkRole(['super_admin', 'orders_manager'])]
   await app.register(
     async (instance) => telegramRoutes(instance, telegramPreHandlers),
     {

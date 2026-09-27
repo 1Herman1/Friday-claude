@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@prisma/client'
 import { ApiError } from '../lib/errors.js'
 import { isInnTakenError } from '../lib/pro-decision.js'
+import { PRO_REVIEW_ROLES, STAFF_ROLES } from '../lib/pricing.js'
 import { createMailSender } from './mail/index.js'
 
 export interface ReviewApplicationInput {
@@ -38,6 +39,16 @@ export async function reviewApplication(
 ): Promise<ReviewApplicationResult> {
   const { applicantId, action, reason, expectedRequestedAt, reviewerId, via } = input
 
+  // Проверяем, что ревьюер имеет нужную роль и активен (защита от подделки reviewerId)
+  const reviewer = await prisma.user.findUnique({
+    where: { id: reviewerId },
+    select: { role: true, isActive: true },
+  })
+
+  if (!reviewer || !reviewer.isActive || !PRO_REVIEW_ROLES.includes(reviewer.role)) {
+    throw new ApiError(403, 'FORBIDDEN', 'Недостаточно прав для рассмотрения заявок')
+  }
+
   // Получаем пользователя
   const user = await prisma.user.findUnique({
     where: { id: applicantId },
@@ -60,9 +71,8 @@ export async function reviewApplication(
     throw new ApiError(404, 'USER_NOT_FOUND', 'Пользователь не найден')
   }
 
-  // Проверяем, что это не сотрудник
-  const staffRoles = ['super_admin', 'orders_manager', 'products_manager', 'content_manager']
-  if (staffRoles.includes(user.role)) {
+  // Проверяем, что это не сотрудник (только обычные пользователи могут быть специалистами)
+  if (STAFF_ROLES.includes(user.role)) {
     throw new ApiError(409, 'PRO_STAFF_ACCOUNT', 'Сотрудники не могут быть специалистами')
   }
 

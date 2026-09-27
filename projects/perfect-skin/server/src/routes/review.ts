@@ -32,24 +32,38 @@ export async function reviewRoutes(app: FastifyInstance) {
       }
 
       const tokenHash = await createTokenHash(token)
-      const viewToken = await app.prisma.docViewToken.findUnique({
-        where: { tokenHash },
+
+      // Атомарно проверяем, что токен валиден и есть лимит, затем увеличиваем counter
+      // Использование 8 = страница (1) + изображение сертификата (1) + иные доказательства (до 6)
+      const viewToken = await app.prisma.docViewToken.findFirst({
+        where: {
+          tokenHash,
+          expiresAt: { gt: new Date() },
+          uses: { lt: 8 },
+        },
         select: {
           applicantId: true,
-          expiresAt: true,
-          uses: true,
         },
       })
 
-      if (!viewToken || viewToken.expiresAt < new Date() || viewToken.uses >= 5) {
+      if (!viewToken) {
         throw new ApiError(404, 'TOKEN_NOT_FOUND', 'Токен не найден')
       }
 
       // Увеличиваем счётчик использований
-      await app.prisma.docViewToken.update({
-        where: { tokenHash },
+      const updateResult = await app.prisma.docViewToken.updateMany({
+        where: {
+          tokenHash,
+          uses: { lt: 8 },
+          expiresAt: { gt: new Date() },
+        },
         data: { uses: { increment: 1 } },
       })
+
+      // Если updateMany вернул 0, значит между findFirst и updateMany кто-то исчерпал лимит
+      if (updateResult.count !== 1) {
+        throw new ApiError(404, 'TOKEN_NOT_FOUND', 'Токен не найден')
+      }
 
       // Получаем данные заявки
       const applicant = await app.prisma.user.findUnique({
@@ -233,24 +247,37 @@ export async function reviewRoutes(app: FastifyInstance) {
       }
 
       const tokenHash = await createTokenHash(token)
-      const viewToken = await app.prisma.docViewToken.findUnique({
-        where: { tokenHash },
+
+      // Атомарно проверяем, что токен валиден и есть лимит, затем увеличиваем counter
+      const viewToken = await app.prisma.docViewToken.findFirst({
+        where: {
+          tokenHash,
+          expiresAt: { gt: new Date() },
+          uses: { lt: 8 },
+        },
         select: {
           applicantId: true,
-          expiresAt: true,
-          uses: true,
         },
       })
 
-      if (!viewToken || viewToken.expiresAt < new Date() || viewToken.uses >= 5) {
+      if (!viewToken) {
         throw new ApiError(404, 'DOCUMENT_NOT_FOUND', 'Документ удалён по сроку хранения')
       }
 
       // Увеличиваем счётчик использований
-      await app.prisma.docViewToken.update({
-        where: { tokenHash },
+      const updateResult = await app.prisma.docViewToken.updateMany({
+        where: {
+          tokenHash,
+          uses: { lt: 8 },
+          expiresAt: { gt: new Date() },
+        },
         data: { uses: { increment: 1 } },
       })
+
+      // Если updateMany вернул 0, значит между findFirst и updateMany кто-то исчерпал лимит
+      if (updateResult.count !== 1) {
+        throw new ApiError(404, 'DOCUMENT_NOT_FOUND', 'Документ удалён по сроку хранения')
+      }
 
       // Получаем документ
       const doc = await app.prisma.proDocument.findFirst({

@@ -20,6 +20,10 @@ export function isWholesaleViewer(viewer: PriceViewer): boolean {
 // теряла бы часть каталога.
 export const STAFF_ROLES: readonly string[] = ['super_admin', 'orders_manager', 'products_manager', 'content_manager']
 
+// Только эти роли могут рассматривать заявки специалистов и взаимодействовать с ними через бота/админку.
+// Отделяется от STAFF_ROLES, так как products_manager и content_manager не должны видеть / одобрять заявки.
+export const PRO_REVIEW_ROLES: readonly string[] = ['super_admin', 'orders_manager']
+
 /** Кабинетные товары и фасовки видны одобренному специалисту и сотрудникам. */
 export function canSeeProfessional(viewer: PriceViewer): boolean {
   if (!viewer) return false

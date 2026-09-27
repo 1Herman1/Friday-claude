@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import type { PrismaClient } from '@prisma/client'
 import { tgBotToken, publicUrl } from '../../lib/env.js'
 import { reviewApplication } from '../pro-review.service.js'
+import { PRO_REVIEW_ROLES } from '../../lib/pricing.js'
 import { createMailSender } from '../mail/index.js'
 import { createTokenHash, crypto } from '../../lib/crypto.js'
 import type { TelegramNotifier } from './notifier.js'
@@ -117,7 +118,8 @@ export class TelegramBot {
   }
 
   private async handleStart(message: any): Promise<void> {
-    const chatId = message.from.id
+    const chatIdNumber = message.from.id
+    const chatId = BigInt(chatIdNumber)
     const parts = message.text.split(' ')
     const code = parts[1]
 
@@ -128,24 +130,42 @@ export class TelegramBot {
 
     try {
       const codeHash = await createTokenHash(code)
-      const linkCode = await this.prisma.telegramLinkCode.findUnique({
-        where: { codeHash },
-        select: { userId: true, expiresAt: true, usedAt: true },
+
+      // Гасим код атомарно ДО привязки: проверяем ещё не использован и не просрочен,
+      // затем устанавливаем usedAt. Так избегаем повторного использования кода.
+      const updateResult = await this.prisma.telegramLinkCode.updateMany({
+        where: {
+          codeHash,
+          usedAt: null,
+          expiresAt: { gt: new Date() },
+        },
+        data: { usedAt: new Date() },
       })
 
-      if (!linkCode || linkCode.usedAt || linkCode.expiresAt < new Date()) {
+      if (updateResult.count !== 1) {
         await this.answerText(chatId, 'Код не подошёл, получите новый в админке')
         return
       }
 
-      // Проверяем что владелец кода — активный сотрудник с нужной ролью
-      const staffRoles = ['super_admin', 'orders_manager', 'products_manager', 'content_manager']
+      // Теперь читаем код (гарантированно существует) и проверяем ревьюера
+      const linkCode = await this.prisma.telegramLinkCode.findUnique({
+        where: { codeHash },
+        select: { userId: true },
+      })
+
+      if (!linkCode) {
+        // Не должно быть, но подстрахуемся
+        await this.answerText(chatId, 'Код не подошёл, получите новый в админке')
+        return
+      }
+
+      // Проверяем что владелец кода — активный сотрудник с правильной ролью
       const user = await this.prisma.user.findUnique({
         where: { id: linkCode.userId },
         select: { role: true, isActive: true },
       })
 
-      if (!user || !user.isActive || !staffRoles.includes(user.role)) {
+      if (!user || !user.isActive || !PRO_REVIEW_ROLES.includes(user.role)) {
         await this.answerText(chatId, 'Код не подошёл, получите новый в админке')
         return
       }
@@ -153,31 +173,26 @@ export class TelegramBot {
       // Привязываем или перепривязываем
       await this.prisma.telegramLink.upsert({
         where: { userId: linkCode.userId },
-        create: { userId: linkCode.userId, chatId: BigInt(chatId) },
-        update: { chatId: BigInt(chatId), linkedAt: new Date() },
-      })
-
-      // Отмечаем код как использованный
-      await this.prisma.telegramLinkCode.update({
-        where: { codeHash },
-        data: { usedAt: new Date() },
+        create: { userId: linkCode.userId, chatId },
+        update: { chatId, linkedAt: new Date() },
       })
 
       await this.answerText(chatId, 'Готово. Сюда будут приходить заявки специалистов')
     } catch (err) {
-      this.app.log.warn({ chatId, error: err }, 'Start command error')
+      this.app.log.warn({ chatId: chatId.toString(), error: err }, 'Start command error')
       await this.answerText(chatId, 'Ошибка, попробуйте позже')
     }
   }
 
   private async handleCallback(callbackQuery: any): Promise<void> {
-    const chatId = callbackQuery.from?.id
+    const chatIdNumber = callbackQuery.from?.id
+    const chatId = BigInt(chatIdNumber)
     const data = callbackQuery.data as string
     const queryId = callbackQuery.id
 
-    // Проверяем доступ: привязан ли чат, активен ли пользователь, есть ли роль
+    // Проверяем доступ: привязан ли чат, активен ли пользователь, есть ли нужная роль
     const link = await this.prisma.telegramLink.findUnique({
-      where: { chatId: BigInt(chatId) },
+      where: { chatId },
       select: { userId: true },
     })
 
@@ -186,13 +201,12 @@ export class TelegramBot {
       return
     }
 
-    const staffRoles = ['super_admin', 'orders_manager', 'products_manager', 'content_manager']
     const user = await this.prisma.user.findUnique({
       where: { id: link.userId },
       select: { role: true, isActive: true },
     })
 
-    if (!user || !user.isActive || !staffRoles.includes(user.role)) {
+    if (!user || !user.isActive || !PRO_REVIEW_ROLES.includes(user.role)) {
       await this.answerCallbackQuery(queryId, 'Нет доступа')
       return
     }
@@ -227,6 +241,17 @@ export class TelegramBot {
     }
 
     try {
+      // Проверяем, что заявка в статусе pending (если уже рассмотрена, не отдаём доступ)
+      const applicant = await this.prisma.user.findUnique({
+        where: { id: applicantId },
+        select: { proStatus: true },
+      })
+
+      if (!applicant || applicant.proStatus !== 'pending') {
+        await this.answerCallbackQuery(queryId, 'Заявка уже рассмотрена')
+        return
+      }
+
       // Создаём одноразовый токен для просмотра
       const token = crypto.randomBytes(32).toString('base64url')
       const tokenHash = await createTokenHash(token)
@@ -353,6 +378,17 @@ export class TelegramBot {
         return
       }
 
+      // Проверяем, что ревьюер активен и имеет нужную роль (перед тем как вызвать сервис)
+      const reviewer = await this.prisma.user.findUnique({
+        where: { id: link.userId },
+        select: { role: true, isActive: true },
+      })
+
+      if (!reviewer || !reviewer.isActive || !PRO_REVIEW_ROLES.includes(reviewer.role)) {
+        await this.answerText(chatId, 'Нет доступа')
+        return
+      }
+
       const mailSender = createMailSender()
       const expectedRequestedAt = new Date(state.ms).toISOString()
 
@@ -370,8 +406,10 @@ export class TelegramBot {
     } catch (err: any) {
       if (err.code === 'PRO_REQUEST_CHANGED') {
         await this.answerText(chatId, 'Заявка изменилась — откройте её заново')
+      } else if (err.code === 'FORBIDDEN') {
+        await this.answerText(chatId, 'Нет доступа')
       } else {
-        this.app.log.warn({ chatId, error: err }, 'Reject reason error')
+        this.app.log.warn({ chatId: chatId.toString(), error: err }, 'Reject reason error')
         await this.answerText(chatId, 'Ошибка')
       }
     }

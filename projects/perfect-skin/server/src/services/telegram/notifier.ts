@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import type { PrismaClient } from '@prisma/client'
 import { publicUrl, tgBotToken } from '../../lib/env.js'
+import { PRO_REVIEW_ROLES } from '../../lib/pricing.js'
 
 export class TelegramNotifier {
   constructor(
@@ -34,7 +35,6 @@ export class TelegramNotifier {
       }
 
       // Получаем активных сотрудников с нужными ролями
-      const staffRoles = ['super_admin', 'orders_manager', 'products_manager', 'content_manager']
       const links = await this.prisma.telegramLink.findMany({
         select: { userId: true, chatId: true },
       })
@@ -46,7 +46,7 @@ export class TelegramNotifier {
           select: { role: true, isActive: true },
         })
 
-        if (!user || !user.isActive || !staffRoles.includes(user.role)) {
+        if (!user || !user.isActive || !PRO_REVIEW_ROLES.includes(user.role)) {
           continue
         }
 

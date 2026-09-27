@@ -33,7 +33,23 @@ declare module 'fastify' {
 }
 
 const app = Fastify({
-  logger: true,
+  logger: {
+    // Маскируем токены просмотра заявок в логах
+    serializers: {
+      req: (request: any) => {
+        // Скрываем токен в URL /api/v1/review/<что угодно до / или ?>
+        let url = request.url || ''
+        url = url.replace(/\/api\/v1\/review\/[^/?]+/g, '/api/v1/review/[скрыто]')
+        return {
+          id: request.id,
+          method: request.method,
+          url,
+          remoteAddress: request.ip,
+          headers: request.headers,
+        }
+      },
+    },
+  },
   // Дефолт 100 символов режет длинные слаги товаров (до 120 по схеме).
   maxParamLength: 200,
 })
