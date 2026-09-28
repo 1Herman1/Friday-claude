@@ -53,7 +53,7 @@ export function RequireRole({ roles, children }: RequireRoleProps) {
 
   // Не залогинен
   if (!user) {
-    return <Navigate to="/auth?next=/admin" replace />
+    return <Navigate to="/staff-login" replace />
   }
 
   // Роль не имеет доступ

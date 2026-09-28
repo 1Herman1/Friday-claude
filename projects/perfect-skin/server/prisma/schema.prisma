@@ -160,6 +160,7 @@ model User {
   phone           String?
   name            String
   passwordHash    String? // только сотрудники
+  login           String?   @unique // только сотрудники, вход по паролю
   role            UserRole  @default(customer)
   isActive        Boolean   @default(true)
   acceptedTermsAt DateTime? // согласие на обработку ПДн — храним документы
