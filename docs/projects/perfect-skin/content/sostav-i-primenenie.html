@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Карточки Perfect Skin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600&family=IBM+Plex+Mono&display=swap">
+<style>
+/* one reading column; each product is a record with two fields */
+:root{--bg:#F4F2EC;--card:#fff;--fg:#1B2433;--muted:#5B6474;--line:#DDD8CC;--accent:#1F3A5F;--ok:#2E6B3F;--warn:#8A5A00;--bad:#9B2C2C;
+--body:"Golos Text",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161D;--card:#1A2029;--fg:#E7E3D9;--muted:#9AA3B2;--line:#2C3440;--accent:#9DB8DE;--ok:#7CC48F;--warn:#E0B458;--bad:#EE8B8B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12161D;--card:#1A2029;--fg:#E7E3D9;--muted:#9AA3B2;--line:#2C3440;--accent:#9DB8DE;--ok:#7CC48F;--warn:#E0B458;--bad:#EE8B8B;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);padding:32px 16px}
+main{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:28px;margin:0;text-wrap:balance;color:var(--accent)}
+.lead{color:var(--muted);max-width:65ch;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:6px 14px;cursor:pointer;min-height:36px}
+.chip[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.chip:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:grid;gap:10px;min-width:0}
+.row header{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between}
+h2{font-size:17px;margin:0;font-weight:600}
+.pill{font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.full{color:var(--ok)}.part{color:var(--accent)}.low{color:var(--warn)}.none{color:var(--bad)}
+dl{margin:0;display:grid;gap:10px}dt{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}dd{margin:2px 0 0;max-width:70ch}
+.inci{font:13px/1.5 var(--mono);overflow-wrap:anywhere}
+em{color:var(--muted)}.meta{margin:0;font-size:13px;color:var(--muted)}a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main><h1>Состав и способ применения</h1>
+<p class="lead">Черновик для карточек товаров. Тексты взяты с сайтов производителя (isseimi.es, glacee.es); состав скопирован дословно, способ применения переведён. Где источника нет, поле осталось пустым. Просим проверить тексты и прислать этикетки или техкарты для товаров без данных.</p>
+<div class="chips" role="group" aria-label="Фильтр"><button class="chip" data-f="full" aria-pressed="false">Состав и применение <b>11</b></button><button class="chip" data-f="part" aria-pressed="false">Частично <b>15</b></button><button class="chip" data-f="low" aria-pressed="false">Нужна сверка <b>7</b></button><button class="chip" data-f="none" aria-pressed="false">Не найдено <b>24</b></button></div>
+<article class="row" data-s="full"><header><h2>PURE MARINE WATER CREAM Увлажняющий крем с морской водой</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите днём на лицо, шею и зону декольте лёгкими массирующими движениями до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Aqua (Water), Octyldodecyl Myristate, Glycerin, Helianthus Annuus (Sunflower) Seed Oil, Caprylic/ Capric Triglyceride,Polyglyceryl-6 Distearate, Cetyl Alcohol, Simmondsia Chinensis (Jojoba) Seed Wax, Maris Aqua (Sea Water), Polyglyceryl-3 Beeswax, Xanthan Gum, Rosmarinus Officinalis (Rosemary) Leaf Extract, Parfum (Fragance), Tocopherol, Beta-Sitosterol, Squalene, Phenoxyethanol, Ethylhexylglycerin, Acetyl Cedrene, Dimethyl Phenethyl Acetate, Terpineol.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/pure-marine/" target="_blank" rel="noopener">Источник</a> · На сайте «Pure Marine», 50 ml.</p></article>
+<article class="row" data-s="full"><header><h2>CHIA DETOX CREAM Увлажняющий крем с чиа</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Используйте днём и вечером: нанесите достаточное количество на лицо, шею и зону декольте круговыми движениями снизу вверх до полного впитывания, избегая сильного трения.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Aqua (Water), Glycerin, Salvia Hispanica (Chia) Seed Oil, Lavandula Angustifolia (Lavender) Flower Water, Caprylic/ Capric Triglyceride, Octyldodecyl Myristate,Polyglyceryl-6 Distearate, Cetyl Alcohol, Jojoba Esters, Polyglyceryl-3 Beeswax, Tocopherol, Xanthan Gum, Beta-Sitosterol, Squalene, Parfum (Fragrance), Lactic Acid, Gluconolactone, Calcium Gluconate, Sodium Benzoate, Potassium Sorbate, Acetyl Cedrene, Anethole, Carvone, Dimethyl Phenethyl Acetate, Terpineol, Amyl Salicylate.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/chia-detox/" target="_blank" rel="noopener">Источник</a></p></article>
+<article class="row" data-s="full"><header><h2>CHIA PROTECT OIL Масло чиа с озоном</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Используйте днём для чувствительной и раздражённой кожи: нанесите достаточное количество на лицо, шею и зону декольте до полного впитывания. Избегайте сильного трения кожи при нанесении.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Caprylic/ Capric Triglyceride, Octyldodecyl Myristate, Salvia Hispanica (Chia) Seed Oil, Prunus Amygdalus Dulcis (Sweet Almond) Oil, Parfum (Fragance), Ozonized Sunflower Seed Oil, Tocopheryl Acetate, Acetyl Cedrene, Anethole, Carvone, Dimethyl Phenethyl Acetate, Terpineol.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/chia-protect-oil/" target="_blank" rel="noopener">Источник</a> · На сайте заголовок «Protect Oil», 30ml.</p></article>
+<article class="row" data-s="full"><header><h2>JOJOBA OIL + O3 Себорегулирующее масло жожоба с озоном</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите днём и вечером перед кремом: выдавите достаточное количество на ладонь и распределите по лицу, шее и зоне декольте до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Prunus Amygdalus Dulcis (Sweet Almond) Oil, Simmondsia Chinensis (Jojoba) Seed Oil, Ozonized Sunflower Seed Oil, Parfum (Fragance), Tocopheryl Acetate, Linalyl Acetate, Terpineol, Tetramethyl Acetyloctahydronaphthalenes, Trimethylcyclopentenyl Methylisopentenol, Hexadecanolactone, Isoeugenyl Acetate.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/o3-jojoba-oil/" target="_blank" rel="noopener">Источник</a></p></article>
+<article class="row" data-s="full"><header><h2>ROSE HIP OIL + O3 Регенерирующее масло шиповника с озоном</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите днём или вечером, всегда перед кремом. Выдавите достаточное количество на ладонь и нанесите на лицо, шею и зону декольте до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Prunus Amygdalus Dulcis (Sweet Almond) Oil, Rosa Canina Fruit Oil, Ozonized Sunflower Seed Oil, Parfum (Fragance), Tocopheryl Acetate, Citronellol, Geraniol, Geranyl Acetate, Hexadecanolactone, Rose Ketones, Tetramethyl Acetyloctahydronaphthalenes.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/o3-mosqueta-oil/" target="_blank" rel="noopener">Источник</a> · На сайте «O3 Mosqueta Oil», 30ml.</p></article>
+<article class="row" data-s="full"><header><h2>BAOBAB OIL ILLUMINATOR AND REPAIRER Восстанавливающее масло баобаба</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите днём или вечером перед кремом как дополнение к уходу для сияния. Распределите достаточное количество по лицу, шее и зоне декольте небольшими круговыми движениями снизу вверх до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Prunus Amygdalus Dulcis (Sweet Almond) Oil, Adansonia Digitata (Baobab) Seed Oil, Ozonized Sunflower Seed Oil , Tocopheryl Acetate, Parfum (Fragance), Benzyl Salicylate, Linalool, Limonene, Coumarin, Benzyl Benzoate, Hexyl Cinnamal, Citral, Anethole, Citrus Limon Peel Oil, Hexamethylindanopyran, Lavandula Oil/ Extract, Linalyl Acetate, Pelargonium Graveolens Flower Oil, Pinene, Pogostemon Cablin Oil, Tetramethyl Acetyloctahydronaphthalenes, Vanillin.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/o3-baobab-oil/" target="_blank" rel="noopener">Источник</a> · На сайте «O3 Baobab Oil», 30 ml.</p></article>
+<article class="row" data-s="full"><header><h2>SCRUB LOTION Крем для снятия макияжа</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Нанесите достаточное количество и распределите по всему лицу, мягко массируя круговыми движениями до полного впитывания для отшелушивания. Удалите частицы скраба сухой салфеткой.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Aqua (Water), Hydrogenated Castor Oil, Paraffinum Liquidum, Glycerin, Isopropyl Myristate, Glyceryl Stearate SE, Caprylic/Capric Triglyceride, Glyceryl Stearate, Cetyl Alcohol, PEG-75 Stearate, Aloe Barbadensis (Aloe) Leaf Juice, Disodium EDTA, Ceteth-20, Steareth-20, Cocamidopropyl Betaine, Xanthan Gum, Ethylhexylglycerin, Phenoxyethanol, Parfum (Fragance), Hydroxycitronellal, Potassium Sorbate, Sodium Benzoate, CI 47005 (FD&amp;C Yellow No. 10), CI 42051.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/scrublotion/" target="_blank" rel="noopener">Источник</a> · На сайте «Scrublotion», 200ml.</p></article>
+<article class="row" data-s="full"><header><h2>BIOCELL Сыворотка обновляющая</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите днём или вечером, перед кремом. Выдавите достаточное количество на ладонь и нанесите на лицо, шею и зону декольте до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Aqua (Water), Glycerin, Rosa Canina (Rosehip) Fruit Oil, SH-Oligopeptide-1, Alcohol Denat., Phosphatidylcholine, Phosphatidylinositol, Lysophosphatidylethanolamine, Hydroxyethylcellulose, Tocopheryl Acetate, Allantoin, Caprylyl Glycol, Serine, TEA-Lactate, Sodium Lactate, Lactic Acid, Urea, Sorbitol, Phosphate Buffered Saline, Sodium Benzoate, Ethylhexylglycerin, Triethanolamine, Sodium Chloride, Sodium Nitrate, Phenethyl Alcohol, Phenoxyethanol.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/biocell/" target="_blank" rel="noopener">Источник</a> · 30ml.</p></article>
+<article class="row" data-s="full"><header><h2>TTS MOISTURIZING MASK Увлажняющая маска</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Откройте саше и разверните маску. Закрепите её на ушах и под подбородком так, чтобы она плотно прилегала по контуру лица. Оставьте на 30 минут. Благодаря системе фиксации во время процедуры дома можно двигаться.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Aqua (Water), Lavandula Angustifolia (Lavender) Flower Water, Dimethylsilanol Hyaluronate, Carbomer, Aloe Barbadensis (Aloe) Leaf Juice, Gluconolactone, Ozonized Sunflower Seed Oil, Glycerin, Phosphatidylcholine, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Tocopheryl Acetate, Calcium Gluconate, Potassium Sorbate, Phenoxyethanol, Triethanolamine, Acrylic Acid, Ethylhexylglycerin, Sodium Benzoate, Phenethyl Alcohol, Caprylyl Glycol, Parfum (Fragance), Cinnamyl Alcohol, Citral, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Hexyl Cinnamal, Limonene, Linalool, Linalyl Acetate, Pinene.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/tts-moisturizing-mask-acido-hialuronico/" target="_blank" rel="noopener">Источник</a> · На сайте 1 ud/30 ml; набор из 6 шт — вероятно кабинетная версия, не проверялась.</p></article>
+<article class="row" data-s="full"><header><h2>TTS ESSENTIAL MASK Укрепляющая и обновляющая маска</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Откройте саше и разверните маску. Закрепите её на ушах и под подбородком так, чтобы она плотно прилегала по контуру лица. Оставьте на 30 минут. Благодаря системе фиксации во время процедуры дома можно двигаться.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Aqua (Water), Dimethylsilanol Hyaluronate, Hydrolyzed Elastin, Carbomer, Hydrolyzed Wheat Protein, Aloe Barbadensis (Aloe) Leaf Juice, Glycerin, SH-Polypeptide-11, Oligopeptide-24, Triethanolamine, Dimethyl MEA, PVP, Disodium EDTA, Glycine Soja (Soybean) Oil, Hydrogenated Phosphatidylcholine, Sorbic Acid, Acrylic Acid, Ethylhexylglycerin, Phenoxyethanol, Potassium Sorbate, Sodium Benzoate, Sodium Oleate, Parfum (Fragance), Cinnamyl Alcohol, Citral, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Hexyl Cinnamal, Limonene, Linalool, Linalyl Acetate, Pinene.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/tts-essential-mask-reafirmante-regenerante/" target="_blank" rel="noopener">Источник</a> · На сайте 1 ud/30 ml; набор из 6 шт — вероятно кабинетная версия, не проверялась.</p></article>
+<article class="row" data-s="full"><header><h2>O3 DEPUR Крем с озоном</h2><span class="pill full">Состав и применение</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите днём и вечером на кожу, склонную к акне: распределите достаточное количество по лицу и шее до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci">Aqua (Water), Hydrogenated Polydecene, Aloe Barbadensis (Aloe) Leaf Juice, Glyceryl Stearate, PEG-100 Stearate, Octyldodecyl Myristate, Cera Alba (Beeswax), Cetyl Alcohol, Octyldodecanol, Carbomer, Tocopheryl Acetate, Glycerin, Triethanolamine, Ozonized Sunflower Seed Oil, Phosphatidylcholine, Lysophosphatidylethanolamine, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Phenoxyethanol, Ethylhexylglycerin, Phosphate Buffered Saline, Potassium Sorbate, Sodium Benzoate, Acrylic Acid, Parfum (Fragrance), Limonene, Linalool, Hexyl Cinnamal, Cinnamyl Alcohol, Citral, Geraniol, Amyl Cinnamal, Phenethyl Alcohol, Caprylyl Glycol, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Linalyl Acetate, Pinene.</dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/o3-depur/" target="_blank" rel="noopener">Источник</a> · 50ml.</p></article>
+<article class="row" data-s="part"><header><h2>DINAMIZANTE Восстанавливающий крем</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>После очищения и сыворотки наносите крем утром и вечером на лицо, шею и зону декольте. Сделайте лёгкий массаж восходящими движениями до полного впитывания. Сочетайте с сывороткой Serum Triple Acción.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/crema/con-celulas-madre" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>HIDRORREVITALIZANTE Восстанавливающий крем</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>На очищенную кожу нанесите небольшое количество крема подушечками пальцев и распределите по лицу, шее и зоне декольте лёгким круговым массажем до полного впитывания. Для лучшего результата используйте утром и вечером.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/crema/hidratante-para-cara" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>ANTIOX-C Антиоксидантный крем</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Нанесите небольшое количество на чистую сухую кожу утром и вечером. Мягкими круговыми движениями помассируйте лицо, шею и зону декольте до полного впитывания крема.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/crema/antioxidante-vitamina-c" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>GEN ADN Укрепляющий крем</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Нанесите умеренное количество на чистую сухую кожу утром и вечером. Мягко помассируйте лицо, шею и зону декольте восходящими движениями, чтобы крем лучше впитался.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/crema/reafirmante-de-cara" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>RETI+ Богатый ретинолом крем</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>После тщательного очищения нанесите небольшое количество на лицо, шею и зону декольте, мягко массируя до полного впитывания. Рекомендуется использовать вечером. Если вы впервые пользуетесь ретинолом, начните с нанесения раз в две-три ночи и постепенно увеличивайте частоту. Днём обязательно используйте солнцезащитное средство: ретинол может повышать чувствительность кожи к солнцу.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/crema/con-retinol-cara" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>CONTOUR-K Крем для глаз</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Выдавите немного средства на подушечку безымянного пальца. Наносите дважды в день, утром и вечером, на чистую кожу лёгкими похлопывающими движениями от внутреннего уголка глаза к внешнему, не растягивая кожу.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/tratamiento-facial/contorno/ojos-vitamina-k" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>SERUM TRIPLE ACCIÓN Сыворотка тройного действия</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>После очищения нанесите несколько капель на лицо, шею и зону декольте, всегда восходящими движениями. Распределите лёгким массажем круговыми движениями до полного впитывания. Рекомендуется ежедневно утром и/или вечером перед привычным кремом Glacée.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/serum/triple-accion" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>ENERGEL Очищающий гель с морской термальной водой</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Нанесите небольшое количество средства на влажное лицо утром и вечером. Массируйте восходящими круговыми движениями, избегая области вокруг глаз. Смойте тёплой водой и аккуратно промокните чистым полотенцем.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/cosmetica-facial/gel-limpiador-cara-hombre" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов. Объём на странице не указан.</p></article>
+<article class="row" data-s="part"><header><h2>BALANCE TONER Тоник с морской термальной водой</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите тоник на лицо после очищающего средства, в дневном и вечернем уходе. Используйте ватный диск или руки и лёгкими похлопываниями распределите по коже до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/cosmetica-facial/tonico-facial-hombre" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов. На сайте название «Balance Tonner».</p></article>
+<article class="row" data-s="part"><header><h2>HYDROCOMBAT Крем с озоном</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите на чистую кожу лица. Возьмите достаточное количество и распределите по крупным зонам — щекам и лбу — восходящими движениями, не забывая о шее. Рекомендуется использовать дважды в день: утром и вечером.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/cosmetica-masculina-para-hombres/crema-hidratante-hombre" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>EYE RESISTANCE Крем для глаз</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>После очищения лица нанесите небольшое количество средства на область вокруг глаз. Подушечками пальцев лёгкими круговыми похлопываниями распределите до полного впитывания. Для лучшего результата используйте дважды в день, утром и вечером, как предпоследний шаг ухода — перед кремом для лица.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/cosmetica-facial/crema-antiojeras-hombre" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>REDENSIFICANTЕ Реденсифицирующий крем для зрелой кожи</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Нанесите небольшое количество крема на чистую сухую кожу лица, шеи и зоны декольте. Мягко помассируйте восходящими движениями до полного впитывания. Рекомендуется ежедневное использование, предпочтительно вечером.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://glacee.es/comprar/crema/redensificante-online" target="_blank" rel="noopener">Источник</a> · Полного INCI на glacee.es нет, только описание ключевых ингредиентов.</p></article>
+<article class="row" data-s="part"><header><h2>3 FLOWER SERUM Мульти увлажняющая сыворотка</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Используйте днём и вечером для покрасневшей и чувствительной кожи: нанесите достаточное количество на лицо, шею и зону декольте, не растирая сильно, до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/3-flowers/" target="_blank" rel="noopener">Источник</a> · INCI на странице не найден. На сайте «3 Flowers», 30ml.</p></article>
+<article class="row" data-s="part"><header><h2>COLLAGEN BOOSTER Восстанавливающая сыворотка</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Наносите днём, всегда перед кремом. Выдавите достаточное количество на ладонь и нанесите на лицо, шею и зону декольте до полного впитывания.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/collagen-booster/" target="_blank" rel="noopener">Источник</a> · Блок INCI на странице пустой. 30ml.</p></article>
+<article class="row" data-s="part"><header><h2>TTS ENERGIZING MASK Маска со стволовыми клетками</h2><span class="pill part">Частично</span></header>
+<dl><div><dt>Способ применения</dt><dd>Откройте саше и разверните маску. Закрепите её на ушах и под подбородком так, чтобы она плотно прилегала по контуру лица. Оставьте на 30 минут.</dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/tts-energizing-mask-cel-madre-vitaminas/" target="_blank" rel="noopener">Источник</a> · Блок INCI на странице пустой. На сайте 1 ud/30 ml; набор из 6 шт — вероятно кабинетная версия (/producto/tts-energizing-mask-celulas-madre-vitaminas/, не проверялась).</p></article>
+<article class="row" data-s="low"><header><h2>DEPURATIVE CREMA Очищающий крем</h2><span class="pill low">Нужна сверка</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/depurative/" target="_blank" rel="noopener">Источник</a> · На сайте Depurative — сыворотка 30ml, а у нас крем 50 мл; вероятно другой продукт.</p></article>
+<article class="row" data-s="low"><header><h2>EMULSION HIGIENIZANTE Крем-скраб для снятия макияжа</h2><span class="pill low">Нужна сверка</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/scrublotion/" target="_blank" rel="noopener">Источник</a> · Товара с таким названием нет; по описанию похож на Scrublotion (200ml), но объём 1000 мл и название не совпадают. Есть также кабинетная версия /producto/scrublotion-2/ (не проверялась).</p></article>
+<article class="row" data-s="low"><header><h2>TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник</h2><span class="pill low">Нужна сверка</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/equilibrance/" target="_blank" rel="noopener">Источник</a> · Вероятно Equilibrance («Tonico Facial Equilibrante para pieles grasas», 200ml), но название другое и 1000 мл на сайте нет. Кабинетная версия /producto/equilibrance-2/ не проверялась.</p></article>
+<article class="row" data-s="low"><header><h2>KERATHOR PLUS Изотонический тоник</h2><span class="pill low">Нужна сверка</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/kerathor-50-plus/" target="_blank" rel="noopener">Источник</a> · На сайте «Kerathor 50 Plus» 200ml — отшелушивающий тоник с AHA, а у нас «изотонический тоник Kerathor Plus»; совпадение не подтверждено.</p></article>
+<article class="row" data-s="low"><header><h2>CREMA ELITE Ультра увлажняющий крем</h2><span class="pill low">Нужна сверка</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/elite/" target="_blank" rel="noopener">Источник</a> · На сайте «Élite» только 50ml; кабинетная версия (/producto/elite-2/) недоступна, 200 мл не подтверждён. Для 50 мл данные есть на странице.</p></article>
+<article class="row" data-s="low"><header><h2>TTS O3 OZONO Кислородная маска с озоном</h2><span class="pill low">Нужна сверка</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/tts-purity-mask-ozono/" target="_blank" rel="noopener">Источник</a> · Вероятно «TTS PURITY MASK OZONO» (oxigenante, 1 ud/30 ml), но название отличается.</p></article>
+<article class="row" data-s="low"><header><h2>FLUIDO VISCOSO FORTE Сыворотка обновляющая</h2><span class="pill low">Нужна сверка</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta"><a href="https://www.isseimi.es/producto/fluido-viscoso-fce/" target="_blank" rel="noopener">Источник</a> · Товара «Forte» нет; есть кабинетный «Fluido Viscoso FCE» — не сверялся, название отличается.</p></article>
+<article class="row" data-s="none"><header><h2>NATURAL CLEANSING MILK Натуральный очищающий крем для лица</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Товара с таким названием на isseimi.es нет (каталог обновлён). Возможный преемник — /producto/skin-barrier-cleaner/, не сверялся.</p></article>
+<article class="row" data-s="none"><header><h2>NATURAL TONIC Натуральный тоник для лица</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Товара с таким названием на isseimi.es нет. Возможный преемник — /producto/fresh-toner/, не сверялся.</p></article>
+<article class="row" data-s="none"><header><h2>365 NIGHT REPAIR CREAM Обновляющий крем с виноградными кислотами</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет (снят с каталога).</p></article>
+<article class="row" data-s="none"><header><h2>KERADETOX Кератолитический тоник</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>HIDRORRENOVADORA Крем для стимулирования тканей</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es упоминается только в блоге, страницы товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет (в текущем каталоге контуры глаз — Hydra/Detox/Light View).</p></article>
+<article class="row" data-s="none"><header><h2>FLUVIX Сыворотка обновляющая</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>SENITUL Восстанавливающая маска</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>OXIODERM Маска с озоном</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>NUTRIESTIMUL Антивозрастной питательный крем</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es упоминается только в блоге, страницы товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>REGENERATIVO CELLULAR Сыворотка обновляющая</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>СONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет (в текущем каталоге контуры глаз — Hydra/Detox/Light View).</p></article>
+<article class="row" data-s="none"><header><h2>BEEVENOM CREAM Антивозрастной крем</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es упоминается только в блоге, страницы товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>ВEEVENOM SERUM Антивозрастная сыворотка</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es упоминается только в блоге, страницы товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>BB CREAM Матирующий крем</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>DERMOSUN SPF 50 Солнцезащитный крем</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · На isseimi.es упоминается только в блоге, страницы товара нет.</p></article>
+<article class="row" data-s="none"><header><h2>KORPO SLIM GEL Укрепляющий гель для ног</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Страница /producto/korpo-slim/ перенаправляет на главную; отдельного геля нет.</p></article>
+<article class="row" data-s="none"><header><h2>KORPO SLIM CREMA Антицеллюлитный и моделирующий крем</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Страница /producto/korpo-slim/ перенаправляет на главную; отдельного крема нет.</p></article>
+<article class="row" data-s="none"><header><h2>Подарочный набор «Обновленная кожа» для коррекции возрастных изменений кожи лица и век</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Подарочный набор: отдельной страницы у производителя нет.</p></article>
+<article class="row" data-s="none"><header><h2>Подарочный набор «Обновленная кожа» для лифтинга и укрепления кожи</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Подарочный набор: отдельной страницы у производителя нет.</p></article>
+<article class="row" data-s="none"><header><h2>Подарочный набор «Expert Team. Full Box» для ухода за мужской кожей</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Подарочный набор: отдельной страницы у производителя нет.</p></article>
+<article class="row" data-s="none"><header><h2>Подарочный набор «Expert Team. Box 1» для глубокого очищения и увлажнения кожи</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Подарочный набор: отдельной страницы у производителя нет.</p></article>
+<article class="row" data-s="none"><header><h2>Подарочный набор «Expert Team. Box 2» для тонизации кожи и устранения отеков кругов вокруг глаз</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Подарочный набор: отдельной страницы у производителя нет.</p></article>
+<article class="row" data-s="none"><header><h2>Подарочный набор «Bee Venom» с пчелиным ядом для разглаживания морщин и устранения тусклости кожи</h2><span class="pill none">Не найдено</span></header>
+<dl><div><dt>Способ применения</dt><dd><em>нет в источнике</em></dd></div>
+<div><dt>Состав (INCI)</dt><dd class="inci"><em>нет в источнике</em></dd></div></dl>
+<p class="meta">Источника нет · Подарочный набор: отдельной страницы у производителя нет.</p></article></main>
+<script>
+const chips=[...document.querySelectorAll(".chip")],rows=[...document.querySelectorAll(".row")];
+chips.forEach(c=>c.addEventListener("click",()=>{const on=c.getAttribute("aria-pressed")!=="true";chips.forEach(x=>x.setAttribute("aria-pressed","false"));if(on)c.setAttribute("aria-pressed","true");rows.forEach(r=>r.hidden=on&&r.dataset.s!==c.dataset.f)}));
+</script>
+</body>
+</html>
