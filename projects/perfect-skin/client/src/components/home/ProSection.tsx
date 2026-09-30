@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { cardImage } from '@/lib/product-image'
 import { Link } from 'react-router-dom'
 import { useCatalogList } from '@/hooks/useCatalogList'
 import type { CatalogFilters } from '@/hooks/useCatalogList'
@@ -119,7 +120,7 @@ export function ProSection() {
                             {product.image && !hasImageError ? (
                               <div className="bg-card p-3 flex items-center justify-center w-full h-full">
                                 <img
-                                  src={`/products-optimized/${product.slug}/card.webp`}
+                                  src={cardImage(product) ?? ''}
                                   alt={product.name}
                                   className="w-full h-full object-contain"
                                   loading="lazy"

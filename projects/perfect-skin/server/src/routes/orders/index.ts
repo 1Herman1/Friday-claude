@@ -139,6 +139,11 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
       const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
       const order = await orderService.createOrder(owner, result.data, viewer)
 
+      // Отправляем уведомление в Telegram (не блокирует ответ)
+      app.telegram.onNewOrder(order.id).catch((err) => {
+        app.log.warn({ orderId: order.id, error: err }, 'Failed to send order notification')
+      })
+
       reply.status(201).send(order)
     }
   )

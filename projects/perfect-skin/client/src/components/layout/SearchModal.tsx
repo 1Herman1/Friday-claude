@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { cardImage } from '@/lib/product-image'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { IconSearch, IconClose } from '@/components/icons'
@@ -195,9 +196,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
                     <div className="w-12 h-12 flex-shrink-0 rounded-media bg-muted overflow-hidden">
                       <img
                         src={
-                          product.image
-                            ? `/products-optimized/${product.slug}/card.webp`
-                            : product.image || ''
+cardImage(product) ?? ''
                         }
                         alt={product.name}
                         className="w-full h-full object-cover"

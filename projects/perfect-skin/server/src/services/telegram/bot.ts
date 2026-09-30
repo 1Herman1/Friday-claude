@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
-import type { PrismaClient } from '@prisma/client'
-import { tgBotToken, publicUrl } from '../../lib/env.js'
+import type { PrismaClient } from '../../lib/db.js'
+import { TelegramBotKind } from '../../lib/db.js'
+import { tgBotToken, tgBotUsername, tgOrdersBotToken, tgOrdersBotUsername, publicUrl } from '../../lib/env.js'
 import { reviewApplication } from '../pro-review.service.js'
 import { PRO_REVIEW_ROLES } from '../../lib/pricing.js'
 import { createMailSender } from '../mail/index.js'
@@ -21,21 +22,23 @@ export class TelegramBot {
   constructor(
     private prisma: PrismaClient,
     private app: FastifyInstance,
-    private notifier: TelegramNotifier
+    private notifier: TelegramNotifier,
+    private token: string,
+    private kind: 'pro' | 'orders'
   ) {}
 
   /**
    * Запустить поллер в фоне. Вызывается при старте сервера.
    */
   start(): void {
-    if (!tgBotToken) {
-      this.app.log.info('Telegram bot token not set, skipping bot startup')
+    if (!this.token) {
+      this.app.log.info(`Telegram ${this.kind} bot token not set, skipping bot startup`)
       return
     }
 
     this.abortController = new AbortController()
     this.pollUpdates().catch((err) => {
-      this.app.log.error(err, 'Bot polling error')
+      this.app.log.error(err, `Bot ${this.kind} polling error`)
     })
   }
 
@@ -78,7 +81,7 @@ export class TelegramBot {
     const timeoutHandle = setTimeout(() => controller.abort(), (timeout + 10) * 1000)
 
     try {
-      const response = await fetch(`https://api.telegram.org/bot${tgBotToken}/getUpdates`, {
+      const response = await fetch(`https://api.telegram.org/bot${this.token}/getUpdates`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ offset, limit, timeout }),
@@ -103,16 +106,19 @@ export class TelegramBot {
     if (message && message.chat?.type === 'private') {
       if (message.text?.startsWith('/start ')) {
         await this.handleStart(message)
-      } else if (message.text && !message.text.startsWith('/')) {
-        // Текстовое сообщение — возможно ответ на отклонение
+      } else if (message.text === '/stop') {
+        await this.handleStop(message)
+      } else if (this.kind === 'pro' && message.text && !message.text.startsWith('/')) {
+        // Текстовое сообщение — возможно ответ на отклонение (только для pro)
         await this.handleRejectReason(message)
-      } else if (!message.text?.startsWith('/start')) {
+      } else if (!message.text?.startsWith('/start') && !message.text?.startsWith('/stop')) {
         // Любое другое сообщение от непривязанного чата
         await this.answerText(message.chat.id, 'Бот для сотрудников магазина')
       }
     }
 
-    if (callbackQuery) {
+    // Callback-кнопки только для pro-бота
+    if (callbackQuery && this.kind === 'pro') {
       await this.handleCallback(callbackQuery)
     }
   }
@@ -131,13 +137,14 @@ export class TelegramBot {
     try {
       const codeHash = await createTokenHash(code)
 
-      // Гасим код атомарно ДО привязки: проверяем ещё не использован и не просрочен,
+      // Гасим код атомарно ДО привязки: проверяем ещё не использован, не просрочен, и botKind совпадает,
       // затем устанавливаем usedAt. Так избегаем повторного использования кода.
       const updateResult = await this.prisma.telegramLinkCode.updateMany({
         where: {
           codeHash,
           usedAt: null,
           expiresAt: { gt: new Date() },
+          botKind: this.kind === 'pro' ? TelegramBotKind.pro : TelegramBotKind.orders,
         },
         data: { usedAt: new Date() },
       })
@@ -147,10 +154,10 @@ export class TelegramBot {
         return
       }
 
-      // Теперь читаем код (гарантированно существует) и проверяем ревьюера
+      // Теперь читаем код (гарантированно существует) и проверяем пользователя
       const linkCode = await this.prisma.telegramLinkCode.findUnique({
         where: { codeHash },
-        select: { userId: true },
+        select: { userId: true, botKind: true },
       })
 
       if (!linkCode) {
@@ -159,28 +166,80 @@ export class TelegramBot {
         return
       }
 
-      // Проверяем что владелец кода — активный сотрудник с правильной ролью
-      const user = await this.prisma.user.findUnique({
-        where: { id: linkCode.userId },
-        select: { role: true, isActive: true },
-      })
-
-      if (!user || !user.isActive || !PRO_REVIEW_ROLES.includes(user.role)) {
-        await this.answerText(chatId, 'Код не подошёл, получите новый в админке')
+      // Проверяем что botKind кода совпадает с типом бота
+      if ((this.kind === 'pro' && linkCode.botKind !== TelegramBotKind.pro) ||
+          (this.kind === 'orders' && linkCode.botKind !== TelegramBotKind.orders)) {
+        await this.answerText(chatId, 'Код не подошёл для этого бота')
         return
       }
 
+      // Для pro: проверяем что владелец кода — активный сотрудник с правильной ролью
+      if (this.kind === 'pro') {
+        const user = await this.prisma.user.findUnique({
+          where: { id: linkCode.userId },
+          select: { role: true, isActive: true },
+        })
+
+        if (!user || !user.isActive || !PRO_REVIEW_ROLES.includes(user.role)) {
+          await this.answerText(chatId, 'Код не подошёл, получите новый в админке')
+          return
+        }
+      }
+      // Для orders: просто проверяем что пользователь существует и активен
+      else {
+        const user = await this.prisma.user.findUnique({
+          where: { id: linkCode.userId },
+          select: { isActive: true },
+        })
+
+        if (!user || !user.isActive) {
+          await this.answerText(chatId, 'Код не подошёл, получите новый в админке')
+          return
+        }
+      }
+
       // Привязываем или перепривязываем
+      const botKindValue = this.kind === 'pro' ? TelegramBotKind.pro : TelegramBotKind.orders
       await this.prisma.telegramLink.upsert({
-        where: { userId: linkCode.userId },
-        create: { userId: linkCode.userId, chatId },
+        where: { userId_botKind: { userId: linkCode.userId, botKind: botKindValue } },
+        create: { userId: linkCode.userId, chatId, botKind: botKindValue },
         update: { chatId, linkedAt: new Date() },
       })
 
-      await this.answerText(chatId, 'Готово. Сюда будут приходить заявки специалистов')
+      const message_ = this.kind === 'pro'
+        ? 'Готово. Сюда будут приходить заявки специалистов'
+        : 'Готово. Сюда будут приходить уведомления о новых заказах'
+
+      await this.answerText(chatId, message_)
     } catch (err) {
-      this.app.log.warn({ chatId: chatId.toString(), error: err }, 'Start command error')
+      this.app.log.warn({ chatId: chatId.toString(), error: err }, `Start command error (${this.kind})`)
       await this.answerText(chatId, 'Ошибка, попробуйте позже')
+    }
+  }
+
+  private async handleStop(message: any): Promise<void> {
+    const chatIdNumber = message.from.id
+    const chatId = BigInt(chatIdNumber)
+
+    try {
+      const botKindValue = this.kind === 'pro' ? TelegramBotKind.pro : TelegramBotKind.orders
+      const link = await this.prisma.telegramLink.findFirst({
+        where: { chatId, botKind: botKindValue },
+        select: { userId: true, botKind: true },
+      })
+
+      if (link) {
+        // Удаляем привязку если она нашлась
+        await this.prisma.telegramLink.delete({
+          where: { userId_botKind: { userId: link.userId, botKind: link.botKind } },
+        })
+        await this.answerText(chatId, 'Привязка удалена')
+      } else {
+        await this.answerText(chatId, 'Не привязано')
+      }
+    } catch (err) {
+      this.app.log.warn({ chatId: chatId.toString(), error: err }, `Stop command error (${this.kind})`)
+      await this.answerText(chatId, 'Ошибка')
     }
   }
 
@@ -191,8 +250,9 @@ export class TelegramBot {
     const queryId = callbackQuery.id
 
     // Проверяем доступ: привязан ли чат, активен ли пользователь, есть ли нужная роль
-    const link = await this.prisma.telegramLink.findUnique({
-      where: { chatId },
+    // Ищем привязку по чату и botKind=pro
+    const link = await this.prisma.telegramLink.findFirst({
+      where: { chatId, botKind: TelegramBotKind.pro },
       select: { userId: true },
     })
 
@@ -368,8 +428,8 @@ export class TelegramBot {
     }
 
     try {
-      const link = await this.prisma.telegramLink.findUnique({
-        where: { chatId },
+      const link = await this.prisma.telegramLink.findFirst({
+        where: { chatId, botKind: TelegramBotKind.pro },
         select: { userId: true },
       })
 
@@ -417,7 +477,7 @@ export class TelegramBot {
 
   private async answerText(chatId: bigint, text: string): Promise<void> {
     try {
-      const response = await fetch(`https://api.telegram.org/bot${tgBotToken}/sendMessage`, {
+      const response = await fetch(`https://api.telegram.org/bot${this.token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: chatId.toString(), text }),
@@ -446,7 +506,7 @@ export class TelegramBot {
         payload.reply_markup = { force_reply: true, selective: true }
       }
 
-      const response = await fetch(`https://api.telegram.org/bot${tgBotToken}/sendMessage`, {
+      const response = await fetch(`https://api.telegram.org/bot${this.token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -462,7 +522,7 @@ export class TelegramBot {
 
   private async answerCallbackQuery(queryId: string, text: string): Promise<void> {
     try {
-      await fetch(`https://api.telegram.org/bot${tgBotToken}/answerCallbackQuery`, {
+      await fetch(`https://api.telegram.org/bot${this.token}/answerCallbackQuery`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ callback_query_id: queryId, text }),
@@ -477,6 +537,12 @@ export class TelegramBot {
   }
 }
 
-export function createTelegramBot(prisma: PrismaClient, app: FastifyInstance, notifier: TelegramNotifier): TelegramBot {
-  return new TelegramBot(prisma, app, notifier)
+export function createProTelegramBot(prisma: PrismaClient, app: FastifyInstance, notifier: TelegramNotifier): TelegramBot | null {
+  if (!tgBotToken) return null
+  return new TelegramBot(prisma, app, notifier, tgBotToken, 'pro')
+}
+
+export function createOrdersTelegramBot(prisma: PrismaClient, app: FastifyInstance, notifier: TelegramNotifier): TelegramBot | null {
+  if (!tgOrdersBotToken) return null
+  return new TelegramBot(prisma, app, notifier, tgOrdersBotToken, 'orders')
 }

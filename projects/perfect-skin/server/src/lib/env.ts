@@ -25,14 +25,23 @@ export const cookieInsecure = process.env.PS_COOKIE_INSECURE === '1'
 // В разработке по умолчанию ./var/pro-docs, в боевом окружении обязателен.
 export const proDocs = getDirWithDefault('PS_PRO_DOCS_DIR', isDevelopment ? './var/pro-docs' : null)
 
+// Каталог для хранения фото товаров.
+// В разработке по умолчанию ./var/product-images, в боевом окружении обязателен.
+export const productImagesDir = getDirWithDefault('PS_PRODUCT_IMAGES_DIR', isDevelopment ? './var/product-images' : null)
+
 // Email адрес для уведомлений менеджера о новых заявках на проверку.
 // Пусто = без уведомлений (опционально).
 export const proNotifyEmail = process.env.PS_PRO_NOTIFY_EMAIL || ''
 
-// Telegram bot: token и username для привязки сотрудников.
+// Telegram bot для заявок (PRO): token и username для привязки сотрудников.
 // Пусто = бот отключен, уведомления молча пропускаются (опционально).
 export const tgBotToken = process.env.PS_TG_BOT_TOKEN || ''
 export const tgBotUsername = process.env.PS_TG_BOT_USERNAME || ''
+
+// Telegram bot для заказов: token и username для уведомлений о заказах.
+// Пусто = бот отключен, уведомления молча пропускаются (опционально).
+export const tgOrdersBotToken = process.env.PS_TG_ORDERS_BOT_TOKEN || ''
+export const tgOrdersBotUsername = process.env.PS_TG_ORDERS_BOT_USERNAME || ''
 
 // DaData API key для проверки ИНН/ОГРНИП в открытых реестрах.
 // Пусто = без проверки в реестре, все заявки получают жёлтый lane (опционально).

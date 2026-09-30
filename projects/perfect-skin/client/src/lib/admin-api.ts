@@ -626,3 +626,236 @@ export async function adminSetPopular(productIds: string[]): Promise<{ success: 
     }
   )
 }
+
+// ============ Управление товарами (редактирование) ============
+
+export interface ProductVariant {
+  id: string
+  productId: string
+  volumeValue: number
+  volumeUnit: 'ml' | 'g' | 'pcs'
+  volumeLabel?: string | null
+  retailPrice: number
+  wholesalePrice?: number | null
+  stock: number
+  sku?: string | null
+  isActive: boolean
+  isProfessional: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ProductEditData {
+  id: string
+  name: string
+  slug: string
+  shortDescription?: string | null
+  description: string
+  brandId?: string | null
+  lineId?: string | null
+  categoryIds: string[]
+  skinTypes: string[]
+  concerns: string[]
+  images: string[]
+  usage?: string | null
+  inciText?: string | null
+  seoTitle?: string | null
+  seoDescription?: string | null
+  isActive: boolean
+  isFeatured: boolean
+  isProfessional: boolean
+  minPrice: number
+  maxPrice: number
+  variants: ProductVariant[]
+  brand?: { id: string; name: string } | null
+  line?: { id: string; name: string } | null
+}
+
+export interface ProductDictionaries {
+  brands: Array<{ id: string; name: string }>
+  lines: Array<{ id: string; brandId: string; name: string }>
+  categories: Array<{ id: string; name: string; slug: string }>
+}
+
+/**
+ * Получить справочники для формы товара
+ */
+export async function adminGetProductDictionaries(): Promise<ProductDictionaries> {
+  return fetchApi<ProductDictionaries>('/api/v1/admin/product-dictionaries')
+}
+
+/**
+ * Получить товар для редактирования
+ */
+export async function adminGetProduct(id: string): Promise<ProductEditData> {
+  return fetchApi<ProductEditData>(`/api/v1/admin/products/${encodeURIComponent(id)}`)
+}
+
+/**
+ * Создать товар
+ */
+export async function adminCreateProduct(body: {
+  name: string
+  slug: string
+  description: string
+  shortDescription?: string
+  brandId?: string | null
+  lineId?: string | null
+  categoryIds?: string[]
+  skinTypes?: string[]
+  concerns?: string[]
+  usage?: string
+  inciText?: string
+  seoTitle?: string
+  seoDescription?: string
+}): Promise<ProductEditData> {
+  return fetchApi<ProductEditData>('/api/v1/admin/products', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
+
+/**
+ * Обновить товар (полное редактирование)
+ */
+export async function adminUpdateProductFull(
+  id: string,
+  body: {
+    name?: string
+    slug?: string
+    shortDescription?: string | null
+    description?: string
+    brandId?: string | null
+    lineId?: string | null
+    categoryIds?: string[]
+    skinTypes?: string[]
+    concerns?: string[]
+    usage?: string | null
+    inciText?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    isActive?: boolean
+    isFeatured?: boolean
+    isProfessional?: boolean
+  }
+): Promise<ProductEditData> {
+  return fetchApi<ProductEditData>(
+    `/api/v1/admin/products/${encodeURIComponent(id)}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    }
+  )
+}
+
+/**
+ * Создать фасовку товара
+ */
+export async function adminCreateVariant(
+  productId: string,
+  body: {
+    volumeValue: number
+    volumeUnit: 'ml' | 'g' | 'pcs'
+    volumeLabel?: string
+    retailPrice: number
+    wholesalePrice?: number | null
+    stock?: number
+    sku?: string
+    isActive?: boolean
+    isProfessional?: boolean
+  }
+): Promise<ProductVariant> {
+  return fetchApi<ProductVariant>(
+    `/api/v1/admin/products/${encodeURIComponent(productId)}/variants`,
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }
+  )
+}
+
+/**
+ * Обновить фасовку товара
+ */
+export async function adminUpdateVariantFull(
+  id: string,
+  body: {
+    volumeLabel?: string
+    sku?: string
+    retailPrice?: number
+    wholesalePrice?: number | null
+    stock?: number
+    isActive?: boolean
+    isProfessional?: boolean
+  }
+): Promise<ProductVariant> {
+  return fetchApi<ProductVariant>(
+    `/api/v1/admin/variants/${encodeURIComponent(id)}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    }
+  )
+}
+
+/**
+ * Удалить фасовку товара
+ */
+export async function adminDeleteVariant(id: string): Promise<void> {
+  return fetchApi<void>(`/api/v1/admin/variants/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  })
+}
+
+/**
+ * Загрузить фото товара
+ */
+export async function adminUploadProductImage(
+  productId: string,
+  file: File
+): Promise<{ url: string }> {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const response = await fetch(`/api/v1/admin/products/${encodeURIComponent(productId)}/images`, {
+    method: 'POST',
+    body: formData,
+    credentials: 'include',
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}))
+    throw new Error(error.message || 'Ошибка при загрузке фото')
+  }
+
+  return response.json()
+}
+
+/**
+ * Удалить фото товара
+ */
+export async function adminDeleteProductImage(productId: string, url: string): Promise<void> {
+  return fetchApi<void>(
+    `/api/v1/admin/products/${encodeURIComponent(productId)}/images`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({ url }),
+    }
+  )
+}
+
+/**
+ * Переставить фото товара
+ */
+export async function adminReorderProductImages(
+  productId: string,
+  images: string[]
+): Promise<void> {
+  return fetchApi<void>(
+    `/api/v1/admin/products/${encodeURIComponent(productId)}/images/order`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ images }),
+    }
+  )
+}

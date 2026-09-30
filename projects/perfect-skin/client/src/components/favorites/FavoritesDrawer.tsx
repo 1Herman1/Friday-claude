@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { cardImage } from '@/lib/product-image'
 import { Link } from 'react-router-dom'
 import { useFavorites } from '@/context/FavoritesContext'
 import { useCart } from '@/context/CartContext'
@@ -187,7 +188,7 @@ export default function FavoritesDrawer({ open, onClose }: Props) {
             >
               {product.image ? (
                 <img
-                  src={`/products-optimized/${product.slug}/card.webp`}
+                  src={cardImage(product) ?? ''}
                   alt={product.name}
                   className="max-h-full max-w-full object-contain"
                   onError={(e) => {

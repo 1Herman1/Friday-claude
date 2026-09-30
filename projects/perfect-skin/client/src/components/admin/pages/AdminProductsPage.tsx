@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { adminListVariants, adminUpdateVariant, adminUpdateProduct, adminGetPopular, adminSetPopular, searchPublicProducts, type AdminVariant, type PopularProduct } from '@/lib/admin-api'
 import { ApiError } from '@/lib/api'
 import { formatPrice } from '@/lib/format'
@@ -6,6 +7,7 @@ import { formatPrice } from '@/lib/format'
 type Tab = 'variants' | 'popular'
 
 export function AdminProductsPage() {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<Tab>('variants')
   const [variants, setVariants] = useState<AdminVariant[]>([])
   const [total, setTotal] = useState(0)
@@ -64,9 +66,17 @@ export function AdminProductsPage() {
 
   return (
     <div className="container-app py-12 md:py-16">
-      <h1 className="text-h2 font-heading font-bold text-foreground mb-8 uppercase">
-        Товары
-      </h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-h2 font-heading font-bold text-foreground uppercase">
+          Товары
+        </h1>
+        <button
+          onClick={() => navigate('/admin/products/new')}
+          className="px-6 py-2 bg-primary text-primary-foreground font-sans font-semibold rounded-block hover:bg-primary/90 transition-colors min-h-11"
+        >
+          + Новый товар
+        </button>
+      </div>
 
       {/* Tabs */}
       <div className="flex gap-2 mb-8 border-b border-border">
@@ -184,18 +194,21 @@ export function AdminProductsPage() {
                 <th className="px-6 py-3 text-left text-muted-foreground font-semibold">
                   Для кабинета
                 </th>
+                <th className="px-6 py-3 text-center text-muted-foreground font-semibold">
+                  Действия
+                </th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
+                  <td colSpan={8} className="px-6 py-12 text-center text-muted-foreground">
                     Загрузка…
                   </td>
                 </tr>
               ) : variants.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
+                  <td colSpan={8} className="px-6 py-12 text-center text-muted-foreground">
                     Нет товаров
                   </td>
                 </tr>
@@ -499,6 +512,7 @@ interface VariantRowProps {
 }
 
 function VariantRow({ variant, onUpdate, isProfessional, productId, isFirstVariant }: VariantRowProps) {
+  const navigate = useNavigate()
   const [priceEdit, setPriceEdit] = useState(false)
   const [priceValue, setPriceValue] = useState(formatPriceForInput(variant.retailPrice))
   const [priceError, setPriceError] = useState('')
@@ -857,6 +871,18 @@ function VariantRow({ variant, onUpdate, isProfessional, productId, isFirstVaria
               />
             </button>
           </div>
+        )}
+      </td>
+
+      {/* Edit button */}
+      <td className="px-6 py-4 text-center">
+        {isFirstVariant && (
+          <button
+            onClick={() => navigate(`/admin/products/${productId}`)}
+            className="px-3 py-1 text-xs border border-border rounded hover:bg-muted transition-colors text-foreground"
+          >
+            Редактировать
+          </button>
         )}
       </td>
     </tr>

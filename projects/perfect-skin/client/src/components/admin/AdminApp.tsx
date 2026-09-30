@@ -8,6 +8,7 @@ const AdminDashboardPage = lazy(() => import('@/components/admin/pages/AdminDash
 const AdminOrdersPage = lazy(() => import('@/components/admin/pages/AdminOrdersPage').then((m) => ({ default: m.AdminOrdersPage })))
 const AdminOrderPage = lazy(() => import('@/components/admin/pages/AdminOrderPage').then((m) => ({ default: m.AdminOrderPage })))
 const AdminProductsPage = lazy(() => import('@/components/admin/pages/AdminProductsPage').then((m) => ({ default: m.AdminProductsPage })))
+const AdminProductEditPage = lazy(() => import('@/components/admin/pages/AdminProductEditPage').then((m) => ({ default: m.AdminProductEditPage })))
 const AdminPromoPage = lazy(() => import('@/components/admin/pages/AdminPromoPage').then((m) => ({ default: m.AdminPromoPage })))
 const AdminPostsPage = lazy(() => import('@/components/admin/pages/AdminPostsPage').then((m) => ({ default: m.AdminPostsPage })))
 const AdminPostEditPage = lazy(() => import('@/components/admin/pages/AdminPostEditPage').then((m) => ({ default: m.AdminPostEditPage })))
@@ -29,6 +30,8 @@ const AdminLayoutWrapper = () => (
       <Route path="orders" element={<Suspense fallback={fallback}><AdminOrdersPage /></Suspense>} />
       <Route path="orders/:id" element={<Suspense fallback={fallback}><AdminOrderPage /></Suspense>} />
       <Route path="products" element={<Suspense fallback={fallback}><AdminProductsPage /></Suspense>} />
+      <Route path="products/new" element={<Suspense fallback={fallback}><AdminProductEditPage /></Suspense>} />
+      <Route path="products/:id" element={<Suspense fallback={fallback}><AdminProductEditPage /></Suspense>} />
       <Route path="promo" element={<Suspense fallback={fallback}><AdminPromoPage /></Suspense>} />
       <Route path="pro-requests" element={<Suspense fallback={fallback}><AdminProRequestsPage /></Suspense>} />
       <Route path="consultations" element={<Suspense fallback={fallback}><AdminConsultationsPage /></Suspense>} />

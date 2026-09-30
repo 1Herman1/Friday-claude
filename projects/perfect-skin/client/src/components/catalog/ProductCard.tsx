@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { isUploadedImage } from '@/lib/product-image'
 import { Link } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
 import { useDrawer } from '@/context/DrawerContext'
@@ -64,10 +65,12 @@ export function ProductCard({ product, onAddToCart, eager, aspectRatio = '3/4' }
         <Link to={`/product/${product.slug}`} className="block overflow-hidden bg-card">
           {product.image ? (
             <picture>
-              <source
-                type="image/webp"
-                srcSet={`/products-optimized/${product.slug}/card.webp 1x, /products-optimized/${product.slug}/card@2x.webp 2x`}
-              />
+              {!isUploadedImage(product.image) && (
+                <source
+                  type="image/webp"
+                  srcSet={`/products-optimized/${product.slug}/card.webp 1x, /products-optimized/${product.slug}/card@2x.webp 2x`}
+                />
+              )}
               <img
                 src={product.image}
                 alt={product.name}

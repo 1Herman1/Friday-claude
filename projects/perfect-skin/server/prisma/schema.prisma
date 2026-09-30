@@ -204,7 +204,7 @@ model User {
   consultations    ConsultationRequest[]
   consents         ConsentRecord[]
   proDocuments     ProDocument[]
-  telegramLink     TelegramLink?
+  telegramLinks    TelegramLink[]
 
   @@index([email])
   @@index([phone])
@@ -958,20 +958,32 @@ model ProDocument {
 
 // ─────────────────────────────── Telegram ───────────────────────────────
 
-/// Привязка сотрудника к его приватному чату с ботом.
-model TelegramLink {
-  userId   String   @id // сотрудник (User с ролью из STAFF)
-  chatId   BigInt   @unique // приватный чат с ботом = Telegram user id
-  linkedAt DateTime @default(now())
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+/// Тип Telegram-бота.
+enum TelegramBotKind {
+  pro    // Бот заявок: специалисты, консультации
+  orders // Бот заказов: уведомления о новых заказах
+}
 
+/// Привязка сотрудника к его приватному чату с ботом.
+/// Composite PK (userId, botKind) — один человек может привязать оба бота одновременно.
+model TelegramLink {
+  userId   String              // сотрудник (User с ролью из STAFF)
+  botKind  TelegramBotKind     @default(pro)
+  chatId   BigInt              // приватный чат с ботом = Telegram user id
+  linkedAt DateTime            @default(now())
+  user     User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, botKind])
+  @@unique([chatId, botKind])
   @@map("telegram_links")
 }
 
 /// Одноразовый код привязки из админки (живёт 10 минут).
+/// Уникальность по (codeHash) — один код на одну операцию.
 model TelegramLinkCode {
-  codeHash  String    @id // sha256 кода
+  codeHash  String              @id // sha256 кода
   userId    String
+  botKind   TelegramBotKind     @default(pro)
   expiresAt DateTime
   usedAt    DateTime?
 

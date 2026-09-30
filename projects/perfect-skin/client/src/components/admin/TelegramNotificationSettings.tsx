@@ -12,75 +12,124 @@ interface LinkStatusResponse {
   linkedAt: string | null
 }
 
-export function TelegramNotificationSettings() {
-  const [isLinked, setIsLinked] = useState(false)
-  const [linkedAt, setLinkedAt] = useState<string | null>(null)
-  const [linkCode, setLinkCode] = useState<string | null>(null)
-  const [deepLink, setDeepLink] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [showCode, setShowCode] = useState(false)
+type BotKind = 'pro' | 'orders'
 
-  // Загрузить статус привязки
+interface BotState {
+  isLinked: boolean
+  linkedAt: string | null
+  linkCode: string | null
+  deepLink: string | null
+  isLoading: boolean
+  error: string | null
+  showCode: boolean
+}
+
+export function TelegramNotificationSettings() {
+  const [proBot, setProBot] = useState<BotState>({
+    isLinked: false,
+    linkedAt: null,
+    linkCode: null,
+    deepLink: null,
+    isLoading: false,
+    error: null,
+    showCode: false,
+  })
+
+  const [ordersBot, setOrdersBot] = useState<BotState>({
+    isLinked: false,
+    linkedAt: null,
+    linkCode: null,
+    deepLink: null,
+    isLoading: false,
+    error: null,
+    showCode: false,
+  })
+
+  // Загрузить статус привязки для обоих ботов
   const loadLinkStatus = async () => {
     try {
-      const response = await fetchApi<LinkStatusResponse>('/api/v1/admin/telegram/link')
-      setIsLinked(response.linked)
-      setLinkedAt(response.linkedAt)
-      setError(null)
+      const proResponse = await fetchApi<LinkStatusResponse>('/api/v1/admin/telegram/link/pro')
+      setProBot(prev => ({
+        ...prev,
+        isLinked: proResponse.linked,
+        linkedAt: proResponse.linkedAt,
+        error: null,
+      }))
     } catch (err) {
-      if (err instanceof ApiError) {
-        if (err.status === 401 || err.status === 403) {
-          // Пользователь не имеет прав
-          return
-        }
-        setError(err.code === 'NOT_AUTHENTICATED' ? null : err.message)
+      if (err instanceof ApiError && err.status !== 401 && err.status !== 403) {
+        setProBot(prev => ({
+          ...prev,
+          error: err.message,
+        }))
+      }
+    }
+
+    try {
+      const ordersResponse = await fetchApi<LinkStatusResponse>('/api/v1/admin/telegram/link/orders')
+      setOrdersBot(prev => ({
+        ...prev,
+        isLinked: ordersResponse.linked,
+        linkedAt: ordersResponse.linkedAt,
+        error: null,
+      }))
+    } catch (err) {
+      if (err instanceof ApiError && err.status !== 401 && err.status !== 403) {
+        setOrdersBot(prev => ({
+          ...prev,
+          error: err.message,
+        }))
       }
     }
   }
 
-  // Генерировать новый код привязки
-  const handleGenerateCode = async () => {
-    setIsLoading(true)
-    setError(null)
+  // Генерировать новый код привязки для конкретного бота
+  const handleGenerateCode = async (botKind: BotKind) => {
+    const setState = botKind === 'pro' ? setProBot : setOrdersBot
+
+    setState(prev => ({ ...prev, isLoading: true, error: null }))
     try {
       const response = await fetchApi<LinkCodeResponse>('/api/v1/admin/telegram/link-code', {
         method: 'POST',
-        body: JSON.stringify({}),
+        body: JSON.stringify({ botKind }),
       })
-      setLinkCode(response.code)
-      setDeepLink(response.deepLink)
-      setShowCode(true)
+      setState(prev => ({
+        ...prev,
+        linkCode: response.code,
+        deepLink: response.deepLink,
+        showCode: true,
+        isLoading: false,
+      }))
     } catch (err) {
       if (err instanceof ApiError) {
-        setError(err.message)
+        setState(prev => ({ ...prev, error: err.message, isLoading: false }))
       } else {
-        setError('Ошибка при генерировании кода')
+        setState(prev => ({ ...prev, error: 'Ошибка при генерировании кода', isLoading: false }))
       }
-    } finally {
-      setIsLoading(false)
     }
   }
 
-  // Отвязать Telegram
-  const handleUnlink = async () => {
+  // Отвязать Telegram для конкретного бота
+  const handleUnlink = async (botKind: BotKind) => {
+    const setState = botKind === 'pro' ? setProBot : setOrdersBot
+
     if (!confirm('Вы уверены? Уведомления в Telegram будут отключены.')) return
 
-    setIsLoading(true)
-    setError(null)
+    setState(prev => ({ ...prev, isLoading: true, error: null }))
     try {
-      await fetchApi('/api/v1/admin/telegram/link', { method: 'DELETE' })
-      setIsLinked(false)
-      setLinkedAt(null)
-      setShowCode(false)
+      await fetchApi(`/api/v1/admin/telegram/link/${botKind}`, { method: 'DELETE' })
+      setState(prev => ({
+        ...prev,
+        isLinked: false,
+        linkedAt: null,
+        showCode: false,
+        isLoading: false,
+      }))
     } catch (err) {
       if (err instanceof ApiError) {
-        setError(err.message)
+        setState(prev => ({ ...prev, error: err.message, isLoading: false }))
       } else {
-        setError('Ошибка при отвязке')
+        setState(prev => ({ ...prev, error: 'Ошибка при отвязке', isLoading: false }))
       }
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -88,57 +137,55 @@ export function TelegramNotificationSettings() {
     loadLinkStatus()
   }, [])
 
-  return (
+  const renderBotCard = (title: string, description: string, botKind: BotKind, state: BotState) => (
     <div className="bg-card rounded-block border border-border p-6 mb-6">
-      <h2 className="text-lg font-semibold mb-4">Уведомления в Telegram</h2>
+      <h3 className="text-lg font-semibold mb-4">{title}</h3>
 
-      {error && (
+      {state.error && (
         <div className="bg-destructive/10 border border-destructive/30 rounded-block p-3 mb-4 text-sm text-destructive">
-          {error}
+          {state.error}
         </div>
       )}
 
-      {isLinked ? (
+      {state.isLinked ? (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500"></div>
             <span className="text-sm text-muted-foreground">
-              Telegram подключён {linkedAt ? new Date(linkedAt).toLocaleDateString('ru-RU') : ''}
+              Бот подключён {state.linkedAt ? new Date(state.linkedAt).toLocaleDateString('ru-RU') : ''}
             </span>
           </div>
           <button
-            onClick={handleUnlink}
-            disabled={isLoading}
+            onClick={() => handleUnlink(botKind)}
+            disabled={state.isLoading}
             className="text-sm px-4 py-2 rounded-pill border border-border hover:bg-muted transition-colors disabled:opacity-50"
-            aria-label="Отключить Telegram"
+            aria-label={`Отключить бот ${botKind}`}
           >
             Отключить
           </button>
         </div>
       ) : (
         <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">
-            Подключите Telegram для получения уведомлений о новых заявках специалистов
-          </p>
+          <p className="text-sm text-muted-foreground">{description}</p>
 
-          {showCode && linkCode ? (
+          {state.showCode && state.linkCode ? (
             <div className="bg-muted rounded-block p-4 space-y-3">
               <div>
                 <p className="text-xs text-muted-foreground mb-2">Код привязки (действителен 10 минут):</p>
                 <div className="bg-card rounded-block p-3 font-mono text-center text-lg font-semibold tracking-widest">
-                  {linkCode}
+                  {state.linkCode}
                 </div>
               </div>
 
-              {deepLink && (
+              {state.deepLink && (
                 <div>
                   <p className="text-xs text-muted-foreground mb-2">Или перейдите по ссылке:</p>
                   <a
-                    href={deepLink}
+                    href={state.deepLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-pill text-sm font-medium transition-colors"
-                    aria-label="Открыть Telegram бота"
+                    aria-label={`Открыть бот ${botKind}`}
                   >
                     Открыть в Telegram
                   </a>
@@ -146,20 +193,38 @@ export function TelegramNotificationSettings() {
               )}
 
               <p className="text-xs text-muted-foreground">
-                Затем отправьте боту команду: <code>/start {linkCode}</code>
+                Затем отправьте боту команду: <code>/start {state.linkCode}</code>
               </p>
             </div>
           ) : (
             <button
-              onClick={handleGenerateCode}
-              disabled={isLoading}
+              onClick={() => handleGenerateCode(botKind)}
+              disabled={state.isLoading}
               className="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-pill font-medium transition-colors disabled:opacity-50"
-              aria-label="Подключить Telegram"
+              aria-label={`Подключить бот ${botKind}`}
             >
-              {isLoading ? 'Генерирую код...' : 'Подключить Telegram'}
+              {state.isLoading ? 'Генерирую код...' : 'Подключить'}
             </button>
           )}
         </div>
+      )}
+    </div>
+  )
+
+  return (
+    <div>
+      {renderBotCard(
+        'Бот заявок специалистов',
+        'Подключите Telegram для получения уведомлений о новых заявках и консультациях',
+        'pro',
+        proBot
+      )}
+
+      {renderBotCard(
+        'Бот заказов',
+        'Подключите Telegram для получения уведомлений о новых заказах',
+        'orders',
+        ordersBot
       )}
     </div>
   )

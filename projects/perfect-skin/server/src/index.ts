@@ -25,7 +25,7 @@ import { reviewRoutes } from './routes/review.js'
 import adminRoutes from './routes/admin/index.js'
 import exchange1cRoutes from './routes/exchange-1c.js'
 import { createTelegramNotifier, TelegramNotifier } from './services/telegram/notifier.js'
-import { createTelegramBot } from './services/telegram/bot.js'
+import { createProTelegramBot, createOrdersTelegramBot } from './services/telegram/bot.js'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -166,19 +166,29 @@ await app.register(async (instance) => reviewRoutes(instance), { prefix: '/api/v
 // Register admin routes
 await app.register(adminRoutes)
 
-// Инициализируем Telegram-бот и запускаем поллер
-const bot = createTelegramBot(app.prisma, app, notifier)
-if (process.env.PS_TG_BOT_TOKEN) {
-  bot.start()
-  app.log.info('Telegram bot started')
+// Инициализируем Telegram-боты и запускаем поллеры
+const proBot = createProTelegramBot(app.prisma, app, notifier)
+const ordersBot = createOrdersTelegramBot(app.prisma, app, notifier)
+
+if (proBot) {
+  proBot.start()
+  app.log.info('Telegram pro bot started')
 } else {
-  app.log.warn('PS_TG_BOT_TOKEN not set, Telegram bot disabled')
+  app.log.warn('PS_TG_BOT_TOKEN not set, Telegram pro bot disabled')
 }
 
-// Останавливаем бот при закрытии сервера
+if (ordersBot) {
+  ordersBot.start()
+  app.log.info('Telegram orders bot started')
+} else {
+  app.log.warn('PS_TG_ORDERS_BOT_TOKEN not set, Telegram orders bot disabled')
+}
+
+// Останавливаем боты при закрытии сервера
 app.addHook('onClose', async () => {
-  bot.stop()
-  app.log.info('Telegram bot stopped')
+  if (proBot) proBot.stop()
+  if (ordersBot) ordersBot.stop()
+  app.log.info('Telegram bots stopped')
 })
 
 // На сервере наружу смотрит только Nginx, поэтому по умолчанию слушаем

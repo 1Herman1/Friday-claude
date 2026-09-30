@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
-import type { PrismaClient } from '@prisma/client'
-import { publicUrl, tgBotToken } from '../../lib/env.js'
+import type { PrismaClient } from '../../lib/db.js'
+import { TelegramBotKind } from '../../lib/db.js'
+import { publicUrl, tgBotToken, tgOrdersBotToken } from '../../lib/env.js'
 import { PRO_REVIEW_ROLES } from '../../lib/pricing.js'
 
 export class TelegramNotifier {
@@ -199,15 +200,100 @@ export class TelegramNotifier {
     }
   }
 
-  private async sendMessage(chatId: bigint, text: string, buttons: any[]) {
+  /**
+   * Отправить уведомление о новом заказе активным менеджерам.
+   * Без ПДн: только номер, сумма, кол-во позиций, способ доставки/оплаты.
+   * Не блокирует ответ, ошибки логируются как warning.
+   */
+  async onNewOrder(orderId: string): Promise<void> {
+    if (!tgOrdersBotToken) {
+      return
+    }
+
+    try {
+      // Получаем заказ: номер, сумма, позиции, доставка, оплата
+      const order = await this.prisma.order.findUnique({
+        where: { id: orderId },
+        select: {
+          id: true,
+          number: true,
+          total: true,
+          deliveryMethod: true,
+          paymentStatus: true,
+          items: { select: { quantity: true } },
+        },
+      })
+
+      if (!order) {
+        return
+      }
+
+      // Считаем позиции
+      const itemCount = order.items.reduce((sum, item) => sum + item.quantity, 0)
+
+      // Форматируем доставку и оплату (без ПДн)
+      const deliveryLabel = {
+        cdek_pvz: 'Пункт выдачи СДЭК',
+        cdek_courier: 'Курьер СДЭК',
+        pickup: 'Самовывоз',
+      }[order.deliveryMethod] || order.deliveryMethod
+
+      const paymentLabel = {
+        pending: 'Ожидает оплаты',
+        paid: 'Оплачено',
+        failed: 'Ошибка платежа',
+        refunded: 'Возврат',
+      }[order.paymentStatus] || order.paymentStatus
+
+      // Сумма в рублях (из копеек)
+      const totalRubles = (order.total / 100).toFixed(2)
+
+      const text = `Новый заказ №${order.number}\nСумма: ${totalRubles} ₽\nПозиций: ${itemCount}\nДоставка: ${deliveryLabel}\nОплата: ${paymentLabel}`
+
+      // Получаем активных менеджеров заказов, привязанных к боту orders
+      const links = await this.prisma.telegramLink.findMany({
+        where: { botKind: TelegramBotKind.orders },
+        select: { userId: true, chatId: true },
+      })
+
+      // Проверяем каждого на активность и роль
+      for (const link of links) {
+        const user = await this.prisma.user.findUnique({
+          where: { id: link.userId },
+          select: { role: true, isActive: true },
+        })
+
+        // Роли: super_admin или orders_manager
+        if (!user || !user.isActive || !['super_admin', 'orders_manager'].includes(user.role)) {
+          continue
+        }
+
+        // Строим кнопку если есть publicUrl
+        const buttons = publicUrl
+          ? [[{ text: 'Открыть заказ', url: `${publicUrl}/admin/orders/${orderId}` } as any]]
+          : []
+
+        try {
+          await this.sendMessage(link.chatId, text, buttons, tgOrdersBotToken)
+        } catch (err) {
+          this.app.log.warn({ chatId: link.chatId, orderId, error: err }, 'Failed to send order notification')
+        }
+      }
+    } catch (err) {
+      this.app.log.warn({ orderId, error: err }, 'Failed to send new order notifications')
+    }
+  }
+
+  private async sendMessage(chatId: bigint, text: string, buttons: any[], botToken?: string) {
+    const token = botToken || tgBotToken
     const payload = {
       chat_id: chatId.toString(),
       text,
       parse_mode: 'HTML',
-      reply_markup: { inline_keyboard: buttons },
+      reply_markup: buttons.length > 0 ? { inline_keyboard: buttons } : undefined,
     }
 
-    const response = await fetch(`https://api.telegram.org/bot${tgBotToken}/sendMessage`, {
+    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -220,7 +306,8 @@ export class TelegramNotifier {
     return await response.json() as any
   }
 
-  private async editMessage(chatId: bigint, messageId: number, text: string, buttons: any[]) {
+  private async editMessage(chatId: bigint, messageId: number, text: string, buttons: any[], botToken?: string) {
+    const token = botToken || tgBotToken
     const payload = {
       chat_id: chatId.toString(),
       message_id: messageId,
@@ -229,7 +316,7 @@ export class TelegramNotifier {
       reply_markup: buttons.length > 0 ? { inline_keyboard: buttons } : undefined,
     }
 
-    const response = await fetch(`https://api.telegram.org/bot${tgBotToken}/editMessageText`, {
+    const response = await fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
