@@ -13,6 +13,7 @@ import { pinterestApiImporter } from "./pinterest-api.js";
 import { shotcafeImporter } from "./shotcafe.js";
 import { rssImporter } from "./rss.js";
 import { eagleImporter } from "./eagle.js";
+import { higgsFieldImporter } from "./higgsfield-catalog.js";
 import type { Importer, ImportRunOptions, RefCandidate } from "../types.js";
 import { mockConfig } from "../testing-utils.js";
 
@@ -90,6 +91,7 @@ const zeroLimitCases: Array<[string, Importer, Partial<ImportRunOptions>]> = [
   ["raindrop", raindropImporter, { config: keyed.raindrop }],
   ["pinterest-api", pinterestApiImporter, { collection: "b1", config: keyed.pinterest }],
   ["shotcafe", shotcafeImporter, { collection: "noir" }],
+  ["higgsfield", higgsFieldImporter, { collection: "filters" }],
 ];
 
 for (const [name, importer, over] of zeroLimitCases) {

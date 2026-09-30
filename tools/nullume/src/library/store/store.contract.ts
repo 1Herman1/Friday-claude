@@ -417,6 +417,66 @@ export function storeContract(
     store.close();
   });
 
+  test(`${name}: listRefIdsByTag returns only active references by tag`, () => {
+    const store = factory();
+
+    // Create 3 references
+    const ref1 = store.insertReference({
+      sha256: "s1",
+      source: "s",
+      sourceRef: "r1",
+      originalPath: "/p1",
+      width: 800,
+      height: 600,
+      bytes: 1024,
+      meta: {},
+      status: "active",
+    });
+
+    const ref2 = store.insertReference({
+      sha256: "s2",
+      source: "s",
+      sourceRef: "r2",
+      originalPath: "/p2",
+      width: 800,
+      height: 600,
+      bytes: 1024,
+      meta: {},
+      status: "active",
+    });
+
+    const ref3 = store.insertReference({
+      sha256: "s3",
+      source: "s",
+      sourceRef: "r3",
+      originalPath: "/p3",
+      width: 800,
+      height: 600,
+      bytes: 1024,
+      meta: {},
+      status: "active",
+    });
+
+    // Tag ref1 and ref2 with "test-tag", ref3 with other tag
+    store.addTags(ref1.id, ["test-tag"], "user");
+    store.addTags(ref2.id, ["test-tag"], "user");
+    store.addTags(ref3.id, ["other-tag"], "user");
+
+    // Mark ref2 as discarded
+    store.setReferenceStatus(ref2.id, "discarded");
+
+    // listRefIdsByTag should return only ref1 (ref2 is discarded)
+    const refIds = store.listRefIdsByTag("test-tag");
+    assert.equal(refIds.length, 1, "Should return only active references");
+    assert.equal(refIds[0], ref1.id);
+
+    // Should return empty for non-existent tag
+    const emptyIds = store.listRefIdsByTag("nonexistent");
+    assert.equal(emptyIds.length, 0);
+
+    store.close();
+  });
+
   test(`${name}: putPalette and getPalette work`, () => {
     const store = factory();
     const ref = store.insertReference({

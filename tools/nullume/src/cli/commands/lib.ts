@@ -911,12 +911,13 @@ function resolveRefIds(store: LibraryStore, raw: string): string[] {
   });
 }
 
-// lib family create --name <n> --slug <s> --refs <id,...>
+// lib family create --name <n> --slug <s> [--refs <id,...> | --tag <tag>]
 familyCmd
   .command("create")
   .requiredOption("--name <name>", "Название семейства")
   .requiredOption("--slug <slug>", "Слаг (a-z, 0-9, дефис)")
   .option("--refs <ids>", "ID референсов через запятую (можно короткие, 8 символов)")
+  .option("--tag <tag>", "Тег — добавить все референсы с этим тегом")
   .description("Создать семейство вручную, без кластеризации")
   .action(async function (options: Record<string, unknown>) {
     const flags = getGlobalFlags();
@@ -933,7 +934,28 @@ familyCmd
         throw new UsageError(`Семейство со слагом "${slug}" уже есть`);
       }
 
-      const refIds = resolveRefIds(db, String(options.refs ?? ""));
+      // Validate that exactly one of --refs or --tag is provided
+      const hasRefs = options.refs !== undefined;
+      const hasTag = options.tag !== undefined;
+
+      if (!hasRefs && !hasTag) {
+        throw new UsageError("Укажите либо --refs, либо --tag");
+      }
+      if (hasRefs && hasTag) {
+        throw new UsageError("Укажите либо --refs, либо --tag, не оба сразу");
+      }
+
+      let refIds: string[] = [];
+
+      if (hasRefs) {
+        refIds = resolveRefIds(db, String(options.refs));
+      } else if (hasTag) {
+        const tag = String(options.tag);
+        refIds = db.listRefIdsByTag(tag);
+        if (refIds.length === 0) {
+          throw new UsageError(`Нет активных референсов с тегом: ${tag}`);
+        }
+      }
 
       const family = db.createFamily({
         slug,
@@ -956,10 +978,11 @@ familyCmd
     }
   });
 
-// lib family set-refs <slug|id> --refs <id,...>
+// lib family set-refs <slug|id> [--refs <id,...> | --tag <tag>]
 familyCmd
   .command("set-refs <id>")
-  .requiredOption("--refs <ids>", "ID референсов через запятую (можно короткие, 8 символов)")
+  .option("--refs <ids>", "ID референсов через запятую (можно короткие, 8 символов)")
+  .option("--tag <tag>", "Тег — добавить все референсы с этим тегом")
   .description("Заменить состав семейства")
   .action(async function (idOrSlug: string, options: Record<string, unknown>) {
     const flags = getGlobalFlags();
@@ -971,7 +994,30 @@ familyCmd
       const family = getFamilyBySlugOrId(db, idOrSlug);
       if (!family) throw new UsageError(`Семейство "${idOrSlug}" не найдено`);
 
-      const refIds = resolveRefIds(db, String(options.refs));
+      // Validate that exactly one of --refs or --tag is provided
+      const hasRefs = options.refs !== undefined;
+      const hasTag = options.tag !== undefined;
+
+      if (!hasRefs && !hasTag) {
+        throw new UsageError("Укажите либо --refs, либо --tag");
+      }
+
+      if (hasRefs && hasTag) {
+        throw new UsageError("Укажите либо --refs, либо --tag, не оба сразу");
+      }
+
+      let refIds: string[] = [];
+
+      if (hasRefs) {
+        refIds = resolveRefIds(db, String(options.refs));
+      } else if (hasTag) {
+        const tag = String(options.tag);
+        refIds = db.listRefIdsByTag(tag);
+        if (refIds.length === 0) {
+          throw new UsageError(`Нет активных референсов с тегом: ${tag}`);
+        }
+      }
+
       db.setMembers(
         family.id,
         refIds.map((refId, i) => ({ familyId: family.id, refId, distance: 0, isExemplar: i < 4 }))

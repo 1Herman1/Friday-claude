@@ -187,6 +187,25 @@ export class MemoryStore implements LibraryStore {
     return tagSet ? Array.from(tagSet) : [];
   }
 
+  listRefIdsByTag(tag: string): string[] {
+    const results: string[] = [];
+    for (const [refId, tagSet] of this.tags) {
+      if (tagSet.has(tag)) {
+        const ref = this.references.get(refId);
+        if (ref && ref.status === "active") {
+          results.push(refId);
+        }
+      }
+    }
+    // Sort by createdAt
+    results.sort((a, b) => {
+      const refA = this.references.get(a)!;
+      const refB = this.references.get(b)!;
+      return refA.createdAt - refB.createdAt;
+    });
+    return results;
+  }
+
   putPalette(refId: string, entries: PaletteEntry[]): void {
     if (!this.references.has(refId)) {
       throw new Error(`Reference ${refId} not found`);

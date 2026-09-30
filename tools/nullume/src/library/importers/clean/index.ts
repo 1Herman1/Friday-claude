@@ -9,6 +9,7 @@ import { pinterestApiImporter } from "./pinterest-api.js";
 import { pexels } from "./pexels.js";
 import { pixabay } from "./pixabay.js";
 import { unsplash } from "./unsplash.js";
+import { higgsFieldImporter } from "./higgsfield-catalog.js";
 
 /**
  * Clean импортёры: публичные API без ограничений
@@ -24,4 +25,5 @@ export const cleanImporters: Importer[] = [
   pexels,
   pixabay,
   unsplash,
+  higgsFieldImporter,
 ];

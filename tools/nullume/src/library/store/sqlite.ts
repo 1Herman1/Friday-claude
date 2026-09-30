@@ -252,6 +252,14 @@ export class SqliteStore implements LibraryStore {
     return rows.map((row) => row.tag);
   }
 
+  listRefIdsByTag(tag: string): string[] {
+    const stmt = this.db.prepare(
+      'SELECT t.refId FROM "tags" t JOIN "references" r ON r.id = t.refId WHERE t.tag = ? AND r.status = ? ORDER BY r.createdAt'
+    );
+    const rows = stmt.all(tag, "active") as Array<{ refId: string }>;
+    return rows.map((row) => row.refId);
+  }
+
   putPalette(refId: string, entries: PaletteEntry[]): void {
     const refExists = this.db
       .prepare('SELECT 1 FROM "references" WHERE id = ?')

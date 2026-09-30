@@ -102,6 +102,7 @@ export interface LibraryStore {
   // Tags and palettes
   addTags(refId: string, tags: string[], origin: string): void;
   getTags(refId: string): string[];
+  listRefIdsByTag(tag: string): string[];
   putPalette(refId: string, entries: PaletteEntry[]): void;
   getPalette(refId: string): PaletteEntry[] | undefined;
 

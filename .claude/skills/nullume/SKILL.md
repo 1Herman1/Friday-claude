@@ -410,9 +410,33 @@ nullume lib dashboard --open
 | **Civitai** | clean | (открыт) | неограниченно | да | промпт, модель, тег |
 | **RSS (5)** | clean | (читаемо) | per feed | 6 ч | заголовок, дата |
 | **shot.cafe** | clean | (статика) | неограниченно | да | название, ссылка |
+| **Higgsfield (каталог)** | clean | (vendored JSON) | 111 позиций | — | имя, описание, раздел, превью |
 | **Pinterest cookies** | local-only | сессия (файл) | risk | да | описание, формат |
 | **Dribbble** | local-only | API токен | свои шоты | да | описание, лайки |
 | **X** | local-only | платный API | $0.005/запрос | да | автор, лайки, ретвиты |
+
+### Раздел Higgsfield (ADR-008)
+
+Каталог пресетов Higgsfield (33 фильтра, 54 эффекта, образцы товарной съёмки и
+motion) вшит в пакет: `data/higgsfield-catalog.json`. Это референсы, не рецепты —
+сам пресет исполняется только на Higgsfield, у нас он служит словарём стилей.
+Превью — материалы Higgsfield, только для справки. Библиотека собирается заново
+в любой среде пятью командами (лимит нужен: дефолт `lib import` — 50):
+
+```
+nullume lib import higgsfield --limit 200
+nullume lib family create --name "Higgsfield · Фильтры"         --slug higgsfield-filters      --tag hf-section:filters
+nullume lib family create --name "Higgsfield · Эффекты"         --slug higgsfield-effects      --tag hf-section:effects
+nullume lib family create --name "Higgsfield · Товарная съёмка" --slug higgsfield-product-shot --tag hf-section:product-shot
+nullume lib family create --name "Higgsfield · Motion"          --slug higgsfield-motion       --tag hf-section:motion
+```
+
+Фильтры: `--collection filters`; конкретный пресет: `--query noir`. Отдельный
+стиль под генерацию — семейство по тегу имени: `family create --slug
+higgsfield-noir --tag hf:noir`, затем дескриптор и `--style higgsfield-noir`.
+Превью в модель не уходят, только текст дескриптора. При `lib cluster` всей
+библиотеки эффекты-ролики тянут кластеры в сторону видео — условие
+пересмотра в ADR-008.
 
 ### Правила дескриптора (StyleDescriptorSchema)
 

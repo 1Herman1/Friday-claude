@@ -231,6 +231,85 @@ describe("lib command", () => {
     assert.notEqual(missing.code, 0, "несуществующий референс должен отклоняться");
   });
 
+  it("lib family create --tag создаёт семейство с рефами по тегу", () => {
+    // Свежая библиотека: в общей фикстура уже лежит без тега и добавление
+    // по --tag срабатывает как дубликат — тег не ставится.
+    const home = { NULLUME_HOME: fs.mkdtempSync(path.join(os.tmpdir(), "nullume-tag-")) };
+    runCommand("lib init --skip-models", home);
+    runCommand(`lib add ${fixtureFile} --tag test-tag`, home);
+
+    const refs = JSON.parse(runCommand("lib list --json", home).stdout);
+    assert.ok(refs.length > 0, "нужен хотя бы один референс");
+
+    const created = runCommand(`lib family create --name "По тегу" --slug bytag --tag test-tag`, home);
+    assert.equal(created.code, 0, `create with tag failed: ${created.stderr}`);
+
+    const families = JSON.parse(runCommand("lib family list --json", home).stdout);
+    const family = families.find((f: { slug: string; id: string }) => f.slug === "bytag");
+    assert.ok(family, "семейство не создано");
+    const listed = JSON.parse(runCommand(`lib list --family ${family.id} --json`, home).stdout);
+    assert.equal(listed.length, 1, "в семействе должен быть ровно помеченный референс");
+  });
+
+  it("lib family create требует либо --refs либо --tag", () => {
+    runCommand("lib init --skip-models");
+
+    // Ни --refs ни --tag
+    const noOpts = runCommand(`lib family create --name "Ни то ни то" --slug noto`);
+    assert.notEqual(noOpts.code, 0, "должно требовать --refs или --tag");
+
+    // Оба сразу
+    runCommand(`lib add ${fixtureFile}`);
+    const refs = JSON.parse(runCommand("lib list --json").stdout);
+    const both = runCommand(
+      `lib family create --name "Оба" --slug obo --refs ${refs[0].id} --tag test-tag`
+    );
+    assert.notEqual(both.code, 0, "не должно принимать и --refs и --tag вместе");
+  });
+
+  it("lib family create --tag выбрасывает ошибку если нет рефов с тегом", () => {
+    runCommand("lib init --skip-models");
+    runCommand(`lib add ${fixtureFile}`);
+
+    const result = runCommand(`lib family create --name "Несуществующий" --slug nonex --tag nonexistent-tag`);
+    assert.notEqual(result.code, 0, "должна быть ошибка для несуществующего тега");
+    assert.ok(result.stderr.includes("Нет активных референсов"));
+  });
+
+  it("lib family set-refs --tag заменяет состав по тегу", () => {
+    const home = { NULLUME_HOME: fs.mkdtempSync(path.join(os.tmpdir(), "nullume-tag-")) };
+    runCommand("lib init --skip-models", home);
+    runCommand(`lib add ${fixtureFile} --tag another-tag`, home);
+    const refs = JSON.parse(runCommand("lib list --json", home).stdout);
+
+    runCommand(`lib family create --name "Изменяемое" --slug changed --refs ${refs[0].id}`, home);
+
+    const replaced = runCommand(`lib family set-refs changed --tag another-tag`, home);
+    assert.equal(replaced.code, 0, `set-refs with tag failed: ${replaced.stderr}`);
+    const families = JSON.parse(runCommand("lib family list --json", home).stdout);
+    const family = families.find((f: { slug: string; id: string }) => f.slug === "changed");
+    const listed = JSON.parse(runCommand(`lib list --family ${family.id} --json`, home).stdout);
+    assert.equal(listed.length, 1);
+  });
+
+  it("lib family set-refs требует --refs или --tag", () => {
+    runCommand("lib init --skip-models");
+    runCommand(`lib add ${fixtureFile}`);
+    const refs = JSON.parse(runCommand("lib list --json").stdout);
+
+    runCommand(`lib family create --name "Проверка" --slug check --refs ${refs[0].id}`);
+
+    // Ни --refs ни --tag
+    const noOpts = runCommand(`lib family set-refs check`);
+    assert.notEqual(noOpts.code, 0, "должно требовать --refs или --tag");
+
+    // Оба сразу
+    const both = runCommand(
+      `lib family set-refs check --refs ${refs[0].id} --tag test-tag`
+    );
+    assert.notEqual(both.code, 0, "не должно принимать и --refs и --tag вместе");
+  });
+
   it("lib style list показывает базовые стили", () => {
     runCommand("lib init --skip-models");
 
