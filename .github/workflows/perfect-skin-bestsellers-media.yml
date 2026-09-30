@@ -1,0 +1,48 @@
+name: Perfect Skin — bestsellers scene media (kie)
+
+# Генерация кадров и роликов сцены «рука + 4 товара» через Nullume/kie.ai.
+# Результат коммитится в docs/projects/perfect-skin/media/bestsellers-v2/.
+on:
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'images — ключевые кадры, videos — ролики по готовым кадрам'
+        type: choice
+        options: [images, videos]
+        default: images
+
+permissions:
+  contents: write
+
+concurrency:
+  group: perfect-skin-bestsellers-media
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
+      NULLUME_HOME: ${{ github.workspace }}/.nullume-run
+      STAGE: ${{ inputs.stage }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: tools/nullume/package-lock.json
+      - name: Build nullume
+        working-directory: tools/nullume
+        run: npm ci && npm run build
+      - name: Balance
+        run: node tools/nullume/bin/nullume.js balance
+      - name: Generate
+        run: bash projects/perfect-skin/media-gen/bestsellers.sh
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/projects/perfect-skin/media/bestsellers-v2
+          git commit -m "Bestsellers scene media: $STAGE" || exit 0
+          for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && break; sleep 5; done
