@@ -15,7 +15,8 @@ P1="$PUB/scrub-lotion-krem-dlya-snyatiya-makiyazha/card@2x.webp"
 P2="$PUB/kerathor-plus-izotonicheskij-tonik/card@2x.webp"
 P3="$PUB/hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej/card@2x.webp"
 P4="$PUB/serum-triple-accion-syvorotka-trojnogo-dejstviya/card@2x.webp"
-NAMES=("ISSEIMI Scrublotion tall white bottle with blue band" "ISSEIMI Kerathor 50 Plus tall white bottle with violet band" "ISSEIMI MD Hidrorrenovadora frosted glass jar with silver lid" "GLACEE Triple Accion pink serum dropper bottle")
+NAMES=("tall white cylindrical bottle with a polished SILVER cap and a blue band at the bottom, label text exactly: 'ISSÉIMI MD' / 'MADRID' / 'SCRUBLOTION' / 'Scrub desmaquillante'" "tall white cylindrical bottle with a polished SILVER cap and a violet band at the bottom, label text exactly: 'ISSÉIMI' / 'MADRID' / 'KERATHOR 50 PLUS' / 'Solución isotónica'" "short frosted glass jar with a polished SILVER lid, label text exactly: 'ISSEIMI MD' / 'HIDRORRENOVADORA' / 'Crema estimulación tisular con FCE'" "clear glass dropper bottle with pink liquid, SILVER dropper collar and white bulb, round black label with text exactly: 'GLACÉE' / 'SKINCARE' / 'SERUM TRIPLE ACCIÓN'")
+LABELS="Copy every product label letter by letter from its own reference photo. Never write ISSEIMI on the GLACÉE serum, never write GLACÉE on the ISSEIMI products. All caps and lids are silver, not gold. No other text anywhere."
 
 STYLE="Premium editorial still life for a pharmacy-grade Spanish skincare shop. Warm cream background #F4F2EC, warm light stone tabletop, soft diffused daylight from the left, gentle long soft shadows, subtle warm gold highlights on metal caps. Calm, precise, expensive, no props, no text overlays, no boxes or packaging cartons, products only. Photorealistic, sharp labels exactly as in the reference photos."
 
@@ -43,8 +44,8 @@ for fmt in desktop mobile; do
   if [ "$fmt" = desktop ]; then AR="16:9"; LAYOUT="The four products stand in one row on the right two thirds of the frame, left third is empty calm background."; else AR="9:16"; LAYOUT="The four products stand in one row in the lower half of the vertical frame, centered, upper half is empty calm background."; fi
 
   if [ "$STAGE" = images ]; then
-    gen_image "$fmt-k0" "$AR" "$STYLE $LAYOUT From left to right: ${NAMES[0]}, ${NAMES[1]}, ${NAMES[2]}, ${NAMES[3]}. Use the first four reference images for the exact product look. Use the last reference image only for composition and camera angle. No hands." \
-      "$P1" "$P2" "$P3" "$P4" "$REF/1.png"
+    gen_image "$fmt-k0" "$AR" "$STYLE $LAYOUT From left to right: ${NAMES[0]}, ${NAMES[1]}, ${NAMES[2]}, ${NAMES[3]}. The four reference images are these four products in the same order; reproduce each one exactly (shape, color, cap, label). $LABELS No hands." \
+      "$P1" "$P2" "$P3" "$P4"
   fi
 
   if [ "$STAGE" = images ] || [ "$STAGE" = hands ]; then
