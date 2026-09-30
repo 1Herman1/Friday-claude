@@ -247,10 +247,11 @@ export class MemoryStore implements LibraryStore {
 
     Object.assign(family, patch, { updatedAt: Date.now() });
 
-    if (oldSlug) {
-      this.familySlugs.delete(oldSlug);
-    }
-    if (newSlug) {
+    // Only update slug mapping if a new slug is provided
+    if (newSlug && newSlug !== oldSlug) {
+      if (oldSlug) {
+        this.familySlugs.delete(oldSlug);
+      }
       this.familySlugs.set(newSlug, id);
     }
   }

@@ -385,4 +385,77 @@ describe("lib command", () => {
     assert.notEqual(result.code, 0, "Should fail for query-less importer");
   });
 
+  it("lib style apply --json с недостижимым тегом пропускает стиль", () => {
+    // Init
+    runCommand("lib init --skip-models");
+
+    // Create a temporary style JSON file with a tag that will have no refs
+    const tmpStyleFile = path.join(tmpHome, "apply-test-styles.json");
+    const stylePayload = {
+      styles: [
+        {
+          slug: "test-apply-no-refs",
+          name: "Test Apply No Refs",
+          tag: "no-such-tag-exists:xyz",
+          descriptor: {
+            summary: "Test style",
+            palette: [
+              { hex: "#0b0b0d", role: "bg", ratio: 1.0 },
+              { hex: "#f2f0ea", role: "text", ratio: 0.96 },
+              { hex: "#8b7355", role: "accent", ratio: 0.5 },
+            ],
+            type: {
+              display: "Manrope",
+              body: "Inter",
+              scale: [0.75, 1, 1.25, 1.5],
+              weightDisplay: 600,
+              tracking: 0,
+              caseAccent: "none",
+            },
+            spacing: {
+              base: 16,
+              rhythm: [4, 8, 16, 24],
+              density: "balanced",
+            },
+            radii: {
+              small: 4,
+              large: 12,
+              pattern: "uniform",
+            },
+            shadows: "soft",
+            motion: {
+              duration: [200, 400],
+              easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+              character: "calm",
+            },
+            dials: {
+              visualDensity: 0.5,
+              designVariance: 0.4,
+              decorLevel: 0.2,
+              symmetry: 0.6,
+            },
+            decor: [],
+            dominant_pattern: "minimal",
+            divergences: [],
+            prompt_fragment: "Test",
+            mood: ["test"],
+            antiRefCheck: [],
+          },
+        },
+      ],
+    };
+
+    fs.writeFileSync(tmpStyleFile, JSON.stringify(stylePayload, null, 2));
+
+    // Apply with --json should output structured result
+    const result = runCommand(`lib style apply ${tmpStyleFile} --json`);
+    assert.equal(result.code, 0, "apply command failed");
+
+    // Parse JSON output - should contain skipped styles
+    const output = JSON.parse(result.stdout);
+    assert.ok(Array.isArray(output.skipped), "Should have skipped array");
+    assert.strictEqual(output.skipped.length, 1, "Should have one skipped style");
+    assert.strictEqual(output.skipped[0].slug, "test-apply-no-refs", "Should skip correct slug");
+  });
+
 });

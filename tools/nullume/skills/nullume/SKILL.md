@@ -431,9 +431,20 @@ nullume lib family create --name "Higgsfield · Товарная съёмка" -
 nullume lib family create --name "Higgsfield · Motion"          --slug higgsfield-motion       --tag hf-section:motion
 ```
 
-Фильтры: `--collection filters`; конкретный пресет: `--query noir`. Отдельный
-стиль под генерацию — семейство по тегу имени: `family create --slug
-higgsfield-noir --tag hf:noir`, затем дескриптор и `--style higgsfield-noir`.
+Фильтры: `--collection filters`; конкретный пресет: `--query noir`.
+
+**33 фильтра уже описаны как стили** — `data/higgsfield-styles.json`
+(собирается `scripts/build-higgsfield-styles.mts`). Шестая команда ставит их
+все: семейство по тегу `hf:<имя>`, дескриптор, утверждение:
+
+```
+nullume lib style apply higgsfield-styles.json
+nullume generate create seedream/5-lite-text-to-image --prompt "…" --style higgsfield-sketch
+```
+
+Слаги: `higgsfield-noir`, `higgsfield-sketch`, `higgsfield-marble`,
+`higgsfield-two-color` и т. д. — `lib family list` покажет все. `--style` есть
+у `generate create`, у пресетов его нет.
 Превью в модель не уходят, только текст дескриптора. При `lib cluster` всей
 библиотеки эффекты-ролики тянут кластеры в сторону видео — условие
 пересмотра в ADR-008.

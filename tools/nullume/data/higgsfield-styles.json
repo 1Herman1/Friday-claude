@@ -1,0 +1,3012 @@
+{
+  "generatedBy": "scripts/build-higgsfield-styles.mts",
+  "styles": [
+    {
+      "slug": "higgsfield-sketch",
+      "name": "Higgsfield · Sketch",
+      "tag": "hf:sketch",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Sketch» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#f7f4ee",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#1f1d1a",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f7f4ee"
+          },
+          {
+            "hex": "#8a6d3b",
+            "role": "accent",
+            "ratio": 0.1
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "hatching",
+          "paper grain"
+        ],
+        "dominant_pattern": "hand-drawn graphite linework on off-white paper, hatching for shade",
+        "divergences": [],
+        "prompt_fragment": "hand-drawn pencil sketch, textured graphite linework, cross-hatching for shadows, off-white paper grain, loose confident strokes, minimal color, illustration study",
+        "negative_fragment": "photorealistic, glossy, 3d render, neon, smooth gradients",
+        "mood": [
+          "handmade",
+          "quiet",
+          "studious"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-canvas",
+      "name": "Higgsfield · Canvas",
+      "tag": "hf:canvas",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Canvas» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#f2ead9",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#2b2419",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f2ead9"
+          },
+          {
+            "hex": "#b5533c",
+            "role": "accent",
+            "ratio": 0.1
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "canvas weave",
+          "impasto"
+        ],
+        "dominant_pattern": "visible canvas weave with impasto paint strokes",
+        "divergences": [],
+        "prompt_fragment": "hand-painted artwork on textured canvas, visible weave, thick impasto brush strokes, warm earthy pigments, gallery painting look",
+        "negative_fragment": "digital vector, flat colors, photorealistic, neon",
+        "mood": [
+          "warm",
+          "tactile",
+          "artisanal"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-hand-paint",
+      "name": "Higgsfield · Hand paint",
+      "tag": "hf:hand-paint",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Hand paint» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#faf8f3",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#20211f",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#faf8f3"
+          },
+          {
+            "hex": "#2f6f9f",
+            "role": "accent",
+            "ratio": 0.1
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "drips",
+          "bristle marks"
+        ],
+        "dominant_pattern": "loose freeform brushwork with visible drips and gaps",
+        "divergences": [],
+        "prompt_fragment": "freeform hand-painted brushwork, loose expressive strokes, visible bristle marks and paint drips, unfinished edges, gouache and acrylic feel",
+        "negative_fragment": "clean vector, photoreal, symmetrical, polished",
+        "mood": [
+          "spontaneous",
+          "expressive",
+          "raw"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-palette",
+      "name": "Higgsfield · Palette",
+      "tag": "hf:palette",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Palette» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#f5f1ea",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#23201c",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f5f1ea"
+          },
+          {
+            "hex": "#d9643a",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#e8dfd0",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.5,
+          "symmetry": 0.5
+        },
+        "decor": [],
+        "dominant_pattern": "hand-painted color blocks composed like a painter's palette",
+        "divergences": [],
+        "prompt_fragment": "hand-painted color composition, bold pigment blocks arranged like a painter's palette, soft blended edges, rich saturated oils, painterly abstraction",
+        "negative_fragment": "photorealistic, neon, thin outlines, monochrome",
+        "mood": [
+          "painterly",
+          "rich",
+          "composed"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-akrill",
+      "name": "Higgsfield · Akrill",
+      "tag": "hf:akrill",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Akrill» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#ede9e1",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#1c1b19",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#ede9e1"
+          },
+          {
+            "hex": "#e04a2f",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#dcd6c9",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.6,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [],
+        "dominant_pattern": "layered opaque acrylic color blocks with hard edges",
+        "divergences": [],
+        "prompt_fragment": "layered acrylic color blocks, opaque flat pigments, hard painted edges, overlapping shapes, bold poster-like composition, matte finish",
+        "negative_fragment": "glossy, photorealistic, gradients, thin lines",
+        "mood": [
+          "bold",
+          "graphic",
+          "confident"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-comic",
+      "name": "Higgsfield · Comic",
+      "tag": "hf:comic",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Comic» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#fffdf5",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#111111",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#fffdf5"
+          },
+          {
+            "hex": "#e8352b",
+            "role": "accent",
+            "ratio": 0.1
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "halftone",
+          "ink outline"
+        ],
+        "dominant_pattern": "black ink outlines with flat cel color and halftone dots",
+        "divergences": [],
+        "prompt_fragment": "graphic comic book illustration, bold black ink outlines, flat cel shading, halftone dot texture, limited primary palette, clean panel composition",
+        "negative_fragment": "photorealistic, soft painterly, 3d render, blur",
+        "mood": [
+          "punchy",
+          "graphic",
+          "playful"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-flash-comic",
+      "name": "Higgsfield · Flash comic",
+      "tag": "hf:flash-comic",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Flash comic» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#fff8e6",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#0f0f0f",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#fff8e6"
+          },
+          {
+            "hex": "#ffb400",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#ffe9b3",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.8,
+          "designVariance": 0.5,
+          "decorLevel": 0.7,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "speed lines",
+          "bursts"
+        ],
+        "dominant_pattern": "high-energy comic panels with speed lines and burst shapes",
+        "divergences": [],
+        "prompt_fragment": "high-energy comic art, dynamic speed lines, action burst shapes, heavy ink, saturated pop colors, dramatic foreshortening, kinetic composition",
+        "negative_fragment": "calm, muted, photorealistic, soft focus",
+        "mood": [
+          "energetic",
+          "loud",
+          "kinetic"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-vintage",
+      "name": "Higgsfield · Vintage",
+      "tag": "hf:vintage",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Vintage» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#efe6d2",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#2a2118",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#efe6d2"
+          },
+          {
+            "hex": "#8b5e34",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#e2d6bd",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "engraving lines",
+          "aged paper"
+        ],
+        "dominant_pattern": "hand-inked engraving lines on aged paper",
+        "divergences": [],
+        "prompt_fragment": "vintage hand-inked illustration, engraving style fine lines, aged sepia paper, slight ink bleed, old print catalog aesthetic",
+        "negative_fragment": "neon, modern, photorealistic, glossy, saturated",
+        "mood": [
+          "nostalgic",
+          "crafted",
+          "quiet"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-magazine",
+      "name": "Higgsfield · Magazine",
+      "tag": "hf:magazine",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Magazine» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#f4f2ee",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#171717",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f4f2ee"
+          },
+          {
+            "hex": "#c8102e",
+            "role": "accent",
+            "ratio": 0.1
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "flat",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.7
+        },
+        "decor": [],
+        "dominant_pattern": "editorial print layout with strong grid and paper texture",
+        "divergences": [],
+        "prompt_fragment": "printed magazine editorial look, glossy print halftone, strong typographic grid, generous white space, fashion editorial photography styling, subtle paper texture",
+        "negative_fragment": "cluttered, neon, cartoon, low resolution",
+        "mood": [
+          "editorial",
+          "polished",
+          "confident"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-paper",
+      "name": "Higgsfield · Paper",
+      "tag": "hf:paper",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Paper» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#f6f1e7",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#2b2924",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f6f1e7"
+          },
+          {
+            "hex": "#4f6f52",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#e9e1d2",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "paper fiber",
+          "cut layers"
+        ],
+        "dominant_pattern": "handcrafted paper cut layers with soft fiber texture",
+        "divergences": [],
+        "prompt_fragment": "handcrafted paper texture, layered paper cut shapes, soft fiber grain, gentle shadows between layers, craft collage feel",
+        "negative_fragment": "glossy, digital gradients, neon, photoreal glass",
+        "mood": [
+          "gentle",
+          "crafted",
+          "warm"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-origami",
+      "name": "Higgsfield · Origami",
+      "tag": "hf:origami",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Origami» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#f9f9f7",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#1b1f24",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f9f9f7"
+          },
+          {
+            "hex": "#e0552b",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#e6e8ec",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "hard",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.2,
+          "symmetry": 0.8
+        },
+        "decor": [],
+        "dominant_pattern": "crisp folded-paper facets with sharp geometric planes",
+        "divergences": [],
+        "prompt_fragment": "origami style, crisp folded paper geometry, sharp planar facets, clean matte paper surfaces, precise angular shadows, minimal palette",
+        "negative_fragment": "organic curves, soft painterly, noise, clutter",
+        "mood": [
+          "precise",
+          "clean",
+          "geometric"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-marble",
+      "name": "Higgsfield · Marble",
+      "tag": "hf:marble",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Marble» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#f3f1ee",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#1f1e1d",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f3f1ee"
+          },
+          {
+            "hex": "#9c7c4a",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#e4e0da",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.2,
+          "symmetry": 0.7
+        },
+        "decor": [],
+        "dominant_pattern": "sculpted white marble with fine veining and soft studio light",
+        "divergences": [],
+        "prompt_fragment": "sculpted marble visual style, polished white stone with fine grey veining, classical sculptural forms, soft museum lighting, timeless and monumental",
+        "negative_fragment": "neon, cartoon, plastic, busy background",
+        "mood": [
+          "classical",
+          "calm",
+          "monumental"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-modern",
+      "name": "Higgsfield · Modern",
+      "tag": "hf:modern",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Modern» из каталога Higgsfield (art).",
+        "palette": [
+          {
+            "hex": "#ffffff",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#111318",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#ffffff"
+          },
+          {
+            "hex": "#1f4fd8",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#f1f3f6",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Fraunces",
+          "body": "IBM Plex Sans",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            56
+          ],
+          "weightDisplay": 600,
+          "tracking": 0,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            48
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 8,
+          "pattern": "uniform"
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "shadows": "none",
+        "dials": {
+          "visualDensity": 0.2,
+          "designVariance": 0.5,
+          "decorLevel": 0.05,
+          "symmetry": 0.8
+        },
+        "decor": [],
+        "dominant_pattern": "clean geometric minimalism with generous negative space",
+        "divergences": [],
+        "prompt_fragment": "clean geometric minimalism, simple primary shapes, generous negative space, flat even lighting, restrained two-tone palette, precise alignment",
+        "negative_fragment": "ornament, texture, grain, clutter, painterly",
+        "mood": [
+          "minimal",
+          "precise",
+          "calm"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-noir",
+      "name": "Higgsfield · Noir",
+      "tag": "hf:noir",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Noir» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#0b0b0d",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#f2f0ea",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#0b0b0d"
+          },
+          {
+            "hex": "#c9a961",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#1c1c20",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "hard",
+        "dials": {
+          "visualDensity": 0.3,
+          "designVariance": 0.5,
+          "decorLevel": 0.2,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "film grain",
+          "long shadows"
+        ],
+        "dominant_pattern": "single hard key light against deep black, subject carved out by contrast",
+        "divergences": [],
+        "prompt_fragment": "cinematic film-noir lighting, deep blacks, single hard key light from the side, high contrast chiaroscuro, subtle film grain, muted desaturated palette with a single warm highlight, moody and restrained",
+        "negative_fragment": "flat even lighting, pastel colors, cluttered background, cartoon, oversaturated, lens flare",
+        "mood": [
+          "moody",
+          "restrained",
+          "cinematic",
+          "mysterious"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-cold-vision",
+      "name": "Higgsfield · Cold vision",
+      "tag": "hf:cold-vision",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Cold vision» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#070b12",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#e6f0ff",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#070b12"
+          },
+          {
+            "hex": "#3fd2ff",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#111a28",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "hard",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "neon rim",
+          "reflections"
+        ],
+        "dominant_pattern": "cold cyan neon rim light with deep blue shadows",
+        "divergences": [],
+        "prompt_fragment": "cold neon shadow lighting, cyan and steel-blue rim light, deep navy shadows, wet reflective surfaces, night-time clinical atmosphere",
+        "negative_fragment": "warm tones, daylight, pastel, cartoon",
+        "mood": [
+          "cold",
+          "clinical",
+          "nocturnal"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-ultraviolet",
+      "name": "Higgsfield · Ultraviolet",
+      "tag": "hf:ultraviolet",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Ultraviolet» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#0d0619",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#f3ecff",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#0d0619"
+          },
+          {
+            "hex": "#b04dff",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#1c0f33",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "uv glow"
+        ],
+        "dominant_pattern": "violet blacklight glow on dark ground",
+        "divergences": [],
+        "prompt_fragment": "neon ultraviolet glow, blacklight violet and magenta illumination, glowing edges on dark background, fluorescent highlights, nightclub luminescence",
+        "negative_fragment": "daylight, warm beige, muted, matte flat",
+        "mood": [
+          "electric",
+          "night",
+          "glowing"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-two-color",
+      "name": "Higgsfield · Two color",
+      "tag": "hf:two-color",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Two color» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#101010",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#fafafa",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#101010"
+          },
+          {
+            "hex": "#ff3b1f",
+            "role": "accent",
+            "ratio": 0.1
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "none",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.3,
+          "decorLevel": 0.1,
+          "symmetry": 0.5
+        },
+        "decor": [],
+        "dominant_pattern": "strict two-tone duotone with hard contrast and no midtones",
+        "divergences": [],
+        "prompt_fragment": "high-contrast two-tone duotone, strictly two colors, hard edged posterized shading, no midtones, bold graphic print look",
+        "negative_fragment": "full color, soft gradients, photorealistic shading, noise",
+        "mood": [
+          "bold",
+          "graphic",
+          "stark"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-overexposed",
+      "name": "Higgsfield · Overexposed",
+      "tag": "hf:overexposed",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Overexposed» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#fbfbf9",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#2a2a2a",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#fbfbf9"
+          },
+          {
+            "hex": "#d19a4a",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#f0efeb",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "none",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "halation"
+        ],
+        "dominant_pattern": "blown-out highlights with washed pale tones",
+        "divergences": [],
+        "prompt_fragment": "extreme overexposure, blown-out white highlights, washed pale tones, soft halation, bright airy dreamlike light, minimal shadows",
+        "negative_fragment": "dark, high contrast shadows, saturated, night",
+        "mood": [
+          "airy",
+          "bright",
+          "dreamy"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-ocean",
+      "name": "Higgsfield · Ocean",
+      "tag": "hf:ocean",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Ocean» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#05263a",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#e8f6fb",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#05263a"
+          },
+          {
+            "hex": "#3fc1c9",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#0e3a52",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "caustics",
+          "ripples"
+        ],
+        "dominant_pattern": "liquid sea-blue overlay with caustic light ripples",
+        "divergences": [],
+        "prompt_fragment": "liquid sea color overlay, deep teal and aquamarine tones, underwater caustic light ripples, soft flowing gradients, submerged calm atmosphere",
+        "negative_fragment": "warm orange, dry desert, harsh contrast, neon pink",
+        "mood": [
+          "fluid",
+          "calm",
+          "deep"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-lava",
+      "name": "Higgsfield · Lava",
+      "tag": "hf:lava",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Lava» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#1a0705",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#fff1e6",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#1a0705"
+          },
+          {
+            "hex": "#ff5a1f",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#3a120a",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "hard",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "molten glow"
+        ],
+        "dominant_pattern": "molten orange-red glow flowing over near-black",
+        "divergences": [],
+        "prompt_fragment": "liquid lava color motion, molten orange and red glow, flowing incandescent streaks over near-black, heat shimmer, dramatic warm light",
+        "negative_fragment": "cool blue, pastel, flat, daylight",
+        "mood": [
+          "hot",
+          "dramatic",
+          "intense"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-toxic",
+      "name": "Higgsfield · Toxic",
+      "tag": "hf:toxic",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Toxic» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#0a0f06",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#effff0",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#0a0f06"
+          },
+          {
+            "hex": "#8cff1f",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#16210e",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "hard",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "neon glow"
+        ],
+        "dominant_pattern": "radioactive acid-green neon blast on dark ground",
+        "divergences": [],
+        "prompt_fragment": "radioactive neon color blast, acid green and toxic yellow glow, dark industrial background, hazard-sign energy, harsh luminous highlights",
+        "negative_fragment": "pastel, warm beige, soft natural light, muted",
+        "mood": [
+          "aggressive",
+          "electric",
+          "hazard"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-acid",
+      "name": "Higgsfield · Acid",
+      "tag": "hf:acid",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Acid» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#120a1f",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#f8f2ff",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#120a1f"
+          },
+          {
+            "hex": "#ff2bd6",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#231340",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.8,
+          "decorLevel": 0.7,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "chromatic aberration"
+        ],
+        "dominant_pattern": "psychedelic neon distortion with chromatic aberration",
+        "divergences": [],
+        "prompt_fragment": "psychedelic neon color distortion, magenta cyan and lime, chromatic aberration, warped rainbow gradients, glitchy saturated trip visuals",
+        "negative_fragment": "muted, monochrome, realistic natural light, calm",
+        "mood": [
+          "trippy",
+          "loud",
+          "saturated"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-lsd",
+      "name": "Higgsfield · LSD",
+      "tag": "hf:lsd",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «LSD» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#1a0b2a",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#fbf3ff",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#1a0b2a"
+          },
+          {
+            "hex": "#ffcc33",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#2b1547",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.9,
+          "decorLevel": 0.8,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "swirls"
+        ],
+        "dominant_pattern": "swirling hallucinogenic color waves",
+        "divergences": [],
+        "prompt_fragment": "hallucinogenic color waves, swirling liquid rainbow gradients, melting shapes, kaleidoscopic symmetry, vivid saturated psychedelic poster",
+        "negative_fragment": "minimal, monochrome, sharp corporate, muted",
+        "mood": [
+          "hallucinatory",
+          "flowing",
+          "vivid"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-cannabis",
+      "name": "Higgsfield · Cannabis",
+      "tag": "hf:cannabis",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Cannabis» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#141a0f",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#f2f5e8",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#141a0f"
+          },
+          {
+            "hex": "#9ccc4a",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#22301a",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "smoke",
+          "print texture"
+        ],
+        "dominant_pattern": "smoky psychedelic poster with hazy green glow",
+        "divergences": [],
+        "prompt_fragment": "smoky psychedelic poster look, hazy green and amber glow, soft drifting smoke layers, 70s poster print texture, relaxed lo-fi atmosphere",
+        "negative_fragment": "clinical, sharp, cold blue, corporate",
+        "mood": [
+          "hazy",
+          "relaxed",
+          "retro"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-random-glow",
+      "name": "Higgsfield · Random Glow",
+      "tag": "hf:random-glow",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Random Glow» из каталога Higgsfield (color-light).",
+        "palette": [
+          {
+            "hex": "#0e0e14",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#f4f4f8",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#0e0e14"
+          },
+          {
+            "hex": "#ff8a3d",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#1a1a24",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Space Grotesk",
+          "body": "Inter Tight",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            40,
+            64
+          ],
+          "weightDisplay": 500,
+          "tracking": 0.01,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            64
+          ],
+          "density": "airy"
+        },
+        "radii": {
+          "small": 0,
+          "large": 4,
+          "pattern": "sharp"
+        },
+        "motion": {
+          "duration": [
+            150,
+            350
+          ],
+          "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "character": "snappy"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.7,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "bokeh",
+          "light leaks"
+        ],
+        "dominant_pattern": "scattered soft glow spots in random colors on dark ground",
+        "divergences": [],
+        "prompt_fragment": "scattered soft glow spots, random colored light leaks, bokeh orbs, dark background, gentle luminous haze",
+        "negative_fragment": "flat even light, daylight, matte, grayscale",
+        "mood": [
+          "playful",
+          "luminous",
+          "night"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-ink-riot",
+      "name": "Higgsfield · Ink Riot",
+      "tag": "hf:ink-riot",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Ink Riot» из каталога Higgsfield (texture).",
+        "palette": [
+          {
+            "hex": "#f5f2ec",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#141414",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f5f2ec"
+          },
+          {
+            "hex": "#d92626",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#e6e1d7",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Syne",
+          "body": "Manrope",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            44,
+            72
+          ],
+          "weightDisplay": 700,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56
+          ],
+          "density": "dense"
+        },
+        "radii": {
+          "small": 4,
+          "large": 16,
+          "pattern": "pill-vs-square"
+        },
+        "motion": {
+          "duration": [
+            250,
+            600
+          ],
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "character": "expressive"
+        },
+        "shadows": "flat",
+        "dials": {
+          "visualDensity": 0.9,
+          "designVariance": 0.8,
+          "decorLevel": 0.4,
+          "symmetry": 0.2
+        },
+        "decor": [
+          "ink splatter",
+          "torn edges"
+        ],
+        "dominant_pattern": "stacked mixed-media collage with ink splatter and torn edges",
+        "divergences": [],
+        "prompt_fragment": "stacked mixed-media composition, ink splatter, torn paper edges, layered collage fragments, rough xerox textures, punk zine energy",
+        "negative_fragment": "clean minimal, polished, photorealistic, symmetrical",
+        "mood": [
+          "chaotic",
+          "raw",
+          "punk"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-fragments",
+      "name": "Higgsfield · Fragments",
+      "tag": "hf:fragments",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Fragments» из каталога Higgsfield (texture).",
+        "palette": [
+          {
+            "hex": "#f1f1f3",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#17181c",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#f1f1f3"
+          },
+          {
+            "hex": "#2f6bff",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#dfe1e6",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Syne",
+          "body": "Manrope",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            44,
+            72
+          ],
+          "weightDisplay": 700,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56
+          ],
+          "density": "dense"
+        },
+        "radii": {
+          "small": 4,
+          "large": 16,
+          "pattern": "pill-vs-square"
+        },
+        "motion": {
+          "duration": [
+            250,
+            600
+          ],
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "character": "expressive"
+        },
+        "shadows": "flat",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.8,
+          "decorLevel": 0.4,
+          "symmetry": 0.3
+        },
+        "decor": [],
+        "dominant_pattern": "layered abstract shards and offset fragments",
+        "divergences": [],
+        "prompt_fragment": "layered abstract visual fragments, offset shards and slices of the subject, translucent overlapping layers, deconstructed composition",
+        "negative_fragment": "single clean subject, painterly, warm vintage",
+        "mood": [
+          "deconstructed",
+          "abstract",
+          "layered"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-multiverse",
+      "name": "Higgsfield · Multiverse",
+      "tag": "hf:multiverse",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Multiverse» из каталога Higgsfield (texture).",
+        "palette": [
+          {
+            "hex": "#0c0c14",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#f2f2f8",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#0c0c14"
+          },
+          {
+            "hex": "#ff4fa3",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#1a1a2c",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Syne",
+          "body": "Manrope",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            44,
+            72
+          ],
+          "weightDisplay": 700,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56
+          ],
+          "density": "dense"
+        },
+        "radii": {
+          "small": 4,
+          "large": 16,
+          "pattern": "pill-vs-square"
+        },
+        "motion": {
+          "duration": [
+            250,
+            600
+          ],
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "character": "expressive"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.8,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "ghost layers"
+        ],
+        "dominant_pattern": "colliding overlapping realities with duplicated ghost layers",
+        "divergences": [],
+        "prompt_fragment": "layered reality collision, duplicated ghost copies of the subject offset in space, overlapping translucent worlds, dimensional glitch, cinematic dark background",
+        "negative_fragment": "single clean subject, flat vector, pastel",
+        "mood": [
+          "surreal",
+          "layered",
+          "cinematic"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-broken-mirror",
+      "name": "Higgsfield · Broken mirror",
+      "tag": "hf:broken-mirror",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Broken mirror» из каталога Higgsfield (texture).",
+        "palette": [
+          {
+            "hex": "#111114",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#f5f5f7",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#111114"
+          },
+          {
+            "hex": "#9fd3ff",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#1f1f26",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Syne",
+          "body": "Manrope",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            44,
+            72
+          ],
+          "weightDisplay": 700,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56
+          ],
+          "density": "dense"
+        },
+        "radii": {
+          "small": 4,
+          "large": 16,
+          "pattern": "pill-vs-square"
+        },
+        "motion": {
+          "duration": [
+            250,
+            600
+          ],
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "character": "expressive"
+        },
+        "shadows": "hard",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "glass shards"
+        ],
+        "dominant_pattern": "shattered glass shards reflecting fragments of the subject",
+        "divergences": [],
+        "prompt_fragment": "broken mirror reflection, shattered glass shards, fragmented reflections of the subject, sharp glass edges catching light, dark background",
+        "negative_fragment": "soft painterly, warm paper, cartoon, intact smooth surface",
+        "mood": [
+          "sharp",
+          "fractured",
+          "dramatic"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-bubbles",
+      "name": "Higgsfield · Bubbles",
+      "tag": "hf:bubbles",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Bubbles» из каталога Higgsfield (texture).",
+        "palette": [
+          {
+            "hex": "#eef6fb",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#1c2a33",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#eef6fb"
+          },
+          {
+            "hex": "#ff7eb6",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#dbeaf3",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Syne",
+          "body": "Manrope",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            44,
+            72
+          ],
+          "weightDisplay": 700,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56
+          ],
+          "density": "dense"
+        },
+        "radii": {
+          "small": 4,
+          "large": 16,
+          "pattern": "pill-vs-square"
+        },
+        "motion": {
+          "duration": [
+            250,
+            600
+          ],
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "character": "expressive"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "iridescence"
+        ],
+        "dominant_pattern": "dreamy soap bubbles with iridescent film",
+        "divergences": [],
+        "prompt_fragment": "dreamy soap bubble texture, iridescent thin-film rainbows, floating translucent spheres, soft pastel light, airy weightless mood",
+        "negative_fragment": "dark, harsh contrast, grunge, matte flat",
+        "mood": [
+          "dreamy",
+          "light",
+          "iridescent"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-particles",
+      "name": "Higgsfield · Particles",
+      "tag": "hf:particles",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Particles» из каталога Higgsfield (texture).",
+        "palette": [
+          {
+            "hex": "#08080c",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#f4f4f8",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#08080c"
+          },
+          {
+            "hex": "#ffd166",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#15151d",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Syne",
+          "body": "Manrope",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            44,
+            72
+          ],
+          "weightDisplay": 700,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56
+          ],
+          "density": "dense"
+        },
+        "radii": {
+          "small": 4,
+          "large": 16,
+          "pattern": "pill-vs-square"
+        },
+        "motion": {
+          "duration": [
+            250,
+            600
+          ],
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "character": "expressive"
+        },
+        "shadows": "soft",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "sparks",
+          "dust"
+        ],
+        "dominant_pattern": "luminous particles drifting through dark space",
+        "divergences": [],
+        "prompt_fragment": "luminous particles in motion, glowing dust and sparks drifting through dark space, depth of field bokeh, subtle motion trails",
+        "negative_fragment": "flat daylight, paper texture, cartoon",
+        "mood": [
+          "magical",
+          "quiet",
+          "cosmic"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-windows",
+      "name": "Higgsfield · Windows",
+      "tag": "hf:windows",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Windows» из каталога Higgsfield (texture).",
+        "palette": [
+          {
+            "hex": "#e9ecef",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#141a22",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#e9ecef"
+          },
+          {
+            "hex": "#0a6cff",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#ffffff",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Syne",
+          "body": "Manrope",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            44,
+            72
+          ],
+          "weightDisplay": 700,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56
+          ],
+          "density": "dense"
+        },
+        "radii": {
+          "small": 4,
+          "large": 16,
+          "pattern": "pill-vs-square"
+        },
+        "motion": {
+          "duration": [
+            250,
+            600
+          ],
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "character": "expressive"
+        },
+        "shadows": "flat",
+        "dials": {
+          "visualDensity": 0.8,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "ui windows",
+          "pixel borders"
+        ],
+        "dominant_pattern": "overlapping retro OS interface windows framing the subject",
+        "divergences": [],
+        "prompt_fragment": "overlapping digital interface windows, retro operating system frames and dialog boxes framing the subject, pixel borders, desktop screenshot aesthetic",
+        "negative_fragment": "painterly, natural photo, organic textures",
+        "mood": [
+          "digital",
+          "retro",
+          "meta"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    },
+    {
+      "slug": "higgsfield-tracking",
+      "name": "Higgsfield · Tracking",
+      "tag": "hf:tracking",
+      "descriptor": {
+        "summary": "Словарный стиль по фильтру «Tracking» из каталога Higgsfield (texture).",
+        "palette": [
+          {
+            "hex": "#0b0f14",
+            "role": "bg",
+            "ratio": 0.55
+          },
+          {
+            "hex": "#eaf2ff",
+            "role": "text",
+            "ratio": 0.2,
+            "contrastOn": "#0b0f14"
+          },
+          {
+            "hex": "#39ff88",
+            "role": "accent",
+            "ratio": 0.1
+          },
+          {
+            "hex": "#151c25",
+            "role": "surface",
+            "ratio": 0.15
+          }
+        ],
+        "type": {
+          "display": "Syne",
+          "body": "Manrope",
+          "scale": [
+            14,
+            16,
+            20,
+            28,
+            44,
+            72
+          ],
+          "weightDisplay": 700,
+          "tracking": -0.01,
+          "caseAccent": "none"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            32,
+            56
+          ],
+          "density": "dense"
+        },
+        "radii": {
+          "small": 4,
+          "large": 16,
+          "pattern": "pill-vs-square"
+        },
+        "motion": {
+          "duration": [
+            250,
+            600
+          ],
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "character": "expressive"
+        },
+        "shadows": "none",
+        "dials": {
+          "visualDensity": 0.5,
+          "designVariance": 0.5,
+          "decorLevel": 0.4,
+          "symmetry": 0.5
+        },
+        "decor": [
+          "hud lines",
+          "markers"
+        ],
+        "dominant_pattern": "dynamic tracking lines and data markers around the subject",
+        "divergences": [],
+        "prompt_fragment": "dynamic object tracking overlay, thin green vector lines and corner markers around the subject, motion-tracking data points, HUD readouts, dark technical background",
+        "negative_fragment": "painterly, warm paper, soft bokeh",
+        "mood": [
+          "technical",
+          "precise",
+          "surveillance"
+        ],
+        "antiRefCheck": [
+          "no purple-blue gradient",
+          "no generic stock look"
+        ]
+      }
+    }
+  ]
+}

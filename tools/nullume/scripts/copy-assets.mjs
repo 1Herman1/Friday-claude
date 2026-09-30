@@ -16,7 +16,7 @@ copyFileSync(srcHtml, destFileHtml);
 console.log(`Copied ${srcHtml} to ${destFileHtml}`);
 
 // Copy data JSON files
-const dataFiles = ['presets.json', 'recipes.json', 'higgsfield-catalog.json'];
+const dataFiles = ['presets.json', 'recipes.json', 'higgsfield-catalog.json', 'higgsfield-styles.json'];
 const destDirData = join(rootDir, 'dist/data');
 
 mkdirSync(destDirData, { recursive: true });

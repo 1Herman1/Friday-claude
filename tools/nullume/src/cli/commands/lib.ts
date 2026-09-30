@@ -23,6 +23,7 @@ import { searchLibrary } from "../../library/search.js";
 import { buildProposalContext, applyProposal } from "../../library/families/propose.js";
 import { startDashboard } from "../../library/dashboard/server.js";
 import { collectStyle } from "../../library/style/collect.js";
+import { applyStyleFile } from "../../library/families/styles.js";
 import {
   getFamilyBySlugOrId,
   approveFamily,
@@ -1505,6 +1506,68 @@ styleCmd
           (result.exemplarsSet > 0 ? `, образцов проставлено: ${result.exemplarsSet}` : ", образцы не менялись") +
           "\n" +
           result.queries.map((q) => `  «${q.query}»: найдено ${q.found}, привязано ${q.added} (лимит ${q.limit})`).join("\n")
+      );
+    } catch (error) {
+      throw error;
+    } finally {
+      store?.close();
+    }
+  });
+
+// lib style apply <file.json> [--dry-run]
+styleCmd
+  .command("apply <file>")
+  .option("--dry-run", "Показать кандидатов без сохранения")
+  .description("Применить стили из JSON файла")
+  .action(async function (filePath: string, options: Record<string, unknown>) {
+    const flags = getGlobalFlags();
+    let store: LibraryStore | undefined;
+
+    try {
+      const dbPath = getLibraryDbPath();
+      store = openStore(dbPath);
+
+      // Resolve file path: try as given, then relative to package data dir
+      let resolvedPath = filePath;
+      if (!fs.existsSync(resolvedPath)) {
+        const altPath = path.join(getPackageDataDir(), filePath);
+        if (fs.existsSync(altPath)) {
+          resolvedPath = altPath;
+        }
+      }
+
+      if (!fs.existsSync(resolvedPath)) {
+        throw new UsageError(`Файл не найден: ${filePath}`);
+      }
+
+      const content = await fs.promises.readFile(resolvedPath, "utf-8");
+      const payload = JSON.parse(content);
+
+      const log = (msg: string) => {
+        if (!flags.quiet && !flags.json) stderr.write(`  ${msg}\n`);
+      };
+
+      const result = applyStyleFile(store, payload, {
+        dryRun: options.dryRun as boolean | undefined,
+        log,
+      });
+
+      const appliedCount = result.applied.length;
+      const skippedCount = result.skipped.length;
+
+      emit(
+        flags,
+        { data: { applied: result.applied, skipped: result.skipped } },
+        () => {
+          let msg = `✓ Стилей применено: ${appliedCount}, пропущено: ${skippedCount}`;
+          if (result.skipped.length > 0) {
+            msg += "\n\nПропущено:";
+            for (const item of result.skipped) {
+              msg += `\n  ${item.slug}: ${item.reason}`;
+            }
+          }
+          return msg;
+        }
       );
     } catch (error) {
       throw error;
