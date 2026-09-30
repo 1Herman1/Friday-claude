@@ -14,12 +14,12 @@ describe('OKVED префиксы', () => {
 
   it('parseOkvedPrefixes: возвращает дефолт если env пуста', () => {
     const result = parseOkvedPrefixes('')
-    expect(result).toEqual(['96.02', '96.04', '86.90', '86.22', '46.45', '47.75'])
+    expect(result).toEqual(['96.02', '86.22', '86.90.3', '86.90.4', '86.90.9'])
   })
 
   it('parseOkvedPrefixes: возвращает дефолт если env undefined', () => {
     const result = parseOkvedPrefixes(undefined)
-    expect(result).toEqual(['96.02', '96.04', '86.90', '86.22', '46.45', '47.75'])
+    expect(result).toEqual(['96.02', '86.22', '86.90.3', '86.90.4', '86.90.9'])
   })
 
   it('parseOkvedPrefixes: фильтрует пустые строки', () => {
