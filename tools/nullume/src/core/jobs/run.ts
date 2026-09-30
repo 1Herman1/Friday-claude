@@ -160,6 +160,10 @@ export async function createJobTask(
     finalInput[modelInfo.meta.promptField] = finalPrompt;
   }
 
+  if (finalImages.length > 0 && !modelInfo.meta.imageField) {
+    throw new Error(`Модель ${modelId} не принимает изображения, а переданы образцы: ${finalImages.length}. Выберите модель с полем для картинок.`)
+  }
+
   // Add images (only if not already in input)
   if (finalImages.length > 0 && modelInfo.meta.imageField && !(modelInfo.meta.imageField in finalInput)) {
     const imageUrls: string[] = [];

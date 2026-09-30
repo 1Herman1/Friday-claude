@@ -5,6 +5,8 @@ import { mergeRegistries } from "./providers/kie/registry.js";
 import { SEED_MODELS } from "./providers/kie/models.js";
 import { getPackageDataDir } from "./paths.js";
 
+const IMAGE_FIELD_KEYS = ["image_input", "image_urls", "input_urls", "image_url", "reference_image_urls"]
+
 const dataDir = getPackageDataDir();
 
 export interface CatalogData {
@@ -24,7 +26,14 @@ export async function loadCatalog(): Promise<ModelInfo[]> {
     const modelsPath = path.join(dataDir, "models.json");
     if (fs.existsSync(modelsPath)) {
       const data: CatalogData = JSON.parse(fs.readFileSync(modelsPath, "utf-8"));
-      return data.models || [];
+      // Поле для картинок в части записей каталога не размечено, хотя в схеме
+      // оно есть: без этого образцы молча выбрасывались. Восстанавливаем по полям.
+      return (data.models || []).map((m) => {
+        if (m.meta?.imageField) return m
+        const key = IMAGE_FIELD_KEYS.find((k) => m.fields && k in m.fields)
+        if (!key) return m
+        return { ...m, meta: { ...m.meta, imageField: key, imageList: m.fields[key]?.type === "array" } }
+      });
     }
   } catch (e) {
     console.error("Failed to load catalog:", e);
