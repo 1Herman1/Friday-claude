@@ -75,11 +75,11 @@ const updateProductFullSchema = z.object({
 })
 
 const deleteImageSchema = z.object({
-  url: z.string().url(),
+  url: z.string().startsWith('/uploads/products/').max(300),
 })
 
 const reorderImagesSchema = z.object({
-  images: z.array(z.string().url()),
+  images: z.array(z.string().max(300)).max(50),
 })
 
 const updateProductSchema = z.object({
@@ -161,16 +161,7 @@ export async function productsRoutes(app: FastifyInstance, preHandlers: any[]) {
             id: { type: 'string', format: 'uuid' },
           },
         },
-        body: {
-          type: 'object',
-          additionalProperties: false,
-          properties: {
-            stock: { type: 'integer', minimum: 0 },
-            retailPrice: { type: 'integer', minimum: 1 },
-            wholesalePrice: { type: ['integer', 'null'], minimum: 0 },
-            isActive: { type: 'boolean' },
-          },
-        },
+        body: { type: 'object' },
         response: {
           200: { $ref: 'ps.adminVariant#' },
           400: { $ref: 'ps.error#' },
@@ -193,70 +184,6 @@ export async function productsRoutes(app: FastifyInstance, preHandlers: any[]) {
     }
   )
 
-  // PATCH /api/v1/admin/products/:id
-  app.patch<{ Params: { id: string }; Body: any; Reply: any }>(
-    '/products/:id',
-    {
-      preHandler: preHandlers,
-      schema: {
-        params: {
-          type: 'object',
-          required: ['id'],
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-          },
-        },
-        body: {
-          type: 'object',
-          additionalProperties: false,
-          properties: {
-            isActive: { type: 'boolean' },
-            isFeatured: { type: 'boolean' },
-            isProfessional: { type: 'boolean' },
-          },
-        },
-        response: {
-          200: {
-            type: 'object',
-            additionalProperties: false,
-            required: ['id', 'name', 'slug', 'isActive', 'isFeatured', 'isProfessional'],
-            properties: {
-              id: { type: 'string', format: 'uuid' },
-              name: { type: 'string' },
-              slug: { type: 'string' },
-              isActive: { type: 'boolean' },
-              isFeatured: { type: 'boolean' },
-              isProfessional: { type: 'boolean' },
-              minPrice: { type: 'integer' },
-              maxPrice: { type: 'integer' },
-              brand: {
-                type: ['object', 'null'],
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                },
-              },
-            },
-          },
-          400: { $ref: 'ps.error#' },
-          404: { $ref: 'ps.error#' },
-          401: { $ref: 'ps.error#' },
-          403: { $ref: 'ps.error#' },
-        },
-      },
-    },
-    async (request: FastifyRequest<{ Params: { id: string }; Body: any }>, reply: FastifyReply) => {
-      const result = updateProductSchema.safeParse(request.body)
-      if (!result.success) {
-        throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации')
-      }
-
-      const product = await adminProductService.updateProduct(request.params.id, result.data)
-
-      reply.code(200)
-      return product
-    }
-  )
 
   // GET /api/v1/admin/popular
   app.get<{ Reply: any }>(
@@ -425,10 +352,7 @@ export async function productsRoutes(app: FastifyInstance, preHandlers: any[]) {
           },
         },
         response: {
-          200: {
-            type: 'object',
-            additionalProperties: false,
-          },
+          200: { type: 'object', additionalProperties: true },
           404: { $ref: 'ps.error#' },
           401: { $ref: 'ps.error#' },
           403: { $ref: 'ps.error#' },
@@ -452,12 +376,9 @@ export async function productsRoutes(app: FastifyInstance, preHandlers: any[]) {
         body: {
           type: 'object',
           required: ['name', 'slug', 'description'],
-          additionalProperties: false,
         },
         response: {
-          201: {
-            type: 'object',
-          },
+          201: { type: 'object', additionalProperties: true },
           400: { $ref: 'ps.error#' },
           409: { $ref: 'ps.error#' },
           401: { $ref: 'ps.error#' },
@@ -491,14 +412,9 @@ export async function productsRoutes(app: FastifyInstance, preHandlers: any[]) {
             id: { type: 'string', format: 'uuid' },
           },
         },
-        body: {
-          type: 'object',
-          additionalProperties: false,
-        },
+        body: { type: 'object' },
         response: {
-          200: {
-            type: 'object',
-          },
+          200: { type: 'object', additionalProperties: true },
           400: { $ref: 'ps.error#' },
           404: { $ref: 'ps.error#' },
           409: { $ref: 'ps.error#' },
@@ -536,7 +452,6 @@ export async function productsRoutes(app: FastifyInstance, preHandlers: any[]) {
         body: {
           type: 'object',
           required: ['volumeValue', 'volumeUnit', 'retailPrice'],
-          additionalProperties: false,
         },
         response: {
           201: { $ref: 'ps.adminVariant#' },
