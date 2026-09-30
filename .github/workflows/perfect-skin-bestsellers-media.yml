@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       stage:
-        description: 'images — ключевые кадры, videos — ролики по готовым кадрам'
+        description: 'images — все кадры, hands — только кадры с рукой по готовому k0, videos — ролики'
         type: choice
-        options: [images, videos]
+        options: [images, hands, videos]
         default: images
 
 permissions:

@@ -45,9 +45,13 @@ for fmt in desktop mobile; do
   if [ "$STAGE" = images ]; then
     gen_image "$fmt-k0" "$AR" "$STYLE $LAYOUT From left to right: ${NAMES[0]}, ${NAMES[1]}, ${NAMES[2]}, ${NAMES[3]}. Use the first four reference images for the exact product look. Use the last reference image only for composition and camera angle. No hands." \
       "$P1" "$P2" "$P3" "$P4" "$REF/1.png"
+  fi
+
+  if [ "$STAGE" = images ] || [ "$STAGE" = hands ]; then
+    PRODUCTS=("$P1" "$P2" "$P3" "$P4")
     for i in 1 2 3 4; do
-      gen_image "$fmt-k$i" "$AR" "Keep this exact scene, products, positions, light and camera unchanged. Add an elegant slender female hand with a nude natural manicure, no jewelry, entering from the top right and gently touching product number $i from the left (${NAMES[$((i-1))]}) with fingertips, lifting it very slightly. Hand pose like the second reference image. $STYLE" \
-        "$OUT/$fmt-k0.png" "$REF/3.png"
+      gen_image "$fmt-k$i" "$AR" "Edit the first image only. Keep EVERYTHING in it pixel-identical: the same exactly four products (${NAMES[0]}; ${NAMES[1]}; ${NAMES[2]}; ${NAMES[3]}), their order, positions, sizes, labels, background, table, light, shadows, camera and framing. Do not add, remove, duplicate, replace or restyle any product. Do not add any other bottles, brands or objects. The ONLY change: add one elegant slender female hand with a natural nude manicure, no jewelry, coming in from the top right edge of the frame, fingertips gently touching the top of product number $i counting from the left, which is ${NAMES[$((i-1))]} (the second image shows this exact product). The other three products are not touched." \
+        "$OUT/$fmt-k0.png" "${PRODUCTS[$((i-1))]}"
     done
   fi
 
