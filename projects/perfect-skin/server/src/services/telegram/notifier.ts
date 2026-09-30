@@ -4,6 +4,59 @@ import { TelegramBotKind } from '../../lib/db.js'
 import { publicUrl, tgBotToken, tgOrdersBotToken } from '../../lib/env.js'
 import { PRO_REVIEW_ROLES } from '../../lib/pricing.js'
 
+export function buildApplicationText(input: {
+  proCheck: unknown
+  duplicates: { pending: number; approved: number } | null
+  queueCount: number
+}): string {
+  const registryText = (input.proCheck as { lane?: string } | null)?.lane === 'green' ? '✓ найден в реестре МСП' : 'Нет в реестре — проверить внимательно'
+  const priorityLine = `Приоритет: ${registryText}`
+
+  let duplicatesLine = ''
+  if (input.duplicates) {
+    const { pending, approved } = input.duplicates
+    if (pending + approved > 0) {
+      duplicatesLine = `\nЭтот ИНН заявлен ещё: ${pending} / уже одобрен: ${approved}`
+    }
+  }
+
+  const queueLine = `В очереди на проверке: ${input.queueCount}`
+
+  return `Новая заявка специалиста\n${priorityLine}${duplicatesLine}\n${queueLine}`
+}
+
+export function buildConsultationText(input: { channel: string | null; queueCount: number }): string {
+  const channelLabel = input.channel === 'phone' ? 'Телефон' : input.channel === 'telegram' ? 'Telegram' : 'WhatsApp'
+  return `Новая заявка на консультацию\nКанал: ${channelLabel}\nНовых в очереди: ${input.queueCount}`
+}
+
+export function buildOrderText(order: {
+  number: string | number
+  total: number
+  deliveryMethod: string
+  paymentStatus: string
+  items: { quantity: number }[]
+}): string {
+  const itemCount = order.items.reduce((sum, item) => sum + item.quantity, 0)
+
+  const deliveryLabel = ({
+    cdek_pvz: 'Пункт выдачи СДЭК',
+    cdek_courier: 'Курьер СДЭК',
+    pickup: 'Самовывоз',
+  } as Record<string, string>)[order.deliveryMethod] || order.deliveryMethod
+
+  const paymentLabel = ({
+    pending: 'Ожидает оплаты',
+    paid: 'Оплачено',
+    failed: 'Ошибка платежа',
+    refunded: 'Возврат',
+  } as Record<string, string>)[order.paymentStatus] || order.paymentStatus
+
+  const totalRubles = (order.total / 100).toFixed(2)
+
+  return `Новый заказ №${order.number}\nСумма: ${totalRubles} ₽\nПозиций: ${itemCount}\nДоставка: ${deliveryLabel}\nОплата: ${paymentLabel}`
+}
+
 export class TelegramNotifier {
   constructor(
     private prisma: PrismaClient,
@@ -51,11 +104,7 @@ export class TelegramNotifier {
           continue
         }
 
-        // Строим текст уведомления
-        const registryText = (applicant.proCheck as { lane?: string } | null)?.lane === 'green' ? '✓ найден в реестре МСП' : 'Нет в реестре — проверить внимательно'
-        const priorityLine = `Приоритет: ${registryText}`
-
-        let duplicatesLine = ''
+        let duplicates: { pending: number; approved: number } | null = null
         if (applicant.inn) {
           const pending = await this.prisma.user.count({
             where: { inn: applicant.inn, deletedAt: null, proStatus: 'pending' },
@@ -63,18 +112,13 @@ export class TelegramNotifier {
           const approved = await this.prisma.user.count({
             where: { inn: applicant.inn, deletedAt: null, proStatus: 'approved' },
           })
-          const totalDuplicates = pending + approved
-          if (totalDuplicates > 0) {
-            duplicatesLine = `\nЭтот ИНН заявлен ещё: ${pending} / уже одобрен: ${approved}`
-          }
+          duplicates = { pending, approved }
         }
 
         const queueCount = await this.prisma.user.count({
           where: { proStatus: 'pending' },
         })
-        const queueLine = `В очереди на проверке: ${queueCount}`
-
-        const text = `Новая заявка специалиста\n${priorityLine}${duplicatesLine}\n${queueLine}`
+        const text = buildApplicationText({ proCheck: applicant.proCheck, duplicates, queueCount })
 
         // Кнопки
         const buttons = [
@@ -153,8 +197,7 @@ export class TelegramNotifier {
           where: { status: 'new' },
         })
 
-        const channelLabel = consultation.channel === 'phone' ? 'Телефон' : consultation.channel === 'telegram' ? 'Telegram' : 'WhatsApp'
-        const text = `Новая заявка на консультацию\nКанал: ${channelLabel}\nНовых в очереди: ${queueCount}`
+        const text = buildConsultationText({ channel: consultation.channel, queueCount })
 
         // Кнопка для открытия админки
         const buttons = publicUrl ? [[{ text: 'Перейти в админку', url: `${publicUrl}/admin/consultations` }]] : []
@@ -228,27 +271,7 @@ export class TelegramNotifier {
         return
       }
 
-      // Считаем позиции
-      const itemCount = order.items.reduce((sum, item) => sum + item.quantity, 0)
-
-      // Форматируем доставку и оплату (без ПДн)
-      const deliveryLabel = {
-        cdek_pvz: 'Пункт выдачи СДЭК',
-        cdek_courier: 'Курьер СДЭК',
-        pickup: 'Самовывоз',
-      }[order.deliveryMethod] || order.deliveryMethod
-
-      const paymentLabel = {
-        pending: 'Ожидает оплаты',
-        paid: 'Оплачено',
-        failed: 'Ошибка платежа',
-        refunded: 'Возврат',
-      }[order.paymentStatus] || order.paymentStatus
-
-      // Сумма в рублях (из копеек)
-      const totalRubles = (order.total / 100).toFixed(2)
-
-      const text = `Новый заказ №${order.number}\nСумма: ${totalRubles} ₽\nПозиций: ${itemCount}\nДоставка: ${deliveryLabel}\nОплата: ${paymentLabel}`
+      const text = buildOrderText(order)
 
       // Получаем активных менеджеров заказов, привязанных к боту orders
       const links = await this.prisma.telegramLink.findMany({

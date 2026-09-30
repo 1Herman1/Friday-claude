@@ -8,7 +8,7 @@
  * - Логирует без ПДн
  */
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, type ConsultationStatus } from '@prisma/client'
 import { readdir, unlink, stat } from 'fs/promises'
 import { join } from 'path'
 
@@ -16,6 +16,9 @@ const isDryRun = !process.argv.includes('--apply')
 const proDocsDir = process.env.PS_PRO_DOCS_DIR || './var/pro-docs'
 
 const prisma = new PrismaClient()
+
+// Срок хранения завершённых консультаций; срок подтверждает юрист клиента
+const CONSULTATION_RETENTION_DAYS = 365
 
 async function main() {
   console.log(`[purge-pro-docs] Starting ${isDryRun ? 'dry run' : 'purge'}...`)
@@ -149,6 +152,24 @@ async function main() {
       })
       console.log(`[purge-pro-docs] Deleted ${expiredViewTokens.length} expired view tokens`)
     }
+  }
+
+  // Шаг 4: Удалить завершённые консультации старше срока хранения.
+  // Согласия (ConsultationConsent) остаются — связь обнуляется (SetNull).
+  console.log('[purge-pro-docs] Step 4: Finding expired consultations...')
+
+  const consultationCutoff = new Date(now.getTime() - CONSULTATION_RETENTION_DAYS * 24 * 60 * 60 * 1000)
+  const consultationWhere = {
+    status: { in: ['done', 'cancelled'] as ConsultationStatus[] },
+    createdAt: { lt: consultationCutoff },
+  }
+
+  const expiredConsultations = await prisma.consultationRequest.count({ where: consultationWhere })
+  console.log(`[purge-pro-docs] Found ${expiredConsultations} expired consultations`)
+
+  if (!isDryRun && expiredConsultations > 0) {
+    const { count } = await prisma.consultationRequest.deleteMany({ where: consultationWhere })
+    console.log(`[purge-pro-docs] Deleted ${count} expired consultations`)
   }
 
   console.log(`[purge-pro-docs] ${isDryRun ? 'Dry run' : 'Purge'} completed`)

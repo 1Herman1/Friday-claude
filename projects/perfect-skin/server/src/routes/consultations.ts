@@ -67,6 +67,24 @@ export default async function consultationsRoute(app: FastifyInstance) {
             },
           })
 
+          // Согласия отправителя — для любого, включая гостя
+          await tx.consultationConsent.createMany({
+            data: [
+              {
+                consultationId: consultation.id,
+                purpose: 'consultation',
+                textVersion: CONSENT_TEXT_VERSION.consultation,
+                ip: request.ip,
+              },
+              {
+                consultationId: consultation.id,
+                purpose: 'health_data',
+                textVersion: CONSENT_TEXT_VERSION.health_data,
+                ip: request.ip,
+              },
+            ],
+          })
+
           // Создаём согласие на обработку ПДн для консультации
           if (userId) {
             await tx.consentRecord.create({
