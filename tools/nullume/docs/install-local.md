@@ -138,7 +138,7 @@ nullume lib cluster
 ```
 
 Раздел Higgsfield (каталог вшит в пакет, сети не нужно кроме превью):
-`nullume lib import higgsfield --limit 200`, дальше четыре команды
+`nullume lib import higgsfield --limit 1000`, дальше четыре команды
 `family create --tag` из SKILL.md — так библиотека пересобирается заново
 на любой машине.
 

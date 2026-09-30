@@ -417,14 +417,14 @@ nullume lib dashboard --open
 
 ### Раздел Higgsfield (ADR-008)
 
-Каталог пресетов Higgsfield (33 фильтра, 54 эффекта, образцы товарной съёмки и
-motion) вшит в пакет: `data/higgsfield-catalog.json`. Это референсы, не рецепты —
+Каталог пресетов Higgsfield целиком — 736 позиций: 33 фильтра, 54 эффекта,
+418 сцен товарной съёмки, 231 motion-пресет — вшит в пакет: `data/higgsfield-catalog.json`. Это референсы, не рецепты —
 сам пресет исполняется только на Higgsfield, у нас он служит словарём стилей.
 Превью — материалы Higgsfield, только для справки. Библиотека собирается заново
 в любой среде пятью командами (лимит нужен: дефолт `lib import` — 50):
 
 ```
-nullume lib import higgsfield --limit 200
+nullume lib import higgsfield --limit 1000
 nullume lib family create --name "Higgsfield · Фильтры"         --slug higgsfield-filters      --tag hf-section:filters
 nullume lib family create --name "Higgsfield · Эффекты"         --slug higgsfield-effects      --tag hf-section:effects
 nullume lib family create --name "Higgsfield · Товарная съёмка" --slug higgsfield-product-shot --tag hf-section:product-shot

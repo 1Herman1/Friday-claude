@@ -1,7 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import { higgsFieldImporter, toJpegUrl } from "./higgsfield-catalog.js";
 import { mockConfig } from "../testing-utils.js";
+import { getPackageDataDir } from "../../../core/paths.js";
 
 test("higgsfield: toJpegUrl transforms raw webp to cdn-cgi jpeg", () => {
   const input = "https://cdn.higgsfield.ai/viral_hub/151664fa-7f7f-43d6-80fa-4683104a3c02.webp";
@@ -30,10 +33,10 @@ test("higgsfield: toJpegUrl leaves foreign hosts unchanged", () => {
   assert.strictEqual(result, input);
 });
 
-test("higgsfield: should load real catalog and respect limit=500", async () => {
+test("higgsfield: should load real catalog in full", async () => {
   const opts = {
     log: () => {},
-    limit: 500,
+    limit: 5000,
     fetchImpl: fetch,
     config: mockConfig(),
     env: {},
@@ -44,9 +47,13 @@ test("higgsfield: should load real catalog and respect limit=500", async () => {
     candidates.push(c);
   }
 
-  assert.strictEqual(candidates.length, 111, "Should load exactly 111 items");
+  // Число позиций берём из файла: Marketing Studio довыгружается страницами.
+  const catalogPath = path.join(getPackageDataDir(), "higgsfield-catalog.json");
+  const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8")) as { items: unknown[] };
+  assert.strictEqual(candidates.length, catalog.items.length, "Should load every catalog item");
+  assert(candidates.length >= 111, "Catalog must not shrink below the first 111 items");
 
-  // Check section distribution
+  // Viral Hub выгружен целиком — эти два раздела зафиксированы точно.
   const sections = candidates.reduce(
     (acc, c) => {
       const section = c.meta.section;
@@ -58,14 +65,14 @@ test("higgsfield: should load real catalog and respect limit=500", async () => {
 
   assert.strictEqual(sections.filters, 33);
   assert.strictEqual(sections.effects, 54);
-  assert.strictEqual(sections["product-shot"], 12);
-  assert.strictEqual(sections.motion, 12);
+  assert(sections["product-shot"] >= 12);
+  assert(sections.motion >= 12);
 });
 
 test("higgsfield: should filter by collection (section)", async () => {
   const opts = {
     log: () => {},
-    limit: 500,
+    limit: 5000,
     collection: "filters",
     fetchImpl: fetch,
     config: mockConfig(),
@@ -110,8 +117,9 @@ test("higgsfield: should throw on unknown collection", async () => {
 test("higgsfield: should filter by query (case-insensitive substring)", async () => {
   const opts = {
     log: () => {},
-    limit: 500,
-    query: "noir",
+    limit: 5000,
+    query: "NoIr",
+    collection: "filters",
     fetchImpl: fetch,
     config: mockConfig(),
     env: {},
@@ -122,15 +130,15 @@ test("higgsfield: should filter by query (case-insensitive substring)", async ()
     candidates.push(c);
   }
 
-  // Should find exactly "Noir" effect
+  // Среди фильтров ровно один Noir; в motion есть «Noir Unboxing» — поэтому collection.
   assert.strictEqual(candidates.length, 1);
-  assert(candidates[0].meta.name.toLowerCase().includes("noir"));
+  assert.strictEqual(candidates[0].meta.name, "Noir");
 });
 
 test("higgsfield: should return empty result for non-matching query", async () => {
   const opts = {
     log: () => {},
-    limit: 500,
+    limit: 5000,
     query: "xyznonexistent12345",
     fetchImpl: fetch,
     config: mockConfig(),
@@ -220,7 +228,7 @@ test("higgsfield: should produce all URLs with cdn-cgi transform (no double nest
 test("higgsfield: should have unique sourceRefs", async () => {
   const opts = {
     log: () => {},
-    limit: 111,
+    limit: 5000,
     fetchImpl: fetch,
     config: mockConfig(),
     env: {},
