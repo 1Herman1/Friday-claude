@@ -53,6 +53,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/projects/perfect-skin/media/bestsellers-v2
+          git add docs/projects/perfect-skin/media/bestsellers-v2 projects/perfect-skin/client/public/video/bestsellers 2>/dev/null || git add docs/projects/perfect-skin/media/bestsellers-v2
           git commit -m "Bestsellers scene media: $STAGE" || exit 0
           for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && break; sleep 5; done

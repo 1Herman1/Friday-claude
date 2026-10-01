@@ -69,4 +69,20 @@ for fmt in desktop mobile; do
     done
   fi
 done
+# Ролики для сайта: без звука, ключевой кадр каждые 6 кадров — чтобы
+# перемотка скроллом шла без рывков; постеры из ключевых кадров.
+if [ "$STAGE" = videos ]; then
+  PUBV="$ROOT/projects/perfect-skin/client/public/video/bestsellers"
+  for fmt in desktop mobile; do
+    mkdir -p "$PUBV/$fmt"
+    if [ "$fmt" = desktop ]; then SCALE="scale=1920:-2"; else SCALE="scale=1080:-2"; fi
+    for i in 1 2 3 4; do
+      ffmpeg -y -loglevel error -i "$OUT/$fmt-$((i-1))-$i.mp4" -an -vf "$SCALE" -c:v libx264 -preset slow -crf 26 -g 6 -pix_fmt yuv420p -movflags +faststart "$PUBV/$fmt/$((i-1))-$i.mp4"
+    done
+    for k in 0 1 2 3 4; do
+      ffmpeg -y -loglevel error -i "$OUT/$fmt-k$k.png" -vf "$SCALE" -q:v 4 "$PUBV/$fmt/k$k.jpg"
+    done
+  done
+  ls -la "$PUBV"/*
+fi
 ls -la "$OUT"
