@@ -50,13 +50,28 @@ for fmt in desktop mobile; do
 
   if [ "$STAGE" = images ] || [ "$STAGE" = hands ]; then
     PRODUCTS=("$P1" "$P2" "$P3" "$P4")
+    # Хват зависит от формы: за корпус, никогда за пипетку или крышку-помпу.
+    GRIPS=("holding the tall bottle by its white body just below the silver cap: thumb on the near side, index and middle fingers on the far side, ring finger and pinky relaxed and slightly lifted"
+           "holding the tall bottle by its white body just below the silver cap: thumb on the near side, index and middle fingers on the far side, ring finger and pinky relaxed and slightly lifted"
+           "holding the short jar by the sides of its frosted glass body (not by the lid): thumb on the near side, two fingers on the far side, pinky slightly lifted"
+           "holding the glass dropper bottle by its glass body below the shoulder — the fingers do NOT touch the white dropper bulb or the silver collar at all: thumb on the near side, index and middle fingers on the far side, pinky slightly lifted")
+    if [ "$fmt" = desktop ]; then LIFT="3 centimeters"; else LIFT="2 centimeters"; fi
+    HAND="one graceful feminine hand of a woman aged 25-35: soft smooth skin, slender fingers, short natural nude manicure, no rings or jewelry, relaxed elegant pose with a gentle natural curve of the wrist, entering the frame from the top right edge"
+    # K0h — стартовый кадр ролика: рука уже в кадре и парит над товарами.
+    if [ -z "${FRAMES:-}" ] || [[ " $FRAMES " == *" $fmt-k0h "* ]]; then
+      for v in $(seq 1 "${VARIANTS:-1}"); do
+      name="$fmt-k0h"; [ "${VARIANTS:-1}" -gt 1 ] && name="$fmt-k0h-v$v"
+      gen_image "$name" "$AR" "Edit the image. Keep EVERYTHING pixel-identical: the same exactly four products (${NAMES[0]}; ${NAMES[1]}; ${NAMES[2]}; ${NAMES[3]}), their order, positions, sizes, labels, background, table, light, shadows, camera and framing. All four products stay standing on the table, untouched. The ONLY change: add $HAND, hovering in the air above the row of products, roughly above the first and second product from the left, fingers softly open and relaxed as if about to choose a product, palm facing down and slightly towards the camera. The hand touches nothing and casts only a faint soft shadow. $LABELS" \
+        "$OUT/$fmt-k0.png"
+      done
+    fi
     for i in 1 2 3 4; do
       # FRAMES="desktop-k1 mobile-k2" — перегенерировать только эти кадры;
       # VARIANTS=3 — несколько вариантов name-v1..vN для ручного выбора.
       if [ -n "${FRAMES:-}" ] && [[ " $FRAMES " != *" $fmt-k$i "* ]]; then continue; fi
       for v in $(seq 1 "${VARIANTS:-1}"); do
       name="$fmt-k$i"; [ "${VARIANTS:-1}" -gt 1 ] && name="$fmt-k$i-v$v"
-      gen_image "$name" "$AR" "Edit the first image only. Keep EVERYTHING in it pixel-identical: the same exactly four products (${NAMES[0]}; ${NAMES[1]}; ${NAMES[2]}; ${NAMES[3]}), their order, positions, sizes, labels, background, table, light, shadows, camera and framing. Do not add, remove, duplicate, replace or restyle any product. Do not add any other bottles, brands or objects. The ONLY change: add one elegant slender female hand with a natural nude manicure, no jewelry, coming in from the top right edge of the frame, already holding product number $i counting from the left, which is ${NAMES[$((i-1))]} (the second image shows this exact product): fingers wrapped around its cap and upper body, the product raised 4 centimeters straight up so there is a clearly visible gap of empty table between the bottom of the product and the tabletop, its soft contact shadow stays on the table below the gap. The product is upright, not tilted, label fully readable. This product exists ONLY ONCE in the image — it is now in the hand, so its original spot on the table is EMPTY (only its faint shadow). Exactly three products remain standing on the table and they stay untouched, exactly four products in total in the whole image. $LABELS" \
+      gen_image "$name" "$AR" "Edit the first image only. Keep EVERYTHING in it pixel-identical: the same exactly four products (${NAMES[0]}; ${NAMES[1]}; ${NAMES[2]}; ${NAMES[3]}), their order, positions, sizes, labels, background, table, light, shadows, camera and framing. Do not add, remove, duplicate, replace or restyle any product. Do not add any other bottles, brands or objects. The ONLY change: add $HAND, ${GRIPS[$((i-1))]}. The hand holds product number $i counting from the left, which is ${NAMES[$((i-1))]} (the second image shows this exact product). The product is lifted exactly $LIFT straight up, DIRECTLY ABOVE ITS OWN ORIGINAL SPOT: same horizontal position, same depth as the neighbouring products (NOT moved backwards, NOT behind the other products, NOT forward, NOT sideways), same size as before, perfectly vertical, label facing the camera and crisp. Below it a small gap of empty table is visible, and its soft contact shadow lies on the table directly under the product; no shadow or trace remains at the old contact point other than that. This product exists ONLY ONCE in the image. Exactly three products remain standing on the table untouched; exactly four products in total. $LABELS" \
         "$OUT/$fmt-k0.png" "${PRODUCTS[$((i-1))]}"
       done
     done

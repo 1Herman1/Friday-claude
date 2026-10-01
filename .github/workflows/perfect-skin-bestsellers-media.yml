@@ -11,7 +11,7 @@ on:
         options: [images, hands, videos]
         default: images
       frames:
-        description: 'Только эти кадры через пробел (например: desktop-k1 mobile-k2). Пусто — все'
+        description: 'Только эти кадры через пробел (например: desktop-k1 mobile-k2 desktop-k0h). Пусто — все'
         type: string
         default: ''
       variants:
