@@ -69,10 +69,17 @@ for fmt in desktop mobile; do
       # FRAMES="desktop-k1 mobile-k2" — перегенерировать только эти кадры;
       # VARIANTS=3 — несколько вариантов name-v1..vN для ручного выбора.
       if [ -n "${FRAMES:-}" ] && [[ " $FRAMES " != *" $fmt-k$i "* ]]; then continue; fi
+      # Два шага против задвоения: сначала кадр без товара i (пустое место на
+      # столе), затем рука с товаром над этим местом.
+      GAP="$OUT/$fmt-gap$i.png"
+      if [ ! -f "$GAP" ]; then
+        gen_image "$fmt-gap$i" "$AR" "Edit the image. Remove ONLY product number $i counting from the left, which is ${NAMES[$((i-1))]}, together with its shadow, leaving its spot on the table completely empty — clean tabletop and background fill the space naturally. Everything else stays pixel-identical: the other three products (their positions, sizes, labels), background, table, light, shadows, camera and framing. Exactly three products remain. No hands. $LABELS" \
+          "$OUT/$fmt-k0.png"
+      fi
       for v in $(seq 1 "${VARIANTS:-1}"); do
       name="$fmt-k$i"; [ "${VARIANTS:-1}" -gt 1 ] && name="$fmt-k$i-v$v"
-      gen_image "$name" "$AR" "Edit the first image only. Keep EVERYTHING in it pixel-identical: the same exactly four products (${NAMES[0]}; ${NAMES[1]}; ${NAMES[2]}; ${NAMES[3]}), their order, positions, sizes, labels, background, table, light, shadows, camera and framing. Do not add, remove, duplicate, replace or restyle any product. Do not add any other bottles, brands or objects. The ONLY change: add $HAND, ${GRIPS[$((i-1))]}. The hand holds product number $i counting from the left, which is ${NAMES[$((i-1))]} (the second image shows this exact product). The product is lifted exactly $LIFT straight up, DIRECTLY ABOVE ITS OWN ORIGINAL SPOT: same horizontal position, same depth as the neighbouring products (NOT moved backwards, NOT behind the other products, NOT forward, NOT sideways), same size as before, perfectly vertical, label facing the camera and crisp.$UPRIGHT Below it a small gap of empty table is visible, and its soft contact shadow lies on the table directly under the product; no shadow or trace remains at the old contact point other than that. This product exists ONLY ONCE in the image. Exactly three products remain standing on the table untouched; exactly four products in total. $LABELS" \
-        "$OUT/$fmt-k0.png" "${PRODUCTS[$((i-1))]}"
+      gen_image "$name" "$AR" "Edit the first image only. It shows three products on a table and one EMPTY SPOT where a fourth product used to stand (position number $i counting from the left). Keep EVERYTHING in it pixel-identical: the three products, their positions, sizes, labels, background, table, light, shadows, camera and framing. Do not add, remove, duplicate, replace or restyle any product. The ONLY change: add $HAND, ${GRIPS[$((i-1))]}. The hand holds the product from the second image, which is ${NAMES[$((i-1))]}, reproduced exactly (shape, color, cap, label text letter by letter). The product hangs exactly $LIFT above the empty spot, DIRECTLY ABOVE IT: same horizontal position and same depth as the neighbouring products (NOT behind them, NOT in front, NOT sideways), same size as the neighbouring tall products' scale, perfectly vertical, label facing the camera and crisp.$UPRIGHT Below it a small gap of empty table is visible, and its soft contact shadow lies on the table directly under the product. This product appears ONLY ONCE in the image, only in the hand — the empty spot stays empty under it. Exactly four products in total. $LABELS" \
+        "$GAP" "${PRODUCTS[$((i-1))]}"
       done
     done
   fi
