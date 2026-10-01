@@ -10,6 +10,14 @@ on:
         type: choice
         options: [images, hands, videos]
         default: images
+      frames:
+        description: 'Только эти кадры через пробел (например: desktop-k1 mobile-k2). Пусто — все'
+        type: string
+        default: ''
+      variants:
+        description: 'Вариантов на кадр'
+        type: string
+        default: '1'
 
 permissions:
   contents: write
@@ -25,6 +33,8 @@ jobs:
       KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
       NULLUME_HOME: ${{ github.workspace }}/.nullume-run
       STAGE: ${{ inputs.stage }}
+      FRAMES: ${{ inputs.frames }}
+      VARIANTS: ${{ inputs.variants }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
