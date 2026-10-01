@@ -204,6 +204,29 @@ export function BestsellerScene() {
     )
   }
 
+  const progressBar = (
+    <div className="flex gap-2">
+            {[0, 1, 2, 3].map(idx => (
+              <div
+                key={idx}
+                className="h-1 flex-1 bg-muted rounded-full overflow-hidden"
+              >
+                <div
+                  className="h-full bg-primary transition-all"
+                  style={{
+                    width:
+                      state.segment > idx
+                        ? '100%'
+                        : state.segment === idx
+                          ? `${state.local * 100}%`
+                          : '0%',
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+  )
+
   return (
     <section ref={containerRef} style={{ height: `${containerHeight}px` }} className="bg-background">
       {/* Sticky container */}
@@ -215,16 +238,21 @@ export function BestsellerScene() {
         </div>
 
         {/* Видео фреймы */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-x-0 top-24 bottom-56 md:inset-0">
           {[0, 1, 2, 3].map(idx => (
             <video
               key={idx}
               ref={el => {
                 videoRefs.current[idx] = el
               }}
-              className={`w-full h-full object-cover transition-opacity duration-300 ${
+              className={`w-full h-full object-cover md:object-center transition-opacity duration-300 ${
                 state.segment === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
+              style={
+                !isDesktop
+                  ? { objectPosition: 'center 88%' }
+                  : undefined
+              }
               poster={VIDEO_CONFIG.startPoster(isDesktop ? 'desktop' : 'mobile', idx)}
               muted
               playsInline
@@ -319,7 +347,8 @@ export function BestsellerScene() {
         </div>
 
         {/* Карточка товара - мобильный (снизу) */}
-        <div className="md:hidden absolute bottom-0 left-0 right-0 pointer-events-none p-4 h-1/3">
+        <div className="md:hidden absolute bottom-0 left-0 right-0 h-56 flex flex-col justify-end gap-3 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] pointer-events-none">
+          {progressBar}
           {(() => {
             const currentProduct = visibleProducts[state.segment]
             if (!currentProduct || !currentProduct.data) return null
@@ -327,7 +356,7 @@ export function BestsellerScene() {
             const productData = currentProduct.data
             return (
               <div
-                className={`bg-card rounded-block shadow-lg p-4 h-full flex flex-col pointer-events-auto transition-all duration-200 ${
+                className={`bg-card rounded-block shadow-lg p-4 h-auto flex flex-col pointer-events-auto transition-all duration-200 ${
                   state.local > 0.5
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-12'
@@ -371,28 +400,9 @@ export function BestsellerScene() {
           })()}
         </div>
 
-        {/* Полоса прогресса (снизу) */}
-        <div className="absolute bottom-6 md:bottom-12 left-6 md:left-12 right-6 md:right-12 z-20">
-          <div className="flex gap-2">
-            {[0, 1, 2, 3].map(idx => (
-              <div
-                key={idx}
-                className="h-1 flex-1 bg-muted rounded-full overflow-hidden"
-              >
-                <div
-                  className="h-full bg-primary transition-all"
-                  style={{
-                    width:
-                      state.segment > idx
-                        ? '100%'
-                        : state.segment === idx
-                          ? `${state.local * 100}%`
-                          : '0%',
-                  }}
-                />
-              </div>
-            ))}
-          </div>
+        {/* Полоса прогресса (десктоп) */}
+        <div className="hidden md:block absolute md:bottom-12 md:left-12 md:right-12 z-20">
+          {progressBar}
         </div>
       </div>
     </section>
