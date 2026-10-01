@@ -339,3 +339,204 @@ test("applyStyleFile: invalid input structure → throws UsageError", () => {
     (err) => err instanceof UsageError && err.message.includes("Invalid style file")
   );
 });
+
+test("applyStyleFile: rerun on approved family keeps status and no duplicate decision", () => {
+  const store = new MemoryStore();
+  const logs: string[] = [];
+  const log = (msg: string) => logs.push(msg);
+
+  const refIds = createRefsWithTag(store, "test:tag", 3);
+
+  // First apply
+  const payload1 = {
+    styles: [
+      {
+        slug: "test-style",
+        name: "Test Style",
+        tag: "test:tag",
+        descriptor: buildValidDescriptor({
+          prompt_fragment: "First version",
+        }),
+      },
+    ],
+  };
+
+  const result1 = applyStyleFile(store, payload1, { dryRun: false, log });
+  assert.strictEqual(result1.applied.length, 1);
+
+  const family1 = store.getFamilyBySlug("test-style")!;
+  const decisions1 = store.listDecisions(family1.id);
+  assert.strictEqual(family1.status, "approved", "After first apply, family should be approved");
+  assert.ok(decisions1.length >= 1, "Should have at least one approval decision");
+  const approvalCount1 = decisions1.filter((d) => d.action === "approve").length;
+
+  // Second apply with updated descriptor
+  const payload2 = {
+    styles: [
+      {
+        slug: "test-style",
+        name: "Test Style Updated",
+        tag: "test:tag",
+        descriptor: buildValidDescriptor({
+          prompt_fragment: "Second version",
+        }),
+      },
+    ],
+  };
+
+  const result2 = applyStyleFile(store, payload2, { dryRun: false, log });
+  assert.strictEqual(result2.applied.length, 1);
+
+  const family2 = store.getFamilyBySlug("test-style")!;
+  const decisions2 = store.listDecisions(family2.id);
+  assert.strictEqual(family2.status, "approved", "After second apply, family should still be approved");
+
+  // Key assertion: no new approval decision was added
+  const approvalCount2 = decisions2.filter((d) => d.action === "approve").length;
+  assert.strictEqual(
+    approvalCount2,
+    approvalCount1,
+    `Approval count should not increase. Before: ${approvalCount1}, After: ${approvalCount2}, All decisions: ${JSON.stringify(decisions2.map(d => d.action))}`
+  );
+});
+
+test("applyStyleFile: mixed valid A and invalid B and valid C → throws with B listed, nothing written", () => {
+  const store = new MemoryStore();
+  const logs: string[] = [];
+  const log = (msg: string) => logs.push(msg);
+
+  const refIds = createRefsWithTag(store, "test:tag", 3);
+
+  // Invalid descriptor: palette with invalid hex
+  const payload = {
+    styles: [
+      {
+        slug: "style-a",
+        name: "Style A",
+        tag: "test:tag",
+        descriptor: buildValidDescriptor({
+          prompt_fragment: "Valid A",
+        }),
+      },
+      {
+        slug: "style-b",
+        name: "Style B",
+        tag: "test:tag",
+        descriptor: buildValidDescriptor({
+          palette: [
+            { hex: "invalid-hex", role: "bg", ratio: 1.0 }, // Invalid hex format
+            { hex: "#f2f0ea", role: "text", ratio: 0.96 },
+          ],
+        }),
+      },
+      {
+        slug: "style-c",
+        name: "Style C",
+        tag: "test:tag",
+        descriptor: buildValidDescriptor({
+          prompt_fragment: "Valid C",
+        }),
+      },
+    ],
+  };
+
+  // Should throw with B in the error message
+  let threwError = false;
+  let errorMsg = "";
+  try {
+    applyStyleFile(store, payload, { dryRun: false, log });
+  } catch (e) {
+    threwError = true;
+    errorMsg = (e as Error).message;
+  }
+
+  assert.ok(threwError, "Should throw an error");
+  assert.ok(errorMsg.includes("style-b"), `Error message should mention style-b. Got: ${errorMsg}`);
+
+  // Verify no families were created for A or C
+  const familyA = store.getFamilyBySlug("style-a");
+  const familyB = store.getFamilyBySlug("style-b");
+  const familyC = store.getFamilyBySlug("style-c");
+
+  assert.strictEqual(familyA, undefined, "Family A should not exist (nothing written due to B error)");
+  assert.strictEqual(familyB, undefined, "Family B should not exist (validation failed)");
+  assert.strictEqual(familyC, undefined, "Family C should not exist (nothing written due to B error)");
+});
+
+test("applyStyleFile: new ref tagged after first apply → second apply adds to members", () => {
+  const store = new MemoryStore();
+  const logs: string[] = [];
+  const log = (msg: string) => logs.push(msg);
+
+  // Create initial 2 refs with tag
+  const initialRefIds = createRefsWithTag(store, "test:tag", 2);
+
+  // First apply
+  const payload1 = {
+    styles: [
+      {
+        slug: "test-style",
+        name: "Test Style",
+        tag: "test:tag",
+        descriptor: buildValidDescriptor({
+          prompt_fragment: "Initial",
+        }),
+      },
+    ],
+  };
+
+  const result1 = applyStyleFile(store, payload1, { dryRun: false, log });
+  assert.strictEqual(result1.applied.length, 1);
+
+  const family1 = store.getFamilyBySlug("test-style")!;
+  const members1 = store.getMembers(family1.id);
+  assert.strictEqual(members1.length, 2, "Initial members should be 2");
+
+  // Create a new ref and tag it with the same tag
+  const newRef = store.insertReference({
+    sha256: "sha-new",
+    source: "test",
+    sourceRef: "ref-new",
+    originalPath: "new.png",
+    width: 100,
+    height: 100,
+    bytes: 1000,
+    meta: {},
+    status: "active",
+  });
+  store.addTags(newRef.id, ["test:tag"], "test");
+
+  // Second apply (same style, but now there are 3 refs with the tag)
+  const payload2 = {
+    styles: [
+      {
+        slug: "test-style",
+        name: "Test Style",
+        tag: "test:tag",
+        descriptor: buildValidDescriptor({
+          prompt_fragment: "Updated",
+        }),
+      },
+    ],
+  };
+
+  const result2 = applyStyleFile(store, payload2, { dryRun: false, log });
+  assert.strictEqual(result2.applied.length, 1);
+
+  const family2 = store.getFamilyBySlug("test-style")!;
+  const members2 = store.getMembers(family2.id);
+  assert.strictEqual(
+    members2.length,
+    3,
+    `Members should be 3 after adding new tagged ref. Got ${members2.length}, members: ${JSON.stringify(members2.map(m => m.refId.slice(0, 8)))}`
+  );
+
+  // Verify the new ref is in the members
+  const memberRefIds = new Set(members2.map((m) => m.refId));
+  assert.ok(memberRefIds.has(newRef.id), "New ref should be in members");
+
+  // Verify new member has isExemplar=false
+  const newMember = members2.find((m) => m.refId === newRef.id);
+  assert.ok(newMember, "New member should exist");
+  assert.strictEqual(newMember.isExemplar, false, "New member should not be exemplar");
+});

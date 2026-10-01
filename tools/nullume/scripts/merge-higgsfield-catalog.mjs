@@ -24,6 +24,8 @@ for (const line of fs.readFileSync(file, "utf8").split("\n")) {
   const raw = JSON.parse(line);
   if (known.has(raw.id)) { skipped++; continue; }
   if (!/^https:\/\/cdn\.higgsfield\.ai\//.test(raw.thumbnailUrl)) { skipped++; continue; }
+  // Host guard for previewUrl
+  if (raw.previewUrl && !/^https:\/\/cdn\.higgsfield\.ai\//.test(raw.previewUrl)) { skipped++; continue; }
   catalog.items.push({
     id: raw.id,
     name: raw.name,

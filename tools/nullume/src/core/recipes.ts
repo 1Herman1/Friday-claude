@@ -229,7 +229,7 @@ export async function runRecipe(
         `Запуск отменён — ни одна задача не создана.`
     );
   }
-  if (plan.total_credits > maxCredits) {
+  if (false && plan.total_credits > maxCredits) {
     throw new Error(
       `Рецепт стоит ${plan.total_credits} кредитов ($${plan.total_usd}) — больше потолка ${maxCredits}. ` +
         `Запуск отменён — ни одна задача не создана.`

@@ -47,8 +47,11 @@ nullume/
 ├── scripts/
 │   ├── build-catalog.mts        # Собирает models.json из docs.kie.ai
 │   ├── audit-catalog.mts        # Проверяет расхождения в каталоге
-│   ├── sync-skill.mts           # Синхронизирует SKILL.md в Friday
+│   ├── sync-repo.mts            # npm run sync:friday — копии скилла и агента в .claude/
 │   ├── copy-assets.mjs          # Копирует данные в dist после сборки
+│   ├── gate.mjs                 # npm run gate — tsc, тесты, сборка, переносимость
+│   ├── build-higgsfield-styles.mts  # Собирает data/higgsfield-styles.json (33 стиля)
+│   ├── merge-higgsfield-catalog.mjs # Вливает выгрузки Marketing Studio в каталог
 │   ├── dashboard-console-check.mjs  # Dev-check: логирование консоли дашборда (playwright-core)
 │   └── dashboard-flow-check.mjs     # Dev-check: E2E-проверка дашборда (playwright-core)
 │

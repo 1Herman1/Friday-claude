@@ -72,17 +72,25 @@ export const higgsFieldImporter: Importer = {
   },
 
   async *run(opts: ImportRunOptions): AsyncIterable<RefCandidate> {
-    const { log, limit, collection, query } = opts;
+    const { log, limit, collection, query, env } = opts;
 
     if (limit === 0) {
       return;
     }
 
-    // Load catalog
+    // Load catalog (allow override via NULLUME_HIGGSFIELD_CATALOG env var for testing)
     let catalog: HiggsFieldCatalog;
     try {
-      const dataDir = getPackageDataDir();
-      const catalogPath = path.join(dataDir, "higgsfield-catalog.json");
+      const catalogPathOverride = env?.NULLUME_HIGGSFIELD_CATALOG;
+      let catalogPath: string;
+
+      if (catalogPathOverride) {
+        catalogPath = catalogPathOverride;
+      } else {
+        const dataDir = getPackageDataDir();
+        catalogPath = path.join(dataDir, "higgsfield-catalog.json");
+      }
+
       const raw = fs.readFileSync(catalogPath, "utf-8");
       catalog = JSON.parse(raw);
     } catch (e) {
@@ -115,6 +123,18 @@ export const higgsFieldImporter: Importer = {
         if (!text.includes(queryLower)) {
           continue;
         }
+      }
+
+      // Host guard: skip items with thumbnailUrl not from cdn.higgsfield.ai
+      if (!item.thumbnailUrl.startsWith("https://cdn.higgsfield.ai/")) {
+        log(`Пропуск ${item.name}: адрес вне cdn.higgsfield.ai`);
+        continue;
+      }
+
+      // Host guard for previewUrl if present
+      if (item.previewUrl && !item.previewUrl.startsWith("https://cdn.higgsfield.ai/")) {
+        log(`Пропуск ${item.name}: адрес превью вне cdn.higgsfield.ai`);
+        continue;
       }
 
       const slug = slugifyName(item.name);

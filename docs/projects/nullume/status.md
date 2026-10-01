@@ -8,7 +8,7 @@
 **Картинки по запросу — готово.** Генерация из диалога, смета до траты, файлы в
 проект, 33 стиля, 6 рецептов. Проверено живьём, больше 15 генераций.
 **Видео — работает, с оговоркой.** Первый живой прогон 01.10 прошёл; полный
-облёт 360° за 6 секунд модель не делает (`docs/live-runs/2026-10-01-video-orbit360/`).
+облёт 360° за 6 секунд модель не делает (`tools/nullume/docs/live-runs/2026-10-01-video-orbit360/`).
 
 ## Работает в облачной сессии
 
@@ -60,5 +60,6 @@
 - Каталоги: `data/models.json`, `data/prices.json`, `data/higgsfield-catalog.json`,
   `data/higgsfield-styles.json`, `data/presets.json`, `data/recipes.json`
 - Решения: `tools/nullume/docs/adr/` (006 архитектура, 007 источники, 008 Higgsfield)
-- Живые прогоны с листами: `tools/nullume/docs/live-runs/`
+- Живые прогоны с листами: `tools/nullume/docs/live-runs/<дата>-<что>/` — рецепты (09-27),
+  раздел и стили Higgsfield (09-30), видео и стиль на фон (10-01)
 - Доступ к Mac: `tools/nullume/docs/access-options.md`

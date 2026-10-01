@@ -282,3 +282,137 @@ test("higgsfield: limit=0 yields nothing", async () => {
 
   assert.strictEqual(candidates.length, 0);
 });
+
+test("higgsfield: foreign-host thumbnailUrl → item skipped", async () => {
+  // Create a temporary test catalog with one foreign host item
+  const testCatalog = {
+    fetchedAt: "2024-01-01",
+    origin: "test",
+    license: "test",
+    items: [
+      {
+        id: "valid-1",
+        name: "Valid Item",
+        description: "Valid CDN item",
+        section: "filters",
+        group: "test",
+        sourceType: "test",
+        thumbnailUrl: "https://cdn.higgsfield.ai/test/valid.webp",
+        previewUrl: "https://cdn.higgsfield.ai/test/valid-preview.jpg",
+        previewType: "image",
+      },
+      {
+        id: "foreign-1",
+        name: "Foreign Host Item",
+        description: "Item with foreign host",
+        section: "filters",
+        group: "test",
+        sourceType: "test",
+        thumbnailUrl: "https://example.com/foreign.jpg",
+        previewUrl: "https://cdn.higgsfield.ai/test/preview.jpg",
+        previewType: "image",
+      },
+    ],
+  };
+
+  // Write to temp file
+  const tmpFile = `/tmp/test-catalog-${Date.now()}.json`;
+  fs.writeFileSync(tmpFile, JSON.stringify(testCatalog));
+
+  try {
+    const logs: string[] = [];
+    const opts = {
+      log: (msg: string) => logs.push(msg),
+      limit: 10,
+      fetchImpl: fetch,
+      config: mockConfig(),
+      env: { NULLUME_HIGGSFIELD_CATALOG: tmpFile },
+    };
+
+    const candidates: any[] = [];
+    for await (const c of higgsFieldImporter.run(opts)) {
+      candidates.push(c);
+    }
+
+    // Only valid item should be yielded
+    assert.strictEqual(
+      candidates.length,
+      1,
+      `Should yield only 1 candidate (foreign host skipped). Got ${candidates.length}`
+    );
+    assert.strictEqual(candidates[0].meta.name, "Valid Item");
+
+    // Verify skip was logged
+    const skipLog = logs.find((l) => l.includes("Пропуск") && l.includes("Foreign Host Item"));
+    assert.ok(skipLog, `Should have logged skip for foreign host. Logs: ${JSON.stringify(logs)}`);
+  } finally {
+    fs.unlinkSync(tmpFile);
+  }
+});
+
+test("higgsfield: foreign-host previewUrl → item skipped", async () => {
+  // Create a temporary test catalog with one item having foreign preview
+  const testCatalog = {
+    fetchedAt: "2024-01-01",
+    origin: "test",
+    license: "test",
+    items: [
+      {
+        id: "valid-2",
+        name: "Valid Item 2",
+        description: "Valid CDN item",
+        section: "filters",
+        group: "test",
+        sourceType: "test",
+        thumbnailUrl: "https://cdn.higgsfield.ai/test/valid.webp",
+        previewUrl: "https://cdn.higgsfield.ai/test/valid-preview.jpg",
+        previewType: "image",
+      },
+      {
+        id: "foreign-preview",
+        name: "Item with Foreign Preview",
+        description: "Item with foreign preview host",
+        section: "filters",
+        group: "test",
+        sourceType: "test",
+        thumbnailUrl: "https://cdn.higgsfield.ai/test/valid.webp",
+        previewUrl: "https://example.com/preview.jpg",
+        previewType: "image",
+      },
+    ],
+  };
+
+  // Write to temp file
+  const tmpFile = `/tmp/test-catalog-${Date.now()}.json`;
+  fs.writeFileSync(tmpFile, JSON.stringify(testCatalog));
+
+  try {
+    const logs: string[] = [];
+    const opts = {
+      log: (msg: string) => logs.push(msg),
+      limit: 10,
+      fetchImpl: fetch,
+      config: mockConfig(),
+      env: { NULLUME_HIGGSFIELD_CATALOG: tmpFile },
+    };
+
+    const candidates: any[] = [];
+    for await (const c of higgsFieldImporter.run(opts)) {
+      candidates.push(c);
+    }
+
+    // Only valid item should be yielded
+    assert.strictEqual(
+      candidates.length,
+      1,
+      `Should yield only 1 candidate (foreign preview skipped). Got ${candidates.length}`
+    );
+    assert.strictEqual(candidates[0].meta.name, "Valid Item 2");
+
+    // Verify skip was logged
+    const skipLog = logs.find((l) => l.includes("Пропуск") && l.includes("Foreign Preview"));
+    assert.ok(skipLog, `Should have logged skip for foreign preview. Logs: ${JSON.stringify(logs)}`);
+  } finally {
+    fs.unlinkSync(tmpFile);
+  }
+});

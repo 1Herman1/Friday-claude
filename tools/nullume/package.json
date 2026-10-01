@@ -32,6 +32,7 @@
     "data",
     "dist",
     "docs",
+    "!docs/live-runs",
     "skills",
     "templates",
     "scripts/audit-catalog.mts",

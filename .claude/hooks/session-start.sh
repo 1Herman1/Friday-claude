@@ -98,9 +98,9 @@ for tool_dir in tools/*/; do
   [ -d "$tool_dir/node_modules" ] && continue
 
   if [ -f "$tool_dir/package-lock.json" ]; then
-    npm ci --no-audit --no-fund -C "$tool_dir" 2>&1 >&2 || true
+    npm ci --no-audit --no-fund -C "$tool_dir" >&2 2>&1 || true
   else
-    npm install --no-audit --no-fund -C "$tool_dir" 2>&1 >&2 || true
+    npm install --no-audit --no-fund -C "$tool_dir" >&2 2>&1 || true
   fi
 done
 
@@ -112,19 +112,30 @@ for tool_dir in tools/*/; do
   [ -d "$tool_dir/dist" ] && [ -d "$tool_dir/src" ] || continue
   grep -q '"build"' "$tool_dir/package.json" 2>/dev/null || continue
   if [ -n "$(find "$tool_dir/src" -newer "$tool_dir/dist" -type f -print -quit 2>/dev/null)" ]; then
-    npm run build --silent --prefix "$tool_dir" 2>&1 >&2 || \
+    # mtime каталога dist сборка не трогает (файлы перезаписываются на месте),
+    # поэтому после успешной сборки ставим его вручную — иначе сборка шла бы
+    # на каждом старте.
+    if npm run build --silent --prefix "$tool_dir" >&2 2>&1; then
+      touch "$tool_dir/dist"
+    else
       echo "session-start: сборка $tool_dir не удалась — bin будет работать на старом dist" >&2
+    fi
   fi
 done
 
 # ── 5. Документ состояния активного проекта ────────────────────────────────
 # Новая сессия начинает с него, а не с пересказа: что работает, что нет, что
 # требует внимания владельца.
-STATUS_FILE="docs/projects/$ACTIVE/status.md"
-if [ -f "$STATUS_FILE" ]; then
+# Печатаем status.md всех проектов, где он есть, активный — первым: открытые
+# решения владельца не должны пропадать из виду, когда .active переключила
+# параллельная сессия.
+for STATUS_FILE in "docs/projects/$ACTIVE/status.md" docs/projects/*/status.md; do
+  [ -f "$STATUS_FILE" ] || continue
+  case " ${PRINTED:-} " in *" $STATUS_FILE "*) continue ;; esac
+  PRINTED="${PRINTED:-} $STATUS_FILE"
   echo "=== СОСТОЯНИЕ ПРОЕКТА ($STATUS_FILE) ==="
   cat "$STATUS_FILE"
   echo "=== КОНЕЦ СОСТОЯНИЯ ==="
-fi
+done
 
 exit 0
