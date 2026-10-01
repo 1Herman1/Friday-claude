@@ -6,27 +6,15 @@ import { useDrawer } from '@/context/DrawerContext'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { Link } from 'react-router-dom'
 
-// TODO: Заменить на реальные пути когда видеофайлы готовы
-// Структура: desktop (16:9) и mobile (9:16) для каждого сегмента
+// Ролики сцены: сегмент i — рука от товара i к товару i+1 (кадры k_i → k_{i+1}).
+const SCENE = '/video/bestsellers'
+const segments = ['0-1', '1-2', '2-3', '3-4']
 const VIDEO_CONFIG = {
-  desktop: [
-    '/video/2-3.mp4',
-    '/video/3-5.mp4',
-    '/video/5-7.mp4',
-    '/video/7-9.mp4',
-  ],
-  mobile: [
-    '/video/2-3.mp4',
-    '/video/3-5.mp4',
-    '/video/5-7.mp4',
-    '/video/7-9.mp4',
-  ],
-  posters: [
-    '/video/posters/poster-2-3.jpg',
-    '/video/posters/poster-3-5.jpg',
-    '/video/posters/poster-5-7.jpg',
-    '/video/posters/poster-7-9.jpg',
-  ],
+  desktop: segments.map((s) => `${SCENE}/desktop/${s}.mp4`),
+  mobile: segments.map((s) => `${SCENE}/mobile/${s}.mp4`),
+  // Постер ролика — его первый кадр; статичный шаг — кадр, где товар уже в руке.
+  startPoster: (fmt: 'desktop' | 'mobile', idx: number) => `${SCENE}/${fmt}/k${idx}.jpg`,
+  stepPoster: (fmt: 'desktop' | 'mobile', idx: number) => `${SCENE}/${fmt}/k${idx + 1}.jpg`,
 }
 
 const PRODUCT_SLUGS = [
@@ -134,6 +122,8 @@ export function BestsellerScene() {
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
+    // Страница может открыться уже прокрученной — считаем положение сразу.
+    handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isVisible, isReducedMotion])
 
@@ -172,7 +162,7 @@ export function BestsellerScene() {
             >
               <div className="flex-shrink-0 w-32 h-32 bg-muted rounded-block overflow-hidden flex items-center justify-center">
                 <img
-                  src={VIDEO_CONFIG.posters[idx]}
+                  src={VIDEO_CONFIG.stepPoster(isDesktop ? 'desktop' : 'mobile', idx)}
                   alt={`Шаг ${idx + 1}`}
                   className="w-full h-full object-cover"
                 />
@@ -235,7 +225,7 @@ export function BestsellerScene() {
               className={`w-full h-full object-cover transition-opacity duration-300 ${
                 state.segment === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
-              poster={VIDEO_CONFIG.posters[idx]}
+              poster={VIDEO_CONFIG.startPoster(isDesktop ? 'desktop' : 'mobile', idx)}
               muted
               playsInline
               preload="auto"
