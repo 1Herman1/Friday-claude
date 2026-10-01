@@ -13,6 +13,7 @@ export const schema = z.object({
   images: z.array(z.string()).optional().describe("Пути к файлам или URL изображений"),
   input: z.record(z.string(), z.unknown()).optional().describe("Дополнительные параметры модели"),
   style: z.string().optional().describe("Стиль из библиотеки вкуса (slug или ID семейства)"),
+  style_scope: z.enum(["whole", "background"]).optional().describe("Область применения стиля: whole (весь образ) или background (только фон)"),
   wait: z.boolean().optional().default(true).describe("Ждать завершения задачи"),
   wait_timeout_sec: z.number().optional().default(300).describe("Таймаут ожидания в секундах"),
   confirm_cost: z.boolean().optional().describe("Подтверждение при стоимости > $1"),
@@ -25,6 +26,7 @@ export async function handler(args: {
   images?: string[];
   input?: Record<string, unknown>;
   style?: string;
+  style_scope?: "whole" | "background";
   wait?: boolean;
   wait_timeout_sec?: number;
   confirm_cost?: boolean;
@@ -119,6 +121,7 @@ export async function handler(args: {
       images: args.images,
       input: finalInput,
       style: args.style,
+      styleScope: args.style_scope,
     });
 
     // If no wait, return job immediately

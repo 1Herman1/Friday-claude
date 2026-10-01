@@ -130,6 +130,7 @@ export interface ApplyStyleParams {
   modelMeta: ModelMeta;
   fields?: Record<string, FieldSpec>;
   resolved: ResolvedStyle;
+  scope?: "whole" | "background";
 }
 
 export interface AppliedStyle {
@@ -151,6 +152,7 @@ export function applyStyle(params: ApplyStyleParams): AppliedStyle {
     modelMeta,
     fields,
     resolved,
+    scope = "whole",
   } = params;
 
   const applied: string[] = [];
@@ -172,20 +174,44 @@ export function applyStyle(params: ApplyStyleParams): AppliedStyle {
     const accentColor = descriptor.palette.find((p) => p.role === "accent");
     const surfaceColor = descriptor.palette.find((p) => p.role === "surface");
 
-    if (bgColor || accentColor) {
-      const colorNames: string[] = [];
-      if (bgColor) {
-        colorNames.push(`${hexToColorName(bgColor.hex)} background`);
-      }
-      if (accentColor) {
-        colorNames.push(`${hexToColorName(accentColor.hex)} accents`);
-      }
-      if (surfaceColor && surfaceColor.hex !== bgColor?.hex) {
-        colorNames.push(`${hexToColorName(surfaceColor.hex)} surfaces`);
-      }
+    // For background scope, wrap style instructions and modify palette sentence
+    if (scope === "background") {
+      promptWithStyle = `The product itself stays photorealistic and unchanged — true material, shape, colour and proportions, no added text or labels; do not restyle the product. Apply the following style only to the background, surface, props and lighting around it: ${promptWithStyle}`;
 
-      if (colorNames.length > 0) {
-        promptWithStyle += `. Colour palette: ${colorNames.join(", ")}.`;
+      // Add palette description with "Background palette" instead of "Colour palette"
+      if (bgColor || accentColor) {
+        const colorNames: string[] = [];
+        if (bgColor) {
+          colorNames.push(`${hexToColorName(bgColor.hex)} background`);
+        }
+        if (accentColor) {
+          colorNames.push(`${hexToColorName(accentColor.hex)} accents`);
+        }
+        if (surfaceColor && surfaceColor.hex !== bgColor?.hex) {
+          colorNames.push(`${hexToColorName(surfaceColor.hex)} surfaces`);
+        }
+
+        if (colorNames.length > 0) {
+          promptWithStyle += `. Background palette: ${colorNames.join(", ")}.`;
+        }
+      }
+    } else {
+      // Original whole scope behavior
+      if (bgColor || accentColor) {
+        const colorNames: string[] = [];
+        if (bgColor) {
+          colorNames.push(`${hexToColorName(bgColor.hex)} background`);
+        }
+        if (accentColor) {
+          colorNames.push(`${hexToColorName(accentColor.hex)} accents`);
+        }
+        if (surfaceColor && surfaceColor.hex !== bgColor?.hex) {
+          colorNames.push(`${hexToColorName(surfaceColor.hex)} surfaces`);
+        }
+
+        if (colorNames.length > 0) {
+          promptWithStyle += `. Colour palette: ${colorNames.join(", ")}.`;
+        }
       }
     }
 
@@ -201,19 +227,37 @@ export function applyStyle(params: ApplyStyleParams): AppliedStyle {
     );
 
     if (negativeFieldName && !(negativeFieldName in newInput)) {
-      newInput[negativeFieldName] = descriptor.negative_fragment;
+      let negativeText = descriptor.negative_fragment;
+
+      // For background scope, prepend product-related negatives
+      if (scope === "background") {
+        negativeText = `restyled product, product made of a different material, ${negativeText}`;
+      }
+
+      newInput[negativeFieldName] = negativeText;
       applied.push("negative_fragment");
     }
   }
 
   // (c) Apply exemplars if no images provided and model has imageField
-  if (newImages.length === 0 && modelMeta.imageField && resolved.exemplarPaths.length > 0) {
+  // For background scope, do NOT add exemplars (they would bleed style onto product)
+  if (
+    scope !== "background" &&
+    newImages.length === 0 &&
+    modelMeta.imageField &&
+    resolved.exemplarPaths.length > 0
+  ) {
     // Determine how many exemplars to include
     const exemplarCount = modelMeta.imageList ? 3 : 1;
     const selectedExemplars = resolved.exemplarPaths.slice(0, exemplarCount);
 
     newImages.push(...selectedExemplars);
     applied.push(`exemplars(${selectedExemplars.length})`);
+  }
+
+  // Record scope in applied
+  if (scope === "background") {
+    applied.push("scope:background");
   }
 
   return {

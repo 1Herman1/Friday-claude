@@ -15,6 +15,7 @@ export interface CreateJobOptions {
   images?: string[];
   input?: Record<string, unknown>;
   style?: string;
+  styleScope?: "whole" | "background";
   fetchImpl?: typeof fetch;
   libraryStore?: LibraryStore; // type only for tests to avoid circular imports
 }
@@ -72,7 +73,7 @@ export async function createJobTask(
   provider: Provider,
   options: CreateJobOptions
 ): Promise<Job> {
-  const { model: modelId, prompt, images = [], input = {}, style, fetchImpl = fetch, libraryStore } = options;
+  const { model: modelId, prompt, images = [], input = {}, style, styleScope, fetchImpl = fetch, libraryStore } = options;
 
   // Resolve model
   let modelInfo = await provider.model(modelId);
@@ -149,6 +150,7 @@ export async function createJobTask(
       modelMeta: modelInfo.meta,
       fields: modelInfo.fields,
       resolved: resolvedStyle,
+      scope: styleScope,
     });
     finalPrompt = applied.prompt;
     finalImages = applied.images;

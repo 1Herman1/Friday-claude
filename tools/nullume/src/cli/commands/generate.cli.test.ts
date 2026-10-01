@@ -326,3 +326,50 @@ test("шлюз стоимости: отдельный процесс CLI зав�
     fs.rmSync(home, { recursive: true, force: true });
   }
 });
+
+test("--style-scope: без --style даёт ошибку использования", async () => {
+  const res = await runCreate(
+    ["mock/image", "--yes", "--prompt", "кот", "--style-scope", "background"],
+    { NULLUME_PROVIDER: "mock" }
+  );
+
+  assert(res.error instanceof UsageError, `ожидался UsageError, получено: ${res.error}`);
+  assert.strictEqual((res.error as UsageError).exitCode, 2);
+  assert(res.error.message.includes("--style-scope требует --style"));
+  assert.deepStrictEqual(res.jobFiles, []);
+});
+
+test("--style-scope: неверное значение даёт ошибку использования", async () => {
+  const res = await runCreate(
+    ["mock/image", "--yes", "--prompt", "кот", "--style", "test-style", "--style-scope", "invalid"],
+    { NULLUME_PROVIDER: "mock" }
+  );
+
+  assert(res.error instanceof UsageError, `ожидался UsageError, получено: ${res.error}`);
+  assert.strictEqual((res.error as UsageError).exitCode, 2);
+  assert(res.error.message.includes("whole"));
+  assert(res.error.message.includes("background"));
+  assert.deepStrictEqual(res.jobFiles, []);
+});
+
+test("--style-scope: valid value 'background' passes through", async () => {
+  // This test just ensures no validation error; actual styling is tested in resolve.test.ts
+  const res = await runCreate(
+    ["mock/image", "--yes", "--prompt", "кот", "--style", "test-style", "--style-scope", "background"],
+    { NULLUME_PROVIDER: "mock" }
+  );
+
+  // Validation should pass (though style resolution will fail with mock provider, that's fine for this test)
+  assert(!(res.error instanceof UsageError) || !res.error.message.includes("--style-scope"),
+    "should not error on valid --style-scope value");
+});
+
+test("--style-scope: valid value 'whole' passes through", async () => {
+  const res = await runCreate(
+    ["mock/image", "--yes", "--prompt", "кот", "--style", "test-style", "--style-scope", "whole"],
+    { NULLUME_PROVIDER: "mock" }
+  );
+
+  assert(!(res.error instanceof UsageError) || !res.error.message.includes("--style-scope"),
+    "should not error on valid --style-scope value");
+});

@@ -444,3 +444,180 @@ test("applyStyle: returns new objects without mutation", () => {
   assert.strictEqual(originalImages.length, 1);
   assert.strictEqual(originalPrompt, "Original");
 });
+
+test("applyStyle: scope=background modifies prompt for product protection", () => {
+  const store = new MemoryStore();
+  const family = store.createFamily({
+    name: "Test",
+    slug: "test",
+    status: "approved",
+    descriptor: DESCRIPTOR_TEMPLATE,
+    proposedBy: "owner",
+  });
+
+  const result = applyStyle({
+    prompt: "A coffee mug on a table",
+    images: [],
+    input: {},
+    modelMeta: {
+      promptField: "prompt",
+      required: [],
+      defaults: {},
+    },
+    resolved: {
+      family,
+      descriptor: DESCRIPTOR_TEMPLATE,
+      exemplarPaths: [],
+    },
+    scope: "background",
+  });
+
+  assert(result.prompt.includes("do not restyle the product"));
+  assert(result.prompt.includes("Apply the following style only to the background"));
+  assert(!result.prompt.includes("Colour palette:"));
+  assert(result.prompt.includes("Background palette:"));
+  assert(result.applied.includes("scope:background"));
+});
+
+test("applyStyle: scope=background does NOT add exemplars", () => {
+  const store = new MemoryStore();
+  const family = store.createFamily({
+    name: "Test",
+    slug: "test",
+    status: "approved",
+    descriptor: DESCRIPTOR_TEMPLATE,
+    proposedBy: "owner",
+  });
+
+  const result = applyStyle({
+    prompt: "Generate",
+    images: [],
+    input: {},
+    modelMeta: {
+      promptField: "prompt",
+      imageField: "image",
+      imageList: false,
+      required: [],
+      defaults: {},
+    },
+    resolved: {
+      family,
+      descriptor: DESCRIPTOR_TEMPLATE,
+      exemplarPaths: ["/p1.png", "/p2.png", "/p3.png"],
+    },
+    scope: "background",
+  });
+
+  assert.strictEqual(result.images.length, 0, "exemplars should NOT be added for background scope");
+  assert(!result.applied.includes("exemplars"));
+});
+
+test("applyStyle: scope=whole (default) adds exemplars and uses Colour palette", () => {
+  const store = new MemoryStore();
+  const family = store.createFamily({
+    name: "Test",
+    slug: "test",
+    status: "approved",
+    descriptor: DESCRIPTOR_TEMPLATE,
+    proposedBy: "owner",
+  });
+
+  const result = applyStyle({
+    prompt: "Generate",
+    images: [],
+    input: {},
+    modelMeta: {
+      promptField: "prompt",
+      imageField: "image",
+      imageList: false,
+      required: [],
+      defaults: {},
+    },
+    resolved: {
+      family,
+      descriptor: DESCRIPTOR_TEMPLATE,
+      exemplarPaths: ["/p1.png", "/p2.png", "/p3.png"],
+    },
+    scope: "whole",
+  });
+
+  assert.strictEqual(result.images.length, 1, "exemplars SHOULD be added for whole scope");
+  assert(result.applied.includes("exemplars(1)"));
+  assert(result.prompt.includes("Colour palette:"));
+  assert(!result.prompt.includes("Background palette:"));
+});
+
+test("applyStyle: scope=background prepends product negatives when field not provided", () => {
+  const store = new MemoryStore();
+  const descriptor: StyleDescriptor = {
+    ...DESCRIPTOR_TEMPLATE,
+    negative_fragment: "busy, crowded, cluttered",
+  };
+  const family = store.createFamily({
+    name: "Test",
+    slug: "test",
+    status: "approved",
+    descriptor,
+    proposedBy: "owner",
+  });
+
+  const result = applyStyle({
+    prompt: "Generate",
+    images: [],
+    input: {},
+    modelMeta: {
+      promptField: "prompt",
+      required: [],
+      defaults: {},
+    },
+    fields: {
+      negative_prompt: { type: "string" },
+    },
+    resolved: {
+      family,
+      descriptor,
+      exemplarPaths: [],
+    },
+    scope: "background",
+  });
+
+  assert(result.applied.includes("negative_fragment"));
+  assert(
+    (result.input.negative_prompt as string).startsWith("restyled product, product made of a different material, "),
+    "background scope should prepend product protection negatives"
+  );
+  assert((result.input.negative_prompt as string).includes("busy, crowded, cluttered"));
+});
+
+test("applyStyle: omitted scope defaults to whole", () => {
+  const store = new MemoryStore();
+  const family = store.createFamily({
+    name: "Test",
+    slug: "test",
+    status: "approved",
+    descriptor: DESCRIPTOR_TEMPLATE,
+    proposedBy: "owner",
+  });
+
+  const result = applyStyle({
+    prompt: "Generate",
+    images: [],
+    input: {},
+    modelMeta: {
+      promptField: "prompt",
+      imageField: "image",
+      required: [],
+      defaults: {},
+    },
+    resolved: {
+      family,
+      descriptor: DESCRIPTOR_TEMPLATE,
+      exemplarPaths: ["/p1.png"],
+    },
+    // scope NOT specified - should default to "whole"
+  });
+
+  assert.strictEqual(result.images.length, 1, "default scope should add exemplars");
+  assert(result.prompt.includes("Colour palette:"));
+  assert(!result.prompt.includes("Background palette:"));
+});

@@ -56,6 +56,7 @@ export interface RecipePlan {
   recipe_id: string;
   subject: string;
   style?: string;
+  styleScope?: "whole" | "background";
   steps: PlannedStep[];
   total_credits: number;
   total_usd: string;
@@ -112,11 +113,12 @@ export async function planRecipe(
     /** Что меняется или уточняется — подставляется в {details}; обязателен, если рецепт его ждёт */
     details?: string;
     style?: string;
+    styleScope?: "whole" | "background";
     catalog: ModelInfo[];
     provider: Provider;
   }
 ): Promise<RecipePlan | null> {
-  const { subject, details, style, catalog, provider } = options;
+  const { subject, details, style, styleScope, catalog, provider } = options;
   const recipe = await getRecipe(id);
   if (!recipe) return null;
 
@@ -186,6 +188,7 @@ export async function planRecipe(
     recipe_id: recipe.id,
     subject,
     style,
+    styleScope,
     steps: plannedSteps,
     total_credits: totalCredits,
     total_usd: totalUsd,
@@ -201,6 +204,7 @@ export interface RecipeRunDeps {
     input: Record<string, unknown>;
     images?: string[];
     style?: string;
+    styleScope?: "whole" | "background";
   }) => Promise<{ id: string }>;
   waitAll: (jobIds: string[]) => Promise<WaitJobsResult>;
 }
@@ -210,12 +214,13 @@ export async function runRecipe(
   options: {
     provider: Provider;
     style?: string;
+    styleScope?: "whole" | "background";
     maxCredits: number;
     timeoutSec?: number;
     deps?: RecipeRunDeps;
   }
 ): Promise<RecipeRunResult> {
-  const { provider, maxCredits, style } = options;
+  const { provider, maxCredits, style, styleScope } = options;
 
   // Проверки до создания первой задачи: после — деньги уже потрачены
   if (plan.has_unconfirmed_price) {
@@ -240,7 +245,7 @@ export async function runRecipe(
 
   const launch = async (step: PlannedStep, images?: string[]): Promise<string | undefined> => {
     try {
-      const job = await deps.createJob({ model: step.model, prompt: step.prompt, input: step.input, images, style });
+      const job = await deps.createJob({ model: step.model, prompt: step.prompt, input: step.input, images, style, styleScope });
       results.set(step.id, { id: step.id, state: "pending", job_id: job.id, local_paths: [] });
       return job.id;
     } catch (error) {

@@ -73,12 +73,24 @@ generateCmd
   .option("--out <dir>", "Скопировать результаты в этот каталог")
   .option("--wait-interval <sec>", "Интервал проверки статуса в секундах", "2")
   .option("--style <slug>", "Стиль из библиотеки вкуса (спринт 2)")
+  .option("--style-scope <scope>", "Область применения стиля: whole (весь образ) или background (только фон, продукт остаётся без изменений)")
   .option("--yes", "Пропустить подтверждение при дорогой генерации")
   .description("Создать задачу генерации")
   .action(async function (model: string, options: Record<string, unknown>) {
     const flags = getGlobalFlags();
 
     try {
+      // Validate --style-scope
+      if (options.styleScope) {
+        const validScopes = ["whole", "background"];
+        if (!validScopes.includes(options.styleScope as string)) {
+          throw new UsageError(`--style-scope должен быть одним из: ${validScopes.join(", ")}`);
+        }
+        if (!options.style) {
+          throw new UsageError("--style-scope требует --style");
+        }
+      }
+
       const providerName = process.env.NULLUME_PROVIDER || "kie";
       const apiKey = providerName === "mock" ? "mock" : await getApiKey();
       const provider = await getProviderWithCatalog(providerName, apiKey);
@@ -125,6 +137,7 @@ generateCmd
         images,
         input: setParams,
         style: options.style as string | undefined,
+        styleScope: options.styleScope as "whole" | "background" | undefined,
       });
 
       if (flags.json) {

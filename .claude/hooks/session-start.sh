@@ -104,4 +104,27 @@ for tool_dir in tools/*/; do
   fi
 done
 
+# ── 4. Пересборка устаревшего dist ─────────────────────────────────────────
+# bin/ инструмента берёт dist, если он есть, — даже если src новее. После
+# git pull новые флаги CLI молча «не существуют» (unknown option), пока
+# кто-нибудь не вспомнит про npm run build. 01.10.2026 так пропал --style-scope.
+for tool_dir in tools/*/; do
+  [ -d "$tool_dir/dist" ] && [ -d "$tool_dir/src" ] || continue
+  grep -q '"build"' "$tool_dir/package.json" 2>/dev/null || continue
+  if [ -n "$(find "$tool_dir/src" -newer "$tool_dir/dist" -type f -print -quit 2>/dev/null)" ]; then
+    npm run build --silent --prefix "$tool_dir" 2>&1 >&2 || \
+      echo "session-start: сборка $tool_dir не удалась — bin будет работать на старом dist" >&2
+  fi
+done
+
+# ── 5. Документ состояния активного проекта ────────────────────────────────
+# Новая сессия начинает с него, а не с пересказа: что работает, что нет, что
+# требует внимания владельца.
+STATUS_FILE="docs/projects/$ACTIVE/status.md"
+if [ -f "$STATUS_FILE" ]; then
+  echo "=== СОСТОЯНИЕ ПРОЕКТА ($STATUS_FILE) ==="
+  cat "$STATUS_FILE"
+  echo "=== КОНЕЦ СОСТОЯНИЯ ==="
+fi
+
 exit 0
