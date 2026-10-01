@@ -22,7 +22,7 @@ STYLE="Premium editorial still life for a pharmacy-grade Spanish skincare shop. 
 
 gen_image() { # out_name aspect prompt images...
   local name="$1" ar="$2" prompt="$3"; shift 3
-  local args=(); for i in "$@"; do args+=(--image "$i"); done
+  local args=() img; for img in "$@"; do args+=(--image "$img"); done
   local tmp; tmp=$(mktemp -d)
   $NUL generate create nano-banana-2 --prompt "$prompt" "${args[@]}" \
     --set aspect_ratio="$ar" --set resolution=2K --set output_format=png \
