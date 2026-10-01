@@ -11,7 +11,7 @@ import { UsageError } from "../../core/errors.js";
 import { emit, table } from "../output.js";
 import { getGlobalFlags } from "../context.js";
 
-function parseSetOption(setStrings: string[]): Record<string, unknown> {
+export function parseSetOption(setStrings: string[]): Record<string, unknown> {
   const result: Record<string, unknown> = {};
 
   for (const item of setStrings) {

@@ -8,6 +8,7 @@ import { UsageError } from "../../core/errors.js";
 // Модели берём из каталога по свойствам, а не по имени: каталог обновляется
 // из живой документации, и прибитые id ломали эти тесты на каждом обновлении.
 import { loadCatalog } from "../../core/catalog.js";
+import { MOCK_APPROXIMATE_MODEL } from "../../core/providers/index.js";
 import type { ModelInfo } from "../../core/catalog.js";
 
 const catalogModels = await loadCatalog();
@@ -153,6 +154,25 @@ test("шлюз стоимости: модель без известной цен
 
   assert.strictEqual(res.error, undefined, `неожиданная ошибка: ${res.error}`);
   assert.strictEqual(readJob(res).model, UNPRICED_MODEL);
+});
+
+test("шлюз стоимости: приблизительная оценка без --yes — ошибка с кодом 2", async () => {
+  const res = await runCreate([MOCK_APPROXIMATE_MODEL, "--prompt", "кот"], {
+    NULLUME_PROVIDER: "mock",
+  });
+
+  assert(res.error instanceof UsageError, `ожидался UsageError, получено: ${res.error}`);
+  assert.strictEqual((res.error as UsageError).exitCode, 2);
+  assert.deepStrictEqual(res.jobFiles, [], "задача не должна создаваться");
+});
+
+test("шлюз стоимости: приблизительная оценка с --yes создаёт задачу", async () => {
+  const res = await runCreate([MOCK_APPROXIMATE_MODEL, "--prompt", "кот", "--yes"], {
+    NULLUME_PROVIDER: "mock",
+  });
+
+  assert.strictEqual(res.error, undefined, `неожиданная ошибка: ${res.error}`);
+  assert.strictEqual(readJob(res).model, MOCK_APPROXIMATE_MODEL);
 });
 
 test("--set: типы значений попадают в input задачи как есть", async () => {

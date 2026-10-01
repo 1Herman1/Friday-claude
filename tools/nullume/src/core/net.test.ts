@@ -58,12 +58,14 @@ test("safeFetch разрешает loopback только с флагом", async
   try {
     // http://127.0.0.1 должен быть отклонён без флага
     globalThis.fetch = async () => new Response("ok");
-    try {
-      await safeFetch("http://127.0.0.1:8080/");
-      assert.fail("Should reject http://127.0.0.1 без allowLoopback");
-    } catch (e) {
-      assert((e as any).message.includes("loopback") || (e as any).message.includes("Loopback"));
-    }
+    await assert.rejects(
+      () => safeFetch("http://127.0.0.1:8080/"),
+      (e) => {
+        const err = e as any;
+        return typeof err.message === 'string' &&
+               (err.message.includes("loopback") || err.message.includes("Loopback"));
+      }
+    );
 
     // С флагом должно работать
     globalThis.fetch = async () => new Response("ok", { headers: new Map() });

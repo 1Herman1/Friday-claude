@@ -58,7 +58,7 @@ async function writeJson(filePath: string, data: unknown, indent: number = 2): P
   await fs.promises.writeFile(filePath, JSON.stringify(data, null, indent) + "\n");
 }
 
-async function initProject(targetDir: string, force: boolean): Promise<InitResult> {
+export async function initProject(targetDir: string, force: boolean): Promise<InitResult> {
   const result: InitResult = {
     created: [],
     updated: [],

@@ -3,41 +3,7 @@ import assert from "node:assert";
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-
-// Mock parseSetOption - inline for testing
-function parseSetOption(setStrings: string[]): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
-
-  for (const item of setStrings) {
-    const [key, ...valueParts] = item.split("=");
-    if (!key) continue;
-
-    const value = valueParts.join("=");
-
-    if (value.startsWith("@")) {
-      // File reference
-      const filePath = value.slice(1);
-      try {
-        const content = fs.readFileSync(filePath, "utf-8");
-        result[key] = JSON.parse(content);
-      } catch (e) {
-        throw new Error(`Не удалось прочитать файл ${filePath}: ${(e as Error).message}`);
-      }
-    } else if (value === "true") {
-      result[key] = true;
-    } else if (value === "false") {
-      result[key] = false;
-    } else if (/^\d+$/.test(value)) {
-      result[key] = parseInt(value, 10);
-    } else if (/^\d+\.\d+$/.test(value)) {
-      result[key] = parseFloat(value);
-    } else {
-      result[key] = value;
-    }
-  }
-
-  return result;
-}
+import { parseSetOption } from "./generate.js";
 
 test("parseSetOption: parse integers", () => {
   const result = parseSetOption(["count=5", "timeout=30"]);

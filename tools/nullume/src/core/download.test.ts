@@ -53,12 +53,10 @@ test("downloadFile rejects empty responses", async () => {
       return new Response(body as any) as any;
     };
 
-    try {
-      await downloadFile("https://example.com/empty", path.join(tempDir, "empty.txt"), tempDir);
-      // Empty is allowed, just should succeed without error
-    } catch (e) {
-      // Re-throw for now since our mock setup doesn't perfectly replicate streaming
-    }
+    // Empty is allowed, should not throw
+    await assert.doesNotReject(() =>
+      downloadFile("https://example.com/empty", path.join(tempDir, "empty.txt"), tempDir)
+    );
   } finally {
     globalThis.fetch = oldFetch;
     fs.rmSync(tempDir, { recursive: true });

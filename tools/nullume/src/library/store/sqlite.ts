@@ -47,6 +47,7 @@ function blobToFloat32(buf: Buffer): Float32Array {
 
 export class SqliteStore implements LibraryStore {
   private db: DatabaseSync;
+  private transactionDepth = 0;
 
   constructor(db: DatabaseSync) {
     this.db = db;
@@ -535,14 +536,37 @@ export class SqliteStore implements LibraryStore {
 
   // Transactions
   transaction<T>(fn: () => T): T {
+    const isRootTransaction = this.transactionDepth === 0;
+    const savepointName = `sp_${this.transactionDepth}`;
+
     try {
-      this.db.exec("BEGIN");
+      this.transactionDepth++;
+
+      if (isRootTransaction) {
+        this.db.exec("BEGIN");
+      } else {
+        this.db.exec(`SAVEPOINT ${savepointName}`);
+      }
+
       const result = fn();
-      this.db.exec("COMMIT");
+
+      if (isRootTransaction) {
+        this.db.exec("COMMIT");
+      } else {
+        this.db.exec(`RELEASE ${savepointName}`);
+      }
+
       return result;
     } catch (e) {
-      this.db.exec("ROLLBACK");
+      if (isRootTransaction) {
+        this.db.exec("ROLLBACK");
+      } else {
+        this.db.exec(`ROLLBACK TO ${savepointName}`);
+        this.db.exec(`RELEASE ${savepointName}`);
+      }
       throw e;
+    } finally {
+      this.transactionDepth--;
     }
   }
 

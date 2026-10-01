@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import os from "node:os";
 import { MemoryStore } from "../store/memory.js";
+import { openStore } from "../store/sqlite.js";
 import type { NewReference } from "../store/types.js";
 import { applyStyleFile } from "./styles.js";
 import { UsageError } from "../../core/errors.js";
@@ -539,4 +543,74 @@ test("applyStyleFile: new ref tagged after first apply → second apply adds to 
   const newMember = members2.find((m) => m.refId === newRef.id);
   assert.ok(newMember, "New member should exist");
   assert.strictEqual(newMember.isExemplar, false, "New member should not be exemplar");
+});
+
+test("applyStyleFile: nested transaction with SqliteStore creates family and members", () => {
+  // Create temporary SQLite database
+  const tmpDir = path.join(os.tmpdir(), `nullume-test-styles-${Date.now()}-${Math.random()}`);
+  fs.mkdirSync(tmpDir, { recursive: true });
+  const dbPath = path.join(tmpDir, "test.db");
+  const store = openStore(dbPath);
+
+  try {
+    // Create references with tags
+    const refIds: string[] = [];
+    for (let i = 0; i < 2; i++) {
+      const ref = store.insertReference({
+        sha256: `sha-nested-${i}`,
+        source: "test",
+        sourceRef: `ref-nested-${i}`,
+        originalPath: `test-nested-${i}.png`,
+        width: 100,
+        height: 100,
+        bytes: 1000,
+        meta: {},
+        status: "active",
+      });
+      store.addTags(ref.id, ["nested-tag"], "test");
+      refIds.push(ref.id);
+    }
+
+    const payload = {
+      styles: [
+        {
+          slug: "nested-test-family",
+          name: "Nested Test Family",
+          tag: "nested-tag",
+          descriptor: buildValidDescriptor(),
+        },
+      ],
+    };
+
+    const logs: string[] = [];
+    const result = applyStyleFile(store, payload, {
+      dryRun: false,
+      log: (msg) => logs.push(msg),
+    });
+
+    // Verify family was created
+    assert.strictEqual(result.applied.length, 1, "One style should be applied");
+    assert.strictEqual(result.applied[0], "nested-test-family");
+
+    // Verify family exists
+    const family = store.getFamilyBySlug("nested-test-family");
+    assert.ok(family, "Family should be created");
+
+    // Verify members were set (this uses nested transaction internally)
+    const members = store.getMembers(family!.id);
+    assert.strictEqual(members.length, 2, "Both references should be members");
+
+    // Verify exemplars
+    const exemplars = members.filter((m) => m.isExemplar);
+    assert.strictEqual(exemplars.length, 2, "First 2 should be exemplars");
+  } finally {
+    store.close();
+    try {
+      if (fs.existsSync(tmpDir)) {
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
+    } catch {
+      // ignore cleanup errors
+    }
+  }
 });

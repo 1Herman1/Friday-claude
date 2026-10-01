@@ -61,6 +61,9 @@ test("getImporter: должен выбросить ошибку для неиз�
 });
 
 test("getImporter: должен найти импортёр по ID если он зарегистрирован", async () => {
-  // На текущем этапе все импортёры пусты, так что это невозможно протестировать
-  // Но структура работает корректно
+  const importer = await getImporter("rss");
+  assert.ok(importer, "Should find RSS importer");
+  assert.strictEqual(importer.id, "rss", "Should return correct importer");
+  assert.ok(importer.title, "Should have title");
+  assert.ok(importer.description, "Should have description");
 });

@@ -8,6 +8,8 @@ export interface MockProviderOptions {
 
 /** Mock-модель за $2 — выше порога подтверждения ($1) */
 export const MOCK_EXPENSIVE_MODEL = "mock/expensive";
+/** Mock-модель с приблизительной оценкой цены */
+export const MOCK_APPROXIMATE_MODEL = "mock/approximate";
 
 export class MockProvider implements Provider {
   name = "mock";
@@ -47,6 +49,16 @@ export class MockProvider implements Provider {
         schemaSource: "seed",
         source: "seed",
       },
+      {
+        id: MOCK_APPROXIMATE_MODEL,
+        category: "image",
+        api: "jobs",
+        fields: {},
+        meta: { promptField: "prompt", required: ["prompt"], defaults: {} },
+        description: "Mock: приблизительная оценка цены — проверка шлюза подтверждения",
+        schemaSource: "seed",
+        source: "seed",
+      },
     ];
   }
 
@@ -67,6 +79,11 @@ export class MockProvider implements Provider {
   async estimate(modelId: string) {
     if (modelId === MOCK_EXPENSIVE_MODEL) {
       return { creditsMin: 400, creditsMax: 400, usdMin: 2, usdMax: 2, approximate: false, source: "vendored" as const };
+    }
+    if (modelId === MOCK_APPROXIMATE_MODEL) {
+      // source pricing-api и цена < $1: шлюз останавливает только флаг approximate,
+      // иначе тест не отличил бы эту ветку от проверки источника.
+      return { creditsMin: 10, creditsMax: 30, usdMin: 0.05, usdMax: 0.15, approximate: true, source: "pricing-api" as const };
     }
     return {
       creditsMin: 10,

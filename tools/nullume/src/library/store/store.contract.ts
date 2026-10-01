@@ -673,8 +673,8 @@ export function storeContract(
       // expected
     }
 
-    // Rollback should mean insert didn't persist (implementation-dependent)
-    // For memory store, this might not work perfectly, but test the interface
+    // Rollback should mean insert didn't persist
+    assert.equal(store.countReferences(), 0, "Failed transaction should not persist data");
     store.close();
   });
 
@@ -694,6 +694,99 @@ export function storeContract(
     const updated = store.getFamily(family.id);
     assert.equal(updated?.name, "Updated");
     assert.equal(updated?.status, "approved");
+    store.close();
+  });
+
+  test(`${name}: nested transactions - inner rollback, outer succeeds`, () => {
+    const store = factory();
+
+    store.transaction(() => {
+      // Outer transaction writes
+      store.insertReference({
+        sha256: "outer",
+        source: "s",
+        sourceRef: "r1",
+        originalPath: "/p",
+        width: 800,
+        height: 600,
+        bytes: 1024,
+        meta: {},
+        status: "active",
+      });
+
+      // Inner transaction fails and rolls back
+      try {
+        store.transaction(() => {
+          store.insertReference({
+            sha256: "inner",
+            source: "s",
+            sourceRef: "r2",
+            originalPath: "/p",
+            width: 800,
+            height: 600,
+            bytes: 1024,
+            meta: {},
+            status: "active",
+          });
+          throw new Error("inner error");
+        });
+      } catch {
+        // expected: inner rolled back
+      }
+    });
+
+    // Outer write persists, inner write rolled back
+    assert.equal(store.countReferences(), 1, "Outer transaction should persist");
+    const ref = store.findBySha256("outer");
+    assert.ok(ref, "Outer reference should exist");
+    assert.equal(store.findBySha256("inner"), undefined, "Inner reference should be rolled back");
+    store.close();
+  });
+
+  test(`${name}: nested transactions - outer rollback rolls back all`, () => {
+    const store = factory();
+
+    try {
+      store.transaction(() => {
+        // Outer writes
+        store.insertReference({
+          sha256: "outer",
+          source: "s",
+          sourceRef: "r1",
+          originalPath: "/p",
+          width: 800,
+          height: 600,
+          bytes: 1024,
+          meta: {},
+          status: "active",
+        });
+
+        // Inner writes successfully
+        store.transaction(() => {
+          store.insertReference({
+            sha256: "inner",
+            source: "s",
+            sourceRef: "r2",
+            originalPath: "/p",
+            width: 800,
+            height: 600,
+            bytes: 1024,
+            meta: {},
+            status: "active",
+          });
+        });
+
+        // Outer transaction fails
+        throw new Error("outer error");
+      });
+    } catch {
+      // expected: all rolled back
+    }
+
+    // Nothing should persist
+    assert.equal(store.countReferences(), 0, "Outer rollback should roll back all writes");
+    assert.equal(store.findBySha256("outer"), undefined, "Outer reference should be rolled back");
+    assert.equal(store.findBySha256("inner"), undefined, "Inner reference should be rolled back");
     store.close();
   });
 

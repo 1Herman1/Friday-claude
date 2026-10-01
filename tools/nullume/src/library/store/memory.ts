@@ -36,6 +36,19 @@ export class MemoryStore implements LibraryStore {
   private decisions: Decision[] = [];
   private meta = new Map<string, unknown>();
   private familySlugs = new Map<string, string>();
+  private transactionDepth = 0;
+  private snapshots: Array<{
+    references: Map<string, Reference>;
+    families: Map<string, Family>;
+    familyMembers: Map<string, FamilyMember[]>;
+    embeddings: Map<string, Map<string, Float32Array>>;
+    tags: Map<string, Set<string>>;
+    palettes: Map<string, PaletteEntry[]>;
+    imports: Map<string, ImportRun>;
+    decisions: Decision[];
+    meta: Map<string, unknown>;
+    familySlugs: Map<string, string>;
+  }> = [];
 
   // References
   insertReference(ref: NewReference): Reference {
@@ -363,8 +376,53 @@ export class MemoryStore implements LibraryStore {
 
   // Transactions
   transaction<T>(fn: () => T): T {
-    // In-memory store doesn't need actual transactions, just execute
-    return fn();
+    const isRootTransaction = this.transactionDepth === 0;
+
+    try {
+      // Save state for ALL transactions (including nested) for rollback
+      this.snapshots.push({
+        references: new Map(this.references),
+        families: new Map(this.families),
+        familyMembers: new Map(this.familyMembers),
+        embeddings: new Map(
+          Array.from(this.embeddings).map(([k, v]) => [k, new Map(v)])
+        ),
+        tags: new Map(
+          Array.from(this.tags).map(([k, v]) => [k, new Set(v)])
+        ),
+        palettes: new Map(this.palettes),
+        imports: new Map(this.imports),
+        decisions: [...this.decisions],
+        meta: new Map(this.meta),
+        familySlugs: new Map(this.familySlugs),
+      });
+
+      this.transactionDepth++;
+      const result = fn();
+      return result;
+    } catch (e) {
+      // Restore state on error (for nested transactions too)
+      if (this.snapshots.length > 0) {
+        const snapshot = this.snapshots.pop()!;
+        this.references = snapshot.references;
+        this.families = snapshot.families;
+        this.familyMembers = snapshot.familyMembers;
+        this.embeddings = snapshot.embeddings;
+        this.tags = snapshot.tags;
+        this.palettes = snapshot.palettes;
+        this.imports = snapshot.imports;
+        this.decisions = snapshot.decisions;
+        this.meta = snapshot.meta;
+        this.familySlugs = snapshot.familySlugs;
+      }
+      throw e;
+    } finally {
+      this.transactionDepth--;
+      // Clean up snapshot if transaction completes successfully
+      if (this.snapshots.length > 0) {
+        this.snapshots.pop();
+      }
+    }
   }
 
   close(): void {
