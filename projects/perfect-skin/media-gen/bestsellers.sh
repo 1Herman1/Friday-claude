@@ -61,7 +61,7 @@ for fmt in desktop mobile; do
     if [ -z "${FRAMES:-}" ] || [[ " $FRAMES " == *" $fmt-k0h "* ]]; then
       for v in $(seq 1 "${VARIANTS:-1}"); do
       name="$fmt-k0h"; [ "${VARIANTS:-1}" -gt 1 ] && name="$fmt-k0h-v$v"
-      gen_image "$name" "$AR" "Edit the image. Keep EVERYTHING pixel-identical: the same exactly four products (${NAMES[0]}; ${NAMES[1]}; ${NAMES[2]}; ${NAMES[3]}), their order, positions, sizes, labels, background, table, light, shadows, camera and framing. All four products stay standing on the table, untouched. The ONLY change: add $HAND, hovering in the air above the row of products, roughly above the first and second product from the left, fingers softly open and relaxed as if about to choose a product, palm facing down and slightly towards the camera. The hand touches nothing and casts only a faint soft shadow. $LABELS" \
+      gen_image "$name" "$AR" "Edit the image. Keep EVERYTHING pixel-identical: the same exactly four products (${NAMES[0]}; ${NAMES[1]}; ${NAMES[2]}; ${NAMES[3]}), their order, positions, sizes, labels, background, table, light, shadows, camera and framing. All four products stay standing on the table, untouched. The ONLY change: add $HAND, hovering in the air above the row of products, roughly above the first and second product from the left, fingers softly open and relaxed as if about to choose a product, palm facing down and slightly towards the camera. The hand floats clearly ABOVE the products with a visible gap of air of at least 5 centimeters between the lowest fingertip and the highest cap — no finger touches or rests on any cap or product (touching is a failure). The hand casts only a faint soft shadow. $LABELS" \
         "$OUT/$fmt-k0.png"
       done
     fi
