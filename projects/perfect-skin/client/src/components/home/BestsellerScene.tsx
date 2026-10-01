@@ -34,8 +34,11 @@ export function BestsellerScene() {
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null, null, null])
+  const videoReadyRef = useRef<boolean[]>([false, false, false, false])
+  const lastVideoTimeRef = useRef<number[]>([0, 0, 0, 0])
   const [state, setState] = useState<SceneState>({ progress: 0, segment: 0, local: 0 })
   const [isVisible, setIsVisible] = useState(false)
+  const [videoReady, setVideoReady] = useState<boolean[]>([false, false, false, false])
   const [isReducedMotion, setIsReducedMotion] = useState(false)
   const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true)
 
@@ -60,24 +63,46 @@ export function BestsellerScene() {
       window.matchMedia('(prefers-reduced-motion: reduce)').removeEventListener('change', listener)
   }, [])
 
-  // Отслеживаем размер экрана
+  // Отслеживаем размер экрана и перезагружаем видео при смене breakpoint
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 768)
+      const newIsDesktop = window.innerWidth >= 768
+      if (newIsDesktop !== isDesktop) {
+        setIsDesktop(newIsDesktop)
+        // Перезагружаем видео при смене breakpoint чтобы применилась новая source
+        videoRefs.current.forEach((video) => {
+          if (video) {
+            video.load()
+          }
+        })
+      }
     }
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [isDesktop])
 
-  // IntersectionObserver для запуска/остановки rAF
+  // IntersectionObserver для запуска/остановки rAF и предзагрузки видео
   useEffect(() => {
     if (!containerRef.current) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting)
+        // Когда секция приближается к viewport, предзагружаем видео
+        if (entry.isIntersecting || entry.boundingClientRect.top < window.innerHeight) {
+          videoRefs.current.forEach((video) => {
+            if (video && !video.src && !video.querySelector('source')) return
+            if (video) {
+              video.load()
+              video
+                .play()
+                .then(() => video.pause())
+                .catch(() => {})
+            }
+          })
+        }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '50% 0px' }
     )
 
     observer.observe(containerRef.current)
@@ -87,8 +112,6 @@ export function BestsellerScene() {
   // Обработка скролла
   useEffect(() => {
     if (!isVisible || isReducedMotion) return
-
-    let lastVideoTime = 0
 
     const handleScroll = () => {
       if (!containerRef.current) return
@@ -102,30 +125,43 @@ export function BestsellerScene() {
       const scrollProgress = Math.max(0, Math.min(1, scrollTop / (containerHeight - viewportHeight)))
 
       const segment = Math.floor(scrollProgress * 4)
-      const local = (scrollProgress * 4) % 1
+      const localRaw = (scrollProgress * 4) % 1
+      const local = scrollProgress >= 1 ? 1 : localRaw
+
+      const finalSegment = scrollProgress >= 1 ? 3 : Math.min(segment, 3)
 
       setState({
         progress: scrollProgress,
-        segment: Math.min(segment, 3),
+        segment: finalSegment,
         local,
       })
 
       // Обновляем currentTime активного видео
-      const video = videoRefs.current[Math.min(segment, 3)]
+      const video = videoRefs.current[finalSegment]
       if (video && video.duration) {
         const targetTime = local * video.duration
-        if (Math.abs(targetTime - lastVideoTime) > video.duration / 30) {
+        const lastTime = lastVideoTimeRef.current[finalSegment]
+        if (Math.abs(targetTime - lastTime) > video.duration / 30) {
           video.currentTime = targetTime
-          lastVideoTime = targetTime
+          lastVideoTimeRef.current[finalSegment] = targetTime
         }
       }
+
+      // Обновляем статус готовности видео
+      const newReady = [...videoReady]
+      videoRefs.current.forEach((video, idx) => {
+        if (video) {
+          newReady[idx] = video.readyState >= 2
+        }
+      })
+      setVideoReady(newReady)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     // Страница может открыться уже прокрученной — считаем положение сразу.
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [isVisible, isReducedMotion])
+  }, [isVisible, isReducedMotion, videoReady])
 
   // Очищаем видео при размонтировании
   useEffect(() => {
@@ -240,35 +276,68 @@ export function BestsellerScene() {
         {/* Видео фреймы */}
         <div className="absolute inset-x-0 top-24 bottom-56 md:inset-0">
           {[0, 1, 2, 3].map(idx => (
-            <video
+            <div
               key={idx}
-              ref={el => {
-                videoRefs.current[idx] = el
-              }}
-              className={`w-full h-full object-cover md:object-center transition-opacity duration-300 ${
+              className={`w-full h-full transition-opacity duration-300 ${
                 state.segment === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
-              style={
-                !isDesktop
-                  ? { objectPosition: 'center 88%' }
-                  : undefined
-              }
-              poster={VIDEO_CONFIG.startPoster(isDesktop ? 'desktop' : 'mobile', idx)}
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden="true"
             >
-              <source
-                src={isDesktop ? VIDEO_CONFIG.desktop[idx] : VIDEO_CONFIG.mobile[idx]}
-                type="video/mp4"
-              />
-            </video>
+              <video
+                ref={el => {
+                  videoRefs.current[idx] = el
+                  if (el) {
+                    const handleReady = () => {
+                      const newReady = [...videoReady]
+                      newReady[idx] = el.readyState >= 2
+                      setVideoReady(newReady)
+                      videoReadyRef.current[idx] = el.readyState >= 2
+                    }
+                    el.addEventListener('loadeddata', handleReady)
+                    el.addEventListener('canplay', handleReady)
+                    return () => {
+                      el.removeEventListener('loadeddata', handleReady)
+                      el.removeEventListener('canplay', handleReady)
+                    }
+                  }
+                }}
+                className="w-full h-full object-cover md:object-center"
+                style={
+                  !isDesktop
+                    ? { objectPosition: 'center 88%' }
+                    : undefined
+                }
+                poster={VIDEO_CONFIG.startPoster(isDesktop ? 'desktop' : 'mobile', idx)}
+                muted
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+              >
+                <source
+                  src={isDesktop ? VIDEO_CONFIG.desktop[idx] : VIDEO_CONFIG.mobile[idx]}
+                  type="video/mp4"
+                />
+              </video>
+              {/* Overlay постера пока видео не готово */}
+              {state.segment === idx && !videoReady[idx] && (
+                <div className="absolute inset-0 flex items-center justify-center bg-muted">
+                  <img
+                    src={VIDEO_CONFIG.startPoster(isDesktop ? 'desktop' : 'mobile', idx)}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    style={
+                      !isDesktop
+                        ? { objectPosition: 'center 88%' }
+                        : undefined
+                    }
+                  />
+                </div>
+              )}
+            </div>
           ))}
         </div>
 
         {/* Карточка товара - десктоп (слева) */}
-        <div className="hidden md:flex absolute inset-y-0 left-0 w-1/3 items-center justify-start pointer-events-none p-6 md:p-12">
+        <div className="hidden md:flex absolute inset-y-0 left-12 items-center justify-start pointer-events-none">
           {(() => {
             const currentProduct = visibleProducts[state.segment]
             if (!currentProduct || !currentProduct.data) return null
@@ -276,23 +345,12 @@ export function BestsellerScene() {
             const productData = currentProduct.data
             return (
               <div
-                className={`bg-card rounded-block shadow-lg p-5 pointer-events-auto transition-all duration-200 ${
+                className={`bg-card rounded-block shadow-lg p-5 pointer-events-auto max-w-sm transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-reduce:translate-x-0 ${
                   state.local > 0.5
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-12'
+                    ? 'opacity-100 translate-x-0'
+                    : 'opacity-0 -translate-x-4'
                 }`}
               >
-                {/* Фото товара */}
-                {productData.image && (
-                  <div className="w-32 h-40 bg-muted rounded-media overflow-hidden mb-4 flex-shrink-0">
-                    <img
-                      src={productData.image}
-                      alt={productData.name}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                )}
-
                 {/* Бренд */}
                 {productData.brand && (
                   <div className="text-label uppercase text-muted-foreground mb-2">
@@ -322,25 +380,17 @@ export function BestsellerScene() {
                   />
                 </div>
 
-                {/* Кнопка и ссылка */}
-                <div className="flex gap-2 flex-col">
-                  <ProductCardButton
-                    product={productData}
-                    user={user}
-                    onAddToCart={async () => {
-                      if (productData.variants[0]) {
-                        await addItem(productData.variants[0].id, 1)
-                        openCart()
-                      }
-                    }}
-                  />
-                  <Link
-                    to={`/product/${currentProduct.slug}`}
-                    className="text-primary hover:underline font-semibold text-xs"
-                  >
-                    Подробнее
-                  </Link>
-                </div>
+                {/* Кнопка */}
+                <ProductCardButton
+                  product={productData}
+                  user={user}
+                  onAddToCart={async () => {
+                    if (productData.variants[0]) {
+                      await addItem(productData.variants[0].id, 1)
+                      openCart()
+                    }
+                  }}
+                />
               </div>
             )
           })()}
