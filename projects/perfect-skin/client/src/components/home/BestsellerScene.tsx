@@ -274,7 +274,7 @@ export function BestsellerScene() {
         </div>
 
         {/* Видео фреймы */}
-        <div className="absolute inset-x-0 top-24 bottom-56 md:inset-0">
+        <div className="absolute inset-x-0 top-24 bottom-36 md:inset-0">
           {[0, 1, 2, 3].map(idx => (
             <div
               key={idx}
@@ -397,7 +397,7 @@ export function BestsellerScene() {
         </div>
 
         {/* Карточка товара - мобильный (снизу) */}
-        <div className="md:hidden absolute bottom-0 left-0 right-0 h-56 flex flex-col justify-end gap-3 px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] pointer-events-none">
+        <div className="md:hidden absolute bottom-0 left-0 right-0 h-36 flex flex-col justify-end gap-2 px-4 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none">
           {progressBar}
           {(() => {
             const currentProduct = visibleProducts[state.segment]
@@ -406,45 +406,42 @@ export function BestsellerScene() {
             const productData = currentProduct.data
             return (
               <div
-                className={`bg-card rounded-block shadow-lg p-4 h-auto flex flex-col pointer-events-auto transition-all duration-200 ${
+                className={`bg-card rounded-block shadow-md px-3 py-2.5 flex items-center gap-3 pointer-events-auto transition-all duration-200 ${
                   state.local > 0.5
                     ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-12'
+                    : 'opacity-0 translate-y-6'
                 }`}
               >
-                {/* Название и бренд */}
-                <div className="mb-2">
+                <div className="min-w-0 flex-1">
                   {productData.brand && (
-                    <div className="text-label uppercase text-muted-foreground">
+                    <div className="text-[10px] leading-tight uppercase tracking-wide text-muted-foreground">
                       {productData.brand.name}
                     </div>
                   )}
-                  <h3 className="text-sm font-heading font-bold text-foreground line-clamp-2">
+                  <h3 className="text-xs font-heading font-semibold text-foreground line-clamp-2 leading-snug">
                     {productData.name}
                   </h3>
+                  <div className="mt-1">
+                    <PriceTag
+                      price={productData.minPrice}
+                      oldPrice={productData.oldPrice ?? undefined}
+                      hidden={productData.priceHidden}
+                      size="sm"
+                    />
+                  </div>
                 </div>
-
-                {/* Цена */}
-                <div className="mb-3">
-                  <PriceTag
-                    price={productData.minPrice}
-                    oldPrice={productData.oldPrice ?? undefined}
-                    hidden={productData.priceHidden}
-                    size="sm"
+                <div className="shrink-0 w-32">
+                  <ProductCardButton
+                    product={productData}
+                    user={user}
+                    onAddToCart={async () => {
+                      if (productData.variants[0]) {
+                        await addItem(productData.variants[0].id, 1)
+                        openCart()
+                      }
+                    }}
                   />
                 </div>
-
-                {/* Кнопка */}
-                <ProductCardButton
-                  product={productData}
-                  user={user}
-                  onAddToCart={async () => {
-                    if (productData.variants[0]) {
-                      await addItem(productData.variants[0].id, 1)
-                      openCart()
-                    }
-                  }}
-                />
               </div>
             )
           })()}
@@ -486,7 +483,7 @@ function ProductCardButton({ product, user, onAddToCart }: ProductCardButtonProp
     return (
       <Link
         to="/pro"
-        className="w-full py-2 px-4 bg-accent text-accent-foreground text-center font-sans font-semibold rounded-pill hover:opacity-90 transition-opacity duration-200 min-h-11 flex items-center justify-center text-sm"
+        className="w-full py-2 px-4 bg-accent text-accent-foreground text-center font-sans font-medium rounded-pill hover:opacity-90 transition-opacity duration-200 min-h-11 flex items-center justify-center text-xs md:text-sm"
       >
         Для специалистов
       </Link>
@@ -497,7 +494,7 @@ function ProductCardButton({ product, user, onAddToCart }: ProductCardButtonProp
     <button
       onClick={handleClick}
       disabled={!product?.inStock || state === 'loading'}
-      className="w-full py-2 px-4 bg-primary text-primary-foreground font-sans font-semibold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11 text-sm"
+      className="w-full py-2 px-4 bg-primary text-primary-foreground font-sans font-medium rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11 text-xs md:text-sm"
     >
       {state === 'success'
         ? 'Добавлено ✓'
