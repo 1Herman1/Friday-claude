@@ -33,10 +33,11 @@ gen_image() { # out_name aspect prompt images...
 gen_video() { # out_name aspect prompt first last
   local name="$1" ar="$2" prompt="$3" first="$4" last="$5"
   local tmp; tmp=$(mktemp -d)
-  $NUL generate create bytedance/seedance-1.5-pro --prompt "$prompt" \
+  # kling-3.0: image_urls = [первый кадр, последний кадр]; pro = 1080p.
+  $NUL generate create kling-3.0/video --prompt "$prompt" \
     --image "$first" --image "$last" \
-    --set aspect_ratio="$ar" --set resolution=1080p --set duration=4 --set fixed_lens=true \
-    --wait --wait-timeout 900 --yes --out "$tmp"
+    --set aspect_ratio="$ar" --set mode=pro --set duration=5 --set sound=false --set multi_shots=false \
+    --wait --wait-timeout 1200 --yes --out "$tmp"
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
@@ -85,9 +86,14 @@ for fmt in desktop mobile; do
   fi
 
   if [ "$STAGE" = videos ]; then
+    # CLIPS="desktop-0-1 mobile-2-3" — только эти ролики (по одному, по решению
+    # Гермеса); пусто — все 8. Сегмент 0 стартует с кадра k0h (рука парит).
     for i in 1 2 3 4; do
-      gen_video "$fmt-$((i-1))-$i" "$AR" "Static locked camera. A slender female hand with nude manicure moves smoothly and slowly from its start position to gently touch product number $i from the left, as in the last frame. Products stay still and unchanged, calm premium product commercial, soft warm light, no text." \
-        "$OUT/$fmt-k$((i-1)).png" "$OUT/$fmt-k$i.png"
+      clip="$fmt-$((i-1))-$i"
+      if [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $clip "* ]]; then continue; fi
+      if [ "$i" = 1 ]; then first="$OUT/$fmt-k0h.png"; else first="$OUT/$fmt-k$((i-1)).png"; fi
+      gen_video "$clip" "$AR" "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A graceful feminine hand (slender fingers, short nude manicure, no jewellery) moves with the unhurried elegance of the reference style: it glides in from the top right, slows down above product number $i from the left, gently sets down whatever it was holding, then lightly takes product $i by its body with relaxed fingers and lifts it a few centimeters straight up, settling exactly into the last frame. Every product keeps its exact position, size and label — labels stay crisp and readable at all times, nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." \
+        "$first" "$OUT/$fmt-k$i.png"
     done
   fi
 done
@@ -99,10 +105,12 @@ if [ "$STAGE" = videos ]; then
     mkdir -p "$PUBV/$fmt"
     if [ "$fmt" = desktop ]; then SCALE="scale=1920:-2"; else SCALE="scale=1080:-2"; fi
     for i in 1 2 3 4; do
+      [ -f "$OUT/$fmt-$((i-1))-$i.mp4" ] || continue
       ffmpeg -y -loglevel error -i "$OUT/$fmt-$((i-1))-$i.mp4" -an -vf "$SCALE" -c:v libx264 -preset slow -crf 26 -g 6 -pix_fmt yuv420p -movflags +faststart "$PUBV/$fmt/$((i-1))-$i.mp4"
     done
-    for k in 0 1 2 3 4; do
-      ffmpeg -y -loglevel error -i "$OUT/$fmt-k$k.png" -vf "$SCALE" -q:v 4 "$PUBV/$fmt/k$k.jpg"
+    for k in 0h 1 2 3 4; do
+      [ -f "$OUT/$fmt-k$k.png" ] || continue
+      ffmpeg -y -loglevel error -i "$OUT/$fmt-k$k.png" -vf "$SCALE" -q:v 4 "$PUBV/$fmt/k${k/0h/0}.jpg"
     done
   done
   ls -la "$PUBV"/*

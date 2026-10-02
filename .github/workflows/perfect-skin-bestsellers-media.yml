@@ -18,6 +18,10 @@ on:
         description: 'Вариантов на кадр'
         type: string
         default: '1'
+      clips:
+        description: 'stage=videos: только эти ролики через пробел (например: desktop-0-1). Пусто — все 8'
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -35,6 +39,7 @@ jobs:
       STAGE: ${{ inputs.stage }}
       FRAMES: ${{ inputs.frames }}
       VARIANTS: ${{ inputs.variants }}
+      CLIPS: ${{ inputs.clips }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
