@@ -34,9 +34,12 @@ gen_video() { # out_name aspect prompt first last
   local name="$1" ar="$2" prompt="$3" first="$4" last="$5"
   local tmp; tmp=$(mktemp -d)
   # kling-3.0: image_urls = [первый кадр, последний кадр]; pro = 1080p.
+  # multi_prompt нужен API только в multi-shot, но каталог считает его
+  # обязательным — передаём пустой список.
+  echo '[]' > "$tmp/mp.json"
   $NUL generate create kling-3.0/video --prompt "$prompt" \
     --image "$first" --image "$last" \
-    --set aspect_ratio="$ar" --set mode=pro --set duration=4 --set sound=false --set multi_shots=false \
+    --set aspect_ratio="$ar" --set mode=pro --set duration=4 --set sound=false --set multi_shots=false --set multi_prompt="@$tmp/mp.json" \
     --wait --wait-timeout 1200 --yes --out "$tmp"
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
