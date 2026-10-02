@@ -36,7 +36,7 @@ gen_video() { # out_name aspect prompt first last
   # kling-3.0: image_urls = [первый кадр, последний кадр]; pro = 1080p.
   $NUL generate create kling-3.0/video --prompt "$prompt" \
     --image "$first" --image "$last" \
-    --set aspect_ratio="$ar" --set mode=pro --set duration=5 --set sound=false --set multi_shots=false \
+    --set aspect_ratio="$ar" --set mode=pro --set duration=4 --set sound=false --set multi_shots=false \
     --wait --wait-timeout 1200 --yes --out "$tmp"
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
@@ -74,7 +74,7 @@ for fmt in desktop mobile; do
       # столе), затем рука с товаром над этим местом.
       GAP="$OUT/$fmt-gap$i.png"
       if [ ! -f "$GAP" ]; then
-        gen_image "$fmt-gap$i" "$AR" "Edit the image. Remove ONLY product number $i counting from the left, which is ${NAMES[$((i-1))]}, together with its shadow, leaving its spot on the table completely empty — clean tabletop and background fill the space naturally. Everything else stays pixel-identical: the other three products (their positions, sizes, labels), background, table, light, shadows, camera and framing. Exactly three products remain. No hands. $LABELS" \
+        gen_image "$fmt-gap$i" "$AR" "Edit the image. There are four products in a row. Remove ONLY the product at position $i counting from the left — the ${NAMES[$((i-1))]} — together with its shadow, leaving its spot on the table completely empty: clean tabletop and background fill the space naturally. The other THREE products stay pixel-identical, including every line of their label text (do not erase, blur or change any text on the remaining products), their positions, sizes, background, table, light, shadows, camera and framing. Exactly three products remain. No hands. $LABELS" \
           "$OUT/$fmt-k0.png"
       fi
       for v in $(seq 1 "${VARIANTS:-1}"); do
@@ -92,9 +92,11 @@ for fmt in desktop mobile; do
       clip="$fmt-$((i-1))-$i"
       if [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $clip "* ]]; then continue; fi
       if [ "$i" = 1 ]; then first="$OUT/$fmt-k0h.png"; else first="$OUT/$fmt-k$((i-1)).png"; fi
+      # Клипы одного формата идут параллельно (цена та же, время — одного клипа).
       gen_video "$clip" "$AR" "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A graceful feminine hand (slender fingers, short nude manicure, no jewellery) moves with the unhurried elegance of the reference style: it glides in from the top right, slows down above product number $i from the left, gently sets down whatever it was holding, then lightly takes product $i by its body with relaxed fingers and lifts it a few centimeters straight up, settling exactly into the last frame. Every product keeps its exact position, size and label — labels stay crisp and readable at all times, nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." \
-        "$first" "$OUT/$fmt-k$i.png"
+        "$first" "$OUT/$fmt-k$i.png" &
     done
+    wait
   fi
 done
 # Ролики для сайта: без звука, ключевой кадр каждые 6 кадров — чтобы

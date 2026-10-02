@@ -51,11 +51,18 @@ jobs:
         working-directory: tools/nullume
         run: npm ci && npm run build
       - name: Install ffmpeg
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+        # Статический бинарь вместо apt: установка через apt однажды заняла 16 минут.
+        run: |
+          curl -sSL https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar -xJ --strip-components=1 --wildcards '*/ffmpeg' -C /usr/local/bin 2>/dev/null \
+            || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+          ffmpeg -version | head -1
       - name: Balance
         run: node tools/nullume/bin/nullume.js balance
       - name: Generate
         run: bash projects/perfect-skin/media-gen/bestsellers.sh
+      - name: Balance after
+        if: always()
+        run: node tools/nullume/bin/nullume.js balance
       - name: Commit results
         if: always()
         run: |
