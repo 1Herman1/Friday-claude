@@ -35,11 +35,12 @@ def silhouette(k0, gap, thr, x0, x1):
 
 def skin(img):
     r, g, b = img[..., 0].astype(int), img[..., 1].astype(int), img[..., 2].astype(int)
-    return (r > g + 12) & (g > b) & (r - b > 35) & (r > 120)
+    # кожа заметно краснее стола: у бежевого стола R-G≈20, у пальцев ≥35
+    return (r - g > 35) & (g > b) & (r - b > 45) & (r > 120)
 
 
 def main():
-    k0, gap, lift, hand, out = (read(p) for p in sys.argv[1:5]) and sys.argv[1:6]
+    k0, gap, lift, hand, out = sys.argv[1:6]
     dy = int(sys.argv[6])
     x0, x1 = float(sys.argv[7]), float(sys.argv[8])
     thr = int(os.environ.get("THR", "60"))
