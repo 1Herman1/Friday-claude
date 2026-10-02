@@ -48,7 +48,7 @@ def main():
     a, b = read(k0), read(gap)
     h, w, _ = a.shape
     diff = np.abs(a.astype(int) - b.astype(int)).sum(axis=2)
-    mask = diff > 40
+    mask = diff > int(__import__("os").environ.get("THR", "40"))
     mask[:, : int(w * x0)] = False
     mask[:, int(w * x1):] = False
     # убрать мелкий шум: оставить столбцы/строки, где маска плотная
