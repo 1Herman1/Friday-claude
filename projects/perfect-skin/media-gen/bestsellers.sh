@@ -49,8 +49,9 @@ for fmt in desktop mobile; do
       "$P1" "$P2" "$P3" "$P4"
   fi
 
-  if [ "$STAGE" = images ] || [ "$STAGE" = hands ]; then
+  if [ "$STAGE" = images ] || [ "$STAGE" = hands ] || [ "$STAGE" = gaps ]; then
     PRODUCTS=("$P1" "$P2" "$P3" "$P4")
+    SHORT=("the SCRUBLOTION bottle (blue band, first from the left)" "the KERATHOR 50 PLUS bottle (violet band, second from the left, standing between the SCRUBLOTION bottle and the frosted jar)" "the frosted glass jar HIDRORRENOVADORA (third from the left)" "the pink glass dropper bottle GLACÉE (last on the right)")
     # Хват зависит от формы: за корпус, никогда за пипетку или крышку-помпу.
     GRIPS=("holding the tall bottle by its white body just below the silver cap: thumb on the near side, index and middle fingers on the far side, ring finger and pinky relaxed and slightly lifted"
            "holding the tall bottle by its white body just below the silver cap: thumb on the near side, index and middle fingers on the far side, ring finger and pinky relaxed and slightly lifted"
@@ -73,12 +74,20 @@ for fmt in desktop mobile; do
       # Два шага против задвоения: сначала кадр без товара i (пустое место на
       # столе), затем рука с товаром над этим местом.
       GAP="$OUT/$fmt-gap$i.png"
-      if [ ! -f "$GAP" ]; then
-        gen_image "$fmt-gap$i" "$AR" "Edit the image. There are four products in a row. Remove ONLY the product at position $i counting from the left — the ${NAMES[$((i-1))]} — together with its shadow, leaving its spot on the table completely empty: clean tabletop and background fill the space naturally. The other THREE products stay pixel-identical, including every line of their label text (do not erase, blur or change any text on the remaining products), their positions, sizes, background, table, light, shadows, camera and framing. Exactly three products remain. No hands. $LABELS" \
+      if [ ! -f "$GAP" ] || [ "$STAGE" = gaps ]; then
+        gen_image "$fmt-gap$i" "$AR" "Edit the image. There are four products in a row. Remove ONLY ${SHORT[$((i-1))]} — together with its shadow, leaving its spot on the table completely empty: clean tabletop and background fill the space naturally. The other THREE products stay pixel-identical, including every line of their label text (do not erase, blur or change any text on the remaining products), their positions, sizes, background, table, light, shadows, camera and framing. Exactly three products remain. No hands. $LABELS" \
           "$OUT/$fmt-k0.png"
       fi
+      [ "$STAGE" = gaps ] && continue
+      LIFT="$OUT/$fmt-lift$i.png"
       for v in $(seq 1 "${VARIANTS:-1}"); do
       name="$fmt-k$i"; [ "${VARIANTS:-1}" -gt 1 ] && name="$fmt-k$i-v$v"
+      if [ -f "$LIFT" ]; then
+        # Товар уже поднят монтажом (lift.py) — модель дорисовывает только руку.
+        gen_image "$name" "$AR" "Edit the image. One product — ${SHORT[$((i-1))]} — is already floating a few centimeters above the table, exactly where it should be. Keep EVERYTHING pixel-identical: all four products, their exact positions, SIZES, labels and text, the floating product's position and size, background, table, light, shadows, camera and framing. Do not move, resize, redraw or restyle any product. The ONLY change: add $HAND, ${GRIPS[$((i-1))]}, so that the hand naturally holds the floating product in place; blend the fingers realistically around it with soft contact shadows. Exactly four products, one hand. $LABELS" \
+          "$LIFT"
+        continue
+      fi
       gen_image "$name" "$AR" "Edit the first image only. It shows three products on a table and one EMPTY SPOT where a fourth product used to stand (position number $i counting from the left). Keep EVERYTHING in it pixel-identical: the three products, their positions, sizes, labels, background, table, light, shadows, camera and framing. Do not add, remove, duplicate, replace or restyle any product. The ONLY change: add $HAND, ${GRIPS[$((i-1))]}. The hand holds the product from the second image, which is ${NAMES[$((i-1))]}, reproduced exactly (shape, color, cap, label text letter by letter). The product hangs exactly $LIFT above the empty spot, DIRECTLY ABOVE IT: same horizontal position and same depth as the neighbouring products (NOT behind them, NOT in front, NOT sideways), EXACTLY the same size as it had on the table in the reference layout — for a tall bottle its height and width equal those of the neighbouring tall bottle (never smaller, never further away, never scaled down; a smaller product is a failure), perfectly vertical, label facing the camera and crisp.$UPRIGHT Below it a small gap of empty table is visible, and its soft contact shadow lies on the table directly under the product. This product appears ONLY ONCE in the image, only in the hand — the empty spot stays empty under it. Exactly four products in total. $LABELS" \
         "$GAP" "${PRODUCTS[$((i-1))]}"
       done

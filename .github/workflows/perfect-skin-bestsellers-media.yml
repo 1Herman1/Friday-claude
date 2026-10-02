@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       stage:
-        description: 'images — все кадры, hands — только кадры с рукой по готовому k0, videos — ролики'
+        description: 'images — все кадры, gaps — кадр без товара, hands — кадры с рукой, videos — ролики'
         type: choice
-        options: [images, hands, videos]
+        options: [images, gaps, hands, videos]
         default: images
       frames:
         description: 'Только эти кадры через пробел (например: desktop-k1 mobile-k2 desktop-k0h). Пусто — все'
