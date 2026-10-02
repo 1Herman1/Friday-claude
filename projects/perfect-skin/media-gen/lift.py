@@ -55,6 +55,12 @@ def main():
     cols = mask.sum(axis=0) > h * 0.02
     rows = mask.sum(axis=1) > 3
     mask &= cols[None, :] & rows[:, None]
+    # Силуэт флакона в каждой строке сплошной: заливаем между крайними
+    # точками, иначе белый корпус на кремовом фоне остаётся дырявым.
+    for y in np.where(rows)[0]:
+        xs_row = np.where(mask[y])[0]
+        if len(xs_row) >= 2:
+            mask[y, xs_row.min():xs_row.max() + 1] = True
     ys, xs = np.where(mask)
     print(f"silhouette: x {xs.min()}..{xs.max()}, y {ys.min()}..{ys.max()}, px {mask.sum()}")
     res = b.copy()
