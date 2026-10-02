@@ -74,4 +74,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/projects/perfect-skin/media/bestsellers-v2 projects/perfect-skin/client/public/video/bestsellers 2>/dev/null || git add docs/projects/perfect-skin/media/bestsellers-v2
           git commit -m "Bestsellers scene media: $STAGE" || exit 0
-          for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && break; sleep 5; done
+          # При конфликте бинарников побеждают файлы этого прогона (-X theirs в
+          # терминах rebase = наш переигрываемый коммит). Неудачный пуш — ошибка.
+          ok=0
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || { git rebase --abort || true; sleep 5; continue; }
+            git push origin "HEAD:$GITHUB_REF_NAME" && { ok=1; break; }
+            sleep 5
+          done
+          [ "$ok" = 1 ] || { echo "::error::push failed, generated media not saved"; exit 1; }

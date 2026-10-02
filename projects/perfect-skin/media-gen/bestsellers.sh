@@ -120,10 +120,14 @@ if [ "$STAGE" = videos ]; then
     if [ "$fmt" = desktop ]; then SCALE="scale=1920:-2"; else SCALE="scale=1080:-2"; fi
     for i in 1 2 3 4; do
       [ -f "$OUT/$fmt-$((i-1))-$i.mp4" ] || continue
+      # Пережимаем только клипы этого прогона — иначе параллельные прогоны
+      # конфликтуют на чужих файлах и теряют результат при пуше.
+      if [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $fmt-$((i-1))-$i "* ]]; then continue; fi
       ffmpeg -y -loglevel error -i "$OUT/$fmt-$((i-1))-$i.mp4" -an -vf "$SCALE" -c:v libx264 -preset slow -crf 26 -g 6 -pix_fmt yuv420p -movflags +faststart "$PUBV/$fmt/$((i-1))-$i.mp4"
     done
     for k in 0h 1 2 3 4; do
       [ -f "$OUT/$fmt-k$k.png" ] || continue
+      [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $fmt-"* ]] && continue
       ffmpeg -y -loglevel error -i "$OUT/$fmt-k$k.png" -vf "$SCALE" -q:v 4 "$PUBV/$fmt/k${k/0h/0}.jpg"
     done
   done
