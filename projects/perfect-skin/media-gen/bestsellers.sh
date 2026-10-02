@@ -30,6 +30,14 @@ gen_image() { # out_name aspect prompt images...
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.png"
 }
 
+if [ "$STAGE" = hero ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"; mkdir -p "$OUT"
+  HERO="Minimal premium skincare hero image, vertical 4:5. Only two elements: a woman's face and a flat background. Close-up of the face of a woman 28-35, three-quarter view slightly to the left, eyes toward camera, calm neutral expression, lips closed. Natural matte skin with real fine texture, no gloss, no makeup look, no heavy retouching. Hair pulled back and out of frame. Background: one flat, even, matte surface in warm stone #F4F2EC (pale warm ivory, not beige, not peach). This surface is a thick layer that overlaps the left side of the face and ends in a single clean, irregular torn edge, so the face appears to emerge from the background. The edge has subtle thickness only, no smears, no cracks, no flakes, no particles. Soft diffused studio light from upper left, no hard highlights, no vignette, no gradient. Photographic realism, 85 mm look. Nothing else in the frame: no text, no logo, no products, no hands, no jewellery, no clothing, no shoulders, no props, single person."
+  for v in $(seq 1 "${VARIANTS:-3}"); do gen_image "hero-v$v" 4:5 "$HERO" & done
+  wait
+  exit 0
+fi
+
 gen_video() { # out_name aspect prompt first last
   local name="$1" ar="$2" prompt="$3" first="$4" last="$5"
   local tmp; tmp=$(mktemp -d)
