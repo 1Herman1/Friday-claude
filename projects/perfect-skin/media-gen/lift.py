@@ -61,6 +61,10 @@ def main():
         xs_row = np.where(mask[y])[0]
         if len(xs_row) >= 2:
             mask[y, xs_row.min():xs_row.max() + 1] = True
+    # И по столбцам: между верхом и низом силуэта корпус тоже сплошной.
+    for x in np.where(mask.any(axis=0))[0]:
+        ys_col = np.where(mask[:, x])[0]
+        mask[ys_col.min():ys_col.max() + 1, x] = True
     ys, xs = np.where(mask)
     print(f"silhouette: x {xs.min()}..{xs.max()}, y {ys.min()}..{ys.max()}, px {mask.sum()}")
     res = b.copy()
