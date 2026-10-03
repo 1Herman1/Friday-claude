@@ -30,6 +30,24 @@ gen_image() { # out_name aspect prompt images...
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.png"
 }
 
+if [ "$STAGE" = hero-start ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  P="Edit this image to create the opening frame of an animation. Remove the woman completely: no face, no skin, no hair, nothing human. In her place continue the same thick matte foundation cream layer so that the cream covers the whole area where her face was, smooth and intact, only very fine first hairline cracks starting in the centre of where the face will appear, and a soft subtle bulge as if something is pressing from behind. Keep everything else pixel-identical: the flat background on the left, the existing cream strokes, colour, light and composition. No text, no objects."
+  gen_image "hero-start-desk" 16:9 "$P" "$OUT/hero-desk3-v2.png" &
+  gen_image "hero-start-mob" 9:16 "$P" "$OUT/hero-mob3-v1.png" &
+  wait
+  exit 0
+fi
+
+if [ "$STAGE" = hero-video ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  V="Locked static camera, no zoom, no pan. Premium skincare commercial, macro detail, soft warm studio light. The thick layer of matte foundation cream slowly cracks open: fine hairline cracks spread outward like a drying clay mask, then deepen, flakes and small pieces of cream lift, curl and fall away in slow motion with tiny particles of cream dust drifting down, and the face of a young woman gradually emerges from behind the cream, pushing through calmly and gracefully, her eyes opening softly as she turns slightly into the final pose. The broken cream edges settle into the jagged torn edge of the final frame. Smooth, continuous, elegant motion, no jumps, no morphing of her features, skin stays clean and natural with fine pores and freckles. The flat background on the left stays perfectly still. No text."
+  if [[ " ${CLIPS:-desk mob} " == *" desk "* ]]; then DUR=5 gen_video "hero-video-desk" 16:9 "$V" "$OUT/hero-start-desk.png" "$OUT/hero-desk3-v2.png" & fi
+  if [[ " ${CLIPS:-desk mob} " == *" mob "* ]]; then DUR=5 gen_video "hero-video-mob" 9:16 "$V" "$OUT/hero-start-mob.png" "$OUT/hero-mob3-v1.png" & fi
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero-crack ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   D="Edit this image. Keep the woman, her face, skin, the composition and the flat left background pixel-identical. Only on the cream layer near her cheek: add fine natural drying cracks, thin hairline fissures and a few deeper splits in the thick foundation cream, like a clay mask starting to dry, following the direction of the strokes. Cracks only inside the cream, none on the skin and none on the flat background. No text, no objects."
@@ -86,7 +104,7 @@ gen_video() { # out_name aspect prompt first last
   echo '[]' > "$tmp/mp.json"
   $NUL generate create kling-3.0/video --prompt "$prompt" \
     --image "$first" --image "$last" \
-    --set aspect_ratio="$ar" --set mode=pro --set duration=4 --set sound=false --set multi_shots=false --set multi_prompt="@$tmp/mp.json" \
+    --set aspect_ratio="$ar" --set mode=pro --set duration="${DUR:-4}" --set sound=false --set multi_shots=false --set multi_prompt="@$tmp/mp.json" \
     --wait --wait-timeout 1200 --yes --out "$tmp"
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
