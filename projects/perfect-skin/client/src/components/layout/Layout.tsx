@@ -1,6 +1,5 @@
 import { ReactNode, useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { TopBar } from './TopBar'
 import { Header } from './Header'
 import { MobileMenu } from './MobileMenu'
 import { Footer } from './Footer'
@@ -33,7 +32,6 @@ export function Layout({
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <TopBar />
       <Header
         cartIcon={cartIcon}
         favoriteIcon={favoriteIcon}
@@ -45,7 +43,7 @@ export function Layout({
         onClose={() => setMobileMenuOpen(false)}
       />
 
-      <main className="flex-1">
+      <main className="flex-1" style={{ paddingTop: 'var(--header-h, 72px)' }}>
         {children}
       </main>
 
