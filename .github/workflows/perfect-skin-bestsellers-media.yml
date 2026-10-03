@@ -8,7 +8,7 @@ on:
       stage:
         description: 'images — все кадры, gaps — кадр без товара, hands — кадры с рукой, videos — ролики'
         type: choice
-        options: [images, gaps, hands, videos, hero, hero-turn, hero-wide, hero-wide2]
+        options: [images, gaps, hands, videos, hero, hero-turn, hero-wide, hero-wide2, hero-crack]
         default: images
       frames:
         description: 'Только эти кадры через пробел (например: desktop-k1 mobile-k2 desktop-k0h). Пусто — все'

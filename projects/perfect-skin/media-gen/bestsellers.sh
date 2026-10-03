@@ -30,6 +30,15 @@ gen_image() { # out_name aspect prompt images...
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.png"
 }
 
+if [ "$STAGE" = hero-crack ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  D="Edit this image. Keep the woman, her face, skin, the composition and the flat left background pixel-identical. Only on the cream layer near her cheek: add fine natural drying cracks, thin hairline fissures and a few deeper splits in the thick foundation cream, like a clay mask starting to dry, following the direction of the strokes. Cracks only inside the cream, none on the skin and none on the flat background. No text, no objects."
+  M="Edit this image. Keep the upper 60% (face, skin, cream edge at the cheek) pixel-identical. In the lower part add a few broad, thick strokes of the same matte foundation cream, continuing down from the cream layer on the left and sweeping across the bottom, with layered torn edges and fine natural drying cracks on them, like a clay mask starting to dry. Leave the middle of the lower area calm enough for overlay text. Add the same fine cracks to the cream at the cheek. No cracks on the skin. No text, no objects."
+  for v in 1 2; do gen_image "hero-desk3-v$v" 16:9 "$D" "$OUT/hero-desk2-v3.png" & gen_image "hero-mob3-v$v" 9:16 "$M" "$OUT/hero-mob2-v2.png" & done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero-wide2 ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   D="Edit the FIRST image and keep its 16:9 composition: wide cream area on the left, face on the right. The woman must be exactly the woman from the SECOND image: same identity, head angle, eyes, brows, lips, freckles, skin texture and pores. Redo the transition between the background and the face exactly in the manner of the THIRD image: a thick layer of matte foundation cream covers the left cheek and breaks off in a jagged, layered, crusty torn edge with real thickness, lifted flakes and a few smeared strokes, the skin emerging from under it. Take nothing else from the third image, not her face. Left 45% of the frame: calm, even, flat cream-colored background with only subtle texture so text stays readable. Same warm soft light. No text, no logo, no objects."
