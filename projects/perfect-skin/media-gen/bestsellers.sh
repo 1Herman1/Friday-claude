@@ -30,6 +30,14 @@ gen_image() { # out_name aspect prompt images...
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.png"
 }
 
+if [ "$STAGE" = hero-turn ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  TURN="Edit the FIRST image. Keep the same woman exactly: identity, face shape, eyes, brows, lips, freckles, skin texture and pore detail, the torn cream layer on the left, the background color and the lighting. The ONLY change: turn her head further to her right (toward the left of the frame) so the face is seen at about 70 degrees, a deeper three-quarter view like the head angle in the SECOND image: the far eye partly hidden behind the nose bridge and cut by the right frame edge, the nose projecting toward the right edge, cheek and jaw line longer and more visible on the left. Use the second image ONLY for head angle; do not copy anything else from it (not the face, eyes, lips, brows, freckles or skin). Keep high skin detail: fine pores, light freckles, soft satin glow, no oily shine. Same crop: extreme close-up, forehead cut by the top edge. No text, no extra objects."
+  for v in $(seq 1 "${VARIANTS:-3}"); do gen_image "hero-t$v" 4:5 "$TURN" "$OUT/hero-r3.png" "$OUT/hero-r1.png" & done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"; mkdir -p "$OUT"
   REFH="$OUT/ref-face.png"
