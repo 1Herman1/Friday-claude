@@ -36,7 +36,7 @@ npx nullume <команда> <опции>
 - `nullume lib list [--family X] [--source X] [--status active] [--limit 50]` — список всех референсов в БД
 - `nullume lib embed [--reindex] [--batch 32]` — вычислить эмбеддинги CLIP для картинок
 - `nullume lib status` — статус библиотеки: count referencias, embeddings, families, disk usage
-- `nullume lib search [text] [--image path] [--family slug] [--limit 12]` — поиск по вектору или текстовому описанию
+- `nullume lib search [text] [--image path] [--family slug] [--limit 12]` — поиск по вектору или текстовому описанию. **Запрос — только по-английски**: текстовая часть CLIP (`clip-vit-base-patch32`) кириллицу не различает, любой русский запрос даёт почти один и тот же вектор (косинус 0.95–0.97 с бессмыслицей) и выдачу-шум без ошибки
 - `nullume lib cluster [--k N] [--k-min 3] [--k-max 12]` — кластеризовать в семейства (k выбирается автоматически через силуэты)
 - `nullume lib session set <importer> [--token t] [--cookie k=v]...` — сохранить токен/cookies для импортёра
 - `nullume lib propose [--apply file.json]` — Claude предлагает имена и описания семейств (или применяет их из JSON)
