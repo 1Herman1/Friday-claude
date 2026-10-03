@@ -30,6 +30,20 @@ gen_image() { # out_name aspect prompt images...
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.png"
 }
 
+gen_video() { # out_name aspect prompt first last
+  local name="$1" ar="$2" prompt="$3" first="$4" last="$5"
+  local tmp; tmp=$(mktemp -d)
+  # kling-3.0: image_urls = [первый кадр, последний кадр]; pro = 1080p.
+  # multi_prompt нужен API только в multi-shot, но каталог считает его
+  # обязательным — передаём пустой список.
+  echo '[]' > "$tmp/mp.json"
+  $NUL generate create kling-3.0/video --prompt "$prompt" \
+    --image "$first" --image "$last" \
+    --set aspect_ratio="$ar" --set mode=pro --set duration="${DUR:-4}" --set sound=false --set multi_shots=false --set multi_prompt="@$tmp/mp.json" \
+    --wait --wait-timeout 1200 --yes --out "$tmp"
+  cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
+}
+
 if [ "$STAGE" = hero-start ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   P="Edit this image to create the opening frame of an animation. Remove the woman completely: no face, no skin, no hair, nothing human. In her place continue the same thick matte foundation cream layer so that the cream covers the whole area where her face was, smooth and intact, only very fine first hairline cracks starting in the centre of where the face will appear, and a soft subtle bulge as if something is pressing from behind. Keep everything else pixel-identical: the flat background on the left, the existing cream strokes, colour, light and composition. No text, no objects."
@@ -95,19 +109,6 @@ if [ "$STAGE" = hero ]; then
   exit 0
 fi
 
-gen_video() { # out_name aspect prompt first last
-  local name="$1" ar="$2" prompt="$3" first="$4" last="$5"
-  local tmp; tmp=$(mktemp -d)
-  # kling-3.0: image_urls = [первый кадр, последний кадр]; pro = 1080p.
-  # multi_prompt нужен API только в multi-shot, но каталог считает его
-  # обязательным — передаём пустой список.
-  echo '[]' > "$tmp/mp.json"
-  $NUL generate create kling-3.0/video --prompt "$prompt" \
-    --image "$first" --image "$last" \
-    --set aspect_ratio="$ar" --set mode=pro --set duration="${DUR:-4}" --set sound=false --set multi_shots=false --set multi_prompt="@$tmp/mp.json" \
-    --wait --wait-timeout 1200 --yes --out "$tmp"
-  cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
-}
 
 for fmt in desktop mobile; do
   if [ "$fmt" = desktop ]; then AR="16:9"; LAYOUT="The four products stand in one row on the right two thirds of the frame, left third is empty calm background."; else AR="9:16"; LAYOUT="The four products stand in one row in the lower half of the vertical frame, centered, upper half is empty calm background."; fi
