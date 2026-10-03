@@ -8,7 +8,7 @@ export function HeroSection() {
     <section className="bg-background pt-8 md:pt-12 pb-10 md:pb-14">
       <div className="container-app">
         {/* Grid: left (text) + right (card with accent bg) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-20 items-stretch">
           {/* LEFT: Text, buttons, tags */}
           <div>
             {/* Badge */}
@@ -60,49 +60,23 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* RIGHT: Accent background with product card */}
-          <div className="relative min-h-[500px] flex items-start justify-end">
-            {/* Accent bg block (golden) */}
-            <picture className="absolute inset-0 hidden md:block">
-              <source srcSet="/photos/m4.webp" type="image/webp" />
-              <img
-                src="/photos/m4.png"
-                className="w-full h-full object-cover rounded-block"
-                alt="Косметика ISSEIMI в воде"
-                width={1122}
-                height={1402}
-                fetchPriority="high"
-              />
-            </picture>
-
-            {/* Product card (beige) */}
-            <Link to="/product/bee-venom-cream-antivozrastnoj-krem" className="relative z-10 bg-background rounded-block p-6 md:p-10 max-w-[320px] ml-auto mt-32 md:mt-48 md:-ml-10 block hover:no-underline">
-              {/* Badge */}
-              <div className="text-label font-bold text-gold-text mb-2">
-                ХИТ ПРОДАЖ · ISSEIMI BASE
-              </div>
-
-              {/* Product title */}
-              <h2 className="text-h3 md:text-h2 font-heading font-bold mb-1">
-                Beevenom Cream
-              </h2>
-
-              {/* Product description */}
-              <p className="text-body leading-body text-muted-foreground mb-2">
-                Антивозрастной крем с пчелиным ядом
-              </p>
-
-              {/* Price */}
-              <div className="text-price font-sans font-semibold tabular-nums text-2xl text-foreground mb-2">
-                8&nbsp;077&nbsp;₽
-              </div>
-
-              {/* CTA Button */}
-              <span className="w-full bg-primary text-primary-foreground font-heading font-bold py-3 px-6 rounded-pill transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-h-11 flex items-center justify-center">
-                В корзину
-              </span>
-            </Link>
-          </div>
+          {/* RIGHT: hero photo */}
+          <picture className="block w-full aspect-[4/5] lg:aspect-auto lg:h-full lg:min-h-[560px]">
+            <source
+              type="image/webp"
+              srcSet="/photos/hero-face-768.webp 768w, /photos/hero-face.webp 1200w"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
+            <img
+              src="/photos/hero-face.jpg"
+              alt="Лицо девушки, проступающее сквозь слой крема"
+              width={1200}
+              height={1490}
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-full object-cover object-[60%_35%] rounded-block"
+            />
+          </picture>
         </div>
       </div>
     </section>
