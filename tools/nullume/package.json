@@ -69,5 +69,8 @@
     "@types/node": "^22",
     "tsx": "^4",
     "typescript": "^5.9"
+  },
+  "allowScripts": {
+    "onnxruntime-node@1.30.0": true
   }
 }
