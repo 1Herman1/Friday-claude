@@ -30,6 +30,16 @@ gen_image() { # out_name aspect prompt images...
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.png"
 }
 
+if [ "$STAGE" = hero-wide2 ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  D="Edit the FIRST image and keep its 16:9 composition: wide cream area on the left, face on the right. The woman must be exactly the woman from the SECOND image: same identity, head angle, eyes, brows, lips, freckles, skin texture and pores. Redo the transition between the background and the face exactly in the manner of the THIRD image: a thick layer of matte foundation cream covers the left cheek and breaks off in a jagged, layered, crusty torn edge with real thickness, lifted flakes and a few smeared strokes, the skin emerging from under it. Take nothing else from the third image, not her face. Left 45% of the frame: calm, even, flat cream-colored background with only subtle texture so text stays readable. Same warm soft light. No text, no logo, no objects."
+  M="Edit this image. Keep everything in the upper 60% pixel-identical: face, skin, cream edge. In the lower 40% remove the horizontal cream smear and all cream strokes, replacing them with one uniform, flat, even background of the same warm beige as the area around the chin. No texture, no gradient, no objects, no text."
+  for v in 1 2 3; do gen_image "hero-desk2-v$v" 16:9 "$D" "$OUT/hero-desktop169-v2.png" "$OUT/hero-t1.png" "$OUT/ref-face.png" & done
+  for v in 1 2; do gen_image "hero-mob2-v$v" 9:16 "$M" "$OUT/hero-mobile-v2.png" & done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero-wide ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   for spec in "16:9:desktop169:the face occupies the right 55% of the width, the left 45% is calm empty background and cream layer for overlay text" "16:10:desktop1610:the face occupies the right 55% of the width, the left 45% is calm empty background and cream layer for overlay text" "9:16:mobile:the face occupies the upper 60% of the height, the lower 40% is calm empty background and cream layer for overlay text"; do
