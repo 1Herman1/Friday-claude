@@ -30,6 +30,17 @@ gen_image() { # out_name aspect prompt images...
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.png"
 }
 
+if [ "$STAGE" = hero-wide ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  for spec in "16:9:desktop169:the face occupies the right 55% of the width, the left 45% is calm empty background and cream layer for overlay text" "16:10:desktop1610:the face occupies the right 55% of the width, the left 45% is calm empty background and cream layer for overlay text" "9:16:mobile:the face occupies the upper 60% of the height, the lower 40% is calm empty background and cream layer for overlay text"; do
+    ar="${spec%%:*}"; rest="${spec#*:}"; ar="$ar:${rest%%:*}"; rest="${rest#*:}"; name="${rest%%:*}"; place="${rest#*:}"
+    WIDE="Extend the canvas of this image to aspect ratio $ar (outpainting). Keep the woman, her face, head angle, skin texture and pores, freckles, the torn cream layer and the lighting exactly as they are, pixel-identical. Continue the flat warm stone background and the torn foundation-cream layer naturally into the new area. Composition: $place. Do not zoom out so much that skin detail is lost: the face stays large. No text, no logo, no extra objects, no hands."
+    for v in $(seq 1 "${VARIANTS:-2}"); do gen_image "hero-$name-v$v" "$ar" "$WIDE" "$OUT/hero-t1.png" & done
+  done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero-turn ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   TURN="Edit the FIRST image. Keep the same woman exactly: identity, face shape, eyes, brows, lips, freckles, skin texture and pore detail, the torn cream layer on the left, the background color and the lighting. The ONLY change: turn her head further to her right (toward the left of the frame) so the face is seen at about 70 degrees, a deeper three-quarter view like the head angle in the SECOND image: the far eye partly hidden behind the nose bridge and cut by the right frame edge, the nose projecting toward the right edge, cheek and jaw line longer and more visible on the left. Use the second image ONLY for head angle; do not copy anything else from it (not the face, eyes, lips, brows, freckles or skin). Keep high skin detail: fine pores, light freckles, soft satin glow, no oily shine. Same crop: extreme close-up, forehead cut by the top edge. No text, no extra objects."
