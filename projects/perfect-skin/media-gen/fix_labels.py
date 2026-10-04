@@ -28,22 +28,22 @@ BOXES = {
 
 def mask_for(shape, fmt, active, k0p=None):
     h, w = shape[:2]
-    m = np.zeros((h, w), bool)
     k0 = read(k0p) if k0p else None
+    H, W = (k0.shape[:2] if k0 is not None else (h, w))
+    m = np.zeros((H, W), bool)
     for j, (x0, x1, y0, y1) in enumerate(BOXES[fmt], 1):
         if j in active:
             continue
         pad = 0.008
-        box = np.zeros((h, w), bool)
-        box[int((y0 - pad) * h):int((y1 + pad) * h), int((x0 - pad) * w):int((x1 + pad) * w)] = True
+        box = np.zeros((H, W), bool)
+        box[int((y0 - pad) * H):int((y1 + pad) * H), int((x0 - pad) * W):int((x1 + pad) * W)] = True
         gap = os.path.join(os.path.dirname(k0p), f"{fmt}-gap{j}.png") if k0p else None
         if k0 is not None and os.path.exists(gap):
-            sil = silhouette(k0, read(gap), 50, x0 - pad, x1 + pad) & box
-            if sil.shape != (h, w):
-                sil = np.array(sil[np.linspace(0, sil.shape[0] - 1, h).astype(int)][:, np.linspace(0, sil.shape[1] - 1, w).astype(int)])
-            m |= dilate(sil, 4)
+            m |= dilate(silhouette(k0, read(gap), 50, x0 - pad, x1 + pad) & box, 4)
         else:
             m |= box
+    if (H, W) != (h, w):
+        m = m[np.linspace(0, H - 1, h).astype(int)][:, np.linspace(0, W - 1, w).astype(int)]
     return m
 
 
