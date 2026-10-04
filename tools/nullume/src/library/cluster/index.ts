@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { cosine, normalize } from "../embed/math.js";
+import { normalize } from "../embed/math.js";
 import { kmeansPP } from "./kmeans.js";
 import { pca } from "./pca.js";
 import { silhouette, pickK } from "./silhouette.js";
@@ -26,6 +26,23 @@ export interface ClusterOptions {
   pcaDims?: number;
   seed?: number;
   model: string;
+  /** Кластеризовать только эти рефы (например, члены выбранных семейств) */
+  refIds?: string[];
+}
+
+// PCA-проекции не нормализованы, поэтому cosine() из math.ts (он рассчитан
+// на единичные векторы) здесь не подходит — считаем косинус честно.
+function cosineDistance(a: Float32Array, b: Float32Array): number {
+  let dot = 0;
+  let na = 0;
+  let nb = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    na += a[i] * a[i];
+    nb += b[i] * b[i];
+  }
+  if (na === 0 || nb === 0) return 1;
+  return 1 - dot / Math.sqrt(na * nb);
 }
 
 /**
@@ -46,9 +63,16 @@ export function clusterLibrary(
   } = opts;
 
   // Получаем все эмбеддинги для модели
-  const embeddings = store.listEmbeddings(model);
+  let embeddings = store.listEmbeddings(model);
   if (embeddings.length === 0) {
     throw new UsageError("Сначала lib init и lib embed");
+  }
+  if (opts.refIds) {
+    const subset = new Set(opts.refIds);
+    embeddings = embeddings.filter((e) => subset.has(e.refId));
+    if (embeddings.length === 0) {
+      throw new UsageError("В выбранных семействах нет рефов с эмбеддингами");
+    }
   }
 
   const runId = randomUUID();
@@ -61,6 +85,7 @@ export function clusterLibrary(
   });
 
   const refIds = embeddings.map((e) => e.refId);
+  const indexByRef = new Map(refIds.map((id, i) => [id, i]));
   let workingVectors = vectors;
   let workingRefIds = refIds;
 
@@ -128,9 +153,8 @@ export function clusterLibrary(
       // Вычисляем расстояния до центроида и выбираем exemplars
       // Используем workingVectors для расчёта, поскольку centroid в этом пространстве
       const membersWithDistance = memberRefIds.map((refId) => {
-        const index = refIds.indexOf(refId);
-        const vec = workingVectors[index];
-        const distance = 1 - cosine(vec, centroid);
+        const vec = workingVectors[indexByRef.get(refId)!];
+        const distance = cosineDistance(vec, centroid);
         return { refId, distance };
       });
 

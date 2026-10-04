@@ -175,3 +175,16 @@ test("getEmbedder: другие ошибки пробрасываются", asyn
     /Connection timeout/
   );
 });
+
+test("getEmbedder: модель не скачана (lib init не запускали) — null, а не падение", async () => {
+  const fs = await import("node:fs");
+  const os = await import("node:os");
+  const path = await import("node:path");
+  const old = process.env.NULLUME_HOME;
+  process.env.NULLUME_HOME = fs.mkdtempSync(path.join(os.tmpdir(), "nullume-nomodel-"));
+  try {
+    assert.strictEqual(await getEmbedder({ model: "clip" }), null);
+  } finally {
+    process.env.NULLUME_HOME = old;
+  }
+});

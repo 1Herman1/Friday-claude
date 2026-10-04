@@ -465,3 +465,16 @@ test("families: listFamilies filters by status", () => {
   const all = listFamilies(store);
   assert.strictEqual(all.length, 3);
 });
+
+test("families: переименованный кластер переживает повторный lib cluster", () => {
+  const store = new MemoryStore();
+  const named = store.createFamily({ name: "cluster-0", slug: "cluster-abc-0", status: "proposed", proposedBy: "cluster" });
+  const raw = store.createFamily({ name: "cluster-1", slug: "cluster-abc-1", status: "proposed", proposedBy: "cluster" });
+
+  renameFamily(store, named.id, "Duotone", "style-group-duotone");
+  store.deleteProposedFamilies();
+
+  assert.strictEqual(store.getFamily(named.id)?.proposedBy, "owner");
+  assert.ok(store.getFamily(named.id));
+  assert.strictEqual(store.getFamily(raw.id), undefined);
+});

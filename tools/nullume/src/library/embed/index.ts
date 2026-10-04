@@ -1,5 +1,10 @@
+import fs from "node:fs";
+import path from "node:path";
 import { getModelsDir } from "../../core/paths.js";
 import { normalize } from "./math.js";
+
+const CLIP_MODEL_ID = "Xenova/clip-vit-base-patch32";
+const SIGLIP_MODEL_ID = "Xenova/siglip-base-patch16-224";
 
 /**
  * Минимальный интерфейс для модуля @huggingface/transformers
@@ -79,6 +84,13 @@ export async function getEmbedder(opts?: {
     throw e;
   }
 
+  // Пакет стоит, но lib init ещё не скачал модель — это тот же случай
+  // «эмбеддера нет», а не падение с сырой ошибкой transformers.
+  const modelId = modelName === "clip" ? CLIP_MODEL_ID : SIGLIP_MODEL_ID;
+  if (!opts?.loader && !fs.existsSync(path.join(getModelsDir(), modelId, "config.json"))) {
+    return null;
+  }
+
   // Гарантируем что allowRemoteModels = false
   transformers.env.allowRemoteModels = false;
   transformers.env.cacheDir = getModelsDir();
@@ -96,7 +108,7 @@ export async function getEmbedder(opts?: {
 async function createCLIPEmbedder(
   transformers: TransformersModule
 ): Promise<Embedder> {
-  const modelId = "Xenova/clip-vit-base-patch32";
+  const modelId = CLIP_MODEL_ID;
 
   const visionModel = await transformers.CLIPVisionModelWithProjection!.from_pretrained(
     modelId,
@@ -144,7 +156,7 @@ async function createCLIPEmbedder(
 async function createSigLIPEmbedder(
   transformers: TransformersModule
 ): Promise<Embedder> {
-  const modelId = "Xenova/siglip-base-patch16-224";
+  const modelId = SIGLIP_MODEL_ID;
 
   const visionModel = await transformers.SiglipVisionModel!.from_pretrained(
     modelId,

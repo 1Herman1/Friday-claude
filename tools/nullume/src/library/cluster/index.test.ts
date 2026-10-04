@@ -204,7 +204,64 @@ test("clusterLibrary exemplars are 6 nearest members", () => {
     for (const exemplarId of family.exemplarRefIds) {
       assert(memberIds.has(exemplarId));
     }
+    // Образцы — самые близкие к центроиду: их расстояние не больше, чем у любого
+    // не-образца того же семейства
+    const maxExemplar = Math.max(...members.filter((m) => m.isExemplar).map((m) => m.distance));
+    const minOther = Math.min(...members.filter((m) => !m.isExemplar).map((m) => m.distance));
+    assert(maxExemplar <= minOther, `exemplar ${maxExemplar} farther than member ${minOther}`);
   }
+});
+
+test("clusterLibrary exemplars sit closest to the centroid in a skewed cluster", () => {
+  // Плотное ядро из 10 точек и 4 далёкие точки в одном кластере: образцами
+  // обязаны стать точки ядра, а не выбросы
+  const dim = 64;
+  const embeddings: Array<{ refId: string; vec: Float32Array }> = [];
+  const unit = (fill: (d: number) => number) => {
+    const v = new Float32Array(dim);
+    for (let d = 0; d < dim; d++) v[d] = fill(d);
+    let n = 0;
+    for (const x of v) n += x * x;
+    n = Math.sqrt(n);
+    for (let d = 0; d < dim; d++) v[d] /= n;
+    return v;
+  };
+  for (let i = 0; i < 10; i++) {
+    embeddings.push({ refId: `core-${i}`, vec: unit((d) => (d < 32 ? 1 : 0) + ((d * 7 + i) % 5) * 0.01) });
+  }
+  for (let i = 0; i < 4; i++) {
+    embeddings.push({ refId: `edge-${i}`, vec: unit((d) => (d < 32 ? 1 : 0) + (d === 32 + i ? 3 : 0)) });
+  }
+  const store = setupStore(embeddings);
+
+  const result = clusterLibrary(store, { k: 1, minSize: 1, model: "test-model" });
+
+  const exemplarSources = result.families[0].exemplarRefIds.map(
+    (id) => store.getReference(id)!.sourceRef
+  );
+  for (const src of exemplarSources) {
+    assert(src?.startsWith("core-"), `outlier ${src} picked as exemplar`);
+  }
+});
+
+test("clusterLibrary refIds limits clustering to the given subset", () => {
+  const embeddings = createSyntheticEmbeddings(8);
+  const store = setupStore(embeddings);
+  const subset = store.listEmbeddings("test-model").slice(0, 12).map((e) => e.refId);
+
+  const result = clusterLibrary(store, { k: 2, minSize: 1, model: "test-model", refIds: subset });
+
+  const clustered = result.families.flatMap((f) => store.getMembers(f.familyId).map((m) => m.refId));
+  assert.strictEqual(clustered.length + result.unassigned.length, 12);
+  for (const id of clustered) assert(subset.includes(id));
+});
+
+test("clusterLibrary refIds without embeddings throws", () => {
+  const store = setupStore(createSyntheticEmbeddings(4));
+  assert.throws(
+    () => clusterLibrary(store, { k: 2, model: "test-model", refIds: ["missing"] }),
+    /нет рефов с эмбеддингами/
+  );
 });
 
 test("clusterLibrary second run replaces only proposed families", () => {

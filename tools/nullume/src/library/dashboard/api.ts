@@ -495,7 +495,8 @@ export async function handleApi(
         res.end(JSON.stringify({ error: "name and slug required" }));
         return;
       }
-      store.updateFamily(payload.familyId, { name: payload.name, slug: payload.slug });
+      // Названное владельцем — уже не сырой кластер: следующий lib cluster его не сотрёт
+      store.updateFamily(payload.familyId, { name: payload.name, slug: payload.slug, proposedBy: "owner" });
     } else if (payload.action === "merge") {
       if (!payload.mergeInto) {
         res.writeHead(400, { "Content-Type": "application/json" });

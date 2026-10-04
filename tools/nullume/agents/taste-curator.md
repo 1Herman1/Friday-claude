@@ -68,6 +68,8 @@ nullume lib embed
 nullume lib cluster
 # или с явным k:
 # nullume lib cluster --k 4
+# только внутри выбранных семейств (стиль ищем среди фильтров, не роликов):
+# nullume lib cluster --family higgsfield-filters --min-size 2
 ```
 
 Получаете список кластеров с exemplars. Важно понимать, что означает это

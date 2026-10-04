@@ -85,9 +85,11 @@ export function renameFamily(store: LibraryStore, idOrSlug: string, newName: str
     }
   }
 
+  // Названное владельцем — уже не сырой кластер: следующий lib cluster его не сотрёт
   store.updateFamily(family.id, {
     name: newName,
     slug: finalSlug,
+    proposedBy: "owner",
   });
 
   store.recordDecision({

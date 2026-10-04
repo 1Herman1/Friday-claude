@@ -688,6 +688,7 @@ libCmd
   .option("--k-max <n>", "Максимум кластеров", "12")
   .option("--min-size <n>", "Минимальный размер кластера", "4")
   .option("--seed <n>", "Seed для K-means", "42")
+  .option("--family <slugs>", "Только члены этих семейств (слаги через запятую)")
   .description("Кластеризовать библиотеку")
   .action(async function (options: Record<string, unknown>) {
     const flags = getGlobalFlags();
@@ -708,7 +709,21 @@ libCmd
         throw new UsageError("Сначала nullume lib embed");
       }
 
+      let refIds: string[] | undefined;
+      if (options.family) {
+        const slugs = (options.family as string).split(",").map((s) => s.trim()).filter(Boolean);
+        const families = store.listFamilies();
+        const ids = new Set<string>();
+        for (const slug of slugs) {
+          const family = families.find((f) => f.slug === slug);
+          if (!family) throw new UsageError(`Семейство не найдено: ${slug}`);
+          for (const m of store.getMembers(family.id)) ids.add(m.refId);
+        }
+        refIds = [...ids];
+      }
+
       const result = clusterLibrary(store, {
+        refIds,
         k: options.k ? parseInt(options.k as string, 10) : undefined,
         kMin: parseInt(options.kMin as string, 10),
         kMax: parseInt(options.kMax as string, 10),
@@ -1147,10 +1162,13 @@ familyCmd
         throw new UsageError(`Семейство "${id}" не найдено`);
       }
 
-      if (options.name && options.slug) {
-        renameFamily(store, id, options.name as string, options.slug as string);
-      } else if (options.name) {
-        renameFamily(store, id, options.name as string);
+      if (options.name || options.slug) {
+        renameFamily(
+          store,
+          id,
+          (options.name as string | undefined) ?? family.name,
+          (options.slug as string | undefined) ?? (options.name ? undefined : family.slug)
+        );
       }
 
       if (options.status === "approved") {
