@@ -96,6 +96,16 @@ if [ "$STAGE" = hero-ab ]; then
   exit 0
 fi
 
+if [ "$STAGE" = hero-ab2 ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  A="Tripod-locked camera, absolutely static frame, no camera shake, no handheld motion, no zoom. A face beneath the cream layer slowly and steadily pushes forward toward the viewer: the raised relief grows noticeably closer and slightly larger as it advances, and this forward pressure makes cracks spread over the whole right part and multiply over the face. Solid opaque cream, nothing transparent. Beige and ivory only. The flat background on the left stays perfectly still. No text."
+  B="Tripod-locked camera, absolutely static frame, no camera shake, no zoom. The face continues the same steady forward movement toward the viewer, physically pushing out of the cracked cream: plates are pushed outward by the face, break off and fall. The cream is solid and opaque, never transparent; skin appears only where plates have physically fallen away, no fade, no dissolve. Eyes closed. Beige only, every flake pale beige on all sides. The flat background on the left stays perfectly still. No text."
+  DUR=3 gen_video "hero-clip-a2" 16:9 "$A" "$OUT/hero-start-desk4-fix.png" "$OUT/hero-mid-v2.png" &
+  DUR=3 gen_video "hero-clip-b2" 16:9 "$B" "$OUT/hero-mid-v2.png" "$OUT/hero-f6.png" &
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero-video ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   V="Locked static camera, no zoom, no pan. Premium skincare commercial, macro detail, soft warm studio light. The thick layer of matte foundation cream slowly cracks open: fine hairline cracks spread outward like a drying clay mask, then deepen, flakes and small pieces of cream lift, curl and fall away in slow motion with tiny particles of cream dust drifting down, and the face of a young woman gradually emerges from behind the cream, pushing through calmly and gracefully, her eyes opening softly as she turns slightly into the final pose. The broken cream edges settle into the jagged torn edge of the final frame. Smooth, continuous, elegant motion, no jumps, no morphing of her features, skin stays clean and natural with fine pores and freckles. The flat background on the left stays perfectly still. No text."
