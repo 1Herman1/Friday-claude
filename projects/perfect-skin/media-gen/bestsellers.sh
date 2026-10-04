@@ -44,6 +44,18 @@ gen_video() { # out_name aspect prompt first last
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
+if [ "$STAGE" = wide2 ]; then
+  W="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"; OUT="$W"
+  C="Edit this image: remove the hand and arm completely; nothing else changes. Keep the four products, their labels, positions, the wall, tabletop, light and shadows pixel-identical. Seamless flat matte wall #F4F2EC where the hand was. No text."
+  M="Edit this image: pull the camera further back and remove the hand completely. The same four products in the same order with exactly the same labels, now noticeably smaller, together about 62% of the frame width, standing on the tabletop in the lower third of the frame; the upper half is empty seamless flat matte wall #F4F2EC, so that a hand reaching in from above stays fully inside the frame. Soft diffused daylight, no glare. No text."
+  gen_image "desktop-k0c-v1" 16:9 "$C" "$W/desktop-k0w-v1.png" &
+  gen_image "desktop-k0c-v2" 16:9 "$C" "$W/desktop-k0w-v1.png" &
+  gen_image "mobile-k0c-v1" 9:16 "$M" "$W/mobile-k0w-v2.png" &
+  gen_image "mobile-k0c-v2" 9:16 "$M" "$W/mobile-k0w-v2.png" &
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = wide ]; then
   W="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"; mkdir -p "$W"
   for fmt in desktop mobile; do
