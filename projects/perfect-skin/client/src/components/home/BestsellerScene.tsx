@@ -35,8 +35,23 @@ export function BestsellerScene() {
   const stickyRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null, null, null])
   const primedRef = useRef(false)
+  const targetRef = useRef({ idx: 0, frac: 0 })
+  const rafRef = useRef<number | null>(null)
+  const smoothRef = useRef([0, 0, 0, 0])
+
+  const tick = () => {
+    rafRef.current = null
+    const { idx, frac } = targetRef.current
+    const video = videoRefs.current[idx]
+    if (!video || !video.duration) return
+    const target = frac * (video.duration - 0.05)
+    const cur = smoothRef.current[idx]
+    const next = Math.abs(target - cur) < 1 / 60 ? target : cur + (target - cur) * 0.18
+    smoothRef.current[idx] = next
+    if (!video.seeking) video.currentTime = next
+    if (next !== target) rafRef.current = requestAnimationFrame(tick)
+  }
   const videoReadyRef = useRef<boolean[]>([false, false, false, false])
-  const lastVideoTimeRef = useRef<number[]>([0, 0, 0, 0])
   const [state, setState] = useState<SceneState>({ progress: 0, segment: 0, local: 0 })
   const [isVisible, setIsVisible] = useState(false)
   const [videoReady, setVideoReady] = useState<boolean[]>([false, false, false, false])
@@ -52,6 +67,10 @@ export function BestsellerScene() {
   const { addItem } = useCart()
   const { openCart } = useDrawer()
   const { user } = useAuth()
+
+  useEffect(() => () => {
+    if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+  }, [])
 
   // Проверяем prefers-reduced-motion
   useEffect(() => {
@@ -138,16 +157,11 @@ export function BestsellerScene() {
         local,
       })
 
-      // Обновляем currentTime активного видео
-      const video = videoRefs.current[finalSegment]
-      if (video && video.duration) {
-        const targetTime = local * video.duration
-        const lastTime = lastVideoTimeRef.current[finalSegment]
-        if (Math.abs(targetTime - lastTime) > video.duration / 30) {
-          video.currentTime = targetTime
-          lastVideoTimeRef.current[finalSegment] = targetTime
-        }
-      }
+      const moveShare = 0.7
+      const k = Math.min(1, local / moveShare)
+      const eased = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2
+      targetRef.current = { idx: finalSegment, frac: scrollProgress >= 1 ? 1 : eased }
+      if (rafRef.current === null) rafRef.current = requestAnimationFrame(tick)
 
       // Обновляем статус готовности видео
       const newReady = [...videoReady]
@@ -250,7 +264,7 @@ export function BestsellerScene() {
                 className="h-1 flex-1 bg-muted rounded-full overflow-hidden"
               >
                 <div
-                  className="h-full bg-primary transition-all"
+                  className="h-full bg-primary"
                   style={{
                     width:
                       state.segment > idx
@@ -268,7 +282,7 @@ export function BestsellerScene() {
   return (
     <section ref={containerRef} style={{ height: `${containerHeight}px` }} className="bg-background">
       {/* Sticky container */}
-      <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden bg-card">
+      <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden bg-background">
         {/* Заголовок */}
         <div className="absolute top-6 left-6 md:top-12 md:left-12 z-20 pointer-events-none">
           <p className="text-label uppercase text-muted-foreground mb-2">Выбор косметологов</p>
@@ -353,10 +367,10 @@ export function BestsellerScene() {
             const productData = currentProduct.data
             return (
               <div
-                className={`bg-card rounded-block shadow-lg p-5 pointer-events-auto max-w-sm transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-reduce:translate-x-0 ${
-                  state.local > 0.5
-                    ? 'opacity-100 translate-x-0'
-                    : 'opacity-0 -translate-x-4'
+                className={`bg-card rounded-block shadow-lg p-5 max-w-sm transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-reduce:translate-x-0 ${
+                  state.local > 0.55
+                    ? 'opacity-100 translate-x-0 visible pointer-events-auto'
+                    : 'opacity-0 -translate-x-4 invisible pointer-events-none'
                 }`}
               >
                 {/* Бренд */}
@@ -384,7 +398,7 @@ export function BestsellerScene() {
                     price={productData.minPrice}
                     oldPrice={productData.oldPrice ?? undefined}
                     hidden={productData.priceHidden}
-                    size="sm"
+                    size="lg"
                   />
                 </div>
 
@@ -414,15 +428,15 @@ export function BestsellerScene() {
             const productData = currentProduct.data
             return (
               <div
-                className={`bg-card rounded-block shadow-md px-3 py-2.5 flex items-center gap-3 pointer-events-auto transition-all duration-200 ${
-                  state.local > 0.5
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-6'
+                className={`bg-card rounded-block shadow-md px-3 py-2.5 flex items-center gap-3 transition-[opacity,transform,visibility] duration-200 ${
+                  state.local > 0.55
+                    ? 'opacity-100 translate-y-0 visible pointer-events-auto'
+                    : 'opacity-0 translate-y-6 invisible pointer-events-none'
                 }`}
               >
                 <div className="min-w-0 flex-1">
                   {productData.brand && (
-                    <div className="text-[10px] leading-tight uppercase tracking-wide text-muted-foreground">
+                    <div className="text-label leading-tight uppercase tracking-wide text-muted-foreground">
                       {productData.brand.name}
                     </div>
                   )}

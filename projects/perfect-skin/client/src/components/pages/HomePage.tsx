@@ -3,7 +3,6 @@ import { CtaTiles } from '@/components/home/CtaTiles'
 import { BrandsSection } from '@/components/home/BrandsSection'
 import { CategoryAccordion } from '@/components/home/CategoryAccordion'
 import { BestsellerScene } from '@/components/home/BestsellerScene'
-import { BestsellerSection } from '@/components/home/BestsellerSection'
 import { ProSection } from '@/components/home/ProSection'
 import { About } from '@/components/home/About'
 import { FaqSection } from '@/components/home/FaqSection'
@@ -27,7 +26,6 @@ export function HomePage() {
       <BestsellerScene />
 
       {/* Bestsellers Grid */}
-      <BestsellerSection />
 
       {/* Pro Section */}
       <ProSection />
