@@ -16,7 +16,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lift import FFMPEG, read, write  # noqa: E402
-from restore import skin  # noqa: E402
+from restore import silhouette, skin  # noqa: E402
 
 # Границы товаров в k0 v3 (доли ширины/высоты), запас 1 %.
 BOXES = {
@@ -27,14 +27,24 @@ BOXES = {
 }
 
 
-def mask_for(shape, fmt, active):
+def mask_for(shape, fmt, active, k0p=None):
     h, w = shape[:2]
     m = np.zeros((h, w), bool)
+    k0 = read(k0p) if k0p else None
     for j, (x0, x1, y0, y1) in enumerate(BOXES[fmt], 1):
         if j in active:
             continue
         pad = 0.008
-        m[int((y0 - pad) * h):int((y1 + pad) * h), int((x0 - pad) * w):int((x1 + pad) * w)] = True
+        box = np.zeros((h, w), bool)
+        box[int((y0 - pad) * h):int((y1 + pad) * h), int((x0 - pad) * w):int((x1 + pad) * w)] = True
+        gap = os.path.join(os.path.dirname(k0p), f"{fmt}-gap{j}.png") if k0p else None
+        if k0 is not None and os.path.exists(gap):
+            sil = silhouette(k0, read(gap), 50, x0 - pad, x1 + pad) & box
+            if sil.shape != (h, w):
+                sil = np.array(sil[np.linspace(0, sil.shape[0] - 1, h).astype(int)][:, np.linspace(0, sil.shape[1] - 1, w).astype(int)])
+            m |= dilate(sil, 4)
+        else:
+            m |= box
     return m
 
 
@@ -50,8 +60,23 @@ def feather(m, r):
     return np.apply_along_axis(g, 1, np.apply_along_axis(g, 0, f))
 
 
+def hand_mask(frame):
+    sk = skin(frame)
+    small = sk[::4, ::4]
+    seed = np.zeros_like(small)
+    seed[0, :] = small[0, :]
+    seed[:, -1] |= small[:, -1]
+    for _ in range(400):
+        grown = dilate(seed, 1) & small
+        if (grown == seed).all():
+            break
+        seed = grown
+    big = np.repeat(np.repeat(seed, 4, 0), 4, 1)[: sk.shape[0], : sk.shape[1]]
+    return big & sk | dilate(big, 2)[: sk.shape[0], : sk.shape[1]] & sk
+
+
 def apply(frame, k0, base):
-    sk = dilate(skin(frame), 10)
+    sk = dilate(hand_mask(frame), 10)
     a = feather(base & ~sk, 3)[..., None]
     return (frame * (1 - a) + k0 * a).astype(np.uint8)
 
@@ -72,13 +97,13 @@ def main():
         k0 = read(k0p)
         if k0.shape != f.shape:
             raise SystemExit(f"size mismatch {k0.shape} vs {f.shape}")
-        write(dst, apply(f.astype(float), k0.astype(float), mask_for(f.shape, fmt, active)))
+        write(dst, apply(f.astype(float), k0.astype(float), mask_for(f.shape, fmt, active, k0p)))
         return
     w, h, fps = size(src)
     k0 = np.frombuffer(subprocess.check_output(
         [FFMPEG, "-loglevel", "error", "-i", k0p, "-vf", f"scale={w}:{h}:flags=lanczos",
          "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]), np.uint8).reshape(h, w, 3).astype(float)
-    base = mask_for((h, w), fmt, active)
+    base = mask_for((h, w), fmt, active, k0p)
     dec = subprocess.Popen([FFMPEG, "-loglevel", "error", "-i", src, "-f", "rawvideo",
                             "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
     enc = subprocess.Popen([FFMPEG, "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
