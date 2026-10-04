@@ -195,6 +195,14 @@ if [ "$STAGE" = hero ]; then
 fi
 
 
+if [[ "$STAGE" == v3-* ]]; then
+  STAGE="${STAGE#v3-}"
+  OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
+  NOGLARE=" Matte natural skin with no shine, no specular highlights or glare on the hand, the caps or the labels."
+else
+  NOGLARE=""
+fi
+
 for fmt in desktop mobile; do
   if [ "$fmt" = desktop ]; then AR="16:9"; LAYOUT="The four products stand in one row on the right two thirds of the frame, left third is empty calm background."; else AR="9:16"; LAYOUT="The four products stand in one row in the lower half of the vertical frame, centered, upper half is empty calm background."; fi
 
@@ -212,7 +220,7 @@ for fmt in desktop mobile; do
            "holding the short jar by the sides of its frosted glass body (not by the lid): thumb on the near side, two fingers on the far side, pinky slightly lifted"
            "holding the glass dropper bottle by the LOWER HALF of its glass body, around the round black label, well below the silver collar — the fingers never touch the white rubber dropper bulb and never touch the silver collar (gripping the dropper is a failure): thumb on the near side, index and middle fingers on the far side, pinky slightly lifted")
     if [ "$fmt" = desktop ]; then LIFT="3 centimeters"; UPRIGHT=""; else LIFT="2 centimeters"; UPRIGHT=" The lifted product stays PERFECTLY VERTICAL, exactly as upright as it stood on the table — absolutely no tilt, no rotation, no lean (a tilted product is a failure). The hand approaches from the right side at the product's mid-height, not from above."; fi
-    HAND="one graceful feminine hand of a woman aged 25-35: soft smooth skin, slender fingers, short natural nude manicure, no rings or jewelry, relaxed elegant pose with a gentle natural curve of the wrist, entering the frame from the top right edge"
+    HAND="one graceful feminine hand of a woman aged 25-35: soft smooth skin, slender fingers, short natural nude manicure, no rings or jewelry, relaxed elegant pose with a gentle natural curve of the wrist, entering the frame from the top right edge, the whole hand and wrist fully inside the frame${NOGLARE}"
     # K0h — стартовый кадр ролика: рука уже в кадре и парит над товарами.
     if [ -z "${FRAMES:-}" ] || [[ " $FRAMES " == *" $fmt-k0h "* ]]; then
       for v in $(seq 1 "${VARIANTS:-1}"); do
