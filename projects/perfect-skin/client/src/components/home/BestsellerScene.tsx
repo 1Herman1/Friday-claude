@@ -290,7 +290,7 @@ export function BestsellerScene() {
         </div>
 
         {/* Видео фреймы */}
-        <div className="absolute inset-x-0 top-24 bottom-36 md:inset-0">
+        <div className="absolute inset-x-0 top-24 bottom-0 md:inset-0">
           {[0, 1, 2, 3].map(idx => (
             <div
               key={idx}
@@ -321,7 +321,7 @@ export function BestsellerScene() {
                 className="w-full h-full object-cover md:object-center"
                 style={
                   !isDesktop
-                    ? { objectPosition: 'center 88%' }
+                    ? { objectPosition: 'center top' }
                     : undefined
                 }
                 poster={VIDEO_CONFIG.startPoster(isDesktop ? 'desktop' : 'mobile', idx)}
@@ -348,7 +348,7 @@ export function BestsellerScene() {
                     className="w-full h-full object-cover"
                     style={
                       !isDesktop
-                        ? { objectPosition: 'center 88%' }
+                        ? { objectPosition: 'center top' }
                         : undefined
                     }
                   />
