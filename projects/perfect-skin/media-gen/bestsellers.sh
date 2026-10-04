@@ -44,6 +44,17 @@ gen_video() { # out_name aspect prompt first last
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
+if [ "$STAGE" = wide ]; then
+  W="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"; mkdir -p "$W"
+  for fmt in desktop mobile; do
+    ar=16:9; share="the middle 45% of the frame width"; [ $fmt = mobile ] && { ar=9:16; share="about 70% of the frame width, in the lower half of the frame"; }
+    P="Edit this image: pull the camera back. Keep the same four products in the same order with exactly the same labels, caps and proportions, but smaller in the frame, together occupying $share, with generous empty space above and around them so that a hand reaching in from above stays fully inside the frame. Background: a seamless flat matte wall in warm stone colour #F4F2EC, the tabletop a slightly warmer light stone, soft diffused daylight from the left, soft shadows, no glare, no hard specular highlights, no props, no text. Photorealistic premium still life."
+    for v in 1 2; do OUT="$W" gen_image "$fmt-k0w-v$v" "$ar" "$P" "$OUT/$fmt-k0.png" & done
+  done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero-start ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   P="Edit this image to create the opening frame of an animation. Remove the woman completely: no face, no skin, no hair, nothing human. In her place continue the same thick matte foundation cream layer so that the cream covers the whole area where her face was, smooth and intact, only very fine first hairline cracks starting in the centre of where the face will appear, and a soft subtle bulge as if something is pressing from behind. Keep everything else pixel-identical: the flat background on the left, the existing cream strokes, colour, light and composition. No text, no objects."
