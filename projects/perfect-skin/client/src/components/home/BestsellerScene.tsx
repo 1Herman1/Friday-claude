@@ -34,6 +34,7 @@ export function BestsellerScene() {
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null, null, null])
+  const primedRef = useRef(false)
   const videoReadyRef = useRef<boolean[]>([false, false, false, false])
   const lastVideoTimeRef = useRef<number[]>([0, 0, 0, 0])
   const [state, setState] = useState<SceneState>({ progress: 0, segment: 0, local: 0 })
@@ -70,6 +71,7 @@ export function BestsellerScene() {
       if (newIsDesktop !== isDesktop) {
         setIsDesktop(newIsDesktop)
         // Перезагружаем видео при смене breakpoint чтобы применилась новая source
+        primedRef.current = false
         videoRefs.current.forEach((video) => {
           if (video) {
             video.load()
@@ -89,16 +91,16 @@ export function BestsellerScene() {
       ([entry]) => {
         setIsVisible(entry.isIntersecting)
         // Когда секция приближается к viewport, предзагружаем видео
-        if (entry.isIntersecting || entry.boundingClientRect.top < window.innerHeight) {
+        if (!primedRef.current && (entry.isIntersecting || entry.boundingClientRect.top < window.innerHeight)) {
+          primedRef.current = true
           videoRefs.current.forEach((video) => {
-            if (video && !video.src && !video.querySelector('source')) return
-            if (video) {
-              video.load()
-              video
-                .play()
-                .then(() => video.pause())
-                .catch(() => {})
-            }
+            if (!video) return
+            video.muted = true
+            video.setAttribute('muted', '')
+            video
+              .play()
+              .then(() => video.pause())
+              .catch(() => {})
           })
         }
       },
@@ -278,7 +280,7 @@ export function BestsellerScene() {
           {[0, 1, 2, 3].map(idx => (
             <div
               key={idx}
-              className={`w-full h-full transition-opacity duration-300 ${
+              className={`absolute inset-0 transition-opacity duration-300 ${
                 state.segment === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
             >
@@ -286,6 +288,8 @@ export function BestsellerScene() {
                 ref={el => {
                   videoRefs.current[idx] = el
                   if (el) {
+                    el.muted = true
+                    el.setAttribute('muted', '')
                     const handleReady = () => {
                       const newReady = [...videoReady]
                       newReady[idx] = el.readyState >= 2
@@ -315,6 +319,10 @@ export function BestsellerScene() {
                 <source
                   src={isDesktop ? VIDEO_CONFIG.desktop[idx] : VIDEO_CONFIG.mobile[idx]}
                   type="video/mp4"
+                />
+                <source
+                  src={(isDesktop ? VIDEO_CONFIG.desktop[idx] : VIDEO_CONFIG.mobile[idx]).replace(/\.mp4$/, '.webm')}
+                  type="video/webm"
                 />
               </video>
               {/* Overlay постера пока видео не готово */}

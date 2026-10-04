@@ -43,6 +43,14 @@ export function HeroSection() {
       {video && (
         <video
           key={video}
+          ref={(el) => {
+            if (!el || el.dataset.started) return
+            el.dataset.started = '1'
+            el.muted = true
+            el.defaultMuted = true
+            el.setAttribute('muted', '')
+            el.play().catch(() => setVideo(null))
+          }}
           poster={`/video/hero/${video}-start.webp`}
           muted
           playsInline
