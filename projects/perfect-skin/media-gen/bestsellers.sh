@@ -69,11 +69,19 @@ if [ "$STAGE" = hero-start3 ]; then
   exit 0
 fi
 
+if [ "$STAGE" = hero-start4 ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  P="Edit this image to create the opening frame of an animation. Remove the woman and remove all cracks and all cream strokes. The whole right part of the frame becomes one perfectly smooth, even, matte surface of warm beige cream, absolutely uniform, no cracks, no relief, no texture lines, seamlessly blending into the flat background on the left. Same colours and light. No text."
+  for v in 1 2; do gen_image "hero-start-desk4-v$v" 16:9 "$P" "$OUT/hero-desk3-v2.png" & done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero-video ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   V="Locked static camera, no zoom, no pan. Premium skincare commercial, macro detail, soft warm studio light. The thick layer of matte foundation cream slowly cracks open: fine hairline cracks spread outward like a drying clay mask, then deepen, flakes and small pieces of cream lift, curl and fall away in slow motion with tiny particles of cream dust drifting down, and the face of a young woman gradually emerges from behind the cream, pushing through calmly and gracefully, her eyes opening softly as she turns slightly into the final pose. The broken cream edges settle into the jagged torn edge of the final frame. Smooth, continuous, elegant motion, no jumps, no morphing of her features, skin stays clean and natural with fine pores and freckles. The flat background on the left stays perfectly still. No text."
-  VD="Locked static camera, no zoom. Palette strictly warm beige, ivory and natural skin tones only; every flake of cream is the same pale beige on both sides, including its edges and underside. The smooth even cream surface on the right begins to crackle with fine hairline cracks; very gently, only a few millimetres, the face of a young woman rises from beneath the surface, a shallow subtle movement, not deep; the thin cream skin over her features splits and thin pale-beige flakes peel off softly and drift down with fine pale cream dust. Her face appears with eyes closed, then she softly opens her eyes and settles into the final pose. Smooth continuous elegant motion. The flat background on the left stays perfectly still. No text."
-  if [[ " ${CLIPS:-desk mob} " == *" desk "* ]]; then DUR=5 gen_video "hero-video-desk" 16:9 "$VD" "$OUT/${FRAMES:-hero-start-desk2-v1}.png" "$OUT/hero-desk3-v2.png" & fi
+  VD="Locked static camera, no zoom, slow realistic pace, nothing fast. Palette only warm beige, ivory and natural skin tones; every cream flake is pale beige on all sides. 0-2 s: the perfectly smooth cream surface on the right stays still, then the first fine hairline cracks appear. 2-4 s: cracks slowly spread across the entire right part of the frame. 4-6.5 s: a young woman's face, hidden beneath, gently moves forward a few millimetres; this movement breaks the layer, more and deeper cracks appear and parts of her face become visible through the breaks, eyes closed. 6.5-8.5 s: the remaining cream pieces slowly peel off and fall away with fine pale dust, revealing her whole face; the torn cream edge and cracked strokes of the final frame remain on the left side of her face. 8.5-10 s: she slowly opens her eyes, her gaze turns to the viewer, a slight gentle sway of the head, then she settles into the final pose. The flat background on the left stays perfectly still. No text."
+  if [[ " ${CLIPS:-desk mob} " == *" desk "* ]]; then DUR=${HERO_DUR:-10} gen_video "hero-video-desk" 16:9 "$VD" "$OUT/${FRAMES:-hero-start-desk2-v1}.png" "$OUT/hero-desk3-v2.png" & fi
   if [[ " ${CLIPS:-desk mob} " == *" mob "* ]]; then DUR=5 gen_video "hero-video-mob" 9:16 "$V" "$OUT/hero-start-mob.png" "$OUT/hero-mob3-v1.png" & fi
   wait
   exit 0
