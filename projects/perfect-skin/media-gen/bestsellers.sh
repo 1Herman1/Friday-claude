@@ -206,7 +206,7 @@ fi
 if [[ "$STAGE" == v3-* ]]; then
   STAGE="${STAGE#v3-}"
   OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
-  NOGLARE=" Matte natural skin with no shine, no specular highlights or glare on the hand, the caps or the labels."
+  NOGLARE=" The hand is delicate and light: a slender feminine hand with a slim wrist, long fine fingers and an airy, weightless gesture, only the fingertips touch, the wrist relaxed and slightly raised, the slim forearm coming in at a high graceful angle from the upper right, never hanging heavily over the products, like a ballet hand; only the hand and a slim part of the forearm, no shoulder. Matte natural skin with no shine, no specular highlights or glare on the hand, the caps or the labels."
 else
   NOGLARE=""
 fi
