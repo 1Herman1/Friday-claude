@@ -44,6 +44,14 @@ gen_video() { # out_name aspect prompt first last
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
+if [ "$STAGE" = pad2 ]; then
+  W="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"; OUT="$W"
+  P="This image is a smaller photo placed on a flat plain canvas. Outpaint only the plain border: extend the light stone tabletop and the flat matte warm wall seamlessly to all edges so it becomes one continuous, natural photograph taken with the camera farther back. Do not change anything inside the inner photo. Soft diffused daylight, no glare, no props, no hands, no text."
+  for v in 1 2; do gen_image "desktop-k0o-v$v" 16:9 "$P" "$W/desktop-k0pad.png" & gen_image "mobile-k0o-v$v" 9:16 "$P" "$W/mobile-k0pad2.png" & done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = mobpad ]; then
   W="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"; OUT="$W"
   P="This image is a smaller photo placed on a flat #F4F2EC canvas. Outpaint: extend the light stone tabletop and the flat matte warm wall #F4F2EC seamlessly to all edges so it becomes one continuous, natural photograph with a camera farther back. Do not change the four products, their labels, size or position. Soft diffused daylight, no glare, no props, no text."
