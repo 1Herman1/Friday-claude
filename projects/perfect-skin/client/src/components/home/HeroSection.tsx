@@ -36,7 +36,7 @@ export function HeroSection() {
           height={1072}
           fetchPriority="high"
           decoding="async"
-          className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%]"
+          className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] portrait:object-contain portrait:object-top"
         />
       </picture>
 
@@ -49,14 +49,14 @@ export function HeroSection() {
           autoPlay
           preload="auto"
           aria-hidden="true"
-          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%]"
+          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] portrait:object-contain portrait:object-top"
         >
           <source src={`/video/hero/${video}.webm`} type="video/webm" />
           <source src={`/video/hero/${video}.mp4`} type="video/mp4" onError={() => setVideo(null)} />
         </video>
       )}
 
-      <div className="absolute inset-x-0 bottom-0 h-[55%] -z-10 bg-gradient-to-t from-background via-background/80 to-transparent landscape:lg:hidden" />
+      <div className="absolute inset-x-0 bottom-0 h-[55%] portrait:h-[62%] -z-10 bg-gradient-to-t from-background via-background/80 to-transparent landscape:lg:hidden" />
 
       <div className="container-app h-full flex flex-col justify-end landscape:lg:justify-center pb-10 md:pb-14 landscape:lg:pb-0" style={{ paddingTop: 'var(--header-h, 72px)' }}>
         <div className="max-w-[560px] landscape:lg:max-w-[36%]">
