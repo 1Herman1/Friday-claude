@@ -36,7 +36,7 @@ export function HeroSection() {
           height={1072}
           fetchPriority="high"
           decoding="async"
-          className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] portrait:object-contain portrait:object-top"
+          className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-contain portrait:object-top"
         />
       </picture>
 
@@ -49,7 +49,7 @@ export function HeroSection() {
           autoPlay
           preload="auto"
           aria-hidden="true"
-          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] portrait:object-contain portrait:object-top"
+          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-contain portrait:object-top"
         >
           <source src={`/video/hero/${video}.webm`} type="video/webm" />
           <source src={`/video/hero/${video}.mp4`} type="video/mp4" onError={() => setVideo(null)} />
@@ -58,32 +58,37 @@ export function HeroSection() {
 
       <div className="absolute inset-x-0 bottom-0 h-[55%] portrait:h-[62%] -z-10 bg-gradient-to-t from-background via-background/80 to-transparent landscape:lg:hidden" />
 
-      <div className="container-app h-full flex flex-col justify-end landscape:lg:justify-center pb-10 md:pb-14 landscape:lg:pb-0" style={{ paddingTop: 'var(--header-h, 72px)' }}>
-        <div className="max-w-[560px] landscape:lg:max-w-[36%]">
-          <div className="inline-block bg-accent text-foreground px-1 py-0.5 rounded-pill text-label font-bold uppercase tracking-wide mb-3">
+      <div
+        className="container-app h-full flex flex-col justify-end pb-10 md:pb-14 landscape:lg:max-w-none landscape:lg:justify-center landscape:lg:pb-24 landscape:lg:[@media(max-height:700px)]:pb-12"
+        style={{ paddingTop: 'var(--header-h, 72px)' }}
+      >
+        <div className="max-w-[560px] landscape:lg:max-w-none">
+          <p className="mb-3 text-label font-semibold uppercase tracking-wide text-primary landscape:lg:mb-4 landscape:lg:text-body-sm landscape:2xl:mb-6">
             ИСПАНИЯ · HEBER FARMA · С 2017 ГОДА
-          </div>
+          </p>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold mb-4 md:mb-6 leading-[1.08]">
-            ПРО-КОСМЕТИКА
-            <span className="block">ИЗ ИСПАНИИ</span>
+          <h1 className="mb-4 md:mb-6 text-4xl sm:text-5xl md:text-6xl font-heading font-bold leading-[1.02] landscape:lg:text-hero landscape:2xl:mb-8">
+            <span className="block landscape:lg:whitespace-nowrap">
+              ПРО-<br className="hidden landscape:lg:inline" />КОСМЕТИКА
+            </span>
+            <span className="block landscape:lg:whitespace-nowrap">ИЗ ИСПАНИИ</span>
           </h1>
 
-          <p className="text-body leading-body text-muted-foreground mb-6 md:mb-8 max-w-prose">
+          <p className="mb-6 md:mb-8 max-w-prose text-body leading-body text-foreground landscape:lg:text-lead landscape:lg:max-w-[min(30vw,65ch)] landscape:2xl:mb-12">
             Два бренда фармацевтического производства — для домашнего ухода и
             для работы в кабинете косметолога.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 landscape:lg:gap-4">
             <Link
               to="/catalog"
-              className="inline-flex items-center justify-center bg-primary text-primary-foreground font-heading font-bold px-6 py-3 rounded-pill transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-h-11"
+              className="inline-flex items-center justify-center min-h-12 px-6 py-3 landscape:2xl:px-8 landscape:2xl:py-4 rounded-pill bg-primary text-primary-foreground font-heading font-bold text-body transition-[opacity,transform] duration-160 ease-out hover:opacity-90 active:scale-97 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Смотреть каталог
             </Link>
             <button
               onClick={openQuiz}
-              className="inline-flex items-center justify-center border border-primary text-primary bg-background/40 backdrop-blur-sm font-heading font-bold px-6 py-3 rounded-pill transition-opacity duration-200 hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary min-h-11"
+              className="inline-flex items-center justify-center min-h-12 px-6 py-3 landscape:2xl:px-8 landscape:2xl:py-4 rounded-pill border border-primary text-primary bg-background/40 backdrop-blur-sm font-heading font-bold text-body transition-[opacity,transform] duration-160 ease-out hover:opacity-90 active:scale-97 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Подобрать уход
             </button>

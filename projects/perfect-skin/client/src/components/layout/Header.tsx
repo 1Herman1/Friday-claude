@@ -102,7 +102,7 @@ export function Header({
                     <Link
                       key={item.href}
                       to={item.href}
-                      className={`relative px-3 py-2 rounded-pill transition-colors duration-200 focus-visible:outline-ring ${
+                      className={`relative whitespace-nowrap px-3 py-2 rounded-pill transition-colors duration-200 focus-visible:outline-ring ${
                         isActive
                           ? 'text-primary font-semibold'
                           : 'text-foreground hover:bg-foreground/5 hover:text-primary'
