@@ -206,8 +206,10 @@ fi
 if [[ "$STAGE" == v3-* ]]; then
   STAGE="${STAGE#v3-}"
   OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
+  VEXTRA=" The camera stays locked far back: the whole delicate hand and slim forearm stay inside the frame at all times, an airy weightless gesture, fluid natural motion without robotic pauses, matte skin without shine."
   NOGLARE=" The hand is delicate and light: a slender feminine hand with a slim wrist, long fine fingers and an airy, weightless gesture, only the fingertips touch, the wrist relaxed and slightly raised, the slim forearm coming in at a high graceful angle from the upper right, never hanging heavily over the products, like a ballet hand; only the hand and a slim part of the forearm, no shoulder. Matte natural skin with no shine, no specular highlights or glare on the hand, the caps or the labels."
 else
+  VEXTRA=""
   NOGLARE=""
 fi
 
@@ -272,7 +274,7 @@ for fmt in desktop mobile; do
       if [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $clip "* ]]; then continue; fi
       if [ "$i" = 1 ]; then first="$OUT/$fmt-k0h.png"; else first="$OUT/$fmt-k$((i-1)).png"; fi
       # Клипы одного формата идут параллельно (цена та же, время — одного клипа).
-      gen_video "$clip" "$AR" "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A graceful feminine hand (slender fingers, short nude manicure, no jewellery) moves with the unhurried elegance of the reference style: it glides in from the top right, slows down above product number $i from the left, gently sets down whatever it was holding, then takes product $i by its body: the fingers first close around it and hold for a brief moment (a real, tangible grip), and only then the hand lifts it a few centimeters straight up — slowly and deliberately, with visible weight, as if the bottle is heavier than it looks; the product never floats, jumps or jitters, the lift fills the last third of the clip and ends with a gentle settle exactly into the last frame. The fingers grip the product from its top and far side, so the FRONT LABEL with the product name stays fully visible and unobstructed at all times — never cover the label with fingers. No new specular highlights, glare or reflections appear on caps, lids or glass; lighting stays exactly as in the first frame. Every product keeps its exact position, size and label — labels stay crisp and readable at all times, nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." \
+      gen_video "$clip" "$AR" "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A graceful feminine hand (slender fingers, short nude manicure, no jewellery) moves with the unhurried elegance of the reference style: it glides in from the top right, slows down above product number $i from the left, gently sets down whatever it was holding, then takes product $i by its body: the fingers first close around it and hold for a brief moment (a real, tangible grip), and only then the hand lifts it a few centimeters straight up — slowly and deliberately, with visible weight, as if the bottle is heavier than it looks; the product never floats, jumps or jitters, the lift fills the last third of the clip and ends with a gentle settle exactly into the last frame. The fingers grip the product from its top and far side, so the FRONT LABEL with the product name stays fully visible and unobstructed at all times — never cover the label with fingers. No new specular highlights, glare or reflections appear on caps, lids or glass; lighting stays exactly as in the first frame. Every product keeps its exact position, size and label — labels stay crisp and readable at all times, nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts.${VEXTRA}" \
         "$first" "$OUT/$fmt-k$i.png" &
     done
     wait
