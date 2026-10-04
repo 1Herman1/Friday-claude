@@ -1,8 +1,16 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDrawer } from '@/context/DrawerContext'
 
 export function HeroSection() {
   const { openQuiz } = useDrawer()
+  const [video, setVideo] = useState<'desk' | 'mob' | null>(null)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const portrait = window.matchMedia('(orientation: portrait)').matches
+    setVideo(portrait ? 'mob' : 'desk')
+  }, [])
 
   return (
     <section
@@ -31,6 +39,22 @@ export function HeroSection() {
           className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%]"
         />
       </picture>
+
+      {video && (
+        <video
+          key={video}
+          poster={`/video/hero/${video}-start.webp`}
+          muted
+          playsInline
+          autoPlay
+          preload="auto"
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%]"
+        >
+          <source src={`/video/hero/${video}.webm`} type="video/webm" />
+          <source src={`/video/hero/${video}.mp4`} type="video/mp4" onError={() => setVideo(null)} />
+        </video>
+      )}
 
       <div className="absolute inset-x-0 bottom-0 h-[55%] -z-10 bg-gradient-to-t from-background via-background/80 to-transparent landscape:lg:hidden" />
 
