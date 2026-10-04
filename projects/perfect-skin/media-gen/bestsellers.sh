@@ -77,6 +77,25 @@ if [ "$STAGE" = hero-start4 ]; then
   exit 0
 fi
 
+if [ "$STAGE" = hero-mid ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  P="Edit the FIRST image. The whole right part of the frame, including the entire area where the face in the SECOND image is, is now covered with a dense, realistic network of drying cracks in the cream layer, like a cracked clay mask: polygonal plates of different sizes, fine hairline cracks between larger fissures, slightly lifted plate edges. Under the area of the face the cream surface is very slightly raised following the soft relief of a face (brow, nose, lips), shallow, only a few millimetres, no face visible, no skin visible. Left flat background unchanged. Same colours and light, beige only. No text."
+  for v in 1 2; do gen_image "hero-mid-v$v" 16:9 "$P" "$OUT/hero-start-desk4-fix.png" "$OUT/hero-f6.png" & done
+  wait
+  exit 0
+fi
+
+if [ "$STAGE" = hero-ab ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero"
+  MID="${FRAMES:-hero-mid-v1}"
+  A="Locked static camera, no zoom, slow realistic pace. On the smooth cream surface the first hairline cracks appear and gradually spread over the whole right part of the frame, including where the face will be; as a face beneath very gently pushes forward a few millimetres, the cracks multiply and widen exactly over the rising relief, plate edges lift slightly. Nothing falls yet. Beige and ivory only. The flat background on the left stays perfectly still. No text."
+  B="Locked static camera, no zoom, slow realistic pace. The face beneath continues a gentle forward push; the cracked plates over the face loosen, lift and slowly fall away piece by piece with fine pale dust, revealing skin only through the breaks: no transparency, no fade-in, the face is revealed only where plates fall off. Eyes closed. Beige only, every flake pale beige on all sides. The flat background on the left stays perfectly still. No text."
+  DUR=4 gen_video "hero-clip-a" 16:9 "$A" "$OUT/hero-start-desk4-fix.png" "$OUT/$MID.png" &
+  DUR=4 gen_video "hero-clip-b" 16:9 "$B" "$OUT/$MID.png" "$OUT/hero-f6.png" &
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = hero-video ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/hero"
   V="Locked static camera, no zoom, no pan. Premium skincare commercial, macro detail, soft warm studio light. The thick layer of matte foundation cream slowly cracks open: fine hairline cracks spread outward like a drying clay mask, then deepen, flakes and small pieces of cream lift, curl and fall away in slow motion with tiny particles of cream dust drifting down, and the face of a young woman gradually emerges from behind the cream, pushing through calmly and gracefully, her eyes opening softly as she turns slightly into the final pose. The broken cream edges settle into the jagged torn edge of the final frame. Smooth, continuous, elegant motion, no jumps, no morphing of her features, skin stays clean and natural with fine pores and freckles. The flat background on the left stays perfectly still. No text."
