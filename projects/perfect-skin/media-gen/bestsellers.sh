@@ -44,6 +44,14 @@ gen_video() { # out_name aspect prompt first last
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
+if [ "$STAGE" = mobpad ]; then
+  W="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"; OUT="$W"
+  P="This image is a smaller photo placed on a flat #F4F2EC canvas. Outpaint: extend the light stone tabletop and the flat matte warm wall #F4F2EC seamlessly to all edges so it becomes one continuous, natural photograph with a camera farther back. Do not change the four products, their labels, size or position. Soft diffused daylight, no glare, no props, no text."
+  for v in 1 2; do gen_image "mobile-k0c2-v$v" 9:16 "$P" "$W/mobile-k0pad.png" & done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = wide2 ]; then
   W="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"; OUT="$W"
   C="Edit this image: remove the hand and arm completely; nothing else changes. Keep the four products, their labels, positions, the wall, tabletop, light and shadows pixel-identical. Seamless flat matte wall #F4F2EC where the hand was. No text."
