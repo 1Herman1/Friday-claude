@@ -272,7 +272,7 @@ export function BestsellerScene() {
             {[0, 1, 2, 3].map(idx => (
               <div
                 key={idx}
-                className="h-1 flex-1 bg-muted rounded-full overflow-hidden"
+                className="h-1 flex-1 bg-foreground/10 rounded-full overflow-hidden"
               >
                 <div
                   className="h-full bg-primary"
@@ -380,15 +380,15 @@ export function BestsellerScene() {
           <div className="container-app h-full">
             <div className="relative h-full">
               <div className="absolute top-6 md:top-12 left-0">
-                <p className="text-label uppercase text-muted-foreground mb-2">Выбор косметологов</p>
-                <h2 className="text-h2 font-heading font-bold">Бестселлеры</h2>
+                <p className="text-label uppercase text-muted-foreground mb-2 min-[1800px]:text-body-sm">Выбор косметологов</p>
+                <h2 className="text-h2 font-heading font-bold min-[1800px]:text-[clamp(3rem,2.6vw,4.25rem)]">Бестселлеры</h2>
               </div>
 
               {/* Карточка товара - десктоп */}
               <div className="hidden md:flex absolute inset-y-0 left-0 items-center">
                 {cardData && cardProduct && (
                   <div
-                    className={`bg-card rounded-block shadow-lg p-5 w-80 transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
+                    className={`bg-card rounded-block shadow-lg w-[clamp(20rem,18vw,28rem)] p-[clamp(1.25rem,1.3vw,2rem)] transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
                       cardIdx >= 0
                         ? 'opacity-100 translate-x-0 visible pointer-events-auto'
                         : 'opacity-0 -translate-x-4 invisible pointer-events-none'
@@ -396,17 +396,17 @@ export function BestsellerScene() {
                   >
                     <div key={cardProduct.slug} className="animate-[fadeIn_200ms_ease-out] motion-reduce:animate-none">
                       {cardData.brand && (
-                        <div className="text-label uppercase text-muted-foreground mb-2">{cardData.brand.name}</div>
+                        <div className="text-label uppercase text-muted-foreground mb-2 min-[1800px]:text-body-sm">{cardData.brand.name}</div>
                       )}
-                      <h3 className="text-body font-heading font-bold text-foreground mb-2 line-clamp-2">
+                      <h3 className="text-[clamp(1rem,0.4rem+0.75vw,1.5rem)] font-heading font-bold text-foreground mb-2 line-clamp-2">
                         <Link to={`/product/${cardProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4 transition-colors duration-200">
                           {cardData.name}
                         </Link>
                       </h3>
                       {cardData.variants[0] && (
-                        <div className="text-xs text-muted-foreground mb-3">{cardData.variants[0].volumeLabel}</div>
+                        <div className="text-[clamp(0.75rem,0.3rem+0.5vw,1rem)] text-muted-foreground mb-3">{cardData.variants[0].volumeLabel}</div>
                       )}
-                      <div className="mb-4">
+                      <div className="mb-4 [&_.text-lg]:text-[clamp(1.125rem,0.5rem+0.8vw,1.75rem)]">
                         <PriceTag
                           price={cardData.minPrice}
                           oldPrice={cardData.oldPrice ?? undefined}
