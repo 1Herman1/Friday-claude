@@ -29,7 +29,7 @@ export default {
       },
       fontSize: {
         display: 'clamp(1.6rem, 4.5vw, 4.5rem)',
-        hero: 'clamp(1.6rem, 4.5vw, 6rem)',
+        hero: 'clamp(1.6rem, 4vw, 5.25rem)',
         lead: 'clamp(1rem, 0.5rem + 0.75vw, 1.25rem)',
         h2: 'clamp(1.75rem, 5vw, 3rem)',
         h3: 'clamp(1.25rem, 3vw, 2rem)',

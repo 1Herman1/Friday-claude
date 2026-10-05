@@ -184,7 +184,7 @@ fontFamily: {
 | Роль | Размер | Шрифт / вес | Параметры |
 |---|---|---|---|
 | `display` (h1) | `clamp(1.6rem, 4.5vw, 4.5rem)` | Montserrat 700 | uppercase, `tracking -0.015em`, `leading 1.02`, `hyphens: auto` |
-| `hero` (только H1 первого экрана, landscape lg+) | `clamp(1.6rem, 4.5vw, 6rem)` | Montserrat 700 | как `display`; до 1600px совпадает с ним, выше растёт до 96px |
+| `hero` (только H1 первого экрана, landscape lg+) | `clamp(1.6rem, 4vw, 5.25rem)` | Montserrat 700 | как `display`; на 1920 — 77px (уменьшен 05.10, чтобы не заходить на трещины), максимум 84px |
 | `lead` (лид первого экрана, landscape lg+) | `clamp(1rem, 0.5rem + 0.75vw, 1.25rem)` | Golos 400 | 16 → 20px |
 | `h2` | `clamp(1.75rem, 5vw, 3rem)` | Montserrat 700 | uppercase, `tracking -0.015em` |
 | `h3` | `clamp(1.25rem, 3vw, 2rem)` | Montserrat 600 | `tracking -0.015em` |
