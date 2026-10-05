@@ -205,44 +205,53 @@ export function BestsellerScene() {
   // Десктоп, как на витрине: пока крутят колесо — ролик идёт с родной скоростью,
   // перестали — замирает; быстрый скролл сразу переключает на следующий ролик.
   // Сегмент 0 — статичный кадр «первый товар в руке», сегменты 1..3 — ролики.
+  // Ролик всегда доигрывает до товара: быстрый скролл ставит следующие в очередь.
   const segRef = useRef(0)
   const idleRef = useRef<number | null>(null)
-  function onDesktopScroll(seg: number) {
-    if (seg !== segRef.current) {
-      const forward = seg > segRef.current
-      const prev = playingRef.current
-      if (prev !== null) videoRefs.current[prev]?.pause()
-      segRef.current = seg
-      if (forward && seg >= 1) {
-        const video = videoRefs.current[seg]
-        playingRef.current = seg
-        setPlaying(seg)
-        setPlayFrac(0)
-        if (video) {
-          video.currentTime = 0
-          video.onended = () => {
-            if (playingRef.current !== seg) return
-            playingRef.current = null
-            stopRef.current = seg
-            setStop(seg)
-            setPlaying(null)
-          }
-          video.ontimeupdate = () => video.duration && setPlayFrac(video.currentTime / video.duration)
-        }
-      } else {
-        playingRef.current = null
-        stopRef.current = seg
-        setStop(seg)
-        setPlaying(null)
+  const scrollingRef = useRef(false)
+  function startClip(clip: number) {
+    const video = videoRefs.current[clip]
+    playingRef.current = clip
+    setPlaying(clip)
+    setPlayFrac(0)
+    if (!video) return
+    video.currentTime = 0
+    video.onended = () => {
+      if (playingRef.current !== clip) return
+      playingRef.current = null
+      stopRef.current = clip
+      setStop(clip)
+      setPlaying(null)
+      if (segRef.current > clip) {
+        startClip(clip + 1)
+        if (scrollingRef.current) videoRefs.current[clip + 1]?.play().catch(() => {})
       }
     }
+    video.ontimeupdate = () => video.duration && setPlayFrac(video.currentTime / video.duration)
+  }
+  function onDesktopScroll(seg: number) {
+    segRef.current = seg
+    if (seg < stopRef.current || (playingRef.current !== null && seg < playingRef.current)) {
+      if (playingRef.current !== null) videoRefs.current[playingRef.current]?.pause()
+      playingRef.current = null
+      stopRef.current = seg
+      setStop(seg)
+      setPlaying(null)
+      return
+    }
+    if (playingRef.current === null && seg > stopRef.current) startClip(stopRef.current + 1)
     const clip = playingRef.current
     if (clip === null) return
     const video = videoRefs.current[clip]
     if (!video) return
+    scrollingRef.current = true
     if (video.paused) video.play().catch(() => {})
     if (idleRef.current !== null) clearTimeout(idleRef.current)
-    idleRef.current = window.setTimeout(() => video.pause(), 180)
+    idleRef.current = window.setTimeout(() => {
+      scrollingRef.current = false
+      const cur = playingRef.current
+      if (cur !== null) videoRefs.current[cur]?.pause()
+    }, 180)
   }
 
   // Вычисляем высоту контейнера (~520vh)
