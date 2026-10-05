@@ -61,6 +61,13 @@ export function BestsellerScene() {
       const next = prev.map((r, i) => r || (videoRefs.current[i]?.readyState ?? 0) >= 2)
       return next.every((r, i) => r === prev[i]) ? prev : next
     })
+  // Десктоп: ролик не скрабится скроллом. Один жест — один ролик с родной скоростью,
+  // остановка на товаре. stop = товар в руке (0..3), playing = индекс играющего ролика.
+  const [stop, setStop] = useState(0)
+  const [playing, setPlaying] = useState<number | null>(null)
+  const [playFrac, setPlayFrac] = useState(0)
+  const stopRef = useRef(0)
+  const playingRef = useRef<number | null>(null)
   const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true)
 
   // Загружаем товары по слагам
@@ -156,6 +163,23 @@ export function BestsellerScene() {
 
       const finalSegment = scrollProgress >= 1 ? 3 : Math.min(segment, 3)
 
+      if (window.innerWidth >= 768) {
+        const target = Math.min(3, Math.floor(scrollProgress * 4))
+        const pinned = rect.top <= 1 && rect.bottom >= viewportHeight - 1
+        if (!pinned && playingRef.current === null) {
+          // Вход в сцену снизу или прыжок скроллбаром — сразу нужная остановка.
+          stopRef.current = target
+          setStop(target)
+        } else if (playingRef.current === null && target < stopRef.current) {
+          stopRef.current = target
+          setStop(target)
+        } else if (playingRef.current === null && target > stopRef.current) {
+          playNext()
+        }
+        markReady()
+        return
+      }
+
       setState({
         progress: scrollProgress,
         segment: finalSegment,
@@ -177,6 +201,36 @@ export function BestsellerScene() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isVisible, isReducedMotion])
 
+  // Колесо/тачпад над закреплённой сценой: один жест — один шаг.
+  useEffect(() => {
+    if (!isVisible || isReducedMotion || !isDesktop) return
+    let backLock = 0
+    const onWheel = (e: WheelEvent) => {
+      const el = containerRef.current
+      if (!el || Math.abs(e.deltaY) < 2) return
+      const rect = el.getBoundingClientRect()
+      const pinned = rect.top <= 1 && rect.bottom >= window.innerHeight - 1
+      if (!pinned) return
+      const forward = e.deltaY > 0
+      if (forward && stopRef.current >= 3 && playingRef.current === null) return
+      if (!forward && stopRef.current <= 0 && playingRef.current === null) return
+      e.preventDefault()
+      if (playingRef.current !== null) return
+      if (forward) {
+        playNext()
+      } else {
+        if (performance.now() < backLock) return
+        backLock = performance.now() + 500
+        const next = stopRef.current - 1
+        stopRef.current = next
+        setStop(next)
+        scrollToStop(next)
+      }
+    }
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [isVisible, isReducedMotion, isDesktop])
+
   // Очищаем видео при размонтировании
   useEffect(() => {
     return () => {
@@ -188,6 +242,43 @@ export function BestsellerScene() {
       })
     }
   }, [])
+
+  function scrollToStop(i: number) {
+    const el = containerRef.current
+    if (!el) return
+    const span = el.scrollHeight - window.innerHeight
+    const top = el.getBoundingClientRect().top + window.scrollY
+    window.scrollTo({ top: top + span * ((i + 0.5) / 4), behavior: 'instant' as ScrollBehavior })
+  }
+
+  function playNext() {
+    const from = stopRef.current
+    if (from >= 3 || playingRef.current !== null) return
+    const clip = from + 1
+    const video = videoRefs.current[clip]
+    playingRef.current = clip
+    setPlaying(clip)
+    setPlayFrac(0)
+    scrollToStop(clip)
+    const finish = () => {
+      if (playingRef.current !== clip) return
+      playingRef.current = null
+      stopRef.current = clip
+      setStop(clip)
+      setPlaying(null)
+      const el = containerRef.current
+      if (el) {
+        const span = el.scrollHeight - window.innerHeight
+        const p = Math.max(0, Math.min(1, -el.getBoundingClientRect().top / span))
+        if (Math.min(3, Math.floor(p * 4)) > clip) playNext()
+      }
+    }
+    if (!video) return finish()
+    video.onended = finish
+    video.ontimeupdate = () => video.duration && setPlayFrac(video.currentTime / video.duration)
+    video.currentTime = 0
+    video.play().catch(finish)
+  }
 
   // Вычисляем высоту контейнера (~520vh)
   const containerHeight = typeof window !== 'undefined' ? window.innerHeight * 5.2 : 0
@@ -255,9 +346,18 @@ export function BestsellerScene() {
   }
 
   const fmt: 'desktop' | 'mobile' = isDesktop ? 'desktop' : 'mobile'
-  const isHold = state.progress >= 1 || state.local >= 0.7
-  // Карточка держится между остановками: до новой остановки показан предыдущий товар.
-  const cardIdx = state.local > 0.55 || state.progress >= 1 ? state.segment : state.segment - 1
+  // Десктоп: segment = видимый ролик; на остановке — точный кадр товара stop.
+  const view = isDesktop
+    ? { segment: playing ?? stop, isHold: playing === null, cardIdx: playing !== null ? playing - 1 : stop, local: playing === null ? 1 : playFrac }
+    : {
+        segment: state.segment,
+        isHold: state.progress >= 1 || state.local >= 0.7,
+        // Карточка держится между остановками: до новой остановки показан предыдущий товар.
+        cardIdx: state.local > 0.55 || state.progress >= 1 ? state.segment : state.segment - 1,
+        local: state.local,
+      }
+  const isHold = view.isHold
+  const cardIdx = view.cardIdx
   const cardProduct = cardIdx >= 0 ? products[cardIdx] : undefined
   const cardData = cardProduct?.data
   const addCurrent = async () => {
@@ -278,10 +378,10 @@ export function BestsellerScene() {
                   className="h-full bg-primary"
                   style={{
                     width:
-                      state.segment > idx
+                      view.segment > idx
                         ? '100%'
-                        : state.segment === idx
-                          ? `${state.local * 100}%`
+                        : view.segment === idx
+                          ? `${view.local * 100}%`
                           : '0%',
                   }}
                 />
@@ -300,7 +400,7 @@ export function BestsellerScene() {
             <div
               key={idx}
               className={`absolute inset-0 transition-opacity duration-300 ${
-                state.segment === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                view.segment === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
             >
               <video
@@ -348,12 +448,12 @@ export function BestsellerScene() {
                 alt=""
                 aria-hidden="true"
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${
-                  state.segment === idx && isHold ? 'opacity-100' : 'opacity-0'
+                  view.segment === idx && isHold ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={!isDesktop ? { objectPosition: 'center top' } : undefined}
               />
               {/* Overlay постера пока видео не готово */}
-              {state.segment === idx && !videoReady[idx] && (
+              {view.segment === idx && !videoReady[idx] && (
                 <div className="absolute inset-0 flex items-center justify-center bg-background">
                   <img
                     src={isHold ? VIDEO_CONFIG.stepPoster(fmt, idx) : VIDEO_CONFIG.startPoster(fmt, idx)}
