@@ -67,7 +67,7 @@ export function HeroSection() {
       <div className="absolute inset-x-0 bottom-0 h-[55%] portrait:h-[62%] -z-10 bg-gradient-to-t from-background via-background/80 to-transparent landscape:lg:hidden" />
 
       <div
-        className="container-app h-full flex flex-col justify-end pb-10 md:pb-14 landscape:lg:max-w-none landscape:lg:justify-center landscape:lg:pb-24 landscape:lg:[@media(max-height:700px)]:pb-12"
+        className="container-app h-full flex flex-col justify-end pb-10 md:pb-14 landscape:lg:justify-center landscape:lg:pb-24 landscape:lg:[@media(max-height:700px)]:pb-12"
         style={{ paddingTop: 'var(--header-h, 72px)' }}
       >
         <div className="max-w-[560px] landscape:lg:max-w-none">
@@ -83,8 +83,8 @@ export function HeroSection() {
           </h1>
 
           <p className="mb-6 md:mb-8 max-w-prose text-body leading-body text-foreground landscape:lg:text-lead landscape:lg:max-w-[min(30vw,65ch)] landscape:2xl:mb-12">
-            Два бренда фармацевтического производства — для домашнего ухода и
-            для работы в кабинете косметолога.
+            ISSEIMI и GLACÉE Skincare — фармацевтическое производство Испании
+            для домашнего ухода и работы в кабинете косметолога.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 landscape:lg:gap-4">
