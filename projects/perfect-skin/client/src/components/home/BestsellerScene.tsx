@@ -207,8 +207,6 @@ export function BestsellerScene() {
   // Сегмент 0 — статичный кадр «первый товар в руке», сегменты 1..3 — ролики.
   // Ролик всегда доигрывает до товара: быстрый скролл ставит следующие в очередь.
   const segRef = useRef(0)
-  const idleRef = useRef<number | null>(null)
-  const scrollingRef = useRef(false)
   function startClip(clip: number) {
     const video = videoRefs.current[clip]
     playingRef.current = clip
@@ -222,12 +220,10 @@ export function BestsellerScene() {
       stopRef.current = clip
       setStop(clip)
       setPlaying(null)
-      if (segRef.current > clip) {
-        startClip(clip + 1)
-        if (scrollingRef.current) videoRefs.current[clip + 1]?.play().catch(() => {})
-      }
+      if (segRef.current > clip) startClip(clip + 1)
     }
     video.ontimeupdate = () => video.duration && setPlayFrac(video.currentTime / video.duration)
+    video.play().catch(() => {})
   }
   function onDesktopScroll(seg: number) {
     segRef.current = seg
@@ -239,19 +235,8 @@ export function BestsellerScene() {
       setPlaying(null)
       return
     }
+    // Скролл только запускает ролик; дальше он сам доигрывает до товара.
     if (playingRef.current === null && seg > stopRef.current) startClip(stopRef.current + 1)
-    const clip = playingRef.current
-    if (clip === null) return
-    const video = videoRefs.current[clip]
-    if (!video) return
-    scrollingRef.current = true
-    if (video.paused) video.play().catch(() => {})
-    if (idleRef.current !== null) clearTimeout(idleRef.current)
-    idleRef.current = window.setTimeout(() => {
-      scrollingRef.current = false
-      const cur = playingRef.current
-      if (cur !== null) videoRefs.current[cur]?.pause()
-    }, 180)
   }
 
   // Вычисляем высоту контейнера (~520vh)
@@ -322,7 +307,7 @@ export function BestsellerScene() {
   const fmt: 'desktop' | 'mobile' = isDesktop ? 'desktop' : 'mobile'
   // Десктоп: segment = видимый ролик; на остановке — точный кадр товара stop.
   const view = isDesktop
-    ? { segment: playing ?? stop, isHold: playing === null, cardIdx: playing !== null ? playing - 1 : stop, local: playing === null ? 1 : playFrac }
+    ? { segment: playing ?? stop, isHold: playing === null, cardIdx: playing ?? stop, local: playing === null ? 1 : playFrac }
     : {
         segment: state.segment,
         isHold: state.progress >= 1 || state.local >= 0.7,
