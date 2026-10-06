@@ -63,10 +63,10 @@ export function BestsellerScene() {
     })
   // Десктоп: ролик не скрабится скроллом. Один жест — один ролик с родной скоростью,
   // остановка на товаре. stop = товар в руке (0..3), playing = индекс играющего ролика.
-  const [stop, setStop] = useState(0)
+  const [stop, setStop] = useState(-1)
   const [playing, setPlaying] = useState<number | null>(null)
   const [playFrac, setPlayFrac] = useState(0)
-  const stopRef = useRef(0)
+  const stopRef = useRef(-1)
   const playingRef = useRef<number | null>(null)
   const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true)
 
@@ -164,7 +164,7 @@ export function BestsellerScene() {
       const finalSegment = scrollProgress >= 1 ? 3 : Math.min(segment, 3)
 
       if (window.innerWidth >= 768) {
-        onDesktopScroll(Math.min(3, Math.floor(scrollProgress * 4)))
+        onDesktopScroll(Math.min(4, Math.floor(scrollProgress * 5)) - 1, rect.top <= 1 && rect.bottom >= viewportHeight - 1)
         markReady()
         return
       }
@@ -206,7 +206,7 @@ export function BestsellerScene() {
   // перестали — замирает; быстрый скролл сразу переключает на следующий ролик.
   // Сегмент 0 — статичный кадр «первый товар в руке», сегменты 1..3 — ролики.
   // Ролик всегда доигрывает до товара: быстрый скролл ставит следующие в очередь.
-  const segRef = useRef(0)
+  const segRef = useRef(-1)
   function startClip(clip: number) {
     const video = videoRefs.current[clip]
     playingRef.current = clip
@@ -225,14 +225,16 @@ export function BestsellerScene() {
     video.ontimeupdate = () => video.duration && setPlayFrac(video.currentTime / video.duration)
     video.play().catch(() => {})
   }
-  function onDesktopScroll(seg: number) {
+  // Остановки: -1 — рука над товарами, 0..3 — товар в руке; ролик c ведёт к товару c.
+  function onDesktopScroll(seg: number, pinned: boolean) {
     segRef.current = seg
-    if (seg < stopRef.current || (playingRef.current !== null && seg < playingRef.current)) {
+    if ((!pinned && playingRef.current === null) || seg < stopRef.current || (playingRef.current !== null && seg < playingRef.current)) {
       if (playingRef.current !== null) videoRefs.current[playingRef.current]?.pause()
       playingRef.current = null
       stopRef.current = seg
       setStop(seg)
       setPlaying(null)
+      if (seg < 0 && videoRefs.current[0]) videoRefs.current[0].currentTime = 0
       return
     }
     // Скролл только запускает ролик; дальше он сам доигрывает до товара.
@@ -307,7 +309,7 @@ export function BestsellerScene() {
   const fmt: 'desktop' | 'mobile' = isDesktop ? 'desktop' : 'mobile'
   // Десктоп: segment = видимый ролик; на остановке — точный кадр товара stop.
   const view = isDesktop
-    ? { segment: playing ?? stop, isHold: playing === null, cardIdx: playing ?? stop, local: playing === null ? 1 : playFrac }
+    ? { segment: playing ?? Math.max(stop, 0), isHold: playing === null && stop >= 0, cardIdx: playing ?? stop, local: playing !== null ? playFrac : stop >= 0 ? 1 : 0 }
     : {
         segment: state.segment,
         isHold: state.progress >= 1 || state.local >= 0.7,
