@@ -438,6 +438,10 @@ export function BestsellerScene() {
         {/* Мягкий стык фона с соседними секциями */}
         <div aria-hidden="true" className="absolute inset-x-0 top-24 md:top-0 h-24 bg-gradient-to-b from-background to-transparent pointer-events-none z-10" />
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
+        {/* Компьютер: края кадра (дорисованная стена и стол) растворяются в фоне страницы */}
+        <div aria-hidden="true" className="hidden md:block absolute inset-y-0 left-0 w-[44%] bg-gradient-to-r from-background from-30% via-background/60 via-60% to-transparent pointer-events-none z-10" />
+        <div aria-hidden="true" className="hidden md:block absolute inset-x-0 top-0 h-[38%] bg-gradient-to-b from-background via-background/50 to-transparent pointer-events-none z-10" />
+        <div aria-hidden="true" className="hidden md:block absolute inset-y-0 right-0 w-[12%] bg-gradient-to-l from-background via-background/50 to-transparent pointer-events-none z-10" />
 
         {/* Слой по сетке container-app: заголовок, карточка, прогресс */}
         <div className="absolute inset-0 z-20 pointer-events-none">
