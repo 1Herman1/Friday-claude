@@ -274,6 +274,13 @@ for fmt in desktop mobile; do
       if [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $clip "* ]]; then continue; fi
       if [ "$i" = 1 ]; then first="$OUT/$fmt-k0h.png"; else first="$OUT/$fmt-k$((i-1)).png"; fi
       # Клипы одного формата идут параллельно (цена та же, время — одного клипа).
+      if [ "$i" = 1 ]; then
+        # Первый ролик: рука уже в кадре над товарами и одним плавным движением
+        # опускается к первому флакону — без заходов, отходов и примерки.
+        gen_video "$clip" "$AR" "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. In the first frame a slender, delicate feminine hand (long fine fingers, short nude manicure, no jewellery, slim wrist) is already in the frame, hovering still above the products. In ONE single smooth continuous movement, with no hesitation, no back-and-forth, no retreat and no second attempt, the hand descends to the first product from the left, the fingers close lightly on its cap and body, a brief tangible grip, then it lifts the bottle a few centimeters straight up and settles exactly into the last frame. The hand never leaves the frame. Nothing appears behind or beside the products: no extra objects, boxes, shapes or duplicates. The other three products stay perfectly still with exact positions, sizes and crisp labels. No new glare or reflections. Smooth continuous motion, no cuts.${VEXTRA}" \
+          "$first" "$OUT/$fmt-k$i.png" &
+        continue
+      fi
       gen_video "$clip" "$AR" "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A graceful feminine hand (slender fingers, short nude manicure, no jewellery) moves with the unhurried elegance of the reference style: it glides in from the top right, slows down above product number $i from the left, gently sets down whatever it was holding, then takes product $i by its body: the fingers first close around it and hold for a brief moment (a real, tangible grip), and only then the hand lifts it a few centimeters straight up — slowly and deliberately, with visible weight, as if the bottle is heavier than it looks; the product never floats, jumps or jitters, the lift fills the last third of the clip and ends with a gentle settle exactly into the last frame. The fingers grip the product from its top and far side, so the FRONT LABEL with the product name stays fully visible and unobstructed at all times — never cover the label with fingers. No new specular highlights, glare or reflections appear on caps, lids or glass; lighting stays exactly as in the first frame. Every product keeps its exact position, size and label — labels stay crisp and readable at all times, nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts.${VEXTRA}" \
         "$first" "$OUT/$fmt-k$i.png" &
     done
@@ -296,7 +303,8 @@ if [ "$STAGE" = videos ]; then
     done
     for k in 0h 1 2 3 4; do
       [ -f "$OUT/$fmt-k$k.png" ] || continue
-      [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $fmt-"* ]] && continue
+      # Постеры остановок поправлены вручную (точные этикетки) — при выборочных роликах не трогаем.
+      [ -n "${CLIPS:-}" ] && continue
       ffmpeg -y -loglevel error -i "$OUT/$fmt-k$k.png" -vf "$SCALE" -q:v 4 "$PUBV/$fmt/k${k/0h/0}.jpg"
     done
   done
