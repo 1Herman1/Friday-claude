@@ -356,7 +356,9 @@ export function BestsellerScene() {
       {/* Sticky container */}
       <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden bg-background">
         {/* Видео фреймы */}
-        <div className="absolute inset-x-0 top-24 bottom-0 md:inset-0">
+        <div className="absolute inset-x-0 top-24 bottom-0 overflow-hidden md:inset-0">
+          {/* Телефон: кадр крупнее в 1,8 раза — центр масштаба на ряду товаров */}
+          <div className="absolute inset-0 max-md:scale-[1.8] max-md:origin-[50%_50%]">
           {[0, 1, 2, 3].map(idx => (
             <div
               key={idx}
@@ -430,6 +432,7 @@ export function BestsellerScene() {
               )}
             </div>
           ))}
+          </div>
         </div>
 
         {/* Мягкий стык фона с соседними секциями */}
