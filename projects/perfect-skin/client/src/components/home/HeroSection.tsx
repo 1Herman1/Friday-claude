@@ -71,7 +71,7 @@ export function HeroSection() {
         style={{ paddingTop: 'var(--header-h, 72px)' }}
       >
         <div className="max-w-[560px] landscape:lg:max-w-none">
-          <p className="mb-3 text-label font-semibold uppercase tracking-wide text-primary landscape:lg:mb-4 landscape:lg:text-body-sm landscape:2xl:mb-6">
+          <p className="mb-3 text-label font-semibold uppercase tracking-wide text-primary landscape:lg:mb-4 lg:text-body-sm landscape:2xl:mb-6">
             ИСПАНИЯ · HEBER FARMA · С 2017 ГОДА
           </p>
 

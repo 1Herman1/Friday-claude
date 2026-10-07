@@ -341,6 +341,8 @@ export function BestsellerScene() {
   const cardIdx = view.cardIdx
   const cardProduct = cardIdx >= 0 ? products[cardIdx] : undefined
   const cardData = cardProduct?.data
+  const mProduct = cardProduct ?? products[0]
+  const mData = mProduct?.data
   const addCurrent = async () => {
     if (cardData?.variants[0]) {
       await addItem(cardData.variants[0].id, 1)
@@ -514,10 +516,10 @@ export function BestsellerScene() {
           </div>
         </div>
 
-        {/* Карточка товара - мобильный (снизу) */}
+        {/* Карточка товара - мобильный (снизу); до первого товара — невидимая заглушка, чтобы полоса прогресса не прыгала */}
         <div className="md:hidden absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none">
           {progressBar}
-          {cardData && cardProduct && (
+          {mData && mProduct && (
             <div
               className={`bg-card rounded-block shadow-md px-3 py-2.5 flex items-center gap-3 transition-[opacity,transform,visibility] duration-200 ${
                 cardIdx >= 0
@@ -525,28 +527,28 @@ export function BestsellerScene() {
                   : 'opacity-0 translate-y-6 invisible pointer-events-none'
               }`}
             >
-              <div key={cardProduct.slug} className="min-w-0 flex-1 animate-[fadeIn_200ms_ease-out] motion-reduce:animate-none">
-                {cardData.brand && (
+              <div key={mProduct.slug} className="min-w-0 flex-1 animate-[fadeIn_200ms_ease-out] motion-reduce:animate-none">
+                {mData.brand && (
                   <div className="text-label leading-tight uppercase tracking-wide text-muted-foreground">
-                    {cardData.brand.name}
+                    {mData.brand.name}
                   </div>
                 )}
-                <h3 className="text-xs font-heading font-semibold text-foreground line-clamp-2 leading-snug">
-                  <Link to={`/product/${cardProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4">
-                    {cardData.name}
+                <h3 className="text-sm font-heading font-semibold text-foreground line-clamp-3 leading-snug min-h-[3lh]">
+                  <Link to={`/product/${mProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4">
+                    {mData.name}
                   </Link>
                 </h3>
                 <div className="mt-1">
                   <PriceTag
-                    price={cardData.minPrice}
-                    oldPrice={cardData.oldPrice ?? undefined}
-                    hidden={cardData.priceHidden}
+                    price={mData.minPrice}
+                    oldPrice={mData.oldPrice ?? undefined}
+                    hidden={mData.priceHidden}
                     size="sm"
                   />
                 </div>
               </div>
-              <div className="shrink-0 w-32">
-                <ProductCardButton product={cardData} user={user} onAddToCart={addCurrent} />
+              <div className="shrink-0 w-28">
+                <ProductCardButton product={mData} user={user} onAddToCart={addCurrent} />
               </div>
             </div>
           )}
