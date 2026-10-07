@@ -54,6 +54,7 @@ export function BestsellerScene() {
   const videoReadyRef = useRef<boolean[]>([false, false, false, false])
   const [state, setState] = useState<SceneState>({ progress: 0, segment: 0, local: 0 })
   const [isVisible, setIsVisible] = useState(false)
+  const [isNear, setIsNear] = useState(false)
   const [videoReady, setVideoReady] = useState<boolean[]>([false, false, false, false])
   const [isReducedMotion, setIsReducedMotion] = useState(false)
   const markReady = () =>
@@ -124,6 +125,7 @@ export function BestsellerScene() {
         // Когда секция приближается к viewport, предзагружаем видео
         if (!primedRef.current && (entry.isIntersecting || entry.boundingClientRect.top < window.innerHeight)) {
           primedRef.current = true
+          setIsNear(true)
           videoRefs.current.forEach((video) => {
             if (!video) return
             video.muted = true
@@ -190,25 +192,95 @@ export function BestsellerScene() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isVisible, isReducedMotion])
 
-  // Колесо мыши на Windows прокручивает ~100 px за щелчок, а отрезок сцены — ~85vh:
-  // без этого до следующего ролика пришлось бы крутить 7–16 щелчков.
-  // Один щелчок, пока сцена закреплена и ролик не играет, переводит к соседнему шагу.
+  // Компьютер: один жест колеса или тачпада — один шаг. Пока сцена закреплена, прокрутку
+  // страницы гасим сами: инерция тачпада не проскакивает товары, а после четвёртого товара
+  // сцену отпускает только новый жест. Жест во время ролика сразу доводит его до товара
+  // и запускает следующий — быстрый скролл не ждёт конца анимации.
   useEffect(() => {
     if (!isVisible || isReducedMotion || !isDesktop) return
+    let lastTs = 0
+    let lastAbs = 0
+    let lastStepTs = 0
+    const placeAt = (seg: number, el: HTMLElement) => {
+      const span = el.scrollHeight - window.innerHeight
+      const top = el.getBoundingClientRect().top + window.scrollY
+      window.scrollTo({ top: top + span * ((seg + 1.1) / 5), behavior: 'instant' as ScrollBehavior })
+    }
     const onWheel = (e: WheelEvent) => {
       const el = containerRef.current
-      if (!el || playingRef.current !== null || Math.abs(e.deltaY) < 1) return
+      if (!el || Math.abs(e.deltaY) < 1) return
+      const now = performance.now()
+      const dt = now - lastTs
+      const abs = Math.abs(e.deltaY)
+      const notch = e.deltaMode === 1 || (abs >= 50 && abs === Math.round(abs) && (dt > 180 || Math.abs(abs - lastAbs) < 1))
+      const fresh = dt > 180 || (notch && now - lastStepTs > 220) || (abs > lastAbs * 1.6 && abs > 30 && now - lastStepTs > 300)
+      lastTs = now
+      lastAbs = abs
       const rect = el.getBoundingClientRect()
       if (rect.top > 1 || rect.bottom < window.innerHeight - 1) return
-      const next = stopRef.current + (e.deltaY > 0 ? 1 : -1)
-      if (next < -1 || next > 3) return
-      const span = el.scrollHeight - window.innerHeight
-      const top = rect.top + window.scrollY
-      window.scrollTo({ top: top + span * ((next + 1.1) / 5), behavior: 'instant' as ScrollBehavior })
+      const down = e.deltaY > 0
+      const playingNow = playingRef.current
+      const at = playingNow ?? stopRef.current
+      e.preventDefault()
+      if (!fresh) return
+      lastStepTs = now
+      if (down) {
+        if (playingNow !== null) {
+          finishClip(playingNow)
+          if (playingNow < 3) {
+            segRef.current = playingNow + 1
+            startClip(playingNow + 1)
+            placeAt(playingNow + 1, el)
+          }
+          return
+        }
+        if (at >= 3) {
+          const span = el.scrollHeight - window.innerHeight
+          window.scrollTo({ top: rect.top + window.scrollY + span + 2, behavior: 'instant' as ScrollBehavior })
+          return
+        }
+        segRef.current = at + 1
+        startClip(at + 1)
+        placeAt(at + 1, el)
+        return
+      }
+      const prev = playingNow !== null ? playingNow - 1 : at - 1
+      if (playingNow === null && at < 0) {
+        window.scrollTo({ top: rect.top + window.scrollY - 2, behavior: 'instant' as ScrollBehavior })
+        return
+      }
+      placeAt(prev, el)
     }
-    window.addEventListener('wheel', onWheel, { passive: true })
+    window.addEventListener('wheel', onWheel, { passive: false })
     return () => window.removeEventListener('wheel', onWheel)
   }, [isVisible, isReducedMotion, isDesktop])
+
+  // Ролики целиком в памяти до показа: потоковая догрузка подвешивала 3-й и 4-й ролик.
+  const [blobs, setBlobs] = useState<(string | null)[]>([null, null, null, null])
+  useEffect(() => {
+    if (!isNear || isReducedMotion) return
+    let alive = true
+    const urls: string[] = []
+    const probe = document.createElement('video')
+    const ext = probe.canPlayType('video/mp4; codecs="avc1.640028"') ? 'mp4' : 'webm'
+    const list = isDesktop ? VIDEO_CONFIG.desktop : VIDEO_CONFIG.mobile
+    list.forEach(async (src, i) => {
+      try {
+        const res = await fetch(src.replace(/\.mp4$/, `.${ext}`))
+        if (!res.ok) return
+        const url = URL.createObjectURL(await res.blob())
+        urls.push(url)
+        if (alive) setBlobs((prev) => prev.map((b, j) => (j === i ? url : b)))
+      } catch {
+        // Без blob ролик играет потоком из <source>.
+      }
+    })
+    return () => {
+      alive = false
+      urls.forEach((u) => URL.revokeObjectURL(u))
+      setBlobs([null, null, null, null])
+    }
+  }, [isNear, isReducedMotion, isDesktop])
 
   // Очищаем видео при размонтировании
   useEffect(() => {
@@ -244,6 +316,19 @@ export function BestsellerScene() {
     }
     video.ontimeupdate = () => video.duration && setPlayFrac(video.currentTime / video.duration)
     video.play().catch(() => {})
+  }
+  // Жест во время ролика: ролик сразу встаёт на свой товар.
+  function finishClip(clip: number) {
+    const video = videoRefs.current[clip]
+    if (video) {
+      video.onended = null
+      video.pause()
+      if (video.duration) video.currentTime = video.duration
+    }
+    playingRef.current = null
+    stopRef.current = clip
+    setStop(clip)
+    setPlaying(null)
   }
   // Остановки: -1 — рука над товарами, 0..3 — товар в руке; ролик c ведёт к товару c.
   function onDesktopScroll(seg: number, pinned: boolean) {
@@ -412,6 +497,7 @@ export function BestsellerScene() {
                     ? { objectPosition: 'center top' }
                     : undefined
                 }
+                src={blobs[idx] ?? undefined}
                 poster={VIDEO_CONFIG.startPoster(fmt, idx)}
                 muted
                 playsInline
