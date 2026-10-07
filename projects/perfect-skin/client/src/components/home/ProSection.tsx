@@ -33,17 +33,18 @@ export function ProSection() {
     )
   }
 
-  const products = data?.items || []
+  // Первыми — самые крупные фасовки: блок обещает «фасовки до 1000 мл».
+  const products = [...(data?.items || [])].sort((a, b) => volumeMl(b) - volumeMl(a))
   const showList = products.length > 0 || loading
 
   return (
     <section id="pro" className="py-10 md:py-14 bg-background">
       <div className="container-app">
-        <div className="bg-dark text-dark-foreground rounded-block p-6 md:p-12 xl:p-16">
+        <div className="bg-dark text-dark-foreground rounded-block p-6 md:p-12 xl:p-16 [container-type:inline-size]">
           <p className="text-label font-semibold uppercase tracking-wide text-accent mb-3 lg:text-body-sm">
             Для косметологов и салонов
           </p>
-          <h2 className="font-heading font-bold uppercase text-dark-foreground text-[clamp(1.75rem,7.4vw,7rem)] leading-[0.9] tracking-tight whitespace-nowrap">
+          <h2 className="font-heading font-bold uppercase text-dark-foreground text-[10.9cqi] leading-[0.9] tracking-tight whitespace-nowrap">
             Специалистам
           </h2>
 
@@ -81,12 +82,12 @@ export function ProSection() {
               {/* Компьютер: одно окно с фото строки под курсором или в фокусе */}
               {!loading && products.length > 0 && (
                 <div className="hidden xl:block xl:col-span-4 pt-12">
-                  <div className="sticky top-28 aspect-[4/5] bg-card rounded-block overflow-hidden">
+                  <div className="relative h-full min-h-[24rem] bg-card rounded-block overflow-hidden">
                     {products.map((product, i) => (
                       <div
                         key={product.id}
                         aria-hidden="true"
-                        className={`absolute inset-0 p-8 flex items-center justify-center transition-opacity duration-200 motion-reduce:transition-none ${
+                        className={`absolute inset-0 p-4 flex items-center justify-center transition-opacity duration-200 motion-reduce:transition-none ${
                           i === active ? 'opacity-100' : 'opacity-0'
                         }`}
                       >
@@ -112,14 +113,14 @@ export function ProSection() {
           )}
 
           <div className="mt-10 md:mt-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-xl">
-              <p className="text-body text-dark-foreground/85">
+            <div className="max-w-2xl">
+              <p className="text-body text-dark-foreground/85 text-pretty">
                 Оптовые цены на весь каталог и кабинетные фасовки до 1000 мл.
               </p>
-              <p className="mt-2 text-body-sm text-dark-foreground/70">
+              <p className="mt-2 text-body-sm text-dark-foreground/75 text-pretty">
                 Нужны ИНН или ОГРНИП и фото сертификата косметолога. Вход по коду на email, без пароля.
               </p>
-              <p className="mt-3 text-body-sm text-dark-foreground/60">
+              <p className="mt-3 text-body-sm text-dark-foreground/75 text-pretty">
                 Регистрация по email <span className="text-accent">→</span> заявка с ИНН и сертификатом{' '}
                 <span className="text-accent">→</span> цены открываются в каталоге после проверки
               </p>
@@ -142,6 +143,10 @@ type ProProduct = NonNullable<ReturnType<typeof useCatalogList>['data']>['items'
 function volumeOf(product: ProProduct) {
   const proVariant = product.variants?.find((v) => v.isProfessional)
   return proVariant?.volumeLabel || product.variants?.[0]?.volumeLabel || ''
+}
+
+function volumeMl(product: ProProduct) {
+  return parseFloat(volumeOf(product).replace(',', '.')) || 0
 }
 
 // «FLUVIX Сыворотка обновляющая» → латинское имя крупно, русское описание под ним.
@@ -192,20 +197,20 @@ function IndexRow({ index, product, active, onActivate, imageFailed, onImageErro
       <span className="min-w-0">
         <span
           className={`block font-heading font-bold uppercase leading-tight text-[clamp(1.05rem,2.2vw,2.1rem)] transition-colors duration-200 ${
-            active ? 'xl:text-accent text-dark-foreground' : 'text-dark-foreground xl:text-dark-foreground/55'
+            active ? 'xl:text-accent text-dark-foreground' : 'text-dark-foreground xl:text-dark-foreground/70'
           }`}
         >
           {title}
         </span>
         {desc && <span className="block mt-1 text-body-sm text-dark-foreground/70">{desc}</span>}
         {product.brand && (
-          <span className="block mt-1 text-label uppercase tracking-wide text-dark-foreground/50">
+          <span className="block mt-1 text-label uppercase tracking-wide text-dark-foreground/60">
             {product.brand.name}
-            {volume && <span className="md:hidden text-accent font-semibold tabular-nums"> · {volume}</span>}
+            {volume && <span className="md:hidden text-dark-foreground/80 font-semibold tabular-nums"> · {volume}</span>}
           </span>
         )}
       </span>
-      <span className="hidden md:block font-heading font-semibold text-body text-accent tabular-nums whitespace-nowrap">
+      <span className="hidden md:block font-heading font-semibold text-body text-dark-foreground/80 tabular-nums whitespace-nowrap">
         {volume}
       </span>
     </li>
