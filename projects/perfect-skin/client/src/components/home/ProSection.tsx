@@ -39,13 +39,13 @@ export function ProSection() {
     <section id="pro" className="py-10 md:py-14 bg-background">
       <div className="container-app">
         <div className="bg-dark text-dark-foreground rounded-block p-6 md:p-12">
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+          <div className="grid xl:grid-cols-12 gap-8 xl:gap-12">
             {/* Left Column */}
-            <div className="lg:col-span-5 flex flex-col lg:self-center">
+            <div className="min-w-0 xl:col-span-5 flex flex-col xl:self-center">
               <p className="text-label font-semibold uppercase tracking-wide text-accent mb-3">
                 Для косметологов и салонов
               </p>
-              <h2 className="text-h2 font-heading font-bold text-dark-foreground mb-3">
+              <h2 className="text-h2 xl:text-[min(3rem,3.3vw)] font-heading font-bold text-dark-foreground mb-3">
                 Специалистам
               </h2>
               <p className="text-body text-dark-foreground/85 max-w-prose mb-6">
@@ -81,7 +81,7 @@ export function ProSection() {
 
             {/* Right Column */}
             {showRightColumn && (
-              <div className="lg:col-span-7">
+              <div className="min-w-0 xl:col-span-7">
                 <p className="text-label font-semibold uppercase tracking-wide text-dark-foreground/70 mb-4">
                   Для кабинета · цены после проверки
                 </p>
