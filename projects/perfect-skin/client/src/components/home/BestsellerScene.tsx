@@ -453,10 +453,10 @@ export function BestsellerScene() {
               </div>
 
               {/* Карточка товара - десктоп */}
-              <div className="hidden md:flex absolute inset-y-0 left-0 items-center">
+              <div className="hidden md:block absolute left-0 bottom-[17%]">
                 {cardData && cardProduct && (
                   <div
-                    className={`bg-card rounded-block shadow-lg w-[clamp(20rem,18vw,28rem)] p-[clamp(1.25rem,1.3vw,2rem)] transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
+                    className={`bg-card rounded-block shadow-lg w-[clamp(22rem,24vw,32rem)] p-[clamp(1.25rem,1.3vw,2rem)] transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
                       cardIdx >= 0
                         ? 'opacity-100 translate-x-0 visible pointer-events-auto'
                         : 'opacity-0 -translate-x-4 invisible pointer-events-none'
@@ -466,7 +466,7 @@ export function BestsellerScene() {
                       {cardData.brand && (
                         <div className="text-label uppercase text-muted-foreground mb-2 min-[1800px]:text-body-sm">{cardData.brand.name}</div>
                       )}
-                      <h3 className="text-[clamp(1rem,0.4rem+0.75vw,1.5rem)] font-heading font-bold text-foreground mb-2 line-clamp-2">
+                      <h3 className="text-[clamp(1rem,0.4rem+0.75vw,1.5rem)] font-heading font-bold text-foreground mb-2 text-balance">
                         <Link to={`/product/${cardProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4 transition-colors duration-200">
                           {cardData.name}
                         </Link>
