@@ -190,6 +190,26 @@ export function BestsellerScene() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [isVisible, isReducedMotion])
 
+  // Колесо мыши на Windows прокручивает ~100 px за щелчок, а отрезок сцены — ~85vh:
+  // без этого до следующего ролика пришлось бы крутить 7–16 щелчков.
+  // Один щелчок, пока сцена закреплена и ролик не играет, переводит к соседнему шагу.
+  useEffect(() => {
+    if (!isVisible || isReducedMotion || !isDesktop) return
+    const onWheel = (e: WheelEvent) => {
+      const el = containerRef.current
+      if (!el || playingRef.current !== null || Math.abs(e.deltaY) < 1) return
+      const rect = el.getBoundingClientRect()
+      if (rect.top > 1 || rect.bottom < window.innerHeight - 1) return
+      const next = stopRef.current + (e.deltaY > 0 ? 1 : -1)
+      if (next < -1 || next > 3) return
+      const span = el.scrollHeight - window.innerHeight
+      const top = rect.top + window.scrollY
+      window.scrollTo({ top: top + span * ((next + 1.1) / 5), behavior: 'instant' as ScrollBehavior })
+    }
+    window.addEventListener('wheel', onWheel, { passive: true })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [isVisible, isReducedMotion, isDesktop])
+
   // Очищаем видео при размонтировании
   useEffect(() => {
     return () => {
