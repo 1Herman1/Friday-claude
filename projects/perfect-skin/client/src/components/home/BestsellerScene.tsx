@@ -253,7 +253,7 @@ export function BestsellerScene() {
       <section className="bg-background">
         <div className="container-app py-16 space-y-12">
           <div className="space-y-4">
-            <p className="text-label uppercase text-muted-foreground">Выбор косметологов</p>
+            <p className="text-label font-semibold uppercase tracking-wide text-primary lg:text-body-sm">Выбор косметологов</p>
             <h2 className="text-h2 font-heading font-bold">Бестселлеры</h2>
           </div>
 
@@ -448,7 +448,7 @@ export function BestsellerScene() {
           <div className="container-app h-full">
             <div className="relative h-full">
               <div className="absolute top-6 md:top-12 left-0">
-                <p className="text-label uppercase text-muted-foreground mb-2 min-[1800px]:text-body-sm">Выбор косметологов</p>
+                <p className="text-label font-semibold uppercase tracking-wide text-primary mb-2 lg:text-body-sm">Выбор косметологов</p>
                 <h2 className="text-h2 font-heading font-bold min-[1800px]:text-[clamp(3rem,2.6vw,4.25rem)]">Бестселлеры</h2>
               </div>
 
