@@ -89,7 +89,7 @@ export function Header({
                   className="h-3.5 min-[380px]:h-4 sm:h-5 md:h-6 w-auto"
                 />
               </Link>
-              <p className="hidden md:block text-xs font-sans text-muted-foreground text-center whitespace-nowrap">
+              <p className="hidden md:block mt-1 text-[13px] leading-none font-sans font-medium text-foreground/75 text-left whitespace-nowrap">
                 Назначают врачи. Любит ваша кожа
               </p>
             </div>
