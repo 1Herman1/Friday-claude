@@ -36,7 +36,7 @@ export function HeroSection() {
           height={1072}
           fetchPriority="high"
           decoding="async"
-          className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-contain portrait:object-top"
+          className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-contain portrait:object-top md:portrait:object-cover md:portrait:object-[50%_10%]"
         />
       </picture>
 
@@ -57,7 +57,7 @@ export function HeroSection() {
           autoPlay
           preload="auto"
           aria-hidden="true"
-          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-contain portrait:object-top"
+          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-contain portrait:object-top md:portrait:object-cover md:portrait:object-[50%_10%]"
         >
           <source src={`/video/hero/${video}.webm`} type="video/webm" />
           <source src={`/video/hero/${video}.mp4`} type="video/mp4" onError={() => setVideo(null)} />
