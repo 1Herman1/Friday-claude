@@ -600,7 +600,7 @@ export function BestsellerScene() {
               <div className={`absolute left-0 top-[54%] -translate-y-1/2 ${isDesktop ? '' : 'hidden'}`}>
                 {cardData && cardProduct && (
                   <div
-                    className={`bg-card rounded-block shadow-lg w-[clamp(24rem,25vw,30rem)] p-[clamp(1.5rem,1.7vw,2.5rem)] [&_button]:min-h-12 [&_a.rounded-pill]:min-h-12 transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
+                    className={`bg-card rounded-block shadow-lg w-[24rem] p-[clamp(1.5rem,1.7vw,2.5rem)] [&_button]:min-h-12 [&_a.rounded-pill]:min-h-12 transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
                       cardIdx >= 0
                         ? 'opacity-100 translate-x-0 visible pointer-events-auto'
                         : 'opacity-0 -translate-x-4 invisible pointer-events-none'
