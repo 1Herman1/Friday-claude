@@ -74,6 +74,7 @@ export function BestsellerScene() {
   const [stop, setStop] = useState(-1)
   const [playing, setPlaying] = useState<number | null>(null)
   const [playFrac, setPlayFrac] = useState(0)
+  const fillRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null])
   const stopRef = useRef(-1)
   const playingRef = useRef<number | null>(null)
   const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? isWideScene() : true)
@@ -241,8 +242,8 @@ export function BestsellerScene() {
           return
         }
         if (at >= 3) {
-          const span = el.scrollHeight - window.innerHeight
-          window.scrollTo({ top: rect.top + window.scrollY + span + 2, behavior: 'instant' as ScrollBehavior })
+          // Последний товар показан — один жест уводит сразу к следующей секции.
+          window.scrollTo({ top: rect.top + window.scrollY + el.scrollHeight, behavior: 'smooth' })
           return
         }
         segRef.current = at + 1
@@ -252,7 +253,7 @@ export function BestsellerScene() {
       }
       const prev = playingNow !== null ? playingNow - 1 : at - 1
       if (playingNow === null && at < 0) {
-        window.scrollTo({ top: rect.top + window.scrollY - 2, behavior: 'instant' as ScrollBehavior })
+        window.scrollTo({ top: rect.top + window.scrollY - window.innerHeight, behavior: 'smooth' })
         return
       }
       placeAt(prev, el)
@@ -343,6 +344,14 @@ export function BestsellerScene() {
     video.ontimeupdate = () => {
       if (playingRef.current === clip && video.duration) setPlayFrac(video.currentTime / video.duration)
     }
+    // Бегунок идёт за роликом каждый кадр, а не 4 раза в секунду, как timeupdate.
+    const follow = () => {
+      if (playingRef.current !== clip) return
+      const fill = fillRefs.current[clip]
+      if (fill && video.duration) fill.style.width = `${(video.currentTime / video.duration) * 100}%`
+      requestAnimationFrame(follow)
+    }
+    requestAnimationFrame(follow)
     video.play().catch(() => finishClip(clip))
   }
   // Жест во время ролика: ролик сразу встаёт на свой товар.
@@ -471,7 +480,12 @@ export function BestsellerScene() {
                 className="h-1 flex-1 bg-foreground/10 rounded-full overflow-hidden"
               >
                 <div
-                  className="h-full bg-primary"
+                  ref={(el) => { fillRefs.current[idx] = el }}
+                  className={`h-full bg-primary ${
+                    isDesktop && playing === idx
+                      ? ''
+                      : 'transition-[width] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none'
+                  }`}
                   style={{
                     width:
                       view.segment > idx
@@ -583,10 +597,10 @@ export function BestsellerScene() {
               </div>
 
               {/* Карточка товара - десктоп */}
-              <div className={`absolute left-0 bottom-[17%] ${isDesktop ? '' : 'hidden'}`}>
+              <div className={`absolute left-0 top-[54%] -translate-y-1/2 ${isDesktop ? '' : 'hidden'}`}>
                 {cardData && cardProduct && (
                   <div
-                    className={`bg-card rounded-block shadow-lg w-[clamp(22rem,24vw,32rem)] p-[clamp(1.25rem,1.3vw,2rem)] transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
+                    className={`bg-card rounded-block shadow-lg w-[clamp(24rem,25vw,30rem)] p-[clamp(1.5rem,1.7vw,2.5rem)] [&_button]:min-h-12 [&_a.rounded-pill]:min-h-12 transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
                       cardIdx >= 0
                         ? 'opacity-100 translate-x-0 visible pointer-events-auto'
                         : 'opacity-0 -translate-x-4 invisible pointer-events-none'
@@ -596,16 +610,16 @@ export function BestsellerScene() {
                       {cardData.brand && (
                         <div className="text-label font-semibold uppercase tracking-wide text-muted-foreground mb-2 min-[1800px]:text-body-sm">{cardData.brand.name}</div>
                       )}
-                      <h3 className="text-[clamp(1rem,0.4rem+0.75vw,1.5rem)] font-heading font-bold text-foreground mb-2 text-balance">
+                      <h3 className="text-[clamp(1.25rem,0.55rem+0.95vw,1.875rem)] leading-tight font-heading font-bold text-foreground mb-3 text-balance">
                         <Link to={`/product/${cardProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4 transition-colors duration-200">
                           <span className="block">{splitName(cardData.name).title}</span>{' '}
                           <span className="block">{splitName(cardData.name).desc}</span>
                         </Link>
                       </h3>
                       {cardData.variants[0] && (
-                        <div className="text-[clamp(0.75rem,0.3rem+0.5vw,1rem)] text-muted-foreground mb-3">{cardData.variants[0].volumeLabel}</div>
+                        <div className="text-[clamp(0.875rem,0.4rem+0.5vw,1.125rem)] text-muted-foreground mb-4">{cardData.variants[0].volumeLabel}</div>
                       )}
-                      <div className="mb-4 [&_.text-lg]:text-[clamp(1.125rem,0.5rem+0.8vw,1.75rem)]">
+                      <div className="mb-5 [&_.text-lg]:text-[clamp(1.5rem,0.7rem+1.1vw,2.25rem)]">
                         <PriceTag
                           price={cardData.minPrice}
                           oldPrice={cardData.oldPrice ?? undefined}
@@ -619,6 +633,17 @@ export function BestsellerScene() {
                 )}
               </div>
 
+              {/* Подсказка на входе в сцену: исчезает после первого шага */}
+              <p
+                aria-hidden={cardIdx >= 0}
+                className={`absolute bottom-[4.5rem] left-0 flex items-center gap-2 text-body-sm text-muted-foreground transition-opacity duration-300 ${isDesktop ? '' : 'hidden'} ${cardIdx >= 0 ? 'opacity-0' : 'opacity-100'}`}
+              >
+                <svg width="16" height="22" viewBox="0 0 16 22" fill="none" aria-hidden="true" className="shrink-0">
+                  <rect x="1" y="1" width="14" height="20" rx="7" stroke="currentColor" strokeWidth="1.5" />
+                  <rect x="7" y="5" width="2" height="5" rx="1" fill="currentColor" className="motion-safe:animate-pulse" />
+                </svg>
+                Прокрутите — рука покажет каждый товар
+              </p>
               {/* Полоса прогресса (десктоп) */}
               <div className={`absolute bottom-12 inset-x-0 ${isDesktop ? '' : 'hidden'}`}>{progressBar}</div>
             </div>
@@ -627,6 +652,9 @@ export function BestsellerScene() {
 
         {/* Карточка товара - мобильный (снизу); до первого товара — невидимая заглушка, чтобы полоса прогресса не прыгала */}
         <div className={`${isDesktop ? 'hidden' : ''} absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 md:px-12 md:[&>*]:max-w-[30rem] pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none`}>
+          <p aria-hidden={cardIdx >= 0} className={`text-label text-muted-foreground transition-opacity duration-300 ${cardIdx >= 0 ? 'opacity-0' : 'opacity-100'}`}>
+            Листайте вниз — рука покажет каждый товар
+          </p>
           {progressBar}
           {mData && mProduct && (
             <div
