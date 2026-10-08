@@ -228,16 +228,25 @@ fi
 # Ролик 3→4 компьютера на Seedance 2: kling четыре раза рисовал грушу пипетки
 # кремовой рядом с рукой. 720p — решение Гермеса по цене ($0,205/с).
 if [ "$STAGE" = v3-sd2 ]; then
+  # CLIPS=desktop-0-1 | desktop-3-4 (по умолчанию 3-4).
   OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
-  F=$($NUL upload "$OUT/desktop-k3.png" | sed -n 's/^URL: //p')
-  L=$($NUL upload "$OUT/desktop-k4.png" | sed -n 's/^URL: //p')
+  case "${CLIPS:-desktop-3-4}" in
+    desktop-0-1)
+      FIRST="$OUT/desktop-k0h.png"; LAST="$OUT/desktop-k1.png"; NAME="desktop-0-1-sd2"
+      PR="Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. In the first frame a slender, delicate feminine hand (short nude manicure, no jewellery, matte skin without shine) hovers still above the products. In ONE single smooth, steady, continuous movement, with no hesitation, no trembling, no jitter, no back-and-forth and no second attempt, the hand descends to the first tall white bottle on the left, the fingers close lightly on its body just below the silver cap, a brief tangible grip, then it lifts the bottle a few centimeters straight up and settles exactly into the last frame. The hand moves like a calm, confident hand of a professional, perfectly stable. Every other product keeps its exact position, size and crisp label; nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." ;;
+    *)
+      FIRST="$OUT/desktop-k3.png"; LAST="$OUT/desktop-k4.png"; NAME="desktop-3-4-sd2"
+      PR="Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A slender, delicate feminine hand (short nude manicure, no jewellery, matte skin without shine) gently sets the frosted jar it holds down on its own spot on the table, rises up and over, high above the products, then descends straight down onto the pink glass dropper bottle on the far right, the fingers close around the glass body of the bottle below the silver collar, a brief tangible grip, and it lifts the bottle a few centimeters straight up, settling exactly into the last frame. The hand never passes behind or beside the dropper bottle. The white rubber dropper bulb is solid, opaque pure white in every frame, never translucent or skin-coloured. Every product keeps its exact position, size and crisp label; nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." ;;
+  esac
+  F=$($NUL upload "$FIRST" | sed -n 's/^URL: //p')
+  L=$($NUL upload "$LAST" | sed -n 's/^URL: //p')
   [ -n "$F" ] && [ -n "$L" ] || { echo "upload failed"; exit 1; }
   tmp=$(mktemp -d)
-  $NUL generate create bytedance/seedance-2 --prompt "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A slender, delicate feminine hand (short nude manicure, no jewellery, matte skin without shine) gently sets the frosted jar it holds down on its own spot on the table, rises up and over, high above the products, then descends straight down onto the pink glass dropper bottle on the far right, the fingers close around the glass body of the bottle below the silver collar, a brief tangible grip, and it lifts the bottle a few centimeters straight up, settling exactly into the last frame. The hand never passes behind or beside the dropper bottle. The white rubber dropper bulb is solid, opaque pure white in every frame, never translucent or skin-coloured. Every product keeps its exact position, size and crisp label; nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." \
+  $NUL generate create bytedance/seedance-2 --prompt "$PR" \
     --set first_frame_url="$F" --set last_frame_url="$L" --set resolution=720p --set duration=4 \
     --set aspect_ratio=16:9 --set generate_audio=false \
     --wait --wait-timeout 1200 --yes --out "$tmp"
-  cp "$(ls "$tmp"/* | head -1)" "$OUT/desktop-3-4-sd2.mp4"
+  cp "$(ls "$tmp"/* | head -1)" "$OUT/$NAME.mp4"
   exit 0
 fi
 
