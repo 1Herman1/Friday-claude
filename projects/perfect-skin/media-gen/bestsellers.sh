@@ -275,7 +275,7 @@ for fmt in desktop mobile; do
       if [ "$i" = 1 ]; then first="$OUT/$fmt-k0h.png"; else first="$OUT/$fmt-k$((i-1)).png"; fi
       # Сыворотка: груша пипетки у kling «таяла» — становилась бежевой и прозрачной.
       DROPPER=""
-      [ "$i" = 4 ] && DROPPER=" The serum bottle's dropper bulb is solid opaque pure white rubber and stays exactly as in the first frame in every frame: never translucent, never beige or skin-coloured, never merging with the fingers; the fingers take the bottle by its silver collar and glass shoulder, not by the white bulb."
+      [ "$i" = 4 ] && DROPPER=" The serum bottle's dropper bulb is solid opaque pure white rubber and stays exactly as in the first frame in every frame: never translucent, never beige or skin-coloured, never merging with the fingers; the fingers take the bottle by its silver collar and glass shoulder, not by the white bulb. The hand never passes behind the dropper: it comes in from above and to the right of the bottle, so the white bulb is always seen against the plain wall, fully opaque."
       # Клипы одного формата идут параллельно (цена та же, время — одного клипа).
       if [ "$i" = 1 ]; then
         # Первый ролик: рука уже в кадре над товарами и одним плавным движением
