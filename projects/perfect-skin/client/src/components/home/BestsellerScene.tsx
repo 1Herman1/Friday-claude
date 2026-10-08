@@ -433,7 +433,7 @@ export function BestsellerScene() {
   }
 
   const fmt: 'desktop' | 'mobile' = isDesktop ? 'desktop' : 'mobile'
-  const portraitTransform = typeof window !== 'undefined' && window.innerWidth >= 768 ? 'translateY(-14%) scale(1.15)' : 'scale(1.8)'
+  const portraitTransform = typeof window !== 'undefined' && window.innerWidth >= 768 ? 'translateY(-9%) scale(1.2)' : 'scale(1.8)'
   // Десктоп: segment = видимый ролик; на остановке — точный кадр товара stop.
   const view = isDesktop
     ? { segment: playing ?? Math.max(stop, 0), isHold: playing === null && stop >= 0, cardIdx: playing ?? stop, local: playing !== null ? playFrac : stop >= 0 ? 1 : 0 }
@@ -611,7 +611,7 @@ export function BestsellerScene() {
         </div>
 
         {/* Карточка товара - мобильный (снизу); до первого товара — невидимая заглушка, чтобы полоса прогресса не прыгала */}
-        <div className={`${isDesktop ? 'hidden' : ''} absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none`}>
+        <div className={`${isDesktop ? 'hidden' : ''} absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 md:px-[calc(50%-15rem)] pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none`}>
           {progressBar}
           {mData && mProduct && (
             <div
@@ -627,7 +627,7 @@ export function BestsellerScene() {
                     {mData.brand.name}
                   </div>
                 )}
-                <h3 className="text-sm font-heading font-semibold text-foreground line-clamp-3 leading-snug min-h-[3lh]">
+                <h3 className="text-sm font-heading font-semibold text-foreground line-clamp-3 leading-snug min-h-[3lh] md:min-h-0">
                   <Link to={`/product/${mProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4">
                     {mData.name}
                   </Link>
