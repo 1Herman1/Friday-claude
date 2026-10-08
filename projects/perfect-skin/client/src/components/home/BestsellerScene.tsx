@@ -108,13 +108,20 @@ export function BestsellerScene() {
       const newIsDesktop = isWideScene()
       if (newIsDesktop !== isDesktop) {
         setIsDesktop(newIsDesktop)
-        // Перезагружаем видео при смене breakpoint чтобы применилась новая source
-        primedRef.current = false
+        // Другой формат — другие ролики: играющий ролик не доиграет, сцена встаёт в начало.
         videoRefs.current.forEach((video) => {
           if (video) {
-            video.load()
+            video.onended = null
+            video.ontimeupdate = null
+            video.pause()
           }
         })
+        playingRef.current = null
+        stopRef.current = -1
+        segRef.current = -1
+        setPlaying(null)
+        setStop(-1)
+        setPlayFrac(0)
       }
     }
     window.addEventListener('resize', handleResize)
@@ -132,15 +139,6 @@ export function BestsellerScene() {
         if (!primedRef.current && (entry.isIntersecting || entry.boundingClientRect.top < window.innerHeight)) {
           primedRef.current = true
           setIsNear(true)
-          videoRefs.current.forEach((video) => {
-            if (!video) return
-            video.muted = true
-            video.setAttribute('muted', '')
-            video
-              .play()
-              .then(() => video.pause())
-              .catch(() => {})
-          })
         }
       },
       { threshold: 0.1, rootMargin: '50% 0px' }
@@ -148,7 +146,7 @@ export function BestsellerScene() {
 
     observer.observe(containerRef.current)
     return () => observer.disconnect()
-  }, [])
+  }, [isReducedMotion])
 
   // Обработка скролла
   useEffect(() => {
@@ -214,7 +212,8 @@ export function BestsellerScene() {
     }
     const onWheel = (e: WheelEvent) => {
       const el = containerRef.current
-      if (!el || Math.abs(e.deltaY) < 1) return
+      // Колесо над корзиной, поиском и другими слоями поверх сцены — их собственное.
+      if (!el || e.ctrlKey || Math.abs(e.deltaY) < 1 || !(e.target instanceof Node) || !el.contains(e.target)) return
       const now = performance.now()
       const dt = now - lastTs
       const abs = Math.abs(e.deltaY)
@@ -271,6 +270,7 @@ export function BestsellerScene() {
     if (!isNear || isReducedMotion) return
     let alive = true
     const urls: string[] = []
+    const abort = new AbortController()
     const probe = document.createElement('video')
     // VP9 в 4–5 раз легче H.264 при том же качестве (SSIM 0,99); mp4 — для Safari.
     const ext = probe.canPlayType('video/webm; codecs="vp9"') ? 'webm' : 'mp4'
@@ -279,17 +279,21 @@ export function BestsellerScene() {
     const list = isDesktop ? VIDEO_CONFIG.desktop : VIDEO_CONFIG.mobile
     list.forEach(async (src, i) => {
       try {
-        const res = await fetch(src.replace(/\.mp4$/, `.${ext}`))
-        if (!res.ok) return
-        const url = URL.createObjectURL(await res.blob())
+        const res = await fetch(src.replace(/\.mp4$/, `.${ext}`), { signal: abort.signal })
+        // Сервер на несуществующий файл может вернуть index.html со статусом 200.
+        if (!res.ok || !res.headers.get('content-type')?.startsWith('video/')) return
+        const blob = await res.blob()
+        if (!alive) return
+        const url = URL.createObjectURL(blob)
         urls.push(url)
-        if (alive) setBlobs((prev) => prev.map((b, j) => (j === i ? url : b)))
+        setBlobs((prev) => prev.map((b, j) => (j === i ? url : b)))
       } catch {
         // Без ролика шаг остаётся стоп-кадром.
       }
     })
     return () => {
       alive = false
+      abort.abort()
       urls.forEach((u) => URL.revokeObjectURL(u))
       setBlobs([null, null, null, null])
     }
@@ -335,14 +339,17 @@ export function BestsellerScene() {
       setPlaying(null)
       if (segRef.current > clip) startClip(clip + 1)
     }
-    video.ontimeupdate = () => video.duration && setPlayFrac(video.currentTime / video.duration)
-    video.play().catch(() => {})
+    video.ontimeupdate = () => {
+      if (playingRef.current === clip && video.duration) setPlayFrac(video.currentTime / video.duration)
+    }
+    video.play().catch(() => finishClip(clip))
   }
   // Жест во время ролика: ролик сразу встаёт на свой товар.
   function finishClip(clip: number) {
     const video = videoRefs.current[clip]
     if (video) {
       video.onended = null
+      video.ontimeupdate = null
       video.pause()
       if (video.duration) video.currentTime = video.duration
     }
@@ -368,10 +375,8 @@ export function BestsellerScene() {
   }
 
   // Вычисляем высоту контейнера (~520vh)
-  const containerHeight = typeof window !== 'undefined' ? window.innerHeight * 5.2 : 0
 
   // Проверяем загрузку товаров
-  const visibleProducts = products.filter(p => p.data)
 
   if (isReducedMotion) {
     // Режим reduced-motion: показываем 4 статичных шага в виде списка
@@ -383,7 +388,7 @@ export function BestsellerScene() {
             <h2 className="text-h2 font-heading font-bold">Бестселлеры</h2>
           </div>
 
-          {visibleProducts.map((product, idx) => (
+          {products.map((product, idx) => product.data && (
             <div
               key={product.slug}
               className="flex gap-8 items-start"
@@ -481,7 +486,15 @@ export function BestsellerScene() {
   )
 
   return (
-    <section ref={containerRef} style={{ height: `${containerHeight}px` }} className="bg-background">
+    <section ref={containerRef} style={{ height: '520vh' }} className="bg-background">
+      {/* Скринридер и клавиатура: все четыре товара сразу, без привязки к прокрутке сцены */}
+      <ul className="sr-only" aria-label="Бестселлеры">
+        {products.map((p) => p.data && (
+          <li key={p.slug}>
+            <Link to={`/product/${p.slug}`} tabIndex={-1}>{p.data.name}</Link>
+          </li>
+        ))}
+      </ul>
       {/* Sticky container */}
       <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden bg-background">
         {/* Видео фреймы */}
