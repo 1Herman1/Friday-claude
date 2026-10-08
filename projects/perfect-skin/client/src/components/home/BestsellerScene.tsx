@@ -5,6 +5,7 @@ import { useCart } from '@/context/CartContext'
 import { useDrawer } from '@/context/DrawerContext'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { Link } from 'react-router-dom'
+import { splitName } from '@/lib/split-name'
 
 // Ролики сцены: сегмент i — рука от товара i к товару i+1 (кадры k_i → k_{i+1}).
 const SCENE = '/video/bestsellers'
@@ -544,7 +545,7 @@ export function BestsellerScene() {
                 src={VIDEO_CONFIG.stepPoster(fmt, idx)}
                 alt=""
                 aria-hidden="true"
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[400ms] ${
                   view.segment === idx && isHold ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={!isDesktop ? { objectPosition: 'center top' } : undefined}
@@ -593,11 +594,12 @@ export function BestsellerScene() {
                   >
                     <div key={cardProduct.slug} className="animate-[fadeIn_200ms_ease-out] motion-reduce:animate-none">
                       {cardData.brand && (
-                        <div className="text-label uppercase text-muted-foreground mb-2 min-[1800px]:text-body-sm">{cardData.brand.name}</div>
+                        <div className="text-label font-semibold uppercase tracking-wide text-muted-foreground mb-2 min-[1800px]:text-body-sm">{cardData.brand.name}</div>
                       )}
                       <h3 className="text-[clamp(1rem,0.4rem+0.75vw,1.5rem)] font-heading font-bold text-foreground mb-2 text-balance">
                         <Link to={`/product/${cardProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4 transition-colors duration-200">
-                          {cardData.name}
+                          <span className="block">{splitName(cardData.name).title}</span>
+                          <span className="block">{splitName(cardData.name).desc}</span>
                         </Link>
                       </h3>
                       {cardData.variants[0] && (
@@ -624,7 +626,7 @@ export function BestsellerScene() {
         </div>
 
         {/* Карточка товара - мобильный (снизу); до первого товара — невидимая заглушка, чтобы полоса прогресса не прыгала */}
-        <div className={`${isDesktop ? 'hidden' : ''} absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 md:px-[calc(50%-15rem)] pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none`}>
+        <div className={`${isDesktop ? 'hidden' : ''} absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 md:px-12 md:[&>*]:max-w-[30rem] pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none`}>
           {progressBar}
           {mData && mProduct && (
             <div
@@ -638,11 +640,13 @@ export function BestsellerScene() {
                 {mData.brand && (
                   <div className="text-label leading-tight uppercase tracking-wide text-muted-foreground">
                     {mData.brand.name}
+                    {mData.variants[0]?.volumeLabel && <span className="font-semibold"> · {mData.variants[0].volumeLabel}</span>}
                   </div>
                 )}
                 <h3 className="text-sm font-heading font-semibold text-foreground line-clamp-3 leading-snug min-h-[3lh] md:min-h-0">
                   <Link to={`/product/${mProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4">
-                    {mData.name}
+                    <span className="block">{splitName(mData.name).title}</span>
+                    <span className="block font-normal">{splitName(mData.name).desc}</span>
                   </Link>
                 </h3>
                 <div className="mt-1">

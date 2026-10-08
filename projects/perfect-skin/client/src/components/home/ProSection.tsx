@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { cardImage } from '@/lib/product-image'
+import { splitName } from '@/lib/split-name'
 import { Link } from 'react-router-dom'
 import { useCatalogList } from '@/hooks/useCatalogList'
 import type { CatalogFilters } from '@/hooks/useCatalogList'
@@ -95,7 +96,7 @@ export function ProSection() {
                           <img
                             src={cardImage(product) ?? ''}
                             alt=""
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-contain scale-[1.6]"
                             loading="lazy"
                             decoding="async"
                             width={480}
@@ -149,11 +150,6 @@ function volumeMl(product: ProProduct) {
   return parseFloat(volumeOf(product).replace(',', '.')) || 0
 }
 
-// «FLUVIX Сыворотка обновляющая» → латинское имя крупно, русское описание под ним.
-function splitName(name: string) {
-  const m = name.match(/^([^А-Яа-яЁё]+?)\s+([А-Яа-яЁё].*)$/)
-  return m ? { title: m[1], desc: m[2] } : { title: name, desc: '' }
-}
 
 interface IndexRowProps {
   index: number
@@ -184,7 +180,7 @@ function IndexRow({ index, product, active, onActivate, imageFailed, onImageErro
             <img
               src={cardImage(product) ?? ''}
               alt=""
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain scale-[1.3]"
               loading="lazy"
               decoding="async"
               width={80}
