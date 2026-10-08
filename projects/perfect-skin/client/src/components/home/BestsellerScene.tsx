@@ -30,6 +30,12 @@ interface SceneState {
   local: number // 0..1 внутри сегмента
 }
 
+// Горизонтальный ролик — только на широком экране; планшет стоя получает вертикальный,
+// иначе обрезка по краям прячет четвёртый товар.
+function isWideScene() {
+  return window.innerWidth >= 768 && window.innerWidth / window.innerHeight >= 1.2
+}
+
 export function BestsellerScene() {
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
@@ -69,7 +75,7 @@ export function BestsellerScene() {
   const [playFrac, setPlayFrac] = useState(0)
   const stopRef = useRef(-1)
   const playingRef = useRef<number | null>(null)
-  const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true)
+  const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? isWideScene() : true)
 
   // Загружаем товары по слагам
   const products = PRODUCT_SLUGS.map(slug => ({
@@ -99,7 +105,7 @@ export function BestsellerScene() {
   // Отслеживаем размер экрана и перезагружаем видео при смене breakpoint
   useEffect(() => {
     const handleResize = () => {
-      const newIsDesktop = window.innerWidth >= 768
+      const newIsDesktop = isWideScene()
       if (newIsDesktop !== isDesktop) {
         setIsDesktop(newIsDesktop)
         // Перезагружаем видео при смене breakpoint чтобы применилась новая source
@@ -165,7 +171,7 @@ export function BestsellerScene() {
 
       const finalSegment = scrollProgress >= 1 ? 3 : Math.min(segment, 3)
 
-      if (window.innerWidth >= 768) {
+      if (isWideScene()) {
         onDesktopScroll(Math.min(4, Math.floor(scrollProgress * 5)) - 1, rect.top <= 1 && rect.bottom >= viewportHeight - 1)
         markReady()
         return
@@ -427,6 +433,7 @@ export function BestsellerScene() {
   }
 
   const fmt: 'desktop' | 'mobile' = isDesktop ? 'desktop' : 'mobile'
+  const portraitTransform = typeof window !== 'undefined' && window.innerWidth >= 768 ? 'translateY(-14%) scale(1.15)' : 'scale(1.8)'
   // Десктоп: segment = видимый ролик; на остановке — точный кадр товара stop.
   const view = isDesktop
     ? { segment: playing ?? Math.max(stop, 0), isHold: playing === null && stop >= 0, cardIdx: playing ?? stop, local: playing !== null ? playFrac : stop >= 0 ? 1 : 0 }
@@ -478,9 +485,9 @@ export function BestsellerScene() {
       {/* Sticky container */}
       <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden bg-background">
         {/* Видео фреймы */}
-        <div className="absolute inset-x-0 top-24 bottom-0 overflow-hidden md:inset-0">
-          {/* Телефон: кадр крупнее в 1,8 раза — центр масштаба на ряду товаров */}
-          <div className="absolute inset-0 max-md:scale-[1.8] max-md:origin-[50%_50%]">
+        <div className={`absolute overflow-hidden ${isDesktop ? 'inset-0' : 'inset-x-0 top-24 bottom-0'}`}>
+          {/* Телефон: кадр крупнее в 1,8 раза — центр масштаба на ряду товаров; планшет стоя — свой масштаб */}
+          <div className="absolute inset-0 origin-[50%_50%]" style={isDesktop ? undefined : { transform: portraitTransform }}>
           {[0, 1, 2, 3].map(idx => (
             <div
               key={idx}
@@ -506,7 +513,7 @@ export function BestsellerScene() {
                     }
                   }
                 }}
-                className="w-full h-full object-cover md:object-center"
+                className="w-full h-full object-cover"
                 style={
                   !isDesktop
                     ? { objectPosition: 'center top' }
@@ -545,24 +552,24 @@ export function BestsellerScene() {
         </div>
 
         {/* Мягкий стык фона с соседними секциями */}
-        <div aria-hidden="true" className="absolute inset-x-0 top-24 md:top-0 h-24 bg-gradient-to-b from-background to-transparent pointer-events-none z-10" />
+        <div aria-hidden="true" className={`absolute inset-x-0 ${isDesktop ? 'top-0' : 'top-24'} h-24 bg-gradient-to-b from-background to-transparent pointer-events-none z-10`} />
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
         {/* Компьютер: края кадра (дорисованная стена и стол) растворяются в фоне страницы */}
-        <div aria-hidden="true" className="hidden md:block absolute inset-y-0 left-0 w-[44%] bg-gradient-to-r from-background from-30% via-background/60 via-60% to-transparent pointer-events-none z-10" />
-        <div aria-hidden="true" className="hidden md:block absolute inset-x-0 top-0 h-[38%] bg-gradient-to-b from-background via-background/50 to-transparent pointer-events-none z-10" />
-        <div aria-hidden="true" className="hidden md:block absolute inset-y-0 right-0 w-[12%] bg-gradient-to-l from-background via-background/50 to-transparent pointer-events-none z-10" />
+        <div aria-hidden="true" className={`${isDesktop ? '' : 'hidden'} absolute inset-y-0 left-0 w-[44%] bg-gradient-to-r from-background from-30% via-background/60 via-60% to-transparent pointer-events-none z-10`} />
+        <div aria-hidden="true" className={`${isDesktop ? '' : 'hidden'} absolute inset-x-0 top-0 h-[38%] bg-gradient-to-b from-background via-background/50 to-transparent pointer-events-none z-10`} />
+        <div aria-hidden="true" className={`${isDesktop ? '' : 'hidden'} absolute inset-y-0 right-0 w-[12%] bg-gradient-to-l from-background via-background/50 to-transparent pointer-events-none z-10`} />
 
         {/* Слой по сетке container-app: заголовок, карточка, прогресс */}
         <div className="absolute inset-0 z-20 pointer-events-none">
           <div className="container-app h-full">
             <div className="relative h-full">
-              <div className="absolute top-6 md:top-12 left-0">
+              <div className={`absolute left-0 ${isDesktop ? 'top-12' : 'top-6'}`}>
                 <p className="text-label font-semibold uppercase tracking-wide text-primary mb-2 lg:text-body-sm">Выбор косметологов</p>
                 <h2 className="text-h2 font-heading font-bold min-[1800px]:text-[clamp(3rem,2.6vw,4.25rem)]">Бестселлеры</h2>
               </div>
 
               {/* Карточка товара - десктоп */}
-              <div className="hidden md:block absolute left-0 bottom-[17%]">
+              <div className={`absolute left-0 bottom-[17%] ${isDesktop ? '' : 'hidden'}`}>
                 {cardData && cardProduct && (
                   <div
                     className={`bg-card rounded-block shadow-lg w-[clamp(22rem,24vw,32rem)] p-[clamp(1.25rem,1.3vw,2rem)] transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
@@ -598,13 +605,13 @@ export function BestsellerScene() {
               </div>
 
               {/* Полоса прогресса (десктоп) */}
-              <div className="hidden md:block absolute bottom-12 inset-x-0">{progressBar}</div>
+              <div className={`absolute bottom-12 inset-x-0 ${isDesktop ? '' : 'hidden'}`}>{progressBar}</div>
             </div>
           </div>
         </div>
 
         {/* Карточка товара - мобильный (снизу); до первого товара — невидимая заглушка, чтобы полоса прогресса не прыгала */}
-        <div className="md:hidden absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none">
+        <div className={`${isDesktop ? 'hidden' : ''} absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none`}>
           {progressBar}
           {mData && mProduct && (
             <div
