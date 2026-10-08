@@ -598,7 +598,7 @@ export function BestsellerScene() {
                       )}
                       <h3 className="text-[clamp(1rem,0.4rem+0.75vw,1.5rem)] font-heading font-bold text-foreground mb-2 text-balance">
                         <Link to={`/product/${cardProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4 transition-colors duration-200">
-                          <span className="block">{splitName(cardData.name).title}</span>
+                          <span className="block">{splitName(cardData.name).title}</span>{' '}
                           <span className="block">{splitName(cardData.name).desc}</span>
                         </Link>
                       </h3>
@@ -645,7 +645,7 @@ export function BestsellerScene() {
                 )}
                 <h3 className="text-sm font-heading font-semibold text-foreground line-clamp-3 leading-snug min-h-[3lh] md:min-h-0">
                   <Link to={`/product/${mProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4">
-                    <span className="block">{splitName(mData.name).title}</span>
+                    <span className="block">{splitName(mData.name).title}</span>{' '}
                     <span className="block font-normal">{splitName(mData.name).desc}</span>
                   </Link>
                 </h3>
