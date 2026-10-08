@@ -610,7 +610,7 @@ export function BestsellerScene() {
                       {cardData.brand && (
                         <div className="text-label font-semibold uppercase tracking-wide text-muted-foreground mb-2 min-[1800px]:text-body-sm">{cardData.brand.name}</div>
                       )}
-                      <h3 className="text-[clamp(1.25rem,0.55rem+0.95vw,1.875rem)] leading-tight font-heading font-bold text-foreground mb-3 text-balance">
+                      <h3 className="text-[clamp(1.25rem,0.55rem+0.95vw,1.625rem)] leading-tight font-heading font-bold text-foreground mb-3 text-balance">
                         <Link to={`/product/${cardProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4 transition-colors duration-200">
                           <span className="block">{splitName(cardData.name).title}</span>{' '}
                           <span className="block">{splitName(cardData.name).desc}</span>
