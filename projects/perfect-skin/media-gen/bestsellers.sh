@@ -225,6 +225,22 @@ if [ "$STAGE" = v3-split4 ]; then
   exit 0
 fi
 
+# Ролик 3→4 компьютера на Seedance 2: kling четыре раза рисовал грушу пипетки
+# кремовой рядом с рукой. 720p — решение Гермеса по цене ($0,205/с).
+if [ "$STAGE" = v3-sd2 ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
+  F=$($NUL upload "$OUT/desktop-k3.png" | sed -n 's/^URL: //p')
+  L=$($NUL upload "$OUT/desktop-k4.png" | sed -n 's/^URL: //p')
+  [ -n "$F" ] && [ -n "$L" ] || { echo "upload failed"; exit 1; }
+  tmp=$(mktemp -d)
+  $NUL generate create bytedance/seedance-2 --prompt "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A slender, delicate feminine hand (short nude manicure, no jewellery, matte skin without shine) gently sets the frosted jar it holds down on its own spot on the table, rises up and over, high above the products, then descends straight down onto the pink glass dropper bottle on the far right, the fingers close around the glass body of the bottle below the silver collar, a brief tangible grip, and it lifts the bottle a few centimeters straight up, settling exactly into the last frame. The hand never passes behind or beside the dropper bottle. The white rubber dropper bulb is solid, opaque pure white in every frame, never translucent or skin-coloured. Every product keeps its exact position, size and crisp label; nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." \
+    --set first_frame_url="$F" --set last_frame_url="$L" --set resolution=720p --set duration=4 \
+    --set aspect_ratio=16:9 --set generate_audio=false \
+    --wait --wait-timeout 1200 --yes --out "$tmp"
+  cp "$(ls "$tmp"/* | head -1)" "$OUT/desktop-3-4-sd2.mp4"
+  exit 0
+fi
+
 if [[ "$STAGE" == v3-* ]]; then
   STAGE="${STAGE#v3-}"
   OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
