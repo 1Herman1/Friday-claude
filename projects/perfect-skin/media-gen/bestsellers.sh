@@ -203,6 +203,28 @@ if [ "$STAGE" = hero ]; then
 fi
 
 
+# Ролик 3→4 компьютера через промежуточный кадр: рука сначала зависает точно
+# над сывороткой и берёт её строго сверху — у kling груша пипетки «таяла»,
+# когда ладонь проходила мимо флакона.
+if [ "$STAGE" = v3-hover4 ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
+  for v in $(seq 1 "${VARIANTS:-2}"); do
+    gen_image "desktop-k3h4-v$v" 16:9 "Edit the image. Keep EVERYTHING pixel-identical: the same exactly four products, their order, positions, sizes, labels, background, table, light, shadows, camera and framing. All four products stay standing on the table, untouched. The ONLY change: add one slender, delicate feminine hand (short nude manicure, no jewellery, matte skin, no glare) hovering in the air DIRECTLY ABOVE the pink glass dropper bottle on the far right: the fingertips point down, softly open as if about to pick it up from above, about 6 centimeters above the top of the white dropper bulb, centred over the bottle; the wrist and slim forearm come from the top edge of the frame, high above the products, never behind or beside the bottle. No finger touches anything. The white dropper bulb stays solid opaque white, fully visible against the plain wall. Only a faint soft shadow. No text." "$OUT/desktop-k0.png" &
+  done
+  wait
+  exit 0
+fi
+
+if [ "$STAGE" = v3-split4 ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
+  MID="$OUT/${FRAMES:-desktop-k3h4-v1}.png"
+  BASE="Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm. A slender, delicate feminine hand (short nude manicure, no jewellery, matte skin without shine). Every product keeps its exact position, size and crisp label; nothing flickers, nothing duplicates, no extra hands. The pink serum bottle's white rubber dropper bulb stays solid, opaque pure white in every frame. Smooth continuous motion, no cuts."
+  DUR=3 gen_video "desktop-3-h4" 16:9 "$BASE The hand gently sets the frosted jar it is holding down on its own spot on the table, releases it, then rises straight up and glides to the right, high above the products, and stops hovering directly above the pink dropper bottle exactly as in the last frame. The hand never passes behind or beside the dropper bottle." "$OUT/desktop-k3.png" "$MID" &
+  DUR=3 gen_video "desktop-h4-4" 16:9 "$BASE The hand, hovering directly above the pink dropper bottle, descends straight down, the fingers close around the glass body of the bottle below the silver collar (never on the white bulb), a brief tangible grip, then it lifts the bottle a few centimeters straight up and settles exactly into the last frame." "$MID" "$OUT/desktop-k4.png" &
+  wait
+  exit 0
+fi
+
 if [[ "$STAGE" == v3-* ]]; then
   STAGE="${STAGE#v3-}"
   OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
