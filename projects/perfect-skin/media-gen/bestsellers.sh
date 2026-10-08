@@ -273,6 +273,9 @@ for fmt in desktop mobile; do
       clip="$fmt-$((i-1))-$i"
       if [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $clip "* ]]; then continue; fi
       if [ "$i" = 1 ]; then first="$OUT/$fmt-k0h.png"; else first="$OUT/$fmt-k$((i-1)).png"; fi
+      # Сыворотка: груша пипетки у kling «таяла» — становилась бежевой и прозрачной.
+      DROPPER=""
+      [ "$i" = 4 ] && DROPPER=" The serum bottle's dropper bulb is solid opaque pure white rubber and stays exactly as in the first frame in every frame: never translucent, never beige or skin-coloured, never merging with the fingers; the fingers take the bottle by its silver collar and glass shoulder, not by the white bulb."
       # Клипы одного формата идут параллельно (цена та же, время — одного клипа).
       if [ "$i" = 1 ]; then
         # Первый ролик: рука уже в кадре над товарами и одним плавным движением
@@ -281,7 +284,7 @@ for fmt in desktop mobile; do
           "$first" "$OUT/$fmt-k$i.png" &
         continue
       fi
-      gen_video "$clip" "$AR" "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A graceful feminine hand (slender fingers, short nude manicure, no jewellery) moves with the unhurried elegance of the reference style: it glides in from the top right, slows down above product number $i from the left, gently sets down whatever it was holding, then takes product $i by its body: the fingers first close around it and hold for a brief moment (a real, tangible grip), and only then the hand lifts it a few centimeters straight up — slowly and deliberately, with visible weight, as if the bottle is heavier than it looks; the product never floats, jumps or jitters, the lift fills the last third of the clip and ends with a gentle settle exactly into the last frame. The fingers grip the product from its top and far side, so the FRONT LABEL with the product name stays fully visible and unobstructed at all times — never cover the label with fingers. No new specular highlights, glare or reflections appear on caps, lids or glass; lighting stays exactly as in the first frame. Every product keeps its exact position, size and label — labels stay crisp and readable at all times, nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts.${VEXTRA}" \
+      gen_video "$clip" "$AR" "Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A graceful feminine hand (slender fingers, short nude manicure, no jewellery) moves with the unhurried elegance of the reference style: it glides in from the top right, slows down above product number $i from the left, gently sets down whatever it was holding, then takes product $i by its body: the fingers first close around it and hold for a brief moment (a real, tangible grip), and only then the hand lifts it a few centimeters straight up — slowly and deliberately, with visible weight, as if the bottle is heavier than it looks; the product never floats, jumps or jitters, the lift fills the last third of the clip and ends with a gentle settle exactly into the last frame. The fingers grip the product from its top and far side, so the FRONT LABEL with the product name stays fully visible and unobstructed at all times — never cover the label with fingers. No new specular highlights, glare or reflections appear on caps, lids or glass; lighting stays exactly as in the first frame. Every product keeps its exact position, size and label — labels stay crisp and readable at all times, nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts.${VEXTRA}${DROPPER}" \
         "$first" "$OUT/$fmt-k$i.png" &
     done
     wait
