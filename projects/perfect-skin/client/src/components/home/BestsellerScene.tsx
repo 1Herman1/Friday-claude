@@ -55,7 +55,7 @@ export function BestsellerScene() {
   const [state, setState] = useState<SceneState>({ progress: 0, segment: 0, local: 0 })
   const [isVisible, setIsVisible] = useState(false)
   const [isNear, setIsNear] = useState(false)
-  const [videoReady, setVideoReady] = useState<boolean[]>([false, false, false, false])
+  const [, setVideoReady] = useState<boolean[]>([false, false, false, false])
   const [isReducedMotion, setIsReducedMotion] = useState(false)
   const markReady = () =>
     setVideoReady((prev) => {
@@ -256,13 +256,20 @@ export function BestsellerScene() {
   }, [isVisible, isReducedMotion, isDesktop])
 
   // Ролики целиком в памяти до показа: потоковая догрузка подвешивала 3-й и 4-й ролик.
+  // Пока ролик шага не в памяти (медленная сеть, экономия трафика), сцена листает
+  // стоп-кадры — без пустого экрана и подвисаний; догрузился — дальше идёт видео.
   const [blobs, setBlobs] = useState<(string | null)[]>([null, null, null, null])
+  const blobsRef = useRef(blobs)
+  blobsRef.current = blobs
   useEffect(() => {
     if (!isNear || isReducedMotion) return
     let alive = true
     const urls: string[] = []
     const probe = document.createElement('video')
-    const ext = probe.canPlayType('video/mp4; codecs="avc1.640028"') ? 'mp4' : 'webm'
+    // VP9 в 4–5 раз легче H.264 при том же качестве (SSIM 0,99); mp4 — для Safari.
+    const ext = probe.canPlayType('video/webm; codecs="vp9"') ? 'webm' : 'mp4'
+    const net = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+    if (net?.saveData || /(^|-)2g$/.test(net?.effectiveType ?? '')) return
     const list = isDesktop ? VIDEO_CONFIG.desktop : VIDEO_CONFIG.mobile
     list.forEach(async (src, i) => {
       try {
@@ -272,7 +279,7 @@ export function BestsellerScene() {
         urls.push(url)
         if (alive) setBlobs((prev) => prev.map((b, j) => (j === i ? url : b)))
       } catch {
-        // Без blob ролик играет потоком из <source>.
+        // Без ролика шаг остаётся стоп-кадром.
       }
     })
     return () => {
@@ -300,6 +307,14 @@ export function BestsellerScene() {
   // Ролик всегда доигрывает до товара: быстрый скролл ставит следующие в очередь.
   const segRef = useRef(-1)
   function startClip(clip: number) {
+    if (!blobsRef.current[clip]) {
+      segRef.current = Math.max(segRef.current, clip)
+      playingRef.current = null
+      stopRef.current = clip
+      setStop(clip)
+      setPlaying(null)
+      return
+    }
     const video = videoRefs.current[clip]
     playingRef.current = clip
     setPlaying(clip)
@@ -417,7 +432,7 @@ export function BestsellerScene() {
     ? { segment: playing ?? Math.max(stop, 0), isHold: playing === null && stop >= 0, cardIdx: playing ?? stop, local: playing !== null ? playFrac : stop >= 0 ? 1 : 0 }
     : {
         segment: state.segment,
-        isHold: state.progress >= 1 || state.local >= 0.7,
+        isHold: state.progress >= 1 || state.local >= (blobs[state.segment] ? 0.7 : 0.5),
         // Карточка держится между остановками: до новой остановки показан предыдущий товар.
         cardIdx: state.local > 0.55 || state.progress >= 1 ? state.segment : state.segment - 1,
         local: state.local,
@@ -503,16 +518,7 @@ export function BestsellerScene() {
                 playsInline
                 preload="auto"
                 aria-hidden="true"
-              >
-                <source
-                  src={isDesktop ? VIDEO_CONFIG.desktop[idx] : VIDEO_CONFIG.mobile[idx]}
-                  type="video/mp4"
-                />
-                <source
-                  src={(isDesktop ? VIDEO_CONFIG.desktop[idx] : VIDEO_CONFIG.mobile[idx]).replace(/\.mp4$/, '.webm')}
-                  type="video/webm"
-                />
-              </video>
+              />
               {/* Остановка: точный кадр «товар в руке» поверх ролика */}
               <img
                 src={VIDEO_CONFIG.stepPoster(fmt, idx)}
@@ -523,20 +529,15 @@ export function BestsellerScene() {
                 }`}
                 style={!isDesktop ? { objectPosition: 'center top' } : undefined}
               />
-              {/* Overlay постера пока видео не готово */}
-              {view.segment === idx && !videoReady[idx] && (
-                <div className="absolute inset-0 flex items-center justify-center bg-background">
-                  <img
-                    src={isHold ? VIDEO_CONFIG.stepPoster(fmt, idx) : VIDEO_CONFIG.startPoster(fmt, idx)}
-                    alt=""
-                    className="w-full h-full object-cover"
-                    style={
-                      !isDesktop
-                        ? { objectPosition: 'center top' }
-                        : undefined
-                    }
-                  />
-                </div>
+              {/* Ролик ещё не в памяти — стартовый кадр шага, на остановке он растворяется в кадр товара */}
+              {view.segment === idx && !blobs[idx] && (
+                <img
+                  src={VIDEO_CONFIG.startPoster(fmt, idx)}
+                  alt=""
+                  aria-hidden="true"
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHold ? 'opacity-0' : 'opacity-100'}`}
+                  style={!isDesktop ? { objectPosition: 'center top' } : undefined}
+                />
               )}
             </div>
           ))}
