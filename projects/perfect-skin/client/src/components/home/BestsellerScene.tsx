@@ -320,10 +320,12 @@ export function BestsellerScene() {
   const segRef = useRef(-1)
   function startClip(clip: number) {
     if (!blobsRef.current[clip]) {
-      segRef.current = Math.max(segRef.current, clip)
+      // Ролик ещё не в памяти — стоп-кадры: сразу встаём туда, куда прокрутили.
+      const target = Math.min(3, Math.max(segRef.current, clip))
+      segRef.current = target
       playingRef.current = null
-      stopRef.current = clip
-      setStop(clip)
+      stopRef.current = target
+      setStop(target)
       setPlaying(null)
       return
     }
@@ -597,7 +599,7 @@ export function BestsellerScene() {
               </div>
 
               {/* Карточка товара - десктоп */}
-              <div className={`absolute left-0 top-[54%] -translate-y-1/2 ${isDesktop ? '' : 'hidden'}`}>
+              <div className={`absolute left-0 top-[54%] -translate-y-[8.5rem] min-[1800px]:-translate-y-[9rem] ${isDesktop ? '' : 'hidden'}`}>
                 {cardData && cardProduct && (
                   <div
                     className={`bg-card rounded-block shadow-lg w-[24rem] p-[clamp(1.5rem,1.7vw,2.5rem)] min-[1800px]:p-7 [&_button]:min-h-12 [&_a.rounded-pill]:min-h-12 transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
