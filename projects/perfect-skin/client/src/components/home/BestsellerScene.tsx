@@ -450,7 +450,7 @@ export function BestsellerScene() {
   }
 
   const fmt: 'desktop' | 'mobile' = isDesktop ? 'desktop' : 'mobile'
-  const portraitTransform = typeof window !== 'undefined' && window.innerWidth >= 768 ? 'translateY(-9%) scale(1.2)' : 'scale(1.8)'
+  const portraitTransform = typeof window !== 'undefined' && window.innerWidth >= 768 ? 'translateY(-16%) scale(1.25)' : 'scale(1.8)'
   // Десктоп: segment = видимый ролик; на остановке — точный кадр товара stop.
   const view = isDesktop
     ? { segment: playing ?? Math.max(stop, 0), isHold: playing === null && stop >= 0, cardIdx: playing ?? stop, local: playing !== null ? playFrac : stop >= 0 ? 1 : 0 }
