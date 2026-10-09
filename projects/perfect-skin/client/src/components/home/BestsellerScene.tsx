@@ -600,7 +600,7 @@ export function BestsellerScene() {
               <div className={`absolute left-0 top-[54%] -translate-y-1/2 ${isDesktop ? '' : 'hidden'}`}>
                 {cardData && cardProduct && (
                   <div
-                    className={`bg-card rounded-block shadow-lg w-[24rem] p-[clamp(1.5rem,1.7vw,2.5rem)] [&_button]:min-h-12 [&_a.rounded-pill]:min-h-12 transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
+                    className={`bg-card rounded-block shadow-lg w-[24rem] p-[clamp(1.5rem,1.7vw,2.5rem)] min-[1800px]:p-7 [&_button]:min-h-12 [&_a.rounded-pill]:min-h-12 transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
                       cardIdx >= 0
                         ? 'opacity-100 translate-x-0 visible pointer-events-auto'
                         : 'opacity-0 -translate-x-4 invisible pointer-events-none'
@@ -610,7 +610,7 @@ export function BestsellerScene() {
                       {cardData.brand && (
                         <div className="text-label font-semibold uppercase tracking-wide text-muted-foreground mb-2 min-[1800px]:text-body-sm">{cardData.brand.name}</div>
                       )}
-                      <h3 className="text-[clamp(1.25rem,0.55rem+0.95vw,1.625rem)] leading-tight font-heading font-bold text-foreground mb-3 text-balance">
+                      <h3 className="text-[clamp(1.25rem,0.55rem+0.95vw,1.625rem)] min-[1800px]:text-[1.4375rem] leading-tight font-heading font-bold text-foreground mb-3 text-pretty">
                         <Link to={`/product/${cardProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4 transition-colors duration-200">
                           <span className="block">{splitName(cardData.name).title}</span>{' '}
                           <span className="block">{splitName(cardData.name).desc}</span>
