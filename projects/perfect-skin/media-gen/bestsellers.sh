@@ -228,9 +228,14 @@ fi
 # Ролик 3→4 компьютера на Seedance 2: kling четыре раза рисовал грушу пипетки
 # кремовой рядом с рукой. 720p — решение Гермеса по цене ($0,205/с).
 if [ "$STAGE" = v3-sd2 ]; then
-  # CLIPS=desktop-0-1 | desktop-3-4 (по умолчанию 3-4).
+  # CLIPS=desktop-0-1 | desktop-2-3 | mobile-2-3 | desktop-3-4 (по умолчанию 3-4).
   OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
+  AR="16:9"
   case "${CLIPS:-desktop-3-4}" in
+    desktop-2-3|mobile-2-3)
+      fmt="${CLIPS%%-*}"; [ "$fmt" = mobile ] && AR="9:16"
+      FIRST="$OUT/$fmt-k2.png"; LAST="$OUT/$fmt-k3.png"; NAME="$fmt-2-3-sd2"
+      PR="Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. A slender, delicate feminine hand (short nude manicure, no jewellery, matte skin without shine) gently sets the tall white KERATHOR 50 PLUS bottle it holds straight down on its own spot on the table, releases it, rises a little and moves right, then descends onto the short frosted glass jar HIDRORRENOVADORA, the fingers close on the sides of its frosted body (never on the lid), a brief tangible grip, and it lifts the jar slowly a few centimeters straight up, perfectly level, settling exactly into the last frame. The jar label stays sharp, legible and steady during the whole lift: slow even motion, no motion blur on the label, the text never warps or changes. Every product keeps its exact position, size and crisp label; nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." ;;
     desktop-0-1)
       FIRST="$OUT/desktop-k0h.png"; LAST="$OUT/desktop-k1.png"; NAME="desktop-0-1-sd2"
       PR="Locked static camera, no camera movement, no zoom. Premium skincare commercial, soft warm studio light, calm and slow. In the first frame a slender, delicate feminine hand (short nude manicure, no jewellery, matte skin without shine) hovers still above the products. In ONE single smooth, steady, continuous movement, with no hesitation, no trembling, no jitter, no back-and-forth and no second attempt, the hand descends to the first tall white bottle on the left, the fingers close lightly on its body just below the silver cap, a brief tangible grip, then it lifts the bottle a few centimeters straight up and settles exactly into the last frame. The hand moves like a calm, confident hand of a professional, perfectly stable. Every other product keeps its exact position, size and crisp label; nothing flickers, nothing duplicates, no extra hands. Smooth continuous motion, no cuts." ;;
@@ -244,7 +249,7 @@ if [ "$STAGE" = v3-sd2 ]; then
   tmp=$(mktemp -d)
   $NUL generate create bytedance/seedance-2 --prompt "$PR" \
     --set first_frame_url="$F" --set last_frame_url="$L" --set resolution=720p --set duration=4 \
-    --set aspect_ratio=16:9 --set generate_audio=false \
+    --set aspect_ratio="$AR" --set generate_audio=false \
     --wait --wait-timeout 1200 --yes --out "$tmp"
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$NAME.mp4"
   exit 0
