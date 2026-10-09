@@ -1,0 +1,20 @@
+{
+  "_comment": "SMC-BTC детектор. Жёсткие числа. Меняет только Герман.",
+  "version": "0.1",
+  "symbol": "BTCUSDT",
+  "exchange": "mexc",
+  "timeframe": "5m",
+  "htf": "1h",
+  "candles": 4032,
+
+  "swing_n": 3,
+  "sweep_lookback_bars": 24,
+  "fvg_min_pct": 0.03,
+  "entry_window_bars": 24,
+  "sl_buffer_pct": 0.03,
+  "min_stop_pct": 0.10,
+  "max_stop_pct": 0.80,
+  "rr": 2.0,
+  "htf_filter": true,
+  "htf_ema": 50
+}
