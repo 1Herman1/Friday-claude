@@ -1,6 +1,9 @@
 import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
 
 export default {
+  // На тач-экранах :hover «залипает» после тапа — hover-стили только там, где есть мышь
+  future: { hoverOnlyWhenSupported: true },
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -78,5 +81,11 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // ios: / android: — варианты под платформу (класс ставит скрипт в index.html)
+    plugin(({ addVariant }) => {
+      addVariant('ios', '.is-ios &')
+      addVariant('android', '.is-android &')
+    }),
+  ],
 } satisfies Config

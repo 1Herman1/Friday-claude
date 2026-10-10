@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import ScrollToTop from '@/components/layout/ScrollToTop'
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import { Layout } from '@/components/layout/Layout'
 import { IconCart, IconHeart } from '@/components/icons'
@@ -36,6 +37,7 @@ const ShopLayout = () => (
     <CartProvider>
       <FavoritesProvider>
         <Layout cartIcon={<IconCart />} favoriteIcon={<IconHeart />}>
+          <ScrollToTop />
           <Outlet />
         </Layout>
       </FavoritesProvider>

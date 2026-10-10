@@ -9,6 +9,7 @@ import { useFavorites } from '@/context/FavoritesContext'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { ContactsPopover } from './ContactsPopover'
 import { pluralize } from '@/lib/format'
+import { scrollToTopFast } from '@/lib/scroll-top'
 
 interface HeaderProps {
   cartIcon?: React.ReactNode
@@ -80,7 +81,17 @@ export function Header({
         <div className="container-app py-3 md:py-4">
           <div className="flex items-center justify-between gap-2">
             <div className="shrink-0">
-              <Link to="/" className="focus-visible:outline-ring block">
+              <Link
+                to="/"
+                className="focus-visible:outline-ring block"
+                onClick={(e) => {
+                  // На главной логотип — быстрый плавный подъём наверх, а не «телепорт»
+                  if (location.pathname === '/') {
+                    e.preventDefault()
+                    scrollToTopFast()
+                  }
+                }}
+              >
                 <img
                   src="/logo/logo-wordmark.webp"
                   alt="Perfect Skin"

@@ -49,6 +49,18 @@
 }
 
 @layer base {
+  html {
+    /* На тапе браузер не рисует свою серую вспышку — нажатие показываем своими стилями */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  a,
+  [role='button'] {
+    /* Без задержки двойного тапа на кнопках и ссылках */
+    touch-action: manipulation;
+  }
+
   h1 {
     @apply text-display font-heading font-bold uppercase leading-[1.12];
     letter-spacing: -0.015em;

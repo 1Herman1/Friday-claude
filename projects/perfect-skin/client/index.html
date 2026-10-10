@@ -8,13 +8,20 @@
     <link rel="icon" type="image/png" sizes="48x48" href="/logo/favicon-48.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/logo/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#F4F2EC" />
     <title>Perfect Skin — про-косметика из Испании</title>
     <!-- Снимок каталога стартует параллельно с бандлом, а не после него -->
     <link rel="preload" href="/snapshot/catalog.json" as="fetch" crossorigin />
-    <!-- LCP-кадр героя главной: грузим до монтирования React (только десктоп) -->
-    <link rel="preload" as="image" href="/photos/m4.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high" />
+    <script>
+      // Платформа до первой отрисовки: iOS — скруглённые плавающие панели, Android — прямоугольные
+      (function () {
+        var ua = navigator.userAgent || ''
+        var ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+        var cls = ios ? 'is-ios' : /Android/.test(ua) ? 'is-android' : 'is-desktop-os'
+        document.documentElement.classList.add(cls)
+      })()
+    </script>
     <meta name="description" content="Профессиональная косметика испанских брендов ISSEIMI и GLACÉE Skincare. Назначают врачи. Любит ваша кожа." />
     <style>
       :root {
