@@ -12,7 +12,8 @@ export function HowItWorksSection({ id, data, level = 'h2' }: HowItWorksSectionP
   const titleId = useId()
   const Heading = level
   const ItemHeading = level === 'h2' ? 'h3' : 'h4'
-  const columns = data.items.length <= 4 ? 'xl:grid-cols-4' : 'xl:grid-cols-3'
+  // Сетка по числу пунктов: 4 — в ряд, 2 — пополам, остальное — по три
+  const columns = data.items.length === 4 ? 'xl:grid-cols-4' : data.items.length === 2 ? '' : 'xl:grid-cols-3'
 
   return (
     <section id={id} aria-labelledby={titleId} className={sectionClass}>

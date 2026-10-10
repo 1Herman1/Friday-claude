@@ -10,6 +10,9 @@ interface LifehackBannerProps {
 
 export function LifehackBanner({ id, data }: LifehackBannerProps) {
   const titleId = useId()
+  // Подпись «Лайфхак» уже над баннером — из заголовка клиента убираем повтор этого слова
+  const rest = data.title?.replace(/^(лайф|лайв)[\s-]*хак\s*(от экспертов)?[\s:.\-–—]*/i, '').trim()
+  const title = rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : null
 
   return (
     <section
@@ -23,8 +26,8 @@ export function LifehackBanner({ id, data }: LifehackBannerProps) {
           Лайфхак
         </h2>
       </div>
-      {data.title && (
-        <h3 className="font-heading text-lg font-semibold text-dark-foreground md:text-xl">{data.title}</h3>
+      {title && (
+        <h3 className="font-heading text-lg font-semibold text-dark-foreground md:text-xl">{title}</h3>
       )}
       {data.paragraphs.map((paragraph, index) => (
         <p key={index} className="max-w-prose">
