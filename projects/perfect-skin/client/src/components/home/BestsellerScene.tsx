@@ -37,6 +37,9 @@ function isWideScene() {
   return window.innerWidth >= 768 && window.innerWidth / window.innerHeight >= 1.2
 }
 
+// Телефон: доля отрезка прокрутки, за которую играет ролик; остаток — остановка на товаре
+const MOVE_SHARE = 0.8
+
 export function BestsellerScene() {
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
@@ -45,6 +48,9 @@ export function BestsellerScene() {
   const targetRef = useRef({ idx: 0, frac: 0 })
   const rafRef = useRef<number | null>(null)
   const smoothRef = useRef([0, 0, 0, 0])
+  const segSeenRef = useRef(-1)
+  // Телефон: при входе в новый отрезок ролик сначала встаёт на нужный кадр, до этого виден стоп-кадр
+  const [pendingSeg, setPendingSeg] = useState<number | null>(null)
 
   const tick = () => {
     rafRef.current = null
@@ -183,10 +189,22 @@ export function BestsellerScene() {
         local,
       })
 
-      const moveShare = 0.7
-      const k = Math.min(1, local / moveShare)
-      const eased = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2
-      targetRef.current = { idx: finalSegment, frac: scrollProgress >= 1 ? 1 : eased }
+      const k = Math.min(1, local / MOVE_SHARE)
+      const eased = 1 - (1 - k) * (1 - k)
+      const frac = scrollProgress >= 1 ? 1 : eased
+      targetRef.current = { idx: finalSegment, frac }
+      if (finalSegment !== segSeenRef.current) {
+        // Новый отрезок: сразу ставим ролик на нужное место, без «доезда» от прошлого прохода
+        segSeenRef.current = finalSegment
+        const video = videoRefs.current[finalSegment]
+        if (video && video.duration) {
+          const t = frac * (video.duration - 0.05)
+          smoothRef.current[finalSegment] = t
+          setPendingSeg(finalSegment)
+          video.addEventListener('seeked', () => setPendingSeg((cur) => (cur === finalSegment ? null : cur)), { once: true })
+          video.currentTime = t
+        }
+      }
       if (rafRef.current === null) rafRef.current = requestAnimationFrame(tick)
 
       markReady()
@@ -456,7 +474,7 @@ export function BestsellerScene() {
     ? { segment: playing ?? Math.max(stop, 0), isHold: playing === null && stop >= 0, cardIdx: playing ?? stop, local: playing !== null ? playFrac : stop >= 0 ? 1 : 0 }
     : {
         segment: state.segment,
-        isHold: state.progress >= 1 || state.local >= (blobs[state.segment] ? 0.7 : 0.5),
+        isHold: state.progress >= 1 || state.local >= (blobs[state.segment] ? MOVE_SHARE : 0.5),
         // Карточка держится между остановками: до новой остановки показан предыдущий товар.
         cardIdx: state.local > 0.55 || state.progress >= 1 ? state.segment : state.segment - 1,
         local: state.local,
@@ -521,7 +539,7 @@ export function BestsellerScene() {
           {[0, 1, 2, 3].map(idx => (
             <div
               key={idx}
-              className={`absolute inset-0 transition-opacity duration-300 ${
+              className={`absolute inset-0 ${
                 view.segment === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
             >
@@ -556,18 +574,18 @@ export function BestsellerScene() {
                 preload="auto"
                 aria-hidden="true"
               />
-              {/* Остановка: точный кадр «товар в руке» поверх ролика */}
+              {/* Остановка: кадр «товар в руке» — тот же, что последний кадр ролика, поэтому подмена мгновенная */}
               <img
                 src={VIDEO_CONFIG.stepPoster(fmt, idx)}
                 alt=""
                 aria-hidden="true"
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[400ms] ${
+                className={`absolute inset-0 w-full h-full object-cover ${
                   view.segment === idx && isHold ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={!isDesktop ? { objectPosition: 'center top' } : undefined}
               />
               {/* Ролик ещё не в памяти — стартовый кадр шага, на остановке он растворяется в кадр товара */}
-              {view.segment === idx && !blobs[idx] && (
+              {view.segment === idx && (!blobs[idx] || (pendingSeg === idx && !isHold)) && (
                 <img
                   src={VIDEO_CONFIG.startPoster(fmt, idx)}
                   alt=""
