@@ -17,8 +17,42 @@ import {
 } from '@/lib/admin-api'
 import { ApiError } from '@/lib/api'
 import { formatPrice } from '@/lib/format'
+import type { ProductDetails } from '@/types/api'
 
-type Tab = 'basic' | 'description' | 'usage' | 'inci' | 'skins' | 'variants' | 'images' | 'seo'
+type Tab = 'basic' | 'card' | 'description' | 'usage' | 'inci' | 'skins' | 'variants' | 'images' | 'seo'
+
+interface ValidationIssue {
+  path: string
+  message: string
+}
+
+type DetailsParse = { ok: true; value: ProductDetails | null } | { ok: false; message: string }
+
+const formatDetails = (details: ProductDetails | null | undefined): string =>
+  details ? JSON.stringify(details, null, 2) : ''
+
+// Проверка в браузере — только синтаксис JSON и тип объекта. Схему проверяет сервер.
+function parseDetailsText(text: string): DetailsParse {
+  if (text.trim() === '') return { ok: true, value: null }
+  let value: unknown
+  try {
+    value = JSON.parse(text)
+  } catch {
+    return { ok: false, message: 'Некорректный JSON: проверьте кавычки, запятые и скобки' }
+  }
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return { ok: false, message: 'Карточка должна быть объектом в фигурных скобках' }
+  }
+  return { ok: true, value: value as ProductDetails }
+}
+
+function isIssue(value: unknown): value is ValidationIssue {
+  return typeof value === 'object' && value !== null && 'path' in value && 'message' in value &&
+    typeof value.path === 'string' && typeof value.message === 'string'
+}
+
+const isDetailsIssue = (issue: ValidationIssue): boolean =>
+  issue.path === 'details' || issue.path.startsWith('details.')
 
 export function AdminProductEditPage() {
   const { id } = useParams()
@@ -55,6 +89,9 @@ export function AdminProductEditPage() {
 
   const [variantModal, setVariantModal] = useState<{ isOpen: boolean; data?: Partial<ProductVariant> }>({ isOpen: false })
   const [imageUpload, setImageUpload] = useState<{ loading: boolean; error: string }>({ loading: false, error: '' })
+  const [detailsText, setDetailsText] = useState('')
+  const [savedDetailsText, setSavedDetailsText] = useState('')
+  const [issues, setIssues] = useState<ValidationIssue[]>([])
 
   const loadDictionaries = async () => {
     try {
@@ -75,6 +112,8 @@ export function AdminProductEditPage() {
     try {
       const product = await adminGetProduct(id!)
       setFormData(product)
+      setDetailsText(formatDetails(product.details))
+      setSavedDetailsText(formatDetails(product.details))
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message || 'Ошибка при загрузке товара')
@@ -107,6 +146,7 @@ export function AdminProductEditPage() {
   const handleSave = async () => {
     setError('')
     setSuccess('')
+    setIssues([])
     setSaving(true)
 
     try {
@@ -129,7 +169,16 @@ export function AdminProductEditPage() {
         setSuccess('Товар создан')
         setTimeout(() => navigate(`/admin/products/${created.id}`), 1000)
       } else {
-        await adminUpdateProductFull(id!, {
+        const detailsParse = parseDetailsText(detailsText)
+        if (!detailsParse.ok) {
+          setActiveTab('card')
+          setError('Товар не сохранён: исправьте карточку на вкладке «Карточка (JSON)»')
+          return
+        }
+        const detailsPatch = detailsText.trim() !== savedDetailsText.trim() ? { details: detailsParse.value } : {}
+
+        const updated = await adminUpdateProductFull(id!, {
+          ...detailsPatch,
           name: formData.name,
           slug: formData.slug,
           shortDescription: formData.shortDescription,
@@ -147,12 +196,24 @@ export function AdminProductEditPage() {
           isFeatured: formData.isFeatured,
           isProfessional: formData.isProfessional,
         })
+        setFormData((prev) => ({
+          ...prev,
+          description: updated.description,
+          usage: updated.usage,
+          details: updated.details,
+        }))
+        const savedJson = formatDetails(updated.details)
+        setDetailsText(savedJson)
+        setSavedDetailsText(savedJson)
         setSuccess('Товар сохранен')
         setTimeout(() => setSuccess(''), 3000)
       }
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message || 'Ошибка при сохранении')
+        const found = Array.isArray(err.details?.issues) ? err.details.issues.filter(isIssue) : []
+        setIssues(found)
+        if (found.some(isDetailsIssue)) setActiveTab('card')
       } else {
         setError('Нет соединения с сервером')
       }
@@ -282,6 +343,12 @@ export function AdminProductEditPage() {
     }
   }
 
+  const detailsParse = parseDetailsText(detailsText)
+  const cardFilled = detailsText.trim() !== ''
+  const cardHasUsage = detailsParse.ok && detailsParse.value?.usage != null
+  const cardIssues = issues.filter(isDetailsIssue)
+  const otherIssues = issues.filter((issue) => !isDetailsIssue(issue))
+
   if (loading) {
     return <div className="container-app py-24 text-muted-foreground">Загрузка…</div>
   }
@@ -336,6 +403,15 @@ export function AdminProductEditPage() {
       {error && (
         <div className="bg-destructive/10 border border-destructive text-destructive rounded-block p-4 mb-8">
           {error}
+          {otherIssues.length > 0 && (
+            <ul className="list-disc pl-5 mt-2 text-sm">
+              {otherIssues.map((issue) => (
+                <li key={`${issue.path}:${issue.message}`}>
+                  {issue.path}: {issue.message}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
@@ -349,6 +425,7 @@ export function AdminProductEditPage() {
       <div className="flex gap-2 mb-8 border-b border-border overflow-x-auto">
         {[
           { id: 'basic', label: 'Основное' },
+          { id: 'card', label: 'Карточка (JSON)' },
           { id: 'description', label: 'Описание' },
           { id: 'usage', label: 'Применение' },
           { id: 'inci', label: 'INCI' },
@@ -491,6 +568,52 @@ export function AdminProductEditPage() {
           </div>
         )}
 
+        {/* Card (JSON) */}
+        {activeTab === 'card' && !isNew && (
+          <div className="bg-card border border-border rounded-block p-6 space-y-4">
+            <div>
+              <label htmlFor="product-details" className="block text-label font-sans text-muted-foreground mb-2">
+                Карточка товара (JSON)
+              </label>
+              <p className="text-sm text-muted-foreground mb-3">
+                Пусто: карточки нет, страница показывает «Описание» и «Применение» как текст. Заполнено: при сохранении
+                оба текста собираются из карточки.
+              </p>
+              <textarea
+                id="product-details"
+                value={detailsText}
+                onChange={(e) => setDetailsText(e.target.value)}
+                spellCheck={false}
+                aria-invalid={!detailsParse.ok}
+                className="w-full px-4 py-2 border border-border-strong rounded-block font-mono text-sm text-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring min-h-[360px]"
+              />
+            </div>
+
+            {(!detailsParse.ok || cardIssues.length > 0) && (
+              <div role="alert" className="text-destructive text-sm space-y-1">
+                {!detailsParse.ok && <p>{detailsParse.message}</p>}
+                {cardIssues.map((issue) => (
+                  <p key={`${issue.path}:${issue.message}`}>
+                    {issue.path}: {issue.message}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={() => {
+                setDetailsText('')
+                setIssues([])
+              }}
+              disabled={!cardFilled}
+              className="px-6 py-2 border border-border text-foreground font-sans font-semibold rounded-block hover:bg-muted transition-colors disabled:opacity-50 min-h-11"
+            >
+              Очистить карточку
+            </button>
+          </div>
+        )}
+
         {/* Description */}
         {activeTab === 'description' && (
           <div className="bg-card border border-border rounded-block p-6 space-y-6">
@@ -510,11 +633,17 @@ export function AdminProductEditPage() {
               <label className="block text-label font-sans text-muted-foreground mb-2">
                 Полное описание
               </label>
+              {cardFilled && (
+                <p className="text-sm text-muted-foreground mb-2">
+                  Собирается из карточки. Чтобы править вручную, очистите карточку на вкладке «Карточка (JSON)».
+                </p>
+              )}
               <textarea
                 value={formData.description || ''}
                 onChange={(e) => handleInputChange('description', e.target.value)}
+                readOnly={cardFilled}
                 maxLength={20000}
-                className="w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring min-h-[200px]"
+                className={`w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground focus:outline-ring focus:ring-2 focus:ring-ring min-h-[200px] ${cardFilled ? 'bg-muted' : 'bg-background'}`}
               />
             </div>
           </div>
@@ -526,11 +655,19 @@ export function AdminProductEditPage() {
             <label className="block text-label font-sans text-muted-foreground mb-2">
               Способ применения
             </label>
+            {cardFilled && (
+              <p className="text-sm text-muted-foreground mb-2">
+                {cardHasUsage
+                  ? 'Собирается из карточки. Чтобы править вручную, очистите карточку на вкладке «Карточка (JSON)».'
+                  : 'В карточке нет раздела «Применение», поэтому при сохранении текст не меняется. Править его можно после очистки карточки.'}
+              </p>
+            )}
             <textarea
               value={formData.usage || ''}
               onChange={(e) => handleInputChange('usage', e.target.value)}
+              readOnly={cardFilled}
               maxLength={10000}
-              className="w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring min-h-[150px]"
+              className={`w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground focus:outline-ring focus:ring-2 focus:ring-ring min-h-[150px] ${cardFilled ? 'bg-muted' : 'bg-background'}`}
             />
           </div>
         )}

@@ -367,6 +367,7 @@ model Product {
   concerns         Concern[]
   usage            String?
   inciText         String? // полный состав как на этикетке
+  details          Json? // карточка «Аптечная карта», формат — lib/product-details.ts; null = текст из description/usage
   seoTitle         String?
   seoDescription   String?
   minPrice         Int        @default(0) // минимальная розничная цена активных фасовок, копейки

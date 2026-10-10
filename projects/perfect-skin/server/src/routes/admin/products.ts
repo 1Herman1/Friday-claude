@@ -8,6 +8,7 @@ import { ApiError } from '../../lib/errors.js'
 import { sniffMime } from '../../lib/pro-docs.js'
 import { productImagesDir } from '../../lib/env.js'
 import { db } from '../../lib/db.js'
+import { ProductDetailsSchema, ruErrorMap } from '../../lib/product-details.js'
 
 const listVariantsSchema = z.object({
   search: z.string().max(100).optional(),
@@ -72,6 +73,7 @@ const updateProductFullSchema = z.object({
   isActive: z.boolean().optional(),
   isFeatured: z.boolean().optional(),
   isProfessional: z.boolean().optional(),
+  details: ProductDetailsSchema.nullable().optional(),
 })
 
 const deleteImageSchema = z.object({
@@ -424,9 +426,11 @@ export async function productsRoutes(app: FastifyInstance, preHandlers: any[]) {
       },
     },
     async (request: FastifyRequest<{ Params: { id: string }; Body: any }>, reply: FastifyReply) => {
-      const result = updateProductFullSchema.safeParse(request.body)
+      const result = updateProductFullSchema.safeParse(request.body, { errorMap: ruErrorMap })
       if (!result.success) {
-        throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации')
+        throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации', {
+          issues: result.error.issues.slice(0, 50).map((issue) => ({ path: issue.path.join('.'), message: issue.message })),
+        })
       }
 
       const product = await adminProductService.updateProductFull(request.params.id, result.data)

@@ -1,4 +1,5 @@
 import { fetchApi } from './api'
+import type { ProductDetails } from '@/types/api'
 
 /**
  * Тип заказа на странице админа
@@ -661,6 +662,7 @@ export interface ProductEditData {
   inciText?: string | null
   seoTitle?: string | null
   seoDescription?: string | null
+  details?: ProductDetails | null
   isActive: boolean
   isFeatured: boolean
   isProfessional: boolean
@@ -737,6 +739,7 @@ export async function adminUpdateProductFull(
     isActive?: boolean
     isFeatured?: boolean
     isProfessional?: boolean
+    details?: ProductDetails | null
   }
 ): Promise<ProductEditData> {
   return fetchApi<ProductEditData>(

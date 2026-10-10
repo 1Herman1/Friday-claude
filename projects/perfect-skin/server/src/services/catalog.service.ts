@@ -4,6 +4,7 @@ import { CONCERNS, SKIN_TYPES } from '../lib/dictionaries.js'
 import type { Concern, SkinType } from '../lib/db.js'
 import { getPopularProductsMap } from './popular.service.js'
 import { isWholesaleViewer, canSeeProfessional, resolvePrice, type PriceViewer } from '../lib/pricing.js'
+import { readDetails } from '../lib/product-details.js'
 
 export interface CatalogFilters {
   q?: string
@@ -719,6 +720,7 @@ export async function getProductBySlug(
     images: product.images || [],
     shortDescription: product.shortDescription,
     description: product.description,
+    details: readDetails(product.details),
     usage: product.usage,
     inciText: product.inciText,
     ingredients: product.ingredients.map((pi: any) => ({

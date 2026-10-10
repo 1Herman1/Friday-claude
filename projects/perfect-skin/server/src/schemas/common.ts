@@ -80,6 +80,116 @@ export function registerCommonSchemas(app: FastifyInstance) {
     },
   })
 
+  // Карточка «Аптечная карта»: формат — server/src/lib/product-details.ts. Каждый уровень
+  // с additionalProperties: false, иначе fast-json-stringify молча вырежет поле.
+  app.addSchema({
+    $id: 'ps.detailsItem',
+    type: 'object',
+    additionalProperties: false,
+    required: ['title', 'text'],
+    properties: {
+      title: { type: ['string', 'null'] },
+      text: { type: 'string' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.detailsHowItWorks',
+    type: 'object',
+    additionalProperties: false,
+    required: ['heading', 'lead', 'items', 'result'],
+    properties: {
+      heading: { type: 'string' },
+      lead: { type: 'array', items: { type: 'string' } },
+      items: { type: 'array', items: { $ref: 'ps.detailsItem#' } },
+      result: { type: ['string', 'null'] },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.detailsForWhom',
+    type: 'object',
+    additionalProperties: false,
+    required: ['lead', 'items', 'note'],
+    properties: {
+      lead: { type: ['string', 'null'] },
+      items: { type: 'array', items: { type: 'string' } },
+      note: { type: 'array', items: { type: 'string' } },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.detailsUsage',
+    type: 'object',
+    additionalProperties: false,
+    required: ['heading', 'steps', 'notes'],
+    properties: {
+      heading: { type: 'string' },
+      steps: { type: 'array', items: { $ref: 'ps.detailsItem#' } },
+      notes: { type: 'array', items: { type: 'string' } },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.detailsPro',
+    type: 'object',
+    additionalProperties: false,
+    required: ['volumeLabel', 'tagline', 'intro', 'howItWorks', 'forWhom', 'actives', 'usage'],
+    properties: {
+      volumeLabel: { type: 'string' },
+      tagline: { type: 'array', items: { type: 'string' } },
+      intro: { type: 'array', items: { type: 'string' } },
+      howItWorks: { anyOf: [{ $ref: 'ps.detailsHowItWorks#' }, { type: 'null' }] },
+      forWhom: { anyOf: [{ $ref: 'ps.detailsForWhom#' }, { type: 'null' }] },
+      actives: { type: 'array', items: { type: 'string' } },
+      usage: { anyOf: [{ $ref: 'ps.detailsUsage#' }, { type: 'null' }] },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.productDetails',
+    type: 'object',
+    additionalProperties: false,
+    required: ['v', 'tagline', 'intro', 'extra', 'howItWorks', 'actives', 'forWhom', 'usage', 'lifehack', 'pro'],
+    properties: {
+      v: { type: 'integer' },
+      tagline: { type: 'array', items: { type: 'string' } },
+      intro: { type: 'array', items: { type: 'string' } },
+      extra: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['heading', 'paragraphs', 'items'],
+          properties: {
+            heading: { type: 'string' },
+            paragraphs: { type: 'array', items: { type: 'string' } },
+            items: { type: 'array', items: { type: 'string' } },
+          },
+        },
+      },
+      howItWorks: { anyOf: [{ $ref: 'ps.detailsHowItWorks#' }, { type: 'null' }] },
+      actives: { type: 'array', items: { type: 'string' } },
+      forWhom: { anyOf: [{ $ref: 'ps.detailsForWhom#' }, { type: 'null' }] },
+      usage: { anyOf: [{ $ref: 'ps.detailsUsage#' }, { type: 'null' }] },
+      lifehack: {
+        anyOf: [
+          {
+            type: 'object',
+            additionalProperties: false,
+            required: ['title', 'paragraphs'],
+            properties: {
+              title: { type: ['string', 'null'] },
+              paragraphs: { type: 'array', items: { type: 'string' } },
+            },
+          },
+          { type: 'null' },
+        ],
+      },
+      pro: { anyOf: [{ $ref: 'ps.detailsPro#' }, { type: 'null' }] },
+    },
+  })
+
   app.addSchema({
     $id: 'ps.productCardFull',
     type: 'object',
@@ -95,6 +205,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
       'variants',
       'images',
       'description',
+      'details',
       'ingredients',
       'categories',
       'seo',
@@ -137,6 +248,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
       images: { type: 'array', items: { type: 'string' } },
       shortDescription: { type: ['string', 'null'] },
       description: { type: 'string' },
+      details: { anyOf: [{ $ref: 'ps.productDetails#' }, { type: 'null' }] },
       usage: { type: ['string', 'null'] },
       inciText: { type: ['string', 'null'] },
       ingredients: {

@@ -1,85 +1,86 @@
 import { z } from 'zod'
+import { ProductDetailsSchema, ruErrorMap, syncedText, textLimitIssue, type ProductDetails } from './product-details.js'
 
-const TextBlockSchema = z.array(z.string().min(1)).min(1).nullable()
-
-export const ContentItemSchema = z.object({
-  slug: z.string().min(1),
-  sourceTitle: z.string().min(1),
-  sourceFile: z.string().min(1),
-  volume: z.string().min(1),
-  description: z.array(z.string().min(1)).min(1),
-  forWhom: TextBlockSchema,
-  actives: TextBlockSchema,
-  usage: TextBlockSchema,
-  lifehack: TextBlockSchema,
-  inci: TextBlockSchema,
+export const DetailsFileSchema = z.object({
+  slug: z.string().regex(/^[a-z0-9-]+$/, 'slug: только латиница, цифры и дефисы'),
+  details: ProductDetailsSchema,
 })
 
-export const ContentFileSchema = z.array(ContentItemSchema)
+export interface DetailsFile {
+  slug: string
+  details: ProductDetails
+}
 
-export type ContentItem = z.infer<typeof ContentItemSchema>
-
-export interface ProductTextFields {
+export interface CurrentContent {
+  details: unknown
   description: string
   usage: string | null
-  inciText: string | null
 }
 
 export interface FieldPlan {
-  field: keyof ProductTextFields
-  inFile: boolean
-  oldLength: number
-  newLength: number
-  changed: boolean
+  field: 'details' | 'description' | 'usage'
+  state: 'changed' | 'same' | 'not-in-card'
+  oldLength?: number
+  newLength?: number
 }
 
-export interface ProductTextPlan {
-  data: Partial<ProductTextFields>
+export interface ProductContentPlan {
+  data: { details?: ProductDetails; description?: string; usage?: string }
   fields: FieldPlan[]
 }
 
-const stripBullet = (line: string): string => line.replace(/^[•\-–]\s*/, '')
-
-// Страница выводит поля через whitespace-pre-line, без markdown: абзацы — пустой строкой, пункты списка — переносом.
-export function composeDescription(item: ContentItem): string {
-  const blocks = [item.description.join('\n\n')]
-  if (item.forWhom) blocks.push(`Кому подойдёт:\n${item.forWhom.map(stripBullet).join('\n')}`)
-  if (item.actives) blocks.push(`Активные ингредиенты:\n${item.actives.join('\n')}`)
-  if (item.lifehack) blocks.push(`Лайфхак:\n${item.lifehack.join('\n\n')}`)
-  return blocks.join('\n\n')
+// Ключи сортируются, чтобы JSONB из базы (порядок ключей у Postgres свой) сравнивался с файлом.
+export function canonicalJson(value: unknown): string {
+  return JSON.stringify(value, (_key, v: unknown) =>
+    v !== null && typeof v === 'object' && !Array.isArray(v)
+      ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)))
+      : v,
+  )
 }
 
-function planField(
-  field: keyof ProductTextFields,
-  oldValue: string | null,
-  newValue: string | undefined
-): FieldPlan {
-  const before = oldValue ?? ''
-  const after = newValue ?? before
+export function parseDetailsFile(file: string, json: unknown): DetailsFile {
+  const parsed = DetailsFileSchema.safeParse(json, { errorMap: ruErrorMap })
+  if (!parsed.success) {
+    const issues = parsed.error.issues.slice(0, 5).map((i) => `${i.path.join('.') || '(корень)'}: ${i.message}`)
+    throw new Error(`${file}: ${issues.join('; ')}`)
+  }
+  return parsed.data
+}
+
+function planText(field: 'description' | 'usage', before: string | null, after: string): FieldPlan {
+  const oldValue = before ?? ''
   return {
     field,
-    inFile: newValue !== undefined,
-    oldLength: before.length,
+    state: oldValue === after ? 'same' : 'changed',
+    oldLength: oldValue.length,
     newLength: after.length,
-    changed: newValue !== undefined && newValue !== before,
   }
 }
 
-export function planProductText(item: ContentItem, current: ProductTextFields): ProductTextPlan {
-  const description = composeDescription(item)
-  const usage = item.usage?.join('\n\n')
-  const inciText = item.inci?.join('\n')
+// Тот же план для базы и для снимка. Лимиты — отказ всего прогона, поэтому бросаем, а не режем текст.
+export function planProductContent(current: CurrentContent, details: ProductDetails): ProductContentPlan {
+  const text = syncedText(details)
+  const limit = textLimitIssue(text)
+  if (limit) throw new Error(limit)
 
-  const fields = [
-    planField('description', current.description, description),
-    planField('usage', current.usage, usage),
-    planField('inciText', current.inciText, inciText),
-  ]
+  const data: ProductContentPlan['data'] = {}
+  const fields: FieldPlan[] = []
 
-  const data: Partial<ProductTextFields> = {}
-  if (fields[0].changed) data.description = description
-  if (fields[1].changed) data.usage = usage
-  if (fields[2].changed) data.inciText = inciText
+  const detailsSame = canonicalJson(current.details) === canonicalJson(details)
+  fields.push({ field: 'details', state: detailsSame ? 'same' : 'changed' })
+  if (!detailsSame) data.details = details
+
+  const description = planText('description', current.description, text.description)
+  fields.push(description)
+  if (description.state === 'changed') data.description = text.description
+
+  if (text.usage === undefined) {
+    fields.push({ field: 'usage', state: 'not-in-card' })
+  } else {
+    const usage = planText('usage', current.usage, text.usage)
+    fields.push(usage)
+    if (usage.state === 'changed') data.usage = text.usage
+  }
 
   return { data, fields }
 }

@@ -89,3 +89,40 @@ export function readDetails(json: unknown): ProductDetails | null {
   console.warn('product details: невалидная карточка, выводим только текст', parsed.error.issues.slice(0, 3))
   return null
 }
+
+// Текст карточки → description/usage. Единая точка для импорта и админки.
+// usage отсутствует в результате, если в карточке нет способа применения:
+// тогда существующее значение в базе не трогаем.
+export function syncedText(d: ProductDetails): { description: string; usage?: string } {
+  const flat = flattenDetails(d)
+  return flat.usage === null ? { description: flat.description } : { description: flat.description, usage: flat.usage }
+}
+
+export const TEXT_LIMITS = { description: 20000, usage: 10000 } as const
+
+export function textLimitIssue(text: { description: string; usage?: string }): string | null {
+  if (text.description.length > TEXT_LIMITS.description) return `описание длиннее ${TEXT_LIMITS.description} знаков`
+  if (text.usage !== undefined && text.usage.length > TEXT_LIMITS.usage) return `применение длиннее ${TEXT_LIMITS.usage} знаков`
+  return null
+}
+
+export const ruErrorMap: z.ZodErrorMap = (issue, ctx) => {
+  switch (issue.code) {
+    case z.ZodIssueCode.invalid_type:
+      return {
+        message: issue.received === z.ZodParsedType.undefined ? 'поле обязательно' : `ожидалось: ${issue.expected}, пришло: ${issue.received}`,
+      }
+    case z.ZodIssueCode.too_small:
+      return { message: issue.type === 'string' && issue.minimum === 1 ? 'не может быть пустым' : `минимум ${issue.minimum}` }
+    case z.ZodIssueCode.too_big:
+      return { message: `максимум ${issue.maximum}` }
+    case z.ZodIssueCode.unrecognized_keys:
+      return { message: `лишние поля: ${issue.keys.join(', ')}` }
+    case z.ZodIssueCode.invalid_literal:
+      return { message: `допустимо только ${String(issue.expected)}` }
+    case z.ZodIssueCode.invalid_string:
+      return { message: 'неверный формат' }
+    default:
+      return { message: ctx.defaultError }
+  }
+}

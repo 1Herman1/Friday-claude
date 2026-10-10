@@ -334,8 +334,28 @@ npm run import:pro-products --workspace=@ps/server            # сухой пр�
 npm run import:pro-products --workspace=@ps/server -- --apply
 ```
 
-Оба импорта входят в bootstrap после посева, поэтому установка с нуля
-получает тот же каталог, что и прод.
+### Карточки товаров («Аптечная карта»)
+
+Структурированные описания из файлов клиента лежат в `server/assets/product-details/<slug>.json`
+(63 файла; `_pending/` и файлы с `_` в начале не читаются). Скрипт
+`server/prisma/import-content.ts` пишет карточку в `products.details` и пересобирает из неё
+`description` и `usage`. `inciText` не трогает. Если в карточке нет способа применения, `usage`
+в базе остаётся прежним. Превышение лимитов (описание 20000 знаков, применение 10000) останавливает
+весь прогон без записи.
+
+```bash
+npm run import:content --workspace=@ps/server               # сухой прогон
+npm run import:content --workspace=@ps/server -- --apply    # одна транзакция; повтор ничего не меняет
+```
+
+Откат без перевыкатки: `UPDATE products SET details = NULL` — страница покажет текст из
+`description`/`usage`, а он останется таким, каким его собрала карточка.
+
+Локальный снимок каталога без базы (`client/public/snapshot/catalog.json`) — тем же планом:
+`npm run content:snapshot --workspace=@ps/server`.
+
+Все импорты (цены, кабинетные товары, карточки) входят в bootstrap после посева, поэтому установка
+с нуля получает тот же каталог, что и прод.
 
 Фото придут от клиента — положить файлы в `client/public/products-optimized/<slug>/`
 (card.webp, card@2x.webp, full.webp) и добавить путь в `Product.images`

@@ -1,5 +1,6 @@
-import { db, type Prisma } from '../lib/db.js'
+import { db, Prisma } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
+import { readDetails, syncedText, textLimitIssue, type ProductDetails } from '../lib/product-details.js'
 import { recalcProductPrices } from './product-prices.js'
 
 interface ListVariantsQuery {
@@ -351,12 +352,22 @@ export class AdminProductService {
       isActive?: boolean
       isFeatured?: boolean
       isProfessional?: boolean
+      details?: ProductDetails | null
     }
   ) {
     const product = await db.product.findUnique({ where: { id } })
     if (!product) {
       throw new ApiError(404, 'PRODUCT_NOT_FOUND', 'Товар не найден')
     }
+
+    // Карточка есть — текст собирается из неё, даже если в запросе пришёл другой description/usage.
+    const details = payload.details !== undefined ? payload.details : readDetails(product.details)
+    const synced = details ? syncedText(details) : null
+    const limit = synced && textLimitIssue(synced)
+    if (limit) {
+      throw new ApiError(400, 'VALIDATION_ERROR', limit)
+    }
+    const text = synced ?? { description: payload.description, usage: payload.usage }
 
     // Check slug uniqueness if slug changed
     if (payload.slug && payload.slug !== product.slug) {
@@ -373,12 +384,13 @@ export class AdminProductService {
           ...(payload.name !== undefined && { name: payload.name }),
           ...(payload.slug !== undefined && { slug: payload.slug }),
           ...(payload.shortDescription !== undefined && { shortDescription: payload.shortDescription }),
-          ...(payload.description !== undefined && { description: payload.description }),
+          ...(payload.details !== undefined && { details: payload.details ?? Prisma.DbNull }),
+          ...(text.description !== undefined && { description: text.description }),
           ...(payload.brandId !== undefined && { brandId: payload.brandId }),
           ...(payload.lineId !== undefined && { lineId: payload.lineId }),
           ...(payload.skinTypes !== undefined && { skinTypes: payload.skinTypes }),
           ...(payload.concerns !== undefined && { concerns: payload.concerns }),
-          ...(payload.usage !== undefined && { usage: payload.usage }),
+          ...(text.usage !== undefined && { usage: text.usage }),
           ...(payload.inciText !== undefined && { inciText: payload.inciText }),
           ...(payload.seoTitle !== undefined && { seoTitle: payload.seoTitle }),
           ...(payload.seoDescription !== undefined && { seoDescription: payload.seoDescription }),
