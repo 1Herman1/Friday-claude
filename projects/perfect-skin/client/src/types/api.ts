@@ -50,10 +50,69 @@ export interface ProductCardExtended extends ProductCard {
   inciText: string | null
   ingredients: Ingredient[]
   categories: Category[]
+  details?: ProductDetails | null
   seo: {
     title: string | null
     description: string | null
   }
+}
+
+export interface Item {
+  title: string | null
+  text: string
+}
+
+export interface HowItWorks {
+  heading: string
+  lead: string[]
+  items: Item[]
+  result: string | null
+}
+
+export interface ForWhom {
+  lead: string | null
+  items: string[]
+  note: string[]
+}
+
+export interface Usage {
+  heading: string
+  steps: Item[]
+  notes: string[]
+}
+
+export interface Lifehack {
+  title: string | null
+  paragraphs: string[]
+}
+
+export interface Extra {
+  heading: string
+  paragraphs: string[]
+  items: string[]
+}
+
+export interface Pro {
+  volumeLabel: string
+  tagline: string[]
+  intro: string[]
+  howItWorks: HowItWorks | null
+  forWhom: ForWhom | null
+  actives: string[]
+  usage: Usage | null
+}
+
+export interface ProductDetails {
+  v: 1
+  tagline: string[]
+  intro: string[]
+  extra: Extra[]
+  howItWorks: HowItWorks | null
+  actives: string[]
+  forWhom: ForWhom | null
+  usage: Usage | null
+  lifehack: Lifehack | null
+  pro: Pro | null
 }
 
 export interface Category {

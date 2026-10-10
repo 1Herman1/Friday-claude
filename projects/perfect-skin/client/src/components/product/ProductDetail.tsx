@@ -8,6 +8,8 @@ import { IconHeart, IconHeartSolid } from '../icons'
 import { PriceTag } from './PriceTag'
 import { StickyProductPanel } from './StickyProductPanel'
 import { RelatedProducts } from './RelatedProducts'
+import { InciSection } from './details/InciSection'
+import { ProductCareCard } from './details/ProductCareCard'
 import { NoImage } from '@/components/catalog/NoImage'
 import type { ProductCardExtended } from '@/types/api'
 
@@ -273,72 +275,11 @@ export function ProductDetail({ product, loading, error }: ProductDetailProps) {
       </div>
 
       {/* Info Blocks */}
-      <div className="space-y-8 border-t border-border pt-8">
-        {/* Description */}
-        {product.description && (
-          <div>
-            <h2 className="text-xl font-heading font-bold text-foreground mb-4">
-              Действие
-            </h2>
-            <p className="text-foreground whitespace-pre-line leading-relaxed">
-              {product.description}
-            </p>
-          </div>
-        )}
-
-        {/* Usage */}
-        {product.usage && (
-          <div>
-            <h2 className="text-xl font-heading font-bold text-foreground mb-4">
-              Применение
-            </h2>
-            <p className="text-foreground whitespace-pre-line leading-relaxed">
-              {product.usage}
-            </p>
-          </div>
-        )}
-
-        {/* Ingredients */}
-        {product.ingredients && product.ingredients.length > 0 && (
-          <div>
-            <h2 className="text-xl font-heading font-bold text-foreground mb-4">
-              Активные компоненты
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {product.ingredients
-                .toSorted((a, b) => {
-                  if (a.isKey !== b.isKey) return a.isKey ? -1 : 1
-                  return a.name.localeCompare(b.name)
-                })
-                .map(ingredient => (
-                  <div
-                    key={ingredient.slug}
-                    className="flex flex-col gap-1"
-                  >
-                    <p className={`text-foreground ${ingredient.isKey ? 'font-bold' : ''}`}>
-                      {ingredient.name}
-                    </p>
-                    {ingredient.concentration && (
-                      <p className="text-sm text-muted-foreground">
-                        {ingredient.concentration}
-                      </p>
-                    )}
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-
-        {/* INCI */}
-        {product.inciText && (
-          <div>
-            <h2 className="text-xl font-heading font-bold text-foreground mb-4">
-              Состав (INCI)
-            </h2>
-            <p className="text-xs text-muted-foreground whitespace-pre-line leading-relaxed">
-              {product.inciText}
-            </p>
-          </div>
+      <div className="border-t border-border pt-8">
+        {product.details ? (
+          <ProductCareCard details={product.details} inciText={product.inciText} />
+        ) : (
+          <PlainProductInfo product={product} />
         )}
       </div>
 
@@ -353,8 +294,70 @@ export function ProductDetail({ product, loading, error }: ProductDetailProps) {
         product={product}
         buttonRef={addToCartButtonRef}
         selectedVariantId={selectedVariantId}
-        onAddToCart={() => console.log('Add to cart:', product.id)}
       />
+    </div>
+  )
+}
+
+function PlainProductInfo({ product }: { product: ProductCardExtended }) {
+  return (
+    <div className="space-y-8">
+      {/* Description */}
+      {product.description && (
+        <div>
+          <h2 className="text-xl font-heading font-bold text-foreground mb-4">
+            Действие
+          </h2>
+          <p className="text-foreground whitespace-pre-line leading-relaxed">
+            {product.description}
+          </p>
+        </div>
+      )}
+
+      {/* Usage */}
+      {product.usage && (
+        <div>
+          <h2 className="text-xl font-heading font-bold text-foreground mb-4">
+            Применение
+          </h2>
+          <p className="text-foreground whitespace-pre-line leading-relaxed">
+            {product.usage}
+          </p>
+        </div>
+      )}
+
+      {/* Ingredients */}
+      {product.ingredients && product.ingredients.length > 0 && (
+        <div>
+          <h2 className="text-xl font-heading font-bold text-foreground mb-4">
+            Активные компоненты
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {product.ingredients
+              .toSorted((a, b) => {
+                if (a.isKey !== b.isKey) return a.isKey ? -1 : 1
+                return a.name.localeCompare(b.name)
+              })
+              .map(ingredient => (
+                <div
+                  key={ingredient.slug}
+                  className="flex flex-col gap-1"
+                >
+                  <p className={`text-foreground ${ingredient.isKey ? 'font-bold' : ''}`}>
+                    {ingredient.name}
+                  </p>
+                  {ingredient.concentration && (
+                    <p className="text-sm text-muted-foreground">
+                      {ingredient.concentration}
+                    </p>
+                  )}
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
+      <InciSection id="pd-inci" text={product.inciText} />
     </div>
   )
 }

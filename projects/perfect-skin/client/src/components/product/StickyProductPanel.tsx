@@ -12,14 +12,12 @@ interface StickyProductPanelProps {
   product: ProductCardExtended
   buttonRef: React.RefObject<HTMLDivElement>
   selectedVariantId?: string
-  onAddToCart?: () => void
 }
 
 export function StickyProductPanel({
   product,
   buttonRef,
   selectedVariantId,
-  onAddToCart,
 }: StickyProductPanelProps) {
   const [isVisible, setIsVisible] = useState(false)
   const { addItem } = useCart()
@@ -46,10 +44,6 @@ export function StickyProductPanel({
       }, 1500)
     } catch {
       setAddingState('idle')
-    }
-
-    if (onAddToCart) {
-      onAddToCart()
     }
   }
 
