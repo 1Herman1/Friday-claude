@@ -189,8 +189,10 @@ jobs:
 
             echo "==> Каталог товаров"
             PRODUCTS=$(PGPASSWORD="$POSTGRES_PASSWORD" psql -h 127.0.0.1 -U ps -d perfect_skin -tAc "SELECT COUNT(*) FROM products")
+            FRESH=0
             if [ "$PRODUCTS" = "0" ]; then
               NODE_ENV=production npx tsx prisma/seed.ts
+              FRESH=1
               echo "Каталог засеян."
             else
               echo "В каталоге уже $PRODUCTS товаров — сид пропущен."
@@ -203,7 +205,13 @@ jobs:
             cd "$SRC"
             npm run import:prices --workspace=@ps/server -- --apply --apply-retail
             npm run import:pro-products --workspace=@ps/server -- --apply
-            npm run import:content --workspace=@ps/server -- --apply
+            # Карточки товаров — только на только что засеянной базе: на живой
+            # повтор затёр бы правки карточек, сделанные в админке.
+            if [ "$FRESH" = "1" ]; then
+              npm run import:content --workspace=@ps/server -- --apply
+            else
+              echo "Карточки товаров не трогаем: база не новая."
+            fi
             cd "$SRC/projects/perfect-skin/server"
 
             echo "==> Nginx"

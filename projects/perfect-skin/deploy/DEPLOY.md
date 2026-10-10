@@ -348,8 +348,22 @@ npm run import:content --workspace=@ps/server               # сухой про�
 npm run import:content --workspace=@ps/server -- --apply    # одна транзакция; повтор ничего не меняет
 ```
 
+Перед `--apply` на живой базе — копия прежних текстов (имя вне маски ротации дампов, не удалится):
+
+```bash
+docker compose -f projects/perfect-skin/deploy/docker-compose.prod.yml exec -T postgres \
+  psql -U ps -d perfect_skin -c "COPY (SELECT id, slug, description, usage FROM products) TO STDOUT WITH (FORMAT csv, HEADER)" \
+  > /var/backups/perfect-skin/products_text_before_content_$(date +%Y%m%d_%H%M%S).csv
+```
+
 Откат без перевыкатки: `UPDATE products SET details = NULL` — страница покажет текст из
-`description`/`usage`, а он останется таким, каким его собрала карточка.
+`description`/`usage`, а он останется таким, каким его собрала карточка. Полный возврат текстов —
+из CSV-копии выше (загрузить во временную таблицу и `UPDATE … FROM` по `id`), не из полного дампа:
+`pg_restore` сотрёт заказы и заявки, появившиеся после него.
+
+Для товаров с карточкой тексты правятся только во вкладке «Карточка (JSON)» в админке: при
+сохранении «Описание» и «Применение» пересобираются из карточки. `bootstrap-perfect-skin.yml`
+импортирует карточки только на только что засеянной базе.
 
 Локальный снимок каталога без базы (`client/public/snapshot/catalog.json`) — тем же планом:
 `npm run content:snapshot --workspace=@ps/server`.
