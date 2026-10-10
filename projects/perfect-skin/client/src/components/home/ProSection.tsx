@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { useCatalogList } from '@/hooks/useCatalogList'
 import type { CatalogFilters } from '@/hooks/useCatalogList'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
+import { useDrawer } from '@/context/DrawerContext'
 
 const PRO_FILTERS: CatalogFilters = { pro: true, limit: 4, offset: 0 }
 
@@ -13,6 +14,7 @@ export function ProSection() {
   const { data, loading } = useCatalogList(PRO_FILTERS)
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
   const [active, setActive] = useState(0)
+  const { openPro } = useDrawer()
 
   if (isApprovedPro(user)) {
     return (
@@ -64,7 +66,16 @@ export function ProSection() {
                     ))}
                   </ul>
                 ) : (
-                  <ul>
+                  <>
+                  <ProAccordion
+                    products={products}
+                    active={active}
+                    onActivate={setActive}
+                    onOpen={openPro}
+                    imageErrors={imageErrors}
+                    onImageError={(id) => setImageErrors((prev) => new Set([...prev, id]))}
+                  />
+                  <ul className="max-md:hidden">
                     {products.map((product, i) => (
                       <IndexRow
                         key={product.id}
@@ -77,6 +88,7 @@ export function ProSection() {
                       />
                     ))}
                   </ul>
+                  </>
                 )}
               </div>
 
@@ -126,12 +138,13 @@ export function ProSection() {
                 <span className="text-accent">→</span> цены открываются в каталоге после проверки
               </p>
             </div>
-            <Link
-              to="/pro/register"
+            <button
+              type="button"
+              onClick={openPro}
               className="inline-flex shrink-0 items-center justify-center w-full md:w-auto bg-accent text-accent-foreground rounded-pill min-h-11 px-8 py-3 font-heading font-bold hover:bg-accent/90 transition-colors duration-200 focus-visible:outline-accent"
             >
               Подать заявку
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -150,6 +163,107 @@ function volumeMl(product: ProProduct) {
   return parseFloat(volumeOf(product).replace(',', '.')) || 0
 }
 
+interface ProAccordionProps {
+  products: ProProduct[]
+  active: number
+  onActivate: (i: number) => void
+  onOpen: () => void
+  imageErrors: Set<string>
+  onImageError: (id: string) => void
+}
+
+// Телефон: ползунок и строка из четырёх товаров — выбранный раскрывается гармошкой
+function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onImageError }: ProAccordionProps) {
+  if (products.length === 0) return null
+  const current = splitName(products[active].name).title
+  return (
+    <div className="md:hidden pt-3">
+      <div className="flex items-center justify-between">
+        <label htmlFor="pro-pick" className="text-body-sm text-dark-foreground/75">
+          Двигайте, чтобы выбрать
+        </label>
+        <span className="font-heading font-semibold text-body-sm text-accent tabular-nums" aria-hidden="true">
+          {String(active + 1).padStart(2, '0')} / {String(products.length).padStart(2, '0')}
+        </span>
+      </div>
+      <input
+        id="pro-pick"
+        type="range"
+        min={0}
+        max={products.length - 1}
+        step={1}
+        value={active}
+        onChange={(e) => onActivate(Number(e.target.value))}
+        aria-valuetext={current}
+        className="block w-full h-11 accent-accent cursor-pointer"
+      />
+      <div className="flex gap-2 h-[26rem]">
+        {products.map((product, i) => {
+          const on = i === active
+          const { title, desc } = splitName(product.name)
+          const volume = volumeOf(product)
+          return (
+            <div
+              key={product.id}
+              onClick={() => onActivate(i)}
+              aria-hidden={!on}
+              className={`relative min-w-0 basis-0 rounded-block overflow-hidden bg-card text-foreground transition-[flex-grow] duration-300 ease-out motion-reduce:transition-none ${
+                on ? 'grow-[8]' : 'grow cursor-pointer'
+              }`}
+            >
+              <div
+                className={`absolute inset-x-0 top-0 flex items-center justify-center p-3 transition-[height] duration-300 ease-out motion-reduce:transition-none ${
+                  on ? 'h-[52%]' : 'h-full'
+                }`}
+              >
+                {product.image && !imageErrors.has(product.id) ? (
+                  <img
+                    src={cardImage(product) ?? ''}
+                    alt=""
+                    className={`h-full max-w-none object-contain ${on ? 'w-full scale-[1.25]' : 'w-[14rem] scale-[1.6]'}`}
+                    loading="lazy"
+                    decoding="async"
+                    width={320}
+                    height={320}
+                    onError={() => onImageError(product.id)}
+                  />
+                ) : null}
+              </div>
+              {!on && (
+                <span className="absolute inset-x-0 bottom-3 text-center font-heading font-semibold text-label text-foreground/60 tabular-nums">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              )}
+              <div
+                className={`absolute inset-x-0 bottom-0 w-[14.5rem] max-w-full p-4 flex flex-col gap-1 transition-opacity duration-200 motion-reduce:transition-none ${
+                  on ? 'opacity-100 delay-150' : 'opacity-0 pointer-events-none'
+                }`}
+              >
+                <span className="font-heading font-bold uppercase leading-tight text-body">{title}</span>
+                {desc && <span className="text-body-sm text-muted-foreground line-clamp-2">{desc}</span>}
+                <span className="text-label uppercase tracking-wide text-muted-foreground">
+                  {product.brand?.name}
+                  {volume && <span className="font-semibold text-foreground tabular-nums"> · {volume}</span>}
+                </span>
+                <button
+                  type="button"
+                  tabIndex={on ? 0 : -1}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onOpen()
+                  }}
+                  className="mt-2 inline-flex items-center justify-center min-h-11 px-4 rounded-pill bg-primary text-primary-foreground font-heading font-bold text-body-sm active:scale-97 transition-transform duration-160 focus-visible:outline-primary"
+                >
+                  Открыть оптовую цену
+                </button>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 interface IndexRowProps {
   index: number

@@ -7,6 +7,7 @@ import { SearchModal } from './SearchModal'
 import CartDrawer from '@/components/cart/CartDrawer'
 import FavoritesDrawer from '@/components/favorites/FavoritesDrawer'
 import { QuizModal } from '@/components/quiz/QuizModal'
+import { ProRegisterModal } from '@/components/pro/ProRegisterModal'
 import { useDrawer } from '@/context/DrawerContext'
 import { MobileBottomNav } from './MobileBottomNav'
 
@@ -53,6 +54,7 @@ export function Layout({
       <CartDrawer open={drawer === 'cart'} onClose={close} />
       <FavoritesDrawer open={drawer === 'favorites'} onClose={close} />
       <QuizModal open={drawer === 'quiz'} onClose={close} />
+      <ProRegisterModal open={drawer === 'pro'} onClose={close} />
 
       <Footer />
       <MobileBottomNav />
