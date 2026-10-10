@@ -14,9 +14,10 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative isolate overflow-hidden bg-background h-[100svh] min-h-[560px]"
-      style={{ marginTop: 'calc(-1 * var(--header-h, 72px))' }}
+      className="relative isolate overflow-hidden bg-background h-[100svh] min-h-[560px] md:mt-[calc(-1*var(--header-h,72px))] max-md:min-h-[480px] max-md:h-[calc(100svh-var(--header-h,72px)-64px-env(safe-area-inset-bottom))] max-md:ios:h-[calc(100svh-var(--header-h,72px))]"
     >
+      {/* Телефон: баннер начинается под шапкой; на Android кончается над нижней панелью,
+          на iOS уходит под плавающую «пилюлю», а текст и кнопки стоят над ней */}
       <picture className="absolute inset-0 -z-10">
         <source
           media="(orientation: portrait)"
@@ -36,7 +37,7 @@ export function HeroSection() {
           height={1072}
           fetchPriority="high"
           decoding="async"
-          className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-contain portrait:object-top md:portrait:object-cover md:portrait:object-[50%_10%]"
+          className="w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-[50%_0%] md:portrait:object-[50%_10%]"
         />
       </picture>
 
@@ -57,7 +58,7 @@ export function HeroSection() {
           autoPlay
           preload="auto"
           aria-hidden="true"
-          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-contain portrait:object-top md:portrait:object-cover md:portrait:object-[50%_10%]"
+          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-[50%_0%] md:portrait:object-[50%_10%]"
         >
           <source src={`/video/hero/${video}.webm`} type="video/webm" />
           <source src={`/video/hero/${video}.mp4`} type="video/mp4" onError={() => setVideo(null)} />
@@ -67,36 +68,35 @@ export function HeroSection() {
       <div className="absolute inset-x-0 bottom-0 h-[55%] portrait:h-[62%] -z-10 bg-gradient-to-t from-background via-background/80 to-transparent landscape:lg:hidden" />
 
       <div
-        className="container-app h-full flex flex-col justify-end pb-10 md:pb-14 landscape:lg:justify-center landscape:lg:pb-24 landscape:lg:[@media(max-height:900px)]:pb-12"
-        style={{ paddingTop: 'var(--header-h, 72px)' }}
+        className="container-app h-full flex flex-col justify-end pt-4 pb-6 max-md:ios:pb-[calc(env(safe-area-inset-bottom)+88px)] md:pt-[var(--header-h,72px)] md:pb-14 landscape:lg:justify-center landscape:lg:pb-24 landscape:lg:[@media(max-height:900px)]:pb-12"
       >
         <div className="max-w-[560px] landscape:lg:max-w-none">
           <p className="mb-3 text-label font-semibold uppercase tracking-wide text-primary landscape:lg:mb-4 lg:text-body-sm landscape:2xl:mb-6">
             ИСПАНИЯ · HEBER FARMA · С 2017 ГОДА
           </p>
 
-          <h1 className="mb-4 md:mb-6 text-4xl sm:text-5xl md:text-6xl font-heading font-bold leading-[1.02] landscape:lg:text-hero landscape:2xl:mb-8">
+          <h1 className="mb-3 md:mb-6 text-4xl sm:text-5xl md:text-6xl font-heading font-bold leading-[1.02] landscape:lg:text-hero landscape:2xl:mb-8">
             <span className="block landscape:lg:whitespace-nowrap">
               ПРО-<br className="hidden landscape:lg:inline" />КОСМЕТИКА
             </span>
             <span className="block landscape:lg:whitespace-nowrap">ИЗ ИСПАНИИ</span>
           </h1>
 
-          <p className="mb-6 md:mb-8 max-w-prose text-body leading-body text-foreground landscape:lg:text-lead landscape:lg:max-w-[min(30vw,34rem)] [text-wrap:pretty] landscape:2xl:mb-12">
+          <p className="mb-5 md:mb-8 max-w-prose text-body-sm md:text-body leading-body text-foreground landscape:lg:text-lead landscape:lg:max-w-[min(30vw,34rem)] [text-wrap:pretty] landscape:2xl:mb-12">
             ISSEIMI и&nbsp;GLACÉE Skincare — фармацевтическое производство Испании
             для домашнего ухода и&nbsp;работы в&nbsp;кабинете косметолога.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 landscape:lg:gap-4">
+          <div className="grid grid-cols-1 min-[380px]:grid-cols-2 gap-2 sm:flex sm:flex-row sm:gap-3 landscape:lg:gap-4">
             <Link
               to="/catalog"
-              className="inline-flex items-center justify-center min-h-12 px-6 py-3 landscape:2xl:px-8 landscape:2xl:py-4 rounded-pill bg-primary text-primary-foreground font-heading font-bold text-body transition-[opacity,transform] duration-160 ease-out hover:opacity-90 active:scale-97 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="inline-flex items-center justify-center min-h-12 px-3 sm:px-6 py-3 max-sm:text-body-sm landscape:2xl:px-8 landscape:2xl:py-4 rounded-pill bg-primary text-primary-foreground font-heading font-bold text-body transition-[opacity,transform] duration-160 ease-out hover:opacity-90 active:scale-97 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Смотреть каталог
             </Link>
             <button
               onClick={openQuiz}
-              className="inline-flex items-center justify-center min-h-12 px-6 py-3 landscape:2xl:px-8 landscape:2xl:py-4 rounded-pill border border-primary text-primary bg-background/40 backdrop-blur-sm font-heading font-bold text-body transition-[opacity,transform] duration-160 ease-out hover:opacity-90 active:scale-97 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="inline-flex items-center justify-center min-h-12 px-3 sm:px-6 py-3 max-sm:text-body-sm landscape:2xl:px-8 landscape:2xl:py-4 rounded-pill border border-primary text-primary bg-background/40 backdrop-blur-sm font-heading font-bold text-body transition-[opacity,transform] duration-160 ease-out hover:opacity-90 active:scale-97 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Подобрать уход
             </button>
