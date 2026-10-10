@@ -35,7 +35,12 @@ SECRET_RE = re.compile(
 
 
 def mask(s):
-    return SECRET_RE.sub("[СКРЫТО]", s or "")
+    s = s or ""
+    # Сообщение с секретом скрываем целиком: ключ мог переноситься на несколько строк,
+    # и хвост без префикса регулярка уже не узнает.
+    if SECRET_RE.search(s) or re.search(r"sk-ant-|sk-or-|BEGIN [A-Z ]*PRIVATE KEY", s):
+        return "[сообщение скрыто: содержало секрет]"
+    return s
 
 
 def slug(s):
