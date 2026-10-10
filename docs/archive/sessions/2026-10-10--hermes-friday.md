@@ -4,7 +4,7 @@ date: 2026-10-10
 source: hermes-telegram
 chat: Friday - AI Agents sytem
 topic: Friday - AI Agents sytem
-status: raw
+status: digested
 ---
 
 # Hermes · Friday - AI Agents sytem / Friday - AI Agents sytem · 2026-10-10
@@ -78,3 +78,13 @@ status: raw
 ### Изменённые файлы
 - `~/.hermes/scripts/archive_digest_prep.sh`
 - `~/.hermes/scripts/hermes_archive_export.sh`
+
+## Фрагмент ()
+
+### Изменённые файлы
+- `~/Friday-claude/CLAUDE.md`
+- `~/Friday-claude/STATUS.md`
+- `~/Friday-claude/trade-performance/README.md`
+
+### Коммиты
+- hermes: topic map, repo agents via delegate_task, Telegram session archiver + nightly archivarius digest

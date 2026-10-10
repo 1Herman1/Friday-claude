@@ -2,7 +2,7 @@
 session: hermes-telegram-trading
 date: 2026-10-10
 branch: claude/greeting-nnz368
-status: raw
+status: digested
 source: Hermes (Telegram «Friday - AI Agents sytem»), записано вручную — хуки Claude Code эти сессии не пишут
 ---
 

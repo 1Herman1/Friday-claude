@@ -4,7 +4,7 @@ date: 2026-10-09
 source: hermes-telegram
 chat: Общее
 topic: Дашборд статусов
-status: raw
+status: digested
 ---
 
 # Hermes · Общее / Дашборд статусов · 2026-10-09

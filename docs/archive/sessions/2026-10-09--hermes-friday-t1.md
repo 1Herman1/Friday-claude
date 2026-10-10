@@ -4,7 +4,7 @@ date: 2026-10-09
 source: hermes-telegram
 chat: Friday - AI Agents sytem
 topic: Создание топиков в группе
-status: raw
+status: digested
 ---
 
 # Hermes · Friday - AI Agents sytem / Создание топиков в группе · 2026-10-09

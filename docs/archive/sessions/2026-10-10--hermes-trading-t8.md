@@ -4,7 +4,7 @@ date: 2026-10-10
 source: hermes-telegram
 chat: Трейдинг - крипта
 topic: Бот памп-дамп
-status: raw
+status: digested
 ---
 
 # Hermes · Трейдинг - крипта / Бот памп-дамп · 2026-10-10

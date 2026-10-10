@@ -4,7 +4,7 @@ date: 2026-10-09
 source: hermes-telegram
 chat: Общее
 topic: Оценка идей и ТЗ
-status: raw
+status: digested
 ---
 
 # Hermes · Общее / Оценка идей и ТЗ · 2026-10-09

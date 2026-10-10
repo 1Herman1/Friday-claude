@@ -4,7 +4,7 @@ date: 2026-10-10
 source: hermes-telegram
 chat: Трейдинг - крипта
 topic: Кластеры агентов на пропах
-status: raw
+status: digested
 ---
 
 # Hermes · Трейдинг - крипта / Кластеры агентов на пропах · 2026-10-10

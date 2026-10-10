@@ -4,7 +4,7 @@ date: 2026-10-10
 source: hermes-telegram
 chat: Трейдинг - крипта
 topic: Тестирование идей и оркестрация
-status: raw
+status: digested
 ---
 
 # Hermes · Трейдинг - крипта / Тестирование идей и оркестрация · 2026-10-10

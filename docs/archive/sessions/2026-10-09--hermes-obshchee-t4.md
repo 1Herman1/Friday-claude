@@ -4,7 +4,7 @@ date: 2026-10-09
 source: hermes-telegram
 chat: Общее
 topic: Автоматизация процессов
-status: raw
+status: digested
 ---
 
 # Hermes · Общее / Автоматизация процессов · 2026-10-09

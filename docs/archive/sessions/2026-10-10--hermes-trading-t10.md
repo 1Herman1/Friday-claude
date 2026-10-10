@@ -4,7 +4,7 @@ date: 2026-10-10
 source: hermes-telegram
 chat: Трейдинг - крипта
 topic: Межбиржевой арбитраж
-status: raw
+status: digested
 ---
 
 # Hermes · Трейдинг - крипта / Межбиржевой арбитраж · 2026-10-10

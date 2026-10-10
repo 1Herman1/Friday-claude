@@ -4,7 +4,7 @@ date: 2026-10-10
 source: hermes-telegram
 chat: Трейдинг - крипта
 topic: Бот SMC-сигналов
-status: raw
+status: digested
 ---
 
 # Hermes · Трейдинг - крипта / Бот SMC-сигналов · 2026-10-10

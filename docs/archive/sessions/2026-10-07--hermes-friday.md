@@ -4,7 +4,7 @@ date: 2026-10-07
 source: hermes-telegram
 chat: Friday - AI Agents sytem (старый id)
 topic: Friday - AI Agents sytem (старый id)
-status: raw
+status: digested
 ---
 
 # Hermes · Friday - AI Agents sytem (старый id) / Friday - AI Agents sytem (старый id) · 2026-10-07
