@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { MouseEvent, ReactNode, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDrawer } from '@/context/DrawerContext'
 
@@ -124,6 +124,72 @@ const faqData: FaqItem[] = [
 ]
 
 // Helper component for the quiz link inside text
+// <details> оставлен ради доступности и поиска по странице; ответ раскрывается плавно —
+// высота растёт через grid 0fr → 1fr, закрытие ждёт конца анимации.
+function FaqRow({ item, divider }: { item: FaqItem; divider: boolean }) {
+  const ref = useRef<HTMLDetailsElement>(null)
+  const ours = useRef(false)
+  const [expanded, setExpanded] = useState(false)
+  const toggle = (e: MouseEvent) => {
+    e.preventDefault()
+    const d = ref.current
+    if (!d) return
+    if (!d.open) {
+      ours.current = true
+      d.open = true
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        ours.current = false
+        setExpanded(true)
+      }))
+      return
+    }
+    setExpanded(false)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.open = false
+  }
+  return (
+    <details
+      ref={ref}
+      // Открыто браузером (поиск по странице) — показываем ответ сразу
+      onToggle={() => {
+        if (!ours.current && ref.current?.open) setExpanded(true)
+      }}
+      className={`cursor-pointer ${divider ? 'border-b border-border' : ''}`}
+    >
+      <summary
+        onClick={toggle}
+        className="list-none [&::-webkit-details-marker]:hidden py-4 md:py-6 flex items-start justify-between gap-4 min-h-11"
+      >
+        <span className="text-body-sm md:text-body font-heading font-bold text-foreground">
+          {item.question}
+        </span>
+        <svg
+          className={`w-5 h-5 md:w-6 md:h-6 flex-shrink-0 mt-0.5 transition-transform duration-300 ease-out motion-reduce:transition-none ${expanded ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </summary>
+      <div
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${
+          expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        }`}
+        onTransitionEnd={(e) => {
+          if (e.propertyName === 'grid-template-rows' && !expanded && ref.current) ref.current.open = false
+        }}
+      >
+        <div className="overflow-hidden">
+          <div className="pb-4 md:pb-6 text-body-sm md:text-body leading-body text-muted-foreground">
+            {item.answer}
+          </div>
+        </div>
+      </div>
+    </details>
+  )
+}
+
 function FaqQuizLink() {
   const { openQuiz } = useDrawer()
   return (
@@ -164,34 +230,7 @@ export function FaqSection() {
           {/* FAQ List */}
           <div className="max-w-prose space-y-0">
             {faqData.map((item, index) => (
-              <details
-                key={item.id}
-                className={`group cursor-pointer transition-colors ${
-                  index < faqData.length - 1 ? 'border-b border-border' : ''
-                }`}
-              >
-                <summary className="list-none [&::-webkit-details-marker]:hidden py-4 md:py-6 flex items-start justify-between gap-4 min-h-11">
-                  <span className="text-body-sm md:text-body font-heading font-bold text-foreground">
-                    {item.question}
-                  </span>
-                  <svg
-                    className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 mt-0.5 transition-transform duration-200 group-open:rotate-180"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                    />
-                  </svg>
-                </summary>
-                <div className="pb-4 md:pb-6 text-body-sm md:text-body leading-body text-muted-foreground">
-                  {item.answer}
-                </div>
-              </details>
+              <FaqRow key={item.id} item={item} divider={index < faqData.length - 1} />
             ))}
           </div>
         </div>
