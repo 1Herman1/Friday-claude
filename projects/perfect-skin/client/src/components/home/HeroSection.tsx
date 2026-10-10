@@ -1,10 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDrawer } from '@/context/DrawerContext'
 
 export function HeroSection() {
   const { openQuiz } = useDrawer()
   const [video, setVideo] = useState<'desk' | 'mob' | null>(null)
+  // После основного ролика — петля «живого» лица (моргание, лёгкое движение головы).
+  // Её первый кадр совпадает с последним кадром ролика, поэтому подмена не видна.
+  const [loadIdle, setLoadIdle] = useState(false)
+  const [idle, setIdle] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+  const idleRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -12,8 +18,26 @@ export function HeroSection() {
     setVideo(portrait ? 'mob' : 'desk')
   }, [])
 
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section || !idle) return
+    // Петля играет, только пока первый экран виден
+    const io = new IntersectionObserver(([entry]) => {
+      const el = idleRef.current
+      if (!el) return
+      if (entry.isIntersecting) el.play().catch(() => {})
+      else el.pause()
+    })
+    io.observe(section)
+    return () => io.disconnect()
+  }, [idle])
+
+  const videoClass =
+    'absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-[50%_0%] md:portrait:object-[50%_10%]'
+
   return (
     <section
+      ref={sectionRef}
       className="relative isolate overflow-hidden bg-background h-[100svh] min-h-[560px] md:mt-[calc(-1*var(--header-h,72px))] max-md:min-h-[480px] max-md:h-[calc(100svh-var(--header-h,72px)-64px-env(safe-area-inset-bottom))] max-md:ios:h-[calc(100svh-var(--header-h,72px))]"
     >
       {/* Телефон: баннер начинается под шапкой; на Android кончается над нижней панелью,
@@ -41,6 +65,22 @@ export function HeroSection() {
         />
       </picture>
 
+      {video && loadIdle && (
+        <video
+          ref={idleRef}
+          muted
+          playsInline
+          loop
+          preload="auto"
+          aria-hidden="true"
+          onPlaying={() => setIdle(true)}
+          className={videoClass}
+        >
+          <source src={`/video/hero/${video}-idle.webm`} type="video/webm" />
+          <source src={`/video/hero/${video}-idle.mp4`} type="video/mp4" />
+        </video>
+      )}
+
       {video && (
         <video
           key={video}
@@ -58,7 +98,14 @@ export function HeroSection() {
           autoPlay
           preload="auto"
           aria-hidden="true"
-          className="absolute inset-0 -z-10 w-full h-full object-cover object-[50%_20%] landscape:object-[75%_35%] landscape:lg:object-[50%_35%] portrait:object-[50%_0%] md:portrait:object-[50%_10%]"
+          onPlaying={() => setLoadIdle(true)}
+          onEnded={() => {
+            const el = idleRef.current
+            if (!el) return
+            el.muted = true
+            el.play().catch(() => {})
+          }}
+          className={`${videoClass} ${idle ? 'invisible' : ''}`}
         >
           <source src={`/video/hero/${video}.webm`} type="video/webm" />
           <source src={`/video/hero/${video}.mp4`} type="video/mp4" onError={() => setVideo(null)} />
