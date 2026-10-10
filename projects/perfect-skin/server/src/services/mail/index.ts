@@ -45,7 +45,7 @@ export class ProductionMailSender implements MailSender {
     })
 
     await transporter.sendMail({
-      from: process.env.SMTP_FROM || 'noreply@perfectskin.ru',
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: recipient,
       subject: 'Код входа Perfect Skin',
       text: `Ваш код: ${code}. Действует 10 минут.`,
@@ -71,7 +71,7 @@ export class ProductionMailSender implements MailSender {
     })
 
     await transporter.sendMail({
-      from: process.env.SMTP_FROM || 'noreply@perfectskin.ru',
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: recipient,
       subject,
       text,
