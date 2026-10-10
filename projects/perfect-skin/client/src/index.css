@@ -96,6 +96,43 @@
 }
 
 @layer components {
+  /* Плитка-призыв: при нажатии размывается и темнеет целиком, кнопка внутри остаётся чёткой */
+  .press-tile {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .press-tile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    pointer-events: none;
+    background-color: rgb(20 32 46 / 0);
+    -webkit-backdrop-filter: blur(0);
+    backdrop-filter: blur(0);
+    transition: background-color 160ms ease-out, backdrop-filter 160ms ease-out, -webkit-backdrop-filter 160ms ease-out;
+  }
+  .press-tile.is-pressed {
+    transform: scale(0.97);
+    transition-duration: 100ms;
+  }
+  .press-tile.is-pressed::after {
+    background-color: rgb(20 32 46 / 0.22);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    transition-duration: 100ms;
+  }
+  .press-tile .press-cta {
+    position: relative;
+    z-index: 2;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .press-tile.is-pressed { transform: none; }
+  }
+
   .container-app {
     @apply max-w-[1440px] mx-auto px-6 md:px-12 xl:px-24;
   }
