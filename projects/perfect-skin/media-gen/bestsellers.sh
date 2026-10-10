@@ -261,6 +261,18 @@ if [ "$STAGE" = v3-sd2 ]; then
   exit 0
 fi
 
+# Первый экран: бесшовная «живая» петля после основного ролика — моргание и едва заметное
+# движение головы. Первый и последний кадр — финальный кадр основного ролика.
+if [ "$STAGE" = hero-idle ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/hero-idle"
+  IDLE="Locked static tripod camera, no zoom, no camera movement. Extreme close-up beauty portrait. The woman is calm and alive: she slowly and naturally blinks once, about two seconds in, and her head makes a barely visible, slow breathing movement of a few millimetres, then returns exactly to the starting position. Her expression stays the same. Nothing else moves: the cracked cream layer, its flakes, the background and the light stay perfectly still. The last frame is identical to the first frame, so the clip loops seamlessly. Natural matte skin, no glow, no flicker, no text."
+  if [[ " ${CLIPS:-mob desk} " == *" mob "* ]]; then DUR=5 gen_video "mob-idle" 9:16 "$IDLE" "$OUT/mob-end.png" "$OUT/mob-end.png" & fi
+  if [[ " ${CLIPS:-mob desk} " == *" desk "* ]]; then DUR=5 gen_video "desk-idle" 16:9 "$IDLE" "$OUT/desk-end.png" "$OUT/desk-end.png" & fi
+  wait
+  ls -la "$OUT"
+  exit 0
+fi
+
 # v4: ролики телефона по портретным кадрам, вырезанным из компьютерных (те же товары и
 # этикетки пиксель в пиксель). CLIPS="0-1 2-3" — только эти; пусто — все четыре.
 if [ "$STAGE" = v4-mobile ]; then
