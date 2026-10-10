@@ -189,9 +189,8 @@ export function BestsellerScene() {
         local,
       })
 
-      const k = Math.min(1, local / MOVE_SHARE)
-      const eased = 1 - (1 - k) * (1 - k)
-      const frac = scrollProgress >= 1 ? 1 : eased
+      // Прокрутка двигает ролик равномерно: замедление руки уже есть в самом ролике
+      const frac = scrollProgress >= 1 ? 1 : Math.min(1, local / MOVE_SHARE)
       targetRef.current = { idx: finalSegment, frac }
       if (finalSegment !== segSeenRef.current) {
         // Новый отрезок: сразу ставим ролик на нужное место, без «доезда» от прошлого прохода
@@ -468,7 +467,7 @@ export function BestsellerScene() {
   }
 
   const fmt: 'desktop' | 'mobile' = isDesktop ? 'desktop' : 'mobile'
-  const portraitTransform = typeof window !== 'undefined' && window.innerWidth >= 768 ? 'translateY(-16%) scale(1.25)' : 'scale(1.8)'
+  const portraitTransform = typeof window !== 'undefined' && window.innerWidth >= 768 ? 'translateY(-16%) scale(1.25)' : 'translateY(4%) scale(1.8)'
   // Десктоп: segment = видимый ролик; на остановке — точный кадр товара stop.
   const view = isDesktop
     ? { segment: playing ?? Math.max(stop, 0), isHold: playing === null && stop >= 0, cardIdx: playing ?? stop, local: playing !== null ? playFrac : stop >= 0 ? 1 : 0 }
@@ -600,7 +599,7 @@ export function BestsellerScene() {
         </div>
 
         {/* Мягкий стык фона с соседними секциями */}
-        <div aria-hidden="true" className={`absolute inset-x-0 ${isDesktop ? 'top-0' : 'top-24'} h-24 bg-gradient-to-b from-background to-transparent pointer-events-none z-10`} />
+        <div aria-hidden="true" className={`absolute inset-x-0 ${isDesktop ? 'top-0 h-24' : 'top-24 h-10'} bg-gradient-to-b from-background to-transparent pointer-events-none z-10`} />
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
         {/* Компьютер: края кадра (дорисованная стена и стол) растворяются в фоне страницы */}
         <div aria-hidden="true" className={`${isDesktop ? '' : 'hidden'} absolute inset-y-0 left-0 w-[44%] bg-gradient-to-r from-background from-30% via-background/60 via-60% to-transparent pointer-events-none z-10`} />
