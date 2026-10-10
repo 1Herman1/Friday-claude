@@ -6,6 +6,8 @@ import { useDrawer } from '@/context/DrawerContext'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { Link } from 'react-router-dom'
 import { splitName } from '@/lib/split-name'
+import { setScenePinned } from '@/lib/scene-pin'
+import { isAutoScrolling } from '@/lib/scroll-top'
 
 // Ролики сцены: сегмент i — рука от товара i к товару i+1 (кадры k_i → k_{i+1}).
 const SCENE = '/video/bestsellers'
@@ -25,72 +27,23 @@ const PRODUCT_SLUGS = [
   'serum-triple-accion-syvorotka-trojnogo-dejstviya',
 ]
 
-interface SceneState {
-  progress: number // 0..1
-  segment: number // 0..3
-  local: number // 0..1 внутри сегмента
-}
-
 // Горизонтальный ролик — только на широком экране; планшет стоя получает вертикальный,
 // иначе обрезка по краям прячет четвёртый товар.
 function isWideScene() {
   return window.innerWidth >= 768 && window.innerWidth / window.innerHeight >= 1.2
 }
 
-// Телефон: доля отрезка прокрутки, за которую играет ролик; остаток — остановка на товаре
-const MOVE_SHARE = 0.8
-// Ролики разные по объёму движения (в первом его втрое меньше, чем в третьем), поэтому длина прокрутки
-// у каждого своя, пропорционально замеру движения оптическим потоком: скорость руки на экране
-// выровнена. Внутри ролика время идёт равномерно — иначе на быстрых участках кадры «ступеньками».
-const MOVE_W = [0.123, 0.225, 0.359, 0.294]
-const HOLD = 0.05
-// Компьютер: ролики играют сами; первый (самый спокойный) чуть быстрее, остальные — родной скоростью
-const PLAY_RATE = [1.4, 1.05, 1, 1]
-
-function mobileSegment(p: number) {
-  if (p >= 1) return { segment: 3, local: 1, frac: 1 }
-  let start = 0
-  for (let i = 0; i < 4; i++) {
-    const move = (1 - 4 * HOLD) * MOVE_W[i]
-    if (p < start + move + HOLD || i === 3) {
-      const pos = Math.max(0, p - start)
-      if (pos < move) {
-        const m = pos / move
-        return { segment: i, local: MOVE_SHARE * m, frac: m }
-      }
-      return { segment: i, local: MOVE_SHARE + (1 - MOVE_SHARE) * Math.min(1, (pos - move) / HOLD), frac: 1 }
-    }
-    start += move + HOLD
-  }
-  return { segment: 3, local: 1, frac: 1 }
-}
+// Ролики играют сами; первый (самый спокойный) чуть быстрее, остальные — родной скоростью
+const PLAY_RATE = { desktop: [1.4, 1.05, 1, 1], mobile: [1.25, 1.05, 1, 1] }
+// Телефон: ряд товаров в кадре 9:16 — по центру на 51 % высоты кадра
+const MOBILE_BAND = 0.51
 
 export function BestsellerScene() {
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null, null, null])
   const primedRef = useRef(false)
-  const targetRef = useRef({ idx: 0, frac: 0 })
-  const rafRef = useRef<number | null>(null)
-  const smoothRef = useRef([0, 0, 0, 0])
-  const segSeenRef = useRef(-1)
-  // Телефон: при входе в новый отрезок ролик сначала встаёт на нужный кадр, до этого виден стоп-кадр
-  const [pendingSeg, setPendingSeg] = useState<number | null>(null)
-
-  const tick = () => {
-    rafRef.current = null
-    const { idx, frac } = targetRef.current
-    const video = videoRefs.current[idx]
-    if (!video || !video.duration) return
-    const target = frac * (video.duration - 0.05)
-    const cur = smoothRef.current[idx]
-    const next = Math.abs(target - cur) < 1 / 60 ? target : cur + (target - cur) * 0.18
-    smoothRef.current[idx] = next
-    if (!video.seeking) video.currentTime = next
-    if (next !== target) rafRef.current = requestAnimationFrame(tick)
-  }
   const videoReadyRef = useRef<boolean[]>([false, false, false, false])
-  const [state, setState] = useState<SceneState>({ progress: 0, segment: 0, local: 0 })
   const [isVisible, setIsVisible] = useState(false)
   const [isNear, setIsNear] = useState(false)
   const [, setVideoReady] = useState<boolean[]>([false, false, false, false])
@@ -120,8 +73,11 @@ export function BestsellerScene() {
   const { openCart } = useDrawer()
   const { user } = useAuth()
 
+  // Своя плавная прокрутка при выходе из сцены: пока она идёт, телефон её не ловит
+  const releasingRef = useRef(false)
   useEffect(() => () => {
-    if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+    setScenePinned(false)
+    document.documentElement.style.overflow = ''
   }, [])
 
   // Проверяем prefers-reduced-motion
@@ -181,74 +137,106 @@ export function BestsellerScene() {
     return () => observer.disconnect()
   }, [isReducedMotion])
 
+  // Шаг сцены: anchor — положение страницы для остановки seg (-1 — рука над товарами)
+  const anchorOf = (seg: number, el: HTMLElement) => {
+    const span = el.scrollHeight - window.innerHeight
+    return el.getBoundingClientRect().top + window.scrollY + span * ((seg + 1.1) / 5)
+  }
+  const placeAt = (seg: number, el: HTMLElement) =>
+    window.scrollTo({ top: anchorOf(seg, el), behavior: 'instant' as ScrollBehavior })
+  // Один жест — один шаг. Жест во время ролика сразу ставит его товар и запускает следующий;
+  // после четвёртого товара жест уводит к следующей секции, до первого — к предыдущей.
+  const step = (down: boolean) => {
+    const el = containerRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const playingNow = playingRef.current
+    const at = playingNow ?? stopRef.current
+    if (down) {
+      if (playingNow !== null) {
+        finishClip(playingNow)
+        if (playingNow < 3) {
+          segRef.current = playingNow + 1
+          startClip(playingNow + 1)
+          placeAt(playingNow + 1, el)
+        }
+        return
+      }
+      if (at >= 3) {
+        releasingRef.current = true
+        window.scrollTo({ top: rect.top + window.scrollY + el.scrollHeight, behavior: 'smooth' })
+        return
+      }
+      segRef.current = at + 1
+      startClip(at + 1)
+      placeAt(at + 1, el)
+      return
+    }
+    if (playingNow === null && at < 0) {
+      releasingRef.current = true
+      window.scrollTo({ top: rect.top + window.scrollY - window.innerHeight, behavior: 'smooth' })
+      return
+    }
+    const prev = playingNow !== null ? playingNow - 1 : at - 1
+    jumpTo(prev)
+    placeAt(prev, el)
+  }
+
   // Обработка скролла
   useEffect(() => {
     if (!isVisible || isReducedMotion) return
 
+    let freezeTimer = 0
     const handleScroll = () => {
-      if (!containerRef.current) return
+      const el = containerRef.current
+      if (!el) return
 
-      const rect = containerRef.current.getBoundingClientRect()
-      const containerHeight = containerRef.current.scrollHeight
+      const rect = el.getBoundingClientRect()
       const viewportHeight = window.innerHeight
+      const scrollProgress = Math.max(0, Math.min(1, -rect.top / (el.scrollHeight - viewportHeight)))
+      const pinned = rect.top <= 1 && rect.bottom >= viewportHeight - 1
 
-      // Скролл-позиция контейнера относительно viewport
-      const scrollTop = -rect.top
-      const scrollProgress = Math.max(0, Math.min(1, scrollTop / (containerHeight - viewportHeight)))
-
-      if (isWideScene()) {
-        onDesktopScroll(Math.min(4, Math.floor(scrollProgress * 5)) - 1, rect.top <= 1 && rect.bottom >= viewportHeight - 1)
-        markReady()
-        return
-      }
-
-      const mob = mobileSegment(scrollProgress)
-      setState({
-        progress: scrollProgress,
-        segment: mob.segment,
-        local: mob.local,
-      })
-
-      const frac = mob.frac
-      targetRef.current = { idx: mob.segment, frac }
-      if (mob.segment !== segSeenRef.current) {
-        // Новый отрезок: сразу ставим ролик на нужное место, без «доезда» от прошлого прохода
-        const seg = mob.segment
-        segSeenRef.current = seg
-        const video = videoRefs.current[seg]
-        if (video && video.duration) {
-          const t = frac * (video.duration - 0.05)
-          smoothRef.current[seg] = t
-          setPendingSeg(seg)
-          video.addEventListener('seeked', () => setPendingSeg((cur) => (cur === seg ? null : cur)), { once: true })
-          video.currentTime = t
+      // Телефон: пока сцена на экране — шапка и нижняя панель спрятаны
+      setScenePinned(pinned && !isWideScene())
+      if (!isWideScene()) {
+        if (!pinned) releasingRef.current = false
+        else if (!releasingRef.current && !isAutoScrolling()) {
+          // Страница внутри сцены сдвинулась не свайпом сцены (инерция броска, начатое
+          // снаружи перетаскивание) — ловим её на текущем шаге, товары не проскакивают.
+          const anchor = anchorOf(playingRef.current ?? stopRef.current, el)
+          if (Math.abs(window.scrollY - anchor) > 2) {
+            const root = document.documentElement
+            root.style.overflow = 'hidden'
+            window.scrollTo({ top: anchor, behavior: 'instant' as ScrollBehavior })
+            window.clearTimeout(freezeTimer)
+            freezeTimer = window.setTimeout(() => { root.style.overflow = '' }, 120)
+            return
+          }
         }
       }
-      if (rafRef.current === null) rafRef.current = requestAnimationFrame(tick)
-
+      onDesktopScroll(Math.min(4, Math.floor(scrollProgress * 5)) - 1, pinned)
       markReady()
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     // Страница может открыться уже прокрученной — считаем положение сразу.
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.clearTimeout(freezeTimer)
+      document.documentElement.style.overflow = ''
+      setScenePinned(false)
+    }
   }, [isVisible, isReducedMotion])
 
-  // Компьютер: один жест колеса или тачпада — один шаг. Пока сцена закреплена, прокрутку
-  // страницы гасим сами: инерция тачпада не проскакивает товары, а после четвёртого товара
-  // сцену отпускает только новый жест. Жест во время ролика сразу доводит его до товара
-  // и запускает следующий — быстрый скролл не ждёт конца анимации.
+  // Колесо и тачпад: один жест — один шаг. Пока сцена закреплена, прокрутку страницы гасим
+  // сами: инерция тачпада не проскакивает товары, а после четвёртого товара сцену отпускает
+  // только новый жест.
   useEffect(() => {
-    if (!isVisible || isReducedMotion || !isDesktop) return
+    if (!isVisible || isReducedMotion) return
     let lastTs = 0
     let lastAbs = 0
     let lastStepTs = 0
-    const placeAt = (seg: number, el: HTMLElement) => {
-      const span = el.scrollHeight - window.innerHeight
-      const top = el.getBoundingClientRect().top + window.scrollY
-      window.scrollTo({ top: top + span * ((seg + 1.1) / 5), behavior: 'instant' as ScrollBehavior })
-    }
     const onWheel = (e: WheelEvent) => {
       const el = containerRef.current
       // Колесо над корзиной, поиском и другими слоями поверх сцены — их собственное.
@@ -262,41 +250,49 @@ export function BestsellerScene() {
       lastAbs = abs
       const rect = el.getBoundingClientRect()
       if (rect.top > 1 || rect.bottom < window.innerHeight - 1) return
-      const down = e.deltaY > 0
-      const playingNow = playingRef.current
-      const at = playingNow ?? stopRef.current
       e.preventDefault()
       if (!fresh) return
       lastStepTs = now
-      if (down) {
-        if (playingNow !== null) {
-          finishClip(playingNow)
-          if (playingNow < 3) {
-            segRef.current = playingNow + 1
-            startClip(playingNow + 1)
-            placeAt(playingNow + 1, el)
-          }
-          return
-        }
-        if (at >= 3) {
-          // Последний товар показан — один жест уводит сразу к следующей секции.
-          window.scrollTo({ top: rect.top + window.scrollY + el.scrollHeight, behavior: 'smooth' })
-          return
-        }
-        segRef.current = at + 1
-        startClip(at + 1)
-        placeAt(at + 1, el)
-        return
-      }
-      const prev = playingNow !== null ? playingNow - 1 : at - 1
-      if (playingNow === null && at < 0) {
-        window.scrollTo({ top: rect.top + window.scrollY - window.innerHeight, behavior: 'smooth' })
-        return
-      }
-      placeAt(prev, el)
+      step(e.deltaY > 0)
     }
     window.addEventListener('wheel', onWheel, { passive: false })
     return () => window.removeEventListener('wheel', onWheel)
+  }, [isVisible, isReducedMotion])
+
+  // Телефон и планшет: один свайп — один шаг. Пока сцена закреплена, страница не прокручивается
+  // (preventDefault на touchmove) — поэтому и панели браузера не выезжают.
+  useEffect(() => {
+    if (!isVisible || isReducedMotion || isDesktop) return
+    let startedPinned = false
+    let startY = 0
+    let stepped = false
+    const pinnedNow = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect()
+      return r.top <= 1 && r.bottom >= window.innerHeight - 1
+    }
+    const onStart = (e: TouchEvent) => {
+      const el = containerRef.current
+      if (!el || e.touches.length !== 1) return
+      startedPinned = pinnedNow(el) && !releasingRef.current
+      startY = e.touches[0].clientY
+      stepped = false
+    }
+    const onMove = (e: TouchEvent) => {
+      const el = containerRef.current
+      if (!el || !startedPinned || e.touches.length !== 1 || !(e.target instanceof Node) || !el.contains(e.target)) return
+      if (e.cancelable) e.preventDefault()
+      if (stepped) return
+      const dy = e.touches[0].clientY - startY
+      if (Math.abs(dy) < 24) return
+      stepped = true
+      step(dy < 0)
+    }
+    window.addEventListener('touchstart', onStart, { passive: true })
+    window.addEventListener('touchmove', onMove, { passive: false })
+    return () => {
+      window.removeEventListener('touchstart', onStart)
+      window.removeEventListener('touchmove', onMove)
+    }
   }, [isVisible, isReducedMotion, isDesktop])
 
   // Ролики целиком в памяти до показа: потоковая догрузка подвешивала 3-й и 4-й ролик.
@@ -372,7 +368,7 @@ export function BestsellerScene() {
     setPlayFrac(0)
     if (!video) return
     video.currentTime = 0
-    video.playbackRate = PLAY_RATE[clip]
+    video.playbackRate = PLAY_RATE[isWideScene() ? 'desktop' : 'mobile'][clip]
     video.onended = () => {
       if (playingRef.current !== clip) return
       playingRef.current = null
@@ -408,16 +404,21 @@ export function BestsellerScene() {
     setStop(clip)
     setPlaying(null)
   }
+  // Назад и вне сцены — без проигрывания: сразу точный кадр шага seg.
+  function jumpTo(seg: number) {
+    if (playingRef.current !== null) videoRefs.current[playingRef.current]?.pause()
+    playingRef.current = null
+    stopRef.current = seg
+    segRef.current = seg
+    setStop(seg)
+    setPlaying(null)
+    if (seg < 0 && videoRefs.current[0]) videoRefs.current[0].currentTime = 0
+  }
   // Остановки: -1 — рука над товарами, 0..3 — товар в руке; ролик c ведёт к товару c.
   function onDesktopScroll(seg: number, pinned: boolean) {
     segRef.current = seg
     if ((!pinned && playingRef.current === null) || seg < stopRef.current || (playingRef.current !== null && seg < playingRef.current)) {
-      if (playingRef.current !== null) videoRefs.current[playingRef.current]?.pause()
-      playingRef.current = null
-      stopRef.current = seg
-      setStop(seg)
-      setPlaying(null)
-      if (seg < 0 && videoRefs.current[0]) videoRefs.current[0].currentTime = 0
+      jumpTo(seg)
       return
     }
     // Скролл только запускает ролик; дальше он сам доигрывает до товара.
@@ -488,17 +489,13 @@ export function BestsellerScene() {
   }
 
   const fmt: 'desktop' | 'mobile' = isDesktop ? 'desktop' : 'mobile'
-  const portraitTransform = typeof window !== 'undefined' && window.innerWidth >= 768 ? 'translateY(-16%) scale(1.25)' : 'translateY(4%) scale(1.8)'
-  // Десктоп: segment = видимый ролик; на остановке — точный кадр товара stop.
-  const view = isDesktop
-    ? { segment: playing ?? Math.max(stop, 0), isHold: playing === null && stop >= 0, cardIdx: playing ?? stop, local: playing !== null ? playFrac : stop >= 0 ? 1 : 0 }
-    : {
-        segment: state.segment,
-        isHold: state.progress >= 1 || state.local >= (blobs[state.segment] ? MOVE_SHARE : 0.5),
-        // Карточка держится между остановками: до новой остановки показан предыдущий товар.
-        cardIdx: state.local > 0.55 || state.progress >= 1 ? state.segment : state.segment - 1,
-        local: state.local,
-      }
+  // segment = видимый ролик; на остановке — точный кадр товара stop.
+  const view = {
+    segment: playing ?? Math.max(stop, 0),
+    isHold: playing === null && stop >= 0,
+    cardIdx: playing ?? stop,
+    local: playing !== null ? playFrac : stop >= 0 ? 1 : 0,
+  }
   const isHold = view.isHold
   const cardIdx = view.cardIdx
   const cardProduct = cardIdx >= 0 ? products[cardIdx] : undefined
@@ -522,7 +519,7 @@ export function BestsellerScene() {
                 <div
                   ref={(el) => { fillRefs.current[idx] = el }}
                   className={`h-full bg-primary ${
-                    isDesktop && playing === idx
+                    playing === idx
                       ? ''
                       : 'transition-[width] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none'
                   }`}
@@ -551,11 +548,14 @@ export function BestsellerScene() {
         ))}
       </ul>
       {/* Sticky container */}
-      <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden bg-background">
+      <div ref={stickyRef} className={`sticky top-0 h-screen overflow-hidden bg-background ${isDesktop ? '' : 'supports-[height:100dvh]:h-dvh'}`}>
         {/* Видео фреймы */}
-        <div className={`absolute overflow-hidden ${isDesktop ? 'inset-0' : 'inset-x-0 top-24 bottom-0'}`}>
-          {/* Телефон: кадр крупнее в 1,8 раза — центр масштаба на ряду товаров; планшет стоя — свой масштаб */}
-          <div className="absolute inset-0 origin-[50%_50%]" style={isDesktop ? undefined : { transform: portraitTransform }}>
+        {/* Телефон: кадр 9:16 во всю ширину, ряд товаров — посередине между заголовком и карточкой */}
+        <div
+          className={`absolute overflow-hidden ${isDesktop ? 'inset-0' : 'inset-x-0 aspect-[9/16]'}`}
+          style={isDesktop ? undefined : { top: `calc((100dvh - 4rem) / 2 - ${(MOBILE_BAND * 1600) / 9}vw)` }}
+        >
+          <div className="absolute inset-0">
           {[0, 1, 2, 3].map(idx => (
             <div
               key={idx}
@@ -582,11 +582,6 @@ export function BestsellerScene() {
                   }
                 }}
                 className="w-full h-full object-cover"
-                style={
-                  !isDesktop
-                    ? { objectPosition: 'center top' }
-                    : undefined
-                }
                 src={blobs[idx] ?? undefined}
                 poster={VIDEO_CONFIG.startPoster(fmt, idx)}
                 muted
@@ -602,25 +597,26 @@ export function BestsellerScene() {
                 className={`absolute inset-0 w-full h-full object-cover ${
                   view.segment === idx && isHold ? 'opacity-100' : 'opacity-0'
                 }`}
-                style={!isDesktop ? { objectPosition: 'center top' } : undefined}
               />
               {/* Ролик ещё не в памяти — стартовый кадр шага, на остановке он растворяется в кадр товара */}
-              {view.segment === idx && (!blobs[idx] || (pendingSeg === idx && !isHold)) && (
+              {view.segment === idx && !blobs[idx] && (
                 <img
                   src={VIDEO_CONFIG.startPoster(fmt, idx)}
                   alt=""
                   aria-hidden="true"
                   className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHold ? 'opacity-0' : 'opacity-100'}`}
-                  style={!isDesktop ? { objectPosition: 'center top' } : undefined}
                 />
               )}
             </div>
           ))}
           </div>
+          {/* Телефон: верх и низ кадра растворяются в фоне страницы */}
+          <div aria-hidden="true" className={`${isDesktop ? 'hidden' : ''} absolute inset-x-0 top-0 h-[14%] bg-gradient-to-b from-background to-transparent`} />
+          <div aria-hidden="true" className={`${isDesktop ? 'hidden' : ''} absolute inset-x-0 bottom-0 h-[14%] bg-gradient-to-t from-background to-transparent`} />
         </div>
 
         {/* Мягкий стык фона с соседними секциями */}
-        <div aria-hidden="true" className={`absolute inset-x-0 ${isDesktop ? 'top-0 h-24' : 'top-24 h-10'} bg-gradient-to-b from-background to-transparent pointer-events-none z-10`} />
+        <div aria-hidden="true" className={`absolute inset-x-0 top-0 h-24 ${isDesktop ? '' : 'hidden'} bg-gradient-to-b from-background to-transparent pointer-events-none z-10`} />
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
         {/* Компьютер: края кадра (дорисованная стена и стол) растворяются в фоне страницы */}
         <div aria-hidden="true" className={`${isDesktop ? '' : 'hidden'} absolute inset-y-0 left-0 w-[44%] bg-gradient-to-r from-background from-30% via-background/60 via-60% to-transparent pointer-events-none z-10`} />
@@ -631,7 +627,7 @@ export function BestsellerScene() {
         <div className="absolute inset-0 z-20 pointer-events-none">
           <div className="container-app h-full">
             <div className="relative h-full">
-              <div className={`absolute left-0 ${isDesktop ? 'top-12' : 'top-6'}`}>
+              <div className={`absolute left-0 ${isDesktop ? 'top-12' : 'top-[max(1.5rem,calc(env(safe-area-inset-top)+1rem))]'}`}>
                 <p className="text-label font-semibold uppercase tracking-wide text-primary mb-2 lg:text-body-sm">Выбор косметологов</p>
                 <h2 className="text-h2 font-heading font-bold min-[1800px]:text-[clamp(3rem,2.6vw,4.25rem)]">Бестселлеры</h2>
               </div>
@@ -693,12 +689,12 @@ export function BestsellerScene() {
         {/* Карточка товара - мобильный (снизу); до первого товара — невидимая заглушка, чтобы полоса прогресса не прыгала */}
         <div className={`${isDesktop ? 'hidden' : ''} absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 md:px-12 md:[&>*]:max-w-[30rem] pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none`}>
           <p aria-hidden={cardIdx >= 0} className={`text-label text-muted-foreground transition-opacity duration-300 ${cardIdx >= 0 ? 'opacity-0' : 'opacity-100'}`}>
-            Листайте вниз — рука покажет каждый товар
+            Листайте — рука покажет каждый товар
           </p>
           {progressBar}
           {mData && mProduct && (
             <div
-              className={`bg-card rounded-block shadow-md px-3 py-2.5 flex items-center gap-3 transition-[opacity,transform,visibility] duration-200 ${
+              className={`relative bg-card rounded-block shadow-md px-3 py-2.5 flex items-center gap-3 transition-[opacity,transform,visibility] duration-200 ${
                 cardIdx >= 0
                   ? 'opacity-100 translate-y-0 visible pointer-events-auto'
                   : 'opacity-0 translate-y-6 invisible pointer-events-none'
@@ -712,7 +708,11 @@ export function BestsellerScene() {
                   </div>
                 )}
                 <h3 className="text-sm font-heading font-semibold text-foreground line-clamp-3 leading-snug min-h-[3lh] md:min-h-0">
-                  <Link to={`/product/${mProduct.slug}`} className="hover:text-primary hover:underline underline-offset-4">
+                  {/* Вся карточка — ссылка на товар (растянутая ссылка); кнопка «В корзину» лежит выше неё */}
+                  <Link
+                    to={`/product/${mProduct.slug}`}
+                    className="hover:text-primary hover:underline underline-offset-4 after:absolute after:inset-0 after:rounded-block after:content-[''] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-ring"
+                  >
                     <span className="block">{splitName(mData.name).title}</span>{' '}
                     <span className="block font-normal">{splitName(mData.name).desc}</span>
                   </Link>
@@ -726,7 +726,7 @@ export function BestsellerScene() {
                   />
                 </div>
               </div>
-              <div className="shrink-0 w-28">
+              <div className="relative z-10 shrink-0 w-28">
                 <ProductCardButton product={mData} user={user} onAddToCart={addCurrent} />
               </div>
             </div>
