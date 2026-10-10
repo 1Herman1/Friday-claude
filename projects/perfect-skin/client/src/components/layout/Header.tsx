@@ -10,6 +10,7 @@ import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { ContactsPopover } from './ContactsPopover'
 import { pluralize } from '@/lib/format'
 import { scrollToTopFast } from '@/lib/scroll-top'
+import { useScenePinned } from '@/lib/scene-pin'
 
 interface HeaderProps {
   cartIcon?: React.ReactNode
@@ -41,7 +42,11 @@ export function Header({
   const contactsButtonRef = useRef<HTMLButtonElement>(null)
   const [headerHeight, setHeaderHeight] = useState(72)
   const [contactsOpen, setContactsOpen] = useState(false)
-  const { hidden, scrolled } = useScrollDirection(headerHeight, 8, contactsOpen)
+  const [contactsKbd, setContactsKbd] = useState(false)
+  const { hidden: hiddenByScroll, scrolled } = useScrollDirection(headerHeight, 8, contactsOpen)
+  // Пока клиент внутри сцены «Бестселлеры» — шапки нет
+  const scenePinned = useScenePinned()
+  const hidden = hiddenByScroll || scenePinned
 
   useEffect(() => {
     if (!headerRef.current) return
@@ -66,7 +71,9 @@ export function Header({
   return (
     <header
       ref={headerRef}
-      className={`fixed top-0 inset-x-0 z-40 bg-background/60 backdrop-blur-xl backdrop-saturate-150 transition-transform duration-300 ${
+      // Телефон: iOS — плавающая скруглённая «пилюля» (как панели нового Safari), Android и
+      // остальные — прямоугольная полоса. Планшет и компьютер — прежняя стеклянная полоса.
+      className={`fixed top-0 inset-x-0 z-40 pt-[env(safe-area-inset-top)] bg-background/70 backdrop-blur-xl backdrop-saturate-150 transition-transform duration-300 max-md:ios:bg-transparent max-md:ios:backdrop-blur-none max-md:ios:backdrop-saturate-100 max-md:ios:px-4 max-md:ios:pt-[calc(env(safe-area-inset-top)+8px)] ${
         hidden ? '-translate-y-full' : 'translate-y-0'
       }`}
       style={{
@@ -76,9 +83,9 @@ export function Header({
       <div
         className={`border-b transition-colors duration-200 ${
           scrolled ? 'border-border' : 'border-transparent'
-        }`}
+        } max-md:ios:border-b-0 max-md:ios:rounded-full max-md:ios:bg-background/80 max-md:ios:backdrop-blur-xl max-md:ios:backdrop-saturate-150 max-md:ios:shadow-[0_6px_24px_rgba(20,32,46,0.14)] max-md:ios:ring-1 max-md:ios:ring-foreground/5`}
       >
-        <div className="container-app py-3 md:py-4">
+        <div className="container-app py-3 md:py-4 max-md:ios:px-4 max-md:ios:py-1.5">
           <div className="flex items-center justify-between gap-2">
             <div className="shrink-0">
               <Link
@@ -130,12 +137,15 @@ export function Header({
               </nav>
             )}
 
-            <div className="flex items-center sm:gap-1 ml-auto">
-              <div className="relative flex items-center sm:gap-1">
+            <div className="flex items-center max-md:gap-2 sm:gap-1 ml-auto">
+              <div className="relative flex items-center max-md:gap-2 sm:gap-1">
                 <button
                   ref={contactsButtonRef}
-                  onClick={() => setContactsOpen(!contactsOpen)}
-                  className="group w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
+                  onClick={(e) => {
+                    setContactsKbd(e.detail === 0)
+                    setContactsOpen(!contactsOpen)
+                  }}
+                  className="max-md:order-2 group w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
                   aria-label="Контакты"
                   aria-haspopup="dialog"
                   aria-expanded={contactsOpen}
@@ -143,15 +153,16 @@ export function Header({
                   <IconPhone className="w-5 h-5 transition-transform duration-200 ease-out group-hover:scale-[1.08] motion-reduce:transform-none motion-reduce:transition-none" />
                 </button>
                 <ContactsPopover
-        isOpen={contactsOpen}
-        onClose={() => setContactsOpen(false)}
-        buttonRef={contactsButtonRef}
-      />
+                  isOpen={contactsOpen}
+                  onClose={() => setContactsOpen(false)}
+                  buttonRef={contactsButtonRef}
+                  focusFirst={contactsKbd}
+                />
 
 
                 <button
                   onClick={onSearchOpen}
-                  className="group w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
+                  className="max-md:order-1 group w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
                   aria-label="Поиск"
                   aria-haspopup="dialog"
                 >
@@ -159,7 +170,7 @@ export function Header({
                 </button>
 
                 {cartIcon && (
-                  <div className="relative">
+                  <div className="relative hidden md:block">
                     <button
                       onClick={openCart}
                       className="group w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
@@ -170,7 +181,7 @@ export function Header({
                       </span>
                     </button>
                     {count > 0 && (
-                      <span className="absolute top-1.5 right-1.5 w-5 h-5 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold tabular-nums ring-2 ring-background">
+                      <span className="absolute top-1.5 right-1.5 w-5 h-5 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold tabular-nums">
                         {count > 99 ? '99+' : count}
                       </span>
                     )}
@@ -178,10 +189,10 @@ export function Header({
                 )}
 
                 {favoriteIcon && (
-                  <div className="relative">
+                  <div className="relative hidden md:block">
                     <button
                       onClick={openFavorites}
-                      className="hidden sm:flex group w-11 h-11 sm:w-12 sm:h-12 items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
+                      className="flex group w-11 h-11 sm:w-12 sm:h-12 items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
                       aria-label={favCount > 0 ? `Избранное, ${favCount} ${pluralize(favCount, ['товар', 'товара', 'товаров'])}` : 'Избранное'}
                     >
                       <span className="transition-transform duration-200 ease-out group-hover:scale-[1.08] motion-reduce:transform-none motion-reduce:transition-none">
@@ -189,7 +200,7 @@ export function Header({
                       </span>
                     </button>
                     {favCount > 0 && (
-                      <span className="absolute top-1.5 right-1.5 w-5 h-5 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold tabular-nums ring-2 ring-background">
+                      <span className="absolute top-1.5 right-1.5 w-5 h-5 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold tabular-nums">
                         {favCount > 99 ? '99+' : favCount}
                       </span>
                     )}
@@ -231,7 +242,7 @@ export function Header({
                 {!isDesktop && (
                   <button
                     onClick={onMobileMenuOpen}
-                    className="group w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
+                    className="max-md:order-3 group w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-pill transition-colors duration-200 hover:bg-foreground/5 active:scale-95 focus-visible:outline-ring"
                     aria-label="Меню"
                   >
                     <IconMenu className="w-5 h-5 transition-transform duration-200 ease-out group-hover:scale-[1.08] motion-reduce:transform-none motion-reduce:transition-none" />

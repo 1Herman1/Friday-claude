@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { IconClose } from '@/components/icons'
 import { useEffect } from 'react'
+import { lockBodyScroll, unlockBodyScroll } from '@/lib/scroll-lock'
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -27,27 +28,21 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     return () => document.removeEventListener('keydown', onKey)
   }, [isOpen, onClose])
 
+  // Общий замок прокрутки (со счётчиком), чтобы не спорить с поиском и шторками
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
-    return () => {
-      document.body.style.overflow = 'auto'
-    }
+    if (!isOpen) return
+    lockBodyScroll()
+    return () => unlockBodyScroll()
   }, [isOpen])
 
   return (
     <>
       {/* Backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
-          onClick={onClose}
-          aria-hidden="true"
-        />
-      )}
+      <div
+        className={`fixed inset-0 bg-foreground/40 backdrop-blur-[2px] z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
       {/* Drawer. Обёртка overflow-hidden: сдвинутая за экран шторка
           иначе растягивает страницу и даёт горизонтальный скролл. */}
@@ -56,25 +51,25 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         aria-hidden={!isOpen}
       >
       <div
-        className={`absolute right-0 top-0 bottom-0 w-full max-w-sm bg-card shadow-lg transform transition-transform duration-300 ${isOpen ? 'pointer-events-auto' : ''} ${
+        className={`absolute right-0 top-0 bottom-0 w-[calc(100%-48px)] max-w-sm bg-background shadow-lg transform transition-transform duration-300 ease-out ${isOpen ? 'pointer-events-auto' : ''} ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="p-6">
+        <div className="p-6 pt-[calc(env(safe-area-inset-top)+1.5rem)]">
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center text-foreground hover:bg-muted rounded-full transition-colors duration-200 focus-visible:outline-ring"
+            className="absolute top-[calc(env(safe-area-inset-top)+1rem)] right-4 w-11 h-11 flex items-center justify-center text-foreground hover:bg-muted rounded-full transition-colors duration-200 focus-visible:outline-ring"
             aria-label="Закрыть меню"
           >
             <IconClose />
           </button>
 
-          <nav className="flex flex-col gap-1 mt-8">
+          <nav className="flex flex-col mt-10">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
-                className="text-body font-sans text-foreground hover:text-primary transition-colors duration-200 focus-visible:outline-ring py-0.5"
+                className="font-heading font-semibold text-[1.125rem] text-foreground hover:text-primary active:text-primary transition-colors duration-200 focus-visible:outline-ring py-3 border-b border-border/70 last:border-b-0"
                 onClick={onClose}
               >
                 {item.label}
@@ -82,19 +77,19 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             ))}
           </nav>
 
-          <div className="border-t border-border mt-8 pt-8">
-            <p className="text-label font-sans font-semibold uppercase tracking-wide text-muted-foreground mb-4">
-              Контакты
+          <div className="border-t border-border mt-6 pt-6">
+            <p className="text-label font-sans font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+              Связаться с нами
             </p>
             <a
               href="tel:+74951832848"
-              className="text-body-sm font-sans text-foreground hover:text-primary transition-colors duration-200 focus-visible:outline-ring block"
+              className="text-body-sm font-sans text-foreground hover:text-primary transition-colors duration-200 focus-visible:outline-ring flex items-center min-h-11"
             >
               +7 (495) 183-28-48
             </a>
             <a
               href="mailto:mail@perfect-skin.shop"
-              className="text-body-sm font-sans text-foreground hover:text-primary transition-colors duration-200 focus-visible:outline-ring block mt-2"
+              className="text-body-sm font-sans text-foreground hover:text-primary transition-colors duration-200 focus-visible:outline-ring flex items-center min-h-11"
             >
               mail@perfect-skin.shop
             </a>

@@ -7,6 +7,7 @@ import { useProductSearch } from '@/hooks/useProductSearch'
 import { useDrawer } from '@/context/DrawerContext'
 import { lockBodyScroll, unlockBodyScroll } from '@/lib/scroll-lock'
 import { PriceTag } from '@/components/product/PriceTag'
+import { usedKeyboard } from '@/lib/input-modality'
 
 interface SearchModalProps {
   open: boolean
@@ -19,11 +20,13 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [isVisible, setIsVisible] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const openerRef = useRef<HTMLElement | null>(null)
   const { openQuiz } = useDrawer()
 
   // Загружаем популярное при открытии модалки
   useEffect(() => {
     if (open) {
+      openerRef.current = document.activeElement as HTMLElement | null
       setIsVisible(true)
       loadPopular()
       lockBodyScroll()
@@ -77,6 +80,10 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
       onClose()
       clear()
       setSelectedIndex(-1)
+      // Фокус возвращаем на кнопку поиска только для клавиатуры; после пальца — снимаем,
+      // иначе на телефоне кнопка остаётся подсвеченной
+      if (usedKeyboard()) openerRef.current?.focus()
+      else (document.activeElement as HTMLElement | null)?.blur()
     }, 150)
   }
 
@@ -110,7 +117,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
       {/* Backdrop */}
       {open && (
         <div
-          className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-150 ${
+          className={`fixed inset-0 bg-foreground/40 backdrop-blur-[2px] z-40 transition-opacity duration-150 ${
             isVisible ? 'opacity-100' : 'opacity-0'
           }`}
           onClick={handleClose}
@@ -120,7 +127,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
 
       {/* Modal */}
       <div
-        className={`fixed inset-0 z-50 flex items-start justify-center pt-16 md:pt-24 pointer-events-none transition-opacity duration-150 ${
+        className={`fixed inset-0 z-50 flex items-start justify-center pt-[calc(var(--header-h,72px)+12px)] md:pt-24 px-4 pointer-events-none transition-opacity duration-150 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
         role="dialog"
@@ -128,7 +135,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
         aria-labelledby="search-title"
       >
         <div
-          className="pointer-events-auto w-full max-w-xl mx-4 bg-background rounded-lg shadow-lg"
+          className="pointer-events-auto w-full max-w-xl bg-background rounded-block shadow-lg overflow-hidden flex flex-col max-h-[calc(100dvh-var(--header-h,72px)-24px)] md:max-h-[80vh]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Search Input */}
@@ -147,7 +154,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
               autoComplete="off"
               aria-label="Поиск товаров"
             />
-            {query && (
+            {query ? (
               <button
                 onClick={clear}
                 className="w-11 h-11 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
@@ -155,11 +162,19 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
               >
                 <IconClose className="w-5 h-5" />
               </button>
+            ) : (
+              <button
+                onClick={handleClose}
+                className="w-11 h-11 -mr-2 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors flex-shrink-0 font-sans text-body-sm"
+                aria-label="Закрыть поиск"
+              >
+                <IconClose className="w-5 h-5" />
+              </button>
             )}
           </div>
 
           {/* Content */}
-          <div className="max-h-[456px] overflow-y-auto">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
             {/* Empty State */}
             {showEmpty && (
               <div className="px-4 py-8 text-center">
@@ -181,6 +196,11 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
             )}
 
             {/* Results or Popular */}
+            {!showEmpty && !showNoConnection && items.length > 0 && !query.trim() && (
+              <p className="px-4 pt-3 pb-1 text-label uppercase tracking-wide font-semibold text-muted-foreground">
+                Популярное
+              </p>
+            )}
             {!showEmpty && !showNoConnection && items.length > 0 && (
               <div className="divide-y divide-border">
                 {items.map((product, index) => (
@@ -210,7 +230,7 @@ cardImage(product) ?? ''
 
                     {/* Product Info */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">
+                      <p className="text-sm font-semibold text-foreground line-clamp-2">
                         {product.name}
                       </p>
                       {product.brand && (

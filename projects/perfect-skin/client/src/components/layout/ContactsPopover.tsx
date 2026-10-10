@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { IconPhone, IconMail } from '@/components/icons'
 
@@ -6,13 +8,17 @@ interface ContactsPopoverProps {
   isOpen: boolean
   onClose: () => void
   buttonRef: React.RefObject<HTMLButtonElement>
+  /** Открыт с клавиатуры — переводим фокус внутрь; пальцем — нет (иначе подсветка на телефоне) */
+  focusFirst?: boolean
 }
 
 export function ContactsPopover({
   isOpen,
   onClose,
   buttonRef,
+  focusFirst = false,
 }: ContactsPopoverProps) {
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
   const popoverRef = useRef<HTMLDivElement>(null)
   const firstLinkRef = useRef<HTMLAnchorElement>(null)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -24,10 +30,10 @@ export function ContactsPopover({
     }
     const id = requestAnimationFrame(() => {
       setIsAnimating(true)
-      firstLinkRef.current?.focus()
+      if (focusFirst) firstLinkRef.current?.focus()
     })
     return () => cancelAnimationFrame(id)
-  }, [isOpen])
+  }, [isOpen, focusFirst])
 
   useEffect(() => {
     if (!isOpen) return
@@ -61,7 +67,7 @@ export function ContactsPopover({
 
   if (!isOpen) return null
 
-  return (
+  const popover = (
     <div
       ref={popoverRef}
       role="dialog"
@@ -78,7 +84,7 @@ export function ContactsPopover({
         <a
           ref={firstLinkRef}
           href="tel:+74951832848"
-          className="flex items-start gap-2 text-body-sm text-foreground hover:text-primary transition-colors focus-visible:outline-ring rounded py-1"
+          className="flex items-start gap-2 text-body-sm text-foreground hover:text-primary transition-colors focus-visible:outline-ring rounded min-h-11 py-1"
           onClick={onClose}
         >
           <IconPhone className="w-4 h-4 flex-shrink-0 mt-0.5 text-muted-foreground" />
@@ -90,10 +96,10 @@ export function ContactsPopover({
 
         <a
           href="mailto:mail@perfect-skin.shop"
-          className="flex items-start gap-2 text-body-sm text-foreground hover:text-primary transition-colors focus-visible:outline-ring rounded py-1"
+          className="flex items-center gap-2 text-body-sm text-foreground hover:text-primary transition-colors focus-visible:outline-ring rounded min-h-11"
           onClick={onClose}
         >
-          <IconMail className="w-4 h-4 flex-shrink-0 mt-0.5 text-muted-foreground" />
+          <IconMail className="w-4 h-4 flex-shrink-0 text-muted-foreground" />
           <span className="font-semibold">mail@perfect-skin.shop</span>
         </a>
 
@@ -107,7 +113,7 @@ export function ContactsPopover({
 
         <Link
           to="/contacts"
-          className="inline-flex items-center gap-1 text-body-sm font-semibold text-primary hover:text-primary/80 transition-colors focus-visible:outline-ring rounded py-1"
+          className="inline-flex items-center gap-1 min-h-11 text-body-sm font-semibold text-primary hover:text-primary/80 transition-colors focus-visible:outline-ring rounded"
           onClick={onClose}
         >
           Все контакты
@@ -119,4 +125,6 @@ export function ContactsPopover({
       </div>
     </div>
   )
+  // На телефоне — в body: у шапки «стекло» (backdrop-filter), и fixed внутри неё считался бы от шапки
+  return isDesktop ? popover : createPortal(popover, document.body)
 }

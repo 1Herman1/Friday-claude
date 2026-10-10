@@ -8,6 +8,7 @@ import CartDrawer from '@/components/cart/CartDrawer'
 import FavoritesDrawer from '@/components/favorites/FavoritesDrawer'
 import { QuizModal } from '@/components/quiz/QuizModal'
 import { useDrawer } from '@/context/DrawerContext'
+import { MobileBottomNav } from './MobileBottomNav'
 
 interface LayoutProps {
   children: ReactNode
@@ -31,7 +32,8 @@ export function Layout({
   }, [location.pathname, close])
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    // Снизу на телефоне — место под нижнюю панель, чтобы она не закрывала подвал
+    <div className="flex flex-col min-h-screen bg-background max-md:pb-[calc(64px+env(safe-area-inset-bottom))] max-md:ios:pb-[calc(84px+env(safe-area-inset-bottom))]">
       <Header
         cartIcon={cartIcon}
         favoriteIcon={favoriteIcon}
@@ -53,6 +55,7 @@ export function Layout({
       <QuizModal open={drawer === 'quiz'} onClose={close} />
 
       <Footer />
+      <MobileBottomNav />
     </div>
   )
 }

@@ -76,7 +76,7 @@ export function StickyProductPanel({
   if (!isVisible) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-4 shadow-lg z-40 animate-in slide-in-from-bottom-2">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-4 shadow-lg z-40 animate-in slide-in-from-bottom-2 max-md:bottom-[calc(64px+env(safe-area-inset-bottom))] max-md:ios:bottom-[calc(env(safe-area-inset-bottom)+82px)] max-md:ios:inset-x-4 max-md:ios:rounded-block max-md:ios:border">
       <div className="container-app flex items-center justify-between gap-4">
         {/* Price */}
         <p className="font-semibold text-foreground whitespace-nowrap tabular-nums text-lg">
