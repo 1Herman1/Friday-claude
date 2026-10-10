@@ -112,10 +112,10 @@ export function HeroSection() {
         </video>
       )}
 
-      <div className="absolute inset-x-0 bottom-0 h-[55%] portrait:h-[62%] -z-10 bg-gradient-to-t from-background via-background/80 to-transparent landscape:lg:hidden" />
+      <div className="absolute inset-x-0 bottom-0 h-[55%] portrait:h-[62%] max-md:ios:portrait:h-[72%] -z-10 bg-gradient-to-t from-background via-background/80 to-transparent landscape:lg:hidden" />
 
       <div
-        className="container-app h-full flex flex-col justify-end pt-4 pb-6 max-md:ios:pb-[calc(env(safe-area-inset-bottom)+88px)] md:pt-[var(--header-h,72px)] md:pb-14 landscape:lg:justify-center landscape:lg:pb-24 landscape:lg:[@media(max-height:900px)]:pb-12"
+        className="container-app h-full flex flex-col justify-end pt-4 pb-6 max-md:ios:pb-[calc(env(safe-area-inset-bottom)+96px)] md:pt-[var(--header-h,72px)] md:pb-14 landscape:lg:justify-center landscape:lg:pb-24 landscape:lg:[@media(max-height:900px)]:pb-12"
       >
         <div className="max-w-[560px] landscape:lg:max-w-none">
           <p className="mb-3 text-label font-semibold uppercase tracking-wide text-primary landscape:lg:mb-4 lg:text-body-sm landscape:2xl:mb-6">

@@ -73,7 +73,7 @@ export function Header({
       ref={headerRef}
       // Телефон: iOS — плавающая скруглённая «пилюля» (как панели нового Safari), Android и
       // остальные — прямоугольная полоса. Планшет и компьютер — прежняя стеклянная полоса.
-      className={`fixed top-0 inset-x-0 z-40 pt-[env(safe-area-inset-top)] bg-background/70 backdrop-blur-xl backdrop-saturate-150 transition-transform duration-300 max-md:ios:bg-transparent max-md:ios:backdrop-blur-none max-md:ios:backdrop-saturate-100 max-md:ios:px-4 max-md:ios:pt-[calc(env(safe-area-inset-top)+8px)] ${
+      className={`fixed top-0 inset-x-0 z-40 pt-[env(safe-area-inset-top)] bg-background/70 backdrop-blur-xl backdrop-saturate-150 transition-transform duration-300 max-md:ios:bg-transparent max-md:ios:backdrop-blur-none max-md:ios:backdrop-saturate-100 max-md:ios:px-4 max-md:ios:pb-2 max-md:ios:pt-[calc(env(safe-area-inset-top)+8px)] ${
         hidden ? '-translate-y-full' : 'translate-y-0'
       }`}
       style={{

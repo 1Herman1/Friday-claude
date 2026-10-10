@@ -35,7 +35,7 @@ export function MobileBottomNav() {
     <nav
       aria-label="Основная навигация"
       className={`md:hidden fixed z-30 transition-transform duration-300 ease-out
-        inset-x-0 bottom-0 h-[calc(64px+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)] bg-background/90 backdrop-blur-xl backdrop-saturate-150 border-t border-border
+        inset-x-0 bottom-0 h-[calc(64px+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)] bg-background backdrop-blur-xl backdrop-saturate-150 border-t border-border
         ios:inset-x-4 ios:bottom-[calc(env(safe-area-inset-bottom)+8px)] ios:h-16 ios:pb-0 ios:rounded-full ios:border-0 ios:bg-background/80 ios:shadow-[0_6px_24px_rgba(20,32,46,0.14)] ios:ring-1 ios:ring-foreground/5
         ${pinned ? 'translate-y-[calc(100%+24px)]' : 'translate-y-0'}`}
     >
