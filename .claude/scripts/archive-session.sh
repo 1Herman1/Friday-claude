@@ -67,6 +67,10 @@ fi
 
 # Маскировка секретов. Последний рубеж перед записью в git: в стенограммах
 # реально встречаются вставленные в чат ключи.
+# Обрезка по символам, а не байтам: BSD cut -c на macOS режет посреди
+# кириллической буквы и ломает UTF-8 в архиве.
+ucut() { perl -CSD -lne "print substr(\$_, 0, $1)" 2>/dev/null; }
+
 redact() {
   sed -E \
     -e 's/\b[a-fA-F0-9]{32,}\b/[СКРЫТО]/g' \
@@ -95,7 +99,7 @@ USER_MSGS=$(jq -r 'select(.type=="user" and (.isMeta != true) and (.toolUseResul
   | grep -vE '^[[:space:]]*(Caveat:|The messages below|\[Request interrupted|\[Image:|✓|✗|Note:)' \
   | awk 'length > 12' \
   | uniq \
-  | cut -c1-400 | redact)
+  | ucut 400 | redact)
 
 # --- изменённые файлы: только внутри проекта, без временных ---
 FILES=$(jq -r 'select(.type=="assistant") | .message.content[]?
@@ -108,13 +112,13 @@ FILES=$(jq -r 'select(.type=="assistant") | .message.content[]?
 AGENTS=$(jq -r 'select(.type=="assistant") | .message.content[]?
   | select(.type=="tool_use") | select(.name=="Agent")
   | (.input.subagent_type // "general") + " — " + (.input.description // "")' \
-  "$NEW" 2>/dev/null | sort -u | cut -c1-120)
+  "$NEW" 2>/dev/null | sort -u | ucut 120)
 
 # --- ход работы: что падало ---
 ERRORS=$(jq -r 'select(.type=="user") | .message.content[]?
   | select(.type=="tool_result") | select(.is_error == true)
   | (if (.content|type)=="string" then .content else ((.content[]?|select(.type=="text").text) // "") end)' \
-  "$NEW" 2>/dev/null | grep -vE '^[[:space:]]*$' | cut -c1-200 | head -20 | redact)
+  "$NEW" 2>/dev/null | grep -vE '^[[:space:]]*$' | ucut 200 | head -20 | redact)
 
   # Фрагмент копится в черновик, а не в docs/archive/sessions/ — так дерево
   # git остаётся чистым между сбросами (см. заголовок файла).
