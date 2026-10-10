@@ -6,7 +6,7 @@ import { useDrawer } from '@/context/DrawerContext'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { Link } from 'react-router-dom'
 import { splitName } from '@/lib/split-name'
-import { setScenePinned } from '@/lib/scene-pin'
+import { setScenePinned, useScenePinned } from '@/lib/scene-pin'
 import { isAutoScrolling } from '@/lib/scroll-top'
 
 // Ролики сцены: сегмент i — рука от товара i к товару i+1 (кадры k_i → k_{i+1}).
@@ -75,7 +75,10 @@ export function BestsellerScene() {
 
   // Своя плавная прокрутка при выходе из сцены: пока она идёт, телефон её не ловит
   const releasingRef = useRef(false)
+  // Пока сцена закреплена, браузер не начинает прокрутку от касания вовсе — свайп превращается в шаг
+  const scenePinned = useScenePinned()
   useEffect(() => () => {
+    playingRef.current = null
     setScenePinned(false)
     document.documentElement.style.overflow = ''
   }, [])
@@ -97,6 +100,7 @@ export function BestsellerScene() {
       const newIsDesktop = isWideScene()
       if (newIsDesktop !== isDesktop) {
         setIsDesktop(newIsDesktop)
+        setScenePinned(false)
         // Другой формат — другие ролики: играющий ролик не доиграет, сцена встаёт в начало.
         videoRefs.current.forEach((video) => {
           if (video) {
@@ -146,6 +150,12 @@ export function BestsellerScene() {
     window.scrollTo({ top: anchorOf(seg, el), behavior: 'instant' as ScrollBehavior })
   // Один жест — один шаг. Жест во время ролика сразу ставит его товар и запускает следующий;
   // после четвёртого товара жест уводит к следующей секции, до первого — к предыдущей.
+  const releaseTimer = useRef(0)
+  const release = () => {
+    releasingRef.current = true
+    window.clearTimeout(releaseTimer.current)
+    releaseTimer.current = window.setTimeout(() => { releasingRef.current = false }, 1200)
+  }
   const step = (down: boolean) => {
     const el = containerRef.current
     if (!el) return
@@ -163,7 +173,7 @@ export function BestsellerScene() {
         return
       }
       if (at >= 3) {
-        releasingRef.current = true
+        release()
         window.scrollTo({ top: rect.top + window.scrollY + el.scrollHeight, behavior: 'smooth' })
         return
       }
@@ -173,7 +183,7 @@ export function BestsellerScene() {
       return
     }
     if (playingNow === null && at < 0) {
-      releasingRef.current = true
+      release()
       window.scrollTo({ top: rect.top + window.scrollY - window.innerHeight, behavior: 'smooth' })
       return
     }
@@ -273,7 +283,9 @@ export function BestsellerScene() {
     const onStart = (e: TouchEvent) => {
       const el = containerRef.current
       if (!el || e.touches.length !== 1) return
-      startedPinned = pinnedNow(el) && !releasingRef.current
+      // Касание во время плавного выхода — пользователь перехватил управление
+      releasingRef.current = false
+      startedPinned = pinnedNow(el)
       startY = e.touches[0].clientY
       stepped = false
     }
@@ -388,7 +400,10 @@ export function BestsellerScene() {
       requestAnimationFrame(follow)
     }
     requestAnimationFrame(follow)
-    video.play().catch(() => finishClip(clip))
+    // pause() от следующего жеста отклоняет play() с AbortError — это не сбой ролика
+    video.play().catch((e: unknown) => {
+      if ((e as { name?: string })?.name !== 'AbortError' && playingRef.current === clip) finishClip(clip)
+    })
   }
   // Жест во время ролика: ролик сразу встаёт на свой товар.
   function finishClip(clip: number) {
@@ -548,11 +563,11 @@ export function BestsellerScene() {
         ))}
       </ul>
       {/* Sticky container */}
-      <div ref={stickyRef} className={`sticky top-0 h-screen overflow-hidden bg-background ${isDesktop ? '' : 'supports-[height:100dvh]:h-dvh'}`}>
+      <div ref={stickyRef} className={`sticky top-0 h-screen overflow-hidden bg-background ${isDesktop ? '' : 'supports-[height:100dvh]:h-dvh'} ${scenePinned ? 'touch-none' : ''}`}>
         {/* Видео фреймы */}
         {/* Телефон: кадр 9:16 во всю ширину, ряд товаров — посередине между заголовком и карточкой */}
         <div
-          className={`absolute overflow-hidden ${isDesktop ? 'inset-0' : 'inset-x-0 aspect-[9/16]'}`}
+          className={`absolute overflow-hidden ${isDesktop ? 'inset-0' : 'inset-x-0 aspect-[9/16] [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_86%,transparent)]'}`}
           style={isDesktop ? undefined : { top: `calc((100dvh - 4rem) / 2 - ${(MOBILE_BAND * 1600) / 9}vw)` }}
         >
           <div className="absolute inset-0">
@@ -566,7 +581,9 @@ export function BestsellerScene() {
               <video
                 ref={el => {
                   videoRefs.current[idx] = el
-                  if (el) {
+                  // Колбэк вызывается на каждом рендере — слушатели вешаем один раз на элемент
+                  if (el && !el.dataset.wired) {
+                    el.dataset.wired = '1'
                     el.muted = true
                     el.setAttribute('muted', '')
                     const handleReady = () => {
@@ -575,10 +592,6 @@ export function BestsellerScene() {
                     }
                     el.addEventListener('loadeddata', handleReady)
                     el.addEventListener('canplay', handleReady)
-                    return () => {
-                      el.removeEventListener('loadeddata', handleReady)
-                      el.removeEventListener('canplay', handleReady)
-                    }
                   }
                 }}
                 className="w-full h-full object-cover"
@@ -610,9 +623,6 @@ export function BestsellerScene() {
             </div>
           ))}
           </div>
-          {/* Телефон: верх и низ кадра растворяются в фоне страницы */}
-          <div aria-hidden="true" className={`${isDesktop ? 'hidden' : ''} absolute inset-x-0 top-0 h-[14%] bg-gradient-to-b from-background to-transparent`} />
-          <div aria-hidden="true" className={`${isDesktop ? 'hidden' : ''} absolute inset-x-0 bottom-0 h-[14%] bg-gradient-to-t from-background to-transparent`} />
         </div>
 
         {/* Мягкий стык фона с соседними секциями */}
@@ -688,13 +698,14 @@ export function BestsellerScene() {
 
         {/* Карточка товара - мобильный (снизу); до первого товара — невидимая заглушка, чтобы полоса прогресса не прыгала */}
         <div className={`${isDesktop ? 'hidden' : ''} absolute bottom-0 left-0 right-0 z-20 h-36 flex flex-col justify-end gap-2 px-6 md:px-12 md:[&>*]:max-w-[30rem] pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pointer-events-none`}>
-          <p aria-hidden={cardIdx >= 0} className={`text-label text-muted-foreground transition-opacity duration-300 ${cardIdx >= 0 ? 'opacity-0' : 'opacity-100'}`}>
+          {progressBar}
+          <div className="relative">
+          <p aria-hidden={cardIdx >= 0} className={`absolute inset-0 flex items-center text-body-sm text-muted-foreground transition-opacity duration-300 ${cardIdx >= 0 ? 'opacity-0' : 'opacity-100'}`}>
             Листайте — рука покажет каждый товар
           </p>
-          {progressBar}
           {mData && mProduct && (
             <div
-              className={`relative bg-card rounded-block shadow-md px-3 py-2.5 flex items-center gap-3 transition-[opacity,transform,visibility] duration-200 ${
+              className={`relative bg-card rounded-block shadow-md px-4 py-3 flex items-center gap-3 transition-[opacity,transform,visibility] duration-200 ${
                 cardIdx >= 0
                   ? 'opacity-100 translate-y-0 visible pointer-events-auto'
                   : 'opacity-0 translate-y-6 invisible pointer-events-none'
@@ -704,33 +715,32 @@ export function BestsellerScene() {
                 {mData.brand && (
                   <div className="text-label leading-tight uppercase tracking-wide text-muted-foreground">
                     {mData.brand.name}
-                    {mData.variants[0]?.volumeLabel && <span className="font-semibold"> · {mData.variants[0].volumeLabel}</span>}
+                    {mData.variants[0]?.volumeLabel && <span className="font-semibold normal-case"> · {mData.variants[0].volumeLabel}</span>}
                   </div>
                 )}
                 <h3 className="text-sm font-heading font-semibold text-foreground line-clamp-3 leading-snug min-h-[3lh] md:min-h-0">
                   {/* Вся карточка — ссылка на товар (растянутая ссылка); кнопка «В корзину» лежит выше неё */}
                   <Link
                     to={`/product/${mProduct.slug}`}
-                    className="hover:text-primary hover:underline underline-offset-4 after:absolute after:inset-0 after:rounded-block after:content-[''] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-ring"
+                    className="hover:text-primary hover:underline underline-offset-4 after:absolute after:inset-0 after:rounded-block after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-ring"
                   >
                     <span className="block">{splitName(mData.name).title}</span>{' '}
                     <span className="block font-normal">{splitName(mData.name).desc}</span>
                   </Link>
                 </h3>
-                <div className="mt-1">
-                  <PriceTag
-                    price={mData.minPrice}
-                    oldPrice={mData.oldPrice ?? undefined}
-                    hidden={mData.priceHidden}
-                    size="sm"
-                  />
-                </div>
               </div>
-              <div className="relative z-10 shrink-0 w-28">
+              <div key={mProduct.slug} className="relative z-10 shrink-0 w-28 flex flex-col items-center gap-1.5">
+                <PriceTag
+                  price={mData.minPrice}
+                  oldPrice={mData.oldPrice ?? undefined}
+                  hidden={mData.priceHidden}
+                  size="lg"
+                />
                 <ProductCardButton product={mData} user={user} onAddToCart={addCurrent} />
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     </section>
@@ -775,10 +785,10 @@ function ProductCardButton({ product, user, onAddToCart }: ProductCardButtonProp
     <button
       onClick={handleClick}
       disabled={!product?.inStock || state === 'loading'}
-      className="w-full py-2 px-4 bg-primary text-primary-foreground font-heading font-bold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11 text-body-sm"
+      className="w-full py-2 px-3 leading-tight bg-primary text-primary-foreground font-heading font-bold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11 text-body-sm"
     >
       {state === 'success'
-        ? 'Добавлено ✓'
+        ? 'Добавлено'
         : state === 'loading'
           ? 'Добавляю...'
           : product?.inStock
