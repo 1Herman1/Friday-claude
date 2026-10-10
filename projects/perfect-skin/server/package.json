@@ -15,6 +15,7 @@
     "import:prices": "tsx prisma/import-prices.ts",
     "import:pro-products": "tsx prisma/import-pro-products.ts",
     "import:content": "tsx prisma/import-content.ts",
+    "parse:client-docx": "tsx prisma/parse-client-docx.ts",
     "studio": "prisma studio",
     "test": "vitest run",
     "test:watch": "vitest",
