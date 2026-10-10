@@ -8,7 +8,7 @@ on:
       stage:
         description: 'images — все кадры, gaps — кадр без товара, hands — кадры с рукой, videos — ролики'
         type: choice
-        options: [images, gaps, hands, videos, hero, hero-turn, hero-wide, hero-wide2, hero-crack, hero-start, hero-start2, hero-start3, hero-start4, hero-mid, hero-ab, hero-ab2, hero-video, wide, wide2, mobpad, pad2, v3-gaps, v3-hands, v3-videos, v3-hover4, v3-split4, v3-sd2]
+        options: [images, gaps, hands, videos, hero, hero-turn, hero-wide, hero-wide2, hero-crack, hero-start, hero-start2, hero-start3, hero-start4, hero-mid, hero-ab, hero-ab2, hero-video, wide, wide2, mobpad, pad2, v3-gaps, v3-hands, v3-videos, v3-hover4, v3-split4, v3-sd2, v4-mobile]
         default: images
       frames:
         description: 'Только эти кадры через пробел (например: desktop-k1 mobile-k2 desktop-k0h). Пусто — все'
@@ -72,7 +72,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/projects/perfect-skin/media/bestsellers-v2 docs/projects/perfect-skin/media/bestsellers-v3 docs/projects/perfect-skin/media/hero projects/perfect-skin/client/public/video/bestsellers 2>/dev/null || git add docs/projects/perfect-skin/media/bestsellers-v2
+          git add docs/projects/perfect-skin/media/bestsellers-v2 docs/projects/perfect-skin/media/bestsellers-v3 docs/projects/perfect-skin/media/bestsellers-v4 docs/projects/perfect-skin/media/hero projects/perfect-skin/client/public/video/bestsellers 2>/dev/null || git add docs/projects/perfect-skin/media/bestsellers-v2
           git commit -m "Bestsellers scene media: $STAGE" || exit 0
           # При конфликте бинарников побеждают файлы этого прогона (-X theirs в
           # терминах rebase = наш переигрываемый коммит). Неудачный пуш — ошибка.

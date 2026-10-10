@@ -261,6 +261,27 @@ if [ "$STAGE" = v3-sd2 ]; then
   exit 0
 fi
 
+# v4: ролики телефона по портретным кадрам, вырезанным из компьютерных (те же товары и
+# этикетки пиксель в пиксель). CLIPS="0-1 2-3" — только эти; пусто — все четыре.
+if [ "$STAGE" = v4-mobile ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v4"
+  BASE="Locked static camera, no camera movement, no zoom, vertical 9:16 frame. Premium skincare commercial, soft warm studio light, calm and slow. A slender, delicate feminine hand (long fine fingers, short nude manicure, no jewellery, matte skin without shine) comes from the right side of the frame. The whole hand and wrist stay inside the frame in every frame; the hand never leaves the frame, never goes behind any product and always passes in front of the products. The products that the hand does not touch stay perfectly still: exact positions, sizes and crisp, unchanged labels. No glare, no glow, no new reflections, constant lighting. Smooth continuous natural motion, no cuts, no jitter."
+  for c in 0-1 1-2 2-3 3-4; do
+    if [ -n "${CLIPS:-}" ] && [[ " $CLIPS " != *" $c "* ]]; then continue; fi
+    a=${c%-*}; b=${c#*-}
+    case $c in
+      0-1) ACT="In the first frame the hand hovers still above the first two bottles. In one single smooth movement it descends to the first white bottle on the left (blue band), the fingers close on its body just below the silver cap, a brief tangible grip, and it lifts the bottle a few centimeters straight up, settling exactly into the last frame." ;;
+      1-2) ACT="The hand gently sets the white bottle with the blue band down on its own spot, releases it, moves slightly right and takes the second white bottle (violet band) by its body just below the silver cap, a brief grip, and lifts it a few centimeters straight up into the last frame." ;;
+      2-3) ACT="The hand sets the second white bottle down on its own spot, releases it, moves right and takes the short frosted jar by the sides of its body (never by the lid), a brief grip, and lifts it a few centimeters straight up, perfectly level, into the last frame." ;;
+      3-4) ACT="The hand sets the frosted jar down on its own spot, releases it, moves right and takes the pink glass dropper bottle by its glass body below the silver collar, never touching the white bulb; the white rubber bulb stays solid opaque white in every frame. A brief grip, then it lifts the bottle a few centimeters straight up into the last frame." ;;
+    esac
+    DUR=4 gen_video "mobile-$c" 9:16 "$BASE $ACT" "$OUT/mobile-k$a.png" "$OUT/mobile-k$b.png" &
+  done
+  wait
+  ls -la "$OUT"
+  exit 0
+fi
+
 if [[ "$STAGE" == v3-* ]]; then
   STAGE="${STAGE#v3-}"
   OUT="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"
