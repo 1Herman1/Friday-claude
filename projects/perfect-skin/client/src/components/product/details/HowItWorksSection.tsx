@@ -14,6 +14,8 @@ export function HowItWorksSection({ id, data, level = 'h2' }: HowItWorksSectionP
   const ItemHeading = level === 'h2' ? 'h3' : 'h4'
   // Сетка по числу пунктов: 4 — в ряд, 2 — пополам, остальное — по три
   const columns = data.items.length === 4 ? 'xl:grid-cols-4' : data.items.length === 2 ? '' : 'xl:grid-cols-3'
+  const resultLines = data.result?.split('\n').map(line => line.trim()).filter(line => line.length > 0) ?? []
+  const resultBold = data.result !== null && data.result.length <= 120
 
   return (
     <section id={id} aria-labelledby={titleId} className={sectionClass}>
@@ -25,20 +27,28 @@ export function HowItWorksSection({ id, data, level = 'h2' }: HowItWorksSectionP
           {paragraph}
         </p>
       ))}
-      <ol role="list" className={`grid grid-cols-1 gap-4 md:grid-cols-2 ${columns}`}>
-        {data.items.map((item, index) => (
-          <li key={index} className="flex flex-col gap-3 rounded-block bg-card p-6">
-            <span aria-hidden="true" className="font-heading text-h3 font-bold leading-none tabular-nums text-gold-text">
-              {String(index + 1).padStart(2, '0')}
-            </span>
-            {item.title && (
-              <ItemHeading className="font-heading text-lg font-semibold text-foreground">{item.title}</ItemHeading>
-            )}
-            <p className="text-body-sm">{item.text}</p>
-          </li>
-        ))}
-      </ol>
-      {data.result && <p className="font-semibold text-foreground">{data.result}</p>}
+      {data.items.length > 0 && (
+        <ol role="list" className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${columns}`}>
+          {data.items.map((item, index) => (
+            <li key={index} className="flex flex-col gap-3 rounded-block bg-transparent p-0 md:bg-card md:p-6">
+              <span aria-hidden="true" className="font-heading text-h3 font-bold leading-none tabular-nums text-gold-text">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              {item.title && (
+                <ItemHeading className="font-heading text-lg font-semibold text-foreground">{item.title}</ItemHeading>
+              )}
+              <p className="text-body-sm">{item.text}</p>
+            </li>
+          ))}
+        </ol>
+      )}
+      {resultLines.length > 0 && (
+        <div className={`flex max-w-prose flex-col gap-3 text-foreground${resultBold ? ' font-semibold' : ''}`}>
+          {resultLines.map((line, index) => (
+            <p key={index}>{line}</p>
+          ))}
+        </div>
+      )}
     </section>
   )
 }

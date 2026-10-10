@@ -63,6 +63,13 @@ export function Header({
   }, [])
 
   useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--header-sticky-top',
+      hidden ? 'env(safe-area-inset-top, 0px)' : `${headerHeight}px`,
+    )
+  }, [hidden, headerHeight])
+
+  useEffect(() => {
     if (contactsOpen) {
       setContactsOpen(false)
     }

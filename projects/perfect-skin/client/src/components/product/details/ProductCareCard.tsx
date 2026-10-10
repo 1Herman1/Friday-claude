@@ -21,10 +21,11 @@ export function ProductCareCard({ details, inciText }: ProductCareCardProps) {
   const hasLifehack = lifehack !== null && (Boolean(lifehack.title) || lifehack.paragraphs.length > 0)
   const hasInci = Boolean(inciText)
   const sidePair = details.forWhom !== null && hasUsage
+  const howLabel = details.howItWorks?.items.length === 0 ? 'Результат' : 'Как работает'
 
   const chips = [
     { id: 'pd-about', label: 'О средстве', visible: hasAbout },
-    { id: 'pd-how', label: 'Как работает', visible: details.howItWorks !== null },
+    { id: 'pd-how', label: howLabel, visible: details.howItWorks !== null },
     { id: 'pd-actives', label: 'Активы', visible: hasActives },
     { id: 'pd-for', label: 'Кому', visible: details.forWhom !== null },
     { id: 'pd-usage', label: 'Применение', visible: hasUsage },
@@ -37,15 +38,13 @@ export function ProductCareCard({ details, inciText }: ProductCareCardProps) {
   if (chips.length === 0) return null
 
   return (
-    <section aria-labelledby="pd-card-label" className="flex flex-col gap-8">
-      <div className="flex flex-col gap-4">
-        <p id="pd-card-label" className="text-label font-semibold uppercase tracking-wide text-primary">
-          Аптечная карта
-        </p>
-        <SectionChips items={chips} />
-      </div>
+    <section aria-labelledby="pd-card-label" className="flex flex-col">
+      <p id="pd-card-label" className="mb-2 text-label font-semibold uppercase tracking-wide text-primary">
+        Аптечная карта
+      </p>
+      <SectionChips items={chips} />
 
-      <div className="flex flex-col gap-12 md:gap-20">
+      <div className="mt-6 flex flex-col gap-12 md:gap-20">
         {hasAbout && (
           <AboutSection id="pd-about" tagline={details.tagline} intro={details.intro} extra={details.extra} />
         )}
@@ -54,7 +53,9 @@ export function ProductCareCard({ details, inciText }: ProductCareCardProps) {
         {(details.forWhom !== null || hasUsage) && (
           <div className={`flex flex-col gap-12 ${sidePair ? 'lg:grid lg:grid-cols-12 lg:gap-x-16' : ''}`}>
             {details.forWhom && <ForWhomSection id="pd-for" data={details.forWhom} />}
-            {hasUsage && <UsageSection id="pd-usage" usage={details.usage} pro={details.pro} />}
+            {hasUsage && (
+              <UsageSection id="pd-usage" usage={details.usage} pro={details.pro} paired={sidePair} />
+            )}
           </div>
         )}
         {hasLifehack && lifehack && <LifehackBanner id="pd-tip" data={lifehack} />}

@@ -1,6 +1,6 @@
 import { useId } from 'react'
 import { IconChevronDown } from '../../icons'
-import type { Pro, Usage } from '@/types/api'
+import type { Item, Pro, Usage } from '@/types/api'
 import { h2Class, h3Class, sectionClass } from './classes'
 import { ForWhomSection } from './ForWhomSection'
 import { HowItWorksSection } from './HowItWorksSection'
@@ -16,18 +16,45 @@ export function hasUsageBlock(usage: Usage | null, pro: Pro | null): boolean {
   return usage !== null || Boolean(pro?.usage) || hasProDescription(pro)
 }
 
+const STEP_MARKER = /^[а-яa-z]\)\s*/i
+
+function stepTitle(title: string): string {
+  const plain = title.replace(STEP_MARKER, '')
+  return plain.charAt(0).toUpperCase() + plain.slice(1)
+}
+
+function UsageStep({ step }: { step: Item }) {
+  if (!step.title) return <dd className="col-span-full">{step.text}</dd>
+  return (
+    <div className="flex flex-col gap-1 md:contents">
+      <dt className="font-semibold text-foreground">{stepTitle(step.title)}</dt>
+      <dd>{step.text}</dd>
+    </div>
+  )
+}
+
 function UsageBody({ usage }: { usage: Usage }) {
   const [first] = usage.steps
+  const hasTitles = usage.steps.some(step => step.title)
+  const leadNotes = usage.notes.filter(note => note.trim().endsWith(':'))
+  const tailNotes = usage.notes.filter(note => !note.trim().endsWith(':'))
 
   return (
     <div className="flex flex-col gap-6">
+      {leadNotes.length > 0 && (
+        <div className="flex max-w-prose flex-col gap-2">
+          {leadNotes.map((note, index) => (
+            <p key={index}>{note}</p>
+          ))}
+        </div>
+      )}
       {usage.steps.length === 1 && first && (
         <p className="max-w-prose">
           {first.title && <span className="block font-semibold text-foreground">{first.title}</span>}
           {first.text}
         </p>
       )}
-      {usage.steps.length > 1 && (
+      {usage.steps.length > 1 && !hasTitles && (
         <ol role="list" className="flex flex-col gap-6">
           {usage.steps.map((step, index) => (
             <li key={index} className="flex gap-4">
@@ -37,17 +64,21 @@ function UsageBody({ usage }: { usage: Usage }) {
               >
                 {index + 1}
               </span>
-              <div className="flex max-w-prose flex-col gap-1">
-                {step.title && <p className="font-semibold text-foreground">{step.title}</p>}
-                <p>{step.text}</p>
-              </div>
+              <p className="max-w-prose">{step.text}</p>
             </li>
           ))}
         </ol>
       )}
-      {usage.notes.length > 0 && (
+      {usage.steps.length > 1 && hasTitles && (
+        <dl className="grid gap-x-6 gap-y-4 md:grid-cols-[minmax(0,14rem)_1fr]">
+          {usage.steps.map((step, index) => (
+            <UsageStep key={index} step={step} />
+          ))}
+        </dl>
+      )}
+      {tailNotes.length > 0 && (
         <div className="flex max-w-prose flex-col gap-2 text-body-sm text-muted-foreground">
-          {usage.notes.map((note, index) => (
+          {tailNotes.map((note, index) => (
             <p key={index}>{note}</p>
           ))}
         </div>
@@ -60,20 +91,21 @@ interface UsageSectionProps {
   id: string
   usage: Usage | null
   pro: Pro | null
+  paired?: boolean
 }
 
-export function UsageSection({ id, usage, pro }: UsageSectionProps) {
+export function UsageSection({ id, usage, pro, paired = false }: UsageSectionProps) {
   const titleId = useId()
   const showProDescription = hasProDescription(pro)
 
   return (
-    <section id={id} aria-labelledby={titleId} className={`${sectionClass} lg:col-span-7`}>
+    <section id={id} aria-labelledby={titleId} className={`${sectionClass} lg:col-span-7${paired ? ' lg:pt-8' : ''}`}>
       <h2 id={titleId} tabIndex={-1} className={h2Class}>
         {usage?.heading ?? 'Применение'}
       </h2>
       {usage && <UsageBody usage={usage} />}
       {pro?.usage && (
-        <div className="flex flex-col gap-6 rounded-block bg-muted p-6">
+        <div className="flex flex-col gap-6 rounded-block bg-muted p-4 md:p-6">
           <h3 className={h3Class}>Для кабинета · {pro.volumeLabel}</h3>
           <UsageBody usage={pro.usage} />
         </div>

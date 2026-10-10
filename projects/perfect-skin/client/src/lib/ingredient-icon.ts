@@ -14,7 +14,6 @@ export type IngredientIconName =
   | 'Wheat'
   | 'Gem'
   | 'Atom'
-  | 'Sparkles'
 
 // Порядок важен: первое совпадение побеждает («экстракт винограда» — лист, а не гроздь).
 const RULES: ReadonlyArray<readonly [readonly string[], IngredientIconName]> = [
@@ -27,16 +26,20 @@ const RULES: ReadonlyArray<readonly [readonly string[], IngredientIconName]> = [
   [['витамин с', 'витамин c'], 'Citrus'],
   [['витамин'], 'Sun'],
   [['пчел', 'яд'], 'Hexagon'],
+  [['эластин', 'коллаген'], 'Dna'],
   [['экстракт', 'стволов', 'алоэ'], 'Leaf'],
   [['цвет', 'роз', 'лаванд'], 'Flower2'],
   [['виноград'], 'Grape'],
   [['пшениц', 'пшенич'], 'Wheat'],
   [['уголь', 'глин', 'каолин', 'бентонит', 'минерал', 'микроэлемент'], 'Gem'],
-  [['ретинол', 'ниацинамид', 'кофеин', 'аллантоин', 'мелатонин', 'cbd', 'атф'], 'Atom'],
+  [
+    ['ретинол', 'ниацинамид', 'кофеин', 'аллантоин', 'мелатонин', 'cbd', 'атф', 'кремни', 'дмае', 'dmae', 'серин', 'сера', 'aha', 'bha'],
+    'Atom',
+  ],
 ]
 
 export function ingredientIcon(name: string): IngredientIconName {
   const normalized = name.toLowerCase()
   const rule = RULES.find(([roots]) => roots.some(root => normalized.includes(root)))
-  return rule ? rule[1] : 'Sparkles'
+  return rule ? rule[1] : 'FlaskConical'
 }

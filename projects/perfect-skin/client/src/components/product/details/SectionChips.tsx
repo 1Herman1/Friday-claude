@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, type MouseEvent } from 'react'
 
 export interface ChipItem {
   id: string
@@ -23,6 +23,7 @@ function currentSection(sections: HTMLElement[]): string | null {
 
 export function SectionChips({ items }: SectionChipsProps) {
   const [active, setActive] = useState<string | null>(null)
+  const navRef = useRef<HTMLElement>(null)
   const idsKey = items.map(item => item.id).join(' ')
 
   useEffect(() => {
@@ -48,6 +49,16 @@ export function SectionChips({ items }: SectionChipsProps) {
     }
   }, [idsKey])
 
+  useEffect(() => {
+    if (!active) return
+    const chip = navRef.current?.querySelector<HTMLAnchorElement>(`a[href="#${active}"]`)
+    if (!chip) return
+    const rect = chip.getBoundingClientRect()
+    // Чип не полностью во вьюпорте по вертикали — scrollIntoView подвинул бы страницу
+    if (rect.top < 0 || rect.bottom > window.innerHeight) return
+    chip.scrollIntoView({ inline: 'nearest', block: 'nearest' })
+  }, [active])
+
   if (items.length === 0) return null
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -63,8 +74,9 @@ export function SectionChips({ items }: SectionChipsProps) {
 
   return (
     <nav
+      ref={navRef}
       aria-label="Разделы карточки"
-      className="-mx-6 overflow-x-auto px-6 [scrollbar-width:none] md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden"
+      className="sticky top-[var(--header-sticky-top,var(--header-h,72px))] z-20 -mx-6 overflow-x-auto bg-background/95 px-6 py-2 backdrop-blur-sm [scrollbar-width:none] md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden"
     >
       <ul role="list" className="flex w-max gap-2 md:w-auto md:flex-wrap">
         {items.map(item => {
