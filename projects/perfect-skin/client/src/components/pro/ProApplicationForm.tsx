@@ -245,18 +245,18 @@ export function ProApplicationForm({ onSuccess }: ProApplicationFormProps) {
             onChange={handleChange}
             inputMode="numeric"
             maxLength={15}
-            className="w-full px-4 py-3 border border-border-strong rounded-block focus:outline-ring focus:ring-2 focus:ring-ring bg-card text-foreground text-base font-mono"
-            placeholder="ИНН (10–12 цифр), ОГРН (13 цифр) или ОГРНИП (15 цифр)"
+            className="w-full px-4 py-3 border border-border-strong rounded-block focus:outline-ring focus:ring-2 focus:ring-ring bg-card text-foreground text-base tabular-nums tracking-wide"
+            placeholder="10, 12, 13 или 15 цифр"
             required
           />
           <p className="text-xs text-muted-foreground mt-1">
-            Используется для верификации. Данные не передаются третьим лицам.
+            ИНН — 10 или 12 цифр, ОГРН — 13, ОГРНИП — 15. Используется для верификации. Данные не передаются третьим лицам.
           </p>
         </div>
 
         <div>
           <label htmlFor="ogrnip" className="block text-sm font-semibold text-foreground mb-2">
-            ОГРНИП (для ИП)
+            ОГРНИП, если в первом поле ИНН
           </label>
           <input
             type="text"
@@ -266,7 +266,7 @@ export function ProApplicationForm({ onSuccess }: ProApplicationFormProps) {
             onChange={handleChange}
             inputMode="numeric"
             maxLength={15}
-            className="w-full px-4 py-3 border border-border-strong rounded-block focus:outline-ring focus:ring-2 focus:ring-ring bg-card text-foreground text-base font-mono"
+            className="w-full px-4 py-3 border border-border-strong rounded-block focus:outline-ring focus:ring-2 focus:ring-ring bg-card text-foreground text-base tabular-nums tracking-wide"
             placeholder="15 цифр"
           />
         </div>

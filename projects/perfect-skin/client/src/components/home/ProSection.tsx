@@ -195,7 +195,7 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
         value={active}
         onChange={(e) => onActivate(Number(e.target.value))}
         aria-valuetext={current}
-        className="block w-full h-11 accent-accent cursor-pointer"
+        className="block w-full h-11 cursor-pointer appearance-none bg-transparent [&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:rounded-pill [&::-webkit-slider-runnable-track]:bg-dark-foreground/40 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-7 [&::-webkit-slider-thumb]:-mt-3 [&::-webkit-slider-thumb]:rounded-pill [&::-webkit-slider-thumb]:bg-accent [&::-moz-range-track]:h-1 [&::-moz-range-track]:rounded-pill [&::-moz-range-track]:bg-dark-foreground/40 [&::-moz-range-thumb]:size-7 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:rounded-pill [&::-moz-range-thumb]:bg-accent"
       />
       <div className="flex gap-2 h-[26rem]">
         {products.map((product, i) => {
@@ -207,8 +207,8 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
               key={product.id}
               onClick={() => onActivate(i)}
               aria-hidden={!on}
-              className={`relative min-w-0 basis-0 rounded-block overflow-hidden bg-card text-foreground transition-[flex-grow] duration-300 ease-out motion-reduce:transition-none ${
-                on ? 'grow-[8]' : 'grow cursor-pointer'
+              className={`relative min-w-0 basis-0 rounded-block overflow-hidden text-foreground transition-[flex-grow,background-color] duration-300 ease-out motion-reduce:transition-none ${
+                on ? 'grow-[8] bg-card' : 'grow cursor-pointer bg-muted'
               }`}
             >
               <div
@@ -220,7 +220,7 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
                   <img
                     src={cardImage(product) ?? ''}
                     alt=""
-                    className={`h-full max-w-none object-contain ${on ? 'w-full scale-[1.25]' : 'w-[14rem] scale-[1.6]'}`}
+                    className={`h-full max-w-none object-contain mix-blend-multiply ${on ? 'w-full scale-[1.25] object-bottom' : 'w-[14rem] scale-[1.6]'}`}
                     loading="lazy"
                     decoding="async"
                     width={320}
@@ -230,7 +230,8 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
                 ) : null}
               </div>
               {!on && (
-                <span className="absolute inset-x-0 bottom-3 text-center font-heading font-semibold text-label text-foreground/60 tabular-nums">
+                <span className="absolute inset-x-0 bottom-3 flex flex-col items-center gap-2 font-heading font-semibold text-label text-muted-foreground tabular-nums">
+                  {volume && <span className="[writing-mode:vertical-rl] rotate-180 uppercase tracking-wide">{volume}</span>}
                   {String(i + 1).padStart(2, '0')}
                 </span>
               )}
@@ -252,7 +253,7 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
                     e.stopPropagation()
                     onOpen()
                   }}
-                  className="mt-2 inline-flex items-center justify-center min-h-11 px-4 rounded-pill bg-primary text-primary-foreground font-heading font-bold text-body-sm active:scale-97 transition-transform duration-160 focus-visible:outline-primary"
+                  className="mt-2 inline-flex items-center justify-center min-h-11 px-4 py-2.5 leading-tight text-balance rounded-pill bg-primary text-primary-foreground font-heading font-bold text-body-sm active:scale-97 transition-transform duration-160 focus-visible:outline-primary"
                 >
                   Открыть оптовую цену
                 </button>
