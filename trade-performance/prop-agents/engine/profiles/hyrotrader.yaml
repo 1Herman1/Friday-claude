@@ -1,0 +1,21 @@
+# Меняет только Герман. Источник: research/props-and-testbeds.md (проверено 2026-10-07).
+# HyroTrader: свой бот через BloFin demo API или платформу Hyro (Bybit-путь требует свой Bybit-аккаунт).
+name: hyrotrader
+access: api
+automation_allowed: true           # официально: свои боты разрешены
+bot_policy: "свои боты: Bybit demo API, BloFin demo API или платформа Hyro"
+target_pct: null                   # проверить по T&C
+daily_loss_pct: null               # проверить по T&C
+daily_loss_method: null            # проверить по T&C
+daily_reset_time: null             # проверить по T&C
+max_drawdown_pct: null             # проверить по T&C
+drawdown_type: null                # проверить по T&C
+max_leverage: null                 # проверить по T&C
+stop_required: null                # проверить по T&C
+min_trading_days: null             # проверить по T&C
+instruments: null                  # проверить по T&C
+forbidden_practices:
+  - чужие стратегии
+  - копи-трейдинг
+  - сигнальные сервисы
+source: "research/props-and-testbeds.md"

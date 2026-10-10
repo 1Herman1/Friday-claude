@@ -1,0 +1,18 @@
+# Меняет только Герман. Источник: research/props-and-testbeds.md (проверено 2026-10-07).
+# Breakout (Kraken), резерв. Боты «разрешены» только по обзорам, API-документации нет.
+name: breakout
+access: platform
+automation_allowed: null           # нужен письменный ответ поддержки → risk.py отклоняет
+bot_policy: "по обзорам боты разрешены, первоисточника нет"
+target_pct: null                   # проверить по T&C
+daily_loss_pct: null               # проверить по T&C
+daily_loss_method: null            # проверить по T&C
+daily_reset_time: null             # проверить по T&C
+max_drawdown_pct: null             # проверить по T&C
+drawdown_type: null                # проверить по T&C
+max_leverage: null                 # проверить по T&C
+stop_required: null                # проверить по T&C
+min_trading_days: null             # проверить по T&C
+instruments: null                  # проверить по T&C
+forbidden_practices: null          # проверить по T&C
+source: "research/props-and-testbeds.md"

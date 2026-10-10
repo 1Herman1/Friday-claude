@@ -1,0 +1,18 @@
+# Меняет только Герман. Мягкий профиль для демо-счетов (Hyperliquid testnet, OKX Demo, BloFin demo).
+# Значения наши, не правила пропа.
+name: demo
+access: api
+automation_allowed: true
+bot_policy: "демо-счета, боты разрешены"
+target_pct: null                   # у демо цели нет
+daily_loss_pct: 5.0
+daily_loss_method: balance         # balance | equity | max (null → max, строже)
+daily_reset_time: "00:00 UTC"
+max_drawdown_pct: 10.0
+drawdown_type: static              # static | trailing (null → trailing, строже)
+max_leverage: 10
+stop_required: true
+min_trading_days: null
+instruments: null                  # null = без ограничений площадки, действует whitelist стратегии
+forbidden_practices: []
+source: "наш профиль"

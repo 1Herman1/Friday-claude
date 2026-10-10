@@ -1,0 +1,19 @@
+# Меняет только Герман. Источник: research/props-and-testbeds.md (проверено 2026-10-07).
+# Propr (Hyperliquid), Classic 1-Step. Числа — по обзору Fortunly, сверить с первоисточником.
+name: propr
+access: api                        # REST API, Python/JS SDK, Beta-среда
+automation_allowed: true           # «первый проп для ИИ-агентов»
+bot_policy: "API и SDK для ботов, Beta-среда для тестов"
+account_from_usd: 25
+target_pct: 10.0                   # по обзору Fortunly — сверить
+daily_loss_pct: 3.0                # по обзору Fortunly — сверить
+daily_loss_method: null            # проверить по T&C
+daily_reset_time: null             # проверить по T&C
+max_drawdown_pct: 6.0              # по обзору Fortunly — сверить
+drawdown_type: null                # проверить по T&C
+max_leverage: null                 # проверить по T&C
+stop_required: null                # проверить по T&C
+min_trading_days: null             # проверить по T&C
+instruments: null                  # проверить по T&C
+forbidden_practices: null          # проверить по T&C
+source: "research/props-and-testbeds.md; Fortunly"

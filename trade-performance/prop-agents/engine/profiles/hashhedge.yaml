@@ -1,0 +1,19 @@
+# Меняет только Герман. Источник: research/props-and-testbeds.md (проверено 2026-10-07).
+# Hash Hedge: только после письменного разрешения.
+name: hashhedge
+access: null
+automation_allowed: false          # Terms п. 12.2: боты, скрипты, API, автоматизация запрещены без письменного разрешения
+bot_policy: "запрещено без письменного разрешения (Terms п. 12.2)"
+target_pct: null                   # проверить по T&C
+daily_loss_pct: null               # проверить по T&C
+daily_loss_method: null            # проверить по T&C
+daily_reset_time: null             # проверить по T&C
+max_drawdown_pct: null             # проверить по T&C
+drawdown_type: null                # проверить по T&C
+max_leverage: null                 # проверить по T&C
+stop_required: null                # проверить по T&C
+min_trading_days: null             # проверить по T&C
+instruments: null                  # проверить по T&C
+forbidden_practices:
+  - боты, скрипты, API, автоматизация без письменного разрешения
+source: "research/props-and-testbeds.md"
