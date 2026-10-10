@@ -39,6 +39,31 @@ function isWideScene() {
 
 // Телефон: доля отрезка прокрутки, за которую играет ролик; остаток — остановка на товаре
 const MOVE_SHARE = 0.8
+// Ролики разные по объёму движения (последний — в 5 раз больше первого), поэтому длина прокрутки
+// у каждого своя, пропорционально замеру движения оптическим потоком: скорость руки на экране
+// выровнена. Внутри ролика время идёт равномерно — иначе на быстрых участках кадры «ступеньками».
+const MOVE_W = [0.121, 0.153, 0.295, 0.431]
+const HOLD = 0.05
+// Компьютер: ролики играют сами; первые два чуть быстрее, последний чуть медленнее
+const PLAY_RATE = [1.25, 1.1, 1, 0.9]
+
+function mobileSegment(p: number) {
+  if (p >= 1) return { segment: 3, local: 1, frac: 1 }
+  let start = 0
+  for (let i = 0; i < 4; i++) {
+    const move = (1 - 4 * HOLD) * MOVE_W[i]
+    if (p < start + move + HOLD || i === 3) {
+      const pos = Math.max(0, p - start)
+      if (pos < move) {
+        const m = pos / move
+        return { segment: i, local: MOVE_SHARE * m, frac: m }
+      }
+      return { segment: i, local: MOVE_SHARE + (1 - MOVE_SHARE) * Math.min(1, (pos - move) / HOLD), frac: 1 }
+    }
+    start += move + HOLD
+  }
+  return { segment: 3, local: 1, frac: 1 }
+}
 
 export function BestsellerScene() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -171,36 +196,31 @@ export function BestsellerScene() {
       const scrollTop = -rect.top
       const scrollProgress = Math.max(0, Math.min(1, scrollTop / (containerHeight - viewportHeight)))
 
-      const segment = Math.floor(scrollProgress * 4)
-      const localRaw = (scrollProgress * 4) % 1
-      const local = scrollProgress >= 1 ? 1 : localRaw
-
-      const finalSegment = scrollProgress >= 1 ? 3 : Math.min(segment, 3)
-
       if (isWideScene()) {
         onDesktopScroll(Math.min(4, Math.floor(scrollProgress * 5)) - 1, rect.top <= 1 && rect.bottom >= viewportHeight - 1)
         markReady()
         return
       }
 
+      const mob = mobileSegment(scrollProgress)
       setState({
         progress: scrollProgress,
-        segment: finalSegment,
-        local,
+        segment: mob.segment,
+        local: mob.local,
       })
 
-      // Прокрутка двигает ролик равномерно: замедление руки уже есть в самом ролике
-      const frac = scrollProgress >= 1 ? 1 : Math.min(1, local / MOVE_SHARE)
-      targetRef.current = { idx: finalSegment, frac }
-      if (finalSegment !== segSeenRef.current) {
+      const frac = mob.frac
+      targetRef.current = { idx: mob.segment, frac }
+      if (mob.segment !== segSeenRef.current) {
         // Новый отрезок: сразу ставим ролик на нужное место, без «доезда» от прошлого прохода
-        segSeenRef.current = finalSegment
-        const video = videoRefs.current[finalSegment]
+        const seg = mob.segment
+        segSeenRef.current = seg
+        const video = videoRefs.current[seg]
         if (video && video.duration) {
           const t = frac * (video.duration - 0.05)
-          smoothRef.current[finalSegment] = t
-          setPendingSeg(finalSegment)
-          video.addEventListener('seeked', () => setPendingSeg((cur) => (cur === finalSegment ? null : cur)), { once: true })
+          smoothRef.current[seg] = t
+          setPendingSeg(seg)
+          video.addEventListener('seeked', () => setPendingSeg((cur) => (cur === seg ? null : cur)), { once: true })
           video.currentTime = t
         }
       }
@@ -352,6 +372,7 @@ export function BestsellerScene() {
     setPlayFrac(0)
     if (!video) return
     video.currentTime = 0
+    video.playbackRate = PLAY_RATE[clip]
     video.onended = () => {
       if (playingRef.current !== clip) return
       playingRef.current = null
