@@ -352,7 +352,7 @@ npm run import:content --workspace=@ps/server -- --apply    # одна тран�
 
 ```bash
 docker compose -f projects/perfect-skin/deploy/docker-compose.prod.yml exec -T postgres \
-  psql -U ps -d perfect_skin -c "COPY (SELECT id, slug, description, usage FROM products) TO STDOUT WITH (FORMAT csv, HEADER)" \
+  psql -U ps -d perfect_skin -c "COPY (SELECT id, slug, name, description, usage, details FROM products) TO STDOUT WITH (FORMAT csv, HEADER)" \
   > /var/backups/perfect-skin/products_text_before_content_$(date +%Y%m%d_%H%M%S).csv
 ```
 
