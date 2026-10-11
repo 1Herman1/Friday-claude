@@ -1,6 +1,7 @@
 import * as zlib from 'node:zlib'
 import { replaceCyrillicLookalikes } from './import-prices.match.js'
 import { ProductDetailsSchema, type ProductDetails } from './product-details.js'
+import { fixClientText } from './text-fixes.js'
 
 export interface VolumeSpec {
   count: number
@@ -245,11 +246,15 @@ function cleanLines(raw: RawLine[], hit: (rule: string) => void): CleanLine[] {
     if (MARKER_RE.test(text)) hit('маркеры 💡 ◀ • удалены')
     MARKER_RE.lastIndex = 0
     text = text.replace(MARKER_RE, ' ').replace(/\s+/g, ' ').trim().replace(/^[-–—]+\s*/, '')
-    if (!text) continue
-    if (/^[.…]+$/.test(text)) {
+    // Разделитель проверяется до исправлений: fixClientText превращает строку из «…» и точек в пустую
+    if (/^[.…\s]+$/.test(text)) {
       out.push({ kind: 'sep', text: '', bullet: false })
       continue
     }
+    const fixed = fixClientText(text)
+    for (const fix of fixed.fixes) hit(`исправлено: ${fix}`)
+    text = fixed.text
+    if (!text) continue
     if (SKIP_RE.test(text)) {
       hit('«Подобные маски уже были в Части 2» пропущено')
       continue

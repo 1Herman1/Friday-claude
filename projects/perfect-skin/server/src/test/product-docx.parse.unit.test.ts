@@ -60,6 +60,28 @@ describe('границы товаров', () => {
     expect(record.warnings).toContain('в файле нет строки объёма: объём берётся из прайса')
   })
 
+  it('текст исправляется по таблице, каждая правка — в правилах файла; «. ……» с пробелом — разделитель', () => {
+    const parsed = parseDocx(
+      makeDocx([
+        'СONTORNO – Крем',
+        'Обьем: 50 мл',
+        'Защита барьера.Эта формула с элексиром .',
+        'Как работает формула:',
+        '* Пункт.',
+        '. ……………',
+        'Текст после разделителя.',
+      ]),
+      { file: 'test.docx', sha1: 'sha', brand: 'ISSEIMI' },
+    )
+    const [record] = parsed.records
+    expect(record.name).toBe('CONTORNO')
+    expect(record.volumeLine).toBe('Объем: 50 мл')
+    expect(record.details?.tagline).toEqual(['Защита барьера. Эта формула с эликсиром.'])
+    expect(parsed.orphans).toEqual(['Текст после разделителя.'])
+    expect(parsed.fileRules).toContain('исправлено: «СONTORNO» → «CONTORNO» (1)')
+    expect(parsed.fileRules).toContain('исправлено: «барьера.Эта» → «барьера. Эта» (1)')
+  })
+
   it('зона «ПРЕПАРАТЫ ДЛЯ ПРОФЕССИОНАЛЬНОГО ПРИМЕНЕНИЯ» закрывает предыдущий товар, строка «Подобные маски…» пропускается', () => {
     const parsed = parseDocx(
       makeDocx([

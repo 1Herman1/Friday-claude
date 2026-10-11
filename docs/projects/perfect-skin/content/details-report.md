@@ -11,7 +11,7 @@
 - Позиций из файлов, которых нет на сайте (отложено в `_pending/`): 9
 - Неоднозначных и конфликтов: 0
 - Предупреждений: 12
-- Подозрительных мест в тексте: 26
+- Подозрительных мест в тексте: 0
 
 ## Совпало: slug ← источник (63)
 
@@ -28,9 +28,9 @@
 - `aqua-o3-whitening-depigmentiruyuschaya-syvorotka-s-ozonom` ← isseimi-part3.docx «Aqua O3 Whitening Депигментирующая сыворотка с озоном» [5 флаконов по 5 мл] (primary)
 - `aquao3-firming-syvorotka-s-ozonom-liftingovyy-kontsentrat` ← isseimi-part3.docx «AQUA O3 FIRMING УКРЕПЛЯЮЩИЙ КОКТЕЙЛЬ ДЛЯ ЛИЦА» [5 флаконов по 5 мл] (primary)
 - `aquao3-gf-antiaging-syvorotka-s-ozonom-omolazhivayuschiy-kontsentrat` ← isseimi-part3.docx «AQUA O3 ANTIAGING – Регенерирующая сыворотка с озоном» [5 флаконов по 5 мл] (primary)
-- `aquao3-lipo-syvorotka-s-ozonom-lipoliticheskiy-kontsentrat` ← isseimi-part3.docx «АQUA O3 LIPO - АНТИЦЕЛЛЮЛИТНЫЙ КОКТЕЙЛЬ» [5 флаконов по 5 мл] (primary)
-- `aquao3-repair-syvorotka-s-ozonom-vosstanavlivayuschiy-kontsentrat` ← isseimi-part3.docx «АQUA O3 REPAIR Коктейль против рубцов и растяжек» [5 флаконов по 5 мл] (primary)
-- `balance-toner-tonik-s-morskoj-termalnoj-vodoj` ← glacee.docx «ВALANCE TONER – Балансирующий тоник с морской термальной водой» [250 мл.] (primary)
+- `aquao3-lipo-syvorotka-s-ozonom-lipoliticheskiy-kontsentrat` ← isseimi-part3.docx «AQUA O3 LIPO - АНТИЦЕЛЛЮЛИТНЫЙ КОКТЕЙЛЬ» [5 флаконов по 5 мл] (primary)
+- `aquao3-repair-syvorotka-s-ozonom-vosstanavlivayuschiy-kontsentrat` ← isseimi-part3.docx «AQUA O3 REPAIR Коктейль против рубцов и растяжек» [5 флаконов по 5 мл] (primary)
+- `balance-toner-tonik-s-morskoj-termalnoj-vodoj` ← glacee.docx «BALANCE TONER – Балансирующий тоник с морской термальной водой» [250 мл.] (primary)
 - `baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba` ← isseimi-part3.docx «BAOBAB OIL ILLUMINATOR AND REPAIRER Восстанавливающее масло баобаба» [Объем: 30 мл] (primary)
 - `bee-venom-cream-antivozrastnoj-krem` ← isseimi-part2.docx «BEE VENOM CREAM – Антивозрастной крем» [Объем: 50 мл] (primary)
 - `biocell-syvorotka-obnovlyayushhaya` ← isseimi-part3.docx «BIOCELL СЫВОРОТКА ОБНОВЛЯЮЩАЯ» [Объем: 30 мл] (primary)
@@ -58,12 +58,12 @@
 - `mascarilla-atp-alabastro-alebastrovaya-maska-s-atf` ← isseimi-part3.docx «Mascarilla ATP + Alabastro Энергетическая маска с АТФ и алебастром для лица» [Объем: 200 мл] (primary)
 - `mascarilla-peel-off-vitamina-c-maska-s-vitaminom-s-alginatnaya` ← isseimi-part3.docx «PEEL -OFF MASK Маска с витамином С» [Объем: 200 мл] (primary)
 - `natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza` ← isseimi-part3.docx «NATURAL CLEANSING MILK Натуральный очищающий крем для лица» [Объем: 500 мл] (primary)
-- `nutriestimul-antivozrastnoj-pitatelnyj-krem` ← isseimi-part2.docx «NUTRIESTIMUL – АНТИВОЗРАСНОЙ ПИТАТЕЛЬНЫЙ КРЕМ» [Объем: 50 мл] (primary)
+- `nutriestimul-antivozrastnoj-pitatelnyj-krem` ← isseimi-part2.docx «NUTRIESTIMUL – АНТИВОЗРАСТНОЙ ПИТАТЕЛЬНЫЙ КРЕМ» [Объем: 50 мл] (primary)
 - `o3-depur-krem-s-ozonom` ← isseimi-part2.docx «O3 DEPUR – Крем с озоном» [Объем: 50 мл] (primary)
 - `oxioderm-maska-s-ozonom` ← isseimi-part3.docx «OXIODERM Маска с озоном» [Форма: 3 дозы (салфетки) 13х17 см] (primary)
 - `peeling-intensivo-intensivnyy-fiziko-himicheskiy-piling` ← isseimi-part3.docx «PEELING INTENSIVO Интенсивный физико-химический пилинг» [100 мл] (primary)
 - `pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj` ← isseimi-part3.docx «PURE MARINE WATER CREAM Увлажняющий крем с морской водой» [Объем: 50 мл] (primary)
-- `redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi` ← glacee.docx «REDENSIFICANTЕ Реденсифицирующий крем для зрелой кожи» [50 мл] (primary)
+- `redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi` ← glacee.docx «REDENSIFICANTE Реденсифицирующий крем для зрелой кожи» [50 мл] (primary)
 - `regenerativo-cellular-syvorotka-obnovlyayushhaya` ← isseimi-part2.docx «REGENERATIVO CELLULAR Сыворотка обновляющая» [Объем: флакон с пипеткой, 50 мл] (primary)
 - `reti-bogatyj-retinolom-krem` ← glacee.docx «RETI+ – Ночной ремоделирующий крем с ретинолом» [50 мл] (primary)
 - `rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom` ← isseimi-part3.docx «ROSE HIP OIL + O3 Регенерирующее масло шиповника с озоном» [Объем: 30 мл] (primary)
@@ -83,12 +83,12 @@
 
 - `4dhyalcross` ← glacee.docx «4D HYAL CROSS – Суперувлажняющая сыворотка с гиалуроновой кислотой» [30 мл.] (primary)
 - `blockmelan` ← isseimi-part3.docx «BLOCKMELAN Депигментирующая сыворотка» [30 мл] (primary)
-- `cbdnightmask` ← glacee.docx «СBD NIGHT MASK – Ночная восстанавливающая маска с каннабидиолом и мелатонином» [50 мл] (primary)
+- `cbdnightmask` ← glacee.docx «CBD NIGHT MASK – Ночная восстанавливающая маска с каннабидиолом и мелатонином» [50 мл] (primary)
 - `cleansingbalm` ← glacee.docx «CLEANSING BALM – Очищающий бальзам» [200 мл.] (primary)
 - `hydraview` ← isseimi-part3.docx «HYDRA VIEW гидра-крем для век» [15 мл] (primary)
 - `liposomec` ← glacee.docx «LIPOSOME-C – Антиоксидантная сыворотка» [30 мл.] (primary)
 - `purifyingwater` ← glacee.docx «PURIFYING WATER – Мицеллярная очищающая вода с термальными микроэлементами» [200 мл.] (primary)
-- `seafoam` ← isseimi-part3.docx «Sea Foam Очищающая пенка с морской водой» [Обьем 150 мл] (primary)
+- `seafoam` ← isseimi-part3.docx «Sea Foam Очищающая пенка с морской водой» [Объем 150 мл] (primary)
 - `ttsbrighteningmask` ← isseimi-part3.docx «TTS BRIGHTENING MASK Депигментирующая маска» [Монодоза: 1 маска, пропитанная высококонцентрированным лифтинг-активом.] (primary)
 
 ## Товары сайта без текста (18)
@@ -109,14 +109,14 @@
 - `podarochnyj-nabor-expert-team-full-box-dlya-uhoda-za-muzhskoj-kozhej` — Подарочный набор «Expert Team. Full Box» для ухода за мужской кожей
 - `podarochnyj-nabor-obnovlennaya-kozha-dlya-korrekczii-vozrastnyh-izmenenij-kozhi-licza-i-vek` — Подарочный набор «Обновленная кожа» для коррекции возрастных изменений кожи лица и век
 - `podarochnyj-nabor-obnovlennaya-kozha-dlya-liftinga-i-ukrepleniya-kozhi` — Подарочный набор «Обновленная кожа» для лифтинга и укрепления кожи
-- `sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami` — СONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами
+- `sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami` — CONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами
 - `tts-o3-ozono-kislorodnaya-maska-s-ozonom` — TTS O3 OZONO Кислородная маска с озоном
 
 ## Неоднозначные и конфликты (0)
 
 Нет.
 
-## Применённые правила (21)
+## Применённые правила (40)
 
 - алиас «peeloffmask» → mascarilla-peel-off-vitamina-c-maska-s-vitaminom-s-alginatnaya
 - isseimi-part3.docx: «PEEL -OFF MASK» → mascarilla-peel-off-vitamina-c-maska-s-vitaminom-s-alginatnaya (алиас)
@@ -126,16 +126,35 @@
 - isseimi-part3.docx: строка-продолжение склеена с предыдущим пунктом «как работает»
 - isseimi-part1.docx: маркеры 💡 ◀ • удалены (10)
 - isseimi-part1.docx: неразрывные пробелы заменены на обычные (2)
+- isseimi-part2.docx: исправлено: «АНТИВОЗРАСНОЙ» → «АНТИВОЗРАСТНОЙ» (1)
 - isseimi-part2.docx: маркеры 💡 ◀ • удалены (13)
 - isseimi-part2.docx: мусор Word «Конец формы»/«Начало формы» удалён (4)
 - isseimi-part2.docx: неразрывные пробелы заменены на обычные (4)
+- isseimi-part2.docx: исправлено: «Витамие» → «Витамин» (1)
 - isseimi-part3.docx: маркеры 💡 ◀ • удалены (14)
+- isseimi-part3.docx: исправлено: «Нанесите .4–6» → «Нанесите 4–6» (1)
 - isseimi-part3.docx: неразрывные пробелы заменены на обычные (10)
+- isseimi-part3.docx: исправлено: «Обьем» → «Объем» (1)
+- isseimi-part3.docx: исправлено: «маска-дермокомпресс ,» → «маска-дермокомпресс,» (1)
+- isseimi-part3.docx: исправлено: «Oзон» → «Озон» (1)
+- isseimi-part3.docx: исправлено: «в соответствие с» → «в соответствии с» (3)
 - isseimi-part3.docx: «ПРЕПАРАТЫ ДЛЯ ПРОФЕССИОНАЛЬНОГО ПРИМЕНЕНИЯ» — маркер зоны, не товар (1)
+- isseimi-part3.docx: исправлено: «.Альгинатная» → «Альгинатная» (1)
+- isseimi-part3.docx: исправлено: «АQUA» → «AQUA» (2)
+- isseimi-part3.docx: исправлено: «Cпособ» → «Способ» (10)
+- isseimi-part3.docx: исправлено: «элексирами» → «эликсирами» (6)
+- isseimi-part3.docx: исправлено: «себостазa» → «себостаза» (1)
+- isseimi-part3.docx: исправлено: «Fluvix. ……………………………………………………………………………………………………………………………………………» → «Fluvix.» (1)
 - isseimi-part3.docx: «Подобные маски уже были в Части 2» пропущено (1)
 - glacee.docx: маркеры 💡 ◀ • удалены (14)
+- glacee.docx: исправлено: «барьера.Эта» → «барьера. Эта» (1)
+- glacee.docx: исправлено: «СBD» → «CBD» (1)
+- glacee.docx: исправлено: «REDENSIFICANTЕ» → «REDENSIFICANTE» (1)
+- glacee.docx: исправлено: «Liposome-C .» → «Liposome-C.» (1)
+- glacee.docx: исправлено: «ACCIÓN .» → «ACCIÓN.» (1)
 - glacee.docx: неразрывные пробелы заменены на обычные (1)
-- Заголовки и маркеры: NBSP и повторные пробелы схлопнуты, маркеры 💡 ◀ • удалены, текст не правился
+- glacee.docx: исправлено: «ВALANCE» → «BALANCE» (1)
+- Заголовки и маркеры: NBSP и повторные пробелы схлопнуты, маркеры 💡 ◀ • удалены; текст правился только по таблице server/src/lib/text-fixes.ts (опечатки, знаки, смешанные алфавиты) — каждая правка выше
 - Строки «…» и точек — границы блоков; INCI («Состав (INCI)») не сохраняется
 - Заголовки секций: регистр, ё, латинская C вместо кириллической С («Cпособ» → «Способ»), двоеточие необязательно
 - Двойные «Кому подойдёт», «Как работает» и «Активные ингредиенты» в одном блоке — слиты без дублей
@@ -159,32 +178,7 @@
 - nutriestimul-antivozrastnoj-pitatelnyj-krem: isseimi-part2.docx: повтор секции «АКТИВНЫЕ ИНГРЕДИЕНТЫ» — слита с предыдущей
 - regenerativo-cellular-syvorotka-obnovlyayushhaya: isseimi-part2.docx: объём в файле «50 мл», на сайте «30» — записано как основная
 
-## Подозрительные места в тексте клиента (не исправлялись) (26)
+## Подозрительные места после исправлений (0)
 
-- isseimi-part2.docx «NUTRIESTIMUL – АНТИВОЗРАСНОЙ ПИТАТЕЛЬНЫЙ КРЕМ»: «АНТИВОЗРАСНОЙ» — вероятно «АНТИВОЗРАСТНОЙ»
-- isseimi-part2.docx «TTS MOISTURIZING MASK - УВЛАЖНЯЮЩАЯ МАСКА»: «Витамие» — вероятно «Витамин»
-- isseimi-part3.docx «3 FLOWER SERUM Мульти увлажняющая сыворотка»: пробел перед знаком: «…РИМЕНЕНИЯ | Нанесите .4–6 капель сы…»
-- isseimi-part3.docx «Sea Foam Очищающая пенка с морской водой»: «Обьем» — в остальных местах «Объем»
-- isseimi-part3.docx «OXIODERM Маска с озоном»: «в соответствие с» — вероятно «в соответствии с»
-- isseimi-part3.docx «OXIODERM Маска с озоном»: смесь алфавитов в слове «Oзон»
-- isseimi-part3.docx «OXIODERM Маска с озоном»: пробел перед знаком: «… маска-дермокомпресс , разработанна…»
-- isseimi-part3.docx «PEEL -OFF MASK Маска с витамином С»: пробел перед знаком: «…лубокое увлажнение | .Альгинатная м…»
-- isseimi-part3.docx «CHARCOAL MASK Маска с угольным порошком»: пробел перед знаком: «…жение снизу вверх. | . …………………………………»
-- isseimi-part3.docx «KGF Gel Acondicionador – Восстанавливающий гель для кожи»: «в соответствие с» — вероятно «в соответствии с»
-- isseimi-part3.docx «АQUA O3 REPAIR Коктейль против рубцов и растяжек»: смесь алфавитов в слове «АQUA»
-- isseimi-part3.docx «АQUA O3 LIPO - АНТИЦЕЛЛЮЛИТНЫЙ КОКТЕЙЛЬ»: смесь алфавитов в слове «АQUA»
-- isseimi-part3.docx «PEELING INTENSIVO Интенсивный физико-химический пилинг»: «элексир» — вероятно «эликсир»
-- isseimi-part3.docx «ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой»: «элексир» — вероятно «эликсир»
-- isseimi-part3.docx «ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой»: смесь алфавитов в слове «себостазa»
-- isseimi-part3.docx «ÁCIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой»: «элексир» — вероятно «эликсир»
-- isseimi-part3.docx «ACIDO LACTICO Эксфолиирующий эликсир с молочной кислотой»: «элексир» — вероятно «эликсир»
-- isseimi-part3.docx «ACIDO PIRUVICO Эксфолиирующий эликсир с пировиноградной кислотой»: «элексир» — вероятно «эликсир»
-- isseimi-part3.docx «ACIDO KOJICO Эксфолиирующий эликсир с койевой кислотой»: «элексир» — вероятно «эликсир»
-- isseimi-part3.docx «В этот препарат KERATHOR PLUS – ИЗОТОНИЧЕСКИЙ ТОНИК»: «в соответствие с» — вероятно «в соответствии с»
-- glacee.docx «4D HYAL CROSS – Суперувлажняющая сыворотка с гиалуроновой кислотой»: нет пробела после знака: «…мального барьера.Эта сверхлегкая, н…»
-- glacee.docx «СBD NIGHT MASK – Ночная восстанавливающая маска с каннабидиолом и мелатонином»: смесь алфавитов в слове «СBD»
-- glacee.docx «REDENSIFICANTЕ Реденсифицирующий крем для зрелой кожи»: смесь алфавитов в слове «REDENSIFICANTЕ»
-- glacee.docx «ANTIOX-C – Антиоксидантный крем с инкапсулированным озоном и витамином С»: пробел перед знаком: «…Сыворотку Liposome-C . Сыворотка ус…»
-- glacee.docx «GEN ADN – Укрепляющий крем-гель с эффектом лифтинга и ДНК-защиты»: пробел перед знаком: «…отками TRIPLE ACCIÓN . Нанесение сы…»
-- glacee.docx «ВALANCE TONER – Балансирующий тоник с морской термальной водой»: смесь алфавитов в слове «ВALANCE»
+Нет.
 
