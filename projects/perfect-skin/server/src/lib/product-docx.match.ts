@@ -13,6 +13,10 @@ export const ALIASES: Record<string, string> = {
   peeloffmask: 'mascarilla-peel-off-vitamina-c-maska-s-vitaminom-s-alginatnaya',
 }
 
+export const EXCLUDED_BY_CLIENT: ReadonlyMap<string, string> = new Map([
+  ['ttsbrighteningmask', 'нет такого товара — клиент, 12.10'],
+])
+
 export interface SiteProduct {
   slug: string
   name: string
@@ -49,9 +53,16 @@ export interface PendingUnit {
   details: ProductDetails
 }
 
+export interface ExcludedUnit {
+  key: string
+  reason: string
+  sources: SourceRef[]
+}
+
 export interface MatchReport {
   matched: MatchedUnit[]
   pending: PendingUnit[]
+  excluded: ExcludedUnit[]
   problems: string[]
   noText: string[]
   warnings: string[]
@@ -247,7 +258,7 @@ export function matchAll(
   site: SiteProduct[],
   variants: CabinetVariant[],
 ): MatchReport {
-  const report: MatchReport = { matched: [], pending: [], problems: [], noText: [], warnings: [], rules: [] }
+  const report: MatchReport = { matched: [], pending: [], excluded: [], problems: [], noText: [], warnings: [], rules: [] }
   const entries = buildEntries(site, variants, report)
   const bySlug = new Map<string, ParsedRecord[]>()
   const pendingGroups = new Map<string, ParsedRecord[]>()
@@ -292,6 +303,15 @@ export function matchAll(
   }
 
   for (const [groupKey, records] of [...pendingGroups.entries()].sort(([a], [b]) => a.localeCompare(b))) {
+    const excludedReason = EXCLUDED_BY_CLIENT.get(records[0].key)
+    if (excludedReason !== undefined) {
+      report.excluded.push({
+        key: records[0].key,
+        reason: excludedReason,
+        sources: records.map((r) => sourceOf(r, r.kind === 'product' ? 'primary' : 'amendment')),
+      })
+      continue
+    }
     const products = records.filter((r) => r.kind === 'product')
     const product = products[0] as ParsedRecord | undefined
     if (products.length !== 1 || !product?.details) {

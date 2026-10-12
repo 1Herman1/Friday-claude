@@ -1,14 +1,17 @@
 // Нормализация карточных фото: кластерный bbox (текст сверху отрезается),
-// X-кроп, вписывание в 76% квадрата. Запуск: node normalize.mjs
+// X-кроп, вписывание в 76% квадрата. Запуск: node tools/normalize-cards.mjs [slug ...] (из server/)
 import pkg from '/opt/node22/lib/node_modules/playwright/index.js'
 import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 const { chromium } = pkg
 
-const SRC = '/home/user/perfect_skin/server/assets/products'
-const OUT = '/home/user/perfect_skin/client/public/products-optimized'
+const here = path.dirname(fileURLToPath(import.meta.url))
+const SRC = path.join(here, '../assets/products')
+const OUT = path.join(here, '../../client/public/products-optimized')
 const CHECK = process.env.CHECK_DIR
+const ONLY = new Set(process.argv.slice(2))
 
 const b = await chromium.launch()
 const p = await b.newPage()
@@ -104,7 +107,9 @@ async function normalize(base64, mime, target) {
   }, { base64, mime, target })
 }
 
-const files = (await readdir(SRC)).filter((f) => /\.(jpe?g|png)$/i.test(f))
+const files = (await readdir(SRC)).filter(
+  (f) => /\.(jpe?g|png)$/i.test(f) && (ONLY.size === 0 || ONLY.has(f.replace(/\.(jpe?g|png)$/i, ''))),
+)
 if (CHECK) await mkdir(CHECK, { recursive: true })
 let ok = 0, skip = []
 for (const f of files) {

@@ -1,0 +1,57 @@
+name: Perfect Skin — fetch product images
+
+# Скачивает фото розничных товаров из retail-products.json (imageUrl) в
+# projects/perfect-skin/server/assets/products/<imageFile>. Уже скачанные файлы не трогает.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: perfect-skin-bestsellers-media
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download missing images
+        run: |
+          set -euo pipefail
+          ASSETS=projects/perfect-skin/server/assets
+          mkdir -p "$ASSETS/products"
+          jq -r '.products[] | [.imageFile, .imageUrl] | @tsv' "$ASSETS/retail-products.json" |
+          while IFS=$'\t' read -r file url; do
+            target="$ASSETS/products/$file"
+            if [ -f "$target" ]; then
+              echo "уже есть: $file"
+              continue
+            fi
+            curl -fsSL --retry 3 -A 'Mozilla/5.0' -o "$target" "$url"
+            type=$(file --brief --mime-type "$target")
+            case "$type" in
+              image/jpeg|image/png) echo "скачано: $file ($type)" ;;
+              *)
+                echo "::error::$file: не изображение JPEG/PNG, а $type"
+                rm -f "$target"
+                exit 1
+                ;;
+            esac
+          done
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add projects/perfect-skin/server/assets/products
+          git commit -m "Perfect Skin: product photos for new retail products" || exit 0
+          # При конфликте бинарников побеждают файлы этого прогона (-X theirs в
+          # терминах rebase = наш переигрываемый коммит). Неудачный пуш — ошибка.
+          ok=0
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || { git rebase --abort || true; sleep 5; continue; }
+            git push origin "HEAD:$GITHUB_REF_NAME" && { ok=1; break; }
+            sleep 5
+          done
+          [ "$ok" = 1 ] || { echo "::error::push failed, product photos not saved"; exit 1; }

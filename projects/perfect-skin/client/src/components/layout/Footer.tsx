@@ -6,7 +6,6 @@ const catalogLinks = [
   { label: 'Сыворотки', href: '/catalog/syvorotki' },
   { label: 'Маски и пилинги', href: '/catalog/maski' },
   { label: 'Очищение', href: '/catalog/ochishchenie' },
-  { label: 'Уход за телом', href: '/catalog/uhod-za-telom' },
   { label: 'Подарочные наборы', href: '/catalog/nabory' },
   { label: 'Линейка ISSEIMI Base', href: '/catalog/all?brand=isseimi&line=isseimi-base' },
   { label: 'Линейка ISSEIMI MD', href: '/catalog/all?brand=isseimi&line=isseimi-md' },

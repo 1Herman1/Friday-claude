@@ -14,6 +14,8 @@
     "seed": "NODE_ENV=development tsx prisma/seed.ts",
     "import:prices": "tsx prisma/import-prices.ts",
     "import:pro-products": "tsx prisma/import-pro-products.ts",
+    "import:retail-products": "tsx prisma/import-retail-products.ts",
+    "discontinue": "tsx prisma/discontinue-products.ts",
     "import:content": "tsx prisma/import-content.ts",
     "fix:names": "tsx prisma/fix-product-names.ts",
     "content:snapshot": "tsx prisma/import-content.ts --snapshot=../client/public/snapshot/catalog.json",

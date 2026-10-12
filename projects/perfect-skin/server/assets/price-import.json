@@ -627,7 +627,9 @@
       "care": "ДОМ",
       "wholesaleKopecks": 590000,
       "retailKopecks": 1120000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "CLEANSING BALM",
+      "forceSingleVariant": true
     },
     {
       "article": 10130,
@@ -636,7 +638,8 @@
       "care": "ДОМ",
       "wholesaleKopecks": 850000,
       "retailKopecks": 1620000,
-      "isProfessional": false
+      "isProfessional": false,
+      "siteName": "CBD NIGHT MASK"
     },
     {
       "article": 10131,

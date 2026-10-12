@@ -205,6 +205,10 @@ jobs:
             cd "$SRC"
             npm run import:prices --workspace=@ps/server -- --apply --apply-retail
             npm run import:pro-products --workspace=@ps/server -- --apply
+            # Розничные товары, которых нет в прайсе сайта (retail-products.json).
+            npm run import:retail-products --workspace=@ps/server -- --apply
+            # Снятые с продажи (discontinued.json): повтор ничего не меняет, поэтому после всех импортов.
+            npm run discontinue --workspace=@ps/server -- --apply
             # Карточки товаров — только на только что засеянной базе: на живой
             # повтор затёр бы правки карточек, сделанные в админке.
             if [ "$FRESH" = "1" ]; then

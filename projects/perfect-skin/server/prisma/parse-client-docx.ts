@@ -17,6 +17,8 @@ import {
   type SiteProduct,
 } from '../src/lib/product-docx.match.js'
 import { ProductDetailsSchema, type ProductDetails } from '../src/lib/product-details.js'
+import { parseDiscontinuedFile } from '../src/lib/discontinue.plan.js'
+import { parseRetailProductsFile } from '../src/lib/import-retail-products.plan.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ASSETS = path.join(__dirname, '../assets')
@@ -49,15 +51,24 @@ function readJson<T>(file: string): T {
 function loadSite(): { products: SiteProduct[]; variants: CabinetVariant[] } {
   const catalog = readJson<CatalogFile>(path.join(ASSETS, 'catalog-curated.json'))
   const pro = readJson<ProFile>(path.join(ASSETS, 'pro-products.json'))
+  const retail = parseRetailProductsFile(readJson(path.join(ASSETS, 'retail-products.json')))
+  const discontinued = new Set(parseDiscontinuedFile(readJson(path.join(ASSETS, 'discontinued.json'))).products)
   const products: SiteProduct[] = [
-    ...catalog.products.map((p) => ({
+    ...catalog.products.filter((p) => !discontinued.has(p.slug)).map((p) => ({
       slug: p.slug,
       name: p.name,
       brand: p.brand,
       kind: 'retail' as const,
       volume: typeof p.volume === 'number' ? { count: 1, each: p.volume, unit: null } : null,
     })),
-    ...pro.products.map((p) => ({
+    ...retail.products.map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      brand: p.brand,
+      kind: 'retail' as const,
+      volume: { count: 1, each: p.volume, unit: null },
+    })),
+    ...pro.products.filter((p) => !discontinued.has(p.slug)).map((p) => ({
       slug: p.slug,
       name: p.name,
       brand: p.brand,
@@ -162,6 +173,7 @@ function renderReport(args: {
   lines.push(`- Совпало с текстом: ${report.matched.length} (розница ${matchedRetail.length}, кабинетные ${matchedPro.length})`)
   lines.push(`- Товаров сайта без текста: ${report.noText.length} (розница ${noTextRetail.length}, кабинетные ${noTextPro.length})`)
   lines.push(`- Позиций из файлов, которых нет на сайте (отложено в \`_pending/\`): ${report.pending.length}`)
+  lines.push(`- Исключено по решению клиента: ${report.excluded.length}`)
   lines.push(`- Неоднозначных и конфликтов: ${report.problems.length}`)
   lines.push(`- Предупреждений: ${warnings.length}`)
   lines.push(`- Подозрительных мест в тексте: ${typos.length}`, '')
@@ -173,6 +185,10 @@ function renderReport(args: {
   section(
     'Нет на сайте (отложено, не заводим)',
     report.pending.map((p: PendingUnit) => `\`${p.key}\` ← ${p.sources.map(sourceLine).join('; ')}`),
+  )
+  section(
+    'Исключено по решению клиента',
+    report.excluded.map((e) => `\`${e.key}\` — ${e.reason} ← ${e.sources.map(sourceLine).join('; ')}`),
   )
   section(
     'Товары сайта без текста',

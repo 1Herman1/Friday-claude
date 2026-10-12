@@ -167,3 +167,12 @@ describe('точность и неоднозначность', () => {
     expect(report.noText).not.toContain('emulsion')
   })
 })
+
+describe('исключённые по решению клиента', () => {
+  it('TTS BRIGHTENING MASK не уходит в ожидание, а попадает в excluded с причиной', () => {
+    const report = run(parse(card('TTS BRIGHTENING MASK – Депигментирующая маска', 'Монодоза: 1 маска', 'Описание.'), 'a.docx', 'ISSEIMI'))
+    expect(report.pending).toEqual([])
+    expect(report.excluded.map((e) => e.key)).toEqual(['ttsbrighteningmask'])
+    expect(report.excluded[0].reason).toContain('клиент')
+  })
+})

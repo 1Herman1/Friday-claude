@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "decided": "2026-10-12",
+    "source": "ответ клиента Гермесу 12.10",
+    "note": "Сняты с продажи навсегда; фасовка — объём больше не выпускается"
+  },
+  "products": [
+    "bb-cream-matiruyushhij-krem",
+    "chia-protect-oil-maslo-chia-s-ozonom",
+    "sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami",
+    "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami",
+    "depurative-crema-ochishhayushhij-krem",
+    "dermosun-spf-50-solnczezashhitnyj-krem",
+    "keradetox-keratoliticheskij-tonik",
+    "korpo-slim-crema-anticzellyulitnyj-i-modeliruyushhij-krem",
+    "korpo-slim-gel-ukreplyayushhij-gel-dlya-nog",
+    "natural-tonic-naturalnyj-tonik-dlya-licza",
+    "tts-o3-ozono-kislorodnaya-maska-s-ozonom",
+    "orange-esential-oil-tsitrusovoe-maslo-chistoe-efirnoe-maslo"
+  ],
+  "variants": [
+    {
+      "product": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza",
+      "volume": 200,
+      "note": "остался только 500 мл (кабинетная фасовка); розничной цены 500 мл пока нет"
+    }
+  ]
+}
