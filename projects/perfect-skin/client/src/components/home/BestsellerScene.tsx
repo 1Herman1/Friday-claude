@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useProductDetail } from '@/hooks/useProductDetail'
 import { PriceTag } from '@/components/product/PriceTag'
 import { useCart } from '@/context/CartContext'
@@ -711,7 +711,8 @@ export function BestsellerScene() {
                   : 'opacity-0 translate-y-6 invisible pointer-events-none'
               }`}
             >
-              <div key={mProduct.slug} className="min-w-0 flex-1 animate-[fadeIn_200ms_ease-out] motion-reduce:animate-none">
+              <Fragment key={mProduct.slug}>
+              <div className="min-w-0 flex-1 animate-[fadeIn_200ms_ease-out] motion-reduce:animate-none">
                 {mData.brand && (
                   <div className="text-label leading-tight uppercase tracking-wide text-muted-foreground">
                     {mData.brand.name}
@@ -729,7 +730,7 @@ export function BestsellerScene() {
                   </Link>
                 </h3>
               </div>
-              <div key={mProduct.slug} className="relative z-10 shrink-0 w-28 flex flex-col items-center gap-1.5">
+              <div className="relative z-10 shrink-0 w-28 flex flex-col items-center gap-1.5">
                 <PriceTag
                   price={mData.minPrice}
                   oldPrice={mData.oldPrice ?? undefined}
@@ -738,6 +739,7 @@ export function BestsellerScene() {
                 />
                 <ProductCardButton product={mData} user={user} onAddToCart={addCurrent} />
               </div>
+              </Fragment>
             </div>
           )}
           </div>
