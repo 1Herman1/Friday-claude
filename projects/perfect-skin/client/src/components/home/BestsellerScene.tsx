@@ -705,7 +705,7 @@ export function BestsellerScene() {
           </p>
           {mData && mProduct && (
             <div
-              className={`relative bg-card rounded-block shadow-md px-4 py-3 flex items-center gap-3 transition-[opacity,transform,visibility] duration-200 ${
+              className={`relative bg-card rounded-block shadow-md px-4 py-3 flex items-center gap-3 transition-[opacity,transform,visibility] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
                 cardIdx >= 0
                   ? 'opacity-100 translate-y-0 visible pointer-events-auto'
                   : 'opacity-0 translate-y-6 invisible pointer-events-none'

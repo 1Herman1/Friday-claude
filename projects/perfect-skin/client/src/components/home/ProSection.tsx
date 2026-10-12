@@ -326,6 +326,9 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
   const shown = reduced ? Math.round(pos) : pos
   const activeIndex = Math.round(pos)
   const current = splitName(products[activeIndex].name).title
+  // Текст панели всегда свёрстан на ширину раскрытой панели (строка минус зазоры gap-2,
+  // доля 1 + EXPAND_WEIGHT из n + EXPAND_WEIGHT) — на полпути он срезается краем, а не переносится.
+  const expandedWidth = `calc((100cqw - ${last * 0.5}rem) * ${(1 + EXPAND_WEIGHT) / (products.length + EXPAND_WEIGHT)})`
 
   return (
     <div className="md:hidden pt-3">
@@ -356,7 +359,7 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
         aria-valuetext={current}
         className="block w-full h-11 cursor-pointer appearance-none bg-transparent [&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:rounded-pill [&::-webkit-slider-runnable-track]:bg-dark-foreground/40 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-7 [&::-webkit-slider-thumb]:-mt-3 [&::-webkit-slider-thumb]:rounded-pill [&::-webkit-slider-thumb]:bg-accent [&::-moz-range-track]:h-1 [&::-moz-range-track]:rounded-pill [&::-moz-range-track]:bg-dark-foreground/40 [&::-moz-range-thumb]:size-7 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:rounded-pill [&::-moz-range-thumb]:bg-accent"
       />
-      <div ref={rowRef} className="flex gap-2 h-[26rem] touch-pan-y">
+      <div ref={rowRef} className="flex gap-2 h-[26rem] touch-pan-y [container-type:inline-size]">
         {products.map((product, i) => {
           const e = expansion(shown, i)
           const on = i === activeIndex
@@ -399,8 +402,8 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
                 {String(i + 1).padStart(2, '0')}
               </span>
               <div
-                className={`absolute inset-x-0 bottom-0 w-[14.5rem] max-w-full p-4 flex flex-col gap-1 ${on ? '' : 'pointer-events-none'}`}
-                style={{ opacity: Math.max(0, 2 * e - 1) }}
+                className={`absolute inset-x-0 bottom-0 p-4 flex flex-col gap-1 ${on ? '' : 'pointer-events-none'}`}
+                style={{ width: expandedWidth, opacity: Math.max(0, 4 * e - 3) }}
               >
                 <span className="font-heading font-bold uppercase leading-tight text-body">{title}</span>
                 {desc && <span className="text-body-sm text-muted-foreground line-clamp-2">{desc}</span>}
