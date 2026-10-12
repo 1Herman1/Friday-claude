@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { KeyboardEvent } from 'react'
 import { cardImage } from '@/lib/product-image'
 import { splitName } from '@/lib/split-name'
 import { Link } from 'react-router-dom'
@@ -6,6 +7,7 @@ import { useCatalogList } from '@/hooks/useCatalogList'
 import type { CatalogFilters } from '@/hooks/useCatalogList'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { useDrawer } from '@/context/DrawerContext'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 
 const PRO_FILTERS: CatalogFilters = { pro: true, limit: 4, offset: 0 }
 
@@ -172,10 +174,159 @@ interface ProAccordionProps {
   onImageError: (id: string) => void
 }
 
-// Телефон: ползунок и строка из четырёх товаров — выбранный раскрывается гармошкой
+const SETTLE_MS = 320
+const SETTLE_EASE = cubicBezier(0.23, 1, 0.32, 1)
+const EXPAND_WEIGHT = 7
+const AXIS_LOCK_PX = 8
+const SWIPE_PX = 28
+const FLICK_PX = 12
+const FLICK_PX_PER_MS = 0.3
+
+// Телефон: ползунок и строка из четырёх товаров — выбранный раскрывается гармошкой.
+// Позиция дробная (0…n-1): ползунок, свайп по строке и доводка пишут одно значение,
+// ширины и фото пересчитываются по нему каждый кадр.
 function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onImageError }: ProAccordionProps) {
-  if (products.length === 0) return null
-  const current = splitName(products[active].name).title
+  const last = Math.max(0, products.length - 1)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const [pos, setPos] = useState(active)
+  const posRef = useRef(active)
+  const reportedRef = useRef(active)
+  const frameRef = useRef(0)
+  const rowRef = useRef<HTMLDivElement>(null)
+
+  const stopSettle = useCallback(() => cancelAnimationFrame(frameRef.current), [])
+
+  const commit = useCallback(
+    (value: number) => {
+      const next = clamp(value, last)
+      posRef.current = next
+      setPos(next)
+      const index = Math.round(next)
+      if (index !== reportedRef.current) {
+        reportedRef.current = index
+        onActivate(index)
+      }
+    },
+    [last, onActivate]
+  )
+
+  const settleTo = useCallback(
+    (value: number) => {
+      stopSettle()
+      const from = posRef.current
+      const target = clamp(value, last)
+      if (reduced || from === target) {
+        commit(target)
+        return
+      }
+      const started = performance.now()
+      const frame = (now: number) => {
+        const t = clamp((now - started) / SETTLE_MS, 1)
+        commit(t < 1 ? from + (target - from) * SETTLE_EASE(t) : target)
+        if (t < 1) frameRef.current = requestAnimationFrame(frame)
+      }
+      frameRef.current = requestAnimationFrame(frame)
+    },
+    [commit, last, reduced, stopSettle]
+  )
+
+  useEffect(() => () => cancelAnimationFrame(frameRef.current), [])
+
+  useEffect(() => {
+    if (active !== reportedRef.current) settleTo(active)
+  }, [active, settleTo])
+
+  useEffect(() => {
+    const row = rowRef.current
+    if (!row) return
+    let gesture: {
+      x: number
+      y: number
+      time: number
+      base: number
+      anchor: number
+      pxPerIndex: number
+      axis: 'x' | 'y' | null
+    } | null = null
+
+    const onTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      gesture = {
+        x: touch.clientX,
+        y: touch.clientY,
+        time: e.timeStamp,
+        base: posRef.current,
+        anchor: touch.clientX,
+        pxPerIndex: row.clientWidth / Math.max(1, last),
+        axis: null,
+      }
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!gesture) return
+      const touch = e.touches[0]
+      if (gesture.axis === null) {
+        const lockDx = touch.clientX - gesture.x
+        const lockDy = touch.clientY - gesture.y
+        if (Math.max(Math.abs(lockDx), Math.abs(lockDy)) < AXIS_LOCK_PX) return
+        gesture.axis = Math.abs(lockDx) > Math.abs(lockDy) ? 'x' : 'y'
+        if (gesture.axis === 'x') {
+          stopSettle()
+          gesture.base = posRef.current
+          gesture.anchor = touch.clientX
+        }
+      }
+      if (gesture.axis === 'y') return
+      e.preventDefault()
+      commit(gesture.base - (touch.clientX - gesture.anchor) / gesture.pxPerIndex)
+    }
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const g = gesture
+      gesture = null
+      if (!g || g.axis !== 'x') return
+      const dx = e.changedTouches[0].clientX - g.x
+      const distance = Math.abs(dx)
+      const speed = distance / Math.max(1, e.timeStamp - g.time)
+      const swipe = distance >= SWIPE_PX || (distance >= FLICK_PX && speed >= FLICK_PX_PER_MS)
+      settleTo(swipe ? Math.round(g.base) - Math.sign(dx) : Math.round(posRef.current))
+    }
+
+    row.addEventListener('touchstart', onTouchStart, { passive: true })
+    row.addEventListener('touchmove', onTouchMove, { passive: false })
+    row.addEventListener('touchend', onTouchEnd, { passive: true })
+    row.addEventListener('touchcancel', onTouchEnd, { passive: true })
+    return () => {
+      row.removeEventListener('touchstart', onTouchStart)
+      row.removeEventListener('touchmove', onTouchMove)
+      row.removeEventListener('touchend', onTouchEnd)
+      row.removeEventListener('touchcancel', onTouchEnd)
+    }
+  }, [commit, last, settleTo, stopSettle])
+
+  const onSliderKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const index = Math.round(posRef.current)
+    const targets: Record<string, number> = {
+      ArrowLeft: index - 1,
+      ArrowDown: index - 1,
+      ArrowRight: index + 1,
+      ArrowUp: index + 1,
+      PageDown: index - 1,
+      PageUp: index + 1,
+      Home: 0,
+      End: last,
+    }
+    const target = targets[e.key]
+    if (target === undefined) return
+    e.preventDefault()
+    stopSettle()
+    commit(target)
+  }
+
+  const shown = reduced ? Math.round(pos) : pos
+  const activeIndex = Math.round(pos)
+  const current = splitName(products[activeIndex].name).title
+
   return (
     <div className="md:hidden pt-3">
       <div className="flex items-center justify-between">
@@ -183,44 +334,54 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
           Двигайте, чтобы выбрать
         </label>
         <span className="font-heading font-semibold text-body-sm text-accent tabular-nums" aria-hidden="true">
-          {String(active + 1).padStart(2, '0')} / {String(products.length).padStart(2, '0')}
+          {String(activeIndex + 1).padStart(2, '0')} / {String(products.length).padStart(2, '0')}
         </span>
       </div>
       <input
         id="pro-pick"
         type="range"
         min={0}
-        max={products.length - 1}
-        step={1}
-        value={active}
-        onChange={(e) => onActivate(Number(e.target.value))}
+        max={last}
+        step="any"
+        value={pos}
+        onChange={(e) => {
+          stopSettle()
+          commit(Number(e.target.value))
+        }}
+        onPointerDown={stopSettle}
+        onPointerUp={() => settleTo(Math.round(posRef.current))}
+        onPointerCancel={() => settleTo(Math.round(posRef.current))}
+        onKeyDown={onSliderKeyDown}
+        aria-valuenow={activeIndex}
         aria-valuetext={current}
         className="block w-full h-11 cursor-pointer appearance-none bg-transparent [&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:rounded-pill [&::-webkit-slider-runnable-track]:bg-dark-foreground/40 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-7 [&::-webkit-slider-thumb]:-mt-3 [&::-webkit-slider-thumb]:rounded-pill [&::-webkit-slider-thumb]:bg-accent [&::-moz-range-track]:h-1 [&::-moz-range-track]:rounded-pill [&::-moz-range-track]:bg-dark-foreground/40 [&::-moz-range-thumb]:size-7 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:rounded-pill [&::-moz-range-thumb]:bg-accent"
       />
-      <div className="flex gap-2 h-[26rem]">
+      <div ref={rowRef} className="flex gap-2 h-[26rem] touch-pan-y">
         {products.map((product, i) => {
-          const on = i === active
+          const e = expansion(shown, i)
+          const on = i === activeIndex
           const { title, desc } = splitName(product.name)
           const volume = volumeOf(product)
           return (
             <div
               key={product.id}
-              onClick={() => onActivate(i)}
+              onClick={() => settleTo(i)}
               aria-hidden={!on}
-              className={`relative min-w-0 basis-0 rounded-block overflow-hidden text-foreground transition-[flex-grow,background-color] duration-300 ease-out motion-reduce:transition-none ${
-                on ? 'grow-[8] bg-card' : 'grow cursor-pointer bg-muted'
-              }`}
+              style={{ flexGrow: 1 + EXPAND_WEIGHT * e }}
+              className={`relative min-w-0 basis-0 rounded-block overflow-hidden bg-muted text-foreground ${on ? '' : 'cursor-pointer'}`}
             >
-              <div
-                className={`absolute inset-x-0 top-0 flex items-center justify-center p-3 transition-[height] duration-300 ease-out motion-reduce:transition-none ${
-                  on ? 'h-[52%]' : 'h-full'
-                }`}
-              >
+              <div className="absolute inset-0 bg-card" style={{ opacity: e }} />
+              <div className="absolute inset-x-0 top-0 flex items-center justify-center p-3" style={{ height: `${100 - 48 * e}%` }}>
                 {product.image && !imageErrors.has(product.id) ? (
                   <img
                     src={cardImage(product) ?? ''}
                     alt=""
-                    className={`h-full max-w-none object-contain mix-blend-multiply ${on ? 'w-full scale-[1.25] object-bottom' : 'w-[14rem] scale-[1.6]'}`}
+                    className="h-full max-w-none object-contain mix-blend-multiply"
+                    style={{
+                      width: `calc(14rem + (100% - 14rem) * ${e})`,
+                      transform: `scale(${1.6 - 0.35 * e})`,
+                      objectPosition: `50% ${50 + 50 * e}%`,
+                    }}
                     loading="lazy"
                     decoding="async"
                     width={320}
@@ -229,16 +390,17 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
                   />
                 ) : null}
               </div>
-              {!on && (
-                <span className="absolute inset-x-0 bottom-3 flex flex-col items-center gap-2 font-heading font-semibold text-label text-muted-foreground tabular-nums">
-                  {volume && <span className="[writing-mode:vertical-rl] rotate-180 uppercase tracking-wide">{volume}</span>}
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-              )}
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-3 flex flex-col items-center gap-2 font-heading font-semibold text-label text-muted-foreground tabular-nums"
+                style={{ opacity: Math.max(0, 1 - 2 * e) }}
+              >
+                {volume && <span className="[writing-mode:vertical-rl] rotate-180 uppercase tracking-wide">{volume}</span>}
+                {String(i + 1).padStart(2, '0')}
+              </span>
               <div
-                className={`absolute inset-x-0 bottom-0 w-[14.5rem] max-w-full p-4 flex flex-col gap-1 transition-opacity duration-200 motion-reduce:transition-none ${
-                  on ? 'opacity-100 delay-150' : 'opacity-0 pointer-events-none'
-                }`}
+                className={`absolute inset-x-0 bottom-0 w-[14.5rem] max-w-full p-4 flex flex-col gap-1 ${on ? '' : 'pointer-events-none'}`}
+                style={{ opacity: Math.max(0, 2 * e - 1) }}
               >
                 <span className="font-heading font-bold uppercase leading-tight text-body">{title}</span>
                 {desc && <span className="text-body-sm text-muted-foreground line-clamp-2">{desc}</span>}
@@ -249,8 +411,8 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
                 <button
                   type="button"
                   tabIndex={on ? 0 : -1}
-                  onClick={(e) => {
-                    e.stopPropagation()
+                  onClick={(ev) => {
+                    ev.stopPropagation()
                     onOpen()
                   }}
                   className="mt-2 inline-flex items-center justify-center min-h-11 px-4 py-2.5 leading-tight text-balance rounded-pill bg-primary text-primary-foreground font-heading font-bold text-body-sm active:scale-97 transition-transform duration-160 focus-visible:outline-primary"
@@ -264,6 +426,36 @@ function ProAccordion({ products, active, onActivate, onOpen, imageErrors, onIma
       </div>
     </div>
   )
+}
+
+function clamp(value: number, max: number): number {
+  return Math.min(max, Math.max(0, value))
+}
+
+function expansion(position: number, index: number): number {
+  return Math.round(Math.max(0, 1 - Math.abs(position - index)) * 1000) / 1000
+}
+
+function cubicBezier(x1: number, y1: number, x2: number, y2: number): (x: number) => number {
+  const cx = 3 * x1
+  const bx = 3 * (x2 - x1) - cx
+  const ax = 1 - cx - bx
+  const cy = 3 * y1
+  const by = 3 * (y2 - y1) - cy
+  const ay = 1 - cy - by
+  const sampleX = (t: number) => ((ax * t + bx) * t + cx) * t
+  const sampleY = (t: number) => ((ay * t + by) * t + cy) * t
+  const slopeX = (t: number) => (3 * ax * t + 2 * bx) * t + cx
+  return (x) => {
+    let t = x
+    for (let i = 0; i < 8; i++) {
+      const error = sampleX(t) - x
+      const slope = slopeX(t)
+      if (Math.abs(error) < 1e-6 || Math.abs(slope) < 1e-6) break
+      t -= error / slope
+    }
+    return sampleY(clamp(t, 1))
+  }
 }
 
 interface IndexRowProps {
