@@ -11,13 +11,15 @@ import { isAutoScrolling } from '@/lib/scroll-top'
 
 // Ролики сцены: сегмент i — рука от товара i к товару i+1 (кадры k_i → k_{i+1}).
 const SCENE = '/video/bestsellers'
+// Имена файлов при замене роликов не меняются — метка версии не даёт браузеру показать старые из кэша.
+const MEDIA_V = '?v=20261014'
 const segments = ['0-1', '1-2', '2-3', '3-4']
 const VIDEO_CONFIG = {
   desktop: segments.map((s) => `${SCENE}/desktop/${s}.mp4`),
   mobile: segments.map((s) => `${SCENE}/mobile/${s}.mp4`),
   // Постер ролика — его первый кадр; статичный шаг — кадр, где товар уже в руке.
-  startPoster: (fmt: 'desktop' | 'mobile', idx: number) => `${SCENE}/${fmt}/k${idx}.jpg`,
-  stepPoster: (fmt: 'desktop' | 'mobile', idx: number) => `${SCENE}/${fmt}/k${idx + 1}.jpg`,
+  startPoster: (fmt: 'desktop' | 'mobile', idx: number) => `${SCENE}/${fmt}/k${idx}.jpg${MEDIA_V}`,
+  stepPoster: (fmt: 'desktop' | 'mobile', idx: number) => `${SCENE}/${fmt}/k${idx + 1}.jpg${MEDIA_V}`,
 }
 
 const PRODUCT_SLUGS = [
@@ -326,7 +328,7 @@ export function BestsellerScene() {
     const list = isDesktop ? VIDEO_CONFIG.desktop : VIDEO_CONFIG.mobile
     list.forEach(async (src, i) => {
       try {
-        const res = await fetch(src.replace(/\.mp4$/, `.${ext}`), { signal: abort.signal })
+        const res = await fetch(`${src.replace(/\.mp4$/, `.${ext}`)}${MEDIA_V}`, { signal: abort.signal })
         // Сервер на несуществующий файл может вернуть index.html со статусом 200.
         if (!res.ok || !res.headers.get('content-type')?.startsWith('video/')) return
         const blob = await res.blob()
