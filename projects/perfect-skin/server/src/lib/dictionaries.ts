@@ -31,6 +31,7 @@ export const CONCERNS: Record<Concern, string> = {
   sun_protection: 'Защита от солнца',
   eye_area: 'Зона вокруг глаз',
   post_procedure: 'Постпроцедурный уход',
+  oxidative_stress: 'Оксидативный стресс',
 }
 
 export const DELIVERY_METHODS: Record<DeliveryMethod, { title: string; hint: string }> = {

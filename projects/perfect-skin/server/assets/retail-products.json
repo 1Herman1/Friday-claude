@@ -2,7 +2,7 @@
   "_meta": {
     "source": "карточки и цены розницы — ответ клиента 12.10; объёмы и цены сверены с price-import.json (прайс 2026-09-22)",
     "date": "2026-10-12",
-    "note": "8 новых розничных товаров. У LIPOSOME-C подпись «Оксидативный стресс / гликация» не записана: её нет в NEEDS_MAP (catalog-seed-maps.ts), карту не расширяли"
+    "note": "8 новых розничных товаров."
   },
   "products": [
     {
@@ -76,7 +76,7 @@
       "retailKopecks": 1520000,
       "wholesaleKopecks": 800000,
       "skinTypes": ["Для всех типов кожи"],
-      "keyNeeds": ["Выравнивание цвета и рельефа", "Придание сияния коже", "Интенсивный уход"],
+      "keyNeeds": ["Выравнивание цвета и рельефа", "Придание сияния коже", "Интенсивный уход", "Оксидативный стресс / гликация"],
       "imageUrl": "https://beautymedgroup.ru/wp-content/uploads/2025/10/serum-liposome-c.jpg",
       "imageFile": "liposome-c-antioksidantnaya-syvorotka.jpg"
     },

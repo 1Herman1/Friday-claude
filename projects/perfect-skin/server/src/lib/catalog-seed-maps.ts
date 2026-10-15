@@ -32,4 +32,5 @@ export const NEEDS_MAP: Record<string, Concern> = {
   'Экспресс-уход': 'express_care',
   'Интенсивный уход': 'intensive_care',
   'Питание': 'nourishing',
+  'Оксидативный стресс / гликация': 'oxidative_stress',
 }

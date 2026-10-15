@@ -72,6 +72,7 @@ enum Concern {
   express_care
   intensive_care
   nourishing
+  oxidative_stress
 }
 
 /// Единица фасовки: мл для флаконов, г для банок, шт для наборов.

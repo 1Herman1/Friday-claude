@@ -6,12 +6,15 @@ interface UseProductDetailReturn {
   data: ProductCardExtended | null
   loading: boolean
   error: ApiError | null
+  // slug, по которому загружены data: отличает свежий ответ от данных прошлого товара
+  loadedSlug: string | null
 }
 
 export function useProductDetail(slug: string | undefined): UseProductDetailReturn {
   const [data, setData] = useState<ProductCardExtended | null>(null)
   const [loading, setLoading] = useState(!!slug)
   const [error, setError] = useState<ApiError | null>(null)
+  const [loadedSlug, setLoadedSlug] = useState<string | null>(null)
 
   useEffect(() => {
     if (!slug) {
@@ -26,6 +29,7 @@ export function useProductDetail(slug: string | undefined): UseProductDetailRetu
         setError(null)
         const response = await fetchApi<ProductCardExtended>(`/api/v1/products/${slug}`)
         setData(response)
+        setLoadedSlug(slug)
       } catch (err) {
         if (err instanceof ApiError) {
           setError(err)
@@ -40,5 +44,5 @@ export function useProductDetail(slug: string | undefined): UseProductDetailRetu
     fetchData()
   }, [slug])
 
-  return { data, loading, error }
+  return { data, loading, error, loadedSlug }
 }

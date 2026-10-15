@@ -23,6 +23,11 @@ interface CatalogSnapshot {
   labels: Record<'categories' | 'brands' | 'lines' | 'needs' | 'skinTypes', Record<string, string>>
 }
 
+// Копия server/src/lib/slug-aliases.ts: старый адрес товара → новый
+const SLUG_ALIASES: Record<string, string> = {
+  'veevenom-serum-syvorotka-pchelinyj-yad': 'beevenom-serum-syvorotka-pchelinyj-yad',
+}
+
 let cache: Promise<CatalogSnapshot> | null = null
 
 export function loadSnapshot(): Promise<CatalogSnapshot> {
@@ -266,7 +271,10 @@ export async function resolveFromSnapshot<T>(path: string): Promise<T> {
   }
   const productMatch = p.match(/^\/api\/v1\/products\/([a-z0-9-]+)$/)
   if (productMatch) {
-    const found = snap.products.find((sp) => sp.detail.slug === productMatch[1])
+    const bySlug = (slug: string) => snap.products.find((sp) => sp.detail.slug === slug)
+    // hasOwnProperty, а не hasOwn: старые Safari его не знают
+    const alias = Object.prototype.hasOwnProperty.call(SLUG_ALIASES, productMatch[1]) ? SLUG_ALIASES[productMatch[1]] : undefined
+    const found = bySlug(productMatch[1]) ?? (alias ? bySlug(alias) : undefined)
     if (!found) throw new ApiError(404, 'PRODUCT_NOT_FOUND', 'Товар не найден')
     // In snapshot mode, viewer is always a guest, so professional products return 404
     if (found.detail.isProfessional) {

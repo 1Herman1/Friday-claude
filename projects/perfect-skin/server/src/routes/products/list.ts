@@ -81,6 +81,7 @@ export default async function listRoute(app: FastifyInstance) {
           'sun_protection',
           'eye_area',
           'post_procedure',
+          'oxidative_stress',
         ]
         for (const need of q.need) {
           if (!validNeeds.includes(need)) {

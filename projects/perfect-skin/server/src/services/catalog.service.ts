@@ -5,6 +5,7 @@ import type { Concern, SkinType } from '../lib/db.js'
 import { getPopularProductsMap } from './popular.service.js'
 import { isWholesaleViewer, canSeeProfessional, resolvePrice, type PriceViewer } from '../lib/pricing.js'
 import { readDetails } from '../lib/product-details.js'
+import { resolveSlugAlias } from '../lib/slug-aliases.js'
 
 export interface CatalogFilters {
   q?: string
@@ -696,19 +697,24 @@ export async function getProductBySlug(
 ): Promise<any | null> {
   // Видимость — тем же правилом, что и листинг: товар без единой видимой
   // фасовки для гостя не существует (404), а не «пустая карточка».
-  const product = await prisma.product.findFirst({
-    where: { slug, ...ACTIVE, ...productVisibleFor(viewer) },
-    include: {
-      brand: true,
-      line: true,
-      variants: { where: ACTIVE, orderBy: { volumeValue: 'asc' } },
-      categories: { include: { category: true } },
-      ingredients: {
-        include: { ingredient: true },
-        orderBy: [{ isKey: 'desc' }, { sortOrder: 'asc' }, { ingredient: { name: 'asc' } }],
+  const findBySlug = (s: string) =>
+    prisma.product.findFirst({
+      where: { slug: s, ...ACTIVE, ...productVisibleFor(viewer) },
+      include: {
+        brand: true,
+        line: true,
+        variants: { where: ACTIVE, orderBy: { volumeValue: 'asc' } },
+        categories: { include: { category: true } },
+        ingredients: {
+          include: { ingredient: true },
+          orderBy: [{ isKey: 'desc' }, { sortOrder: 'asc' }, { ingredient: { name: 'asc' } }],
+        },
       },
-    },
-  })
+    })
+
+  // Старый адрес после переименования: ищем по новому, в ответе — новый slug
+  const alias = resolveSlugAlias(slug)
+  const product = (await findBySlug(slug)) ?? (alias ? await findBySlug(alias) : null)
 
   if (!product) return null
 

@@ -6,6 +6,7 @@ interface FavoritesContextType {
   isFavorite: (slug: string) => boolean
   toggle: (slug: string) => void
   remove: (slug: string) => void
+  rename: (from: string, to: string) => void
   clear: () => void
 }
 
@@ -78,14 +79,28 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
+  // Товар сменил адрес: заменяем запись на новый slug, сохраняя место в списке
+  const rename = useCallback((from: string, to: string) => {
+    setSlugs(prev => {
+      if (from === to || !prev.has(from)) return prev
+      const next = new Set<string>()
+      prev.forEach(s => {
+        if (s === from) next.add(to)
+        else if (s !== to) next.add(s)
+      })
+      saveToStorage(next)
+      return next
+    })
+  }, [])
+
   const clear = useCallback(() => {
     setSlugs(new Set())
     saveToStorage(new Set())
   }, [])
 
   const value = useMemo(
-    () => ({ slugs, count, isFavorite, toggle, remove, clear }),
-    [slugs, count, isFavorite, toggle, remove, clear]
+    () => ({ slugs, count, isFavorite, toggle, remove, rename, clear }),
+    [slugs, count, isFavorite, toggle, remove, rename, clear]
   )
 
   return (

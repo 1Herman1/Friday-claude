@@ -32,6 +32,7 @@ const concernEnum = z.enum([
   'express_care',
   'intensive_care',
   'nourishing',
+  'oxidative_stress',
 ])
 
 const productSchema = z.object({
@@ -115,6 +116,7 @@ describe('Product Enums', () => {
           'express_care',
           'intensive_care',
           'nourishing',
+          'oxidative_stress',
         ],
       })
       expect(result.success).toBe(true)

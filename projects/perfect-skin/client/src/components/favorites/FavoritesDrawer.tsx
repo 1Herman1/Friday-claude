@@ -15,7 +15,7 @@ type Props = {
 }
 
 export default function FavoritesDrawer({ open, onClose }: Props) {
-  const { slugs, remove, clear, count } = useFavorites()
+  const { slugs, remove, rename, clear, count } = useFavorites()
   const { addItem } = useCart()
 
   const [products, setProducts] = useState<Map<string, ProductCardExtended>>(new Map())
@@ -69,6 +69,11 @@ export default function FavoritesDrawer({ open, onClose }: Props) {
               const product = result.value
               cacheRef.current.set(slug, product)
               results.set(slug, product)
+              // Товар отдан по старому адресу — переписываем запись на новый slug
+              if (product.slug !== slug) {
+                cacheRef.current.set(product.slug, product)
+                rename(slug, product.slug)
+              }
             } else {
               // Протухший slug — удаляем из избранного
               remove(slug)
@@ -90,7 +95,7 @@ export default function FavoritesDrawer({ open, onClose }: Props) {
     }
 
     load()
-  }, [open, slugs, remove])
+  }, [open, slugs, remove, rename])
 
   const handleRemove = (slug: string) => {
     setRemovingSlug(slug)

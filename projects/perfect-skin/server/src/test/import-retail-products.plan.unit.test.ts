@@ -109,8 +109,8 @@ describe('planRetailProduct', () => {
 
   it('неизвестная подпись забот — ошибка с текстом подписи', () => {
     expect(() =>
-      planRetailProduct({ ...hydraView, keyNeeds: ['Оксидативный стресс / гликация'] }, ctx),
-    ).toThrow('Неизвестная подпись забот «Оксидативный стресс / гликация»')
+      planRetailProduct({ ...hydraView, keyNeeds: ['Несуществующая забота'] }, ctx),
+    ).toThrow('Неизвестная подпись забот «Несуществующая забота»')
   })
 
   it('неизвестный тип кожи — ошибка', () => {
@@ -159,8 +159,11 @@ describe('retail-products.json', () => {
     }
   })
 
-  it('у LIPOSOME-C нет подписи «Оксидативный стресс / гликация»', () => {
+  it('у LIPOSOME-C есть забота oxidative_stress из подписи «Оксидативный стресс / гликация»', () => {
     const liposome = file.products.find((p) => p.slug === 'liposome-c-antioksidantnaya-syvorotka')
-    expect(liposome?.keyNeeds).not.toContain('Оксидативный стресс / гликация')
+    expect(liposome?.keyNeeds).toContain('Оксидативный стресс / гликация')
+    const plan = planRetailProduct(liposome!, realCtx)
+    expect(plan.kind).toBe('create')
+    if (plan.kind === 'create') expect(plan.product.concerns).toContain('oxidative_stress')
   })
 })
