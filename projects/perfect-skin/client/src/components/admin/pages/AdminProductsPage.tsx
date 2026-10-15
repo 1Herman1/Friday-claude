@@ -361,6 +361,14 @@ function PopularTab() {
     setSuccess('')
     setSaving(true)
     try {
+      // Список мог поменяться в другом окне (галочкой в карточке товара) — не затираем чужое
+      const fresh = await adminGetPopular()
+      const sameSet = (a: string[], b: string[]) => a.length === b.length && a.every((id) => b.includes(id))
+      if (!sameSet(fresh.map((p) => p.id), popular.map((p) => p.id))) {
+        setError('Список изменился в другом окне — загрузили свежий, проверьте порядок и сохраните ещё раз')
+        await load()
+        return
+      }
       const ids = localOrder.map((p) => p.id)
       await adminSetPopular(ids)
       setSuccess('Порядок сохранён')

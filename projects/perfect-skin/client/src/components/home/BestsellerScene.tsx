@@ -385,6 +385,7 @@ export function BestsellerScene() {
     // и сцена стояла пустой. Сначала кадры старта и первого товара, потом ролики по одному.
     void (async () => {
       await preload(VIDEO_CONFIG.startPoster(fmtNow, 0))
+      if (!alive) return
       await preload(VIDEO_CONFIG.stepPoster(fmtNow, 0))
       for (let i = 0; i < list.length; i++) {
         if (!alive) return

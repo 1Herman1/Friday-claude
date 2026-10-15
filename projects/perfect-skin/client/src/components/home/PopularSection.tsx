@@ -18,7 +18,7 @@ function SectionHeading() {
         to="/catalog"
         className="min-h-11 inline-flex items-center gap-1 text-body-sm font-semibold text-primary hover:underline underline-offset-4 shrink-0"
       >
-        Весь каталог →
+        Весь каталог <span aria-hidden="true">→</span>
       </Link>
     </div>
   )
