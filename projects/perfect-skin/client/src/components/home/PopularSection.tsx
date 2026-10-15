@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ProductCard } from '@/components/catalog/ProductCard'
+import { ProductGridSkeleton } from '@/components/home/ProductGridSkeleton'
 import { BESTSELLER_SCENE_SLUGS } from '@/components/home/bestseller-slugs'
 import { useCatalogList } from '@/hooks/useCatalogList'
 import type { CatalogFilters } from '@/hooks/useCatalogList'
@@ -12,7 +13,7 @@ const POPULAR_FILTERS: CatalogFilters = {
 
 function SectionHeading() {
   return (
-    <div className="flex items-end justify-between gap-4 mb-8">
+    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-8">
       <h2 className="text-h2 font-heading font-bold">Выбор покупателей</h2>
       <Link
         to="/catalog"
@@ -34,19 +35,7 @@ export function PopularSection() {
       <section className="bg-background py-10 md:py-14">
         <div className="container-app">
           <SectionHeading />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="bg-card rounded-block overflow-hidden">
-                <div className="w-full h-64 bg-muted animate-pulse motion-reduce:animate-none" />
-                <div className="p-5 space-y-3">
-                  <div className="h-4 bg-muted rounded animate-pulse motion-reduce:animate-none w-1/2" />
-                  <div className="h-5 bg-muted rounded animate-pulse motion-reduce:animate-none" />
-                  <div className="h-4 bg-muted rounded animate-pulse motion-reduce:animate-none w-1/3" />
-                  <div className="h-11 bg-muted rounded-pill animate-pulse motion-reduce:animate-none" />
-                </div>
-              </div>
-            ))}
-          </div>
+          <ProductGridSkeleton />
         </div>
       </section>
     )

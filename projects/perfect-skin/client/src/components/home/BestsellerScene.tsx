@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { useProductDetail } from '@/hooks/useProductDetail'
 import { PriceTag } from '@/components/product/PriceTag'
 import { ProductCard } from '@/components/catalog/ProductCard'
+import { ProductGridSkeleton } from '@/components/home/ProductGridSkeleton'
 import { useCart } from '@/context/CartContext'
 import { useDrawer } from '@/context/DrawerContext'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
@@ -360,6 +361,8 @@ export function BestsellerScene() {
   // Пока ролик шага не в памяти (медленная сеть, экономия трафика), сцена листает
   // стоп-кадры — без пустого экрана и подвисаний; догрузился — дальше идёт видео.
   const [blobs, setBlobs] = useState<(string | null)[]>([null, null, null, null])
+  // Кадры старта и первого товара уже в браузере — можно звать остальные, не отбирая у них канал
+  const [framesReady, setFramesReady] = useState(false)
   const blobsRef = useRef(blobs)
   blobsRef.current = blobs
   useEffect(() => {
@@ -387,6 +390,8 @@ export function BestsellerScene() {
       await preload(VIDEO_CONFIG.startPoster(fmtNow, 0))
       if (!alive) return
       await preload(VIDEO_CONFIG.stepPoster(fmtNow, 0))
+      if (!alive) return
+      setFramesReady(true)
       for (let i = 0; i < list.length; i++) {
         if (!alive) return
         try {
@@ -409,6 +414,7 @@ export function BestsellerScene() {
       abort.abort()
       urls.forEach((u) => URL.revokeObjectURL(u))
       setBlobs([null, null, null, null])
+      setFramesReady(false)
     }
   }, [isNear, isReducedMotion, isDesktop])
 
@@ -519,14 +525,20 @@ export function BestsellerScene() {
     // Без анимаций (системная настройка «Уменьшить движение»): те же товары обычными карточками
     // каталога — фото товара, цена, «В корзину». Снятые с продажи не показываем.
     const shown = products.filter((p) => p.data)
+    const loadingAny = products.some((p) => p.loading)
+    if (!loadingAny && shown.length === 0) return null
     return (
       <section className="bg-background py-10 md:py-14">
         <div className="container-app">
           <p className="text-label font-semibold uppercase tracking-wide text-primary mb-2 lg:text-body-sm">Выбор косметологов</p>
           <h2 className="text-h2 font-heading font-bold mb-8">Бестселлеры</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-            {shown.map((p) => p.data && <ProductCard key={p.slug} product={p.data} />)}
-          </div>
+          {loadingAny ? (
+            <ProductGridSkeleton />
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+              {shown.map((p) => p.data && <ProductCard key={p.slug} product={p.data} />)}
+            </div>
+          )}
         </div>
       </section>
     )
@@ -542,7 +554,8 @@ export function BestsellerScene() {
   }
   const isHold = view.isHold
   if (isNear) [view.segment - 1, view.segment, view.segment + 1].forEach((i) => { if (i >= 0 && i < 4) shownRef.current.add(i) })
-  const wants = (idx: number) => shownRef.current.has(idx)
+  // До готовности первых кадров — только кадр текущего шага, чтобы он не делил канал с соседними
+  const wants = (idx: number) => shownRef.current.has(idx) && (framesReady || idx === view.segment)
   const cardIdx = view.cardIdx
   const cardProduct = cardIdx >= 0 ? products[cardIdx] : undefined
   const cardData = cardProduct?.data
@@ -687,7 +700,7 @@ export function BestsellerScene() {
                 aria-hidden="true"
               />
               {/* Остановка: кадр «товар в руке» — тот же, что последний кадр ролика, поэтому подмена мгновенная */}
-              {wants(idx) && (
+              {wants(idx) && (framesReady || isHold) && (
                 <img
                   src={VIDEO_CONFIG.stepPoster(fmt, idx)}
                   alt=""
