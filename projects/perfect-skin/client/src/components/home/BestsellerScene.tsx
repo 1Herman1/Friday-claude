@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useProductDetail } from '@/hooks/useProductDetail'
 import { PriceTag } from '@/components/product/PriceTag'
+import { ProductCard } from '@/components/catalog/ProductCard'
 import { useCart } from '@/context/CartContext'
 import { useDrawer } from '@/context/DrawerContext'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
@@ -14,6 +15,11 @@ import { isAutoScrolling } from '@/lib/scroll-top'
 const SCENE = '/video/bestsellers'
 // Имена файлов при замене роликов не меняются — метка версии не даёт браузеру показать старые из кэша.
 const MEDIA_V = '?v=20261014'
+// Размытая копия стартового кадра (~0,6 КБ): видна сразу, пока кадры и ролики ещё грузятся
+const SCENE_PLACEHOLDER = {
+  desktop: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gAPTGF2YzYxLjMuMTAwAP/bAEMADQkKCwoIDQsKCw4ODQ8TIBUTEhITJxweFyAuKTEwLiktLDM6Sj4zNkY3LC1AV0FGTE5SU1IyPlphWlBgSlFST//bAEMBDg4OExETJhUVJk81LTVPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT//AABEIABIAIAMBIgACEQEDEQH/xAAaAAACAwEBAAAAAAAAAAAAAAAAAwEEBQYH/8QAIxAAAgICAgEEAwAAAAAAAAAAAQIAAwQRElFBFCEjgTJhkv/EABUBAQEAAAAAAAAAAAAAAAAAAAMC/8QAFxEBAQEBAAAAAAAAAAAAAAAAAAECUf/aAAwDAQACEQMRAD8A9Gi7W4Vu5BIUE6A2TJ5ReQEtx7K391ZCCPqSpz1rXvtvTtUWO/k8fXcrFLtFTfrfSATVyHXHx7Uqx2tZiWUeORA7/cWasfe+T/yYNyaa415DfiYQiUUU7Ce4mEIdJH//2Q==',
+  mobile: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gAPTGF2YzYxLjMuMTAwAP/bAEMADQkKCwoIDQsKCw4ODQ8TIBUTEhITJxweFyAuKTEwLiktLDM6Sj4zNkY3LC1AV0FGTE5SU1IyPlphWlBgSlFST//bAEMBDg4OExETJhUVJk81LTVPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT//AABEIACAAEgMBIgACEQEDEQH/xAAYAAADAQEAAAAAAAAAAAAAAAAABAUCBv/EACoQAAEEAAQEBQUAAAAAAAAAAAEAAgMRBBITIQUUMUEjMlFTYXFygZGS/8QAFgEBAQEAAAAAAAAAAAAAAAAAAwIB/8QAGREBAQEBAQEAAAAAAAAAAAAAAQACERJh/9oADAMBAAIRAxEAPwDreLTwxRtbLK1hcdgep/CkSzNByRsdJJV5elfX0T/E2Dm5peS1XxwtLH5iLt2/6HdE+CEbM0VBgF10pBoVny5CkamJ9hn9oThjdflKFHK/XysYm3F/hk5oi2wQp2PGNnhfDG7Ta5oAdTTRsKjIaOw7Jd5SLGFnXPfD7/cELF/CFPW3hf/Z',
+}
 const segments = ['0-1', '1-2', '2-3', '3-4']
 const VIDEO_CONFIG = {
   desktop: segments.map((s) => `${SCENE}/desktop/${s}.mp4`),
@@ -63,6 +69,8 @@ export function BestsellerScene() {
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const endRef = useRef<HTMLDivElement>(null)
+  // Кадры сцены качаем только рядом с экраном и для текущего и соседних шагов; показанный кадр не убираем
+  const shownRef = useRef(new Set<number>())
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null, null, null])
   const primedRef = useRef(false)
   const videoReadyRef = useRef<boolean[]>([false, false, false, false])
@@ -365,20 +373,36 @@ export function BestsellerScene() {
     const net = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
     if (net?.saveData || /(^|-)2g$/.test(net?.effectiveType ?? '')) return
     const list = isDesktop ? VIDEO_CONFIG.desktop : VIDEO_CONFIG.mobile
-    list.forEach(async (src, i) => {
-      try {
-        const res = await fetch(`${src.replace(/\.mp4$/, `.${ext}`)}${MEDIA_V}`, { signal: abort.signal })
-        // Сервер на несуществующий файл может вернуть index.html со статусом 200.
-        if (!res.ok || !res.headers.get('content-type')?.startsWith('video/')) return
-        const blob = await res.blob()
+    const fmtNow = isDesktop ? 'desktop' : 'mobile'
+    const preload = (src: string) =>
+      new Promise<void>((resolve) => {
+        const img = new Image()
+        img.setAttribute('fetchpriority', 'high')
+        img.onload = img.onerror = () => resolve()
+        img.src = src
+      })
+    // Очередь, а не толпа: на медленной сети параллельные ролики забирали канал у кадров,
+    // и сцена стояла пустой. Сначала кадры старта и первого товара, потом ролики по одному.
+    void (async () => {
+      await preload(VIDEO_CONFIG.startPoster(fmtNow, 0))
+      await preload(VIDEO_CONFIG.stepPoster(fmtNow, 0))
+      for (let i = 0; i < list.length; i++) {
         if (!alive) return
-        const url = URL.createObjectURL(blob)
-        urls.push(url)
-        setBlobs((prev) => prev.map((b, j) => (j === i ? url : b)))
-      } catch {
-        // Без ролика шаг остаётся стоп-кадром.
+        try {
+          const res = await fetch(`${list[i].replace(/\.mp4$/, `.${ext}`)}${MEDIA_V}`, { signal: abort.signal })
+          // Сервер на несуществующий файл может вернуть index.html со статусом 200.
+          if (!res.ok || !res.headers.get('content-type')?.startsWith('video/')) continue
+          const blob = await res.blob()
+          if (!alive) return
+          const url = URL.createObjectURL(blob)
+          urls.push(url)
+          setBlobs((prev) => prev.map((b, j) => (j === i ? url : b)))
+        } catch {
+          // Без ролика шаг остаётся стоп-кадром; при уходе со страницы загрузка прервана.
+          if (!alive) return
+        }
       }
-    })
+    })()
     return () => {
       alive = false
       abort.abort()
@@ -399,10 +423,8 @@ export function BestsellerScene() {
     }
   }, [])
 
-  // Десктоп, как на витрине: пока крутят колесо — ролик идёт с родной скоростью,
-  // перестали — замирает; быстрый скролл сразу переключает на следующий ролик.
-  // Сегмент 0 — статичный кадр «первый товар в руке», сегменты 1..3 — ролики.
-  // Ролик всегда доигрывает до товара: быстрый скролл ставит следующие в очередь.
+  // Один жест (колесо, свайп) — один ролик с родной скоростью до следующего товара и остановка.
+  // Жест во время ролика сразу ставит его товар и запускает следующий; без ролика в памяти — стоп-кадр.
   const segRef = useRef(-1)
   function startClip(clip: number) {
     if (!blobsRef.current[clip]) {
@@ -493,59 +515,17 @@ export function BestsellerScene() {
   // Проверяем загрузку товаров
 
   if (isReducedMotion) {
-    // Режим reduced-motion: показываем 4 статичных шага в виде списка
+    // Без анимаций (системная настройка «Уменьшить движение»): те же товары обычными карточками
+    // каталога — фото товара, цена, «В корзину». Снятые с продажи не показываем.
+    const shown = products.filter((p) => p.data)
     return (
-      <section className="bg-background">
-        <div className="container-app py-16 space-y-12">
-          <div className="space-y-4">
-            <p className="text-label font-semibold uppercase tracking-wide text-primary lg:text-body-sm">Выбор косметологов</p>
-            <h2 className="text-h2 font-heading font-bold">Бестселлеры</h2>
+      <section className="bg-background py-10 md:py-14">
+        <div className="container-app">
+          <p className="text-label font-semibold uppercase tracking-wide text-primary mb-2 lg:text-body-sm">Выбор косметологов</p>
+          <h2 className="text-h2 font-heading font-bold mb-8">Бестселлеры</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            {shown.map((p) => p.data && <ProductCard key={p.slug} product={p.data} />)}
           </div>
-
-          {products.map((product, idx) => product.data && (
-            <div
-              key={product.slug}
-              className="flex gap-8 items-start"
-            >
-              <div className="flex-shrink-0 w-32 h-32 bg-muted rounded-block overflow-hidden flex items-center justify-center">
-                <img
-                  src={VIDEO_CONFIG.stepPoster(isDesktop ? 'desktop' : 'mobile', idx)}
-                  alt={`Шаг ${idx + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {product.data && (
-                <div className="flex-1">
-                  <div className="text-label uppercase text-muted-foreground mb-2">
-                    {product.data.brand?.name}
-                  </div>
-                  <h3 className="text-h3 font-heading font-bold mb-2">{product.data.name}</h3>
-                  <div className="mb-4">
-                    {product.data.variants[0] && (
-                      <div className="text-sm text-muted-foreground mb-2">
-                        {product.data.variants[0].volumeLabel}
-                      </div>
-                    )}
-                    <PriceTag
-                      price={product.data.minPrice}
-                      oldPrice={product.data.oldPrice}
-                      hidden={product.data.priceHidden}
-                      size="lg"
-                    />
-                  </div>
-                  <div className="flex gap-3">
-                    <Link
-                      to={`/product/${product.slug}`}
-                      className="text-primary hover:underline font-semibold text-sm"
-                    >
-                      Подробнее
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
         </div>
       </section>
     )
@@ -560,6 +540,8 @@ export function BestsellerScene() {
     local: playing !== null ? playFrac : stop >= 0 ? 1 : 0,
   }
   const isHold = view.isHold
+  if (isNear) [view.segment - 1, view.segment, view.segment + 1].forEach((i) => { if (i >= 0 && i < 4) shownRef.current.add(i) })
+  const wants = (idx: number) => shownRef.current.has(idx)
   const cardIdx = view.cardIdx
   const cardProduct = cardIdx >= 0 ? products[cardIdx] : undefined
   const cardData = cardProduct?.data
@@ -631,7 +613,8 @@ export function BestsellerScene() {
 
   return (
     <section ref={containerRef} style={{ height: '520vh' }} className="bg-background">
-      {/* Скринридер и клавиатура: все четыре товара сразу, без привязки к прокрутке сцены */}
+      {/* Программа чтения с экрана: все четыре товара сразу. С клавиатуры товары выбираются
+          кнопками сцены (флаконы, деления), поэтому ссылки здесь вне порядка Tab */}
       <ul className="sr-only" aria-label="Бестселлеры">
         {products.map((p) => p.data && (
           <li key={p.slug}>
@@ -668,6 +651,8 @@ export function BestsellerScene() {
           className={`absolute overflow-hidden ${isDesktop ? 'inset-0' : 'inset-x-0 aspect-[9/16] md:[--scene-shift:6rem] lg:[--scene-shift:10rem] [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_86%,transparent)]'}`}
           style={isDesktop ? undefined : { top: `calc((100dvh - 4rem) / 2 - ${(MOBILE_BAND * 1600) / 9}vw + var(--scene-shift, 0px))` }}
         >
+          {/* Размытая заглушка: под кадрами, видна, пока они не пришли — пустого экрана нет ни на какой сети */}
+          <div aria-hidden="true" className="absolute inset-0 bg-cover bg-center blur-xl scale-110" style={{ backgroundImage: `url(${SCENE_PLACEHOLDER[fmt]})` }} />
           <div className="absolute inset-0">
           {[0, 1, 2, 3].map(idx => (
             <div
@@ -694,23 +679,25 @@ export function BestsellerScene() {
                 }}
                 className="w-full h-full object-cover"
                 src={blobs[idx] ?? undefined}
-                poster={VIDEO_CONFIG.startPoster(fmt, idx)}
+                poster={wants(idx) ? VIDEO_CONFIG.startPoster(fmt, idx) : undefined}
                 muted
                 playsInline
                 preload="auto"
                 aria-hidden="true"
               />
               {/* Остановка: кадр «товар в руке» — тот же, что последний кадр ролика, поэтому подмена мгновенная */}
-              <img
-                src={VIDEO_CONFIG.stepPoster(fmt, idx)}
-                alt=""
-                aria-hidden="true"
-                className={`absolute inset-0 w-full h-full object-cover ${
-                  view.segment === idx && isHold ? 'opacity-100' : 'opacity-0'
-                }`}
-              />
+              {wants(idx) && (
+                <img
+                  src={VIDEO_CONFIG.stepPoster(fmt, idx)}
+                  alt=""
+                  aria-hidden="true"
+                  className={`absolute inset-0 w-full h-full object-cover ${
+                    view.segment === idx && isHold ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+              )}
               {/* Ролик ещё не в памяти — стартовый кадр шага, на остановке он растворяется в кадр товара */}
-              {view.segment === idx && !blobs[idx] && (
+              {view.segment === idx && !blobs[idx] && wants(idx) && (
                 <img
                   src={VIDEO_CONFIG.startPoster(fmt, idx)}
                   alt=""
