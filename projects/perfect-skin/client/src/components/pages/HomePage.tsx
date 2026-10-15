@@ -3,6 +3,7 @@ import { CtaTiles } from '@/components/home/CtaTiles'
 import { BrandsSection } from '@/components/home/BrandsSection'
 import { CategoryAccordion } from '@/components/home/CategoryAccordion'
 import { BestsellerScene } from '@/components/home/BestsellerScene'
+import { PopularSection } from '@/components/home/PopularSection'
 import { ProSection } from '@/components/home/ProSection'
 import { About } from '@/components/home/About'
 import { FaqSection } from '@/components/home/FaqSection'
@@ -25,7 +26,8 @@ export function HomePage() {
       {/* Bestsellers Scrollytelling Scene */}
       <BestsellerScene />
 
-      {/* Bestsellers Grid */}
+      {/* Popular: сетка, которой управляет клиент */}
+      <PopularSection />
 
       {/* Pro Section */}
       <ProSection />
