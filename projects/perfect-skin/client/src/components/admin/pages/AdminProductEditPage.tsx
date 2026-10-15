@@ -11,6 +11,8 @@ import {
   adminUploadProductImage,
   adminDeleteProductImage,
   adminReorderProductImages,
+  adminGetPopular,
+  adminSetPopular,
   type ProductEditData,
   type ProductDictionaries,
   type ProductVariant,
@@ -54,6 +56,11 @@ function isIssue(value: unknown): value is ValidationIssue {
 const isDetailsIssue = (issue: ValidationIssue): boolean =>
   issue.path === 'details' || issue.path.startsWith('details.')
 
+// Столько же разрешает сервер в PUT /admin/popular
+const POPULAR_LIMIT = 20
+const POPULAR_LIMIT_MESSAGE =
+  'В «Выбор покупателей» уже 20 товаров — уберите лишний во вкладке «Выбор покупателей»'
+
 export function AdminProductEditPage() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -92,6 +99,9 @@ export function AdminProductEditPage() {
   const [detailsText, setDetailsText] = useState('')
   const [savedDetailsText, setSavedDetailsText] = useState('')
   const [issues, setIssues] = useState<ValidationIssue[]>([])
+  const [inPopular, setInPopular] = useState(false)
+  // null — список не загрузился, переключатель недоступен
+  const [savedInPopular, setSavedInPopular] = useState<boolean | null>(null)
 
   const loadDictionaries = async () => {
     try {
@@ -123,8 +133,41 @@ export function AdminProductEditPage() {
     }
   }
 
+  const loadPopular = async () => {
+    if (isNew) return
+    try {
+      const popular = await adminGetPopular()
+      const pinned = popular.some((p) => p.id === id)
+      setInPopular(pinned)
+      setSavedInPopular(pinned)
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Не удалось загрузить «Выбор покупателей»')
+    }
+  }
+
+  // Ошибка возвращается текстом, чтобы сбой не отменял уже сохранённые поля товара
+  const savePopular = async (): Promise<string | null> => {
+    if (savedInPopular === null || inPopular === savedInPopular) return null
+    try {
+      const ids = (await adminGetPopular()).map((p) => p.id)
+      let next = ids
+      if (inPopular && !ids.includes(id!)) {
+        if (ids.length >= POPULAR_LIMIT) return POPULAR_LIMIT_MESSAGE
+        next = [...ids, id!]
+      } else if (!inPopular) {
+        next = ids.filter((pid) => pid !== id)
+      }
+      if (next !== ids) await adminSetPopular(next)
+      setSavedInPopular(inPopular)
+      return null
+    } catch (err) {
+      if (err instanceof ApiError) return err.message || 'Ошибка при сохранении «Выбор покупателей»'
+      return 'Нет соединения с сервером'
+    }
+  }
+
   useEffect(() => {
-    Promise.all([loadDictionaries(), loadProduct()])
+    Promise.all([loadDictionaries(), loadProduct(), loadPopular()])
   }, [])
 
   const handleInputChange = (field: string, value: any) => {
@@ -207,6 +250,8 @@ export function AdminProductEditPage() {
         setSavedDetailsText(savedJson)
         setSuccess('Товар сохранен')
         setTimeout(() => setSuccess(''), 3000)
+        const popularError = await savePopular()
+        if (popularError) setError(popularError)
       }
     } catch (err) {
       if (err instanceof ApiError) {
@@ -384,6 +429,7 @@ export function AdminProductEditPage() {
     { value: 'express_care', label: 'Экспресс-уход' },
     { value: 'intensive_care', label: 'Интенсивный уход' },
     { value: 'nourishing', label: 'Питание' },
+    { value: 'oxidative_stress', label: 'Оксидативный стресс' },
   ]
 
   return (
@@ -555,6 +601,21 @@ export function AdminProductEditPage() {
                 />
                 <span className="text-label font-sans text-foreground">Избранное</span>
               </label>
+              {!isNew && (
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inPopular}
+                    disabled={savedInPopular === null}
+                    onChange={(e) => {
+                      setInPopular(e.target.checked)
+                      setError('')
+                    }}
+                    className="w-4 h-4 rounded border-border-strong"
+                  />
+                  <span className="text-label font-sans text-foreground">Показывать в «Выбор покупателей»</span>
+                </label>
+              )}
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"

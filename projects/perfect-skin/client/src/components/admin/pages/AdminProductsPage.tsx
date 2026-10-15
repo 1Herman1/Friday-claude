@@ -101,7 +101,7 @@ export function AdminProductsPage() {
               : 'border-transparent text-muted-foreground hover:text-foreground'
           }`}
         >
-          Популярные
+          Выбор покупателей
         </button>
       </div>
 
@@ -266,7 +266,7 @@ export function AdminProductsPage() {
   )
 }
 
-// ──────────────────────────────── Вкладка "Популярные" ────────────────────────────────
+// ──────────────────────────────── Вкладка "Выбор покупателей" ────────────────────────────────
 
 function PopularTab() {
   const [popular, setPopular] = useState<PopularProduct[]>([])
@@ -436,9 +436,9 @@ function PopularTab() {
 
       {/* List of popular products */}
       <div className="bg-card border border-border rounded-block p-6 mb-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-2">
           <h2 className="text-lg font-heading font-bold text-foreground">
-            Закреплённые товары ({localOrder.length})
+            Выбор покупателей ({localOrder.length})
           </h2>
           <button
             onClick={handleSave}
@@ -448,6 +448,9 @@ function PopularTab() {
             {saving ? 'Сохранение…' : 'Сохранить порядок'}
           </button>
         </div>
+        <p className="text-sm text-muted-foreground mb-6">
+          Первые 4 товара показываются на главной под «Бестселлерами». Если отмечено меньше — добираются самые продаваемые за 90 дней. Товары сцены «Бестселлеры» в этой сетке не повторяются.
+        </p>
 
         {loading ? (
           <div className="text-center py-8 text-muted-foreground">Загрузка…</div>

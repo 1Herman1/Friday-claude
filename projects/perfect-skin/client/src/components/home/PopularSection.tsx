@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ProductCard } from '@/components/catalog/ProductCard'
 import { BESTSELLER_SCENE_SLUGS } from '@/components/home/bestseller-slugs'
 import { useCatalogList } from '@/hooks/useCatalogList'
@@ -9,6 +10,20 @@ const POPULAR_FILTERS: CatalogFilters = {
   offset: 0,
 }
 
+function SectionHeading() {
+  return (
+    <div className="flex items-end justify-between gap-4 mb-8">
+      <h2 className="text-h2 font-heading font-bold">Выбор покупателей</h2>
+      <Link
+        to="/catalog"
+        className="min-h-11 inline-flex items-center gap-1 text-body-sm font-semibold text-primary hover:underline underline-offset-4 shrink-0"
+      >
+        Весь каталог →
+      </Link>
+    </div>
+  )
+}
+
 export function PopularSection() {
   const { data, loading, error } = useCatalogList(POPULAR_FILTERS)
   // Секция дополнительная: при сбое API тихо не показываем её, сцена выше и каталог работают
@@ -18,7 +33,7 @@ export function PopularSection() {
     return (
       <section className="bg-background py-10 md:py-14">
         <div className="container-app">
-          <h2 className="text-h2 font-heading font-bold mb-8">Выбор покупателей</h2>
+          <SectionHeading />
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="bg-card rounded-block overflow-hidden">
@@ -48,7 +63,7 @@ export function PopularSection() {
   return (
     <section className="bg-background py-10 md:py-14">
       <div className="container-app">
-        <h2 className="text-h2 font-heading font-bold mb-8">Выбор покупателей</h2>
+        <SectionHeading />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />

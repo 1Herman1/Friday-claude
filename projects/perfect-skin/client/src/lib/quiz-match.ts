@@ -9,7 +9,7 @@ export const NEEDS_LABELS: Record<string, string> = {
   pigmentation: 'выравнивание тона',
   acne: 'борьба с акне',
   sensitivity: 'снятие раздражения',
-  redness: 'борьба с красотой',
+  redness: 'борьба с краснотой',
   cleansing: 'глубокое очищение',
   sun_protection: 'защита от солнца',
   firming: 'укрепление',
@@ -24,6 +24,7 @@ export const NEEDS_LABELS: Record<string, string> = {
   express_care: 'экспресс-уход',
   intensive_care: 'интенсивный уход',
   nourishing: 'питание',
+  oxidative_stress: 'для защиты от оксидативного стресса',
 }
 
 export interface QuizResultStep {
