@@ -2,9 +2,11 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { useProductDetail } from '@/hooks/useProductDetail'
 import { PriceTag } from '@/components/product/PriceTag'
 import { useCart } from '@/context/CartContext'
+import { useDrawer } from '@/context/DrawerContext'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { Link } from 'react-router-dom'
 import { splitName } from '@/lib/split-name'
+import { BESTSELLER_SCENE_SLUGS } from '@/components/home/bestseller-slugs'
 import { setScenePinned, useScenePinned } from '@/lib/scene-pin'
 import { isAutoScrolling } from '@/lib/scroll-top'
 
@@ -21,12 +23,6 @@ const VIDEO_CONFIG = {
   stepPoster: (fmt: 'desktop' | 'mobile', idx: number) => `${SCENE}/${fmt}/k${idx + 1}.jpg${MEDIA_V}`,
 }
 
-export const BESTSELLER_SCENE_SLUGS: readonly string[] = [
-  'scrub-lotion-krem-dlya-snyatiya-makiyazha',
-  'kerathor-plus-izotonicheskij-tonik',
-  'hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej',
-  'serum-triple-accion-syvorotka-trojnogo-dejstviya',
-]
 
 // Товар снят или скрыт (API ответил 404): карточка показывает эти данные вместо пустоты
 const MISSING_PRODUCTS: Record<string, { brand: string; brandSlug: string; title: string; desc: string }> = {
@@ -66,6 +62,7 @@ const MOBILE_BAND = 0.51
 export function BestsellerScene() {
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
+  const endRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null, null, null])
   const primedRef = useRef(false)
   const videoReadyRef = useRef<boolean[]>([false, false, false, false])
@@ -174,19 +171,30 @@ export function BestsellerScene() {
     window.scrollTo({ top: anchorOf(seg, el), behavior: 'instant' as ScrollBehavior })
   // Один жест — один шаг. Жест во время ролика сразу ставит его товар и запускает следующий;
   // после четвёртого товара жест уводит к следующей секции, до первого — к предыдущей.
+  // Свой плавный уход из сцены: флаг держится до прибытия к цели, таймер — запасной
   const releaseTimer = useRef(0)
-  const release = () => {
-    releasingRef.current = true
+  const releaseTargetRef = useRef<number | null>(null)
+  const endRelease = () => {
+    releasingRef.current = false
+    releaseTargetRef.current = null
     window.clearTimeout(releaseTimer.current)
-    releaseTimer.current = window.setTimeout(() => { releasingRef.current = false }, 1200)
   }
-  // Выход вниз: jumpTo ставит на паузу играющий ролик и встаёт на 4-м товаре, иначе ролики доиграют на ходу скролла
+  const release = (target: number) => {
+    const top = Math.max(0, Math.min(target, document.documentElement.scrollHeight - window.innerHeight))
+    releasingRef.current = true
+    releaseTargetRef.current = top
+    window.clearTimeout(releaseTimer.current)
+    releaseTimer.current = window.setTimeout(endRelease, 3000)
+    window.scrollTo({ top, behavior: 'smooth' })
+  }
+  // Выход вниз: jumpTo ставит на паузу играющий ролик и встаёт на 4-м товаре, иначе ролики доиграют на ходу скролла.
+  // Фокус переносится за сцену, чтобы Tab после «Пропустить» не возвращал в неё.
   const exitDown = () => {
     const el = containerRef.current
     if (!el) return
-    release()
     jumpTo(3)
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + el.scrollHeight, behavior: 'smooth' })
+    release(el.getBoundingClientRect().top + window.scrollY + el.scrollHeight)
+    endRef.current?.focus({ preventScroll: true })
   }
   const step = (down: boolean) => {
     const el = containerRef.current
@@ -214,8 +222,7 @@ export function BestsellerScene() {
       return
     }
     if (playingNow === null && at < 0) {
-      release()
-      window.scrollTo({ top: rect.top + window.scrollY - window.innerHeight, behavior: 'smooth' })
+      release(rect.top + window.scrollY - window.innerHeight)
       return
     }
     const prev = playingNow !== null ? playingNow - 1 : at - 1
@@ -236,11 +243,13 @@ export function BestsellerScene() {
       const viewportHeight = window.innerHeight
       const scrollProgress = Math.max(0, Math.min(1, -rect.top / (el.scrollHeight - viewportHeight)))
       const pinned = rect.top <= 1 && rect.bottom >= viewportHeight - 1
+      if (releaseTargetRef.current !== null && Math.abs(window.scrollY - releaseTargetRef.current) <= 2) endRelease()
 
       // Пока сцена на экране — шапка (и на телефоне нижняя панель) спрятаны
       setScenePinned(pinned)
       if (!isWideScene()) {
-        if (!pinned) releasingRef.current = false
+        // Сцена ушла вверх за экран — уход закончен; уход вверх снимает прибытие или таймер
+        if (!pinned) { if (rect.top <= 1) endRelease() }
         else if (!releasingRef.current && !isAutoScrolling()) {
           // Страница внутри сцены сдвинулась не свайпом сцены (инерция броска, начатое
           // снаружи перетаскивание) — ловим её на текущем шаге, товары не проскакивают.
@@ -316,7 +325,7 @@ export function BestsellerScene() {
       const el = containerRef.current
       if (!el || e.touches.length !== 1) return
       // Касание во время плавного выхода — пользователь перехватил управление
-      releasingRef.current = false
+      endRelease()
       startedPinned = pinnedNow(el)
       startY = e.touches[0].clientY
       stepped = false
@@ -573,6 +582,7 @@ export function BestsellerScene() {
             type="button"
             onClick={() => goTo(idx)}
             aria-label={name ? `Показать товар ${idx + 1}: ${name}` : `Показать товар ${idx + 1}`}
+            aria-current={cardIdx === idx ? 'true' : undefined}
             className="relative flex-1 py-5 -my-5 pointer-events-auto cursor-pointer rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
           >
             <div className="h-1 bg-foreground/10 rounded-full overflow-hidden">
@@ -631,10 +641,31 @@ export function BestsellerScene() {
       </ul>
       {/* Sticky container: touch-none только там, где свайп — шаг сцены; на тач-экране шире 768 страница должна прокручиваться */}
       <div ref={stickyRef} className={`sticky top-0 h-screen overflow-hidden bg-background ${isDesktop ? '' : 'supports-[height:100dvh]:h-dvh'} ${scenePinned && !isDesktop ? 'touch-none' : ''}`}>
+        {/* «Пропустить» — первым в порядке Tab; плашка держит контраст и поверх руки на планшете */}
+        <div className="absolute inset-x-0 top-0 z-20 pointer-events-none">
+          <div className="container-app">
+            <div className="relative">
+              <button
+                type="button"
+                onClick={exitDown}
+                aria-label="Пропустить бестселлеры"
+                className={`absolute right-0 ${headTop} -translate-y-4 md:-translate-y-3 pointer-events-auto min-h-11 -mr-3 inline-flex items-center text-body-sm font-semibold text-muted-foreground hover:text-primary transition-colors duration-200 motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring rounded-pill`}
+              >
+                {/* Видимая плашка ниже зоны нажатия (44 px), чтобы на узком экране не касаться заголовка */}
+                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-pill bg-background/90 shadow-sm">
+                  Пропустить
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="shrink-0">
+                    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
         {/* Видео фреймы */}
         {/* Телефон: кадр 9:16 во всю ширину, ряд товаров — посередине между заголовком и карточкой */}
         <div
-          className={`absolute overflow-hidden ${isDesktop ? 'inset-0' : 'inset-x-0 aspect-[9/16] md:[--scene-shift:6rem] [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_86%,transparent)]'}`}
+          className={`absolute overflow-hidden ${isDesktop ? 'inset-0' : 'inset-x-0 aspect-[9/16] md:[--scene-shift:6rem] lg:[--scene-shift:10rem] [mask-image:linear-gradient(to_bottom,transparent,#000_14%,#000_86%,transparent)]'}`}
           style={isDesktop ? undefined : { top: `calc((100dvh - 4rem) / 2 - ${(MOBILE_BAND * 1600) / 9}vw + var(--scene-shift, 0px))` }}
         >
           <div className="absolute inset-0">
@@ -718,17 +749,6 @@ export function BestsellerScene() {
                 <p className="text-label font-semibold uppercase tracking-wide text-primary mb-2 lg:text-body-sm">Выбор косметологов</p>
                 <h2 className="text-h2 font-heading font-bold min-[1800px]:text-[clamp(3rem,2.6vw,4.25rem)]">Бестселлеры</h2>
               </div>
-              <button
-                type="button"
-                onClick={exitDown}
-                aria-label="Пропустить бестселлеры"
-                className={`absolute right-0 ${headTop} pointer-events-auto min-h-11 px-2 -mr-2 inline-flex items-center gap-1 text-body-sm font-semibold text-muted-foreground hover:text-primary transition-colors duration-200 motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring rounded-pill`}
-              >
-                Пропустить
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="shrink-0">
-                  <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
 
               {/* Карточка товара - десктоп */}
               <div className={`absolute left-0 top-[54%] -translate-y-[8.5rem] min-[1800px]:-translate-y-[9rem] ${isDesktop ? '' : 'hidden'}`}>
@@ -874,6 +894,8 @@ export function BestsellerScene() {
           </div>
         </div>
       </div>
+      {/* Сюда уходит фокус после «Пропустить»: следующий Tab — уже секция после сцены */}
+      <div ref={endRef} tabIndex={-1} className="outline-none" />
     </section>
   )
 }
@@ -885,17 +907,26 @@ interface ProductCardButtonProps {
 }
 
 function ProductCardButton({ product, user, onAddToCart }: ProductCardButtonProps) {
-  const [state, setState] = useState<'idle' | 'loading' | 'success'>('idle')
+  // В сцене корзина сама не выезжает; после добавления кнопка становится путём в корзину
+  // и остаётся им, пока не сменится товар (карточка перемонтируется по слагу).
+  const [state, setState] = useState<'idle' | 'loading' | 'success' | 'added'>('idle')
+  const { openCart } = useDrawer()
+  const timerRef = useRef(0)
+  useEffect(() => () => window.clearTimeout(timerRef.current), [])
   const isProProduct = product?.isProfessional && !isApprovedPro(user)
 
   const handleClick = async () => {
+    if (state === 'added') {
+      openCart()
+      return
+    }
     if (!product?.inStock || product?.variants?.length === 0) return
 
     try {
       setState('loading')
       await onAddToCart()
       setState('success')
-      setTimeout(() => setState('idle'), 2500)
+      timerRef.current = window.setTimeout(() => setState('added'), 1500)
     } catch {
       setState('idle')
     }
@@ -915,16 +946,20 @@ function ProductCardButton({ product, user, onAddToCart }: ProductCardButtonProp
   return (
     <button
       onClick={handleClick}
-      disabled={!product?.inStock || state === 'loading'}
-      className="w-full py-2 px-3 leading-tight bg-primary text-primary-foreground font-heading font-bold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11 text-body-sm"
+      disabled={(!product?.inStock && state !== 'added') || state === 'loading'}
+      className={`w-full py-2 px-3 leading-tight font-heading font-bold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11 text-body-sm ${
+        state === 'added' ? 'border border-primary text-primary bg-card' : 'bg-primary text-primary-foreground'
+      }`}
     >
-      {state === 'success'
-        ? 'Добавлено'
-        : state === 'loading'
-          ? 'Добавляю...'
-          : product?.inStock
-            ? 'В корзину'
-            : 'Нет в наличии'}
+      {state === 'added'
+        ? 'В корзине →'
+        : state === 'success'
+          ? 'Добавлено'
+          : state === 'loading'
+            ? 'Добавляю...'
+            : product?.inStock
+              ? 'В корзину'
+              : 'Нет в наличии'}
     </button>
   )
 }

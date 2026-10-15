@@ -110,10 +110,10 @@ export function ProductCard({ product, onAddToCart, eager, aspectRatio = '3/4' }
       </div>
 
       {/* Content */}
-      <div className="p-5 flex flex-col flex-1">
+      <div className="p-3 md:p-5 flex flex-col flex-1">
         {/* Brand and Line */}
         {(product.brand || product.line) && (
-          <div className="text-xs text-muted-foreground mb-2">
+          <div className="text-xs text-muted-foreground mb-2 truncate">
             {product.brand?.name && <span>{product.brand.name}</span>}
             {product.brand?.name && product.line?.name && <span> • </span>}
             {product.line?.name && <span>{product.line.name}</span>}
@@ -144,7 +144,7 @@ export function ProductCard({ product, onAddToCart, eager, aspectRatio = '3/4' }
           {isProProduct ? (
             <Link
               to="/pro"
-              className="w-full py-3 px-6 bg-accent text-accent text-center font-sans font-semibold rounded-pill hover:opacity-90 transition-opacity duration-200 min-h-11 flex items-center justify-center"
+              className="w-full py-3 px-3 md:px-6 whitespace-nowrap bg-accent text-accent text-center font-sans font-semibold rounded-pill hover:opacity-90 transition-opacity duration-200 min-h-11 flex items-center justify-center"
             >
               Для специалистов
             </Link>
@@ -152,7 +152,7 @@ export function ProductCard({ product, onAddToCart, eager, aspectRatio = '3/4' }
             <button
               onClick={handleAddToCart}
               disabled={!product.inStock || addingState === 'loading'}
-              className="w-full py-3 px-6 bg-primary text-primary-foreground font-sans font-semibold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11"
+              className="w-full py-3 px-3 md:px-6 whitespace-nowrap bg-primary text-primary-foreground font-sans font-semibold rounded-pill hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200 min-h-11"
             >
               {addingState === 'success'
                 ? 'Добавлено ✓'

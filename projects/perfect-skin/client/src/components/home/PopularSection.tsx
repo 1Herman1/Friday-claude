@@ -1,5 +1,5 @@
 import { ProductCard } from '@/components/catalog/ProductCard'
-import { BESTSELLER_SCENE_SLUGS } from '@/components/home/BestsellerScene'
+import { BESTSELLER_SCENE_SLUGS } from '@/components/home/bestseller-slugs'
 import { useCatalogList } from '@/hooks/useCatalogList'
 import type { CatalogFilters } from '@/hooks/useCatalogList'
 
@@ -10,13 +10,15 @@ const POPULAR_FILTERS: CatalogFilters = {
 }
 
 export function PopularSection() {
-  const { data, loading } = useCatalogList(POPULAR_FILTERS)
+  const { data, loading, error } = useCatalogList(POPULAR_FILTERS)
+  // Секция дополнительная: при сбое API тихо не показываем её, сцена выше и каталог работают
+  if (error) return null
 
   if (loading) {
     return (
       <section className="bg-background py-10 md:py-14">
         <div className="container-app">
-          <h2 className="text-h2 font-heading font-bold mb-8">Популярное</h2>
+          <h2 className="text-h2 font-heading font-bold mb-8">Выбор покупателей</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="bg-card rounded-block overflow-hidden">
@@ -46,14 +48,10 @@ export function PopularSection() {
   return (
     <section className="bg-background py-10 md:py-14">
       <div className="container-app">
-        <h2 className="text-h2 font-heading font-bold mb-8">Популярное</h2>
+        <h2 className="text-h2 font-heading font-bold mb-8">Выбор покупателей</h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-          {products.map((product, i) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              eager={i < 4}
-            />
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>
