@@ -96,10 +96,12 @@ export function CareRequestForm({ onDone }: { onDone: () => void }) {
   }
 
   return (
-    <div className="px-4 sm:px-6 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-      <p className="text-body-sm text-muted-foreground mb-6">
-        Оставьте контакты — специалист Отдела заботы свяжется с вами и расскажет о персональном сопровождении.
-      </p>
+    <div className="px-4 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      {status !== 'done' && (
+        <p className="text-body-sm text-muted-foreground mb-6">
+          Оставьте контакты — специалист Отдела заботы свяжется с вами и расскажет о персональном сопровождении.
+        </p>
+      )}
 
       {status === 'done' ? (
         <div ref={doneRef} tabIndex={-1} role="status" className="space-y-6 outline-none">

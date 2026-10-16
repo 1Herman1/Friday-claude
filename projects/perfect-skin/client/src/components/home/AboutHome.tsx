@@ -43,12 +43,12 @@ export function AboutHome() {
           </p>
         </div>
 
-        <figure className="relative md:max-w-[28rem] lg:max-w-none lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:row-span-2 lg:self-start">
+        <figure className="relative lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:row-span-2 lg:self-start">
           <picture>
             <source
               type="image/webp"
               srcSet="/photos/m14-640.webp 640w, /photos/m14-1122.webp 1122w"
-              sizes="(min-width:1280px) 610px, (min-width:1024px) 45vw, (min-width:768px) 448px, 100vw"
+              sizes="(min-width:1280px) 610px, (min-width:1024px) 45vw, 100vw"
             />
             <img
               src="/photos/m14.png"
@@ -57,7 +57,7 @@ export function AboutHome() {
               loading="lazy"
               decoding="async"
               alt="Косметолог наносит маску кистью"
-              className="w-full aspect-[4/5] object-cover object-top rounded-media"
+              className="w-full aspect-[4/5] md:aspect-[4/3] lg:aspect-[4/5] object-cover object-top rounded-media"
             />
           </picture>
           <div className="relative z-[1] -mt-12 ml-6 w-fit max-w-[calc(100%-1.5rem)] rounded-block bg-accent text-accent-foreground p-6 lg:absolute lg:mt-0 lg:ml-0 lg:-left-8 lg:bottom-8 lg:p-8 xl:-left-16">

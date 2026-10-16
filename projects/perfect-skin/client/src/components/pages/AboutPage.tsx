@@ -48,7 +48,7 @@ export function AboutPage() {
               формулы, и подбирать их нужно правильно: ошибка в выборе может не дать результата или не подойти
               вашей коже.
             </p>
-            <picture>
+            <picture className="block">
               <source
                 type="image/webp"
                 srcSet="/photos/m16-640.webp 640w, /photos/m16-1254.webp 1254w"
@@ -71,8 +71,8 @@ export function AboutPage() {
           <h2 id="about-care-title" className="text-h3 md:col-span-4 md:row-start-1 [text-wrap:balance]">
             Система заботы
           </h2>
-          <div className={`${BODY_COL} max-w-prose space-y-8 md:row-start-1 md:row-span-2`}>
-            <p className="text-lead text-foreground">
+          <div className={`${BODY_COL} space-y-8 md:row-start-1 md:row-span-2`}>
+            <p className="max-w-prose text-lead text-foreground">
               Чтобы уход подходил именно вашей коже, мы выстроили систему заботы из четырёх частей.
             </p>
             <CareList items={CARE_STEPS} size="md" />
