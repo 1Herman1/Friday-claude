@@ -35,6 +35,7 @@
 - `balance-toner-tonik-s-morskoj-termalnoj-vodoj` ← glacee.docx «BALANCE TONER – Балансирующий тоник с морской термальной водой» [250 мл.] (primary)
 - `baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba` ← isseimi-part3.docx «BAOBAB OIL ILLUMINATOR AND REPAIRER Восстанавливающее масло баобаба» [Объем: 30 мл] (primary)
 - `bee-venom-cream-antivozrastnoj-krem` ← isseimi-part2.docx «BEE VENOM CREAM – Антивозрастной крем» [Объем: 50 мл] (primary)
+- `beevenom-serum-syvorotka-pchelinyj-yad` ← isseimi-part2.docx «BEE VENOM SERUM – Регенерирующая сыворотка с пчелиным ядом» [Объем: 30 мл (флакон с пипеткой)] (primary)
 - `biocell-syvorotka-obnovlyayushhaya` ← isseimi-part3.docx «BIOCELL СЫВОРОТКА ОБНОВЛЯЮЩАЯ» [Объем: 30 мл] (primary)
 - `blockmelan-depigmentiruyushhaya-syvorotka` ← isseimi-part3.docx «BLOCKMELAN Депигментирующая сыворотка» [30 мл] (primary)
 - `cbd-night-mask-nochnaya-vosstanavlivayushhaya-maska` ← glacee.docx «CBD NIGHT MASK – Ночная восстанавливающая маска с каннабидиолом и мелатонином» [50 мл] (primary)
@@ -85,7 +86,6 @@
 - `tts-energizing-mask-maska-so-stvolovymi-kletkami` ← isseimi-part2.docx «TTS ENERGIZING MASK – Маска со стволовыми клетками» [Монодоза: 1 маска, пропитанная высококонцентрированным активом для регенерации и питания кожи.] (primary)
 - `tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska` ← isseimi-part2.docx «TTS Essential Mask – Укрепляющая и обновляющая маска» [Монодоза: 1 маска, пропитанная высококонцентрированным лифтинг-активом.] (primary)
 - `tts-moisturizing-mask-uvlazhnyayushhaya-maska` ← isseimi-part2.docx «TTS MOISTURIZING MASK - УВЛАЖНЯЮЩАЯ МАСКА» [Монодоза: 1 маска, пропитанная высококонцентрированным активом для глубокого увлажнения кожи.] (primary)
-- `veevenom-serum-syvorotka-pchelinyj-yad` ← isseimi-part2.docx «BEE VENOM SERUM – Регенерирующая сыворотка с пчелиным ядом» [Объем: 30 мл (флакон с пипеткой)] (primary)
 - `vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s` ← isseimi-part3.docx «Vitamina C + Peptidos Hidrosoluble – Сыворотка с витамином С» [Флакон с пипеткой 50 мл] (primary)
 
 ## Нет на сайте (отложено, не заводим) (0)
@@ -109,7 +109,7 @@
 
 Нет.
 
-## Применённые правила (40)
+## Применённые правила (41)
 
 - алиас «peeloffmask» → mascarilla-peel-off-vitamina-c-maska-s-vitaminom-s-alginatnaya
 - isseimi-part3.docx: «PEEL -OFF MASK» → mascarilla-peel-off-vitamina-c-maska-s-vitaminom-s-alginatnaya (алиас)
@@ -147,6 +147,7 @@
 - glacee.docx: исправлено: «ACCIÓN .» → «ACCIÓN.» (1)
 - glacee.docx: неразрывные пробелы заменены на обычные (1)
 - glacee.docx: исправлено: «ВALANCE» → «BALANCE» (1)
+- Правки клиента поверх файлов: 12 товаров (product-details-overrides.json)
 - Заголовки и маркеры: NBSP и повторные пробелы схлопнуты, маркеры 💡 ◀ • удалены; текст правился только по таблице server/src/lib/text-fixes.ts (опечатки, знаки, смешанные алфавиты) — каждая правка выше
 - Строки «…» и точек — границы блоков; INCI («Состав (INCI)») не сохраняется
 - Заголовки секций: регистр, ё, латинская C вместо кириллической С («Cпособ» → «Способ»), двоеточие необязательно

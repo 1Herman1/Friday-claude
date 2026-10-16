@@ -334,6 +334,21 @@ npm run import:pro-products --workspace=@ps/server            # сухой пр�
 npm run import:pro-products --workspace=@ps/server -- --apply
 ```
 
+### Состав (INCI)
+
+`server/prisma/import-inci.ts` пишет `products.inciText` из
+`docs/projects/perfect-skin/content/inci/isseimi.json` — только позиции с
+`clientDecision: "keep"` (проверены клиентом). Пустой состав не ставит и
+существующий не стирает; товар из файла, которого нет на сайте, останавливает
+`--apply` без записи. Правки активных ингредиентов от клиента — в
+`server/assets/product-details-overrides.json`, их применяет `parse:client-docx`,
+на сайт они попадают через `import:content`.
+
+```bash
+npm run import:inci --workspace=@ps/server               # сухой прогон
+npm run import:inci --workspace=@ps/server -- --apply    # одна транзакция; повтор ничего не меняет
+```
+
 ### Карточки товаров («Аптечная карта»)
 
 Структурированные описания из файлов клиента лежат в `server/assets/product-details/<slug>.json`
@@ -352,7 +367,7 @@ npm run import:content --workspace=@ps/server -- --apply    # одна тран�
 
 ```bash
 docker compose -f projects/perfect-skin/deploy/docker-compose.prod.yml exec -T postgres \
-  psql -U ps -d perfect_skin -c "COPY (SELECT id, slug, name, description, usage, details FROM products) TO STDOUT WITH (FORMAT csv, HEADER)" \
+  psql -U ps -d perfect_skin -c "COPY (SELECT id, slug, name, description, usage, details, \"inciText\" FROM products) TO STDOUT WITH (FORMAT csv, HEADER)" \
   > /var/backups/perfect-skin/products_text_before_content_$(date +%Y%m%d_%H%M%S).csv
 ```
 

@@ -2,9 +2,14 @@
   "_meta": {
     "source": "https://www.isseimi.es",
     "collectedAt": "2026-10-13",
-    "note": "INCI copied verbatim from the Spanish product pages of isseimi.es (manufacturer site, allowed by the client). Not yet confirmed by the client.",
+    "note": "INCI copied verbatim from the Spanish product pages of isseimi.es (manufacturer site, allowed by the client). Confirmed by the client on 2026-10-16, see clientReview.",
     "processed": 31,
-    "scrapes": 30
+    "scrapes": 30,
+    "clientReview": {
+      "date": "2026-10-16",
+      "file": "ISSEIMI-sostav-otvet-klienta-2026-10-16.xlsx",
+      "note": "Клиент проверил: INCI оставляем у всех, кроме NATURAL CLEANSING MILK — профессиональный объём, на проф. продукцию INCI пока не ставим"
+    }
   },
   "items": [
     {
@@ -16,7 +21,8 @@
       "article": 2046,
       "confidence": "high",
       "reason": "Код картинки 2046.jpg совпадает с артикулом 2046 (O3 Depur, 50 мл); совпадают название, объём и активы (озон, алоэ вера, пчелиный воск, витамин E, масло шиповника).",
-      "inci": "Aqua (Water), Hydrogenated Polydecene, Aloe Barbadensis (Aloe) Leaf Juice, Glyceryl Stearate, PEG-100 Stearate, Octyldodecyl Myristate, Cera Alba (Beeswax), Cetyl Alcohol, Octyldodecanol, Carbomer, Tocopheryl Acetate, Glycerin, Triethanolamine, Ozonized Sunflower Seed Oil, Phosphatidylcholine, Lysophosphatidylethanolamine, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Phenoxyethanol, Ethylhexylglycerin, Phosphate Buffered Saline, Potassium Sorbate, Sodium Benzoate, Acrylic Acid, Parfum (Fragrance), Limonene, Linalool, Hexyl Cinnamal, Cinnamyl Alcohol, Citral, Geraniol, Amyl Cinnamal, Phenethyl Alcohol, Caprylyl Glycol, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Linalyl Acetate, Pinene."
+      "inci": "Aqua (Water), Hydrogenated Polydecene, Aloe Barbadensis (Aloe) Leaf Juice, Glyceryl Stearate, PEG-100 Stearate, Octyldodecyl Myristate, Cera Alba (Beeswax), Cetyl Alcohol, Octyldodecanol, Carbomer, Tocopheryl Acetate, Glycerin, Triethanolamine, Ozonized Sunflower Seed Oil, Phosphatidylcholine, Lysophosphatidylethanolamine, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Phenoxyethanol, Ethylhexylglycerin, Phosphate Buffered Saline, Potassium Sorbate, Sodium Benzoate, Acrylic Acid, Parfum (Fragrance), Limonene, Linalool, Hexyl Cinnamal, Cinnamyl Alcohol, Citral, Geraniol, Amyl Cinnamal, Phenethyl Alcohol, Caprylyl Glycol, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Linalyl Acetate, Pinene.",
+      "clientDecision": "keep"
     },
     {
       "slug": "collagen-booster-vosstanavlivayushhaya-syvorotka",
@@ -27,7 +33,8 @@
       "article": 2041,
       "confidence": "high",
       "reason": "Код картинки 2041.jpg совпадает с артикулом 2041 (Collagen Booster, 30 мл); совпадают название, объём и активы (EGF в липосомах, NMF, аллантоин, масло шиповника, витамин E).",
-      "inci": "Aqua (Water), Hydroxyethylcellulose, SH-Oligopeptide-1, Allantoin, Phosphatidylcholine, Glycerin, Lactic Acid, Serine, Sodium Lactate, Sorbitol, TEA-Lactate, Urea, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Tocopheryl Acetate, Sodium Chloride, Sodium Benzoate, Parfum (Fragrance), PEG-40 Hydrogenated Castor Oil, Sodium Nitrate, Ethylhexylglycerin, Phenoxyethanol, Triethanolamine, Phenethyl Alcohol, Caprylyl Glycol, Dimethyl Phenethyl Acetate, Geranyl Acetate, Hexamethylindanopyran, Juniperus Virginiana Oil, Linalyl Acetate, Pogostemon Cablin Oil, Tetramethyl Acetyloctahydronaphthalenes, Trimethylbenzenepropanol, CI 19140 (FD&C Yellow No.5), CI 15985 (FD&C Yellow No.6)."
+      "inci": "Aqua (Water), Hydroxyethylcellulose, SH-Oligopeptide-1, Allantoin, Phosphatidylcholine, Glycerin, Lactic Acid, Serine, Sodium Lactate, Sorbitol, TEA-Lactate, Urea, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Tocopheryl Acetate, Sodium Chloride, Sodium Benzoate, Parfum (Fragrance), PEG-40 Hydrogenated Castor Oil, Sodium Nitrate, Ethylhexylglycerin, Phenoxyethanol, Triethanolamine, Phenethyl Alcohol, Caprylyl Glycol, Dimethyl Phenethyl Acetate, Geranyl Acetate, Hexamethylindanopyran, Juniperus Virginiana Oil, Linalyl Acetate, Pogostemon Cablin Oil, Tetramethyl Acetyloctahydronaphthalenes, Trimethylbenzenepropanol, CI 19140 (FD&C Yellow No.5), CI 15985 (FD&C Yellow No.6).",
+      "clientDecision": "keep"
     },
     {
       "slug": "blockmelan-depigmentiruyushhaya-syvorotka",
@@ -38,7 +45,8 @@
       "article": 2069,
       "confidence": "high",
       "reason": "Код картинки 2069.jpg совпадает с артикулом 2069 (Blockmelan, 30 мл); совпадают название, объём и активы (витамин C, койевая кислота, толокнянка, солодка, олигопептид-34, молочная кислота).",
-      "inci": "Aqua (Water), Glycerin, Sodium Ascorbyl Phosphate, Polyacrylamide, Butylene Glycol, Arctostaphylos Uva Ursi (Bearberry) Leaf Extract, Kojic Acid, C13-14 Isoparaffin, Sorbitol, Glycyrrhiza Glabra (Licorice) Root Extract, Decyl Glucoside, Oligopeptide-34, Lactic Acid, Laureth-7, Disodium EDTA, Tocopheryl Acetate, Glycine Soja (Soybean) Oil, Sodium Oleate, Hydrogenated Phosphatidylcholine, Phenoxyethanol, Ethylhexylglycerin, Potassium Sorbate, Sodium Benzoate, Methylparaben, Ethylparaben."
+      "inci": "Aqua (Water), Glycerin, Sodium Ascorbyl Phosphate, Polyacrylamide, Butylene Glycol, Arctostaphylos Uva Ursi (Bearberry) Leaf Extract, Kojic Acid, C13-14 Isoparaffin, Sorbitol, Glycyrrhiza Glabra (Licorice) Root Extract, Decyl Glucoside, Oligopeptide-34, Lactic Acid, Laureth-7, Disodium EDTA, Tocopheryl Acetate, Glycine Soja (Soybean) Oil, Sodium Oleate, Hydrogenated Phosphatidylcholine, Phenoxyethanol, Ethylhexylglycerin, Potassium Sorbate, Sodium Benzoate, Methylparaben, Ethylparaben.",
+      "clientDecision": "keep"
     },
     {
       "slug": "hydra-view-gidra-krem-dlya-vek",
@@ -49,7 +57,8 @@
       "article": 2117,
       "confidence": "high",
       "reason": "Код картинки 2117.jpg совпадает с артикулом 2117 (Hydra View, 15 мл); совпадают название, объём и активы (гесперидин метилхалкон, арника, конский каштан, гамамелис, иглица, мальва, ши, воски пчелиный и жожоба).",
-      "inci": "Aqua (Water), Caprylic/ Capric Triglyceride, Octyldodecyl Myristate, Propanediol, Cetyl Alcohol, Butyrospermum Parkii (Shea) Butter, Polyglyceryl-6 Distearate, Glycerin, Aluminum Starch Octenylsuccinate, Oligopeptide-24, Simmondsia Chinensis (Jojoba) Seed Wax, Polyglyceryl-3 Beeswax, Xanthan Gum, Hesperidin Methyl Chalcone, Aesculus Hippocastanum (Horse Chestnut) Seed Extract, Arnica Montana (Arnica) Flower Extract, Hamamelis Virginiana (Witch Hazel) Leaf Extract, Malva Sylvestris (Mallow) Extract, Ruscus Aculeatus (Butcher’s Broom) Root Extract, Lactic Acid, Serine, Sodium Lactate, Sorbitol, TEA-Lactate, Urea , Allantoin, Parfum (Fragrance), Disodium EDTA, Glycine Soja (Soybean) Oil, Hydrogenated Phosphatidylcholine, Phenoxyethanol, Ethylhexylglycerin, Sodium Chloride, Sodium Oleate, Sodium Benzoate, Triethanolamine,Amyl Salicylate, Acetyl Cedrene, Linalyl Acetate, Pogostemon Cablin Oil, Tetramethyl Acetyloctahydronaphthalenes, Vanillin."
+      "inci": "Aqua (Water), Caprylic/ Capric Triglyceride, Octyldodecyl Myristate, Propanediol, Cetyl Alcohol, Butyrospermum Parkii (Shea) Butter, Polyglyceryl-6 Distearate, Glycerin, Aluminum Starch Octenylsuccinate, Oligopeptide-24, Simmondsia Chinensis (Jojoba) Seed Wax, Polyglyceryl-3 Beeswax, Xanthan Gum, Hesperidin Methyl Chalcone, Aesculus Hippocastanum (Horse Chestnut) Seed Extract, Arnica Montana (Arnica) Flower Extract, Hamamelis Virginiana (Witch Hazel) Leaf Extract, Malva Sylvestris (Mallow) Extract, Ruscus Aculeatus (Butcher’s Broom) Root Extract, Lactic Acid, Serine, Sodium Lactate, Sorbitol, TEA-Lactate, Urea , Allantoin, Parfum (Fragrance), Disodium EDTA, Glycine Soja (Soybean) Oil, Hydrogenated Phosphatidylcholine, Phenoxyethanol, Ethylhexylglycerin, Sodium Chloride, Sodium Oleate, Sodium Benzoate, Triethanolamine,Amyl Salicylate, Acetyl Cedrene, Linalyl Acetate, Pogostemon Cablin Oil, Tetramethyl Acetyloctahydronaphthalenes, Vanillin.",
+      "clientDecision": "keep"
     },
     {
       "slug": "sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj",
@@ -60,7 +69,8 @@
       "article": 2114,
       "confidence": "high",
       "reason": "Код картинки 2114.jpg совпадает с артикулом 2114 (Sea Foam, 150 мл); совпадают название, объём и активы (морская термальная вода, сера, лимонная кислота).",
-      "inci": "AQUA (WATER), SODIUM LAURETH SULFATE, COCAMIDOPROPYL BETAINE, GLYCERIN, DECYL GLUCOSIDE, PEG-30 CASTOR OIL, POLYSORBATE 20, COCO-GLUCOSIDE, MARIS AQUA (SEA WATER), SULFUR, PEG-40 HIDROGENATED CASTOR OIL, PARFUM (FRAGANCE), LIMONENE, LINALOOL, ALPHA-ISOMETHYL IONONE, TETRAMETHYL ACETYLOCTAHYDRONAPHTHALENES, CITRIC ACID, ETHYLHEXYLGLYCERIN, PHENOXYETHANOL, METHYLCHLOROISOTHIAZOLINONE ,METHYLISOTHIAZOLINONE, CI 42090."
+      "inci": "AQUA (WATER), SODIUM LAURETH SULFATE, COCAMIDOPROPYL BETAINE, GLYCERIN, DECYL GLUCOSIDE, PEG-30 CASTOR OIL, POLYSORBATE 20, COCO-GLUCOSIDE, MARIS AQUA (SEA WATER), SULFUR, PEG-40 HIDROGENATED CASTOR OIL, PARFUM (FRAGANCE), LIMONENE, LINALOOL, ALPHA-ISOMETHYL IONONE, TETRAMETHYL ACETYLOCTAHYDRONAPHTHALENES, CITRIC ACID, ETHYLHEXYLGLYCERIN, PHENOXYETHANOL, METHYLCHLOROISOTHIAZOLINONE ,METHYLISOTHIAZOLINONE, CI 42090.",
+      "clientDecision": "keep"
     },
     {
       "slug": "biocell-syvorotka-obnovlyayushhaya",
@@ -70,7 +80,8 @@
       "sourceVolume": "30ml",
       "confidence": "medium",
       "reason": "Совпадают название, объём 30 мл и почти все активы (EGF / SH-Oligopeptide-1, NMF: мочевина, молочная кислота, серин; масло шиповника, витамин E). Но код картинки 2141.jpg не совпадает с нашим артикулом 2002, а гидролизата шёлка из нашего описания в INCI нет: возможна обновлённая формула.",
-      "inci": "Aqua (Water), Glycerin, Rosa Canina (Rosehip) Fruit Oil, SH-Oligopeptide-1, Alcohol Denat., Phosphatidylcholine, Phosphatidylinositol, Lysophosphatidylethanolamine, Hydroxyethylcellulose, Tocopheryl Acetate, Allantoin, Caprylyl Glycol, Serine, TEA-Lactate, Sodium Lactate, Lactic Acid, Urea, Sorbitol, Phosphate Buffered Saline, Sodium Benzoate, Ethylhexylglycerin, Triethanolamine, Sodium Chloride, Sodium Nitrate, Phenethyl Alcohol, Phenoxyethanol."
+      "inci": "Aqua (Water), Glycerin, Rosa Canina (Rosehip) Fruit Oil, SH-Oligopeptide-1, Alcohol Denat., Phosphatidylcholine, Phosphatidylinositol, Lysophosphatidylethanolamine, Hydroxyethylcellulose, Tocopheryl Acetate, Allantoin, Caprylyl Glycol, Serine, TEA-Lactate, Sodium Lactate, Lactic Acid, Urea, Sorbitol, Phosphate Buffered Saline, Sodium Benzoate, Ethylhexylglycerin, Triethanolamine, Sodium Chloride, Sodium Nitrate, Phenethyl Alcohol, Phenoxyethanol.",
+      "clientDecision": "keep"
     },
     {
       "slug": "rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom",
@@ -81,7 +92,8 @@
       "article": 2133,
       "confidence": "high",
       "reason": "Код картинки 2133.jpg совпадает с артикулом 2133 (O3 Mosqueta Oil, 30 мл); совпадают объём и активы (масло шиповника, озонированное масло подсолнечника, витамин E). Экстракта розмарина из нашего описания в INCI нет.",
-      "inci": "Prunus Amygdalus Dulcis (Sweet Almond) Oil, Rosa Canina Fruit Oil, Ozonized Sunflower Seed Oil, Parfum (Fragance), Tocopheryl Acetate, Citronellol, Geraniol, Geranyl Acetate, Hexadecanolactone, Rose Ketones, Tetramethyl Acetyloctahydronaphthalenes."
+      "inci": "Prunus Amygdalus Dulcis (Sweet Almond) Oil, Rosa Canina Fruit Oil, Ozonized Sunflower Seed Oil, Parfum (Fragance), Tocopheryl Acetate, Citronellol, Geraniol, Geranyl Acetate, Hexadecanolactone, Rose Ketones, Tetramethyl Acetyloctahydronaphthalenes.",
+      "clientDecision": "keep"
     },
     {
       "slug": "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom",
@@ -92,7 +104,8 @@
       "article": 2130,
       "confidence": "high",
       "reason": "Код картинки 2130.jpg совпадает с артикулом 2130 (O3 Jojoba Oil, 30 мл); совпадают объём и активы (масло жожоба, озонированное масло подсолнечника, витамин E). Экстракта розмарина из нашего описания в INCI нет.",
-      "inci": "Prunus Amygdalus Dulcis (Sweet Almond) Oil, Simmondsia Chinensis (Jojoba) Seed Oil, Ozonized Sunflower Seed Oil, Parfum (Fragance), Tocopheryl Acetate, Linalyl Acetate, Terpineol, Tetramethyl Acetyloctahydronaphthalenes, Trimethylcyclopentenyl Methylisopentenol, Hexadecanolactone, Isoeugenyl Acetate."
+      "inci": "Prunus Amygdalus Dulcis (Sweet Almond) Oil, Simmondsia Chinensis (Jojoba) Seed Oil, Ozonized Sunflower Seed Oil, Parfum (Fragance), Tocopheryl Acetate, Linalyl Acetate, Terpineol, Tetramethyl Acetyloctahydronaphthalenes, Trimethylcyclopentenyl Methylisopentenol, Hexadecanolactone, Isoeugenyl Acetate.",
+      "clientDecision": "keep"
     },
     {
       "slug": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba",
@@ -103,7 +116,8 @@
       "article": 2126,
       "confidence": "high",
       "reason": "Код картинки 2126.jpg совпадает с артикулом 2126 (O3 Baobab Oil, 30 мл); совпадают объём и активы (масло баобаба, озонированное масло, витамин E). Экстракта розмарина из нашего описания в INCI нет.",
-      "inci": "Prunus Amygdalus Dulcis (Sweet Almond) Oil, Adansonia Digitata (Baobab) Seed Oil, Ozonized Sunflower Seed Oil , Tocopheryl Acetate, Parfum (Fragance), Benzyl Salicylate, Linalool, Limonene, Coumarin, Benzyl Benzoate, Hexyl Cinnamal, Citral, Anethole, Citrus Limon Peel Oil, Hexamethylindanopyran, Lavandula Oil/ Extract, Linalyl Acetate, Pelargonium Graveolens Flower Oil, Pinene, Pogostemon Cablin Oil, Tetramethyl Acetyloctahydronaphthalenes, Vanillin."
+      "inci": "Prunus Amygdalus Dulcis (Sweet Almond) Oil, Adansonia Digitata (Baobab) Seed Oil, Ozonized Sunflower Seed Oil , Tocopheryl Acetate, Parfum (Fragance), Benzyl Salicylate, Linalool, Limonene, Coumarin, Benzyl Benzoate, Hexyl Cinnamal, Citral, Anethole, Citrus Limon Peel Oil, Hexamethylindanopyran, Lavandula Oil/ Extract, Linalyl Acetate, Pelargonium Graveolens Flower Oil, Pinene, Pogostemon Cablin Oil, Tetramethyl Acetyloctahydronaphthalenes, Vanillin.",
+      "clientDecision": "keep"
     },
     {
       "slug": "scrub-lotion-krem-dlya-snyatiya-makiyazha",
@@ -114,7 +128,8 @@
       "article": 2067,
       "confidence": "high",
       "reason": "Код картинки 2067.jpg совпадает с артикулом 2067 (Scrub Lotion, 200 мл); совпадают объём, назначение (очищающее молочко со скрабом) и алоэ вера. Расхождение с нашим описанием: гранулы на сайте из гидрогенизированного касторового масла (у нас «частички целлюлозы»), гераниола в INCI нет.",
-      "inci": "Aqua (Water), Hydrogenated Castor Oil, Paraffinum Liquidum, Glycerin, Isopropyl Myristate, Glyceryl Stearate SE, Caprylic/Capric Triglyceride, Glyceryl Stearate, Cetyl Alcohol, PEG-75 Stearate, Aloe Barbadensis (Aloe) Leaf Juice, Disodium EDTA, Ceteth-20, Steareth-20, Cocamidopropyl Betaine, Xanthan Gum, Ethylhexylglycerin, Phenoxyethanol, Parfum (Fragance), Hydroxycitronellal, Potassium Sorbate, Sodium Benzoate, CI 47005 (FD&C Yellow No. 10), CI 42051."
+      "inci": "Aqua (Water), Hydrogenated Castor Oil, Paraffinum Liquidum, Glycerin, Isopropyl Myristate, Glyceryl Stearate SE, Caprylic/Capric Triglyceride, Glyceryl Stearate, Cetyl Alcohol, PEG-75 Stearate, Aloe Barbadensis (Aloe) Leaf Juice, Disodium EDTA, Ceteth-20, Steareth-20, Cocamidopropyl Betaine, Xanthan Gum, Ethylhexylglycerin, Phenoxyethanol, Parfum (Fragance), Hydroxycitronellal, Potassium Sorbate, Sodium Benzoate, CI 47005 (FD&C Yellow No. 10), CI 42051.",
+      "clientDecision": "keep"
     },
     {
       "slug": "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj",
@@ -124,7 +139,8 @@
       "sourceVolume": "50 ml",
       "confidence": "medium",
       "reason": "Совпадают название, объём 50 мл и активы: морская термальная вода, воски жожоба и пчелиный, витамин E. Но код картинки 2122.jpg не совпадает с нашим артикулом 22004 (линия Nat Collection), а вместо масла чиа из нашего описания в INCI масло подсолнечника: возможна другая редакция формулы.",
-      "inci": "Aqua (Water), Octyldodecyl Myristate, Glycerin, Helianthus Annuus (Sunflower) Seed Oil, Caprylic/ Capric Triglyceride,Polyglyceryl-6 Distearate, Cetyl Alcohol, Simmondsia Chinensis (Jojoba) Seed Wax, Maris Aqua (Sea Water), Polyglyceryl-3 Beeswax, Xanthan Gum, Rosmarinus Officinalis (Rosemary) Leaf Extract, Parfum (Fragance), Tocopherol, Beta-Sitosterol, Squalene, Phenoxyethanol, Ethylhexylglycerin, Acetyl Cedrene, Dimethyl Phenethyl Acetate, Terpineol."
+      "inci": "Aqua (Water), Octyldodecyl Myristate, Glycerin, Helianthus Annuus (Sunflower) Seed Oil, Caprylic/ Capric Triglyceride,Polyglyceryl-6 Distearate, Cetyl Alcohol, Simmondsia Chinensis (Jojoba) Seed Wax, Maris Aqua (Sea Water), Polyglyceryl-3 Beeswax, Xanthan Gum, Rosmarinus Officinalis (Rosemary) Leaf Extract, Parfum (Fragance), Tocopherol, Beta-Sitosterol, Squalene, Phenoxyethanol, Ethylhexylglycerin, Acetyl Cedrene, Dimethyl Phenethyl Acetate, Terpineol.",
+      "clientDecision": "keep"
     },
     {
       "slug": "chia-detox-cream-uvlazhnyayushhij-krem-s-chia",
@@ -135,7 +151,8 @@
       "article": 22005,
       "confidence": "high",
       "reason": "Код картинки 22005.jpg совпадает с артикулом 22005 (Chia Detox Crema, 50 мл); совпадают объём и активы (масло семян чиа, гидролат лаванды, пчелиный воск).",
-      "inci": "Aqua (Water), Glycerin, Salvia Hispanica (Chia) Seed Oil, Lavandula Angustifolia (Lavender) Flower Water, Caprylic/ Capric Triglyceride, Octyldodecyl Myristate,Polyglyceryl-6 Distearate, Cetyl Alcohol, Jojoba Esters, Polyglyceryl-3 Beeswax, Tocopherol, Xanthan Gum, Beta-Sitosterol, Squalene, Parfum (Fragrance), Lactic Acid, Gluconolactone, Calcium Gluconate, Sodium Benzoate, Potassium Sorbate, Acetyl Cedrene, Anethole, Carvone, Dimethyl Phenethyl Acetate, Terpineol, Amyl Salicylate."
+      "inci": "Aqua (Water), Glycerin, Salvia Hispanica (Chia) Seed Oil, Lavandula Angustifolia (Lavender) Flower Water, Caprylic/ Capric Triglyceride, Octyldodecyl Myristate,Polyglyceryl-6 Distearate, Cetyl Alcohol, Jojoba Esters, Polyglyceryl-3 Beeswax, Tocopherol, Xanthan Gum, Beta-Sitosterol, Squalene, Parfum (Fragrance), Lactic Acid, Gluconolactone, Calcium Gluconate, Sodium Benzoate, Potassium Sorbate, Acetyl Cedrene, Anethole, Carvone, Dimethyl Phenethyl Acetate, Terpineol, Amyl Salicylate.",
+      "clientDecision": "keep"
     },
     {
       "slug": "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka",
@@ -145,7 +162,8 @@
       "sourceVolume": "30ml",
       "confidence": "medium",
       "reason": "Совпадают название, объём 30 мл и все три ключевых актива (цветки апельсина, гидролат лаванды, гамамелис). Код картинки 2128.jpg не совпадает с нашим артикулом 22008 (линия Nat Collection). На странице опечатка «Simmodsia» — оставлена как есть.",
-      "inci": "Aqua (Water), Glycerin, Propylene Glycol, Lavandula Angustifolia (Lavender) Flower Water, Caprylic/Capric Triglyceride, Citrus Aurantium Dulcis (Orange) Flower Extract, Hamamelis Virginiana (Witch Hazel) Leaf Extract, Simmodsia Chinensis (Jojoba) Seed Wax, Xanthan Gum, Polyglyceryl-6 Distearate, Cetyl Alcohol, Polyglyceryl-3 Beeswax, Tocopheryl Acetate, Lactic Acid, Gluconolactone, Calcium Gluconate, Sodium Benzoate, Potassium Sorbate."
+      "inci": "Aqua (Water), Glycerin, Propylene Glycol, Lavandula Angustifolia (Lavender) Flower Water, Caprylic/Capric Triglyceride, Citrus Aurantium Dulcis (Orange) Flower Extract, Hamamelis Virginiana (Witch Hazel) Leaf Extract, Simmodsia Chinensis (Jojoba) Seed Wax, Xanthan Gum, Polyglyceryl-6 Distearate, Cetyl Alcohol, Polyglyceryl-3 Beeswax, Tocopheryl Acetate, Lactic Acid, Gluconolactone, Calcium Gluconate, Sodium Benzoate, Potassium Sorbate.",
+      "clientDecision": "keep"
     },
     {
       "slug": "kerathor-plus-izotonicheskij-tonik",
@@ -156,7 +174,8 @@
       "article": 2035,
       "confidence": "high",
       "reason": "Код картинки 2035.jpg совпадает с артикулом 2035 (Kerathor 50 Plus, 200 мл); совпадают объём и активы (AHA, гамамелис, мирра, лук, шалфей, сера, ниацинамид, витамин C). Мелкие расхождения с нашим описанием: в INCI черника (Vaccinium Myrtillus), а не клюква, и яблочная кислота вместо винной. Вторую страницу kerathor-50-plus-2 не открывали.",
-      "inci": "Aqua (Water), Glycerin, Alcohol Denat., Lactic Acid, PEG-30 Castor Oil, PEG-40 Hydrogenated Castor Oil, Phenoxyethanol, Niacinamide, Propylene Glycol, Ascorbic Acid, Commiphora Myrrha (Myrrha) Resin Extract, Vaccinium Myrtillus (Bilberry) Fruit Extract, Hamamelis Virginiana (Witch Hazel) Leaf Extract, Salvia Officinalis (Sage) Leaf Extract, Allium Cepa (Onion) Bulb Extract, Glycolic Acid, Citric Acid, Malic Acid, Sulfur, Sodium Hydroxide, Potassium Sorbate, Sodium Benzoate, Ethylhexylglycerin."
+      "inci": "Aqua (Water), Glycerin, Alcohol Denat., Lactic Acid, PEG-30 Castor Oil, PEG-40 Hydrogenated Castor Oil, Phenoxyethanol, Niacinamide, Propylene Glycol, Ascorbic Acid, Commiphora Myrrha (Myrrha) Resin Extract, Vaccinium Myrtillus (Bilberry) Fruit Extract, Hamamelis Virginiana (Witch Hazel) Leaf Extract, Salvia Officinalis (Sage) Leaf Extract, Allium Cepa (Onion) Bulb Extract, Glycolic Acid, Citric Acid, Malic Acid, Sulfur, Sodium Hydroxide, Potassium Sorbate, Sodium Benzoate, Ethylhexylglycerin.",
+      "clientDecision": "keep"
     },
     {
       "slug": "crema-elite-ultra-uvlazhnyayushhij-krem",
@@ -166,7 +185,8 @@
       "sourceVolume": "50ml",
       "confidence": "medium",
       "reason": "Совпадают название (Élite / Crema Elite), объём 50 мл и все активы нашего описания (EGF / SH-Oligopeptide-1, алоэ вера, аллантоин, масло шиповника, зародыши пшеницы, витамин E). Код картинки 2134.jpg не совпадает с нашим артикулом 2038.",
-      "inci": "Aqua (Water), Hydrogenated Polydecene, Glycerin, Octyldodecyl Myristate, Cetyl Alcohol, Caprylic/Capric Triglyceride, Propylene Glycol, Glyceryl Stearate, Cetyl Palmitate, Glyceryl Stearate SE, Aloe Barbadensis (Aloe) Leaf Juice, PEG-75 Stearate, Ceteth-20, Steareth-20, Triticum Vulgare (Wheat) Germ Extract, SH-Oligopeptide-1, Dimethylsilanol Hyaluronate, Rosa Canina (Rosehip) Fruit Oil, Allantoin, Lactic Acid, Serine, Sodium Lactate, Sorbitol, TEA-Lactate, Urea, Phosphatidylcholine, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Tocopheryl Acetate, Sodium Chloride, Sodium Benzoate, Potassium Sorbate, Phenoxyethanol, Parfum (Fragance), Ethylhexylglycerin, Phenethyl Alcohol, Caprylyl Glycol, Limonene, Linalool, Hexyl Cinnamal, Cinnamyl Alcohol, Citral, Geraniol, Amyl Cinnamal, Eugenol, Hydroxycitronellal, Citrus Aurantium Peel Oil, Eugenia Caryophyllus Oil, Hexamethylindanopyran, Linalyl Acetate, Pinene."
+      "inci": "Aqua (Water), Hydrogenated Polydecene, Glycerin, Octyldodecyl Myristate, Cetyl Alcohol, Caprylic/Capric Triglyceride, Propylene Glycol, Glyceryl Stearate, Cetyl Palmitate, Glyceryl Stearate SE, Aloe Barbadensis (Aloe) Leaf Juice, PEG-75 Stearate, Ceteth-20, Steareth-20, Triticum Vulgare (Wheat) Germ Extract, SH-Oligopeptide-1, Dimethylsilanol Hyaluronate, Rosa Canina (Rosehip) Fruit Oil, Allantoin, Lactic Acid, Serine, Sodium Lactate, Sorbitol, TEA-Lactate, Urea, Phosphatidylcholine, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Tocopheryl Acetate, Sodium Chloride, Sodium Benzoate, Potassium Sorbate, Phenoxyethanol, Parfum (Fragance), Ethylhexylglycerin, Phenethyl Alcohol, Caprylyl Glycol, Limonene, Linalool, Hexyl Cinnamal, Cinnamyl Alcohol, Citral, Geraniol, Amyl Cinnamal, Eugenol, Hydroxycitronellal, Citrus Aurantium Peel Oil, Eugenia Caryophyllus Oil, Hexamethylindanopyran, Linalyl Acetate, Pinene.",
+      "clientDecision": "keep"
     },
     {
       "slug": "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska",
@@ -177,7 +197,8 @@
       "article": 2029,
       "confidence": "high",
       "reason": "Код картинки 2029V.jpg совпадает с артикулом 2029 (TTS Essential Mask); совпадают название и активы (ДМАЕ, белок пшеницы, FGF, пептид-лифтинг, алоэ, эластин, гиалуроновая кислота). В INCI нет EGF и экстрактов Pronalen (женьшень, яблоко, персик, ячмень) из нашего описания.",
-      "inci": "Aqua (Water), Dimethylsilanol Hyaluronate, Hydrolyzed Elastin, Carbomer, Hydrolyzed Wheat Protein, Aloe Barbadensis (Aloe) Leaf Juice, Glycerin, SH-Polypeptide-11, Oligopeptide-24, Triethanolamine, Dimethyl MEA, PVP, Disodium EDTA, Glycine Soja (Soybean) Oil, Hydrogenated Phosphatidylcholine, Sorbic Acid, Acrylic Acid, Ethylhexylglycerin, Phenoxyethanol, Potassium Sorbate, Sodium Benzoate, Sodium Oleate, Parfum (Fragance), Cinnamyl Alcohol, Citral, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Hexyl Cinnamal, Limonene, Linalool, Linalyl Acetate, Pinene."
+      "inci": "Aqua (Water), Dimethylsilanol Hyaluronate, Hydrolyzed Elastin, Carbomer, Hydrolyzed Wheat Protein, Aloe Barbadensis (Aloe) Leaf Juice, Glycerin, SH-Polypeptide-11, Oligopeptide-24, Triethanolamine, Dimethyl MEA, PVP, Disodium EDTA, Glycine Soja (Soybean) Oil, Hydrogenated Phosphatidylcholine, Sorbic Acid, Acrylic Acid, Ethylhexylglycerin, Phenoxyethanol, Potassium Sorbate, Sodium Benzoate, Sodium Oleate, Parfum (Fragance), Cinnamyl Alcohol, Citral, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Hexyl Cinnamal, Limonene, Linalool, Linalyl Acetate, Pinene.",
+      "clientDecision": "keep"
     },
     {
       "slug": "tts-moisturizing-mask-uvlazhnyayushhaya-maska",
@@ -188,7 +209,8 @@
       "article": 2028,
       "confidence": "high",
       "reason": "Код картинки 2028V.jpg совпадает с артикулом 2028 (TTS Moisturizing Mask); совпадают название и активы (гиалуроновая кислота, озонированное масло, гидролат лаванды, алоэ, витамин E, масло шиповника). АТФ из нашего названия и описания в испанском INCI нет.",
-      "inci": "Aqua (Water), Lavandula Angustifolia (Lavender) Flower Water, Dimethylsilanol Hyaluronate, Carbomer, Aloe Barbadensis (Aloe) Leaf Juice, Gluconolactone, Ozonized Sunflower Seed Oil, Glycerin, Phosphatidylcholine, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Tocopheryl Acetate, Calcium Gluconate, Potassium Sorbate, Phenoxyethanol, Triethanolamine, Acrylic Acid, Ethylhexylglycerin, Sodium Benzoate, Phenethyl Alcohol, Caprylyl Glycol, Parfum (Fragance), Cinnamyl Alcohol, Citral, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Hexyl Cinnamal, Limonene, Linalool, Linalyl Acetate, Pinene."
+      "inci": "Aqua (Water), Lavandula Angustifolia (Lavender) Flower Water, Dimethylsilanol Hyaluronate, Carbomer, Aloe Barbadensis (Aloe) Leaf Juice, Gluconolactone, Ozonized Sunflower Seed Oil, Glycerin, Phosphatidylcholine, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Tocopheryl Acetate, Calcium Gluconate, Potassium Sorbate, Phenoxyethanol, Triethanolamine, Acrylic Acid, Ethylhexylglycerin, Sodium Benzoate, Phenethyl Alcohol, Caprylyl Glycol, Parfum (Fragance), Cinnamyl Alcohol, Citral, Citrus Aurantium Peel Oil, Citrus Limon Peel Oil, Hexyl Cinnamal, Limonene, Linalool, Linalyl Acetate, Pinene.",
+      "clientDecision": "keep"
     },
     {
       "slug": "tts-energizing-mask-maska-so-stvolovymi-kletkami",
@@ -199,7 +221,8 @@
       "article": 2027,
       "confidence": "high",
       "reason": "Код картинки 2027V.jpg совпадает с артикулом 2027 (TTS Energizing Mask); совпадают название и активы (стволовые клетки яблони, алоэ, озонированное масло, витамин E, инозитол, ретинол, биотин, пантотенат кальция, масло шиповника, масло Rosa Moschata).",
-      "inci": "Aqua (Water), Aloe Barbadensis (Aloe) Leaf Juice, Malus Domestica (Apple) Fruit Water, Aesculus Hippocastanum (Horse Chestnut) Seed Extract, Carbomer, Ozonized Sunflower Seed Oil, Phosphatidylcholine, Glycerin, PEG-20 Castor Oil, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Tocopheryl Acetate, Zea Mays (Corn) Oil, Lecithin, Calcium Pantothenate, Inositol, Retinol, Rosa Moschata Seed Oil, Biotin, Alcohol Denat., Xanthan Gum, Triethanolamine, Phenoxyethanol, Imidazolidinyl Urea, Ethylhexylglycerin, Acrylic Acid, Sodium Benzoate, Potassium Sorbate, Phenethyl Alcohol, Caprylyl Glycol, Parfum (Fragance), Limonene, Citral, Pinene, Citrus Limon Peel Oil."
+      "inci": "Aqua (Water), Aloe Barbadensis (Aloe) Leaf Juice, Malus Domestica (Apple) Fruit Water, Aesculus Hippocastanum (Horse Chestnut) Seed Extract, Carbomer, Ozonized Sunflower Seed Oil, Phosphatidylcholine, Glycerin, PEG-20 Castor Oil, Lysophosphatidylethanolamine, Phosphate Buffered Saline, Phosphatidylinositol, Rosa Canina (Rosehip) Fruit Oil, Tocopheryl Acetate, Zea Mays (Corn) Oil, Lecithin, Calcium Pantothenate, Inositol, Retinol, Rosa Moschata Seed Oil, Biotin, Alcohol Denat., Xanthan Gum, Triethanolamine, Phenoxyethanol, Imidazolidinyl Urea, Ethylhexylglycerin, Acrylic Acid, Sodium Benzoate, Potassium Sorbate, Phenethyl Alcohol, Caprylyl Glycol, Parfum (Fragance), Limonene, Citral, Pinene, Citrus Limon Peel Oil.",
+      "clientDecision": "keep"
     },
     {
       "slug": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza",
@@ -209,7 +232,8 @@
       "sourceVolume": "200ml",
       "confidence": "medium",
       "reason": "Описание на странице — «Leche limpiadora natural» (натуральное очищающее молочко), активы совпадают с нашими: пчелиный воск и воск жожоба, масло шиповника, экстракт цветков апельсина, витамин E. Но название другое, код картинки 2115.jpg не совпадает с нашими артикулами 22009/2082, и объём на сайте 200 мл, у нас 500 мл. «Эфиров жожоба» из нашего описания в INCI нет (есть воск жожоба). На странице опечатка «Simmodsia» — оставлена как есть.",
-      "inci": "Aqua (Water), Caprylic/Capric Triglyceride, Octyldodecanol, Polyglyceryl-6 Distearate, Glycerin, Cera Alba (Beeswax), Xanthan Gum, Propylene Glycol, Cocamidopropyl Betaine, Rosa Canina (Rosehip) Fruit Oil, Citrus Aurantium Dulcis (Orange) Flower Extract, Simmodsia Chinensis (Jojoba) Seed Wax, Polyglyceryl-3 Beeswax, Cetyl Alcohol, Parfum (Fragrance), Sodium Phytate, Tocopheryl Acetate, Sodium Chloride, Citric Acid, Limonene,Citrus Aurantium Peel Oil,Citrus Limon Peel Oil,Pinene, Sodium Benzoate, Potassium Sorbate."
+      "inci": "Aqua (Water), Caprylic/Capric Triglyceride, Octyldodecanol, Polyglyceryl-6 Distearate, Glycerin, Cera Alba (Beeswax), Xanthan Gum, Propylene Glycol, Cocamidopropyl Betaine, Rosa Canina (Rosehip) Fruit Oil, Citrus Aurantium Dulcis (Orange) Flower Extract, Simmodsia Chinensis (Jojoba) Seed Wax, Polyglyceryl-3 Beeswax, Cetyl Alcohol, Parfum (Fragrance), Sodium Phytate, Tocopheryl Acetate, Sodium Chloride, Citric Acid, Limonene,Citrus Aurantium Peel Oil,Citrus Limon Peel Oil,Pinene, Sodium Benzoate, Potassium Sorbate.",
+      "clientDecision": "skip"
     },
     {
       "slug": "tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
@@ -219,7 +243,8 @@
       "sourceVolume": "200ml",
       "confidence": "medium",
       "reason": "Подзаголовок на странице дословно «Tonico Facial Equilibrante»; совпадают объём 200 мл и активы (алоэ вера, NMF: мочевина, молочная кислота, серин, лактат натрия). Код картинки 2113.jpg не совпадает с нашим артикулом 2034. На странице опечатка «Ethyhexylglycerin» — оставлена как есть.",
-      "inci": "Aqua (Water), Glycerin, Aloe Barbadensis (Aloe) Leaf Juice, PEG-40 Hydrogenated Castor Oil, Lactic Acid, Serine, Sodium Lactate, Sorbitol, TEA-Lactate, Urea, Allantoin, Sodium Chloride, Sodium Benzoate,Potassium Sorbate, Phenoxyethanol, Ethyhexylglycerin, Parfum (Fragrance), Citronellol, Geraniol, Hexyl Cinnamal, Hydroxycitronellal, Linalool, CI 42090."
+      "inci": "Aqua (Water), Glycerin, Aloe Barbadensis (Aloe) Leaf Juice, PEG-40 Hydrogenated Castor Oil, Lactic Acid, Serine, Sodium Lactate, Sorbitol, TEA-Lactate, Urea, Allantoin, Sodium Chloride, Sodium Benzoate,Potassium Sorbate, Phenoxyethanol, Ethyhexylglycerin, Parfum (Fragrance), Citronellol, Geraniol, Hexyl Cinnamal, Hydroxycitronellal, Linalool, CI 42090.",
+      "clientDecision": "keep"
     }
   ],
   "notFound": [

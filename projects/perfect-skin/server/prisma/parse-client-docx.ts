@@ -11,12 +11,12 @@ import {
   ALIASES,
   matchAll,
   type CabinetVariant,
-  type MatchedUnit,
   type MatchReport,
   type PendingUnit,
   type SiteProduct,
 } from '../src/lib/product-docx.match.js'
 import { ProductDetailsSchema, type ProductDetails } from '../src/lib/product-details.js'
+import { applyActivesOverrides, DetailsOverridesFileSchema } from '../src/lib/product-details-overrides.js'
 import { parseDiscontinuedFile } from '../src/lib/discontinue.plan.js'
 import { parseRetailProductsFile } from '../src/lib/import-retail-products.plan.js'
 
@@ -24,6 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ASSETS = path.join(__dirname, '../assets')
 const OUT_DIR = path.join(ASSETS, 'product-details')
 const PENDING_DIR = path.join(OUT_DIR, '_pending')
+const OVERRIDES_FILE = path.join(ASSETS, 'product-details-overrides.json')
 const CONTENT_DIR = path.join(__dirname, '../../../../docs/projects/perfect-skin/content')
 const SOURCE_DIR = path.join(CONTENT_DIR, 'source')
 const REPORT_MD = path.join(CONTENT_DIR, 'details-report.md')
@@ -143,8 +144,9 @@ function renderReport(args: {
   fileRules: string[]
   records: ParsedRecord[]
   typos: string[]
+  overrides: number
 }): string {
-  const { site, report, orphans, fileRules, records, typos } = args
+  const { site, report, orphans, fileRules, records, typos, overrides } = args
   const siteBySlug = new Map(site.map((p) => [p.slug, p]))
   const matchedRetail = report.matched.filter((m) => siteBySlug.get(m.slug)?.kind === 'retail')
   const matchedPro = report.matched.filter((m) => siteBySlug.get(m.slug)?.kind === 'pro')
@@ -203,6 +205,7 @@ function renderReport(args: {
     ...report.rules,
     ...records.flatMap((r) => r.rules.map((rule) => `${r.file}: ${rule}`)),
     ...fileRules,
+    `Правки клиента поверх файлов: ${overrides} товаров (product-details-overrides.json)`,
     'Заголовки и маркеры: NBSP и повторные пробелы схлопнуты, маркеры 💡 ◀ • удалены; текст правился только по таблице server/src/lib/text-fixes.ts (опечатки, знаки, смешанные алфавиты) — каждая правка выше',
     'Строки «…» и точек — границы блоков; INCI («Состав (INCI)») не сохраняется',
     'Заголовки секций: регистр, ё, латинская C вместо кириллической С («Cпособ» → «Способ»), двоеточие необязательно',
@@ -236,13 +239,15 @@ function main(): void {
   const typos = [
     ...records.flatMap((r) => suspiciousSpots(`${r.file} «${r.title}»`, [r.title, r.volumeLine, ...(r.details ? texts(r.details) : r.amendmentNotes)].join(' | '))),
   ]
+  const overrides = DetailsOverridesFileSchema.parse(readJson(OVERRIDES_FILE)).overrides
+  const matched = applyActivesOverrides(report.matched, overrides)
 
   fs.mkdirSync(PENDING_DIR, { recursive: true })
   const written = new Set<string>()
   const writeUnit = (dir: string, file: string, value: unknown): void => {
     written.add(writeJson(path.join(dir, file), value))
   }
-  for (const unit of report.matched as MatchedUnit[]) {
+  for (const unit of matched) {
     writeUnit(OUT_DIR, `${unit.slug}.json`, {
       slug: unit.slug,
       sources: unit.sources,
@@ -271,7 +276,7 @@ function main(): void {
   removeStale(PENDING_DIR, written)
   fs.writeFileSync(
     REPORT_MD,
-    renderReport({ site, report, orphans, fileRules, records, typos }),
+    renderReport({ site, report, orphans, fileRules, records, typos, overrides: Object.keys(overrides).length }),
   )
 
   console.log(`совпало: ${report.matched.length}, нет на сайте: ${report.pending.length}, без текста: ${report.noText.length}, проблем: ${report.problems.length}`)
