@@ -1,0 +1,15 @@
+{
+  "name": "@trade-performance/db",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "prisma validate",
+    "migrate": "prisma migrate dev",
+    "deploy": "prisma migrate deploy",
+    "generate": "prisma generate"
+  },
+  "devDependencies": {
+    "prisma": "7.10.1",
+    "dotenv": "^16.4.5"
+  }
+}

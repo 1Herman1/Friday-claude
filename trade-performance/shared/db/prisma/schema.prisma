@@ -1,0 +1,1578 @@
+// =====================================================================
+// trade-performance — общая схема БД (journal + prop-agents)
+// Владелец миграций: Prisma (shared/db). Python-движок читает/пишет через SQL.
+// Соглашения:
+//   * таблицы и колонки в snake_case (@@map/@map) — удобно для сырого SQL и Python;
+//   * id — UUID (генерирует БД, Python тоже может прислать свой uuid);
+//   * время — timestamptz(6), всегда UTC;
+//   * цены/объёмы/суммы — Decimal(38,18) («Px»), проценты/R — Decimal(20,8) («Ratio»);
+//   * organization_id — на каждой бизнес-таблице; справочники (venue, instrument) — глобальные;
+//   * deleted_at — только на таблицах, которые правит человек; журналы (fills, llm_calls,
+//     risk) — append-only, не удаляются мягко.
+// =====================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------
+// ENUMS
+// ---------------------------------------------------------------------
+
+enum OrgRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum VenueKind {
+  EXCHANGE // MEXC, Bybit
+  PROP_FIRM // Propr, HyroTrader, SizeProp
+  TESTNET // Hyperliquid testnet, OKX Demo, BloFin demo
+  BROKER // MT5-брокер (Ф3)
+  PAPER // внутренняя бумажная торговля / бэктест
+}
+
+enum AccountKind {
+  LIVE
+  DEMO
+  PROP_CHALLENGE
+  PROP_FUNDED
+  PAPER
+  BACKTEST
+}
+
+enum OwnerType {
+  HUMAN
+  AGENT
+}
+
+enum InstrumentKind {
+  SPOT
+  PERPETUAL
+  FUTURE
+  CFD
+}
+
+enum TradeSide {
+  LONG
+  SHORT
+}
+
+enum OrderSide {
+  BUY
+  SELL
+}
+
+enum Executor {
+  HUMAN // руками (Герман / пользователь SaaS)
+  AGENT // агент prop-agents
+}
+
+enum DataOrigin {
+  MANUAL // веб-форма
+  VOICE // голос из Telegram → разбор
+  IMPORT // импорт с биржи/пропа
+  ENGINE // записал движок prop-agents
+}
+
+enum TradeStatus {
+  PLANNED
+  OPEN
+  CLOSED
+  CANCELLED
+}
+
+enum OrderType {
+  MARKET
+  LIMIT
+  STOP_MARKET
+  STOP_LIMIT
+  TAKE_PROFIT
+  TRAILING_STOP
+  OTHER
+}
+
+enum OrderStatus {
+  NEW
+  PARTIALLY_FILLED
+  FILLED
+  CANCELED
+  REJECTED
+  EXPIRED
+}
+
+enum LedgerKind {
+  FUNDING
+  FEE // комиссия, не привязанная к филлу
+  REBATE
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER_IN
+  TRANSFER_OUT
+  LIQUIDATION_FEE
+  INSURANCE
+  ADJUSTMENT
+  OTHER
+}
+
+enum SignalMode {
+  LIVE
+  BACKTEST
+  SHADOW
+}
+
+enum SignalSourceKind {
+  SCANNER // наш сканер сетапов (ccxt, свечи площадки исполнения)
+  DETECTOR // детектор кластера prop-agents (smc-btc и др.)
+  TELEGRAM_CHANNEL // чужой Telegram-канал (парсер, Opus 5.5 → структура)
+  MANUAL // сигнал внесён руками / переслан в топик
+}
+
+enum SignalStatus {
+  PENDING
+  OPEN
+  WIN
+  LOSS
+  EXPIRED
+  CANCELLED
+}
+
+enum DecisionAction {
+  TAKE
+  SKIP
+  HOLD // невалидный ответ LLM → HOLD (правило ТЗ)
+}
+
+enum RiskVerdict {
+  APPROVED
+  REDUCED
+  REJECTED
+}
+
+enum RiskScope {
+  GLOBAL
+  ORGANIZATION
+  USER
+  ACCOUNT
+  AGENT
+  CLUSTER
+}
+
+enum Severity {
+  INFO
+  WARN
+  CRITICAL
+}
+
+enum VersionStatus {
+  DRAFT
+  SHADOW
+  ACTIVE
+  RETIRED
+  REJECTED
+}
+
+enum AgentMode {
+  LIVE
+  SHADOW
+  BASELINE
+  PAPER
+}
+
+enum RunState {
+  RUNNING
+  PAUSED
+  STOPPED
+}
+
+enum LlmBilling {
+  API
+  SUBSCRIPTION // Hermes на подписке: токены/стоимость могут быть неизвестны
+  FREE
+}
+
+enum NoteKind {
+  TEXT
+  VOICE
+}
+
+enum Channel {
+  WEB
+  TELEGRAM
+  API
+  SYSTEM
+}
+
+enum AttachmentKind {
+  SCREENSHOT
+  CHART
+  VOICE
+  EXPORT
+  OTHER
+}
+
+enum ImportStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  PARTIAL
+  FAILED
+  CANCELLED
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  DONE
+  FAILED
+  DEAD
+}
+
+enum ActorType {
+  USER
+  AGENT
+  SYSTEM
+}
+
+// ---------------------------------------------------------------------
+// 1. ТЕНАНТЫ И ДОСТУП
+// ---------------------------------------------------------------------
+
+/// Организация = тенант. Сейчас одна (Герман). Все бизнес-данные висят на ней.
+/// plan — заготовка под биллинг Ф3 (таблиц биллинга пока нет).
+model Organization {
+  id        String    @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String    @unique
+  plan      String    @default("personal") // Ф3: free/pro/team; деньги биллинга — в целых копейках
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  memberships   Membership[]
+  apiTokens     ApiToken[]
+  accounts      Account[]
+  propProfiles  PropProfile[]
+  riskPolicies  RiskPolicy[]
+  trades        Trade[]
+  executions    Execution[]
+  orders        Order[]
+  ledger        LedgerEntry[]
+  snapshots     AccountSnapshot[]
+  playbooks     Playbook[]
+  rules         Rule[]
+  tags          Tag[]
+  notes         Note[]
+  attachments   Attachment[]
+  dailyJournals DailyJournal[]
+  dailySummary  DailySummary[]
+  aiReviews     AiReview[]
+  clusters      Cluster[]
+  versions      StrategyVersion[]
+  agents        Agent[]
+  experiments   Experiment[]
+  evaluations   ShadowEvaluation[]
+  detectorRuns  DetectorRun[]
+  signals       Signal[]
+  signalSources SignalSource[]
+  decisions     AgentDecision[]
+  llmCalls      LlmCall[]
+  riskEvals     RiskEvaluation[]
+  riskEvents    RiskEvent[]
+  importJobs    ImportJob[]
+  rawRecords    RawRecord[]
+  credentials   ExchangeCredential[]
+  auditLogs     AuditLog[]
+
+  @@map("organizations")
+}
+
+/// Человек. Аутентификация (как вошёл) — AuthIdentity; авторизация (что можно) — Membership.role.
+model User {
+  id             String    @id @default(uuid()) @db.Uuid
+  name           String?
+  email          String?   @unique
+  phone          String?   @unique // E.164; кандидат в основной способ входа (РКН A3)
+  telegramUserId BigInt?   @unique @map("telegram_user_id")
+  timezone       String    @default("Europe/Moscow") // граница «торгового дня» человека
+  locale         String    @default("ru")
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  memberships   Membership[]
+  identities    AuthIdentity[]
+  apiTokens     ApiToken[]
+  accounts      Account[]
+  notes         Note[]
+  dailyJournals DailyJournal[]
+  playbooks     Playbook[]
+  rules         Rule[]
+  aiReviews     AiReview[]
+  uploads       Attachment[]   @relation("AttachmentUploader")
+
+  @@map("users")
+}
+
+/// Членство пользователя в организации + роль (RBAC).
+model Membership {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  role           OrgRole  @default(OWNER)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@map("memberships")
+}
+
+/// Способ входа: phone / telegram / email / esia ... Секреты (пароли) здесь не храним.
+model AuthIdentity {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  provider       String // "phone" | "telegram" | "email" | "esia" — см. РКН A3
+  providerUserId String   @map("provider_user_id")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+  @@map("auth_identities")
+}
+
+/// Сервисные токены: Hermes (голос/команды из Telegram), движок prop-agents, скрипты.
+/// Храним только хэш токена.
+model ApiToken {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  userId         String?   @map("user_id") @db.Uuid
+  name           String
+  tokenHash      String    @unique @map("token_hash")
+  scopes         String[] // напр. ["notes:write","trades:write","signals:read"]
+  lastUsedAt     DateTime? @map("last_used_at") @db.Timestamptz(6)
+  expiresAt      DateTime? @map("expires_at") @db.Timestamptz(6)
+  revokedAt      DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id])
+
+  @@index([organizationId])
+  @@map("api_tokens")
+}
+
+/// Журнал значимых действий: кто менял риск-лимиты, профили пропов, повышал версии.
+/// Обязателен, т.к. «жёсткие лимиты меняет только Герман» должно быть проверяемо.
+model AuditLog {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  actorType      ActorType @map("actor_type")
+  actorId        String?   @map("actor_id") // user.id / agent.id / имя сервиса
+  action         String // "risk_policy.update", "version.promote", "trade.merge" ...
+  entity         String
+  entityId       String?   @map("entity_id")
+  before         Json?
+  after          Json?
+  at             DateTime  @default(now()) @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, at])
+  @@index([entity, entityId])
+  @@map("audit_logs")
+}
+
+// ---------------------------------------------------------------------
+// 2. СПРАВОЧНИКИ: ПЛОЩАДКИ, ИНСТРУМЕНТЫ, ПРОФИЛИ ПРОПОВ
+// ---------------------------------------------------------------------
+
+/// Площадка: биржа, проп, тестнет. Глобальный справочник (без organization_id).
+model Venue {
+  id          String    @id @default(uuid()) @db.Uuid
+  slug        String    @unique // "mexc", "bybit", "hyperliquid-testnet", "propr", "hyrotrader", "manual"
+  name        String
+  kind        VenueKind
+  hasApi      Boolean   @default(false) @map("has_api")
+  meta        Json? // лимиты API, заметки; ничего секретного
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  instruments  Instrument[]
+  accounts     Account[]
+  propProfiles PropProfile[]
+
+  @@map("venues")
+}
+
+/// Инструмент площадки. symbol — в нативном виде площадки (у MEXC spot "BTCUSDT",
+/// у MEXC futures "BTC_USDT" — проверить). contract_size нужен там, где объём в контрактах.
+model Instrument {
+  id           String         @id @default(uuid()) @db.Uuid
+  venueId      String         @map("venue_id") @db.Uuid
+  symbol       String
+  kind         InstrumentKind
+  baseAsset    String         @map("base_asset")
+  quoteAsset   String         @map("quote_asset")
+  settleAsset  String?        @map("settle_asset") // в чём считается PnL (USDT)
+  isInverse    Boolean        @default(false) @map("is_inverse") // coin-margined: MVP не поддерживает расчёт
+  contractSize Decimal?       @map("contract_size") @db.Decimal(38, 18)
+  tickSize     Decimal?       @map("tick_size") @db.Decimal(38, 18)
+  stepSize     Decimal?       @map("step_size") @db.Decimal(38, 18)
+  active       Boolean        @default(true)
+  meta         Json?
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  venue      Venue         @relation(fields: [venueId], references: [id])
+  trades     Trade[]
+  executions Execution[]
+  orders     Order[]
+  ledger     LedgerEntry[]
+  signals    Signal[]
+  runs       DetectorRun[]
+
+  @@unique([venueId, symbol, kind])
+  @@index([baseAsset])
+  @@map("instruments")
+}
+
+/// Правила пропа (программа + фаза). Неизменяемая запись: изменились правила → новая строка,
+/// старая получает valid_to. organization_id = null → системный шаблон студии.
+/// Не в промптах: читает риск-слой (код).
+model PropProfile {
+  id                  String    @id @default(uuid()) @db.Uuid
+  organizationId      String?   @map("organization_id") @db.Uuid
+  venueId             String    @map("venue_id") @db.Uuid
+  program             String // "1-step 10k", "2-step phase 1" ...
+  phase               String? // challenge / verification / funded
+  accountSize         Decimal   @map("account_size") @db.Decimal(38, 18)
+  profitTargetPct     Decimal?  @map("profit_target_pct") @db.Decimal(20, 8)
+  dailyLossPct        Decimal?  @map("daily_loss_pct") @db.Decimal(20, 8)
+  dailyLossMethod     String?   @map("daily_loss_method") // "start_of_day_balance" | "equity_high" | "static" — по правилам фирмы
+  dailyResetTz        String?   @map("daily_reset_tz") // таймзона сброса дня у фирмы
+  dailyResetTime      String?   @map("daily_reset_time") // "00:00"
+  maxDrawdownPct      Decimal?  @map("max_drawdown_pct") @db.Decimal(20, 8)
+  drawdownType        String?   @map("drawdown_type") // "static" | "trailing" | "trailing_eod"
+  maxLeverage         Decimal?  @map("max_leverage") @db.Decimal(20, 8)
+  stopLossRequired    Boolean   @default(false) @map("stop_loss_required")
+  minTradingDays      Int?      @map("min_trading_days")
+  consistencyRulePct  Decimal?  @map("consistency_rule_pct") @db.Decimal(20, 8)
+  newsTradingAllowed  Boolean?  @map("news_trading_allowed")
+  weekendHoldAllowed  Boolean?  @map("weekend_hold_allowed")
+  botPolicy           String    @default("unknown") @map("bot_policy") // allowed | with_permission | forbidden | unknown
+  botPermissionRef    String?   @map("bot_permission_ref") // ссылка на письменное разрешение фирмы
+  forbiddenPractices  String[]  @map("forbidden_practices")
+  extra               Json?
+  sourceUrl           String?   @map("source_url") // где опубликованы правила
+  verifiedAt          DateTime? @map("verified_at") @db.Timestamptz(6) // когда человек сверил с сайтом фирмы
+  validFrom           DateTime  @default(now()) @map("valid_from") @db.Timestamptz(6)
+  validTo             DateTime? @map("valid_to") @db.Timestamptz(6)
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  venue        Venue         @relation(fields: [venueId], references: [id])
+  accounts     Account[]
+  riskEvals    RiskEvaluation[]
+
+  @@index([venueId])
+  @@index([organizationId])
+  @@map("prop_profiles")
+}
+
+// ---------------------------------------------------------------------
+// 3. СЧЕТА, КЛЮЧИ, СНИМКИ БАЛАНСА
+// ---------------------------------------------------------------------
+
+/// Торговый счёт: биржевой, демо, проп, агентский. Агентский = owner_type AGENT
+/// (агент ссылается на счёт через agents.account_id — у каждого агента свой счёт).
+model Account {
+  id                String      @id @default(uuid()) @db.Uuid
+  organizationId    String      @map("organization_id") @db.Uuid
+  venueId           String      @map("venue_id") @db.Uuid
+  propProfileId     String?     @map("prop_profile_id") @db.Uuid
+  ownerType         OwnerType   @default(HUMAN) @map("owner_type")
+  userId            String?     @map("user_id") @db.Uuid // для HUMAN
+  name              String
+  kind              AccountKind
+  baseAsset         String      @default("USDT") @map("base_asset")
+  externalAccountId String?     @map("external_account_id") // id/uid на площадке, если есть
+  credentialRef     String?     @map("credential_ref") // MVP: имя переменной окружения ("env:MEXC_RO"), не секрет
+  startingBalance   Decimal?    @map("starting_balance") @db.Decimal(38, 18)
+  dayBoundaryTz     String?     @map("day_boundary_tz") // null → tz пользователя / prop_profile.daily_reset_tz
+  active            Boolean     @default(true)
+  openedAt          DateTime?   @map("opened_at") @db.Timestamptz(6)
+  closedAt          DateTime?   @map("closed_at") @db.Timestamptz(6)
+  createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt         DateTime?   @map("deleted_at") @db.Timestamptz(6)
+
+  organization Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  venue        Venue               @relation(fields: [venueId], references: [id])
+  propProfile  PropProfile?        @relation(fields: [propProfileId], references: [id])
+  user         User?               @relation(fields: [userId], references: [id])
+  credential   ExchangeCredential?
+  agent        Agent?
+  trades       Trade[]
+  executions   Execution[]
+  orders       Order[]
+  ledger       LedgerEntry[]
+  snapshots    AccountSnapshot[]
+  dailySummary DailySummary[]
+  riskPolicies RiskPolicy[]
+  riskEvals    RiskEvaluation[]
+  riskEvents   RiskEvent[]
+  importJobs   ImportJob[]
+  cursors      ImportCursor[]
+  rawRecords   RawRecord[]
+
+  @@unique([venueId, externalAccountId])
+  @@index([organizationId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+/// Ф3 (SaaS): ключи пользователей, зашифрованные конвертным шифрованием (KMS).
+/// В MVP НЕ используется: ключ MEXC (только чтение) лежит в .env на сервере.
+model ExchangeCredential {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  accountId      String    @unique @map("account_id") @db.Uuid
+  keyHint        String    @map("key_hint") // последние 4 символа, для UI
+  ciphertext     Bytes
+  encKeyId       String    @map("enc_key_id") // id ключа KMS
+  readOnly       Boolean   @default(true) @map("read_only")
+  scopes         String[]
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  rotatedAt      DateTime? @map("rotated_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("exchange_credentials")
+}
+
+/// Снимок баланса/equity счёта: equity curve, лимиты пропа, сверка Сторожем.
+model AccountSnapshot {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  accountId      String   @map("account_id") @db.Uuid
+  takenAt        DateTime @map("taken_at") @db.Timestamptz(6)
+  balance        Decimal  @db.Decimal(38, 18)
+  equity         Decimal  @db.Decimal(38, 18)
+  unrealizedPnl  Decimal? @map("unrealized_pnl") @db.Decimal(38, 18)
+  marginUsed     Decimal? @map("margin_used") @db.Decimal(38, 18)
+  origin         DataOrigin
+  raw            Json?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, takenAt])
+  @@index([organizationId])
+  @@map("account_snapshots")
+}
+
+// ---------------------------------------------------------------------
+// 4. ТОРГОВЛЯ: ОРДЕРА, ИСПОЛНЕНИЯ, СДЕЛКИ, ДВИЖЕНИЯ СРЕДСТВ
+// ---------------------------------------------------------------------
+
+/// Ордер. Для импорта — что вернула биржа; для движка — что поставил Order Manager.
+/// client_order_id генерирует движок → идемпотентность повторной отправки.
+model Order {
+  id               String      @id @default(uuid()) @db.Uuid
+  organizationId   String      @map("organization_id") @db.Uuid
+  accountId        String      @map("account_id") @db.Uuid
+  instrumentId     String      @map("instrument_id") @db.Uuid
+  tradeId          String?     @map("trade_id") @db.Uuid
+  decisionId       String?     @map("decision_id") @db.Uuid
+  riskEvaluationId String?     @map("risk_evaluation_id") @db.Uuid
+  externalOrderId  String?     @map("external_order_id")
+  clientOrderId    String?     @map("client_order_id")
+  purpose          String? // entry | stop | take | exit | breakeven | trailing
+  side             OrderSide
+  type             OrderType
+  timeInForce      String?     @map("time_in_force")
+  reduceOnly       Boolean     @default(false) @map("reduce_only")
+  price            Decimal?    @db.Decimal(38, 18)
+  stopPrice        Decimal?    @map("stop_price") @db.Decimal(38, 18)
+  qty              Decimal     @db.Decimal(38, 18) // в базовом активе (нормализовано)
+  filledQty        Decimal     @default(0) @map("filled_qty") @db.Decimal(38, 18)
+  avgFillPrice     Decimal?    @map("avg_fill_price") @db.Decimal(38, 18)
+  leverage         Decimal?    @db.Decimal(20, 8)
+  status           OrderStatus
+  origin           DataOrigin
+  placedAt         DateTime    @map("placed_at") @db.Timestamptz(6)
+  updatedAt        DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  closedAt         DateTime?   @map("closed_at") @db.Timestamptz(6)
+  raw              Json?
+
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account        Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  instrument     Instrument      @relation(fields: [instrumentId], references: [id])
+  trade          Trade?          @relation(fields: [tradeId], references: [id])
+  decision       AgentDecision?  @relation(fields: [decisionId], references: [id])
+  riskEvaluation RiskEvaluation? @relation(fields: [riskEvaluationId], references: [id])
+  executions     Execution[]
+
+  @@unique([accountId, externalOrderId])
+  @@unique([accountId, clientOrderId])
+  @@index([organizationId, placedAt])
+  @@index([tradeId])
+  @@map("orders")
+}
+
+/// Исполнение (fill) — атом истины о торговле. Сделка (trade) собирается из исполнений.
+/// Ручная сделка тоже пишет «синтетические» исполнения (external_id = "manual:<uuid>"),
+/// чтобы у статистики был один путь расчёта.
+model Execution {
+  id             String     @id @default(uuid()) @db.Uuid
+  organizationId String     @map("organization_id") @db.Uuid
+  accountId      String     @map("account_id") @db.Uuid
+  instrumentId   String     @map("instrument_id") @db.Uuid
+  orderId        String?    @map("order_id") @db.Uuid
+  tradeId        String?    @map("trade_id") @db.Uuid
+  externalId     String     @map("external_id") // id сделки на бирже → ключ идемпотентности
+  side           OrderSide
+  positionSide   String?    @map("position_side") // long | short | both (hedge mode)
+  price          Decimal    @db.Decimal(38, 18)
+  qty            Decimal    @db.Decimal(38, 18) // в базовом активе
+  qtyContracts   Decimal?   @map("qty_contracts") @db.Decimal(38, 18) // как отдала биржа, если в контрактах
+  quoteQty       Decimal?   @map("quote_qty") @db.Decimal(38, 18)
+  fee            Decimal    @default(0) @db.Decimal(38, 18) // со знаком: + списание, − ребейт
+  feeAsset       String?    @map("fee_asset")
+  feeQuote       Decimal?   @map("fee_quote") @db.Decimal(38, 18) // комиссия в валюте PnL на момент филла
+  isMaker        Boolean?   @map("is_maker")
+  realizedPnl    Decimal?   @map("realized_pnl") @db.Decimal(38, 18) // если биржа отдаёт сама
+  executedAt     DateTime   @map("executed_at") @db.Timestamptz(6)
+  origin         DataOrigin
+  rawRecordId    String?    @map("raw_record_id") @db.Uuid
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  instrument   Instrument   @relation(fields: [instrumentId], references: [id])
+  order        Order?       @relation(fields: [orderId], references: [id])
+  trade        Trade?       @relation(fields: [tradeId], references: [id])
+  rawRecord    RawRecord?   @relation(fields: [rawRecordId], references: [id])
+
+  @@unique([accountId, externalId])
+  @@index([organizationId, executedAt])
+  @@index([accountId, instrumentId, executedAt])
+  @@index([tradeId])
+  @@map("executions")
+}
+
+/// Сделка = позиция от открытия до закрытия (round-trip). Единая модель для человека и агента.
+/// Кто исполнял — executor; откуда пришли данные — origin; по чьему сигналу — signal_id.
+/// Денормализованные итоги (entry_avg, net_pnl, r_multiple...) пересчитывает
+/// SQL-функция tp_recompute_trade(id) из executions + ledger_entries (одна реализация для TS и Python).
+model Trade {
+  id                 String      @id @default(uuid()) @db.Uuid
+  organizationId     String      @map("organization_id") @db.Uuid
+  accountId          String      @map("account_id") @db.Uuid
+  instrumentId       String      @map("instrument_id") @db.Uuid
+  executor           Executor
+  origin             DataOrigin
+  agentId            String?     @map("agent_id") @db.Uuid
+  strategyVersionId  String?     @map("strategy_version_id") @db.Uuid
+  signalId           String?     @map("signal_id") @db.Uuid
+  decisionId         String?     @map("decision_id") @db.Uuid
+  playbookId         String?     @map("playbook_id") @db.Uuid // стиль/сетап человека: «SMC 15m», «Шорт пампов»
+  status             TradeStatus
+  side               TradeSide
+  timeframe          String? // "5m", "15m"
+  openedAt           DateTime?   @map("opened_at") @db.Timestamptz(6)
+  closedAt           DateTime?   @map("closed_at") @db.Timestamptz(6)
+
+  // --- план (что собирался сделать) ---
+  plannedEntry       Decimal?    @map("planned_entry") @db.Decimal(38, 18)
+  plannedStop        Decimal?    @map("planned_stop") @db.Decimal(38, 18)
+  plannedTakeProfits Decimal[]   @map("planned_take_profits") @db.Decimal(38, 18)
+  plannedRiskQuote   Decimal?    @map("planned_risk_quote") @db.Decimal(38, 18) // 1R в валюте PnL
+  stopIsLiquidation  Boolean     @default(false) @map("stop_is_liquidation") // триггер тильта Ф2 + метрика «цена ликвидационного стопа»
+
+  // --- факт (пересчитывается из исполнений) ---
+  leverage           Decimal?    @db.Decimal(20, 8)
+  marginMode         String?     @map("margin_mode") // isolated | cross
+  marginUsed         Decimal?    @map("margin_used") @db.Decimal(38, 18)
+  liquidationPrice   Decimal?    @map("liquidation_price") @db.Decimal(38, 18)
+  actualStop         Decimal?    @map("actual_stop") @db.Decimal(38, 18) // последний стоп на бирже перед выходом
+  maxQty             Decimal?    @map("max_qty") @db.Decimal(38, 18)
+  entryAvg           Decimal?    @map("entry_avg") @db.Decimal(38, 18)
+  exitAvg            Decimal?    @map("exit_avg") @db.Decimal(38, 18)
+  pnlAsset           String?     @map("pnl_asset") // USDT
+  grossPnl           Decimal?    @map("gross_pnl") @db.Decimal(38, 18)
+  fees               Decimal?    @db.Decimal(38, 18)
+  funding            Decimal?    @db.Decimal(38, 18)
+  netPnl             Decimal?    @map("net_pnl") @db.Decimal(38, 18)
+  netPnlUsd          Decimal?    @map("net_pnl_usd") @db.Decimal(38, 18) // для сводной статистики по разным валютам
+  returnPct          Decimal?    @map("return_pct") @db.Decimal(20, 8) // к марже
+  rMultiple          Decimal?    @map("r_multiple") @db.Decimal(20, 8)
+  mfe                Decimal?    @db.Decimal(38, 18) // макс. благоприятное движение (Ф2, по свечам)
+  mae                Decimal?    @db.Decimal(38, 18)
+  recomputedAt       DateTime?   @map("recomputed_at") @db.Timestamptz(6)
+
+  // --- психология (заполняет человек; для агента — пусто) ---
+  entryReason        String?     @map("entry_reason")
+  emotionBefore      String?     @map("emotion_before") // код из справочника эмоций (настраиваемый список)
+  emotionAfter       String?     @map("emotion_after")
+  confidence         Int? // 1–10, CHECK в SQL-миграции
+  followedPlan       Boolean?    @map("followed_plan")
+
+  // --- идемпотентность и дубликаты ---
+  externalPositionId String?     @map("external_position_id") // id позиции на бирже, если есть
+  idempotencyKey     String?     @map("idempotency_key") // из заголовка Idempotency-Key (ручной/голосовой ввод)
+  possibleDuplicateOfId String?  @map("possible_duplicate_of_id") @db.Uuid // ручная сделка ↔ импортированная
+  mergedIntoId       String?     @map("merged_into_id") @db.Uuid
+
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt          DateTime?   @map("deleted_at") @db.Timestamptz(6)
+
+  organization      Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account           Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  instrument        Instrument       @relation(fields: [instrumentId], references: [id])
+  agent             Agent?           @relation(fields: [agentId], references: [id])
+  strategyVersion   StrategyVersion? @relation(fields: [strategyVersionId], references: [id])
+  signal            Signal?          @relation(fields: [signalId], references: [id])
+  decision          AgentDecision?   @relation(fields: [decisionId], references: [id])
+  playbook          Playbook?        @relation(fields: [playbookId], references: [id])
+  possibleDuplicate Trade?           @relation("TradeDuplicate", fields: [possibleDuplicateOfId], references: [id])
+  duplicates        Trade[]          @relation("TradeDuplicate")
+  mergedInto        Trade?           @relation("TradeMerge", fields: [mergedIntoId], references: [id])
+  mergedFrom        Trade[]          @relation("TradeMerge")
+  executions        Execution[]
+  orders            Order[]
+  ledger            LedgerEntry[]
+  tags              TradeTag[]
+  violations        TradeRuleViolation[]
+  notes             Note[]
+  attachments       Attachment[]
+  riskEvents        RiskEvent[]
+  aiReviews         AiReview[]
+
+  @@unique([accountId, externalPositionId])
+  @@unique([organizationId, idempotencyKey])
+  @@index([organizationId, closedAt])
+  @@index([organizationId, openedAt])
+  @@index([accountId, instrumentId, openedAt])
+  @@index([agentId])
+  @@index([signalId])
+  @@index([playbookId])
+  @@map("trades")
+}
+
+/// Движения средств вне филлов: фандинг, отдельные комиссии, депозиты/выводы, переводы.
+/// Нужны для честного PnL сделки (фандинг) и equity curve (депозит ≠ прибыль).
+model LedgerEntry {
+  id             String     @id @default(uuid()) @db.Uuid
+  organizationId String     @map("organization_id") @db.Uuid
+  accountId      String     @map("account_id") @db.Uuid
+  instrumentId   String?    @map("instrument_id") @db.Uuid
+  tradeId        String?    @map("trade_id") @db.Uuid // фандинг привязывается к открытой в этот момент сделке
+  kind           LedgerKind
+  externalId     String     @map("external_id") // id записи на бирже; для синтетики — "calc:<...>"
+  asset          String
+  amount         Decimal    @db.Decimal(38, 18) // со знаком: + приход, − расход
+  amountQuote    Decimal?   @map("amount_quote") @db.Decimal(38, 18)
+  occurredAt     DateTime   @map("occurred_at") @db.Timestamptz(6)
+  origin         DataOrigin
+  rawRecordId    String?    @map("raw_record_id") @db.Uuid
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  instrument   Instrument?  @relation(fields: [instrumentId], references: [id])
+  trade        Trade?       @relation(fields: [tradeId], references: [id])
+  rawRecord    RawRecord?   @relation(fields: [rawRecordId], references: [id])
+
+  @@unique([accountId, kind, externalId])
+  @@index([organizationId, occurredAt])
+  @@index([tradeId])
+  @@map("ledger_entries")
+}
+
+// ---------------------------------------------------------------------
+// 5. РАЗМЕТКА ЧЕЛОВЕКА: СТИЛИ, ПРАВИЛА, ТЕГИ, ЗАМЕТКИ, ВЛОЖЕНИЯ, ДНИ
+// ---------------------------------------------------------------------
+
+/// Стиль/сетап человека («SMC 15m BTC», «Шорт пампов MEXC»). Для агентов вместо этого — StrategyVersion.
+model Playbook {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  userId         String?   @map("user_id") @db.Uuid
+  name           String
+  description    String?
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id])
+  trades       Trade[]
+  rules        Rule[]
+
+  @@unique([organizationId, name])
+  @@map("playbooks")
+}
+
+/// Правило человека: пункт чек-листа (Ф2) или жёсткое правило. Нарушения — TradeRuleViolation.
+model Rule {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  userId         String?   @map("user_id") @db.Uuid
+  playbookId     String?   @map("playbook_id") @db.Uuid
+  code           String // короткий код: "no_reentry_5m", "stop_not_liq"
+  text           String
+  kind           String    @default("rule") // rule | checklist
+  sortOrder      Int       @default(0) @map("sort_order")
+  active         Boolean   @default(true)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  organization Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?                @relation(fields: [userId], references: [id])
+  playbook     Playbook?            @relation(fields: [playbookId], references: [id])
+  violations   TradeRuleViolation[]
+
+  @@unique([organizationId, code])
+  @@map("rules")
+}
+
+model TradeRuleViolation {
+  tradeId   String   @map("trade_id") @db.Uuid
+  ruleId    String   @map("rule_id") @db.Uuid
+  comment   String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  trade Trade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  rule  Rule  @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@id([tradeId, ruleId])
+  @@map("trade_rule_violations")
+}
+
+model Tag {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  name           String
+  color          String?
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  trades       TradeTag[]
+
+  @@unique([organizationId, name])
+  @@map("tags")
+}
+
+model TradeTag {
+  tradeId String @map("trade_id") @db.Uuid
+  tagId   String @map("tag_id") @db.Uuid
+
+  trade Trade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([tradeId, tagId])
+  @@index([tagId])
+  @@map("trade_tags")
+}
+
+/// Заметка: текст или голос. Голос из Telegram: аудио → Attachment, распознанный текст → transcript,
+/// структурированный разбор (сделка/эмоция/правило) → parsed. Telegram-id → идемпотентность.
+model Note {
+  id                String    @id @default(uuid()) @db.Uuid
+  organizationId    String    @map("organization_id") @db.Uuid
+  userId            String    @map("user_id") @db.Uuid
+  tradeId           String?   @map("trade_id") @db.Uuid
+  dayDate           DateTime? @map("day_date") @db.Date // заметка к дню, а не к сделке
+  kind              NoteKind
+  channel           Channel
+  text              String?
+  transcript        String?
+  audioAttachmentId String?   @unique @map("audio_attachment_id") @db.Uuid
+  durationSec       Int?      @map("duration_sec")
+  parsed            Json? // результат LLM-разбора голосовой заметки
+  parseStatus       String?   @map("parse_status") // pending | done | failed | confirmed
+  telegramChatId    BigInt?   @map("telegram_chat_id")
+  telegramMessageId BigInt?   @map("telegram_message_id")
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt         DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+  trade        Trade?       @relation(fields: [tradeId], references: [id])
+  audio        Attachment?  @relation("NoteAudio", fields: [audioAttachmentId], references: [id])
+  attachments  Attachment[] @relation("NoteAttachments")
+  llmCalls     LlmCall[]
+
+  @@unique([telegramChatId, telegramMessageId])
+  @@index([organizationId, createdAt])
+  @@index([tradeId])
+  @@map("notes")
+}
+
+/// Файл (скриншот, картинка графика детектора, голосовое). Сам файл — в объектном хранилище
+/// (S3-совместимое), в БД только ключ и метаданные. Не BYTEA.
+model Attachment {
+  id             String         @id @default(uuid()) @db.Uuid
+  organizationId String         @map("organization_id") @db.Uuid
+  kind           AttachmentKind
+  storageKey     String         @unique @map("storage_key")
+  mime           String
+  sizeBytes      Int            @map("size_bytes")
+  sha256         String
+  width          Int?
+  height         Int?
+  tradeId        String?        @map("trade_id") @db.Uuid
+  noteId         String?        @map("note_id") @db.Uuid
+  uploadedById   String?        @map("uploaded_by_id") @db.Uuid
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  deletedAt      DateTime?      @map("deleted_at") @db.Timestamptz(6)
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  trade        Trade?        @relation(fields: [tradeId], references: [id])
+  note         Note?         @relation("NoteAttachments", fields: [noteId], references: [id])
+  uploadedBy   User?         @relation("AttachmentUploader", fields: [uploadedById], references: [id])
+  audioOf      Note?         @relation("NoteAudio")
+  signals      Signal[]
+  detectorRuns DetectorRun[]
+
+  @@index([organizationId, createdAt])
+  @@index([tradeId])
+  @@index([sha256])
+  @@map("attachments")
+}
+
+/// День глазами человека: настрой, оценка дисциплины, итоговая заметка.
+model DailyJournal {
+  id              String   @id @default(uuid()) @db.Uuid
+  organizationId  String   @map("organization_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  date            DateTime @db.Date // локальная дата в tz пользователя
+  mood            String?
+  disciplineScore Int?     @map("discipline_score") // 1–10
+  plan            String?
+  summary         String?
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+  @@index([organizationId, date])
+  @@map("daily_journals")
+}
+
+/// Дневные итоги счёта (производная таблица, пересчитывается). Граница дня — по tz счёта/пропа.
+model DailySummary {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  accountId      String   @map("account_id") @db.Uuid
+  date           DateTime @db.Date
+  dayTz          String   @map("day_tz")
+  startBalance   Decimal? @map("start_balance") @db.Decimal(38, 18)
+  endBalance     Decimal? @map("end_balance") @db.Decimal(38, 18)
+  startEquity    Decimal? @map("start_equity") @db.Decimal(38, 18)
+  endEquity      Decimal? @map("end_equity") @db.Decimal(38, 18)
+  realizedPnl    Decimal  @default(0) @map("realized_pnl") @db.Decimal(38, 18)
+  fees           Decimal  @default(0) @db.Decimal(38, 18)
+  funding        Decimal  @default(0) @db.Decimal(38, 18)
+  netPnl         Decimal  @default(0) @map("net_pnl") @db.Decimal(38, 18)
+  netFlows       Decimal  @default(0) @map("net_flows") @db.Decimal(38, 18) // депозиты − выводы
+  maxDrawdownPct Decimal? @map("max_drawdown_pct") @db.Decimal(20, 8)
+  tradesCount    Int      @default(0) @map("trades_count")
+  wins           Int      @default(0)
+  losses         Int      @default(0)
+  computedAt     DateTime @map("computed_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, date])
+  @@index([organizationId, date])
+  @@map("daily_summaries")
+}
+
+/// ИИ-разбор: еженедельный (человек), разбор сделки, Post-Trade Reviewer агента.
+model AiReview {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  userId         String?  @map("user_id") @db.Uuid
+  agentId        String?  @map("agent_id") @db.Uuid
+  tradeId        String?  @map("trade_id") @db.Uuid
+  kind           String // weekly | trade | post_trade | strategy_research
+  periodFrom     DateTime? @map("period_from") @db.Timestamptz(6)
+  periodTo       DateTime? @map("period_to") @db.Timestamptz(6)
+  status         String   @default("queued") // queued | done | failed
+  contentMd      String?  @map("content_md")
+  findings       Json? // [{type:"pattern", text, tradeIds[]}, ...]
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id])
+  agent        Agent?       @relation(fields: [agentId], references: [id])
+  trade        Trade?       @relation(fields: [tradeId], references: [id])
+  llmCalls     LlmCall[]
+
+  @@index([organizationId, createdAt])
+  @@map("ai_reviews")
+}
+
+// ---------------------------------------------------------------------
+// 6. PROP-AGENTS: КЛАСТЕРЫ, ВЕРСИИ, АГЕНТЫ, АРЕНА
+// ---------------------------------------------------------------------
+
+/// Кластер = стратегия (smc-btc, ma-cross). Карточка живёт в репо: clusters/<slug>/.
+model Cluster {
+  id               String   @id @default(uuid()) @db.Uuid
+  organizationId   String   @map("organization_id") @db.Uuid
+  slug             String
+  name             String
+  repoPath         String   @map("repo_path") // trade-performance/prop-agents/clusters/smc-btc
+  telegramChatId   BigInt?  @map("telegram_chat_id")
+  telegramThreadId BigInt?  @map("telegram_thread_id")
+  state            RunState @default(RUNNING)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  versions     StrategyVersion[]
+  agents       Agent[]
+  signals      Signal[]
+  riskPolicies RiskPolicy[]
+  riskEvents   RiskEvent[]
+
+  @@unique([organizationId, slug])
+  @@map("clusters")
+}
+
+/// Версия стратегии = снимок config.json/rules.yaml + коммит карточки. Неизменяема.
+/// Новая версия (правка Германа или Strategy Researcher) → SHADOW → ACTIVE только с approved_by.
+model StrategyVersion {
+  id           String        @id @default(uuid()) @db.Uuid
+  organizationId String      @map("organization_id") @db.Uuid
+  clusterId    String        @map("cluster_id") @db.Uuid
+  version      String // "0.1"
+  status       VersionStatus @default(DRAFT)
+  config       Json // содержимое config.json / rules.yaml
+  configHash   String        @map("config_hash") // sha256 канонического JSON
+  gitCommit    String?       @map("git_commit")
+  parentId     String?       @map("parent_id") @db.Uuid
+  changelog    String?
+  createdBy    ActorType     @map("created_by")
+  approvedById String?       @map("approved_by_id") @db.Uuid // только человек
+  approvedAt   DateTime?     @map("approved_at") @db.Timestamptz(6)
+  promotedAt   DateTime?     @map("promoted_at") @db.Timestamptz(6)
+  retiredAt    DateTime?     @map("retired_at") @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  cluster      Cluster            @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  parent       StrategyVersion?   @relation("VersionLineage", fields: [parentId], references: [id])
+  children     StrategyVersion[]  @relation("VersionLineage")
+  agents       Agent[]
+  signals      Signal[]
+  runs         DetectorRun[]
+  decisions    AgentDecision[]
+  trades       Trade[]
+  asCandidate  ShadowEvaluation[] @relation("EvalCandidate")
+  asBaseline   ShadowEvaluation[] @relation("EvalBaseline")
+
+  @@unique([clusterId, version])
+  @@unique([clusterId, configHash])
+  @@index([organizationId])
+  @@map("strategy_versions")
+}
+
+/// Агент = кластер + версия + модель + площадка; свой счёт (account_id уникален) и свой топик.
+model Agent {
+  id                String    @id @default(uuid()) @db.Uuid
+  organizationId    String    @map("organization_id") @db.Uuid
+  clusterId         String    @map("cluster_id") @db.Uuid
+  strategyVersionId String    @map("strategy_version_id") @db.Uuid
+  accountId         String    @unique @map("account_id") @db.Uuid
+  experimentId      String?   @map("experiment_id") @db.Uuid
+  name              String
+  model             String // "claude-opus-5.5", "openrouter/…", "none" для бейзлайна
+  mode              AgentMode
+  replica           Int       @default(1) // повтор N≥3 в арене
+  state             RunState  @default(RUNNING)
+  telegramThreadId  BigInt?   @map("telegram_thread_id")
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  stoppedAt         DateTime? @map("stopped_at") @db.Timestamptz(6)
+
+  organization    Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  cluster         Cluster         @relation(fields: [clusterId], references: [id])
+  strategyVersion StrategyVersion @relation(fields: [strategyVersionId], references: [id])
+  account         Account         @relation(fields: [accountId], references: [id])
+  experiment      Experiment?     @relation(fields: [experimentId], references: [id])
+  decisions       AgentDecision[]
+  trades          Trade[]
+  riskPolicies    RiskPolicy[]
+  riskEvals       RiskEvaluation[]
+  riskEvents      RiskEvent[]
+  aiReviews       AiReview[]
+
+  @@index([organizationId])
+  @@index([clusterId])
+  @@index([experimentId])
+  @@map("agents")
+}
+
+/// Эксперимент арены: матрица {модель × кластер × площадка} на период.
+model Experiment {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  name           String
+  hypothesis     String?
+  config         Json?
+  startedAt      DateTime  @map("started_at") @db.Timestamptz(6)
+  endedAt        DateTime? @map("ended_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  agents       Agent[]
+
+  @@index([organizationId])
+  @@map("experiments")
+}
+
+/// Итог сравнения тени со старой версией (Shadow Evaluator). Решение о замене — человек.
+model ShadowEvaluation {
+  id                 String   @id @default(uuid()) @db.Uuid
+  organizationId     String   @map("organization_id") @db.Uuid
+  candidateVersionId String   @map("candidate_version_id") @db.Uuid
+  baselineVersionId  String   @map("baseline_version_id") @db.Uuid
+  periodFrom         DateTime @map("period_from") @db.Timestamptz(6)
+  periodTo           DateTime @map("period_to") @db.Timestamptz(6)
+  metrics            Json // после комиссий и стоимости LLM: netR, PF, maxDD, trades, llmCostUsd ...
+  verdict            String // candidate_better | not_better | insufficient_data
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  candidate    StrategyVersion @relation("EvalCandidate", fields: [candidateVersionId], references: [id])
+  baseline     StrategyVersion @relation("EvalBaseline", fields: [baselineVersionId], references: [id])
+
+  @@index([organizationId])
+  @@map("shadow_evaluations")
+}
+
+// ---------------------------------------------------------------------
+// 7. СИГНАЛЫ, РЕШЕНИЯ LLM, СТОИМОСТЬ
+// ---------------------------------------------------------------------
+
+/// Прогон детектора: бэктест (история) или live-прогон, в котором что-то нашлось.
+/// Пустые live-прогоны каждые 5 мин не пишем (это heartbeat — в логи/метрики).
+model DetectorRun {
+  id                String     @id @default(uuid()) @db.Uuid
+  organizationId    String     @map("organization_id") @db.Uuid
+  strategyVersionId String     @map("strategy_version_id") @db.Uuid
+  instrumentId      String     @map("instrument_id") @db.Uuid
+  mode              SignalMode
+  timeframe         String
+  rangeFrom         DateTime   @map("range_from") @db.Timestamptz(6)
+  rangeTo           DateTime   @map("range_to") @db.Timestamptz(6)
+  candles           Int
+  stats             Json? // {setups, closed, winrate, sumR, sumRAfterFees}
+  chartAttachmentId String?    @map("chart_attachment_id") @db.Uuid
+  startedAt         DateTime   @map("started_at") @db.Timestamptz(6)
+  finishedAt        DateTime?  @map("finished_at") @db.Timestamptz(6)
+  error             String?
+
+  organization    Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  strategyVersion StrategyVersion @relation(fields: [strategyVersionId], references: [id])
+  instrument      Instrument      @relation(fields: [instrumentId], references: [id])
+  chart           Attachment?     @relation(fields: [chartAttachmentId], references: [id])
+  signals         Signal[]
+
+  @@index([organizationId, startedAt])
+  @@map("detector_runs")
+}
+
+/// Сигнал детектора (без LLM). Ключ дедупликации заменяет out/seen.json:
+/// (версия, инструмент, ТФ, режим, сторона, время сетапа). Статус обновляется детектором.
+model Signal {
+  id                String       @id @default(uuid()) @db.Uuid
+  organizationId    String       @map("organization_id") @db.Uuid
+  sourceId          String       @map("source_id") @db.Uuid // кто дал сигнал: наш сканер/детектор или чужой канал
+  clusterId         String?      @map("cluster_id") @db.Uuid // только для наших стратегий
+  strategyVersionId String?      @map("strategy_version_id") @db.Uuid // только для наших стратегий
+  externalMessageId String?      @map("external_message_id") // id поста в канале-источнике
+  rawText           String?      @map("raw_text") // исходный текст поста (только чтение, не перепубликуем)
+  editedAt          DateTime?    @map("edited_at") @db.Timestamptz(6) // пост правили после публикации
+  deletedInSourceAt DateTime?    @map("deleted_in_source_at") @db.Timestamptz(6) // пост удалили в канале
+  detectorRunId     String?      @map("detector_run_id") @db.Uuid
+  instrumentId      String       @map("instrument_id") @db.Uuid
+  timeframe         String
+  mode              SignalMode
+  side              TradeSide
+  setupTime         DateTime     @map("setup_time") @db.Timestamptz(6) // поле time детектора (закрытие свечи CHoCH)
+  detectedAt        DateTime     @map("detected_at") @db.Timestamptz(6)
+  entry             Decimal      @db.Decimal(38, 18)
+  stopLoss          Decimal      @map("stop_loss") @db.Decimal(38, 18)
+  takeProfits       Decimal[]    @map("take_profits") @db.Decimal(38, 18)
+  stopPct           Decimal      @map("stop_pct") @db.Decimal(20, 8)
+  status            SignalStatus
+  statusChangedAt   DateTime     @map("status_changed_at") @db.Timestamptz(6)
+  filledAt          DateTime?    @map("filled_at") @db.Timestamptz(6) // симуляция детектора
+  exitAt            DateTime?    @map("exit_at") @db.Timestamptz(6)
+  simulatedR        Decimal?     @map("simulated_r") @db.Decimal(20, 8)
+  htfBias           Int?         @map("htf_bias")
+  priceAtDetect     Decimal?     @map("price_at_detect") @db.Decimal(38, 18)
+  payload           Json // все поля детектора (swept_level, choch_level, fvg_top/bot, индексы — только справочно)
+  chartAttachmentId String?      @map("chart_attachment_id") @db.Uuid
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization    Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  source          SignalSource     @relation(fields: [sourceId], references: [id])
+  cluster         Cluster?         @relation(fields: [clusterId], references: [id])
+  strategyVersion StrategyVersion? @relation(fields: [strategyVersionId], references: [id])
+  detectorRun     DetectorRun?    @relation(fields: [detectorRunId], references: [id])
+  instrument      Instrument      @relation(fields: [instrumentId], references: [id])
+  chart           Attachment?     @relation(fields: [chartAttachmentId], references: [id])
+  events          SignalEvent[]
+  decisions       AgentDecision[]
+  trades          Trade[]
+  riskEvals       RiskEvaluation[]
+
+  @@unique([strategyVersionId, instrumentId, timeframe, mode, side, setupTime])
+  @@unique([sourceId, externalMessageId])
+  @@index([sourceId, detectedAt])
+  @@index([organizationId, detectedAt])
+  @@index([clusterId, status])
+  @@map("signals")
+}
+
+/// История смены статуса сигнала (pending → open → win/loss ...).
+model SignalEvent {
+  id        String       @id @default(uuid()) @db.Uuid
+  signalId  String       @map("signal_id") @db.Uuid
+  status    SignalStatus
+  at        DateTime     @db.Timestamptz(6)
+  data      Json?
+
+  signal Signal @relation(fields: [signalId], references: [id], onDelete: Cascade)
+
+  @@unique([signalId, status])
+  @@map("signal_events")
+}
+
+/// Решение мозга кластера по сигналу: ВЗЯТЬ / ПРОПУСТИТЬ / HOLD, с обоснованием.
+/// Уровни LLM не меняет — proposed_* хранятся для контроля (должны совпасть с сигналом).
+/// human_* — когда кнопку жмёт Герман (полуавто).
+model AgentDecision {
+  id                String         @id @default(uuid()) @db.Uuid
+  organizationId    String         @map("organization_id") @db.Uuid
+  signalId          String         @map("signal_id") @db.Uuid
+  agentId           String?        @map("agent_id") @db.Uuid // null — пока решает Hermes без отдельного агента
+  strategyVersionId String         @map("strategy_version_id") @db.Uuid
+  action            DecisionAction
+  confidence        Decimal?       @db.Decimal(5, 4) // 0..1
+  proposedEntry     Decimal?       @map("proposed_entry") @db.Decimal(38, 18)
+  proposedStop      Decimal?       @map("proposed_stop") @db.Decimal(38, 18)
+  proposedTakes     Decimal[]      @map("proposed_takes") @db.Decimal(38, 18)
+  reasons           Json? // {context, setup, exit} — по схеме ТЗ
+  rawOutput         Json?          @map("raw_output")
+  schemaValid       Boolean        @map("schema_valid")
+  totalTokens       Int?           @map("total_tokens")
+  totalCostUsd      Decimal?       @map("total_cost_usd") @db.Decimal(20, 10)
+  telegramMessageId BigInt?        @map("telegram_message_id")
+  humanAction       DecisionAction? @map("human_action")
+  humanUserId       String?        @map("human_user_id") @db.Uuid
+  humanAt           DateTime?      @map("human_at") @db.Timestamptz(6)
+  decidedAt         DateTime       @map("decided_at") @db.Timestamptz(6)
+
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  signal          Signal           @relation(fields: [signalId], references: [id])
+  agent           Agent?           @relation(fields: [agentId], references: [id])
+  strategyVersion StrategyVersion  @relation(fields: [strategyVersionId], references: [id])
+  llmCalls        LlmCall[]
+  riskEvals       RiskEvaluation[]
+  orders          Order[]
+  trades          Trade[]
+
+  @@index([organizationId, decidedAt])
+  @@index([signalId])
+  @@index([agentId])
+  @@map("agent_decisions")
+}
+
+/// Каждый вызов LLM в системе: роли мозга кластера, улучшатели, разбор голоса, еженедельный разбор.
+/// Единая таблица → единый учёт стоимости по агенту/модели/дню.
+model LlmCall {
+  id             String     @id @default(uuid()) @db.Uuid
+  organizationId String     @map("organization_id") @db.Uuid
+  decisionId     String?    @map("decision_id") @db.Uuid
+  aiReviewId     String?    @map("ai_review_id") @db.Uuid
+  noteId         String?    @map("note_id") @db.Uuid
+  role           String // context_analyst | chart_vision | news | bull | bear | strategy_trader | post_trade_review | strategy_research | voice_parse | weekly_review
+  provider       String // anthropic | openrouter | hermes
+  model          String
+  billing        LlmBilling
+  promptVersion  String?    @map("prompt_version") // версия шаблона промпта (git sha / semver)
+  promptHash     String?    @map("prompt_hash")
+  prompt         String? // полный текст; может содержать ПД → политика хранения
+  response       String?
+  inputTokens    Int?       @map("input_tokens")
+  outputTokens   Int?       @map("output_tokens")
+  cacheTokens    Int?       @map("cache_tokens")
+  costUsd        Decimal?   @map("cost_usd") @db.Decimal(20, 10) // null, если подписка и стоимость неизвестна
+  latencyMs      Int?       @map("latency_ms")
+  status         String // ok | error | timeout | invalid_schema
+  error          String?
+  startedAt      DateTime   @map("started_at") @db.Timestamptz(6)
+
+  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  decision     AgentDecision? @relation(fields: [decisionId], references: [id])
+  aiReview     AiReview?      @relation(fields: [aiReviewId], references: [id])
+  note         Note?          @relation(fields: [noteId], references: [id])
+
+  @@index([organizationId, startedAt])
+  @@index([decisionId])
+  @@index([model, startedAt])
+  @@map("llm_calls")
+}
+
+// ---------------------------------------------------------------------
+// 8. РИСК
+// ---------------------------------------------------------------------
+
+/// Жёсткие лимиты (риск на сделку, дневной лимит, плечо, мин. R:R, пауза после серии, whitelist).
+/// Пишет только человек (через API с ролью OWNER) — у роли БД движка только SELECT.
+/// Неизменяемая запись: правка = новая строка + valid_to у старой + запись в audit_logs.
+model RiskPolicy {
+  id               String    @id @default(uuid()) @db.Uuid
+  organizationId   String    @map("organization_id") @db.Uuid
+  scope            RiskScope
+  accountId        String?   @map("account_id") @db.Uuid
+  agentId          String?   @map("agent_id") @db.Uuid
+  clusterId        String?   @map("cluster_id") @db.Uuid
+  riskPerTradePct  Decimal?  @map("risk_per_trade_pct") @db.Decimal(20, 8)
+  dailyLossPct     Decimal?  @map("daily_loss_pct") @db.Decimal(20, 8)
+  totalLossPct     Decimal?  @map("total_loss_pct") @db.Decimal(20, 8)
+  maxLeverage      Decimal?  @map("max_leverage") @db.Decimal(20, 8)
+  minRr            Decimal?  @map("min_rr") @db.Decimal(20, 8)
+  lossStreakPause  Int?      @map("loss_streak_pause")
+  maxOpenPositions Int?      @map("max_open_positions")
+  whitelist        String[] // символы
+  extra            Json?
+  approvedById     String    @map("approved_by_id") @db.Uuid
+  validFrom        DateTime  @default(now()) @map("valid_from") @db.Timestamptz(6)
+  validTo          DateTime? @map("valid_to") @db.Timestamptz(6)
+
+  organization Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account?         @relation(fields: [accountId], references: [id])
+  agent        Agent?           @relation(fields: [agentId], references: [id])
+  cluster      Cluster?         @relation(fields: [clusterId], references: [id])
+  evaluations  RiskEvaluation[]
+
+  @@index([organizationId, scope])
+  @@map("risk_policies")
+}
+
+/// Проверка риск-слоем конкретного намерения войти: одобрено / урезано / отклонено и почему.
+model RiskEvaluation {
+  id                String      @id @default(uuid()) @db.Uuid
+  organizationId    String      @map("organization_id") @db.Uuid
+  accountId         String      @map("account_id") @db.Uuid
+  agentId           String?     @map("agent_id") @db.Uuid
+  signalId          String?     @map("signal_id") @db.Uuid
+  decisionId        String?     @map("decision_id") @db.Uuid
+  riskPolicyId      String?     @map("risk_policy_id") @db.Uuid
+  propProfileId     String?     @map("prop_profile_id") @db.Uuid
+  verdict           RiskVerdict
+  requestedQty      Decimal?    @map("requested_qty") @db.Decimal(38, 18)
+  approvedQty       Decimal?    @map("approved_qty") @db.Decimal(38, 18)
+  requestedLeverage Decimal?    @map("requested_leverage") @db.Decimal(20, 8)
+  approvedLeverage  Decimal?    @map("approved_leverage") @db.Decimal(20, 8)
+  ruleCodes         String[]    @map("rule_codes") // ["DAILY_LIMIT_NEAR", "RR_BELOW_MIN"]
+  explanation       String?
+  snapshot          Json? // equity, дневной PnL, открытые позиции на момент проверки
+  evaluatedAt       DateTime    @map("evaluated_at") @db.Timestamptz(6)
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account       @relation(fields: [accountId], references: [id])
+  agent        Agent?        @relation(fields: [agentId], references: [id])
+  signal       Signal?       @relation(fields: [signalId], references: [id])
+  decision     AgentDecision? @relation(fields: [decisionId], references: [id])
+  riskPolicy   RiskPolicy?   @relation(fields: [riskPolicyId], references: [id])
+  propProfile  PropProfile?  @relation(fields: [propProfileId], references: [id])
+  orders       Order[]
+
+  @@index([organizationId, evaluatedAt])
+  @@index([accountId, evaluatedAt])
+  @@map("risk_evaluations")
+}
+
+/// Событие риска: kill-switch, пауза после серии, достигнут дневной лимит, расхождение позиций,
+/// а также триггеры тильта человека (Ф2: kind = "tilt_quick_reentry" и т.п.).
+model RiskEvent {
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  scope          RiskScope
+  accountId      String?   @map("account_id") @db.Uuid
+  agentId        String?   @map("agent_id") @db.Uuid
+  clusterId      String?   @map("cluster_id") @db.Uuid
+  tradeId        String?   @map("trade_id") @db.Uuid
+  kind           String // kill_switch | daily_loss_limit | max_drawdown | loss_streak_pause | position_mismatch | connectivity | manual_pause | tilt_*
+  severity       Severity
+  actionTaken    String?   @map("action_taken") // paused | flattened | notified | none
+  message        String
+  data           Json?
+  occurredAt     DateTime  @map("occurred_at") @db.Timestamptz(6)
+  resolvedAt     DateTime? @map("resolved_at") @db.Timestamptz(6)
+  resolvedById   String?   @map("resolved_by_id") @db.Uuid
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account?     @relation(fields: [accountId], references: [id])
+  agent        Agent?       @relation(fields: [agentId], references: [id])
+  cluster      Cluster?     @relation(fields: [clusterId], references: [id])
+  trade        Trade?       @relation(fields: [tradeId], references: [id])
+
+  @@index([organizationId, occurredAt])
+  @@index([kind, occurredAt])
+  @@map("risk_events")
+}
+
+// ---------------------------------------------------------------------
+// 9. ИМПОРТ И ФОНОВЫЕ ЗАДАЧИ
+// ---------------------------------------------------------------------
+
+/// Запуск импорта по счёту: статус и счётчики (сколько новых, сколько дублей).
+model ImportJob {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  accountId      String       @map("account_id") @db.Uuid
+  mode           String // full | incremental | file
+  status         ImportStatus @default(QUEUED)
+  streams        String[] // ["futures_deals","futures_orders","funding","spot_trades:BTCUSDT"]
+  requestedBy    String?      @map("requested_by") // user.id | "cron"
+  fetched        Int          @default(0)
+  inserted       Int          @default(0)
+  updated        Int          @default(0)
+  duplicates     Int          @default(0)
+  errors         Int          @default(0)
+  errorLog       Json?        @map("error_log")
+  startedAt      DateTime?    @map("started_at") @db.Timestamptz(6)
+  finishedAt     DateTime?    @map("finished_at") @db.Timestamptz(6)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  firstSeen    RawRecord[]  @relation("RawFirstJob")
+  lastSeen     RawRecord[]  @relation("RawLastJob")
+
+  @@index([organizationId, createdAt])
+  @@index([accountId, status])
+  @@map("import_jobs")
+}
+
+/// Курсор инкрементального импорта: докуда дочитали каждый поток каждого счёта.
+model ImportCursor {
+  accountId String   @map("account_id") @db.Uuid
+  stream    String
+  cursor    Json // {"last_time": 1696..., "last_id": "..."} — формат зависит от API площадки
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@id([accountId, stream])
+  @@map("import_cursors")
+}
+
+/// Сырая запись площадки «как пришла» (landing zone). Позволяет пересобрать сделки
+/// без повторного похода в API и разбирать спорные случаи. Уникальна по (счёт, поток, внешний id).
+model RawRecord {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  accountId      String   @map("account_id") @db.Uuid
+  stream         String
+  externalId     String   @map("external_id")
+  payload        Json
+  payloadHash    String   @map("payload_hash")
+  firstJobId     String?  @map("first_job_id") @db.Uuid
+  lastJobId      String?  @map("last_job_id") @db.Uuid
+  firstSeenAt    DateTime @default(now()) @map("first_seen_at") @db.Timestamptz(6)
+  lastSeenAt     DateTime @default(now()) @map("last_seen_at") @db.Timestamptz(6)
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  firstJob     ImportJob?    @relation("RawFirstJob", fields: [firstJobId], references: [id])
+  lastJob      ImportJob?    @relation("RawLastJob", fields: [lastJobId], references: [id])
+  executions   Execution[]
+  ledger       LedgerEntry[]
+
+  @@unique([accountId, stream, externalId])
+  @@index([organizationId])
+  @@map("raw_records")
+}
+
+/// Очередь фоновых задач в самой PostgreSQL (SELECT … FOR UPDATE SKIP LOCKED) — без Redis.
+/// Импорт, распознавание голоса, ИИ-разбор, пересчёт сделок/дней.
+model Job {
+  id          String    @id @default(uuid()) @db.Uuid
+  queue       String // import | transcribe | ai_review | recompute
+  kind        String
+  payload     Json
+  status      JobStatus @default(QUEUED)
+  dedupeKey   String?   @unique @map("dedupe_key")
+  runAt       DateTime  @default(now()) @map("run_at") @db.Timestamptz(6)
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(5) @map("max_attempts")
+  lockedAt    DateTime? @map("locked_at") @db.Timestamptz(6)
+  lockedBy    String?   @map("locked_by")
+  lastError   String?   @map("last_error")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  finishedAt  DateTime? @map("finished_at") @db.Timestamptz(6)
+
+  @@index([queue, status, runAt])
+  @@map("jobs")
+}
+
+// ---------------------------------------------------------------------
+// Источники сигналов и их рейтинг (TZ дневника §2.1)
+// ---------------------------------------------------------------------
+
+model SignalSource {
+  id              String           @id @default(uuid()) @db.Uuid
+  organizationId  String           @map("organization_id") @db.Uuid
+  kind            SignalSourceKind
+  name            String
+  handle          String? // t.me/<handle> для каналов, slug кластера для детектора
+  telegramChatId  BigInt?          @map("telegram_chat_id")
+  isVip           Boolean          @default(false) @map("is_vip")
+  active          Boolean          @default(true)
+  notes           String?
+  // --- рейтинг (пересчитывается по проверенным сигналам) ---
+  signalsTotal    Int              @default(0) @map("signals_total")
+  signalsResolved Int              @default(0) @map("signals_resolved")
+  winRate         Decimal?         @map("win_rate") @db.Decimal(20, 8)
+  avgR            Decimal?         @map("avg_r") @db.Decimal(20, 8)
+  expectancyR     Decimal?         @map("expectancy_r") @db.Decimal(20, 8)
+  avgDelaySec     Int?             @map("avg_delay_sec") // задержка поста относительно сетапа/движения
+  editedCount     Int              @default(0) @map("edited_count")
+  deletedCount    Int              @default(0) @map("deleted_count")
+  ratedAt         DateTime?        @map("rated_at") @db.Timestamptz(6)
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime?        @map("deleted_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  signals      Signal[]
+
+  @@unique([organizationId, kind, name])
+  @@index([organizationId, active])
+  @@map("signal_sources")
+}
