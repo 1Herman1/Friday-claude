@@ -1,7 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { ApiError } from '../../lib/errors.js'
-import { CONSENT_TEXT_VERSION } from '../../lib/consents.js'
 
 function marketingConsentState(consents: { revokedAt: Date | null }[]): 'yes' | 'revoked' | 'no' {
   if (consents.some((c) => c.revokedAt === null)) return 'yes'
@@ -214,25 +213,40 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
 
       const consultation = await app.prisma.consultationRequest.findUnique({
         where: { id },
-        select: { userId: true },
+        select: { userId: true, phone: true },
       })
       if (!consultation) {
         throw new ApiError(404, 'NOT_FOUND', 'Заявка не найдена')
       }
 
+      // Отзыв — решение человека, а не заявки: снимаем во всех его заявках (тот же телефон или аккаунт)
+      const sameClient = {
+        OR: [
+          { phone: consultation.phone },
+          ...(consultation.userId ? [{ userId: consultation.userId }] : []),
+        ],
+      }
+
       const revokedAt = new Date()
       await app.prisma.$transaction(async (tx) => {
+        const active = await tx.consultationConsent.findMany({
+          where: { purpose: 'marketing', revokedAt: null, consultation: sameClient },
+          select: { id: true, textVersion: true },
+        })
+        if (active.length === 0) return
+
         await tx.consultationConsent.updateMany({
-          where: { consultationId: id, purpose: 'marketing', revokedAt: null },
+          where: { id: { in: active.map((c) => c.id) } },
           data: { revokedAt },
         })
 
+        // Версии берём из самих согласий: константа сменится, а старые записи должны отзываться
         if (consultation.userId) {
           await tx.consentRecord.updateMany({
             where: {
               userId: consultation.userId,
               purpose: 'marketing',
-              textVersion: CONSENT_TEXT_VERSION.care_marketing,
+              textVersion: { in: [...new Set(active.map((c) => c.textVersion))] },
               revokedAt: null,
             },
             data: { revokedAt },

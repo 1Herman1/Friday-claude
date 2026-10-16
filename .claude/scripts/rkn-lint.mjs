@@ -68,7 +68,7 @@ const RULES = [
     // давало сто процентов ложных срабатываний, а отчёт, где все находки
     // ложные, перестают читать целиком.
     test: (line, ctx) =>
-      /console\.(log|info|warn)\([^)]*(phone|email|password|otp|passport|address)/i.test(line) &&
+      /console\.(log|info|warn)\([^)]*\b(phone|email|password|otp|passport|address)\b/i.test(line) &&
       !/\bclass\s+Dev\w+|\bDev\w*(Sender|Mailer|Sms)\b/.test(ctx || ""),
     skipPath: /prisma\/seed[\w.-]*\.ts$/,
     hint: "персональные данные в логах — логи становятся местом обработки ПД, маскировать",
@@ -268,6 +268,13 @@ function main() {
         findings.push({ file: filePath, line: 1, hint: rule.hint, level: rule.level });
       }
     }
+  }
+
+  // Проверка, которая ничего не прочитала, не должна рапортовать «чисто»:
+  // каталог или опечатка в пути дают пустой список прочитанных файлов.
+  if (loaded.length === 0) {
+    console.error("Не прочитано ни одного файла — передайте пути к файлам (не каталог) или запустите без аргументов.");
+    process.exit(2);
   }
 
   // Репо-правила осмысленны только на полном проходе: при разборе одного файла
