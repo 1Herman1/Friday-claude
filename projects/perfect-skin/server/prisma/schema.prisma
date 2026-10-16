@@ -359,6 +359,7 @@ model Product {
   id               String     @id @default(uuid())
   name             String
   slug             String
+  previousSlugs    String[]   @default([]) // старые адреса товара: продолжают открывать его после переименования
   shortDescription String?
   description      String
   brandId          String?

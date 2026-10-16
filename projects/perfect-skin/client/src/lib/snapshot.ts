@@ -23,7 +23,7 @@ interface CatalogSnapshot {
   labels: Record<'categories' | 'brands' | 'lines' | 'needs' | 'skinTypes', Record<string, string>>
 }
 
-// Копия server/src/lib/slug-aliases.ts: старый адрес товара → новый
+// Копия бывшего словаря сервера (теперь Product.previousSlugs): снимок — демо без базы
 const SLUG_ALIASES: Record<string, string> = {
   'veevenom-serum-syvorotka-pchelinyj-yad': 'beevenom-serum-syvorotka-pchelinyj-yad',
 }

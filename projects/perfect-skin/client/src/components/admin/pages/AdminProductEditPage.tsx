@@ -244,6 +244,7 @@ export function AdminProductEditPage() {
           description: updated.description,
           usage: updated.usage,
           details: updated.details,
+          previousSlugs: updated.previousSlugs,
         }))
         const savedJson = formatDetails(updated.details)
         setDetailsText(savedJson)
@@ -523,6 +524,14 @@ export function AdminProductEditPage() {
                 placeholder="latynish-slug"
                 className="w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring min-h-11"
               />
+              {!isNew && (
+                <p className="mt-1 text-sm text-muted-foreground">При смене адреса старый продолжит открывать товар</p>
+              )}
+              {formData.previousSlugs && formData.previousSlugs.length > 0 && (
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Старые адреса продолжают открывать товар: {formData.previousSlugs.map((s) => `/product/${s}`).join(', ')}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

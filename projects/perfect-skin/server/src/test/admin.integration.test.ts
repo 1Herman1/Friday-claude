@@ -21,6 +21,7 @@ import { db } from '../lib/db.js'
 // всех своих пользователей, а файлы vitest идут параллельно.
 const DOMAIN = '@ps-admintest.local'
 const POST_SLUG_PREFIX = 'admin-test-post-'
+const PRODUCT_SLUG_PREFIX = 'admin-test-product-'
 const PARTNER_NAME = `AdminTest Partner ${Date.now()}`
 const PROMO_CODE = `ADMT${Date.now().toString().slice(-8)}`
 
@@ -166,6 +167,7 @@ describe('Admin Integration Tests', () => {
     }
 
     await db.post.deleteMany({ where: { slug: { startsWith: POST_SLUG_PREFIX } } })
+    await db.product.deleteMany({ where: { slug: { startsWith: PRODUCT_SLUG_PREFIX } } })
 
     const users = await db.user.findMany({
       where: { email: { endsWith: DOMAIN } },
@@ -526,5 +528,61 @@ describe('Admin Integration Tests', () => {
     const dbP2Final = await db.product.findUnique({ where: { id: p2.id }, select: { popularPin: true } })
     expect(dbP1Final?.popularPin).toBeNull()
     expect(dbP2Final?.popularPin).toBeNull()
+  })
+
+  // ──────────────────────────── 8. Старые адреса товара ────────────────────────────
+
+  it('переименование оставляет старый адрес рабочим; новый товар на старом адресе забирает его из истории', async () => {
+    const auth = { authorization: `Bearer ${tokens.products}` }
+    const stamp = Date.now()
+    const oldSlug = `${PRODUCT_SLUG_PREFIX}old-${stamp}`
+    const newSlug = `${PRODUCT_SLUG_PREFIX}new-${stamp}`
+
+    const product = await db.product.create({
+      data: {
+        name: 'Тест старых адресов',
+        slug: oldSlug,
+        description: 'Тестовый товар',
+        skinTypes: [],
+        concerns: [],
+        images: [],
+        variants: { create: { volumeValue: 50, volumeLabel: '50 мл', retailPrice: 100000, stock: 1 } },
+      },
+    })
+    const post = await db.post.create({
+      data: {
+        slug: `${POST_SLUG_PREFIX}embed-${stamp}`,
+        title: 'Тестовая ссылка на товар',
+        body: `Текст. [[product:${oldSlug}]]`,
+      },
+    })
+
+    const renamed = await app.inject({
+      method: 'PATCH',
+      url: `/api/v1/admin/products/${product.id}`,
+      headers: auth,
+      payload: { slug: newSlug },
+    })
+    expect(renamed.statusCode).toBe(200)
+
+    const adminGet = await app.inject({ method: 'GET', url: `/api/v1/admin/products/${product.id}`, headers: auth })
+    expect(JSON.parse(adminGet.body).previousSlugs).toEqual([oldSlug])
+
+    const byOldSlug = await app.inject({ method: 'GET', url: `/api/v1/products/${oldSlug}` })
+    expect(byOldSlug.statusCode).toBe(200)
+    expect(JSON.parse(byOldSlug.body).slug).toBe(newSlug)
+
+    const postAfter = await db.post.findUniqueOrThrow({ where: { id: post.id }, select: { body: true } })
+    expect(postAfter.body).toBe(`Текст. [[product:${newSlug}]]`)
+
+    const taken = await app.inject({
+      method: 'POST',
+      url: '/api/v1/admin/products',
+      headers: auth,
+      payload: { name: 'Новый товар на старом адресе', slug: oldSlug, description: 'Тестовый товар' },
+    })
+    expect(taken.statusCode).toBe(201)
+    const afterTake = await db.product.findUniqueOrThrow({ where: { id: product.id }, select: { previousSlugs: true } })
+    expect(afterTake.previousSlugs).toEqual([])
   })
 })

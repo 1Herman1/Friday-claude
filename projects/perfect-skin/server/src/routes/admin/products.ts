@@ -354,7 +354,11 @@ export async function productsRoutes(app: FastifyInstance, preHandlers: any[]) {
           },
         },
         response: {
-          200: { type: 'object', additionalProperties: true },
+          200: {
+            type: 'object',
+            properties: { previousSlugs: { type: 'array', items: { type: 'string' } } },
+            additionalProperties: true,
+          },
           404: { $ref: 'ps.error#' },
           401: { $ref: 'ps.error#' },
           403: { $ref: 'ps.error#' },

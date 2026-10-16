@@ -1,6 +1,6 @@
 import { PrismaClient } from '../../../../node_modules/.prisma/ps-client/index.js'
 
-// Опечатка в адресе товара (V вместо B). Старый адрес продолжает открываться через src/lib/slug-aliases.ts
+// Опечатка в адресе товара (V вместо B). Старый адрес теперь хранится в Product.previousSlugs (миграция 20261016000001)
 const FROM = 'veevenom-serum-syvorotka-pchelinyj-yad'
 const TO = 'beevenom-serum-syvorotka-pchelinyj-yad'
 const FROM_EMBED = `[[product:${FROM}]]`

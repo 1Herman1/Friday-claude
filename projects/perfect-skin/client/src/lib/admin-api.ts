@@ -650,6 +650,7 @@ export interface ProductEditData {
   id: string
   name: string
   slug: string
+  previousSlugs: string[]
   shortDescription?: string | null
   description: string
   brandId?: string | null

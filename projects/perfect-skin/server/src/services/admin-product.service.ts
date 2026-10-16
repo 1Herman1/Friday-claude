@@ -1,6 +1,7 @@
 import { db, Prisma } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
 import { readDetails, syncedText, textLimitIssue, type ProductDetails } from '../lib/product-details.js'
+import { nextPreviousSlugs } from '../lib/slug-history.js'
 import { recalcProductPrices } from './product-prices.js'
 
 interface ListVariantsQuery {
@@ -17,6 +18,35 @@ interface UpdateVariantPayload {
   wholesalePrice?: number | null
   isActive?: boolean
   isProfessional?: boolean
+}
+
+type Tx = Prisma.TransactionClient
+
+// Действующий адрес важнее чужого старого: снимаем его из истории других товаров
+async function releaseSlugFromHistories(tx: Tx, slug: string, exceptId?: string): Promise<void> {
+  const holders = await tx.product.findMany({
+    where: { id: exceptId ? { not: exceptId } : undefined, previousSlugs: { has: slug } },
+    select: { id: true, previousSlugs: true },
+  })
+  await Promise.all(
+    holders.map((holder) =>
+      tx.product.update({
+        where: { id: holder.id },
+        data: { previousSlugs: holder.previousSlugs.filter((s) => s !== slug) },
+      })
+    )
+  )
+}
+
+// Точная замена токена, а не регулярка по тексту статьи
+// Включая удалённые статьи: при восстановлении вставка не должна сломаться
+async function rewriteProductEmbeds(tx: Tx, oldSlug: string, newSlug: string): Promise<void> {
+  const from = `[[product:${oldSlug}]]`
+  const to = `[[product:${newSlug}]]`
+  const posts = await tx.post.findMany({ where: { body: { contains: from } }, select: { id: true, body: true } })
+  await Promise.all(
+    posts.map((post) => tx.post.update({ where: { id: post.id }, data: { body: post.body.split(from).join(to) } }))
+  )
 }
 
 export class AdminProductService {
@@ -296,6 +326,7 @@ export class AdminProductService {
     }
 
     const created = await db.$transaction(async (tx) => {
+      await releaseSlugFromHistories(tx, payload.slug)
       const product = await tx.product.create({
         data: {
           name: payload.name,
@@ -370,19 +401,25 @@ export class AdminProductService {
     const text = synced ?? { description: payload.description, usage: payload.usage }
 
     // Check slug uniqueness if slug changed
-    if (payload.slug && payload.slug !== product.slug) {
-      const existing = await db.product.findFirst({ where: { slug: payload.slug } })
+    const renamedTo = payload.slug !== undefined && payload.slug !== product.slug ? payload.slug : null
+    if (renamedTo) {
+      const existing = await db.product.findFirst({ where: { slug: renamedTo } })
       if (existing) {
         throw new ApiError(409, 'SLUG_EXISTS', 'Slug должен быть уникальным')
       }
     }
 
     const updated = await db.$transaction(async (tx) => {
+      if (renamedTo) {
+        await releaseSlugFromHistories(tx, renamedTo, id)
+        await rewriteProductEmbeds(tx, product.slug, renamedTo)
+      }
       const result = await tx.product.update({
         where: { id },
         data: {
           ...(payload.name !== undefined && { name: payload.name }),
           ...(payload.slug !== undefined && { slug: payload.slug }),
+          ...(renamedTo !== null && { previousSlugs: nextPreviousSlugs(product.previousSlugs, product.slug, renamedTo) }),
           ...(payload.shortDescription !== undefined && { shortDescription: payload.shortDescription }),
           ...(payload.details !== undefined && { details: payload.details ?? Prisma.DbNull }),
           ...(text.description !== undefined && { description: text.description }),
