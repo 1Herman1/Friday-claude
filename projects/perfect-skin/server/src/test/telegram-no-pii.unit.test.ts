@@ -35,6 +35,12 @@ describe('Telegram notifications contain no PII', () => {
     }
   })
 
+  it('care request', () => {
+    const text = buildConsultationText({ channel: 'whatsapp', source: 'care', queueCount: 2 })
+    expectNoPii(text)
+    expect(text).toContain('Новая заявка в Отдел заботы')
+  })
+
   it('order', () => {
     const order = {
       ...person,

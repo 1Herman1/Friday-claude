@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 // Черновик студии — формулировки подтверждает владелец магазина.
-const UPDATED_AT = '20 сентября 2026 года'
+const UPDATED_AT = '16 октября 2026 года'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -33,9 +33,11 @@ export default function PrivacyPage() {
         <div className="bg-card rounded-block border border-border-strong p-6 space-y-3 mb-10">
           <p className="font-semibold text-foreground">Коротко о главном</p>
           <p className="text-body font-sans leading-body text-foreground">
-            Мы собираем только то, что нужно для входа в аккаунт и доставки заказа:
-            имя, email, телефон, адрес. Для специалистов дополнительно просим название
-            салона и специализацию. Не передаём данные рекламным сетям. Чтобы получить
+            Мы собираем только то, что нужно для входа в аккаунт, доставки заказа и ответа
+            на заявки — на консультацию или в Отдел заботы: имя, email, телефон, адрес.
+            Для специалистов дополнительно просим название салона и специализацию.
+            Не передаём данные рекламным сетям. Рекламу присылаем только с отдельного
+            согласия. Чтобы получить
             копию своих данных или удалить аккаунт, напишите нам — ответим в срок,
             установленный законом.
           </p>
@@ -80,6 +82,11 @@ export default function PrivacyPage() {
             Сведения о состоянии кожи обрабатываются только с отдельного согласия.
           </p>
           <p>
+            <strong className="font-semibold text-foreground">Заявка в Отдел заботы:</strong>{' '}
+            имя, телефон, способ связи (телефон, Telegram, WhatsApp). Время и IP-адрес
+            согласия сохраняем как подтверждение, что вы его дали.
+          </p>
+          <p>
             <strong className="font-semibold text-foreground">Автоматически:</strong> IP
             и браузер — записываются в журнал сервера и в запись о согласии для защиты
             от подбора кодов.
@@ -92,17 +99,28 @@ export default function PrivacyPage() {
             специалистов, ответ на ваше обращение, бухгалтерский учёт.
           </p>
           <p>
+            <strong className="font-semibold text-foreground">Отдел заботы</strong> — связаться
+            по вашей заявке и рассказать о персональном сопровождении.
+          </p>
+          <p>
             Основание обработки — ваше согласие отдельной галочкой и договор
             купли-продажи (публичная оферта). Рекламные и информационные рассылки
-            направляются только при отдельном согласии; согласие можно отозвать в любой
-            момент через ссылку отписки в письме или написав на{' '}
+            направляются только при отдельном согласии.
+          </p>
+          <p>
+            <strong className="font-semibold text-foreground">Реклама</strong> — напоминания о
+            пополнении средств, закрытые предложения, бонусы; по звонку, SMS, в Telegram или
+            WhatsApp. Только с отдельного согласия.
+          </p>
+          <p>
+            Согласие на рекламу можно отозвать в любой момент: напишите на{' '}
             <a
               href="mailto:mail@perfect-skin.shop"
               className="text-primary underline underline-offset-2 hover:opacity-80"
             >
               mail@perfect-skin.shop
-            </a>
-            .
+            </a>{' '}
+            или позвоните +7 (495) 183-28-48 — менеджер отметит отзыв.
           </p>
         </Section>
 
@@ -111,6 +129,14 @@ export default function PrivacyPage() {
             <li>
               <strong className="font-semibold">СДЭК</strong> — доставляет посылку;
               видит имя, телефон и адрес.
+            </li>
+            <li>
+              <strong className="font-semibold">«Достависта»</strong> — доставляет заказы;
+              видит имя, телефон и адрес доставки.
+            </li>
+            <li>
+              <strong className="font-semibold">Собственные курьеры</strong> — доставляют
+              заказы; видят имя, телефон и адрес доставки.
             </li>
             <li>
               <strong className="font-semibold">Платёжный провайдер</strong> — обрабатывает
@@ -154,9 +180,17 @@ export default function PrivacyPage() {
               после закрытия заявки.
             </li>
             <li>
+              <strong className="font-semibold">Заявка в Отдел заботы</strong> — 12 месяцев
+              с последнего изменения заявки.
+            </li>
+            <li>
               <strong className="font-semibold">Согласия</strong> — записи о согласии
               и его отзыве хранятся как подтверждение получения и отзыва; согласия об
               обработке состояния кожи хранятся 3 года после отзыва.
+            </li>
+            <li>
+              <strong className="font-semibold">Согласие на рекламу</strong> — действует до
+              отзыва; запись об отзыве хранится как подтверждение.
             </li>
           </ul>
         </Section>

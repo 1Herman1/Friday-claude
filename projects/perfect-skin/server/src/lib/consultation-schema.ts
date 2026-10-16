@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 // Нормализует номер телефона: оставляет только цифры
-function normalizePhone(value: string): string {
+export function normalizePhone(value: string): string {
   return value.replace(/\D/g, '')
 }
 

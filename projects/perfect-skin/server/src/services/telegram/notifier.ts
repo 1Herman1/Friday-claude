@@ -25,9 +25,10 @@ export function buildApplicationText(input: {
   return `Новая заявка специалиста\n${priorityLine}${duplicatesLine}\n${queueLine}`
 }
 
-export function buildConsultationText(input: { channel: string | null; queueCount: number }): string {
+export function buildConsultationText(input: { channel: string | null; source?: string | null; queueCount: number }): string {
+  const title = input.source === 'care' ? 'Новая заявка в Отдел заботы' : 'Новая заявка на консультацию'
   const channelLabel = input.channel === 'phone' ? 'Телефон' : input.channel === 'telegram' ? 'Telegram' : 'WhatsApp'
-  return `Новая заявка на консультацию\nКанал: ${channelLabel}\nНовых в очереди: ${input.queueCount}`
+  return `${title}\nКанал: ${channelLabel}\nНовых в очереди: ${input.queueCount}`
 }
 
 export function buildOrderText(order: {
@@ -168,6 +169,7 @@ export class TelegramNotifier {
         where: { id: consultationId },
         select: {
           channel: true,
+          source: true,
           createdAt: true,
         },
       })
@@ -197,7 +199,7 @@ export class TelegramNotifier {
           where: { status: 'new' },
         })
 
-        const text = buildConsultationText({ channel: consultation.channel, queueCount })
+        const text = buildConsultationText({ channel: consultation.channel, source: consultation.source, queueCount })
 
         // Кнопка для открытия админки
         const buttons = publicUrl ? [[{ text: 'Перейти в админку', url: `${publicUrl}/admin/consultations` }]] : []

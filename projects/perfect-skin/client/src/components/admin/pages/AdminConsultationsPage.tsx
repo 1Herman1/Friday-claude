@@ -1,28 +1,10 @@
 import { useEffect, useState } from 'react'
 import { fetchApi, ApiError } from '@/lib/api'
-
-interface Consultation {
-  id: string
-  name: string
-  phone: string
-  email: string | null
-  channel: string | null
-  message: string | null
-  skinType: string | null
-  concern: string | null
-  source: string | null
-  status: 'new' | 'contacted' | 'scheduled' | 'done' | 'cancelled'
-  adminNote: string | null
-  createdAt: string
-  updatedAt: string
-}
-
-interface ConsultationsResponse {
-  items: Consultation[]
-  total: number
-  skip: number
-  limit: number
-}
+import {
+  adminRevokeConsultationMarketing,
+  type AdminConsultation,
+  type AdminConsultationsResponse,
+} from '@/lib/admin-api'
 
 const STATUS_LABELS: Record<string, string> = {
   new: 'Новая',
@@ -50,10 +32,17 @@ const SOURCE_LABELS: Record<string, string> = {
   tile: 'Плитка',
   quiz: 'Квиз',
   contacts: 'Контакты',
+  care: 'Отдел заботы',
+}
+
+const MARKETING_LABELS: Record<AdminConsultation['marketingConsent'], string> = {
+  yes: 'согласие есть',
+  revoked: 'отозвано',
+  no: 'нет',
 }
 
 export function AdminConsultationsPage() {
-  const [consultations, setConsultations] = useState<Consultation[]>([])
+  const [consultations, setConsultations] = useState<AdminConsultation[]>([])
   const [total, setTotal] = useState(0)
   const [skip, setSkip] = useState(0)
   const [status, setStatus] = useState<'all' | 'new' | 'contacted' | 'scheduled' | 'done' | 'cancelled'>('new')
@@ -78,7 +67,7 @@ export function AdminConsultationsPage() {
         skip: skip.toString(),
         limit: limit.toString(),
       })
-      const data = await fetchApi<ConsultationsResponse>(`/api/v1/admin/consultations?${query}`)
+      const data = await fetchApi<AdminConsultationsResponse>(`/api/v1/admin/consultations?${query}`)
       setConsultations(data.items)
       setTotal(data.total)
     } catch (error) {
@@ -108,12 +97,33 @@ export function AdminConsultationsPage() {
       setConsultations((prev) =>
         prev.map((c) =>
           c.id === id
-            ? { ...c, status: newStatus as Consultation['status'], adminNote: note || null }
+            ? { ...c, status: newStatus as AdminConsultation['status'], adminNote: note || null }
             : c
         )
       )
       setEditingStatus((prev) => ({ ...prev, [id]: '' }))
       setExpandedId(null)
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setErrorMessage(error.message || 'Ошибка при сохранении')
+      } else {
+        setErrorMessage('Ошибка при сохранении')
+      }
+    } finally {
+      setSubmitting(null)
+    }
+  }
+
+  const handleMarketingRevoke = async (id: string) => {
+    if (!window.confirm('Отметить отзыв согласия на рекламу? Снять отметку из интерфейса нельзя.')) return
+
+    setSubmitting(id)
+    setErrorMessage('')
+    try {
+      await adminRevokeConsultationMarketing(id)
+      setConsultations((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, marketingConsent: 'revoked' as const } : c))
+      )
     } catch (error) {
       if (error instanceof ApiError) {
         setErrorMessage(error.message || 'Ошибка при сохранении')
@@ -243,6 +253,22 @@ export function AdminConsultationsPage() {
                     </div>
                   </div>
 
+                  <div>
+                    <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Реклама</label>
+                    <div className="flex flex-wrap items-center gap-4">
+                      <p className="text-sm text-foreground">{MARKETING_LABELS[c.marketingConsent]}</p>
+                      {c.marketingConsent === 'yes' && (
+                        <button
+                          onClick={() => handleMarketingRevoke(c.id)}
+                          disabled={submitting === c.id}
+                          className="px-4 py-2 border border-border rounded-block text-sm font-semibold hover:bg-muted disabled:opacity-50"
+                        >
+                          Отметить отзыв согласия
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
                   {c.message && (
                     <div>
                       <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Сообщение</label>
@@ -276,6 +302,11 @@ export function AdminConsultationsPage() {
                         className="w-full px-3 py-2 border border-border rounded-block bg-card text-sm text-foreground"
                         maxLength={1000}
                       />
+                      {c.source === 'care' && (
+                        <p className="mt-2 text-sm text-foreground">
+                          Не записывайте сведения о состоянии кожи — для этого нужна отдельная форма консультации
+                        </p>
+                      )}
                     </div>
 
                     <button

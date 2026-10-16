@@ -145,6 +145,7 @@ enum ConsentPurpose {
   marketing // рекламная рассылка
   consultation // обработка ПДн для обратной связи (консультация)
   health_data // обработка данных о состоянии кожи для консультации
+  care // обработка ПДн, чтобы связаться по заявке Отдела заботы
 }
 
 /// Источник решения по заявке: автоматическая или ручная обработка.
@@ -900,7 +901,9 @@ model ConsultationConsent {
   purpose        ConsentPurpose
   textVersion    String
   ip             String?
+  form           String? // из какой формы: consultation | care — после чистки заявки видно происхождение
   grantedAt      DateTime       @default(now())
+  revokedAt      DateTime? // когда клиент отозвал согласие (реклама)
 
   consultation ConsultationRequest? @relation(fields: [consultationId], references: [id], onDelete: SetNull)
 

@@ -597,6 +597,46 @@ export async function getSyncLog(): Promise<{ items: SyncLogItem[] }> {
   return fetchApi<{ items: SyncLogItem[] }>('/api/v1/admin/sync-log')
 }
 
+// ============ Заявки на консультацию и Отдел заботы ============
+
+export interface AdminConsultation {
+  id: string
+  name: string
+  phone: string
+  email: string | null
+  channel: string | null
+  message: string | null
+  skinType: string | null
+  concern: string | null
+  source: string | null
+  status: 'new' | 'contacted' | 'scheduled' | 'done' | 'cancelled'
+  adminNote: string | null
+  marketingConsent: 'yes' | 'revoked' | 'no'
+  createdAt: string
+  updatedAt: string
+}
+
+export interface AdminConsultationsResponse {
+  items: AdminConsultation[]
+  total: number
+  skip: number
+  limit: number
+}
+
+/**
+ * Отметить отзыв рекламного согласия по заявке
+ */
+export async function adminRevokeConsultationMarketing(id: string): Promise<{ ok: boolean }> {
+  // fetchApi шлёт JSON-заголовок, а Fastify отвергает пустое JSON-тело — нужен хотя бы {}
+  return fetchApi<{ ok: boolean }>(
+    `/api/v1/admin/consultations/${encodeURIComponent(id)}/marketing-revoke`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({}),
+    }
+  )
+}
+
 // ============ Популярные товары ============
 
 export interface PopularProduct {

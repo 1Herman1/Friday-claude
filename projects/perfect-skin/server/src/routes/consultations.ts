@@ -49,7 +49,7 @@ export default async function consultationsRoute(app: FastifyInstance) {
 
       // Транзакция: создаём заявку + два ConsentRecord
       try {
-        await app.prisma.$transaction(async (tx) => {
+        const consultation = await app.prisma.$transaction(async (tx) => {
           // Создаём заявку на консультацию
           const consultation = await tx.consultationRequest.create({
             data: {
@@ -75,12 +75,14 @@ export default async function consultationsRoute(app: FastifyInstance) {
                 purpose: 'consultation',
                 textVersion: CONSENT_TEXT_VERSION.consultation,
                 ip: request.ip,
+                form: 'consultation',
               },
               {
                 consultationId: consultation.id,
                 purpose: 'health_data',
                 textVersion: CONSENT_TEXT_VERSION.health_data,
                 ip: request.ip,
+                form: 'consultation',
               },
             ],
           })
@@ -105,36 +107,38 @@ export default async function consultationsRoute(app: FastifyInstance) {
             })
           }
 
-          // После транзакции: уведомляем менеджера и отправляем в Telegram
-          setImmediate(() => {
-            // Email уведомление (не блокируем ответ)
-            if (proNotifyEmail) {
-              try {
-                const mailSender = createMailSender()
-                const channelLabel = channel === 'phone' ? 'Телефон' : channel === 'telegram' ? 'Telegram' : 'WhatsApp'
-                const message = `Новая заявка на консультацию
+          return consultation
+        })
+
+        // После коммита: уведомляем менеджера и отправляем в Telegram
+        setImmediate(() => {
+          // Email уведомление (не блокируем ответ)
+          if (proNotifyEmail) {
+            try {
+              const mailSender = createMailSender()
+              const channelLabel = channel === 'phone' ? 'Телефон' : channel === 'telegram' ? 'Telegram' : 'WhatsApp'
+              const message = `Новая заявка на консультацию
 
 Канал: ${channelLabel}
 Ссылка: /admin/consultations
 
 Обработана: ${new Date().toISOString()}`
 
-                mailSender.sendPlain(
-                  proNotifyEmail,
-                  'Новая заявка на консультацию',
-                  message
-                ).catch((err) => {
-                  app.log.warn({ err }, 'Failed to send consultation notification email')
-                })
-              } catch (err) {
+              mailSender.sendPlain(
+                proNotifyEmail,
+                'Новая заявка на консультацию',
+                message
+              ).catch((err) => {
                 app.log.warn({ err }, 'Failed to send consultation notification email')
-              }
+              })
+            } catch (err) {
+              app.log.warn({ err }, 'Failed to send consultation notification email')
             }
+          }
 
-            // Telegram уведомление (не блокируем ответ)
-            app.telegram.onNewConsultation(consultation.id).catch((err) => {
-              app.log.warn({ err, consultation_id: consultation.id }, 'Failed to send Telegram notification for consultation')
-            })
+          // Telegram уведомление (не блокируем ответ)
+          app.telegram.onNewConsultation(consultation.id).catch((err) => {
+            app.log.warn({ err, consultation_id: consultation.id }, 'Failed to send Telegram notification for consultation')
           })
         })
       } catch (err) {

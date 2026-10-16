@@ -1,6 +1,13 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { ApiError } from '../../lib/errors.js'
+import { CONSENT_TEXT_VERSION } from '../../lib/consents.js'
+
+function marketingConsentState(consents: { revokedAt: Date | null }[]): 'yes' | 'revoked' | 'no' {
+  if (consents.some((c) => c.revokedAt === null)) return 'yes'
+  if (consents.length > 0) return 'revoked'
+  return 'no'
+}
 
 const listQuerySchema = z.object({
   status: z.enum(['new', 'contacted', 'scheduled', 'done', 'cancelled', 'all']).optional().default('new'),
@@ -31,7 +38,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
                 items: {
                   type: 'object',
                   additionalProperties: false,
-                  required: ['id', 'name', 'phone', 'email', 'channel', 'message', 'skinType', 'concern', 'source', 'status', 'adminNote', 'createdAt', 'updatedAt'],
+                  required: ['id', 'name', 'phone', 'email', 'channel', 'message', 'skinType', 'concern', 'source', 'status', 'adminNote', 'marketingConsent', 'createdAt', 'updatedAt'],
                   properties: {
                     id: { type: 'string', format: 'uuid' },
                     name: { type: 'string' },
@@ -44,6 +51,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
                     source: { type: ['string', 'null'] },
                     status: { type: 'string', enum: ['new', 'contacted', 'scheduled', 'done', 'cancelled'] },
                     adminNote: { type: ['string', 'null'] },
+                    marketingConsent: { type: 'string', enum: ['yes', 'revoked', 'no'] },
                     createdAt: { type: 'string', format: 'date-time' },
                     updatedAt: { type: 'string', format: 'date-time' },
                   },
@@ -88,6 +96,10 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
             source: true,
             status: true,
             adminNote: true,
+            consents: {
+              where: { purpose: 'marketing' },
+              select: { revokedAt: true },
+            },
             createdAt: true,
             updatedAt: true,
           },
@@ -110,6 +122,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
         source: item.source || null,
         status: item.status,
         adminNote: item.adminNote || null,
+        marketingConsent: marketingConsentState(item.consents),
         createdAt: item.createdAt.toISOString(),
         updatedAt: item.updatedAt.toISOString(),
       }))
@@ -170,6 +183,62 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
       if (!updated) {
         throw new ApiError(404, 'NOT_FOUND', 'Заявка не найдена')
       }
+
+      reply.status(200).send({ ok: true })
+    }
+  )
+
+  // PATCH /api/v1/admin/consultations/:id/marketing-revoke — менеджер отметил отзыв рекламного согласия
+  app.patch(
+    '/consultations/:id/marketing-revoke',
+    {
+      preHandler: preHandlers,
+      schema: {
+        response: {
+          200: {
+            type: 'object',
+            additionalProperties: false,
+            required: ['ok'],
+            properties: {
+              ok: { type: 'boolean' },
+            },
+          },
+          401: { $ref: 'ps.error#' },
+          403: { $ref: 'ps.error#' },
+          404: { $ref: 'ps.error#' },
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params as { id: string }
+
+      const consultation = await app.prisma.consultationRequest.findUnique({
+        where: { id },
+        select: { userId: true },
+      })
+      if (!consultation) {
+        throw new ApiError(404, 'NOT_FOUND', 'Заявка не найдена')
+      }
+
+      const revokedAt = new Date()
+      await app.prisma.$transaction(async (tx) => {
+        await tx.consultationConsent.updateMany({
+          where: { consultationId: id, purpose: 'marketing', revokedAt: null },
+          data: { revokedAt },
+        })
+
+        if (consultation.userId) {
+          await tx.consentRecord.updateMany({
+            where: {
+              userId: consultation.userId,
+              purpose: 'marketing',
+              textVersion: CONSENT_TEXT_VERSION.care_marketing,
+              revokedAt: null,
+            },
+            data: { revokedAt },
+          })
+        }
+      })
 
       reply.status(200).send({ ok: true })
     }
