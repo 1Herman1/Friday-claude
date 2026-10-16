@@ -48,6 +48,7 @@ export function AdminConsultationsPage() {
   const [status, setStatus] = useState<'all' | 'new' | 'contacted' | 'scheduled' | 'done' | 'cancelled'>('new')
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState<string | null>(null)
+  const [revoking, setRevoking] = useState<string | null>(null)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [editingStatus, setEditingStatus] = useState<{ [key: string]: string }>({})
   const [editingNote, setEditingNote] = useState<{ [key: string]: string }>({})
@@ -56,27 +57,35 @@ export function AdminConsultationsPage() {
   const limit = 20
 
   useEffect(() => {
-    loadConsultations()
-  }, [status, skip])
+    let ignore = false
 
-  const loadConsultations = async () => {
-    setLoading(true)
-    try {
-      const query = new URLSearchParams({
-        status: status === 'all' ? 'all' : status,
-        skip: skip.toString(),
-        limit: limit.toString(),
-      })
-      const data = await fetchApi<AdminConsultationsResponse>(`/api/v1/admin/consultations?${query}`)
-      setConsultations(data.items)
-      setTotal(data.total)
-    } catch (error) {
-      console.error('Failed to load consultations:', error)
-      setErrorMessage('Ошибка при загрузке заявок')
-    } finally {
-      setLoading(false)
+    const loadConsultations = async () => {
+      setLoading(true)
+      try {
+        const query = new URLSearchParams({
+          status: status === 'all' ? 'all' : status,
+          skip: skip.toString(),
+          limit: limit.toString(),
+        })
+        const data = await fetchApi<AdminConsultationsResponse>(`/api/v1/admin/consultations?${query}`)
+        if (ignore) return
+        setConsultations(data.items)
+        setTotal(data.total)
+        setErrorMessage('')
+      } catch (error) {
+        if (ignore) return
+        console.error('Failed to load consultations:', error)
+        setErrorMessage('Ошибка при загрузке заявок')
+      } finally {
+        if (!ignore) setLoading(false)
+      }
     }
-  }
+
+    loadConsultations()
+    return () => {
+      ignore = true
+    }
+  }, [status, skip])
 
   const handleStatusChange = async (id: string) => {
     const newStatus = editingStatus[id]
@@ -117,7 +126,7 @@ export function AdminConsultationsPage() {
   const handleMarketingRevoke = async (id: string) => {
     if (!window.confirm('Отметить отзыв согласия на рекламу? Снять отметку из интерфейса нельзя.')) return
 
-    setSubmitting(id)
+    setRevoking(id)
     setErrorMessage('')
     try {
       await adminRevokeConsultationMarketing(id)
@@ -131,7 +140,7 @@ export function AdminConsultationsPage() {
         setErrorMessage('Ошибка при сохранении')
       }
     } finally {
-      setSubmitting(null)
+      setRevoking(null)
     }
   }
 
@@ -154,7 +163,7 @@ export function AdminConsultationsPage() {
         <h1 className="text-h2 font-heading font-bold mb-6">Заявки на консультацию</h1>
 
         {errorMessage && (
-          <div className="mb-4 p-4 bg-destructive/10 border border-destructive/30 rounded-block">
+          <div role="alert" className="mb-4 p-4 bg-destructive/10 border border-destructive/30 rounded-block">
             <p className="text-sm text-destructive">{errorMessage}</p>
           </div>
         )}
@@ -167,6 +176,7 @@ export function AdminConsultationsPage() {
               onClick={() => {
                 setStatus(s)
                 setSkip(0)
+                setErrorMessage('')
               }}
               className={`px-4 py-2 rounded-pill text-sm font-semibold transition-colors ${
                 status === s
@@ -236,31 +246,31 @@ export function AdminConsultationsPage() {
                 <>
                   <div className="grid grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Email</label>
+                      <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Email</p>
                       <p className="text-sm text-foreground">{c.email || '—'}</p>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Тип кожи</label>
+                      <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Тип кожи</p>
                       <p className="text-sm text-foreground">{c.skinType || '—'}</p>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Задача</label>
+                      <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Задача</p>
                       <p className="text-sm text-foreground">{c.concern || '—'}</p>
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Источник</label>
+                      <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Источник</p>
                       <p className="text-sm text-foreground">{c.source ? SOURCE_LABELS[c.source] || c.source : '—'}</p>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Реклама</label>
+                    <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Реклама</p>
                     <div className="flex flex-wrap items-center gap-4">
                       <p className="text-sm text-foreground">{MARKETING_LABELS[c.marketingConsent]}</p>
                       {c.marketingConsent === 'yes' && (
                         <button
                           onClick={() => handleMarketingRevoke(c.id)}
-                          disabled={submitting === c.id}
+                          disabled={revoking === c.id || submitting === c.id}
                           className="px-4 py-2 border border-border rounded-block text-sm font-semibold hover:bg-muted disabled:opacity-50"
                         >
                           Отметить отзыв согласия
@@ -271,15 +281,16 @@ export function AdminConsultationsPage() {
 
                   {c.message && (
                     <div>
-                      <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Сообщение</label>
+                      <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Сообщение</p>
                       <p className="text-sm text-foreground whitespace-pre-wrap break-words">{c.message}</p>
                     </div>
                   )}
 
                   <div className="border-t border-border pt-4 space-y-4">
                     <div>
-                      <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Новый статус</label>
+                      <label htmlFor={`status-${c.id}`} className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Новый статус</label>
                       <select
+                        id={`status-${c.id}`}
                         value={editingStatus[c.id] || c.status}
                         onChange={(e) => setEditingStatus((prev) => ({ ...prev, [c.id]: e.target.value }))}
                         className="w-full px-3 py-2 border border-border rounded-block bg-card text-sm text-foreground"
@@ -294,8 +305,9 @@ export function AdminConsultationsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Заметка (до 1000 символов)</label>
+                      <label htmlFor={`note-${c.id}`} className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Заметка (до 1000 символов)</label>
                       <textarea
+                        id={`note-${c.id}`}
                         value={editingNote[c.id] ?? c.adminNote ?? ''}
                         onChange={(e) => setEditingNote((prev) => ({ ...prev, [c.id]: e.target.value }))}
                         rows={3}

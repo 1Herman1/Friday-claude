@@ -68,7 +68,10 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
 
-      if (event.shiftKey && document.activeElement === first) {
+      if (!dialogRef.current?.contains(document.activeElement)) {
+        event.preventDefault()
+        first.focus()
+      } else if (event.shiftKey && document.activeElement === first) {
         event.preventDefault()
         last.focus()
       } else if (!event.shiftKey && document.activeElement === last) {

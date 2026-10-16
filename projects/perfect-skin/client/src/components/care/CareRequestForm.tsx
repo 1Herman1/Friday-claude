@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { flushSync } from 'react-dom'
 import { ApiError } from '@/lib/api'
 import { submitCareRequest, type CareChannel } from '@/lib/care-api'
 import { BTN_OUTLINE, BTN_PRIMARY } from '@/components/about/classes'
@@ -25,7 +26,13 @@ function isFieldKey(value: unknown): value is FieldKey {
   return FIELD_KEYS.includes(value as FieldKey)
 }
 
-export function CareRequestForm({ onDone }: { onDone: () => void }) {
+export function CareRequestForm({
+  onDone,
+  onSendingChange,
+}: {
+  onDone: () => void
+  onSendingChange: (sending: boolean) => void
+}) {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [channel, setChannel] = useState<CareChannel>('phone')
@@ -46,6 +53,11 @@ export function CareRequestForm({ onDone }: { onDone: () => void }) {
     if (status === 'done') doneRef.current?.focus()
   }, [status])
 
+  useEffect(() => {
+    onSendingChange(busy)
+    return () => onSendingChange(false)
+  }, [busy, onSendingChange])
+
   const focusFirstError = (found: FieldErrors) => {
     const key = FIELD_KEYS.find((k) => found[k])
     if (key) fieldRefs[key].current?.focus()
@@ -54,16 +66,20 @@ export function CareRequestForm({ onDone }: { onDone: () => void }) {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const found: FieldErrors = {}
+    const digits = phone.replace(/\D/g, '')
     if (!name.trim()) found.name = 'Укажите имя'
+    else if (name.trim().length < 2) found.name = 'Имя — минимум 2 символа'
     if (!phone.trim()) found.phone = 'Укажите номер телефона'
+    else if (digits.length < 10 || digits.length > 15) found.phone = 'Номер должен быть 10–15 цифр'
     if (!consentPd) found.consentPd = CONSENT_ERROR
-    setErrors(found)
     setFormError('')
 
     if (Object.keys(found).length > 0) {
+      flushSync(() => setErrors(found))
       focusFirstError(found)
       return
     }
+    setErrors({})
 
     setStatus('sending')
     try {
@@ -76,17 +92,20 @@ export function CareRequestForm({ onDone }: { onDone: () => void }) {
       })
       setStatus('done')
     } catch (err) {
+      const field = err instanceof ApiError ? err.details?.field : undefined
+      if (err instanceof ApiError && err.code === 'VALIDATION_ERROR' && isFieldKey(field)) {
+        const serverErrors: FieldErrors = {}
+        serverErrors[field] = err.message
+        flushSync(() => {
+          setStatus('idle')
+          setErrors(serverErrors)
+        })
+        focusFirstError(serverErrors)
+        return
+      }
       setStatus('idle')
       if (!(err instanceof ApiError)) {
         setFormError('Ошибка при отправке заявки')
-        return
-      }
-      const field = err.details?.field
-      if (err.code === 'VALIDATION_ERROR' && isFieldKey(field)) {
-        const serverErrors: FieldErrors = {}
-        serverErrors[field] = err.message
-        setErrors(serverErrors)
-        focusFirstError(serverErrors)
       } else if (err.status === 429 || err.code === 'RATE_LIMITED') {
         setFormError('Слишком много запросов. Попробуйте позже')
       } else {
@@ -124,6 +143,7 @@ export function CareRequestForm({ onDone }: { onDone: () => void }) {
               name="name"
               type="text"
               autoComplete="given-name"
+              maxLength={80}
               value={name}
               onChange={(e) => setName(e.target.value)}
               readOnly={busy}
