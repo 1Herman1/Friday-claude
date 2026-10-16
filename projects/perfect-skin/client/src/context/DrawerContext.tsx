@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState, ReactNode } from 'react'
 
-type DrawerName = 'cart' | 'favorites' | 'quiz' | 'pro' | null
+type DrawerName = 'cart' | 'favorites' | 'quiz' | 'pro' | 'care' | null
 
 interface DrawerContextType {
   drawer: DrawerName
@@ -8,6 +8,7 @@ interface DrawerContextType {
   openFavorites: () => void
   openQuiz: () => void
   openPro: () => void
+  openCare: () => void
   close: () => void
 }
 
@@ -25,11 +26,12 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
   const openFavorites = useCallback(() => setDrawer('favorites'), [])
   const openQuiz = useCallback(() => setDrawer('quiz'), [])
   const openPro = useCallback(() => setDrawer('pro'), [])
+  const openCare = useCallback(() => setDrawer('care'), [])
   const close = useCallback(() => setDrawer(null), [])
 
   const value = useMemo(
-    () => ({ drawer, openCart, openFavorites, openQuiz, openPro, close }),
-    [drawer, openCart, openFavorites, openQuiz, openPro, close]
+    () => ({ drawer, openCart, openFavorites, openQuiz, openPro, openCare, close }),
+    [drawer, openCart, openFavorites, openQuiz, openPro, openCare, close]
   )
 
   return <DrawerContext.Provider value={value}>{children}</DrawerContext.Provider>

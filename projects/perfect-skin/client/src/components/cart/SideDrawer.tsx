@@ -12,9 +12,10 @@ type Props = {
   titleSuffix?: React.ReactNode
   children: React.ReactNode
   footer?: React.ReactNode
+  closeLabel?: string
 }
 
-export default function SideDrawer({ open, onClose, title, titleSuffix, children, footer }: Props) {
+export default function SideDrawer({ open, onClose, title, titleSuffix, children, footer, closeLabel }: Props) {
   const titleId = useId()
   const [mounted, setMounted] = useState(open)
   const [shown, setShown] = useState(false)
@@ -28,10 +29,7 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
     if (open) {
       returnFocusRef.current = document.activeElement as HTMLElement
       setMounted(true)
-      const raf = requestAnimationFrame(() => {
-        setShown(true)
-        closeBtnRef.current?.focus({ preventScroll: true })
-      })
+      const raf = requestAnimationFrame(() => setShown(true))
       return () => cancelAnimationFrame(raf)
     }
 
@@ -42,6 +40,11 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
     }, EXIT_MS)
     return () => clearTimeout(timer)
   }, [open])
+
+  // Фокус на закрытие — после монтирования: в rAF кнопки ещё нет в DOM
+  useEffect(() => {
+    if (mounted && open) closeBtnRef.current?.focus({ preventScroll: true })
+  }, [mounted, open])
 
   // Фокус-трап и обработчик Escape
   useEffect(() => {
@@ -102,8 +105,8 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
         className={`absolute inset-y-0 right-0 flex flex-col
                     w-full sm:w-[420px] max-w-full
                     bg-background shadow-lg sm:border-l sm:border-border
-                    transition-[transform,opacity] ease-out
-                    ${shown ? 'translate-x-0 opacity-100 duration-300' : 'translate-x-full opacity-0 duration-200'}`}
+                    transition-[transform,opacity] ease-out motion-reduce:translate-x-0 motion-reduce:transition-opacity
+                    ${shown ? 'translate-x-0 opacity-100 duration-300' : 'translate-x-full opacity-0 duration-200 pointer-events-none'}`}
       >
         {/* Header */}
         <div className="flex-shrink-0 flex items-center gap-2 px-4 py-3 border-b border-border
@@ -116,7 +119,7 @@ export default function SideDrawer({ open, onClose, title, titleSuffix, children
             ref={closeBtnRef}
             type="button"
             onClick={onClose}
-            aria-label={`Закрыть ${title.toLowerCase()}`}
+            aria-label={closeLabel ?? `Закрыть ${title.toLowerCase()}`}
             className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-pill text-muted-foreground hover:bg-muted transition-colors duration-200 ml-auto"
           >
             <IconClose className="w-5 h-5" />
