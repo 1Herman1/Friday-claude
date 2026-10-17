@@ -51,7 +51,7 @@ export function MarketingConsentSection() {
 
   return (
     <section aria-busy={saving} className="p-6 rounded-block border border-border bg-card">
-      <h2 className="font-semibold text-foreground mb-4">Уведомления и предложения</h2>
+      <h2 className="text-h3 font-heading font-semibold normal-case tracking-[-0.015em] text-foreground mb-4">Уведомления и предложения</h2>
 
       {failure?.kind === 'load' ? (
         <div className="flex flex-wrap items-center justify-between gap-3">

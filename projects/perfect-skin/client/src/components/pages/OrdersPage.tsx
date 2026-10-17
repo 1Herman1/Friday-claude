@@ -127,7 +127,7 @@ export function OrdersPage() {
       {user && (
         <div className="mb-8 p-6 rounded-block border border-border bg-card">
           {user.proStatus === 'none' ? (
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Стать специалистом ISSEIMI</h3>
                 <p className="text-sm text-muted-foreground">
@@ -142,7 +142,7 @@ export function OrdersPage() {
               </Link>
             </div>
           ) : isApprovedPro(user) ? (
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-success/10 text-success rounded-full text-sm font-semibold mb-2">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -162,7 +162,7 @@ export function OrdersPage() {
               </Link>
             </div>
           ) : (
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h3 className="font-semibold text-foreground mb-1">
                   {user.proStatus === 'pending' ? 'Заявка на проверке' : 'Заявка отклонена'}
