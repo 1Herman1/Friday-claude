@@ -5,23 +5,25 @@
  * - Удаляет файлы у ProDocument, где deletedAt IS NULL и (deleteAfter <= now ИЛИ пользователь удалён)
  * - Отдельно чистит сирот-файлы в PS_PRO_DOCS_DIR, на которые нет записей в БД и старше 1 дня
  * - Без флага --apply — сухой прогон с выводом подсчёта
+ * - Заявки консультаций и Отдела заботы (шаг 4): открытая без движения 90 дней закрывается,
+ *   персональные данные стираются через 90 дней после последнего изменения; запись остаётся
  * - Логирует без ПДн
  */
 
 // Тот же сгенерированный клиент, что у сервера: стандартный @prisma/client пуст, и чистка падала
-import { PrismaClient, type ConsultationStatus } from '../../../../node_modules/.prisma/ps-client/index.js'
+import { PrismaClient } from '../../../../node_modules/.prisma/ps-client/index.js'
 import { readdir, unlink, stat } from 'fs/promises'
 import { join } from 'path'
+import {
+  OPEN_STATUSES,
+  planConsultationRetention,
+  retentionCutoff,
+} from '../src/lib/consultation-retention.js'
 
 const isDryRun = !process.argv.includes('--apply')
 const proDocsDir = process.env.PS_PRO_DOCS_DIR || './var/pro-docs'
 
 const prisma = new PrismaClient()
-
-// Срок хранения завершённых консультаций; срок подтверждает юрист клиента
-const CONSULTATION_RETENTION_DAYS = 365
-// срок Отдела заботы — 12 месяцев с последнего изменения заявки; см. политику
-const CARE_RETENTION_DAYS = 365
 
 async function main() {
   console.log(`[purge-pro-docs] Starting ${isDryRun ? 'dry run' : 'purge'}...`)
@@ -157,42 +159,50 @@ async function main() {
     }
   }
 
-  // Шаг 4: Удалить завершённые консультации старше срока хранения.
-  // Согласия (ConsultationConsent) остаются — связь обнуляется (SetNull).
-  // Заявки Отдела заботы здесь не трогаем — у них свой срок (шаг 5).
-  console.log('[purge-pro-docs] Step 4: Finding expired consultations...')
+  // Шаг 4: Заявки консультаций и Отдела заботы (source = 'care').
+  // Кандидаты берутся одним снимком до записей: автозакрытие двигает updatedAt,
+  // и без снимка заявка, закрытая в этом прогоне, не дошла бы до стирания.
+  // Согласия (ConsultationConsent) не трогаем — это подтверждение, что согласие было.
+  console.log('[purge-pro-docs] Step 4: Finding consultation requests without movement or past retention...')
 
-  const consultationCutoff = new Date(now.getTime() - CONSULTATION_RETENTION_DAYS * 24 * 60 * 60 * 1000)
-  const consultationWhere = {
-    status: { in: ['done', 'cancelled'] as ConsultationStatus[] },
-    // политика: 12 месяцев после закрытия — закрытие последнее изменение заявки
-    updatedAt: { lt: consultationCutoff },
-    OR: [{ source: null }, { source: { not: 'care' } }],
-  }
+  const candidates = await prisma.consultationRequest.findMany({
+    where: {
+      updatedAt: { lt: retentionCutoff(now) },
+      OR: [{ status: { in: OPEN_STATUSES } }, { anonymizedAt: null }],
+    },
+    select: { id: true, status: true, adminNote: true, updatedAt: true, anonymizedAt: true },
+  })
+  const plan = planConsultationRetention(candidates, now)
 
-  const expiredConsultations = await prisma.consultationRequest.count({ where: consultationWhere })
-  console.log(`[purge-pro-docs] Found ${expiredConsultations} expired consultations`)
+  console.log(`[purge-pro-docs] Found ${plan.autoClose.length} open requests to auto-close`)
+  console.log(`[purge-pro-docs] Found ${plan.anonymize.length} requests with personal data to erase`)
 
-  if (!isDryRun && expiredConsultations > 0) {
-    const { count } = await prisma.consultationRequest.deleteMany({ where: consultationWhere })
-    console.log(`[purge-pro-docs] Deleted ${count} expired consultations`)
-  }
+  if (!isDryRun && (plan.autoClose.length > 0 || plan.anonymize.length > 0)) {
+    await prisma.$transaction(async (tx) => {
+      await Promise.all(
+        plan.autoClose.map((row) =>
+          tx.consultationRequest.updateMany({
+            where: { id: row.id, status: { in: OPEN_STATUSES } },
+            data: { status: 'cancelled', adminNote: row.adminNote },
+          })
+        )
+      )
 
-  // Шаг 5: Удалить заявки Отдела заботы, которых не трогали дольше срока хранения, в любом статусе.
-  console.log('[purge-pro-docs] Step 5: Finding expired care requests...')
-
-  const careCutoff = new Date(now.getTime() - CARE_RETENTION_DAYS * 24 * 60 * 60 * 1000)
-  const careWhere = {
-    source: 'care',
-    updatedAt: { lt: careCutoff },
-  }
-
-  const expiredCare = await prisma.consultationRequest.count({ where: careWhere })
-  console.log(`[purge-pro-docs] Found ${expiredCare} expired care requests`)
-
-  if (!isDryRun && expiredCare > 0) {
-    const { count } = await prisma.consultationRequest.deleteMany({ where: careWhere })
-    console.log(`[purge-pro-docs] Deleted ${count} expired care requests`)
+      await tx.consultationRequest.updateMany({
+        where: { id: { in: plan.anonymize }, anonymizedAt: null },
+        data: {
+          name: 'Удалено',
+          phone: '',
+          email: null,
+          message: null,
+          skinType: null,
+          concern: null,
+          adminNote: null,
+          anonymizedAt: now,
+        },
+      })
+    })
+    console.log(`[purge-pro-docs] Auto-closed ${plan.autoClose.length}, erased ${plan.anonymize.length}`)
   }
 
   console.log(`[purge-pro-docs] ${isDryRun ? 'Dry run' : 'Purge'} completed`)

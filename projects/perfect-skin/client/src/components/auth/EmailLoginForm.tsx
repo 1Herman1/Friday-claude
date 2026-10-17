@@ -23,6 +23,7 @@ export function EmailLoginForm({ onSuccess }: EmailLoginFormProps) {
   const [resendTimer, setResendTimer] = useState(0)
   const [stepIn, setStepIn] = useState(false)
   const [consentPD, setConsentPD] = useState(false)
+  const [consentMarketing, setConsentMarketing] = useState(false)
 
   // Анимация появления шага
   useEffect(() => {
@@ -102,7 +103,10 @@ export function EmailLoginForm({ onSuccess }: EmailLoginFormProps) {
     setError('')
 
     try {
-      await verifyOtp(email.trim().toLowerCase(), code)
+      await verifyOtp(email.trim().toLowerCase(), code, {
+        consentPd: 'true',
+        consentMarketing: consentMarketing ? 'true' : 'false',
+      })
       onSuccess?.()
     } catch (err) {
       if (err instanceof ApiError) {
@@ -220,6 +224,19 @@ export function EmailLoginForm({ onSuccess }: EmailLoginFormProps) {
               <a href="/privacy" target="_blank" rel="noopener" className="text-primary underline underline-offset-2 hover:opacity-80">
                 Политике обработки данных
               </a>
+            </span>
+          </label>
+
+          <label className="flex items-start gap-3 cursor-pointer group min-h-11 mb-4">
+            <input
+              type="checkbox"
+              checked={consentMarketing}
+              onChange={(e) => setConsentMarketing(e.target.checked)}
+              className="w-5 h-5 mt-0.5 flex-shrink-0 rounded border border-border-strong checked:bg-primary checked:border-primary cursor-pointer"
+            />
+            <span className="text-sm text-foreground leading-snug">
+              Согласен(на) получать от ИП Рыбко А. А. напоминания о пополнении средств, закрытые предложения и
+              информацию о бонусах — звонком, SMS, в Telegram или WhatsApp
             </span>
           </label>
 

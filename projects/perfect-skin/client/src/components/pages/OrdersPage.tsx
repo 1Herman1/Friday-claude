@@ -4,6 +4,7 @@ import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { fetchApi } from '@/lib/api'
 import { formatPrice, pluralize } from '@/lib/format'
 import { IconPackage } from '@/components/icons'
+import { MarketingConsentSection } from '@/components/account/MarketingConsentSection'
 
 interface OrderPreview {
   number: string
@@ -67,6 +68,9 @@ export function OrdersPage() {
           >
             В каталог
           </a>
+        </div>
+        <div className="max-w-xl mx-auto mt-12">
+          <MarketingConsentSection />
         </div>
       </div>
     )
@@ -231,6 +235,10 @@ export function OrdersPage() {
             )}
           </a>
         ))}
+      </div>
+
+      <div className="max-w-xl mt-10">
+        <MarketingConsentSection />
       </div>
     </div>
   )

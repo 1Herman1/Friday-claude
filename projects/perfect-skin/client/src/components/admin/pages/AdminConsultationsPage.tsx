@@ -210,8 +210,10 @@ export function AdminConsultationsPage() {
               <tbody>
                 {consultations.map((c) => (
                   <tr key={c.id} className="border-b border-border last:border-b-0 hover:bg-muted/50">
-                    <td className="px-6 py-4 text-sm text-foreground">{c.name}</td>
-                    <td className="px-6 py-4 text-sm text-foreground font-mono">{c.phone}</td>
+                    <td className="px-6 py-4 text-sm text-foreground">
+                      {c.anonymizedAt ? <span className="text-muted-foreground">Данные удалены по сроку</span> : c.name}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-foreground font-mono">{c.anonymizedAt ? '—' : c.phone}</td>
                     <td className="px-6 py-4 text-sm text-muted-foreground">
                       {c.channel ? CHANNEL_LABELS[c.channel] || c.channel : '—'}
                     </td>
@@ -244,19 +246,29 @@ export function AdminConsultationsPage() {
               if (!c) return null
               return (
                 <>
+                  {c.anonymizedAt && (
+                    <p className="text-sm font-semibold text-foreground">
+                      Данные удалены по сроку ({formatDate(c.anonymizedAt)})
+                    </p>
+                  )}
+
                   <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Email</p>
-                      <p className="text-sm text-foreground">{c.email || '—'}</p>
-                    </div>
-                    <div>
-                      <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Тип кожи</p>
-                      <p className="text-sm text-foreground">{c.skinType || '—'}</p>
-                    </div>
-                    <div>
-                      <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Задача</p>
-                      <p className="text-sm text-foreground">{c.concern || '—'}</p>
-                    </div>
+                    {!c.anonymizedAt && (
+                      <>
+                        <div>
+                          <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Email</p>
+                          <p className="text-sm text-foreground">{c.email || '—'}</p>
+                        </div>
+                        <div>
+                          <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Тип кожи</p>
+                          <p className="text-sm text-foreground">{c.skinType || '—'}</p>
+                        </div>
+                        <div>
+                          <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Задача</p>
+                          <p className="text-sm text-foreground">{c.concern || '—'}</p>
+                        </div>
+                      </>
+                    )}
                     <div>
                       <p className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Источник</p>
                       <p className="text-sm text-foreground">{c.source ? SOURCE_LABELS[c.source] || c.source : '—'}</p>
@@ -286,49 +298,51 @@ export function AdminConsultationsPage() {
                     </div>
                   )}
 
-                  <div className="border-t border-border pt-4 space-y-4">
-                    <div>
-                      <label htmlFor={`status-${c.id}`} className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Новый статус</label>
-                      <select
-                        id={`status-${c.id}`}
-                        value={editingStatus[c.id] || c.status}
-                        onChange={(e) => setEditingStatus((prev) => ({ ...prev, [c.id]: e.target.value }))}
-                        className="w-full px-3 py-2 border border-border rounded-block bg-card text-sm text-foreground"
+                  {!c.anonymizedAt && (
+                    <div className="border-t border-border pt-4 space-y-4">
+                      <div>
+                        <label htmlFor={`status-${c.id}`} className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Новый статус</label>
+                        <select
+                          id={`status-${c.id}`}
+                          value={editingStatus[c.id] || c.status}
+                          onChange={(e) => setEditingStatus((prev) => ({ ...prev, [c.id]: e.target.value }))}
+                          className="w-full px-3 py-2 border border-border rounded-block bg-card text-sm text-foreground"
+                        >
+                          <option value={c.status}>— Не менять —</option>
+                          {(['new', 'contacted', 'scheduled', 'done', 'cancelled'] as const).map((s) => (
+                            <option key={s} value={s}>
+                              {STATUS_LABELS[s]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label htmlFor={`note-${c.id}`} className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Заметка (до 1000 символов)</label>
+                        <textarea
+                          id={`note-${c.id}`}
+                          value={editingNote[c.id] ?? c.adminNote ?? ''}
+                          onChange={(e) => setEditingNote((prev) => ({ ...prev, [c.id]: e.target.value }))}
+                          rows={3}
+                          className="w-full px-3 py-2 border border-border rounded-block bg-card text-sm text-foreground"
+                          maxLength={1000}
+                        />
+                        {c.source === 'care' && (
+                          <p className="mt-2 text-sm text-foreground">
+                            Не записывайте сведения о состоянии кожи — для этого нужна отдельная форма консультации
+                          </p>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => handleStatusChange(c.id)}
+                        disabled={submitting === c.id || !editingStatus[c.id]}
+                        className="px-6 py-2 bg-primary text-primary-foreground rounded-pill text-sm font-semibold hover:opacity-90 disabled:opacity-50 transition-opacity"
                       >
-                        <option value={c.status}>— Не менять —</option>
-                        {(['new', 'contacted', 'scheduled', 'done', 'cancelled'] as const).map((s) => (
-                          <option key={s} value={s}>
-                            {STATUS_LABELS[s]}
-                          </option>
-                        ))}
-                      </select>
+                        {submitting === c.id ? 'Сохраняю…' : 'Сохранить'}
+                      </button>
                     </div>
-
-                    <div>
-                      <label htmlFor={`note-${c.id}`} className="block text-xs font-semibold text-muted-foreground uppercase mb-2">Заметка (до 1000 символов)</label>
-                      <textarea
-                        id={`note-${c.id}`}
-                        value={editingNote[c.id] ?? c.adminNote ?? ''}
-                        onChange={(e) => setEditingNote((prev) => ({ ...prev, [c.id]: e.target.value }))}
-                        rows={3}
-                        className="w-full px-3 py-2 border border-border rounded-block bg-card text-sm text-foreground"
-                        maxLength={1000}
-                      />
-                      {c.source === 'care' && (
-                        <p className="mt-2 text-sm text-foreground">
-                          Не записывайте сведения о состоянии кожи — для этого нужна отдельная форма консультации
-                        </p>
-                      )}
-                    </div>
-
-                    <button
-                      onClick={() => handleStatusChange(c.id)}
-                      disabled={submitting === c.id || !editingStatus[c.id]}
-                      className="px-6 py-2 bg-primary text-primary-foreground rounded-pill text-sm font-semibold hover:opacity-90 disabled:opacity-50 transition-opacity"
-                    >
-                      {submitting === c.id ? 'Сохраняю…' : 'Сохранить'}
-                    </button>
-                  </div>
+                  )}
                 </>
               )
             })()}

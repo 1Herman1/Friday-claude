@@ -26,12 +26,17 @@ interface VerifyOtpResponse {
   cartMerged?: boolean
 }
 
+interface SignInConsents {
+  consentPd: 'true'
+  consentMarketing: 'true' | 'false'
+}
+
 interface AuthContextType {
   user: User | null
   isLoading: boolean
   isAuthed: boolean
   sendOtp: (email: string) => Promise<SendOtpResponse>
-  verifyOtp: (email: string, code: string) => Promise<VerifyOtpResponse>
+  verifyOtp: (email: string, code: string, consents: SignInConsents) => Promise<VerifyOtpResponse>
   logout: () => Promise<void>
 }
 
@@ -69,10 +74,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return response
   }
 
-  const verifyOtp = async (email: string, code: string): Promise<VerifyOtpResponse> => {
+  const verifyOtp = async (email: string, code: string, consents: SignInConsents): Promise<VerifyOtpResponse> => {
     const response = await fetchApi<VerifyOtpResponse>('/api/v1/auth/verify-otp', {
       method: 'POST',
-      body: JSON.stringify({ email, code }),
+      body: JSON.stringify({ email, code, ...consents }),
     })
 
     // Токен из ответа намеренно не сохраняем: сервер уже поставил куку

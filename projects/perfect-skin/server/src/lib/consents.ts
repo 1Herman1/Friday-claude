@@ -7,4 +7,6 @@ export const CONSENT_TEXT_VERSION = {
   health_data: '2026-09-27-draft',     // обработка данных о состоянии кожи
   care: '2026-10-16-draft',            // связаться по заявке Отдела заботы
   care_marketing: '2026-10-16-draft',  // реклама Отдела заботы; свой текст, не marketing (тот — для специалистов)
+  account: '2026-10-17-draft',         // обработка ПДн для входа и работы кабинета
+  retail_marketing: '2026-10-17-draft', // реклама розницы; тот же текст, что care_marketing, но собирается при входе
 } as const

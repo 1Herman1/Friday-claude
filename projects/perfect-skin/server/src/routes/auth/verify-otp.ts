@@ -6,6 +6,7 @@ import { otpService } from '../../services/otp.service.js'
 import { cartService } from '../../services/cart.service.js'
 import { ApiError } from '../../lib/errors.js'
 import { isProduction, cookieInsecure } from '../../lib/env.js'
+import { grantSignInConsents } from '../../lib/account-consents.js'
 
 const verifySchema = z.object({
   email: z
@@ -17,6 +18,9 @@ const verifySchema = z.object({
   code: z
     .string()
     .regex(/^\d{6}$/, 'Код должен быть 6 цифр'),
+  // Необязательные: старые клиенты их не шлют и продолжают входить
+  consentPd: z.enum(['true']).optional(),
+  consentMarketing: z.enum(['true', 'false']).optional(),
 })
 
 export async function verifyOtpRoute(app: FastifyInstance) {
@@ -61,13 +65,20 @@ export async function verifyOtpRoute(app: FastifyInstance) {
         )
       }
 
-      const { email, code } = result.data
+      const { email, code, consentPd, consentMarketing } = result.data
 
       // Verify OTP code
       await otpService.verifyCode(email, code)
 
       // Get or create user
       const user = await otpService.findOrCreateUser(email)
+
+      await app.prisma.$transaction((tx) =>
+        grantSignInConsents(tx, user.id, {
+          personalData: consentPd === 'true',
+          marketing: consentMarketing === 'true',
+        })
+      )
 
       // Merge guest cart into user cart (inside transaction for atomicity)
       const psidCookie = (request.cookies as any)?.ps_sid

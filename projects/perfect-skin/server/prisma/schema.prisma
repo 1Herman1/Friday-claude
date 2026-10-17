@@ -146,6 +146,7 @@ enum ConsentPurpose {
   consultation // обработка ПДн для обратной связи (консультация)
   health_data // обработка данных о состоянии кожи для консультации
   care // обработка ПДн, чтобы связаться по заявке Отдела заботы
+  account // обработка ПДн при входе в кабинет
 }
 
 /// Источник решения по заявке: автоматическая или ручная обработка.
@@ -850,6 +851,7 @@ model ConsultationRequest {
   adminNote      String?
   consentVersion String?
   consentedAt    DateTime?
+  anonymizedAt   DateTime? // когда персональные данные стёрты по сроку (3 месяца)
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
 

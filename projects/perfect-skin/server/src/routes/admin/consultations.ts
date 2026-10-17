@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { ApiError } from '../../lib/errors.js'
+import { revokeMarketingConsents } from '../../lib/account-consents.js'
 
 function marketingConsentState(consents: { revokedAt: Date | null }[]): 'yes' | 'revoked' | 'no' {
   if (consents.some((c) => c.revokedAt === null)) return 'yes'
@@ -37,7 +38,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
                 items: {
                   type: 'object',
                   additionalProperties: false,
-                  required: ['id', 'name', 'phone', 'email', 'channel', 'message', 'skinType', 'concern', 'source', 'status', 'adminNote', 'marketingConsent', 'createdAt', 'updatedAt'],
+                  required: ['id', 'name', 'phone', 'email', 'channel', 'message', 'skinType', 'concern', 'source', 'status', 'adminNote', 'marketingConsent', 'anonymizedAt', 'createdAt', 'updatedAt'],
                   properties: {
                     id: { type: 'string', format: 'uuid' },
                     name: { type: 'string' },
@@ -51,6 +52,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
                     status: { type: 'string', enum: ['new', 'contacted', 'scheduled', 'done', 'cancelled'] },
                     adminNote: { type: ['string', 'null'] },
                     marketingConsent: { type: 'string', enum: ['yes', 'revoked', 'no'] },
+                    anonymizedAt: { type: ['string', 'null'], format: 'date-time' },
                     createdAt: { type: 'string', format: 'date-time' },
                     updatedAt: { type: 'string', format: 'date-time' },
                   },
@@ -99,6 +101,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
               where: { purpose: 'marketing' },
               select: { revokedAt: true },
             },
+            anonymizedAt: true,
             createdAt: true,
             updatedAt: true,
           },
@@ -122,6 +125,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
         status: item.status,
         adminNote: item.adminNote || null,
         marketingConsent: marketingConsentState(item.consents),
+        anonymizedAt: item.anonymizedAt ? item.anonymizedAt.toISOString() : null,
         createdAt: item.createdAt.toISOString(),
         updatedAt: item.updatedAt.toISOString(),
       }))
@@ -219,40 +223,9 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
         throw new ApiError(404, 'NOT_FOUND', 'Заявка не найдена')
       }
 
-      // Отзыв — решение человека, а не заявки: снимаем во всех его заявках (тот же телефон или аккаунт)
-      const sameClient = {
-        OR: [
-          { phone: consultation.phone },
-          ...(consultation.userId ? [{ userId: consultation.userId }] : []),
-        ],
-      }
-
-      const revokedAt = new Date()
-      await app.prisma.$transaction(async (tx) => {
-        const active = await tx.consultationConsent.findMany({
-          where: { purpose: 'marketing', revokedAt: null, consultation: sameClient },
-          select: { id: true, textVersion: true },
-        })
-        if (active.length === 0) return
-
-        await tx.consultationConsent.updateMany({
-          where: { id: { in: active.map((c) => c.id) } },
-          data: { revokedAt },
-        })
-
-        // Версии берём из самих согласий: константа сменится, а старые записи должны отзываться
-        if (consultation.userId) {
-          await tx.consentRecord.updateMany({
-            where: {
-              userId: consultation.userId,
-              purpose: 'marketing',
-              textVersion: { in: [...new Set(active.map((c) => c.textVersion))] },
-              revokedAt: null,
-            },
-            data: { revokedAt },
-          })
-        }
-      })
+      await app.prisma.$transaction((tx) =>
+        revokeMarketingConsents(tx, consultation, new Date())
+      )
 
       reply.status(200).send({ ok: true })
     }

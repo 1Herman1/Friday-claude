@@ -612,6 +612,7 @@ export interface AdminConsultation {
   status: 'new' | 'contacted' | 'scheduled' | 'done' | 'cancelled'
   adminNote: string | null
   marketingConsent: 'yes' | 'revoked' | 'no'
+  anonymizedAt: string | null
   createdAt: string
   updatedAt: string
 }
