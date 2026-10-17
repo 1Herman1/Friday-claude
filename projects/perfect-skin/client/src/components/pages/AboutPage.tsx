@@ -100,14 +100,6 @@ export function AboutPage() {
         <p className="mx-auto max-w-[28ch] text-center font-heading font-semibold text-h3 text-foreground [text-wrap:balance]">
           Добро пожаловать в&nbsp;Perfect&nbsp;Skin. Доверьте свою кожу профессионалам.
         </p>
-
-        <div className="border-t border-border pt-8">
-          <p className="text-body-sm text-muted-foreground">
-            <span className="font-semibold">ИП Рыбко Анна Александровна</span>
-            <br />
-            ОГРНИП 321508100460474
-          </p>
-        </div>
       </div>
     </div>
   )

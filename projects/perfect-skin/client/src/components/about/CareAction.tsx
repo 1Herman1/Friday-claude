@@ -24,7 +24,9 @@ export function CareAction({ action }: { action: CareActionKind }) {
 
   return (
     <button type="button" onClick={openCare} className={BTN_OUTLINE}>
-      Стать подопечным Отдела заботы
+      {/* На телефоне полная подпись переносится на две строки */}
+      <span className="sm:hidden">В Отдел заботы</span>
+      <span className="hidden sm:inline">Стать подопечным Отдела заботы</span>
     </button>
   )
 }
