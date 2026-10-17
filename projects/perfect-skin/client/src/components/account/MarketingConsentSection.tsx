@@ -1,68 +1,93 @@
 import { useEffect, useState } from 'react'
-import { fetchApi } from '@/lib/api'
+import { fetchMarketingConsent, updateMarketingConsent } from '@/lib/account-api'
+import { AD_CONSENT_TEXT } from '@/lib/consent-texts'
 
-interface MarketingConsentResponse {
-  consent: boolean
-}
+type Failure = { kind: 'load' } | { kind: 'save'; wanted: boolean }
+
+const RETRY_BUTTON = 'text-sm font-semibold text-primary underline underline-offset-2 hover:opacity-80 min-h-11'
 
 export function MarketingConsentSection() {
   const [consent, setConsent] = useState<boolean | null>(null)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
+  const [failure, setFailure] = useState<Failure | null>(null)
+  const [loadAttempt, setLoadAttempt] = useState(0)
 
   useEffect(() => {
     let ignore = false
 
-    const loadConsent = async () => {
-      try {
-        const result = await fetchApi<MarketingConsentResponse>('/api/v1/auth/me/marketing')
-        if (!ignore) setConsent(result.consent)
-      } catch {
-        if (!ignore) setError('Не удалось загрузить настройку')
-      }
-    }
+    fetchMarketingConsent()
+      .then((value) => {
+        if (!ignore) setConsent(value)
+      })
+      .catch(() => {
+        if (!ignore) setFailure({ kind: 'load' })
+      })
 
-    loadConsent()
     return () => {
       ignore = true
     }
-  }, [])
+  }, [loadAttempt])
 
-  const handleToggle = async (next: boolean) => {
+  const save = async (next: boolean) => {
     setSaving(true)
-    setError('')
+    setFailure(null)
     try {
-      const result = await fetchApi<MarketingConsentResponse>('/api/v1/auth/me/marketing', {
-        method: 'PATCH',
-        body: JSON.stringify({ consent: next }),
-      })
-      setConsent(result.consent)
+      setConsent(await updateMarketingConsent(next))
     } catch {
-      setError('Не удалось сохранить. Попробуйте ещё раз')
+      setFailure({ kind: 'save', wanted: next })
     } finally {
       setSaving(false)
     }
   }
 
+  const retry = () => {
+    if (failure?.kind === 'save') {
+      save(failure.wanted)
+      return
+    }
+    setFailure(null)
+    setLoadAttempt((attempt) => attempt + 1)
+  }
+
   return (
-    <section className="p-6 rounded-block border border-border bg-card">
+    <section aria-busy={saving} className="p-6 rounded-block border border-border bg-card">
       <h2 className="font-semibold text-foreground mb-4">Уведомления и предложения</h2>
-      <label className="flex items-start gap-3 cursor-pointer min-h-11">
-        <input
-          type="checkbox"
-          checked={consent === true}
-          disabled={consent === null || saving}
-          onChange={(e) => handleToggle(e.target.checked)}
-          className="w-5 h-5 mt-0.5 flex-shrink-0 rounded border border-border-strong checked:bg-primary checked:border-primary cursor-pointer disabled:cursor-not-allowed"
-        />
-        <span className="text-sm text-foreground leading-snug">
-          Получать напоминания о пополнении средств, закрытые предложения и бонусы (звонок, SMS, Telegram, WhatsApp)
-        </span>
-      </label>
-      {error && (
-        <p role="alert" className="mt-3 text-sm text-destructive">
-          {error}
-        </p>
+
+      {failure?.kind === 'load' ? (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p role="alert" className="text-sm text-destructive">
+            Не удалось загрузить настройку
+          </p>
+          <button type="button" onClick={retry} className={RETRY_BUTTON}>
+            Повторить
+          </button>
+        </div>
+      ) : consent === null ? (
+        <p className="text-sm text-muted-foreground">Загрузка…</p>
+      ) : (
+        <label
+          className={`flex items-start gap-3 cursor-pointer min-h-11 transition-opacity ${saving ? 'opacity-60' : ''}`}
+        >
+          <input
+            type="checkbox"
+            checked={consent}
+            disabled={saving}
+            onChange={(e) => save(e.target.checked)}
+            className="w-5 h-5 mt-0.5 flex-shrink-0 rounded border border-border-strong checked:bg-primary checked:border-primary cursor-pointer disabled:cursor-not-allowed"
+          />
+          <span className="text-sm text-foreground leading-snug">{AD_CONSENT_TEXT}</span>
+        </label>
+      )}
+
+      {failure?.kind === 'save' && (
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <p role="alert" className="text-sm text-destructive">
+            Не удалось сохранить. Попробуйте ещё раз
+          </p>
+          <button type="button" onClick={retry} className={RETRY_BUTTON}>
+            Повторить
+          </button>
+        </div>
       )}
     </section>
   )

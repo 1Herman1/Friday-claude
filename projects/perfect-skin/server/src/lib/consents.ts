@@ -6,7 +6,15 @@ export const CONSENT_TEXT_VERSION = {
   consultation: '2026-09-27-draft',    // обработка ПДн для обратной связи
   health_data: '2026-09-27-draft',     // обработка данных о состоянии кожи
   care: '2026-10-16-draft',            // связаться по заявке Отдела заботы
-  care_marketing: '2026-10-16-draft',  // реклама Отдела заботы; свой текст, не marketing (тот — для специалистов)
+  care_marketing: '2026-10-17-draft',  // реклама Отдела заботы; текст как у retail_marketing, не marketing (тот — для специалистов)
   account: '2026-10-17-draft',         // обработка ПДн для входа и работы кабинета
-  retail_marketing: '2026-10-17-draft', // реклама розницы; тот же текст, что care_marketing, но собирается при входе
+  retail_marketing: '2026-10-17-draft', // реклама розницы: напоминания, закрытые предложения, бонусы
 } as const
+
+// Рекламные согласия покупателя: текущие версии и прежние. Прежний текст care_marketing
+// с «звонком» остаётся в списке, иначе его согласия перестанут считаться рекламой покупателя.
+export const RETAIL_AD_VERSIONS: string[] = [
+  CONSENT_TEXT_VERSION.retail_marketing,
+  CONSENT_TEXT_VERSION.care_marketing,
+  '2026-10-16-draft',
+]

@@ -96,6 +96,8 @@ const RULES = [
   {
     name: "marketing-in-pd-consent",
     ext: [".tsx", ".jsx", ".astro"],
+    // Политика и оферта описывают цели и согласия, а не подписи галочек
+    skipPath: /Privacy|Offer/,
     test: (line) =>
       /соглас/i.test(line) &&
       /рассылк|реклам|промо|акци/i.test(line) &&

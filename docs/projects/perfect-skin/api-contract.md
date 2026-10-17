@@ -597,9 +597,9 @@ app.addSchema({
 
 **`GET /api/v1/auth/me`** → `{ "id", "name", "phone", "email", "role" }`. `401 UNAUTHORIZED` при просроченном токене или расхождении `tokenVersion`.
 
-**`GET /api/v1/auth/me/marketing`** → `{ "consent": boolean }`: есть ли активное согласие на рекламу.
+**`GET /api/v1/auth/me/marketing`** → `{ "consent": boolean }`: есть ли активное согласие покупателя на рекламу (версии `RETAIL_AD_VERSIONS`). Рассылка для специалистов здесь не учитывается.
 
-**`PATCH /api/v1/auth/me/marketing`** — тело `{ "consent": boolean }`, ответ `{ "consent": boolean }`. `true` — пишет согласие `marketing` с текстом `retail_marketing`, если активного нет. `false` — ставит `revokedAt` на все активные согласия `marketing` пользователя и на рекламные согласия его заявок (совпадение по аккаунту или телефону; стёртые заявки без телефона не сопоставляются).
+**`PATCH /api/v1/auth/me/marketing`** — тело `{ "consent": boolean }`, ответ `{ "consent": boolean }`. `true` — пишет согласие `marketing` с текстом `retail_marketing`, если активного согласия покупателя нет. `false` — ставит `revokedAt` на все активные согласия `marketing` пользователя (включая рассылку для специалистов) и на маркетинговые согласия его заявок (по аккаунту или телефону; стёртые заявки без телефона не сопоставляются).
 
 **`POST /api/v1/auth/logout`** → `{ "ok": true }`; инкремент `User.tokenVersion` (выход на всех устройствах).
 

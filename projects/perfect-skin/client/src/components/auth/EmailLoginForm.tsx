@@ -1,7 +1,10 @@
 import { useRef, useState, useEffect } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { ApiError } from '@/lib/api'
+import { AD_CONSENT_TEXT } from '@/lib/consent-texts'
 import { IconArrowRight } from '@/components/icons'
+
+const PD_CONSENT_ERROR = 'Примите условия Политики обработки данных'
 
 type Step = 'input' | 'code'
 
@@ -68,7 +71,7 @@ export function EmailLoginForm({ onSuccess }: EmailLoginFormProps) {
     }
 
     if (!consentPD) {
-      setError('Примите условия Политики обработки данных')
+      setError(PD_CONSENT_ERROR)
       return
     }
 
@@ -94,6 +97,11 @@ export function EmailLoginForm({ onSuccess }: EmailLoginFormProps) {
   }
 
   const handleVerifyCode = async () => {
+    if (!consentPD) {
+      setError(PD_CONSENT_ERROR)
+      return
+    }
+
     if (!code || code.length < CODE_LENGTH) {
       setError('Введите 6-значный код')
       return
@@ -157,6 +165,7 @@ export function EmailLoginForm({ onSuccess }: EmailLoginFormProps) {
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-2 absolute inset-0'
           }`}
+          hidden={step !== 'input'}
         >
           <h1 className="text-lg font-heading font-semibold text-foreground mb-1">
             Введите email
@@ -235,8 +244,7 @@ export function EmailLoginForm({ onSuccess }: EmailLoginFormProps) {
               className="w-5 h-5 mt-0.5 flex-shrink-0 rounded border border-border-strong checked:bg-primary checked:border-primary cursor-pointer"
             />
             <span className="text-sm text-foreground leading-snug">
-              Согласен(на) получать от ИП Рыбко А. А. напоминания о пополнении средств, закрытые предложения и
-              информацию о бонусах — звонком, SMS, в Telegram или WhatsApp
+              {AD_CONSENT_TEXT}
             </span>
           </label>
 
@@ -283,6 +291,7 @@ export function EmailLoginForm({ onSuccess }: EmailLoginFormProps) {
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-2 absolute inset-0'
           }`}
+          hidden={step !== 'code'}
         >
           <button
             onClick={handleChangeEmail}

@@ -158,6 +158,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
           401: { $ref: 'ps.error#' },
           403: { $ref: 'ps.error#' },
           404: { $ref: 'ps.error#' },
+          409: { $ref: 'ps.error#' },
         },
       },
     },
@@ -175,16 +176,20 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
 
       const { status, adminNote } = validation.data
 
-      const updated = await app.prisma.consultationRequest.update({
-        where: { id },
+      const { count } = await app.prisma.consultationRequest.updateMany({
+        where: { id, anonymizedAt: null },
         data: {
           status,
           adminNote: adminNote || null,
         },
       })
 
-      if (!updated) {
-        throw new ApiError(404, 'NOT_FOUND', 'Заявка не найдена')
+      if (count === 0) {
+        const exists = await app.prisma.consultationRequest.findUnique({ where: { id }, select: { id: true } })
+        if (!exists) {
+          throw new ApiError(404, 'NOT_FOUND', 'Заявка не найдена')
+        }
+        throw new ApiError(409, 'ANONYMIZED', 'Данные заявки удалены по сроку')
       }
 
       reply.status(200).send({ ok: true })
@@ -224,7 +229,7 @@ export async function consultationsRoutes(app: FastifyInstance, preHandlers: any
       }
 
       await app.prisma.$transaction((tx) =>
-        revokeMarketingConsents(tx, consultation, new Date())
+        revokeMarketingConsents(tx, consultation, new Date(), id)
       )
 
       reply.status(200).send({ ok: true })

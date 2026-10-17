@@ -184,6 +184,10 @@ export function OrdersPage() {
         </div>
       )}
 
+      <div className="max-w-xl mb-8">
+        <MarketingConsentSection />
+      </div>
+
       <div className="grid gap-4">
         {orders.map((order) => (
           <a
@@ -235,10 +239,6 @@ export function OrdersPage() {
             )}
           </a>
         ))}
-      </div>
-
-      <div className="max-w-xl mt-10">
-        <MarketingConsentSection />
       </div>
     </div>
   )

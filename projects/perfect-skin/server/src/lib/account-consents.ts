@@ -1,12 +1,16 @@
 import type { Prisma } from './db.js'
-import { CONSENT_TEXT_VERSION } from './consents.js'
+import { CONSENT_TEXT_VERSION, RETAIL_AD_VERSIONS } from './consents.js'
 
 type Tx = Prisma.TransactionClient
 
-// Рекламное согласие: любое активное уже покрывает человека, версия здесь не важна
+// Активное рекламное согласие покупателя. Рассылка для специалистов (marketing с другой версией) не в счёт.
+export function activeRetailMarketingWhere(userId: string): Prisma.ConsentRecordWhereInput {
+  return { userId, purpose: 'marketing', textVersion: { in: RETAIL_AD_VERSIONS }, revokedAt: null }
+}
+
 export async function grantRetailMarketing(tx: Tx, userId: string): Promise<void> {
   const active = await tx.consentRecord.findFirst({
-    where: { userId, purpose: 'marketing', revokedAt: null },
+    where: activeRetailMarketingWhere(userId),
     select: { id: true },
   })
   if (active) return
@@ -39,21 +43,28 @@ export async function grantSignInConsents(
   }
 }
 
-// Отзыв рекламы — решение человека, а не заявки: снимаем во всех его заявках
-// (по аккаунту или по телефону) и во всех его записях о согласии.
-// Пустой телефон не сопоставляем: так выглядят стёртые заявки, они чужие.
+// Отзыв рекламы — решение человека, а не заявки. Снимаем:
+// - все его маркетинговые согласия в аккаунте: и покупательскую рекламу, и рассылку специалистам;
+// - маркетинговые согласия из его заявок (по аккаунту или по телефону);
+// - согласие самой заявки (consultationId), даже если заявка стёрта и сопоставить её не по чему.
+// Согласия на обработку ПДн не трогаем. Пустой телефон не сопоставляем: так выглядят стёртые заявки.
 export async function revokeMarketingConsents(
   tx: Tx,
   client: { userId: string | null; phone: string },
   revokedAt: Date,
+  consultationId?: string,
 ): Promise<void> {
   const sameClient: Prisma.ConsultationRequestWhereInput[] = [
     ...(client.userId ? [{ userId: client.userId }] : []),
     ...(client.phone ? [{ phone: client.phone }] : []),
   ]
-  if (sameClient.length > 0) {
+  const consentOr: Prisma.ConsultationConsentWhereInput[] = [
+    ...(consultationId ? [{ consultationId }] : []),
+    ...(sameClient.length > 0 ? [{ consultation: { OR: sameClient } }] : []),
+  ]
+  if (consentOr.length > 0) {
     await tx.consultationConsent.updateMany({
-      where: { purpose: 'marketing', revokedAt: null, consultation: { OR: sameClient } },
+      where: { purpose: 'marketing', revokedAt: null, OR: consentOr },
       data: { revokedAt },
     })
   }

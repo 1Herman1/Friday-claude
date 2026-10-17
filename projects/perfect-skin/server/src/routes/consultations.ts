@@ -31,6 +31,7 @@ export default async function consultationsRoute(app: FastifyInstance) {
           429: { $ref: 'ps.error#' },
         },
       },
+      preHandler: app.authenticateOptional,
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       // Валидируем

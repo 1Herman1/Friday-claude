@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { flushSync } from 'react-dom'
 import { ApiError } from '@/lib/api'
 import { submitCareRequest, type CareChannel } from '@/lib/care-api'
+import { AD_CONSENT_TEXT } from '@/lib/consent-texts'
 import { BTN_OUTLINE, BTN_PRIMARY } from '@/components/about/classes'
 
 type FieldKey = 'name' | 'phone' | 'consentPd'
@@ -248,8 +249,7 @@ export function CareRequestForm({
                 className={CHECKBOX}
               />
               <label htmlFor="care-consent-marketing" className={CHECK_LABEL}>
-                Согласен(на) получать от ИП Рыбко А. А. напоминания о пополнении средств, закрытые предложения и
-                информацию о бонусах — звонком, SMS, в Telegram или WhatsApp.
+                {AD_CONSENT_TEXT}
               </label>
             </div>
           </div>

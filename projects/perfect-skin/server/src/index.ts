@@ -47,7 +47,8 @@ const app = Fastify({
           method: request.method,
           url,
           remoteAddress: request.ip,
-          headers: request.headers,
+          // Только тип браузера: в заголовках cookie сессии и Authorization обмена с 1С
+          userAgent: request.headers?.['user-agent'],
         }
       },
     },

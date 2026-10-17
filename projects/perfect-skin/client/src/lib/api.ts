@@ -27,10 +27,12 @@ export async function fetchApi<T>(
   path: string,
   options?: RequestInit,
 ): Promise<T> {
-  // Снимок-режим: без сервера каталог обслуживается из статического JSON.
-  if (import.meta.env.VITE_API_MODE === 'snapshot' && (!options?.method || options.method === 'GET')) {
+  // Снимок-режим: без сервера чтение и PATCH (согласие в профиле) отвечают из статического снимка.
+  // Остальные записи идут как раньше: их страницы в демо сами показывают заглушку.
+  const method = options?.method ?? 'GET'
+  if (import.meta.env.VITE_API_MODE === 'snapshot' && (method === 'GET' || method === 'PATCH')) {
     const { resolveFromSnapshot } = await import('./snapshot')
-    return resolveFromSnapshot<T>(path)
+    return resolveFromSnapshot<T>(path, options)
   }
   const baseUrl = getApiUrl()
   const url = new URL(path, baseUrl)

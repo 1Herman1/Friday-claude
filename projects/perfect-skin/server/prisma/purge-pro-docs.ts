@@ -7,6 +7,7 @@
  * - Без флага --apply — сухой прогон с выводом подсчёта
  * - Заявки консультаций и Отдела заботы (шаг 4): открытая без движения 90 дней закрывается,
  *   персональные данные стираются через 90 дней после последнего изменения; запись остаётся
+ * - PS_RETENTION_CONSULTATIONS=off отключает только шаг 4, остальные шаги идут как обычно
  * - Логирует без ПДн
  */
 
@@ -14,14 +15,11 @@
 import { PrismaClient } from '../../../../node_modules/.prisma/ps-client/index.js'
 import { readdir, unlink, stat } from 'fs/promises'
 import { join } from 'path'
-import {
-  OPEN_STATUSES,
-  planConsultationRetention,
-  retentionCutoff,
-} from '../src/lib/consultation-retention.js'
+import { applyConsultationRetention } from '../src/lib/consultation-retention.js'
 
 const isDryRun = !process.argv.includes('--apply')
 const proDocsDir = process.env.PS_PRO_DOCS_DIR || './var/pro-docs'
+const retentionConsultations = process.env.PS_RETENTION_CONSULTATIONS !== 'off'
 
 const prisma = new PrismaClient()
 
@@ -160,49 +158,13 @@ async function main() {
   }
 
   // Шаг 4: Заявки консультаций и Отдела заботы (source = 'care').
-  // Кандидаты берутся одним снимком до записей: автозакрытие двигает updatedAt,
-  // и без снимка заявка, закрытая в этом прогоне, не дошла бы до стирания.
   // Согласия (ConsultationConsent) не трогаем — это подтверждение, что согласие было.
-  console.log('[purge-pro-docs] Step 4: Finding consultation requests without movement or past retention...')
-
-  const candidates = await prisma.consultationRequest.findMany({
-    where: {
-      updatedAt: { lt: retentionCutoff(now) },
-      OR: [{ status: { in: OPEN_STATUSES } }, { anonymizedAt: null }],
-    },
-    select: { id: true, status: true, adminNote: true, updatedAt: true, anonymizedAt: true },
-  })
-  const plan = planConsultationRetention(candidates, now)
-
-  console.log(`[purge-pro-docs] Found ${plan.autoClose.length} open requests to auto-close`)
-  console.log(`[purge-pro-docs] Found ${plan.anonymize.length} requests with personal data to erase`)
-
-  if (!isDryRun && (plan.autoClose.length > 0 || plan.anonymize.length > 0)) {
-    await prisma.$transaction(async (tx) => {
-      await Promise.all(
-        plan.autoClose.map((row) =>
-          tx.consultationRequest.updateMany({
-            where: { id: row.id, status: { in: OPEN_STATUSES } },
-            data: { status: 'cancelled', adminNote: row.adminNote },
-          })
-        )
-      )
-
-      await tx.consultationRequest.updateMany({
-        where: { id: { in: plan.anonymize }, anonymizedAt: null },
-        data: {
-          name: 'Удалено',
-          phone: '',
-          email: null,
-          message: null,
-          skinType: null,
-          concern: null,
-          adminNote: null,
-          anonymizedAt: now,
-        },
-      })
-    })
-    console.log(`[purge-pro-docs] Auto-closed ${plan.autoClose.length}, erased ${plan.anonymize.length}`)
+  if (retentionConsultations) {
+    console.log('[purge-pro-docs] Step 4: Consultation requests without movement or past retention...')
+    const { closed, erased } = await applyConsultationRetention(prisma, now, { apply: !isDryRun })
+    console.log(`[purge-pro-docs] ${isDryRun ? 'Would auto-close' : 'Auto-closed'} ${closed}, ${isDryRun ? 'would erase' : 'erased'} ${erased}`)
+  } else {
+    console.log('[purge-pro-docs] Step 4 skipped: PS_RETENTION_CONSULTATIONS=off')
   }
 
   console.log(`[purge-pro-docs] ${isDryRun ? 'Dry run' : 'Purge'} completed`)

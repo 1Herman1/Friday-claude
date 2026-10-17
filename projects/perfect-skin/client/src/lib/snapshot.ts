@@ -255,7 +255,7 @@ function computeFacets(sp: URLSearchParams, snap: CatalogSnapshot): Facets {
   }
 }
 
-export async function resolveFromSnapshot<T>(path: string): Promise<T> {
+export async function resolveFromSnapshot<T>(path: string, options?: RequestInit): Promise<T> {
   const url = new URL(path, 'http://snapshot.local')
   const snap = await loadSnapshot()
   const p = url.pathname
@@ -293,6 +293,14 @@ export async function resolveFromSnapshot<T>(path: string): Promise<T> {
       role: 'customer',
       proStatus: 'none',
     } as T
+  }
+  if (p === '/api/v1/auth/me/marketing') {
+    // Гость без рекламного согласия. PATCH отвечает тем, что пришло, но нигде не сохраняется
+    if (options?.method === 'PATCH') {
+      const body = JSON.parse(String(options.body)) as { consent: boolean }
+      return { consent: body.consent } as T
+    }
+    return { consent: false } as T
   }
   if (p === '/api/v1/pro/status') {
     // Return pending status for demo

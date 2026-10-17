@@ -31,6 +31,7 @@ export default async function careRequestsRoute(app: FastifyInstance) {
           429: { $ref: 'ps.error#' },
         },
       },
+      preHandler: app.authenticateOptional,
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const validation = careSchema.safeParse(request.body)
