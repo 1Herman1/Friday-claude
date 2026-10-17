@@ -1,0 +1,174 @@
+{
+  "_meta": {
+    "source": "https://glacee.es (официальный сайт GLACÉE, WooCommerce)",
+    "collectedAt": "2026-10-18",
+    "finding": "На glacee.es нет полного INCI ни у одного товара: вкладка «Ingredientes» описывает 2–8 ключевых активов текстом, объём не указан. Все 17 наших товаров сопоставлены со страницами по названию, активам и картинкам. Состав нужен с упаковки или от поставщика.",
+    "note": "Таблица для клиента — GLACEE-sostav-na-proverku.xlsx, колонка «Состав (INCI) с упаковки»."
+  },
+  "items": [],
+  "notFound": [
+    {
+      "slug": "dinamizante-vosstanavlivayushhij-krem",
+      "siteName": "DINAMIZANTE Восстанавливающий крем",
+      "article": 10081,
+      "volume": "50 мл",
+      "sourceUrl": "https://glacee.es/comprar/crema/con-celulas-madre",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "hidrorrevitalizante-vosstanavlivayushhij-krem",
+      "siteName": "HIDRORREVITALIZANTE Восстанавливающий крем",
+      "article": 10080,
+      "volume": "50 мл",
+      "sourceUrl": "https://glacee.es/comprar/crema/hidratante-para-cara",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "antiox-c-antioksidantnyj-krem",
+      "siteName": "ANTIOX-C Антиоксидантный крем",
+      "article": 10122,
+      "volume": "50 мл",
+      "sourceUrl": "https://glacee.es/comprar/crema/antioxidante-vitamina-c",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "gen-adn-ukreplyayushhij-krem",
+      "siteName": "GEN ADN Укрепляющий крем",
+      "article": 10061,
+      "volume": "50 мл",
+      "sourceUrl": "https://glacee.es/comprar/crema/reafirmante-de-cara",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "reti-bogatyj-retinolom-krem",
+      "siteName": "RETI+ Богатый ретинолом крем",
+      "article": 10121,
+      "volume": "50 мл",
+      "sourceUrl": "https://glacee.es/comprar/crema/con-retinol-cara",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "contour-k-krem-dlya-glaz",
+      "siteName": "CONTOUR-K Крем для глаз",
+      "article": 10123,
+      "volume": "15 мл",
+      "sourceUrl": "https://glacee.es/comprar/tratamiento-facial/contorno/ojos-vitamina-k",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "serum-triple-accion-syvorotka-trojnogo-dejstviya",
+      "siteName": "SERUM TRIPLE ACCIÓN Сыворотка тройного действия",
+      "article": 10082,
+      "volume": "30 мл",
+      "sourceUrl": "https://glacee.es/comprar/serum/triple-accion",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj",
+      "siteName": "ENERGEL Очищающий гель с морской термальной водой",
+      "article": 10124,
+      "volume": "250 мл",
+      "sourceUrl": "https://glacee.es/comprar/cosmetica-facial/gel-limpiador-cara-hombre",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "balance-toner-tonik-s-morskoj-termalnoj-vodoj",
+      "siteName": "BALANCE TONER Тоник с морской термальной водой",
+      "article": 10125,
+      "volume": "250 мл",
+      "sourceUrl": "https://glacee.es/comprar/cosmetica-facial/tonico-facial-hombre",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "hydrocombat-krem-s-ozonom",
+      "siteName": "HYDROCOMBAT Крем с озоном",
+      "article": 10126,
+      "volume": "50 мл",
+      "sourceUrl": "https://glacee.es/comprar/cosmetica-masculina-para-hombres/crema-hidratante-hombre",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "eye-resistance-krem-dlya-glaz",
+      "siteName": "EYE RESISTANCE Крем для глаз",
+      "article": 10127,
+      "volume": "15 мл",
+      "sourceUrl": "https://glacee.es/comprar/cosmetica-facial/crema-antiojeras-hombre",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi",
+      "siteName": "REDENSIFICANTE Реденсифицирующий крем для зрелой кожи",
+      "article": 10052,
+      "volume": "50 мл",
+      "sourceUrl": "https://glacee.es/comprar/crema/redensificante-online",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "purifying-water-miczellyarnaya-voda",
+      "siteName": "PURIFYING WATER Мицеллярная очищающая вода с термальными микроэлементами",
+      "article": 10128,
+      "volume": "200 мл",
+      "sourceUrl": "https://glacee.es/comprar/tratamiento-facial/limpiador/agua-micelar",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "cleansing-balm-ochishhayushhij-balzam",
+      "siteName": "CLEANSING BALM Очищающий бальзам",
+      "article": 10129,
+      "volume": "200 мл",
+      "sourceUrl": "https://glacee.es/comprar/tratamiento-facial/limpiador/balsamo-calamante",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "cbd-night-mask-nochnaya-vosstanavlivayushhaya-maska",
+      "siteName": "CBD NIGHT MASK Ночная восстанавливающая маска с каннабидиолом и мелатонином",
+      "article": 10130,
+      "volume": "50 мл",
+      "sourceUrl": "https://glacee.es/comprar/tratamiento-facial/limpiador/de-noche-hidratante",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "4d-hyal-cross-superuvlazhnyayushhaya-syvorotka",
+      "siteName": "4D HYAL CROSS Суперувлажняющая сыворотка с гиалуроновой кислотой",
+      "article": 10131,
+      "volume": "30 мл",
+      "sourceUrl": "https://glacee.es/comprar/serum/antiedad-mejor",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    },
+    {
+      "slug": "liposome-c-antioksidantnaya-syvorotka",
+      "siteName": "LIPOSOME-C Антиоксидантная сыворотка",
+      "article": 10132,
+      "volume": "30 мл",
+      "sourceUrl": "https://glacee.es/comprar/serum/con-vitamina-c",
+      "reason": "Товар найден на glacee.es, но полного состава (INCI) на странице нет — только описание ключевых активов."
+    }
+  ],
+  "sets": [
+    {
+      "slug": "podarochnyj-nabor-obnovlennaya-kozha-dlya-korrekczii-vozrastnyh-izmenenij-kozhi-licza-i-vek",
+      "siteName": "Подарочный набор «Обновленная кожа» для коррекции возрастных изменений кожи лица и век",
+      "note": "Набор: своего состава нет, у каждого средства — свой"
+    },
+    {
+      "slug": "podarochnyj-nabor-obnovlennaya-kozha-dlya-liftinga-i-ukrepleniya-kozhi",
+      "siteName": "Подарочный набор «Обновленная кожа» для лифтинга и укрепления кожи",
+      "note": "Набор: своего состава нет, у каждого средства — свой"
+    },
+    {
+      "slug": "podarochnyj-nabor-expert-team-full-box-dlya-uhoda-za-muzhskoj-kozhej",
+      "siteName": "Подарочный набор «Expert Team. Full Box» для ухода за мужской кожей",
+      "note": "Набор: своего состава нет, у каждого средства — свой"
+    },
+    {
+      "slug": "podarochnyj-nabor-expert-team-box-1-dlya-glubokogo-ochishheniya-i-uvlazhneniya-kozhi",
+      "siteName": "Подарочный набор «Expert Team. Box 1» для глубокого очищения и увлажнения кожи",
+      "note": "Набор: своего состава нет, у каждого средства — свой"
+    },
+    {
+      "slug": "podarochnyj-nabor-expert-team-box-2-dlya-tonizaczii-kozhi-i-ustraneniya-otekov-krugov-vokrug-glaz",
+      "siteName": "Подарочный набор «Expert Team. Box 2» для тонизации кожи и устранения отеков кругов вокруг глаз",
+      "note": "Набор: своего состава нет, у каждого средства — свой"
+    }
+  ]
+}
