@@ -340,7 +340,7 @@ npm run import:pro-products --workspace=@ps/server -- --apply
 `docs/projects/perfect-skin/content/inci/isseimi.json` — только позиции с
 `clientDecision: "keep"` (проверены клиентом). Пустой состав не ставит и
 существующий не стирает; товар из файла, которого нет на сайте, останавливает
-`--apply` без записи. Правки активных ингредиентов от клиента — в
+`--apply` без записи. Правки клиента к карточкам (активы, удаление пунктов «Как работает», замены фраз) — в
 `server/assets/product-details-overrides.json`, их применяет `parse:client-docx`,
 на сайт они попадают через `import:content`.
 

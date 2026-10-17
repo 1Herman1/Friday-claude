@@ -16,7 +16,7 @@ import {
   type SiteProduct,
 } from '../src/lib/product-docx.match.js'
 import { ProductDetailsSchema, type ProductDetails } from '../src/lib/product-details.js'
-import { applyActivesOverrides, DetailsOverridesFileSchema } from '../src/lib/product-details-overrides.js'
+import { applyDetailsOverrides, DetailsOverridesFileSchema } from '../src/lib/product-details-overrides.js'
 import { parseDiscontinuedFile } from '../src/lib/discontinue.plan.js'
 import { parseRetailProductsFile } from '../src/lib/import-retail-products.plan.js'
 
@@ -240,7 +240,7 @@ function main(): void {
     ...records.flatMap((r) => suspiciousSpots(`${r.file} «${r.title}»`, [r.title, r.volumeLine, ...(r.details ? texts(r.details) : r.amendmentNotes)].join(' | '))),
   ]
   const overrides = DetailsOverridesFileSchema.parse(readJson(OVERRIDES_FILE)).overrides
-  const matched = applyActivesOverrides(report.matched, overrides)
+  const matched = applyDetailsOverrides(report.matched, overrides)
 
   fs.mkdirSync(PENDING_DIR, { recursive: true })
   const written = new Set<string>()
