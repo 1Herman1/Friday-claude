@@ -1,6 +1,7 @@
+import { readFileSync } from 'node:fs'
 import { describe, it, expect } from 'vitest'
 import { applyDetailsOverrides, DetailsOverridesFileSchema } from '../lib/product-details-overrides.js'
-import type { ProductDetails } from '../lib/product-details.js'
+import { ProductDetailsSchema, type ProductDetails } from '../lib/product-details.js'
 
 const details = (patch: Partial<ProductDetails> = {}): ProductDetails => ({
   v: 1,
@@ -52,6 +53,12 @@ describe('applyDetailsOverrides', () => {
         { a: { removeHowItWorks: ['Гераниол'] } },
       ),
     ).toThrow('правка a: нет пункта «Как работает» с заголовком: Гераниол')
+  })
+
+  it('удаление пункта у карточки без «Как работает» — ошибка, а не тихий пропуск', () => {
+    expect(() =>
+      applyDetailsOverrides([unit('a', { howItWorks: null })], { a: { removeHowItWorks: ['Гераниол (из масла герани)'] } }),
+    ).toThrow('правка a: нет пункта «Как работает» с заголовком: Гераниол (из масла герани)')
   })
 
   it('заменяет фрагмент в intro', () => {
@@ -147,5 +154,31 @@ describe('DetailsOverridesFileSchema', () => {
       overrides: { a: {} },
     })
     expect(parsed.success).toBe(false)
+  })
+})
+
+// Правило владельца 17.10: компонента нет в INCI производителя — в тексте карточки его нет.
+describe('карточки после правок не упоминают компоненты вне INCI', () => {
+  const cards = new URL('../../assets/product-details/', import.meta.url)
+  const word = (stem: string): RegExp => new RegExp(`(?<!\\p{L})${stem}`, 'iu')
+  const absent: Record<string, RegExp[]> = {
+    'scrub-lotion-krem-dlya-snyatiya-makiyazha': [word('гераниол'), word('geraniol')],
+    'tts-moisturizing-mask-uvlazhnyayushhaya-maska': [/(?<!\p{L})АТФ(?!\p{L})/iu, /(?<!\p{L})ATP(?!\p{L})/iu, word('аденозин'), word('adenosin')],
+  }
+
+  const strings = (value: unknown): string[] =>
+    typeof value === 'string'
+      ? [value]
+      : Array.isArray(value)
+        ? value.flatMap(strings)
+        : value !== null && typeof value === 'object'
+          ? Object.values(value).flatMap(strings)
+          : []
+
+  it.each(Object.entries(absent))('%s', (slug, patterns) => {
+    const file = JSON.parse(readFileSync(new URL(`${slug}.json`, cards), 'utf-8')) as { details: unknown }
+    const details = ProductDetailsSchema.parse(file.details)
+    const hits = strings(details).filter((text) => patterns.some((pattern) => pattern.test(text)))
+    expect(hits).toEqual([])
   })
 })
