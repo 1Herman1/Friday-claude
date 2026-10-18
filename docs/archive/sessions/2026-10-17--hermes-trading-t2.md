@@ -63,3 +63,13 @@ status: digested
 ### Коммиты
 - journal: MEXC xlsx importer prototype (fills -> round-trip trades); trade data gitignored
 - journal J0-J2: Prisma schema+migration (signal_sources), idempotent MEXC xlsx→PG importer, Next.js dashboard
+
+## Фрагмент (12:12)
+
+**Просил** 12:12:
+  Давай продолжим разрабатывать делай первый второе третий пункт по порядку
+
+## Фрагмент (12:12)
+
+**Просил** 12:12:
+  Давай продолжим разрабатывать делай первый второе третий пункт по порядку
