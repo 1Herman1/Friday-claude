@@ -51,6 +51,7 @@ friday/                         # репозиторий Friday (1Herman1/Friday
     │   ├── README.md           # Реестр: кто есть кто, где код, где выкатка
     │   ├── .active             # Имя активного проекта (одна строка)
     │   ├── _template/          # Шаблон нового проекта (project.md + brand.md)
+    │   ├── beautymedgroup/     # Правки чужого сайта (WordPress + Tilda), кода нет
     │   ├── hb-landing/         # Лендинг, код в projects/hb-landing/
     │   ├── nullume/            # CLI + MCP генерации медиа, код в tools/nullume/
     │   ├── perfect-skin/       # Код в projects/perfect-skin/
