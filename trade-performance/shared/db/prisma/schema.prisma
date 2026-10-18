@@ -654,6 +654,7 @@ model Execution {
   feeQuote       Decimal?   @map("fee_quote") @db.Decimal(38, 18) // комиссия в валюте PnL на момент филла
   isMaker        Boolean?   @map("is_maker")
   realizedPnl    Decimal?   @map("realized_pnl") @db.Decimal(38, 18) // если биржа отдаёт сама
+  isLiquidation  Boolean    @default(false) @map("is_liquidation") // филл ликвидационного ордера
   executedAt     DateTime   @map("executed_at") @db.Timestamptz(6)
   origin         DataOrigin
   rawRecordId    String?    @map("raw_record_id") @db.Uuid

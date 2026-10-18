@@ -4,7 +4,7 @@
 дублей не создаёт.
   raw_records  (account, stream, external_id)   ← каждая строка файла
   executions   (account, external_id)           ← нормализованное исполнение
-  trades       (account, external_position_id)  ← сборка позиции 0 → ≠0 → 0, ключ "fifo:<первое исполнение>"
+  trades       ← пересборка из всех исполнений счёта (journal/core/rebuild.py)
 
 В выгрузке нет id исполнения, поэтому external_id синтетический: sha1 от полей строки
 + порядковый номер среди полностью одинаковых строк.
@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import json
 import os
+import sys
 from collections import defaultdict
 from decimal import Decimal
 from pathlib import Path
@@ -26,6 +27,8 @@ import pandas as pd
 import psycopg
 
 ROOT = Path(__file__).resolve().parents[2]  # trade-performance/
+sys.path.insert(0, str(ROOT / "journal"))
+from core.rebuild import rebuild  # noqa: E402
 STREAM = "file:futures_trade_history"
 EPS = Decimal("1e-9")
 
@@ -134,7 +137,6 @@ def main():
     a = ap.parse_args()
     load_env()
     fills = read_fills(a.file)
-    trades = build_trades(fills)
 
     with psycopg.connect(os.environ["DATABASE_URL"]) as conn, conn.cursor() as cur:
         cur.execute(SEED_SQL)
@@ -187,38 +189,20 @@ def main():
             oside = "BUY" if (f["action"] == "buy") == (f["side"] == "long") else "SELL"
             cur.execute("""INSERT INTO executions (id, organization_id, account_id, instrument_id, external_id, side,
                            position_side, price, qty, qty_contracts, quote_qty, fee, fee_asset, fee_quote, is_maker,
-                           realized_pnl, executed_at, origin, raw_record_id)
-                           VALUES (gen_random_uuid(), %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'IMPORT',%s)
-                           ON CONFLICT (account_id, external_id) DO UPDATE SET raw_record_id=EXCLUDED.raw_record_id
+                           realized_pnl, is_liquidation, executed_at, origin, raw_record_id)
+                           VALUES (gen_random_uuid(), %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'IMPORT',%s)
+                           ON CONFLICT (account_id, external_id) DO UPDATE SET raw_record_id=EXCLUDED.raw_record_id,
+                             is_liquidation=EXCLUDED.is_liquidation
                            RETURNING id""",
                         (org, acc, inst[f["symbol"]], f["external_id"], oside, f["side"], f["price"], f["qty"],
                          f["qty_cont"], f["notional"], f["fee"], f["fee_ccy"],
                          f["fee"] if f["fee_ccy"] == "USDT" else None, f["is_maker"],
-                         f["pnl"] if not f["is_open"] else None, f["ts"], rid))
+                         f["pnl"] if not f["is_open"] else None, f["order_type"] == "Liquidation_Order", f["ts"], rid))
             exe_id[f["external_id"]] = cur.fetchone()[0]
 
-        n_tr = 0
-        for t in trades:
-            status = "CLOSED" if t.get("closed") else "OPEN"
-            cur.execute("""INSERT INTO trades (id, organization_id, account_id, instrument_id, executor, origin, status,
-                           side, opened_at, closed_at, stop_is_liquidation, max_qty, entry_avg, exit_avg, pnl_asset,
-                           gross_pnl, fees, net_pnl, net_pnl_usd, external_position_id, recomputed_at, updated_at)
-                           VALUES (gen_random_uuid(), %s,%s,%s,'HUMAN','IMPORT',%s,%s,%s,%s,%s,%s,%s,%s,'USDT',%s,%s,%s,%s,%s,
-                           now(), now())
-                           ON CONFLICT (account_id, external_position_id) DO UPDATE SET
-                             status=EXCLUDED.status, opened_at=EXCLUDED.opened_at, closed_at=EXCLUDED.closed_at,
-                             stop_is_liquidation=EXCLUDED.stop_is_liquidation, max_qty=EXCLUDED.max_qty,
-                             entry_avg=EXCLUDED.entry_avg, exit_avg=EXCLUDED.exit_avg, gross_pnl=EXCLUDED.gross_pnl,
-                             fees=EXCLUDED.fees, net_pnl=EXCLUDED.net_pnl, net_pnl_usd=EXCLUDED.net_pnl_usd,
-                             recomputed_at=now(), updated_at=now()
-                           RETURNING id""",
-                        (org, acc, inst[t["symbol"]], status, t["side"].upper(), t["opened_at"], t["closed_at"],
-                         t["liquidated"], t["max_qty_base"], t["entry_avg"], t["exit_avg"], t["gross"], t["fees"],
-                         t["net"], t["net"], t["ext_pos"]))
-            tid = cur.fetchone()[0]
-            n_tr += 1
-            cur.execute("UPDATE executions SET trade_id=%s WHERE id = ANY(%s)",
-                        (tid, [exe_id[f["external_id"]] for f in t["fills"]]))
+        # сделки собираются из ВСЕХ исполнений счёта (файл + API) — см. journal/core/rebuild.py
+        rb = rebuild(cur, acc)
+        n_tr = rb["trades"]
 
         cur.execute("""UPDATE import_jobs SET status='SUCCEEDED', inserted=%s, duplicates=%s, finished_at=now()
                        WHERE id=%s""", (ins, dup, job))
