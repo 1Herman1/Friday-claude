@@ -3,20 +3,28 @@ import Button from '../ui/Button.astro';
 
 const BASE_URL = import.meta.env.BASE_URL;
 
-// Chip positions from the approved canvas (Variant A, 390px artboard),
-// desktop offsets scaled ~1.45x around the face center
+// Chips from the approved canvas (390px artboard). Mobile: x/y — top-left corner inside the portrait (338×421.68),
+// side — screen edge the chip sticks to, w — chip width (12px Roboto Mono). Desktop: dl/dt — offsets around the face center.
+const PORTRAIT_W = 338;
+const PORTRAIT_H = 421.68;
 const chips = [
-  { label: 'Веб-порталы',              ml: '1.8%',  mt: '20px',  dl: 'calc(50% - 273px)', dt: '2%' },
-  { label: 'Агрегаторы',               ml: '70%',   mt: '52px',  dl: 'calc(50% + 113px)', dt: '11%' },
-  { label: 'Сайты',                    ml: '7.2%',  mt: '113px', dl: 'calc(50% - 242px)', dt: '28%' },
-  { label: 'SaaS',                     ml: '74.9%', mt: '153px', dl: 'calc(50% + 141px)', dt: '39%' },
-  { label: 'ИИ-решения',               ml: '4.4%',  mt: '206px', dl: 'calc(50% - 258px)', dt: '54%' },
-  { label: 'Разработка CRM',           ml: '62.8%', mt: '247px', dl: 'calc(50% + 73px)',  dt: '66%' },
-  { label: 'Интеграции 1С и МойСклад', ml: '6.4%',  mt: '300px', dl: 'calc(50% - 247px)', dt: '80%' },
-];
+  { label: 'UI/UX-дизайн',           side: 'r', x: 238, y: 3,   w: 120.4, dl: 'calc(50% - 273px)', dt: '2%' },
+  { label: 'Веб-порталы',            side: 'l', x: -23, y: 40,  w: 113.2, dl: 'calc(50% + 113px)', dt: '11%' },
+  { label: 'Сайты',                  side: 'r', x: 282, y: 102, w: 70,    dl: 'calc(50% - 242px)', dt: '28%' },
+  { label: 'SaaS',                   side: 'l', x: 2,   y: 173, w: 62.8,  dl: 'calc(50% + 141px)', dt: '39%' },
+  { label: 'ИИ-решения',             side: 'r', x: 252, y: 231, w: 106,   dl: 'calc(50% - 258px)', dt: '54%' },
+  { label: 'Разработка CRM',         side: 'l', x: -19, y: 273, w: 134.8, dl: 'calc(50% + 73px)',  dt: '66%' },
+  { label: 'SEO и органик продюсер', side: 'r', x: 165, y: 320, w: 192.4, dl: 'calc(50% - 247px)', dt: '80%' },
+].map(({ x, y, w, side, ...chip }) => ({
+  ...chip,
+  side,
+  fh: side === 'l' ? x / PORTRAIT_W : (PORTRAIT_W - x - w) / PORTRAIT_W,
+  fy: y / PORTRAIT_H,
+}));
+const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.fy ?? 0;
 ---
 
-<section class="relative min-h-[100svh] bg-[#010101] text-white overflow-hidden flex flex-col items-center justify-center" style="padding-top: clamp(48px, 4.5vw, 84px);">
+<section class="hero-section relative min-h-[100svh] bg-[#010101] text-white overflow-hidden flex flex-col items-center justify-center">
   <!-- Top line: Sun icon + Name on the left, Telegram link on the right (absolute OVER the video zone) -->
   <div class="absolute top-10 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-6">
     <!-- Left: Sun icon + Герман Брызгалов -->
@@ -52,7 +60,7 @@ const chips = [
   </div>
 
   <!-- Main content container: flex column to control vertical rhythm -->
-  <div class="relative w-full flex flex-col items-center justify-center" style="flex: 1; gap: 0;">
+  <div class="hero-stack relative w-full flex flex-col items-center justify-center" style="flex: 1; gap: 0;">
     <!-- Video zone container: max-w-[1200px], positioning anchor for chips -->
     <div class="hero-video-zone relative">
       <!-- Video container - centered -->
@@ -74,9 +82,9 @@ const chips = [
       </div>
 
       <!-- Floating chips: positions from the approved canvas (mobile) / scaled around face center (desktop) -->
-      {chips.map(({ label, ml, mt, dl, dt }) => (
-        <div class="hero-chip absolute" style={`--ml: ${ml}; --mt: ${mt}; --dl: ${dl}; --dt: ${dt};`} aria-hidden="true">
-          <div class="px-4 rounded-full" style="height: clamp(38px, 3.17vw, 46px); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); font-family: var(--font-mono); font-weight: 400; color: white; font-size: clamp(12px, 1.17vw, 16.8px); display: inline-flex; align-items: center; white-space: nowrap; line-height: 1.2;">
+      {chips.map(({ label, side, fh, fy, dl, dt }) => (
+        <div class={`hero-chip hero-chip--${side} absolute`} style={`--fh: ${fh}; --fy: ${fy}; --dl: ${dl}; --dt: ${dt}; --fg: ${crmFy};`} aria-hidden="true">
+          <div class="hero-chip__pill px-4 rounded-full" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); font-family: var(--font-mono); font-weight: 400; color: white; display: inline-flex; align-items: center; white-space: nowrap; line-height: 1.2;">
             {label}
           </div>
         </div>
@@ -85,12 +93,11 @@ const chips = [
 
     <!-- Facts line (overlaps video slightly) -->
     <div
-      class="font-mono font-medium text-white text-center flex items-center justify-center relative"
+      class="hero-facts font-mono font-medium text-white text-center flex items-center justify-center relative"
       style="
         font-size: clamp(14px, 1.5vw, 21.6px);
         line-height: 1.2;
         gap: clamp(16px, 1.67vw, 30px);
-        margin-top: clamp(-6px, -0.6vw, -36px);
       "
     >
       <span>От идеи до запуска</span>
@@ -98,48 +105,44 @@ const chips = [
 
     <!-- H1 Heading (tight margin after facts) -->
     <h1
-      class="font-heading uppercase text-center"
+      class="hero-h1 font-heading uppercase text-center"
       style="
-        font-size: clamp(30px, 10vw, 92px); text-wrap: balance;
+        text-wrap: balance;
         line-height: 1.0;
         letter-spacing: 0;
-        margin-top: clamp(12px, 1.37vw, 22px);
         max-width: 1200px;
         width: 100%;
-        padding: 0 16px;
       "
     >
       <span class="block" style="color: #F5F5F5;">ГЕРМАН БРЫЗГАЛОВ</span>
-      <span class="block" style="color: #F97316; font-size: 0.67em;">IT РАЗРАБОТКА И AI</span>
+      <span class="block" style="color: #F97316; font-size: 0.67em;">IT-РАЗРАБОТКА И AI</span>
     </h1>
 
     <!-- What & for whom -->
     <p
-      class="text-center"
+      class="hero-sub text-center"
       style="
         font-family: var(--font-mono);
         font-size: clamp(13px, 1.15vw, 16.5px);
         line-height: 1.6;
         color: #C4C9D0;
         max-width: 46ch;
-        margin-top: clamp(12px, 1.2vw, 20px);
         padding: 0 20px;
         text-wrap: balance;
       "
     >
-      Сайты, порталы, SaaS и интернет-магазины для бизнеса — с внедрением ИИ в процессы
+      Делаем проект под вашу задачу так, чтобы клиенты находили вас сами
     </p>
 
     <!-- Contact button (below heading) -->
     <button
       id="hero-contact-btn"
-      class="rounded-full flex items-center justify-center flex-shrink-0"
+      class="hero-cta rounded-full flex items-center justify-center flex-shrink-0"
       style="
         width: clamp(60px, 5.83vw, 84px);
         height: clamp(60px, 5.83vw, 84px);
         background-color: #F5F5F5;
         color: #010101;
-        margin-top: clamp(18px, 2.08vw, 36px);
       "
       aria-label="Связаться"
     >
@@ -151,15 +154,13 @@ const chips = [
 
     <!-- Call to action text (bottom of viewport) -->
     <p
-      class="font-mono font-medium text-white text-center"
+      class="hero-caption font-mono font-medium text-white text-center"
       style="
         font-size: clamp(12px, 1.17vw, 16.8px);
         line-height: 1.55;
-        max-width: 234px;
-        margin-top: clamp(9px, 0.9vw, 18px);
       "
     >
-      Нажмите на кнопку, чтобы связаться со мной
+      Опишите, что болит, а мы предложим решение и&nbsp;прототип бесплатно.
     </p>
   </div>
 </section>
@@ -212,20 +213,27 @@ const chips = [
 </script>
 
 <style>
+  .hero-stack {
+    --s: calc((100svh - 306px - 16.7vw) / 1.115);
+  }
   .hero-video-zone {
+    --hw: min(338px, 86.6vw);
+    --bw: min(var(--hw), var(--s));
+    --bh: calc(var(--bw) * 1280 / 1026);
+    --zh: min(363px, var(--s));
     width: 100%;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
     padding: 0 16px;
-    height: min(363px, 44svh);
+    height: var(--zh);
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .hero-video-box {
     position: relative;
-    width: min(338px, 86.6vw, 44svh);
+    width: var(--bw);
     aspect-ratio: 1026 / 1280;
     display: flex;
     align-items: center;
@@ -259,12 +267,114 @@ const chips = [
     mask-composite: intersect;
   }
   .hero-chip {
-    left: var(--ml);
-    top: var(--mt);
+    top: calc((var(--zh) - var(--bh)) / 2 + var(--bh) * var(--fy));
     pointer-events: none;
     z-index: 20;
   }
+  .hero-chip--l {
+    left: max(3px, calc(50% - var(--hw) / 2 + var(--hw) * var(--fh)));
+  }
+  .hero-chip--r {
+    right: max(3px, calc(50% - var(--hw) / 2 + var(--hw) * var(--fh)));
+  }
+  .hero-section {
+    padding-top: clamp(48px, 4.5vw, 84px);
+  }
+  .hero-chip__pill {
+    height: clamp(38px, 3.17vw, 46px);
+    font-size: clamp(12px, 1.17vw, 16.8px);
+  }
+  .hero-h1 {
+    font-size: clamp(30px, 10vw, 92px);
+    margin-top: clamp(12px, 1.37vw, 22px);
+    padding: 0 16px;
+  }
+  .hero-facts {
+    margin-top: clamp(-6px, -0.6vw, -36px);
+  }
+  .hero-sub {
+    margin-top: clamp(12px, 1.2vw, 20px);
+  }
+  .hero-cta {
+    margin-top: clamp(18px, 2.08vw, 36px);
+  }
+  .hero-caption {
+    max-width: 234px;
+    margin-top: clamp(9px, 0.9vw, 18px);
+  }
+  @media (max-width: 767px) {
+    .hero-stack {
+      justify-content: flex-start;
+      padding-top: calc(42px + 0.115 * min(363px, var(--s)) + max(0px, (100svh - 844px) / 2));
+    }
+    .hero-facts {
+      margin-top: 11px;
+    }
+    .hero-h1 {
+      margin-top: -5px;
+    }
+    .hero-sub {
+      margin-top: 7px;
+    }
+    .hero-cta {
+      margin-top: 23px;
+    }
+    .hero-caption {
+      max-width: 252px;
+    }
+    .hero-chip:last-child {
+      top: min(
+        max(
+          calc((var(--zh) - var(--bh)) / 2 + var(--bh) * var(--fy)),
+          calc((var(--zh) - var(--bh)) / 2 + var(--bh) * var(--fg) + 40px)
+        ),
+        calc(100% - 31px)
+      );
+    }
+  }
+  @media (max-width: 359px) {
+    .hero-h1 {
+      padding: 0 8px;
+    }
+    .hero-chip__pill {
+      padding-left: 12px;
+      padding-right: 12px;
+      font-size: 11px;
+      height: 34px;
+    }
+  }
+  @media (max-height: 500px) {
+    .hero-chip {
+      display: none;
+    }
+  }
+  @media (min-width: 431px) and (max-width: 767px) and (max-height: 610px) {
+    .hero-chip {
+      display: none;
+    }
+  }
+  @media (max-width: 430px) and (max-height: 555px) {
+    .hero-chip {
+      display: none;
+    }
+  }
   @media (min-width: 768px) {
+    .hero-section {
+      padding-top: min(clamp(48px, 4.5vw, 84px), max(40px, 5.5svh, calc(17.1svh - 88.5px)));
+    }
+    .hero-h1 {
+      font-size: clamp(30px, min(10vw, 11svh), 92px);
+      margin-top: min(clamp(12px, 1.37vw, 22px), max(8px, 1.4svh, calc(6.9svh - 42.2px)));
+    }
+    .hero-sub {
+      margin-top: min(clamp(12px, 1.2vw, 20px), max(8px, 1.4svh, calc(5svh - 27.5px)));
+    }
+    .hero-cta {
+      margin-top: min(clamp(18px, 2.08vw, 36px), max(14px, 2.4svh, calc(8.8svh - 49px)));
+    }
+    .hero-facts {
+      margin-top: max(-6px, min(6px, calc(6px - (100svh - 800px) * 0.12)));
+    }
     .hero-video-zone {
       height: min(clamp(300px, 36vw, 518px), 38svh);
     }
@@ -273,7 +383,61 @@ const chips = [
     }
     .hero-chip {
       left: var(--dl);
+      right: auto;
       top: min(var(--dt), calc(100% - 46px));
+    }
+    .hero-caption {
+      max-width: 420px;
+      text-wrap: balance;
+    }
+  }
+  @media (min-width: 768px) and (max-height: 641px) {
+    .hero-caption {
+      margin-top: min(clamp(9px, 0.9vw, 18px), 16.5px);
+    }
+  }
+  @media (min-width: 768px) and (max-height: 800px) {
+    .hero-video-zone {
+      height: min(clamp(300px, 36vw, 518px), 36svh);
+    }
+    .hero-video-box {
+      width: min(clamp(300px, 36vw, 518px), 36svh);
+    }
+  }
+  @media (min-width: 768px) and (max-height: 720px) {
+    .hero-video-zone {
+      height: min(clamp(300px, 36vw, 518px), 35svh);
+    }
+    .hero-video-box {
+      width: min(clamp(300px, 36vw, 518px), 35svh);
+    }
+  }
+  @media (min-width: 768px) and (max-height: 700px) {
+    .hero-video-zone {
+      height: min(clamp(300px, 36vw, 518px), 33svh);
+    }
+    .hero-video-box {
+      width: min(clamp(300px, 36vw, 518px), 33svh);
+    }
+  }
+  @media (min-width: 768px) and (max-width: 799px) {
+    .hero-section {
+      padding-top: 48px;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 819px) and (min-height: 576px) and (max-height: 640px) {
+    .hero-section {
+      padding-top: 60px;
+    }
+  }
+  @media (min-width: 768px) and (max-height: 575px) {
+    .hero-chip {
+      display: none;
+    }
+  }
+  @media (min-width: 1290px) and (max-height: 599px), (min-width: 1420px) and (max-height: 607px) {
+    .hero-chip {
+      display: none;
     }
   }
 
