@@ -1,5 +1,5 @@
 ---
-type Variant = 'primary' | 'ghost';
+type Variant = 'primary' | 'primary-cta' | 'ghost';
 type Size = 'sm' | 'md' | 'lg';
 
 interface Props {
@@ -12,28 +12,74 @@ interface Props {
 const { href, variant = 'primary', size = 'md', class: className = '' } = Astro.props;
 
 const baseClasses =
-  'inline-flex items-center justify-center font-medium transition-colors duration-200 ease-out rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent';
+  'inline-flex items-center justify-center font-mono font-bold transition-transform duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent focus:ring-offset-dark relative overflow-hidden';
 
 const variantClasses = {
-  primary: 'bg-accent text-white hover:bg-accent-hover',
-  ghost: 'border border-line text-foreground hover:bg-muted',
+  primary: 'rounded-full',
+  'primary-cta': 'text-white rounded-full',
+  ghost: 'border border-dark-line text-on-dark hover:bg-dark-surface-hover rounded-full',
 };
 
 const sizeClasses = {
   sm: 'px-4 py-2 text-sm min-h-[44px]',
   md: 'px-6 py-3 text-base min-h-[44px]',
-  lg: 'px-8 py-4 text-lg min-h-[44px]',
+  lg: 'px-6 py-3 text-base min-h-[46px]',
 };
 
 const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 ---
 
 {href ? (
-  <a href={href} class={classes}>
-    <slot />
+  <a href={href} class={classes} data-variant={variant}>
+    <span class="relative z-[1]"><slot /></span>
   </a>
 ) : (
-  <button class={classes}>
-    <slot />
+  <button class={classes} data-variant={variant}>
+    <span class="relative z-[1]"><slot /></span>
   </button>
 )}
+
+<style>
+  [data-variant='primary'] {
+    position: relative;
+    isolation: isolate;
+    color: var(--color-foreground);
+  }
+
+  [data-variant='primary']::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-accent-on-dark);
+    transform: translateY(100%);
+    transition: transform 300ms var(--ease-out);
+    z-index: 1;
+  }
+
+  [data-variant='primary']::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-on-dark);
+    z-index: 0;
+  }
+
+  @media (hover: hover) {
+    [data-variant='primary']:hover::before {
+      transform: translateY(0);
+    }
+  }
+
+  [data-variant='primary'] :global(*) {
+    position: relative;
+    z-index: 1;
+  }
+
+  [data-variant='primary-cta'] {
+    background: var(--color-accent);
+  }
+
+  [data-variant='primary-cta']:hover {
+    background: var(--color-accent-hover);
+  }
+</style>

@@ -8,11 +8,116 @@ interface Props {
 const { number, title, class: className = '' } = Astro.props;
 ---
 
-<div class={`mb-12 ${className}`}>
-  <div class="text-muted-foreground font-medium mb-2 text-sm tracking-wide">
+<div class={`mb-12 text-center ${className}`}>
+  <div class="text-on-dark-muted font-mono font-medium mb-2 text-sm tracking-[0.14em] uppercase">
     {number}
   </div>
-  <h2 class="text-[clamp(2rem,4vw,3.25rem)] font-bold font-heading text-foreground max-w-3xl">
-    {title}
+  <h2 class="text-[clamp(34px,4.5vw,65px)] font-normal font-heading text-on-dark leading-[1.06] mx-auto max-w-4xl section-title" style="text-wrap: balance;">
+    <slot />
   </h2>
 </div>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
+        entry.target.setAttribute('data-animated', 'true');
+
+        if (!prefersReducedMotion) {
+          const titleEl = entry.target as HTMLElement;
+          const fragment = document.createDocumentFragment();
+
+          // Process child nodes to preserve structure (e.g., colored spans)
+          let wordIndex = 0;
+          const processNode = (node: Node) => {
+            if (node.nodeType === Node.TEXT_NODE) {
+              const text = node.textContent || '';
+              const words = text.split(/(\s+)/); // Keep whitespace
+              words.forEach((word) => {
+                if (/\s/.test(word)) {
+                  // Whitespace: add as-is
+                  fragment.appendChild(document.createTextNode(word));
+                } else if (word.length > 0) {
+                  // Non-whitespace: wrap in span with animation
+                  const span = document.createElement('span');
+                  span.textContent = word;
+                  span.className = 'section-word';
+                  span.style.display = 'inline-block';
+                  span.style.animationDelay = `${wordIndex * 40}ms`;
+                  fragment.appendChild(span);
+                  wordIndex++;
+                }
+              });
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+              // Preserve element structure (e.g., <span class="text-accent-on-dark">)
+              const elem = node as HTMLElement;
+              const clonedElem = elem.cloneNode(false) as HTMLElement;
+              let elemWordIndex = 0;
+
+              elem.childNodes.forEach((child) => {
+                if (child.nodeType === Node.TEXT_NODE) {
+                  const text = child.textContent || '';
+                  const words = text.split(/(\s+)/);
+                  words.forEach((word) => {
+                    if (/\s/.test(word)) {
+                      clonedElem.appendChild(document.createTextNode(word));
+                    } else if (word.length > 0) {
+                      const span = document.createElement('span');
+                      span.textContent = word;
+                      span.className = 'section-word';
+                      span.style.display = 'inline-block';
+                      span.style.animationDelay = `${wordIndex * 40}ms`;
+                      clonedElem.appendChild(span);
+                      wordIndex++;
+                      elemWordIndex++;
+                    }
+                  });
+                } else {
+                  clonedElem.appendChild(child.cloneNode(true));
+                }
+              });
+
+              fragment.appendChild(clonedElem);
+            }
+          };
+
+          titleEl.childNodes.forEach(processNode);
+          titleEl.innerHTML = '';
+          titleEl.appendChild(fragment);
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.section-title').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+
+<style>
+  @keyframes section-word-in {
+    from {
+      opacity: 0;
+      filter: blur(20px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+    }
+  }
+
+  :global(.section-word) {
+    animation: section-word-in 0.6s ease forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.section-word) {
+      animation: none;
+      opacity: 1;
+      filter: none;
+    }
+  }
+</style>

@@ -2,20 +2,20 @@
 import Button from '../ui/Button.astro';
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur border-b border-line">
+<header class="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-dark-line opacity-0 invisible pointer-events-none transition-[opacity,visibility] duration-300">
   <nav class="max-w-6xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between">
-    <a href="#" class="font-bold text-lg text-foreground font-heading">H&B /</a>
+    <a href="#" class="font-normal text-lg text-on-dark font-heading inline-flex items-center min-h-11 -my-2">H&B /</a>
 
-    <div class="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-      <a href="#services" class="hover:text-foreground transition-colors">Услуги</a>
-      <a href="#process" class="hover:text-foreground transition-colors">Процесс</a>
-      <a href="#works" class="hover:text-foreground transition-colors">Работы</a>
-      <a href="#ai-cases" class="hover:text-foreground transition-colors">ИИ-кейсы</a>
-      <a href="#about" class="hover:text-foreground transition-colors">О нас</a>
-      <a href="#contacts" class="hover:text-foreground transition-colors">Контакты</a>
+    <div class="hidden md:flex items-center gap-8 text-sm text-on-dark-muted">
+      <a href="#services" class="hover:text-on-dark transition-colors">Услуги</a>
+      <a href="#works" class="hover:text-on-dark transition-colors">Работы</a>
+      <a href="#ai-cases" class="hover:text-on-dark transition-colors">ИИ-кейсы</a>
+      <a href="#process" class="hover:text-on-dark transition-colors">Процесс</a>
+      <a href="#about" class="hover:text-on-dark transition-colors">О нас</a>
+      <a href="#contacts" class="hover:text-on-dark transition-colors">Контакты</a>
     </div>
 
-    <button class="w-11 h-11 flex items-center justify-center rounded-lg border border-line hover:bg-muted transition-colors" aria-label="Открыть контакты">
+    <button class="w-11 h-11 flex items-center justify-center rounded-lg border border-dark-line hover:bg-dark-surface-hover transition-colors text-on-dark" aria-label="Открыть контакты">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
       </svg>
@@ -24,6 +24,21 @@ import Button from '../ui/Button.astro';
 </header>
 
 <script>
+  const header = document.querySelector('header');
+  const heroSection = document.querySelector('section:first-of-type');
+
+  const observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      header?.classList.add('opacity-0', 'invisible', 'pointer-events-none');
+    } else {
+      header?.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
+    }
+  }, { rootMargin: '-120px 0px 0px 0px', threshold: 0 });
+
+  if (heroSection) {
+    observer.observe(heroSection);
+  }
+
   const button = document.querySelector('header button');
   button?.addEventListener('click', () => {
     window.dispatchEvent(new Event('open-contact-dialog'));

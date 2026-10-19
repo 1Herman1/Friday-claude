@@ -2,12 +2,14 @@
 import SectionTitle from '../ui/SectionTitle.astro';
 ---
 
-<section id="about" class="py-24 md:py-32">
+<section id="about" class="py-24 md:py-32 border-t border-dark-divider">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <SectionTitle number="05 / Кто мы" title="О нас" />
+    <SectionTitle number="05 /">
+      <span class="text-accent-on-dark">КТО</span> мы
+    </SectionTitle>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-      <p class="text-lg leading-relaxed text-foreground max-w-2xl">
+      <p class="text-lg leading-relaxed text-on-dark-body max-w-2xl">
         Я — Герман, и вместе с командой H&B team мы делаем проекты небольшим составом: вы общаетесь напрямую с тем, кто пишет код, проектирует архитектуру и интегрирует системы.
       </p>
     </div>
@@ -20,8 +22,8 @@ import SectionTitle from '../ui/SectionTitle.astro';
         { title: 'Сопровождаем после запуска', desc: 'Не бросаем проект на финише. Первые месяцы поддерживаем, помогаем масштабировать.' },
       ].map(({ title, desc }) => (
         <div>
-          <h3 class="text-xl font-bold font-heading text-foreground mb-2">{title}</h3>
-          <p class="text-foreground">{desc}</p>
+          <h3 class="text-xl font-normal font-heading text-on-dark mb-2">{title}</h3>
+          <p class="text-on-dark-body">{desc}</p>
         </div>
       ))}
     </div>

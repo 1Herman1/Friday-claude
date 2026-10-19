@@ -1,0 +1,20 @@
+---
+import Button from '../ui/Button.astro';
+---
+
+<section class="py-12 md:py-16" style="background-color: rgba(194, 65, 12, 0.11); border-top: 1px solid rgba(194, 65, 12, 0.4); border-bottom: 1px solid rgba(194, 65, 12, 0.4);">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-8">
+    <div class="flex-1">
+      <h2 class="font-heading text-on-dark mb-3" style="font-size: clamp(24px, 3vw, 40px); line-height: 1.2;">
+        Посчитаем вашу задачу — прототип бесплатно
+      </h2>
+      <p class="font-mono text-on-dark-muted" style="font-size: 13px;">
+        Обсудим за 20 минут, без обязательств
+      </p>
+    </div>
+
+    <Button size="lg" variant="primary-cta" class="open-contact-dialog cursor-pointer w-full md:w-auto shrink-0">
+      Обсудить задачу
+    </Button>
+  </div>
+</section>

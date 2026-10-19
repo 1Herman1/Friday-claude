@@ -5,9 +5,11 @@ import Button from '../ui/Button.astro';
 import processImage from '../../assets/process.jpg';
 ---
 
-<section id="process" class="py-24 md:py-32">
+<section id="process" class="py-24 md:py-32 border-t border-dark-divider">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <SectionTitle number="02 / Как мы работаем" title="Процесс работы" />
+    <SectionTitle number="04 /">
+      <span class="text-accent-on-dark">КАК</span> мы работаем
+    </SectionTitle>
 
     <div class="grid grid-cols-1 md:grid-cols-[1fr_0.8fr] gap-12 items-start mb-12">
       <div class="space-y-8">
@@ -18,17 +20,17 @@ import processImage from '../../assets/process.jpg';
           { step: '04', title: 'Делаем прототип — бесплатно', desc: 'Собираем рабочий прототип на основе аудита. Вы ничего не платите на этом этапе.', highlight: true },
           { step: '05', title: 'Показываем — решаете вы', desc: 'Понравился прототип — покупаете, и мы доводим его до полноценного продукта. Не понравился — вы ничего не потеряли.' },
         ].map(({ step, title, desc, highlight }) => (
-          <div class={`relative pl-16 pb-8 last:pb-0 ${highlight ? 'rounded-lg p-6 pl-16 -mx-6 bg-gradient-to-r from-[#C2410C]/5 to-transparent' : ''}`}>
-            <div class={`absolute left-0 top-0 text-3xl font-bold font-heading ${highlight ? 'text-accent' : 'text-muted-foreground'}`}>
+          <div class={`relative pl-16 pb-8 last:pb-0 ${highlight ? 'rounded-xl py-6 pr-6 pl-16 bg-accent-wash' : ''}`}>
+            <div class={`absolute ${highlight ? 'left-6 top-6' : 'left-0 top-0'} font-mono font-bold text-base tracking-wide ${highlight ? 'text-accent-on-dark' : 'text-on-dark-muted'}`}>
               {step}
             </div>
-            <h3 class="text-lg font-bold font-heading text-foreground mb-2">{title}</h3>
-            <p class="text-foreground leading-relaxed max-w-[65ch] text-base">{desc}</p>
+            <h3 class="text-lg font-normal font-heading text-on-dark mb-2 items-baseline">{title}</h3>
+            <p class="text-on-dark-body leading-relaxed max-w-[65ch] text-base">{desc}</p>
           </div>
         ))}
       </div>
 
-      <div class="w-full">
+      <div class="w-full hidden md:block">
         <Image
           src={processImage}
           alt="Путь от встречи к бесплатному прототипу"
@@ -36,16 +38,17 @@ import processImage from '../../assets/process.jpg';
           format="webp"
           loading="lazy"
           decoding="async"
-          class="w-full h-auto"
+          class="w-full h-auto border border-dark-line rounded-2xl"
+          style="filter: brightness(.55) contrast(1.15) saturate(.9);"
         />
       </div>
     </div>
 
     <div class="space-y-6">
-      <p class="text-lg leading-relaxed text-foreground max-w-[65ch]">
-        <span class="font-bold">Бесплатный прототип</span> — наше уникальное предложение: вы принимаете решение, глядя на готовый продукт, а не на обещания.
+      <p class="text-lg leading-relaxed text-on-dark-body max-w-[65ch]">
+        <span class="font-bold text-on-dark">Бесплатный прототип</span> — наше уникальное предложение: вы принимаете решение, глядя на готовый продукт, а не на обещания.
       </p>
-      <Button size="lg" variant="primary" class="open-contact-dialog cursor-pointer">
+      <Button size="lg" variant="primary-cta" class="open-contact-dialog cursor-pointer">
         Начать со встречи
       </Button>
     </div>
@@ -53,8 +56,9 @@ import processImage from '../../assets/process.jpg';
 </section>
 
 <script>
-  const button = document.querySelector('.open-contact-dialog');
-  button?.addEventListener('click', () => {
-    window.dispatchEvent(new Event('open-contact-dialog'));
+  document.querySelectorAll('.open-contact-dialog').forEach((button) => {
+    button.addEventListener('click', () => {
+      window.dispatchEvent(new Event('open-contact-dialog'));
+    });
   });
 </script>

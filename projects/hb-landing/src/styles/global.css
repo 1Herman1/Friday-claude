@@ -1,6 +1,12 @@
-@import "@fontsource-variable/montserrat";
 @import "@fontsource-variable/open-sans";
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'Coolvetica';
+  src: url('/hb_landing/fonts/coolvetica.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+}
 
 @theme {
   --color-background: #FAFAF8;
@@ -14,19 +20,42 @@
   --color-on-dark: #F4F4F1;
   --color-line: #E8E6E1;
 
-  --font-heading: "Montserrat Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --color-dark-surface: rgba(244, 244, 241, 0.04);
+  --color-dark-surface-hover: rgba(244, 244, 241, 0.07);
+  --color-dark-line: rgba(244, 244, 241, 0.12);
+  --color-dark-line-strong: rgba(244, 244, 241, 0.20);
+  --color-dark-divider: rgba(244, 244, 241, 0.08);
+  --color-chip-bg: rgba(244, 244, 241, 0.06);
+  --color-chip-border: rgba(244, 244, 241, 0.10);
+  --color-on-dark-body: #C4C9D0;
+  --color-on-dark-muted: #9BA1AA;
+  --color-on-dark-faint: #6E747D;
+  --color-accent-on-dark: #F97316;
+  --color-accent-on-dark-hv: #FB923C;
+  --color-accent-wash: rgba(249, 115, 22, 0.10);
+  --color-accent-wash-line: rgba(249, 115, 22, 0.22);
+
+  --font-heading: "Coolvetica", "Montserrat Variable", Arial, sans-serif;
+  --font-mono: "Roboto Mono", monospace;
   --font-sans: "Open Sans Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 :root {
   font-family: var(--font-sans);
-  color: var(--color-foreground);
-  background: var(--color-background);
+  color: var(--color-on-dark-body);
+  background: var(--color-dark);
   line-height: 1.7;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.font-heading {
+  font-synthesis-weight: none;
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
 }
 
 body {
@@ -51,12 +80,7 @@ section {
 
 section:nth-of-type(1) { animation-delay: 0ms; }
 section:nth-of-type(2) { animation-delay: 60ms; }
-section:nth-of-type(3) { animation-delay: 120ms; }
-section:nth-of-type(4) { animation-delay: 180ms; }
-section:nth-of-type(5) { animation-delay: 240ms; }
-section:nth-of-type(6) { animation-delay: 300ms; }
-section:nth-of-type(7) { animation-delay: 360ms; }
-section:nth-of-type(8) { animation-delay: 420ms; }
+section:not(:nth-of-type(-n+2)) { animation: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *,

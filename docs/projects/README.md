@@ -15,7 +15,7 @@
 | Проект | Что это | Каталог доков | Код в репозитории | Ветка выкатки |
 |--------|---------|---------------|-------------------|---------------|
 | Симба | Интернет-магазин зоотоваров simbazoo.ru | `simba/` | `projects/simba/` (`client/ admin/ server/ shared/ deploy/ scripts/`) | `deploy/simba` |
-| HB Landing | Лендинг-визитка | `hb-landing/` | `projects/hb-landing/` | нет |
+| HB Landing | Лендинг-визитка | `hb-landing/` | `projects/hb-landing/` (зеркало; источник — репо `1Herman1/hb_landing`) | `main` в `1Herman1/hb_landing` → `gh-pages` |
 | Perfect Skin | Магазин косметики | `perfect-skin/` | `projects/perfect-skin/` | `deploy/perfect-skin` |
 | Ветклиника | SEO/GEO-аналитика, сайта пока нет | `vet-clinic/` | нет | нет |
 | Nullume | CLI и MCP генерации медиа через kie.ai, библиотека вкуса | `nullume/` | `tools/nullume/` | нет (npm) |

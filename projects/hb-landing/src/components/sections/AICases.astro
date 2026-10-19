@@ -2,9 +2,11 @@
 import SectionTitle from '../ui/SectionTitle.astro';
 ---
 
-<section id="ai-cases" class="py-24 md:py-32">
+<section id="ai-cases" class="py-24 md:py-32 border-t border-dark-divider">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <SectionTitle number="04 / Как работает ИИ в реальных задачах" title="ИИ-кейсы" />
+    <SectionTitle number="03 /">
+      ИИ в <span class="text-accent-on-dark">РЕАЛЬНЫХ</span> задачах
+    </SectionTitle>
 
     <div class="space-y-12">
       {[
@@ -14,9 +16,9 @@ import SectionTitle from '../ui/SectionTitle.astro';
           solution: 'ИИ читает письмо и вложения, создаёт сделку в CRM, готовит черновик ответа, менеджер проверяет',
           result: '6 недель внедрения',
           metrics: [
-            '2 мин вместо 20',
-            '+30% заявок тем же штатом',
-            'окупилось за 3 месяца',
+            { number: '2 мин', description: 'вместо 20' },
+            { number: '+30%', description: 'заявок тем же штатом' },
+            { number: '3 мес', description: 'срок окупаемости' },
           ],
         },
         {
@@ -25,40 +27,43 @@ import SectionTitle from '../ui/SectionTitle.astro';
           solution: 'ИИ-консультант: 4 вопроса о коже → персональный набор → ответы 24/7, только каталог компании',
           result: 'Обучен на данных магазина',
           metrics: [
-            'конверсия +18%',
-            'поддержка −40%',
-            'чек +12%',
+            { number: '+18%', description: 'конверсия' },
+            { number: '−40%', description: 'поддержка' },
+            { number: '+12%', description: 'чек' },
           ],
         },
       ].map(({ title, task, solution, result, metrics }) => (
-        <article class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 border-b border-line last:border-b-0">
+        <article class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 border-b border-dark-divider last:border-b-0">
           <div class="md:col-span-2">
-            <h3 class="text-3xl font-bold font-heading text-foreground mb-6">{title}</h3>
+            <h3 class="text-3xl font-normal font-heading text-on-dark mb-6">{title}</h3>
             <div class="space-y-4">
               <div>
-                <h4 class="text-sm font-bold text-muted-foreground mb-2">ЗАДАЧА</h4>
-                <p class="text-foreground">{task}</p>
+                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">ЗАДАЧА</h4>
+                <p class="text-on-dark-body max-w-[65ch]">{task}</p>
               </div>
               <div>
-                <h4 class="text-sm font-bold text-muted-foreground mb-2">ЧТО СДЕЛАЛИ</h4>
-                <p class="text-foreground">{solution}</p>
+                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">ЧТО СДЕЛАЛИ</h4>
+                <p class="text-on-dark-body max-w-[65ch]">{solution}</p>
               </div>
               <div>
-                <h4 class="text-sm font-bold text-muted-foreground mb-2">РЕЗУЛЬТАТ</h4>
-                <p class="text-foreground">{result}</p>
+                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">РЕЗУЛЬТАТ</h4>
+                <p class="text-on-dark-body max-w-[65ch]">{result}</p>
               </div>
             </div>
           </div>
 
-          <div>
-            <div class="space-y-3">
-              {metrics.map((metric) => (
-                <div class="inline-flex px-4 py-3 bg-muted rounded-lg">
-                  <span class="text-accent font-bold font-heading text-lg tabular-nums">{metric}</span>
+          <div class="flex flex-col items-start gap-6">
+              {metrics.map(({ number, description }) => (
+                <div class="flex flex-col gap-1">
+                  <div class="font-heading text-accent-on-dark tabular-nums" style="font-size: clamp(28px, 3vw, 44px); line-height: 1;">
+                    {number}
+                  </div>
+                  <div class="font-mono text-xs text-on-dark-muted uppercase tracking-[0.1em]">
+                    {description}
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
         </article>
       ))}
     </div>

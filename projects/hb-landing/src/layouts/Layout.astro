@@ -1,4 +1,6 @@
 ---
+import '@fontsource/roboto-mono/400.css';
+import '@fontsource/roboto-mono/500.css';
 import '../styles/global.css';
 
 interface Props {
@@ -10,6 +12,8 @@ const {
   title = 'Герман Брызгалов — разработка IT-продуктов и внедрение ИИ | H&B team',
   description = 'H&B team разрабатывает веб-сервисы, порталы, SaaS-решения, интернет-магазины и внедряет искусственный интеллект. Разработка от идеи до запуска.',
 } = Astro.props;
+
+const BASE_URL = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
@@ -21,10 +25,37 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hb-team.dev" />
-    <meta name="theme-color" content="#FAFAF8" />
-    <link rel="icon" href="/favicon.svg" />
+    <meta property="og:url" content="https://1herman1.github.io/hb_landing/" />
+    <meta property="og:image" content="https://1herman1.github.io/hb_landing/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#14161A" />
+    <link rel="canonical" href="https://1herman1.github.io/hb_landing/" />
+    <link rel="icon" href={`${BASE_URL}favicon.svg`} />
+    <link rel="apple-touch-icon" href={`${BASE_URL}apple-touch-icon.png`} />
+    <link rel="preload" as="font" type="font/woff" href={`${BASE_URL}fonts/coolvetica.woff`} crossorigin />
     <title>{title}</title>
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": ["Person", "ProfessionalService"],
+        "name": "Герман Брызгалов",
+        "alternateName": "H&B team",
+        "url": "https://1herman1.github.io/hb_landing/",
+        "telephone": "+7 916 965 56 11",
+        "email": "gera103546@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Москва",
+          "addressCountry": "RU"
+        },
+        "description": "Разработка веб-сайтов, SaaS-решений, интернет-магазинов, порталов, внедрение ИИ и автоматизация бизнес-процессов",
+        "sameAs": ["https://t.me/h_and_b_team"],
+        "image": "https://1herman1.github.io/hb_landing/og-image.jpg",
+        "areaServed": "RU"
+      })}
+    </script>
   </head>
   <body>
     <slot />

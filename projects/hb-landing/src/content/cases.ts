@@ -5,10 +5,18 @@ import primeFitness from '../assets/cases/prime-fitness.jpg';
 import potok from '../assets/cases/potok.jpg';
 import sovetnik from '../assets/cases/sovetnik.jpg';
 
+import smenaShot from '../assets/cases/shots/smena.jpg';
+import atlasShot from '../assets/cases/shots/atlas.jpg';
+import domKeramikiShot from '../assets/cases/shots/dom-keramiki.jpg';
+import primeFitnessShot from '../assets/cases/shots/prime-fitness.jpg';
+import potokShot from '../assets/cases/shots/potok.jpg';
+import sovetnikShot from '../assets/cases/shots/sovetnik.jpg';
+
 export interface Case {
   id: string;
   name: string;
   image: ImageMetadata;
+  shot: ImageMetadata;
   tags: string[];
   task: string;
   solution: string;
@@ -20,6 +28,7 @@ export const cases: Case[] = [
     id: 'smena',
     name: 'Смена',
     image: smena,
+    shot: smenaShot,
     tags: ['SaaS', 'Графики'],
     task: 'Маленькая сеть кофеен (14 точек) тратила 3 часа на составление графика — через Google Sheets, визуализацию в Excel, согласование по email.',
     solution: 'Сделали веб-сервис: менеджер вводит данные о смене (дата, время, позиции), алгоритм подбирает людей с нужными навыками и свободным временем, проверяет ограничения (макс. часы, дни отдыха). Всё хранится в облаке, доступно с мобильного.',
@@ -29,6 +38,7 @@ export const cases: Case[] = [
     id: 'atlas',
     name: 'Атлас',
     image: atlas,
+    shot: atlasShot,
     tags: ['Портал', 'Корпоративный'],
     task: 'Строительный холдинг (800 сотрудников) согласовывал договоры вручную: диспетчер создаёт форму, подрядчик заполняет, юрист проверяет, финансы одобряют. Всё по email и доступу на сервер. Средний срок — 9 дней.',
     solution: 'Портал с чётким workflow: форма → экспорт в Word → визуальный чеклист согласования (кто на каком этапе) → уведомления в email и Telegram.',
@@ -38,6 +48,7 @@ export const cases: Case[] = [
     id: 'dom-keramiki',
     name: 'Дом Керамики',
     image: domKeramiki,
+    shot: domKeramikiShot,
     tags: ['E-commerce', 'Интеграция'],
     task: '12 000 товаров (плитка, керамика), каталог в 1С, нет интернет-магазина. Заказы принимали по телефону. Клиентам нужны фото, цены, расчёт метража для заказа.',
     solution: 'Интернет-магазин на WordPress+WooCommerce с интеграцией 1С (синхронизация каталога, остатков, цен). Специальный калькулятор метража (выбираешь плитку → вводишь размеры → видишь, сколько нужно штук).',
@@ -47,6 +58,7 @@ export const cases: Case[] = [
     id: 'prime-fitness',
     name: 'Прайм.Фитнес',
     image: primeFitness,
+    shot: primeFitnessShot,
     tags: ['Мобильное', 'Приложение'],
     task: 'Сеть фитнес-студий (8 филиалов). Посетители записывались к тренеру по телефону (50% звонков), узнавали расписание через WhatsApp-группы, забывали про тренировки.',
     solution: 'Мобильное приложение: расписание, бронь слота, push-напоминания за день и за час, история посещений, бонусы за регулярность.',
@@ -56,6 +68,7 @@ export const cases: Case[] = [
     id: 'potok',
     name: 'Поток',
     image: potok,
+    shot: potokShot,
     tags: ['ИИ', 'Логистика'],
     task: 'Логистическая компания получает 400 заявок в день письмами (из разных источников). Диспетчер вручную читает письмо, ищет адрес доставки, вид груза, вес, создаёт запись в CRM, пишет черновик ответа.',
     solution: 'Подключили ИИ (Claude API): письмо с вложениями → ИИ извлекает данные → создаёт сделку в CRM → готовит черновик ответа. Диспетчер только проверяет и отправляет.',
@@ -65,6 +78,7 @@ export const cases: Case[] = [
     id: 'sovetnik',
     name: 'Советник',
     image: sovetnik,
+    shot: sovetnikShot,
     tags: ['ИИ', 'E-commerce'],
     task: 'Магазин косметики (3 000 средств). Клиенты не знают, какое средство выбрать: разные типы кожи, назначения, бренды. Служба поддержки — узкое место.',
     solution: 'На сайт встроили чат-бота с ИИ: 4 вопроса о типе кожи и проблемах → персональный набор из каталога → при сложных вопросах переводит на живого консультанта. Бот обучен только на данных магазина.',

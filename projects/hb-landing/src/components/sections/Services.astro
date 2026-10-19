@@ -2,27 +2,33 @@
 import SectionTitle from '../ui/SectionTitle.astro';
 ---
 
-<section id="services" class="py-24 md:py-32">
+<section id="services" class="py-24 md:py-32 border-t border-dark-divider">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <SectionTitle number="01 / Что мы делаем" title="Услуги" />
+    <SectionTitle number="01 /">
+      Что мы <span class="text-accent-on-dark">ДЕЛАЕМ</span>
+    </SectionTitle>
 
-    <p class="text-lg leading-relaxed text-foreground max-w-[65ch] mb-12">
+    <p class="text-lg leading-relaxed text-on-dark-body max-w-[65ch] mb-12 md:mb-16">
       Делаю сайты, сервисы и внутренние системы, которые зарабатывают для бизнеса, — и подключаю искусственный интеллект там, где он реально экономит время и деньги.
     </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+    <div class="space-y-0">
       {[
         { num: '01', title: 'IT-продукты под ключ', desc: 'Придумаем, спроектируем и запустим ваш сервис или приложение: от идеи на салфетке до работающего продукта с первыми пользователями.' },
-        { num: '02', title: 'Порталы и внутренние системы', desc: 'Личные кабинеты, базы знаний, системы заявок. Наводим порядок там, где сейчас Excel, почта и „спросить у Лены".' },
+        { num: '02', title: 'Порталы и внутренние системы', desc: 'Личные кабинеты, базы знаний, системы заявок. Наводим порядок там, где сейчас Excel, почта и «спросить у Лены».' },
         { num: '03', title: 'SaaS-решения', desc: 'Онлайн-сервисы по подписке: биллинг, тарифы, личные кабинеты. Строим так, чтобы продукт рос без переписывания с нуля.' },
         { num: '04', title: 'Интернет-магазины', desc: 'Каталог, корзина, оплата, доставка, интеграция с 1С и CRM. Магазины, в которых удобно покупать с телефона.' },
         { num: '05', title: 'Оптимизация процессов с помощью ИИ', desc: 'Находим рутину, которая съедает часы сотрудников, — и отдаём её ИИ: разбор писем, документов, заявок, отчётов.' },
         { num: '06', title: 'Внедрение ИИ в продукты', desc: 'Добавляем в ваш сайт или сервис умного помощника: консультации клиентов, подбор товара, ответы на вопросы 24/7.' },
       ].map(({ num, title, desc }) => (
-        <div class="p-8 border border-line rounded-2xl bg-surface">
-          <div class="text-4xl font-bold font-heading text-muted-foreground mb-4">{num}</div>
-          <h3 class="text-2xl font-bold font-heading text-foreground mb-4">{title}</h3>
-          <p class="text-base leading-relaxed text-foreground">{desc}</p>
+        <div class="border-t border-dark-divider py-8 md:py-10 flex gap-4 md:gap-12 hover:bg-dark-surface-hover transition-colors duration-200 -mx-5 md:-mx-8 px-5 md:px-8">
+          <div class="flex-shrink-0 w-8 md:w-24 text-right tabular-nums font-mono font-bold text-on-dark-muted">
+            <div class="text-base tracking-wide">{num}</div>
+          </div>
+          <div class="flex-grow">
+            <h3 class="text-[clamp(22px,2.5vw,28px)] font-normal font-heading text-on-dark mb-3">{title}</h3>
+            <p class="text-base leading-relaxed text-on-dark-body max-w-[65ch]">{desc}</p>
+          </div>
         </div>
       ))}
     </div>

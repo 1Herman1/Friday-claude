@@ -1,73 +1,164 @@
 ---
 import Button from '../ui/Button.astro';
+
+const BASE_URL = import.meta.env.BASE_URL;
+
+// Chip positions from the approved canvas (Variant A, 390px artboard),
+// desktop offsets scaled ~1.45x around the face center
+const chips = [
+  { label: 'Веб-порталы',              ml: '1.8%',  mt: '20px',  dl: 'calc(50% - 273px)', dt: '2%' },
+  { label: 'Агрегаторы',               ml: '70%',   mt: '52px',  dl: 'calc(50% + 113px)', dt: '11%' },
+  { label: 'Сайты',                    ml: '7.2%',  mt: '113px', dl: 'calc(50% - 242px)', dt: '28%' },
+  { label: 'SaaS',                     ml: '74.9%', mt: '153px', dl: 'calc(50% + 141px)', dt: '39%' },
+  { label: 'ИИ-решения',               ml: '4.4%',  mt: '206px', dl: 'calc(50% - 258px)', dt: '54%' },
+  { label: 'Разработка CRM',           ml: '62.8%', mt: '247px', dl: 'calc(50% + 73px)',  dt: '66%' },
+  { label: 'Интеграции 1С и МойСклад', ml: '6.4%',  mt: '300px', dl: 'calc(50% - 247px)', dt: '80%' },
+];
 ---
 
-<section class="min-h-screen bg-dark text-on-dark flex items-center justify-center py-16">
-  <div class="max-w-6xl mx-auto px-5 md:px-8 w-full flex flex-col items-center text-center">
-    <!-- Hero video with floating chips -->
-    <div class="relative mb-12 max-w-sm w-full">
-      <!-- Video -->
-      <video
-        id="hero-video"
-        muted
-        loop
-        playsinline
-        preload="metadata"
-        poster="/media/hero/germes.jpg"
-        aria-hidden="true"
-        class="w-full h-auto rounded-2xl object-cover"
-        style="max-height: 520px; aspect-ratio: 1;"
-      >
-        <source src="/media/hero/germes.mp4" type="video/mp4" />
-      </video>
-
-      <!-- Floating chips -->
-      <div class="absolute top-8 right-0 md:top-12 md:right-8 z-10">
-        <div class="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-on-dark text-xs md:text-sm font-medium whitespace-nowrap">
-          Сайты и сервисы
-        </div>
-      </div>
-
-      <div class="absolute left-0 top-1/2 md:left-8 md:top-1/3 z-10 -translate-y-1/2">
-        <div class="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-on-dark text-xs md:text-sm font-medium whitespace-nowrap">
-          SaaS
-        </div>
-      </div>
-
-      <div class="absolute bottom-8 right-0 md:bottom-12 md:right-8 z-10">
-        <div class="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-on-dark text-xs md:text-sm font-medium whitespace-nowrap">
-          ИИ-решения
-        </div>
-      </div>
+<section class="relative min-h-[100svh] bg-[#010101] text-white overflow-hidden flex flex-col items-center justify-center" style="padding-top: clamp(48px, 4.5vw, 84px);">
+  <!-- Top line: Sun icon + Name on the left, Telegram link on the right (absolute OVER the video zone) -->
+  <div class="absolute top-10 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-6">
+    <!-- Left: Sun icon + Герман Брызгалов -->
+    <div class="flex items-center gap-2 md:gap-2">
+      <!-- Rune icon: glowing stone loop; mask on the video, glow on the wrapper (round halo) -->
+      <span class="rune-glow flex-shrink-0" aria-hidden="true">
+        <video
+          id="rune-icon"
+          muted
+          loop
+          autoplay
+          playsinline
+          preload="auto"
+          poster={`${BASE_URL}media/hero/rune-poster.jpg`}
+          style="width: 34px; height: 34px; object-fit: cover; display: block;"
+        >
+          <source src={`${BASE_URL}media/hero/rune.mp4`} type="video/mp4" />
+        </video>
+      </span>
+      <!-- Name: Герман Брызгалов, mono 500 -->
+      <span class="font-mono font-medium text-white" style="font-size: clamp(12px, 1.17vw, 16.8px); line-height: 1.2;">
+        H&B team
+      </span>
     </div>
 
-    <!-- Facts line -->
-    <div class="text-on-dark/70 text-sm mb-6">
-      8+ лет · 40+ проектов · Москва
+    <!-- Right: location label (per canvas edit) -->
+    <span
+      class="font-mono font-medium text-white inline-flex items-center justify-center min-h-[44px] flex-shrink-0"
+      style="font-size: clamp(12px, 1.17vw, 16.8px); line-height: 1.2;"
+    >
+      Москва
+    </span>
+  </div>
+
+  <!-- Main content container: flex column to control vertical rhythm -->
+  <div class="relative w-full flex flex-col items-center justify-center" style="flex: 1; gap: 0;">
+    <!-- Video zone container: max-w-[1200px], positioning anchor for chips -->
+    <div class="hero-video-zone relative">
+      <!-- Video container - centered -->
+      <div class="hero-video-box">
+        <video
+          id="hero-video"
+          muted
+          loop
+          playsinline
+          preload="auto"
+          poster={`${BASE_URL}media/hero/germes.webp`}
+          fetchpriority="high"
+          aria-hidden="true"
+          class="w-full h-full object-cover"
+        >
+          <source src={`${BASE_URL}media/hero/germes-mobile.mp4`} type="video/mp4" media="(max-width: 767px)" />
+          <source src={`${BASE_URL}media/hero/germes.mp4`} type="video/mp4" />
+        </video>
+      </div>
+
+      <!-- Floating chips: positions from the approved canvas (mobile) / scaled around face center (desktop) -->
+      {chips.map(({ label, ml, mt, dl, dt }) => (
+        <div class="hero-chip absolute" style={`--ml: ${ml}; --mt: ${mt}; --dl: ${dl}; --dt: ${dt};`} aria-hidden="true">
+          <div class="px-4 rounded-full" style="height: clamp(38px, 3.17vw, 46px); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); font-family: var(--font-mono); font-weight: 400; color: white; font-size: clamp(12px, 1.17vw, 16.8px); display: inline-flex; align-items: center; white-space: nowrap; line-height: 1.2;">
+            {label}
+          </div>
+        </div>
+      ))}
     </div>
 
-    <!-- Name heading -->
-    <h1 class="text-[clamp(2.5rem,9vw,6.5rem)] font-bold font-heading leading-none mb-2">
-      <span class="block text-on-dark">ГЕРМАН БРЫЗГАЛОВ</span>
-      <span class="block text-accent">РАЗРАБОТКА И ВНЕДРЕНИЕ ИИ</span>
+    <!-- Facts line (overlaps video slightly) -->
+    <div
+      class="font-mono font-medium text-white text-center flex items-center justify-center relative"
+      style="
+        font-size: clamp(14px, 1.5vw, 21.6px);
+        line-height: 1.2;
+        gap: clamp(16px, 1.67vw, 30px);
+        margin-top: clamp(-6px, -0.6vw, -36px);
+      "
+    >
+      <span>От идеи до запуска</span>
+    </div>
+
+    <!-- H1 Heading (tight margin after facts) -->
+    <h1
+      class="font-heading uppercase text-center"
+      style="
+        font-size: clamp(30px, 10vw, 92px); text-wrap: balance;
+        line-height: 1.0;
+        letter-spacing: 0;
+        margin-top: clamp(12px, 1.37vw, 22px);
+        max-width: 1200px;
+        width: 100%;
+        padding: 0 16px;
+      "
+    >
+      <span class="block" style="color: #F5F5F5;">ГЕРМАН БРЫЗГАЛОВ</span>
+      <span class="block" style="color: #F97316; font-size: 0.67em;">IT РАЗРАБОТКА И AI</span>
     </h1>
 
-    <!-- Contact button -->
-    <div class="mt-12 mb-6">
-      <button
-        id="hero-contact-btn"
-        class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-on-dark text-foreground flex items-center justify-center hover:scale-105 transition-transform duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-dark"
-        aria-label="Связаться"
-      >
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-      </button>
-    </div>
+    <!-- What & for whom -->
+    <p
+      class="text-center"
+      style="
+        font-family: var(--font-mono);
+        font-size: clamp(13px, 1.15vw, 16.5px);
+        line-height: 1.6;
+        color: #C4C9D0;
+        max-width: 46ch;
+        margin-top: clamp(12px, 1.2vw, 20px);
+        padding: 0 20px;
+        text-wrap: balance;
+      "
+    >
+      Сайты, порталы, SaaS и интернет-магазины для бизнеса — с внедрением ИИ в процессы
+    </p>
 
-    <!-- Call to action text -->
-    <p class="text-on-dark/70 text-sm max-w-sm">
+    <!-- Contact button (below heading) -->
+    <button
+      id="hero-contact-btn"
+      class="rounded-full flex items-center justify-center flex-shrink-0"
+      style="
+        width: clamp(60px, 5.83vw, 84px);
+        height: clamp(60px, 5.83vw, 84px);
+        background-color: #F5F5F5;
+        color: #010101;
+        margin-top: clamp(18px, 2.08vw, 36px);
+      "
+      aria-label="Связаться"
+    >
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+
+    <!-- Call to action text (bottom of viewport) -->
+    <p
+      class="font-mono font-medium text-white text-center"
+      style="
+        font-size: clamp(12px, 1.17vw, 16.8px);
+        line-height: 1.55;
+        max-width: 234px;
+        margin-top: clamp(9px, 0.9vw, 18px);
+      "
+    >
       Нажмите на кнопку, чтобы связаться со мной
     </p>
   </div>
@@ -79,10 +170,13 @@ import Button from '../ui/Button.astro';
   const heroVideo = document.getElementById('hero-video') as HTMLVideoElement;
 
   if (!prefersReducedMotion) {
-    // Hero video autoplays immediately since it's visible from the start
     heroVideo?.play().catch(() => {
-      // Gracefully handle play() rejection (browser autoplay policies)
+      // Gracefully handle play() rejection
     });
+  } else {
+    const runeVideo = document.getElementById('rune-icon') as HTMLVideoElement;
+    runeVideo?.removeAttribute('autoplay');
+    runeVideo?.pause();
   }
 
   // Contact button opens dialog
@@ -90,4 +184,195 @@ import Button from '../ui/Button.astro';
   heroBtn?.addEventListener('click', () => {
     window.dispatchEvent(new Event('open-contact-dialog'));
   });
+
+  // Character-by-character animation for h1
+  if (!prefersReducedMotion) {
+    const h1 = document.querySelector('h1');
+    if (h1) {
+      let globalCharIndex = 0;
+
+      // Process each span.block (each line) separately to preserve color
+      h1.querySelectorAll('span.block').forEach((lineSpan) => {
+        const text = lineSpan.textContent;
+        lineSpan.textContent = ''; // Clear only this line's text
+
+        text.split('').forEach((char) => {
+          const charSpan = document.createElement('span');
+          charSpan.textContent = char;
+          charSpan.className = 'char-in';
+          charSpan.style.display = 'inline';
+          charSpan.style.animationDelay = `${500 + globalCharIndex * 26}ms`;
+          charSpan.style.color = 'inherit'; // Inherit from parent span.block
+          lineSpan.appendChild(charSpan);
+          globalCharIndex++;
+        });
+      });
+    }
+  }
 </script>
+
+<style>
+  .hero-video-zone {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 16px;
+    height: min(363px, 44svh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-video-box {
+    position: relative;
+    width: min(338px, 86.6vw, 44svh);
+    aspect-ratio: 1026 / 1280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Warm halo with a transparent center: depth around the head, never on it */
+  .hero-video-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(closest-side,
+      rgba(249, 115, 22, 0)    0%,
+      rgba(249, 115, 22, 0)    52%,
+      rgba(249, 115, 22, 0.13) 68%,
+      rgba(194, 65, 12, 0.06)  82%,
+      rgba(194, 65, 12, 0)     94%);
+  }
+  #hero-video {
+    object-fit: cover;
+    object-position: 50% 0%;
+    filter: contrast(1.12) saturate(1.06);
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%),
+      linear-gradient(to bottom, #000 0, #000 88%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%),
+      linear-gradient(to bottom, #000 0, #000 88%, transparent 100%);
+    mask-composite: intersect;
+  }
+  .hero-chip {
+    left: var(--ml);
+    top: var(--mt);
+    pointer-events: none;
+    z-index: 20;
+  }
+  @media (min-width: 768px) {
+    .hero-video-zone {
+      height: min(clamp(300px, 36vw, 518px), 38svh);
+    }
+    .hero-video-box {
+      width: min(clamp(300px, 36vw, 518px), 38svh);
+    }
+    .hero-chip {
+      left: var(--dl);
+      top: min(var(--dt), calc(100% - 46px));
+    }
+  }
+
+  .rune-glow {
+    display: inline-flex;
+    filter:
+      drop-shadow(0 0 5px rgba(249, 115, 22, 0.65))
+      drop-shadow(0 0 12px rgba(234, 88, 12, 0.40));
+  }
+  #rune-icon {
+    filter: contrast(1.08) saturate(1.12);
+    -webkit-mask-image: radial-gradient(closest-side, #000 56%, rgba(0,0,0,0.7) 76%, transparent 97%);
+    mask-image: radial-gradient(closest-side, #000 56%, rgba(0,0,0,0.7) 76%, transparent 97%);
+  }
+
+  #hero-contact-btn {
+    position: relative;
+    isolation: isolate;
+    transition:
+      transform 160ms var(--ease-out),
+      box-shadow 220ms var(--ease-out);
+  }
+  #hero-contact-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 220ms var(--ease-out);
+    background-image: linear-gradient(110deg,
+      #C2410C  0%,
+      #EA580C 14%,
+      #F97316 30%,
+      #FDBA74 42%,
+      #FFF7ED 48%,
+      #FB923C 58%,
+      #F97316 72%,
+      #EA580C 88%,
+      #C2410C 100%);
+    background-size: 300% 100%;
+    background-position: 0% 50%;
+    box-shadow:
+      inset 0 2px 6px rgba(255, 255, 255, 0.55),
+      inset 0 -8px 14px rgba(124, 45, 18, 0.38);
+    animation: hero-btn-sheen 2600ms linear infinite;
+    animation-play-state: paused;
+  }
+  @keyframes hero-btn-sheen {
+    from { background-position: 0% 50%; }
+    to   { background-position: 100% 50%; }
+  }
+  #hero-contact-btn svg {
+    transition: transform 320ms var(--ease-out);
+    transform-origin: 50% 50%;
+  }
+  @media (hover: hover) {
+    #hero-contact-btn:hover { transform: scale(1.04); box-shadow: 0 10px 30px -8px rgba(249,115,22,0.55); }
+    #hero-contact-btn:hover::before { opacity: 1; animation-play-state: running; }
+    #hero-contact-btn:hover svg { transform: rotate(180deg); }
+  }
+  #hero-contact-btn:focus-visible {
+    outline: 2px solid #F97316;
+    outline-offset: 4px;
+    transform: scale(1.04);
+    box-shadow: 0 10px 30px -8px rgba(249, 115, 22, 0.55);
+  }
+  #hero-contact-btn:focus-visible::before { opacity: 1; animation-play-state: running; }
+  #hero-contact-btn:focus-visible svg { transform: rotate(180deg); }
+  #hero-contact-btn:active { transform: scale(0.97); }
+  @media (prefers-reduced-motion: reduce) {
+    #hero-contact-btn::before { animation: none; }
+    #hero-contact-btn:hover,
+    #hero-contact-btn:focus-visible,
+    #hero-contact-btn:active { transform: none; }
+    #hero-contact-btn:hover svg,
+    #hero-contact-btn:focus-visible svg { transform: none; }
+  }
+
+  @keyframes char-in {
+    from {
+      opacity: 0;
+      filter: blur(8px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+    }
+  }
+
+  :global(.char-in) {
+    animation: char-in 0.5s ease forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.char-in) {
+      animation: none;
+      opacity: 1;
+      filter: none;
+    }
+  }
+</style>

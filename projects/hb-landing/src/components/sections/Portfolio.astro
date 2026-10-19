@@ -5,84 +5,137 @@ import Tag from '../ui/Tag.astro';
 import { cases } from '../../content/cases';
 ---
 
-<section id="works" class="py-24 md:py-32">
+<section id="works" class="py-24 md:py-32 border-t border-dark-divider">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <SectionTitle number="03 / Избранные работы" title="Портфолио" />
+    <SectionTitle number="02 /">
+      <span class="text-accent-on-dark">ИЗБРАННЫЕ</span> работы
+    </SectionTitle>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
       {cases.map((caseItem) => (
-        <article class="border border-line rounded-2xl overflow-hidden bg-surface">
-          <div class="aspect-[16/10] overflow-hidden">
+        <article class="border border-dark-line rounded-2xl overflow-hidden bg-dark-surface hover:bg-dark-surface-hover hover:border-dark-line-strong transition-[background-color,border-color] duration-200">
+          <!-- Название ВСЕГДА видно сверху -->
+          <div class="px-6 md:px-8 pt-6 md:pt-8 pb-4">
+            <h3 class="text-2xl font-normal font-heading text-on-dark">{caseItem.name}</h3>
+          </div>
+
+          <!-- Обложка ВСЕГДА видна, вне details -->
+          <div class="aspect-[16/10] overflow-hidden relative group cursor-pointer" data-case-toggle-wrapper>
+            <!-- Image -->
             <Image
               src={caseItem.image}
               alt={caseItem.name}
-              width={1600}
+              width={1120}
               format="webp"
               loading="lazy"
               decoding="async"
-              sizes="100vw"
-              class="w-full h-full object-cover"
+              class="w-full h-full object-cover group-hover:brightness-90 transition-[filter] duration-200"
+              style="filter: brightness(.72) contrast(1.1);"
             />
-          </div>
 
-          <div class="p-8">
-            <h3 class="text-2xl font-bold font-heading text-foreground mb-4">{caseItem.name}</h3>
-
-            <div class="flex flex-wrap gap-2 mb-6">
+            <!-- Tags overlay top-left -->
+            <div class="absolute top-3 left-3 flex flex-wrap gap-2">
               {caseItem.tags.map((tag) => (
-                <Tag>{tag}</Tag>
+                <span class="inline-flex px-3 py-1.5 rounded-full font-mono uppercase text-xs font-medium" style="background: rgba(9, 9, 9, 0.6); border: 1px solid rgba(255, 255, 255, 0.35); backdrop-filter: blur(10px); color: white;">
+                  {tag}
+                </span>
               ))}
             </div>
 
-            <details class="group">
-              <summary class="inline-flex items-center min-h-[44px] cursor-pointer text-accent hover:text-accent-hover transition-colors font-medium">
-                Подробнее →
-              </summary>
-              <div class="mt-6 space-y-4 text-foreground">
-                <div>
-                  <h4 class="font-bold text-sm text-muted-foreground mb-2">Задача</h4>
-                  <p class="leading-relaxed">{caseItem.task}</p>
-                </div>
-                <div>
-                  <h4 class="font-bold text-sm text-muted-foreground mb-2">Решение</h4>
-                  <p class="leading-relaxed">{caseItem.solution}</p>
-                </div>
-                <div>
-                  <h4 class="font-bold text-sm text-muted-foreground mb-2">Результат</h4>
-                  <p class="leading-relaxed">{caseItem.result}</p>
-                </div>
-              </div>
-            </details>
           </div>
+
+          <!-- Read case trigger under the cover (ghost style) -->
+          <div class="px-6 md:px-8 pt-4">
+            <button
+              data-case-toggle
+              class="inline-flex items-center gap-2 min-h-[44px] text-on-dark-body hover:text-accent-on-dark transition-colors duration-300"
+              aria-label={`Читать кейс: ${caseItem.name}`}
+            >
+              Читать кейс
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                class="inline-block flex-shrink-0 text-accent-on-dark"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Details с содержимым - раскрывается по клику на обложку или кнопку -->
+          <details class="group">
+            <summary style="display: none;"></summary>
+            <div class="p-6 md:p-8 space-y-4 text-on-dark-body border-t border-dark-line">
+              <div>
+                <h4 class="font-bold text-sm text-on-dark-muted mb-2 font-mono uppercase tracking-[0.14em]">Задача</h4>
+                <p class="leading-relaxed">{caseItem.task}</p>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-on-dark-muted mb-2 font-mono uppercase tracking-[0.14em]">Решение</h4>
+                <p class="leading-relaxed">{caseItem.solution}</p>
+              </div>
+
+              <div class="pt-2">
+                <Image
+                  src={caseItem.shot}
+                  alt={`Интерфейс ${caseItem.name}`}
+                  width={1280}
+                  format="webp"
+                  loading="lazy"
+                  decoding="async"
+                  sizes="100vw"
+                  class="w-full rounded-[12px] border"
+                  style="border-color: rgba(255, 255, 255, 0.12);"
+                />
+                <p class="text-xs font-mono text-[#9BA1AA] mt-2">Интерфейс продукта — макет</p>
+              </div>
+
+              <div>
+                <h4 class="font-bold text-sm text-on-dark-muted mb-2 font-mono uppercase tracking-[0.14em]">Результат</h4>
+                <p class="leading-relaxed">{caseItem.result}</p>
+              </div>
+            </div>
+          </details>
         </article>
       ))}
     </div>
   </div>
 </section>
 
-<style>
-  details {
-    list-style: none;
-  }
+<script>
+  const arrowSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="inline-block flex-shrink-0 text-accent-on-dark"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
 
-  details::-webkit-details-marker {
-    display: none;
-  }
+  document.querySelectorAll('article').forEach(article => {
+    const button = article.querySelector('[data-case-toggle]');
+    const cover = article.querySelector('[data-case-toggle-wrapper]');
+    const details = article.querySelector('details');
+    if (!details || !button) return;
 
-  summary {
-    display: inline-flex;
-  }
+    // Store the original case name from aria-label
+    const originalLabel = button.getAttribute('aria-label') || '';
+    const caseName = originalLabel.split(': ')[1] || '';
 
-  summary::after {
-    content: '';
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    margin-left: 0.5em;
-    transition: transform 200ms ease-out;
-  }
+    const toggle = () => {
+      details.open = !details.open;
+      button.setAttribute('aria-expanded', String(details.open));
+      if (details.open) {
+        button.setAttribute('aria-label', 'Свернуть');
+      } else {
+        button.setAttribute('aria-label', originalLabel);
+      }
+      button.innerHTML = details.open ? 'Свернуть' : `Читать кейс ${arrowSvg}`;
+    };
 
-  details[open] summary::after {
-    transform: rotate(90deg);
-  }
-</style>
+    button.addEventListener('click', toggle);
+    cover?.addEventListener('click', toggle);
+    button.setAttribute('aria-expanded', 'false');
+  });
+</script>

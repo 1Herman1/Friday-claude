@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const BASE_URL = import.meta.env.BASE_URL;
+---
+
+<Layout title="404 — Страница не найдена">
+  <div class="min-h-screen flex items-center justify-center px-5 py-16">
+    <div class="text-center max-w-md">
+      <h1 class="font-heading text-7xl md:text-8xl font-normal text-on-dark mb-6">404</h1>
+      <p class="text-on-dark-body text-lg md:text-xl mb-8">
+        Страница не найдена. Проверьте адрес или вернитесь на главную.
+      </p>
+      <a
+        href={`${BASE_URL}`}
+        class="inline-flex items-center justify-center font-mono font-bold px-8 py-4 rounded-full transition-colors duration-200 min-h-[44px]"
+        style="background-color: var(--color-accent-on-dark); color: white;"
+      >
+        На главную
+      </a>
+    </div>
+  </div>
+</Layout>

@@ -1,8 +1,10 @@
 ---
 import Button from '../ui/Button.astro';
+
+const BASE_URL = import.meta.env.BASE_URL;
 ---
 
-<section class="w-full py-0 bg-dark relative overflow-hidden h-screen max-h-screen flex items-center justify-center">
+<section class="w-full py-0 bg-dark relative overflow-hidden h-screen max-h-screen flex items-center justify-center border-t border-[rgba(244,244,241,0.14)]">
   <video
     id="banner-video"
     class="absolute inset-0 w-full h-full object-cover"
@@ -10,17 +12,17 @@ import Button from '../ui/Button.astro';
     loop
     playsinline
     preload="none"
-    poster="/media/banner/build-your-dream.jpg"
+    poster={`${BASE_URL}media/banner/build-your-dream.jpg`}
   >
-    <source src="/media/banner/build-your-dream.mp4" type="video/mp4" />
+    <source src={`${BASE_URL}media/banner/build-your-dream.mp4`} type="video/mp4" />
   </video>
 
-  <div class="absolute inset-0 bg-dark/60"></div>
+  <div class="absolute inset-0 bg-dark/45"></div>
 
   <div class="relative z-10 max-w-6xl mx-auto px-5 md:px-8 text-center">
     <div class="mb-6">
-      <h2 class="text-[3rem] md:text-[7rem] lg:text-[9rem] font-bold font-heading text-on-dark uppercase leading-none">
-        Build your dream <span class="text-accent">/</span>
+      <h2 class="text-[3rem] md:text-[7rem] lg:text-[9rem] font-normal font-heading text-on-dark uppercase leading-none">
+        Build your dream <span class="text-accent-on-dark">/</span>
       </h2>
     </div>
     <div class="flex justify-center">
@@ -31,6 +33,7 @@ import Button from '../ui/Button.astro';
 
 <script>
   const video = document.getElementById('banner-video') as HTMLVideoElement;
+  const BASE_URL = import.meta.env.BASE_URL;
 
   // Respect prefers-reduced-motion
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -40,6 +43,9 @@ import Button from '../ui/Button.astro';
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            if (!video.poster) {
+              video.poster = `${BASE_URL}media/banner/build-your-dream.jpg`;
+            }
             video.play().catch(() => {});
           } else {
             video.pause();
@@ -50,6 +56,8 @@ import Button from '../ui/Button.astro';
     );
 
     observer.observe(video);
+  } else {
+    // prefers-reduced-motion: set poster to show a static frame
+    video.poster = `${BASE_URL}media/banner/build-your-dream.jpg`;
   }
-  // prefers-reduced-motion: video never plays, poster stays visible
 </script>

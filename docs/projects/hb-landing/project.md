@@ -9,7 +9,12 @@
 Здесь она не повторяется: четыре копии одного имени разойдутся при первой же
 смене. Новых веток не заводить — правила в `CLAUDE.md`, раздел «Git».
 
-Проект живёт подкаталогом общего репозитория: своего репозитория у него нет.
+**Источник истины и выкатка — отдельный репозиторий `1Herman1/hb_landing`, ветка `main`.**
+Пуш в `main` запускает GitHub Actions (`.github/workflows/deploy.yml`, peaceiris/actions-gh-pages)
+и публикует `dist/` в ветку `gh-pages` → https://1herman1.github.io/hb_landing/ (`base: '/hb_landing/'`).
+Правки делать в клоне `hb_landing`, а не здесь: каталог `projects/hb-landing/` в Friday — зеркало
+(синхронизировано 19.10.2026 с `hb_landing@a69e5a0`), сам по себе он ничего не выкатывает.
+После выкатки зеркало обновлять копированием без `node_modules`, `dist`, `.git`.
 
 ## Пользователь
 
@@ -44,8 +49,9 @@
 - Language: TypeScript strict
 - Styling: Tailwind CSS 4 через `@tailwindcss/vite`; токены — в
   `src/styles/global.css` блоком `@theme` (без tailwind.config)
-- Шрифты: `@fontsource-variable/montserrat` + `@fontsource-variable/open-sans`
-  (локально, кириллические сабсеты обязательны)
+- Шрифты: Coolvetica (заголовки, `public/fonts/coolvetica.woff`, только вес 400 —
+  синтетический жирный отключён) + `@fontsource/roboto-mono` 400/500 (моно-текст) +
+  `@fontsource-variable/open-sans` (основной текст); кириллица у всех есть
 - Картинки: встроенный `astro:assets` (`<Image />`); НЕ устаревший `@astrojs/image`
 
 ### Backend
@@ -62,7 +68,7 @@
   собирать лендинг.
 - Команды: `cd hb-landing && npm install`, `npm run dev` / `build` / `preview`
   (dev/preview — порт 4321)
-- Деплой: любой статический хостинг (dist/), решается отдельно
+- Деплой: GitHub Pages из `1Herman1/hb_landing` (`main` → Actions → `gh-pages`), см. «Ветка и репозиторий»
 
 ## Медиа
 

@@ -1,31 +1,29 @@
 ---
 import Button from '../ui/Button.astro';
+import SectionTitle from '../ui/SectionTitle.astro';
 ---
 
-<section id="contacts" class="py-24 md:py-32">
+<section id="contacts" class="py-24 md:py-32 border-t border-dark-divider">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <div class="mb-12">
-      <div class="text-muted-foreground text-sm font-medium mb-2">06 / Контакты</div>
-      <h2 class="text-[clamp(2rem,4vw,3.25rem)] font-bold font-heading text-foreground mb-8 max-w-2xl">
-        Расскажите о вашей задаче — посчитаю сроки и бюджет за один разговор.
-      </h2>
-    </div>
+    <SectionTitle number="06 /">
+      <span class="text-accent-on-dark">КОНТАКТЫ</span>
+    </SectionTitle>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      <a href="https://t.me/h_and_b_team" class="p-6 border border-line rounded-2xl hover:bg-muted transition-colors">
-        <div class="font-bold text-foreground mb-1">Telegram</div>
-        <div class="text-sm text-muted-foreground">@h_and_b_team</div>
+      <a href="https://t.me/h_and_b_team" class="p-6 border border-dark-line rounded-2xl hover:bg-dark-surface-hover hover:border-dark-line-strong transition-colors duration-200">
+        <div class="font-bold text-on-dark mb-1 font-mono">Telegram</div>
+        <div class="text-sm text-on-dark-muted font-mono">@h_and_b_team</div>
       </a>
-      <a href="tel:+79169655611" class="p-6 border border-line rounded-2xl hover:bg-muted transition-colors">
-        <div class="font-bold text-foreground mb-1">Телефон</div>
-        <div class="text-sm text-muted-foreground">+7 916 965 56 11</div>
+      <a href="tel:+79169655611" class="p-6 border border-dark-line rounded-2xl hover:bg-dark-surface-hover hover:border-dark-line-strong transition-colors duration-200">
+        <div class="font-bold text-on-dark mb-1 font-mono">Телефон</div>
+        <div class="text-sm text-on-dark-muted font-mono">+7 916 965 56 11</div>
       </a>
-      <a href="mailto:gera103546@gmail.com" class="p-6 border border-line rounded-2xl hover:bg-muted transition-colors">
-        <div class="font-bold text-foreground mb-1">Email</div>
-        <div class="text-sm text-muted-foreground">gera103546@gmail.com</div>
+      <a href="mailto:gera103546@gmail.com" class="p-6 border border-dark-line rounded-2xl hover:bg-dark-surface-hover hover:border-dark-line-strong transition-colors duration-200">
+        <div class="font-bold text-on-dark mb-1 font-mono">Email</div>
+        <div class="text-sm text-on-dark-muted font-mono">gera103546@gmail.com</div>
       </a>
     </div>
 
-    <Button size="lg" variant="primary" href="https://t.me/h_and_b_team">Написать в Telegram</Button>
+    <Button size="lg" variant="primary-cta" href="https://t.me/h_and_b_team">Написать в Telegram</Button>
   </div>
 </section>
