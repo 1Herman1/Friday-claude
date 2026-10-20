@@ -55,10 +55,15 @@ jobs:
             exit 1
           fi
           echo "Длина user_id: ${#U}; длина ключа: ${#K}."
-          RESP=$(curl -sS --max-time 30 "https://xmlriver.com/wordstat/new/json?user=${U}&key=${K}&query=test&regions=${{ inputs.region }}" || true)
           # Структуру ответа печатает отдельный скрипт: значения обрезаются,
-          # данные аккаунта в лог не попадают.
-          printf '%s' "$RESP" | python3 tools/seo/wordstat_shape.py
+          # данные аккаунта в лог не попадают. XMLRiver временами отвечает
+          # «выполните перезапрос» — даём проверке три попытки.
+          for i in 1 2 3; do
+            RESP=$(curl -sS --max-time 30 "https://xmlriver.com/wordstat/new/json?user=${U}&key=${K}&query=test&regions=${{ inputs.region }}" || true)
+            printf '%s' "$RESP" | python3 tools/seo/wordstat_shape.py && exit 0
+            sleep 15
+          done
+          exit 1
 
       - name: Собрать частотность
         env:
