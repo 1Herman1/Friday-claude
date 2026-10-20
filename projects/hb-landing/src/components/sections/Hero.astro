@@ -3,24 +3,17 @@ import Button from '../ui/Button.astro';
 
 const BASE_URL = import.meta.env.BASE_URL;
 
-// Chips from the approved canvas (390px artboard). Mobile: x/y — top-left corner inside the portrait (338×421.68),
-// side — screen edge the chip sticks to, w — chip width (12px Roboto Mono). Desktop: dr/dt — offsets around the face center, dr anchors to the right edge.
-const PORTRAIT_W = 338;
-const PORTRAIT_H = 421.68;
+// Chips placed along the face video's gaze. Mobile: fy — top as a share of the portrait height, fh — offset from the
+// chip's screen edge (side) as a share of the portrait width. Desktop: dr/dt — offsets around the face center, dr anchors to the right edge.
 const chips = [
-  { label: 'UI/UX-дизайн',           side: 'r', x: 238, y: 3,   w: 120.4, dr: 'calc(50% - 273px)', dt: '2%' },
-  { label: 'Веб-порталы',            side: 'l', x: -23, y: 40,  w: 113.2, dr: 'calc(50% + 113px)', dt: '11%' },
-  { label: 'Сайты',                  side: 'r', x: 282, y: 102, w: 70,    dr: 'calc(50% - 242px)', dt: '28%' },
-  { label: 'SaaS',                   side: 'l', x: 2,   y: 173, w: 62.8,  dr: 'calc(50% + 141px)', dt: '39%' },
-  { label: 'ИИ-решения',             side: 'r', x: 252, y: 231, w: 106,   dr: 'calc(50% - 258px)', dt: '54%' },
-  { label: 'Разработка CRM',         side: 'l', x: -19, y: 273, w: 134.8, dr: 'calc(50% + 73px)',  dt: '66%' },
-  { label: 'SEO и органик продюсер', side: 'r', x: 165, y: 320, w: 192.4, dr: 'calc(50% - 247px)', dt: '80%' },
-].map(({ x, y, w, side, ...chip }) => ({
-  ...chip,
-  side,
-  fh: side === 'l' ? x / PORTRAIT_W : (PORTRAIT_W - x - w) / PORTRAIT_W,
-  fy: y / PORTRAIT_H,
-}));
+  { label: 'UI/UX-дизайн',           side: 'r', fh: -0.068,  fy: 0.007,  dr: 'calc(50% - 265px)', dt: '-8%' },
+  { label: 'Веб-порталы',            side: 'l', fh: -0.068,  fy: 0.005,  dr: 'calc(50% + 165px)', dt: '-8%' },
+  { label: 'Сайты',                  side: 'r', fh: -0.0414, fy: 0.2419, dr: 'calc(50% - 242px)', dt: '28%' },
+  { label: 'SaaS',                   side: 'l', fh: -0.0685, fy: 0.305,  dr: 'calc(50% + 160px)', dt: '25%' },
+  { label: 'ИИ-решения',             side: 'r', fh: -0.0592, fy: 0.5478, dr: 'calc(50% - 258px)', dt: '54%' },
+  { label: 'Разработка CRM',         side: 'l', fh: -0.0562, fy: 0.6474, dr: 'calc(50% + 140px)', dt: '66%' },
+  { label: 'SEO и органик продюсер', side: 'r', fh: 0.2,     fy: 0.8,    dr: 'calc(50% - 128px)', dt: '80%' },
+];
 const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.fy ?? 0;
 ---
 
@@ -280,7 +273,9 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
     mask-composite: intersect;
   }
   .hero-chip {
-    top: calc((var(--zh) - var(--bh)) / 2 + var(--bh) * var(--fy));
+    --y: calc((var(--zh) - var(--bh)) / 2 + var(--bh) * var(--fy));
+    --ch: clamp(38px, 3.17vw, 46px);
+    top: var(--y);
     pointer-events: none;
     z-index: 20;
   }
@@ -294,7 +289,7 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
     padding-top: clamp(48px, 4.5vw, 84px);
   }
   .hero-chip__pill {
-    height: clamp(38px, 3.17vw, 46px);
+    height: var(--ch);
     font-size: clamp(12px, 1.17vw, 16.8px);
   }
   .hero-h1 {
@@ -339,10 +334,28 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
       top: min(
         max(
           calc((var(--zh) - var(--bh)) / 2 + var(--bh) * var(--fy)),
-          calc((var(--zh) - var(--bh)) / 2 + var(--bh) * var(--fg) + 40px)
+          calc((var(--zh) - var(--bh)) / 2 + var(--bh) * var(--fg) + 48px)
         ),
-        calc(100% - 31px)
+        calc(100% - 41px)
       );
+    }
+    .hero-chip:nth-child(-n+3) {
+      top: min(
+        var(--y),
+        calc((var(--zh) - var(--bh)) / 2 + var(--bh) * 0.2419 - 47px),
+        calc(100% - 179px)
+      );
+    }
+    .hero-chip:nth-child(6), .hero-chip:nth-child(7) {
+      top: min(var(--y), calc(100% - 89px));
+    }
+  }
+  @media (max-width: 767px) and (max-height: 640px) {
+    .hero-chip:nth-child(4), .hero-chip:nth-child(5) {
+      top: min(var(--y), calc(100% - 133px));
+    }
+    .hero-chip:nth-child(6), .hero-chip:nth-child(7) {
+      top: min(var(--y), calc(100% - 87px));
     }
   }
   @media (max-width: 359px) {
@@ -399,9 +412,49 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
       left: auto;
       top: min(var(--dt), calc(100% - 46px));
     }
+    .hero-chip:last-child {
+      top: min(var(--dt), calc(100% - 8px - var(--ch)));
+    }
+    .hero-chip:nth-child(-n+3) {
+      top: max(var(--dt), calc(294px - 31svh));
+    }
     .hero-caption {
       max-width: 420px;
       text-wrap: balance;
+    }
+  }
+  @media (min-width: 768px) and (max-height: 880px) {
+    .hero-chip {
+      --tl: min(60px, calc(203px - 20svh));
+    }
+    .hero-chip--r {
+      --k: 0.85;
+    }
+    .hero-chip--l {
+      --k: 0.7;
+    }
+    .hero-chip:not(:last-child) {
+      top: calc(var(--tl) + (var(--dt) + 8%) * var(--k));
+    }
+    .hero-chip:nth-child(6) {
+      right: calc(50% - 272px);
+    }
+  }
+  @media (min-width: 768px) and (max-height: 720px) {
+    .hero-chip:nth-child(2) {
+      left: calc(50% + 254px);
+      right: auto;
+      top: var(--tl);
+    }
+    .hero-chip:nth-child(3) {
+      right: calc(50% + 246px);
+      top: var(--tl);
+    }
+    .hero-chip:nth-child(4), .hero-chip:nth-child(5) {
+      top: min(max(var(--dt), calc(var(--tl) + 36px)), calc(100% - 29px - 2 * var(--ch)));
+    }
+    .hero-chip:nth-child(6), .hero-chip:nth-child(7) {
+      top: min(max(var(--dt), calc(var(--tl) + 92px)), calc(100% - 20px - var(--ch)));
     }
   }
   @media (min-width: 768px) and (max-height: 641px) {
