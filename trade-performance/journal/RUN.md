@@ -13,4 +13,9 @@ prop-agents/.venv/bin/python journal/importers/mexc_xlsx_to_db.py journal/data/r
 cd journal/web && npm install && npm run build && npm start
 ```
 
+Синхронизация MEXC по API: `bash journal/importers/run_mexc_sync.sh` (Hermes cron раз в час; лог `journal/data/logs/mexc_sync.log`).
+
+Заметки из Telegram (Т6): `prop-agents/.venv/bin/python journal/intake/tg_note.py recent` — последние сделки;
+`... tg_note.py add --text "..." [--voice] [--trade auto|#N|day] [--reason ..] [--emotion-before ..] [--tags ..] --chat <chat_id> --msg <message_id>`; `--dry-run` для проверки.
+
 Данные сделок (`journal/data/`) в git не попадают.

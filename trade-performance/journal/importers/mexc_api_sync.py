@@ -48,16 +48,22 @@ def private(path, params):
     qs = "&".join(f"{k}={params[k]}" for k in sorted(params))
     sig = hmac.new(sec.encode(), (key + ts + qs).encode(), hashlib.sha256).hexdigest()
     req = urllib.request.Request(f"{BASE}{path}?{qs}", headers={**UA, "ApiKey": key, "Request-Time": ts, "Signature": sig})
-    for attempt in range(4):
+    for attempt in range(5):
+        # подпись зависит от времени → пересобираем запрос на каждой попытке
+        ts = str(int(time.time() * 1000))
+        sig = hmac.new(sec.encode(), (key + ts + qs).encode(), hashlib.sha256).hexdigest()
+        req = urllib.request.Request(f"{BASE}{path}?{qs}", headers={**UA, "ApiKey": key, "Request-Time": ts, "Signature": sig})
         try:
             r = json.load(urllib.request.urlopen(req, timeout=30))
-            if not r.get("success"):
+            if r.get("success"):
+                return r["data"]
+            # 513 «Invalid request, please try again later» — временный отказ MEXC, повторяем
+            if r.get("code") != 513 or attempt == 4:
                 raise RuntimeError(f"MEXC {path}: {r.get('code')} {r.get('message')}")
-            return r["data"]
         except (urllib.error.URLError, TimeoutError):
-            if attempt == 3:
+            if attempt == 4:
                 raise
-            time.sleep(2 ** attempt)
+        time.sleep(3 * 2 ** attempt)
 
 
 def contract_sizes():
@@ -178,12 +184,27 @@ def main():
                          Decimal(str(f["funding"])), ts(f["settleTime"]), rid))
             st["funding_new" if cur.rowcount else "funding_dup"] += 1
 
+        cur.execute("""SELECT max(finished_at) FROM import_jobs WHERE account_id = %s AND mode = 'api'
+                       AND status = 'SUCCEEDED'""", (acc,))
+        prev = cur.fetchone()[0]
         rb = rebuild(cur, acc)
+        closed_new = ""
+        if prev:
+            cur.execute("""SELECT i.base_asset, t.side, t.net_pnl, t.stop_is_liquidation, t.id FROM trades t
+                           JOIN instruments i ON i.id = t.instrument_id
+                           WHERE t.account_id = %s AND t.deleted_at IS NULL AND t.status = 'CLOSED' AND t.closed_at > %s
+                           ORDER BY t.closed_at""", (acc, prev))
+            lines = [f"{'🟢' if n > 0 else '🔴'} {b} {'лонг' if s == 'LONG' else 'шорт'} {'+' if n > 0 else '−'}${abs(n):.2f}"
+                     f"{' 💀 ликвидация' if lq else ''}" for b, s, n, lq, _ in cur.fetchall()]
+            if lines:
+                closed_new = "📓 В дневник добавлены сделки MEXC:\n" + "\n".join(lines) + \
+                             "\nРазбор: напиши сюда причину входа и эмоции — привяжу к сделке."
         cur.execute("""UPDATE import_jobs SET status='SUCCEEDED', inserted=%s, duplicates=%s, finished_at=now()
                        WHERE id=%s""", (st["deals_new"] + st["funding_new"],
                                         st["deals_dup"] + st["deals_matched_file"] + st["funding_dup"], job))
         conn.commit()
-    print(json.dumps({**st, **rb, "fetched_deals": len(deals), "fetched_funding": len(funding)}, ensure_ascii=False))
+    print(json.dumps({**st, **rb, "fetched_deals": len(deals), "fetched_funding": len(funding),
+                      "closed_new": closed_new}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

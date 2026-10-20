@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { trades, symbols, type Filters } from "@/server/stats";
 import { usd, px, dt, pnlClass } from "@/lib/fmt";
 import FilterBar from "@/components/FilterBar";
@@ -24,10 +25,10 @@ export default async function Trades({ searchParams }: { searchParams: Promise<F
           <tbody className="tabular-nums">
             {list.map((t) => (
               <tr key={t.id} className={`border-t border-zinc-800/70 [&>td]:px-3 [&>td]:py-1.5 ${t.liq ? "bg-rose-950/30" : ""}`}>
-                <td className="text-zinc-500">{t.n}</td>
+                <td className="text-zinc-500"><Link href={`/trades/${t.id}`}>{t.n}</Link></td>
                 <td>{dt(t.opened_at)}</td>
                 <td className="text-zinc-400">{dt(t.closed_at)}</td>
-                <td className="font-medium">{t.symbol}</td>
+                <td className="font-medium"><Link href={`/trades/${t.id}`} className="underline decoration-zinc-600 underline-offset-2 hover:text-white">{t.symbol}</Link></td>
                 <td className={t.side === "LONG" ? "text-emerald-400" : "text-rose-400"}>{t.side === "LONG" ? "Лонг" : "Шорт"}</td>
                 <td>{px(t.entry_avg)}</td>
                 <td>{px(t.exit_avg)}</td>
