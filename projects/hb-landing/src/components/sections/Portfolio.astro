@@ -1,8 +1,36 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import SectionTitle from '../ui/SectionTitle.astro';
 import Tag from '../ui/Tag.astro';
 import { cases } from '../../content/cases';
+
+const SEPARATOR = ' · ';
+const SHOT_SIZES = '(min-width: 1152px) 462px, (min-width: 768px) calc(50vw - 112px), calc(100vw - 88px)';
+const WIDE_SHOT_SIZES = '(min-width: 1152px) 325px, (min-width: 768px) calc((100vw - 178px) / 3), calc(100vw - 88px)';
+
+function splitSolution(solution: string) {
+  const separatorAt = solution.indexOf(SEPARATOR);
+  if (separatorAt === -1) return null;
+  const colonAt = solution.indexOf(':');
+  const hasIntro = colonAt !== -1 && colonAt < separatorAt;
+  return {
+    intro: hasIntro ? solution.slice(0, colonAt).trim() : '',
+    items: (hasIntro ? solution.slice(colonAt + 1) : solution)
+      .split(SEPARATOR)
+      .map((item) => item.trim())
+      .filter(Boolean),
+  };
+}
+
+const isOddCount = cases.length % 2 === 1;
+const fullSizeSrc = new Map<ImageMetadata, string>(
+  await Promise.all(
+    cases.flatMap((caseItem) => caseItem.shots ?? []).map(async (shot) => [
+      shot.src,
+      (await getImage({ src: shot.src, format: 'webp', width: shot.src.width })).src,
+    ] as const),
+  ),
+);
 ---
 
 <section id="works" class="py-24 md:py-32 border-t border-dark-divider">
@@ -12,15 +40,18 @@ import { cases } from '../../content/cases';
     </SectionTitle>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-      {cases.map((caseItem) => (
-        <article class="border border-dark-line rounded-2xl overflow-hidden bg-dark-surface hover:bg-dark-surface-hover hover:border-dark-line-strong transition-[background-color,border-color] duration-200">
+      {cases.map((caseItem, index) => {
+        const isWide = isOddCount && index === 0;
+        const solutionParts = splitSolution(caseItem.solution);
+        return (
+        <article class:list={['border border-dark-line rounded-2xl overflow-hidden bg-dark-surface hover:bg-dark-surface-hover hover:border-dark-line-strong transition-[background-color,border-color] duration-200', isWide && 'md:col-span-2']}>
           <!-- Название ВСЕГДА видно сверху -->
           <div class="px-6 md:px-8 pt-6 md:pt-8 pb-4">
             <h3 class="text-2xl font-normal font-heading text-on-dark">{caseItem.name}</h3>
           </div>
 
           <!-- Обложка ВСЕГДА видна, вне details -->
-          <div class="aspect-[16/10] overflow-hidden relative group cursor-pointer" data-case-toggle-wrapper>
+          <div class:list={['aspect-[16/10] overflow-hidden relative group cursor-pointer', isWide && 'md:aspect-[2/1]']} data-case-toggle-wrapper>
             <!-- Image -->
             <Image
               src={caseItem.image}
@@ -30,11 +61,11 @@ import { cases } from '../../content/cases';
               loading="lazy"
               decoding="async"
               class="w-full h-full object-cover group-hover:brightness-90 transition-[filter] duration-200"
-              style="filter: brightness(.72) contrast(1.1);"
+              style={`filter: brightness(.72) contrast(1.1); object-position: ${caseItem.coverPosition ?? 'center'};`}
             />
 
             <!-- Tags overlay top-left -->
-            <div class="absolute top-3 left-3 flex flex-wrap gap-2">
+            <div class:list={['absolute flex flex-wrap gap-2', caseItem.coverTagsRight ? 'top-3 right-3 justify-end md:right-auto md:left-3 md:justify-start' : 'top-3 left-3']}>
               {caseItem.tags.map((tag) => (
                 <span class="inline-flex px-3 py-1.5 rounded-full font-mono uppercase text-xs font-medium" style="background: rgba(9, 9, 9, 0.6); border: 1px solid rgba(255, 255, 255, 0.35); backdrop-filter: blur(10px); color: white;">
                   {tag}
@@ -74,38 +105,84 @@ import { cases } from '../../content/cases';
           <details class="group">
             <summary style="display: none;"></summary>
             <div class="p-6 md:p-8 space-y-4 text-on-dark-body border-t border-dark-line">
-              <div>
+              <div class:list={[isWide && 'max-w-[68ch]']}>
                 <h4 class="font-bold text-sm text-on-dark-muted mb-2 font-mono uppercase tracking-[0.14em]">Задача</h4>
                 <p class="leading-relaxed">{caseItem.task}</p>
               </div>
-              <div>
+              <div class:list={[isWide && 'max-w-[68ch]']}>
                 <h4 class="font-bold text-sm text-on-dark-muted mb-2 font-mono uppercase tracking-[0.14em]">Решение</h4>
-                <p class="leading-relaxed">{caseItem.solution}</p>
+                {solutionParts ? (
+                  <>
+                    {solutionParts.intro && <p class="leading-relaxed mb-3">{solutionParts.intro}</p>}
+                    <ul class="space-y-2">
+                      {solutionParts.items.map((item) => (
+                        <li class="flex gap-3 leading-relaxed">
+                          <span aria-hidden="true" class="text-accent-on-dark shrink-0">–</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p class="leading-relaxed">{caseItem.solution}</p>
+                )}
               </div>
 
-              <div class="pt-2">
-                <Image
-                  src={caseItem.shot}
-                  alt={`Интерфейс ${caseItem.name}`}
-                  width={1280}
-                  format="webp"
-                  loading="lazy"
-                  decoding="async"
-                  sizes="100vw"
-                  class="w-full rounded-[12px] border"
-                  style="border-color: rgba(255, 255, 255, 0.12);"
-                />
-                <p class="text-xs font-mono text-[#9BA1AA] mt-2">Интерфейс продукта — макет</p>
-              </div>
+              {caseItem.shots && (
+                <div class:list={['pt-2 space-y-6', isWide && 'md:grid md:grid-cols-3 md:gap-6 md:space-y-0']}>
+                  {caseItem.shots.map((shot, shotIndex) => (
+                    <figure>
+                      <a
+                        href={fullSizeSrc.get(shot.src)}
+                        target="_blank"
+                        rel="noopener"
+                        aria-label={`Открыть скриншот в полном размере: ${shot.caption}`}
+                        class="block rounded-[12px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-on-dark"
+                      >
+                        <Image
+                          src={shot.src}
+                          alt={`Скриншот ${shotIndex + 1}: ${shot.caption}`}
+                          widths={[480, 960, 1400]}
+                          sizes={isWide ? WIDE_SHOT_SIZES : SHOT_SIZES}
+                          format="webp"
+                          loading="lazy"
+                          decoding="async"
+                          class:list={['w-full rounded-[12px] border', isWide && 'md:aspect-[16/9] md:object-cover md:object-top']}
+                          style="border-color: rgba(255, 255, 255, 0.12);"
+                        />
+                      </a>
+                      <figcaption class="text-xs font-mono text-on-dark-muted mt-2">{shot.caption}</figcaption>
+                    </figure>
+                  ))}
+                </div>
+              )}
 
-              <div>
+              {!caseItem.shots && caseItem.shot && (
+                <div class="pt-2">
+                  <Image
+                    src={caseItem.shot}
+                    alt={`Интерфейс ${caseItem.name}`}
+                    width={1280}
+                    format="webp"
+                    loading="lazy"
+                    decoding="async"
+                    sizes="100vw"
+                    class="w-full rounded-[12px] border"
+                    style="border-color: rgba(255, 255, 255, 0.12);"
+                  />
+                  <p class="text-xs font-mono text-on-dark-muted mt-2">Интерфейс продукта — макет</p>
+                </div>
+              )}
+
+              <div class:list={[isWide && 'max-w-[68ch]']}>
                 <h4 class="font-bold text-sm text-on-dark-muted mb-2 font-mono uppercase tracking-[0.14em]">Результат</h4>
                 <p class="leading-relaxed">{caseItem.result}</p>
               </div>
             </div>
           </details>
         </article>
-      ))}
+        );
+      })}
     </div>
   </div>
 </section>

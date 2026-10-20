@@ -4,17 +4,17 @@ import Button from '../ui/Button.astro';
 const BASE_URL = import.meta.env.BASE_URL;
 
 // Chips from the approved canvas (390px artboard). Mobile: x/y — top-left corner inside the portrait (338×421.68),
-// side — screen edge the chip sticks to, w — chip width (12px Roboto Mono). Desktop: dl/dt — offsets around the face center.
+// side — screen edge the chip sticks to, w — chip width (12px Roboto Mono). Desktop: dr/dt — offsets around the face center, dr anchors to the right edge.
 const PORTRAIT_W = 338;
 const PORTRAIT_H = 421.68;
 const chips = [
-  { label: 'UI/UX-дизайн',           side: 'r', x: 238, y: 3,   w: 120.4, dl: 'calc(50% - 273px)', dt: '2%' },
-  { label: 'Веб-порталы',            side: 'l', x: -23, y: 40,  w: 113.2, dl: 'calc(50% + 113px)', dt: '11%' },
-  { label: 'Сайты',                  side: 'r', x: 282, y: 102, w: 70,    dl: 'calc(50% - 242px)', dt: '28%' },
-  { label: 'SaaS',                   side: 'l', x: 2,   y: 173, w: 62.8,  dl: 'calc(50% + 141px)', dt: '39%' },
-  { label: 'ИИ-решения',             side: 'r', x: 252, y: 231, w: 106,   dl: 'calc(50% - 258px)', dt: '54%' },
-  { label: 'Разработка CRM',         side: 'l', x: -19, y: 273, w: 134.8, dl: 'calc(50% + 73px)',  dt: '66%' },
-  { label: 'SEO и органик продюсер', side: 'r', x: 165, y: 320, w: 192.4, dl: 'calc(50% - 247px)', dt: '80%' },
+  { label: 'UI/UX-дизайн',           side: 'r', x: 238, y: 3,   w: 120.4, dr: 'calc(50% - 273px)', dt: '2%' },
+  { label: 'Веб-порталы',            side: 'l', x: -23, y: 40,  w: 113.2, dr: 'calc(50% + 113px)', dt: '11%' },
+  { label: 'Сайты',                  side: 'r', x: 282, y: 102, w: 70,    dr: 'calc(50% - 242px)', dt: '28%' },
+  { label: 'SaaS',                   side: 'l', x: 2,   y: 173, w: 62.8,  dr: 'calc(50% + 141px)', dt: '39%' },
+  { label: 'ИИ-решения',             side: 'r', x: 252, y: 231, w: 106,   dr: 'calc(50% - 258px)', dt: '54%' },
+  { label: 'Разработка CRM',         side: 'l', x: -19, y: 273, w: 134.8, dr: 'calc(50% + 73px)',  dt: '66%' },
+  { label: 'SEO и органик продюсер', side: 'r', x: 165, y: 320, w: 192.4, dr: 'calc(50% - 247px)', dt: '80%' },
 ].map(({ x, y, w, side, ...chip }) => ({
   ...chip,
   side,
@@ -82,8 +82,8 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
       </div>
 
       <!-- Floating chips: positions from the approved canvas (mobile) / scaled around face center (desktop) -->
-      {chips.map(({ label, side, fh, fy, dl, dt }) => (
-        <div class={`hero-chip hero-chip--${side} absolute`} style={`--fh: ${fh}; --fy: ${fy}; --dl: ${dl}; --dt: ${dt}; --fg: ${crmFy};`} aria-hidden="true">
+      {chips.map(({ label, side, fh, fy, dr, dt }) => (
+        <div class={`hero-chip hero-chip--${side} absolute`} style={`--fh: ${fh}; --fy: ${fy}; --dr: ${dr}; --dt: ${dt}; --fg: ${crmFy};`} aria-hidden="true">
           <div class="hero-chip__pill px-4 rounded-full" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); font-family: var(--font-mono); font-weight: 400; color: white; display: inline-flex; align-items: center; white-space: nowrap; line-height: 1.2;">
             {label}
           </div>
@@ -145,6 +145,9 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
         color: #010101;
       "
       aria-label="Связаться"
+      aria-haspopup="dialog"
+      aria-controls="contact-dialog"
+      aria-expanded="false"
     >
       <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -180,10 +183,20 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
     runeVideo?.pause();
   }
 
-  // Contact button opens dialog
   const heroBtn = document.getElementById('hero-contact-btn');
+  const OPEN_DELAY_MS = prefersReducedMotion ? 0 : 140;
+  let openTimer = 0;
   heroBtn?.addEventListener('click', () => {
-    window.dispatchEvent(new Event('open-contact-dialog'));
+    if (openTimer || heroBtn.getAttribute('aria-expanded') === 'true') return;
+    heroBtn.setAttribute('aria-expanded', 'true');
+    openTimer = window.setTimeout(() => {
+      openTimer = 0;
+      window.dispatchEvent(new Event('open-contact-dialog'));
+    }, OPEN_DELAY_MS);
+  });
+  window.addEventListener('contact-dialog-state', (e) => {
+    const open = (e as CustomEvent<{ open: boolean }>).detail.open;
+    heroBtn?.setAttribute('aria-expanded', String(open));
   });
 
   // Character-by-character animation for h1
@@ -382,8 +395,8 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
       width: min(clamp(300px, 36vw, 518px), 38svh);
     }
     .hero-chip {
-      left: var(--dl);
-      right: auto;
+      right: var(--dr);
+      left: auto;
       top: min(var(--dt), calc(100% - 46px));
     }
     .hero-caption {
@@ -459,6 +472,8 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
     transition:
       transform 160ms var(--ease-out),
       box-shadow 220ms var(--ease-out);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   #hero-contact-btn::before {
     content: '';
@@ -491,7 +506,7 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
     to   { background-position: 100% 50%; }
   }
   #hero-contact-btn svg {
-    transition: transform 320ms var(--ease-out);
+    transition: transform 360ms var(--ease-out);
     transform-origin: 50% 50%;
   }
   @media (hover: hover) {
@@ -502,12 +517,18 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
   #hero-contact-btn:focus-visible {
     outline: 2px solid #F97316;
     outline-offset: 4px;
-    transform: scale(1.04);
+  }
+  #hero-contact-btn:active { transform: scale(0.97); }
+  #hero-contact-btn[aria-expanded="true"] {
+    color: #010101;
     box-shadow: 0 10px 30px -8px rgba(249, 115, 22, 0.55);
   }
-  #hero-contact-btn:focus-visible::before { opacity: 1; animation-play-state: running; }
-  #hero-contact-btn:focus-visible svg { transform: rotate(180deg); }
-  #hero-contact-btn:active { transform: scale(0.97); }
+  #hero-contact-btn[aria-expanded="true"]::before {
+    opacity: 1;
+    animation-play-state: running;
+  }
+  #hero-contact-btn[aria-expanded="true"] svg { transform: rotate(225deg); }
+  #hero-contact-btn[aria-expanded="true"]:active { transform: scale(0.97); }
   @media (prefers-reduced-motion: reduce) {
     #hero-contact-btn::before { animation: none; }
     #hero-contact-btn:hover,
@@ -515,6 +536,9 @@ const crmFy = chips.find((chip) => chip.label === 'Разработка CRM')?.f
     #hero-contact-btn:active { transform: none; }
     #hero-contact-btn:hover svg,
     #hero-contact-btn:focus-visible svg { transform: none; }
+    #hero-contact-btn[aria-expanded="true"] svg { transform: rotate(45deg); transition: none; }
+    #hero-contact-btn[aria-expanded="true"]:active { transform: none; }
+    #hero-contact-btn::before { transition: none; }
   }
 
   @keyframes char-in {

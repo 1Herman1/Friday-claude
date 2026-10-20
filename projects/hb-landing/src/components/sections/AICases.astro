@@ -1,5 +1,78 @@
 ---
 import SectionTitle from '../ui/SectionTitle.astro';
+
+interface Metric {
+  prefix?: string;
+  value: number;
+  suffix?: string;
+  description: string;
+  animate?: boolean;
+}
+
+interface Source {
+  label: string;
+  href: string;
+}
+
+interface Solution {
+  title: string;
+  who: string;
+  task: string;
+  solution: string;
+  metrics: Metric[];
+  sources: Source[];
+}
+
+const solutions: Solution[] = [
+  {
+    title: 'Спецификация → черновик КП',
+    who: 'Поставщики и дистрибьюторы стройматериалов и инженерного оборудования',
+    task: 'Клиент присылает запрос или спецификацию, названия и артикулы не совпадают с каталогом. На одно КП у менеджера уходит от получаса до часа.',
+    solution: 'ИИ разбирает запрос из письма, мессенджера или формы, находит каждой позиции товар в каталоге 1С и на остатках, предлагает аналоги и собирает черновик КП. Менеджер только проверяет готовый документ.',
+    metrics: [
+      { prefix: '3–', value: 5, suffix: ' мин', animate: false, description: 'на одно КП вместо 30–⁠60 минут' },
+      { prefix: 'свыше ', value: 98, suffix: '%', description: 'точность подбора номенклатуры, было около 85%' },
+      { prefix: 'менее ', value: 1, suffix: '%', description: 'КП с ошибками в ценах и артикулах, было до 10%' },
+    ],
+    sources: [{ label: 'МБС, данные вендора', href: 'https://mbsgroup.ru/ai/1c/prodazhi/podborshchik-nomenklatury-dlya-kp/' }],
+  },
+  {
+    title: 'Разбор тендерной документации',
+    who: 'Заказчики, которые проверяют заявки подрядчиков, и участники торгов по 44‑ФЗ, 223‑ФЗ и коммерческих тендеров',
+    task: 'Пакет документов — сотни страниц. Требования, сроки и риски выписывают вручную: заказчик подолгу проверяет заявки, участник долго решает, идти ли в торги, а ошибка в заявке ведёт к отклонению.',
+    solution: 'ИИ читает пакет, выписывает требования, сроки и риски и сверяет с ними документы — подрядчика или свои: показывает, чего не хватает и что не соответствует. Решение остаётся за человеком.',
+    metrics: [
+      { prefix: '×', value: 5, description: 'быстрее проверка заявок подрядчиков на соответствие требованиям' },
+      { value: 93, suffix: '%', description: 'точность извлечения требований по сверке с разметкой экспертов' },
+      { prefix: 'до ', value: 7, suffix: ' мин', description: 'на проверку 50‑страничного документа подрядчика' },
+    ],
+    sources: [{ label: 'Doubletapp, кейс вендора на Хабре', href: 'https://habr.com/ru/companies/doubletapp/articles/1018940/' }],
+  },
+  {
+    title: 'ИИ-консультант 24/7 по каталогу',
+    who: 'Продавцы стройматериалов, спецтехники и запчастей, застройщики',
+    task: 'Ответ на заявку приходит через полчаса, ночью и в выходные заявки никто не обрабатывает — клиент уходит к тому, кто ответил первым.',
+    solution: 'ИИ-агент отвечает по каталогу компании на сайте и в мессенджерах, уточняет задачу и сроки, собирает контакт и передаёт готовую заявку в CRM. Нестандартные вопросы передаёт менеджеру.',
+    metrics: [
+      { prefix: 'менее ', value: 1, suffix: ' мин', description: 'до первого ответа вместо 33 минут' },
+      { value: 18, suffix: '%', description: 'конверсия обращения в заказ, было 13%' },
+      { value: 72, description: 'заявки, обработанные в нерабочее время за первый месяц, было 0' },
+    ],
+    sources: [{ label: 'ChatRex, кейс поставщика спецтехники', href: 'https://chatrex.pro/case-72-zayavki-s-ai-botom' }],
+  },
+  {
+    title: 'Речевая аналитика звонков',
+    who: 'Отделы продаж девелоперов, агентств недвижимости и поставщиков',
+    task: 'Руководитель вручную слушает 5–⁠10% звонков и не видит, на каком шаге теряются сделки.',
+    solution: 'ИИ расшифровывает все звонки, оценивает каждый по чек-листу, находит типовые ошибки — нет следующего шага, формальные ответы на вопросы клиента — и собирает отчёт для руководителя.',
+    metrics: [
+      { prefix: '+', value: 34, suffix: '%', description: 'конверсия звонка во встречу после тренингов по находкам ИИ' },
+      { prefix: '+', value: 9, suffix: ' млн ₽', description: 'продаж за квартал (+2 сделки)' },
+      { value: 100, suffix: '%', description: 'звонков проверено; при ручном контроле обычно 5–⁠10%' },
+    ],
+    sources: [{ label: 'KeshAI, кейс девелопера', href: 'https://keshai.ru/tpost/76gugysxh1-analiz-zvonkov-s-pomoschyu-ii-keis-devel' }],
+  },
+];
 ---
 
 <section id="ai-cases" class="py-24 md:py-32 border-t border-dark-divider">
@@ -8,64 +81,127 @@ import SectionTitle from '../ui/SectionTitle.astro';
       ИИ в <span class="text-accent-on-dark">РЕАЛЬНЫХ</span> задачах
     </SectionTitle>
 
+    <p class="text-lg leading-relaxed text-on-dark-body max-w-[65ch] mb-12 md:mb-16">
+      Решения такого типа мы можем внедрить у&nbsp;вас. Цифры — из&nbsp;открытых кейсов и&nbsp;материалов вендоров, со&nbsp;ссылками на&nbsp;источники.
+    </p>
+
     <div class="space-y-12">
-      {[
-        {
-          title: 'Поток',
-          task: '400 заявок в день письмами',
-          solution: 'ИИ читает письмо и вложения, создаёт сделку в CRM, готовит черновик ответа, менеджер проверяет',
-          result: '6 недель внедрения',
-          metrics: [
-            { number: '2 мин', description: 'вместо 20' },
-            { number: '+30%', description: 'заявок тем же штатом' },
-            { number: '3 мес', description: 'срок окупаемости' },
-          ],
-        },
-        {
-          title: 'Советник',
-          task: 'Каталог 3 000 средств косметики',
-          solution: 'ИИ-консультант: 4 вопроса о коже → персональный набор → ответы 24/7, только каталог компании',
-          result: 'Обучен на данных магазина',
-          metrics: [
-            { number: '+18%', description: 'конверсия' },
-            { number: '−40%', description: 'поддержка' },
-            { number: '+12%', description: 'чек' },
-          ],
-        },
-      ].map(({ title, task, solution, result, metrics }) => (
+      {solutions.map(({ title, who, task, solution, metrics, sources }) => (
         <article class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 border-b border-dark-divider last:border-b-0">
           <div class="md:col-span-2">
             <h3 class="text-3xl font-normal font-heading text-on-dark mb-6">{title}</h3>
             <div class="space-y-4">
               <div>
+                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">ДЛЯ КОГО</h4>
+                <p class="text-on-dark-body max-w-[65ch]">{who}</p>
+              </div>
+              <div>
                 <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">ЗАДАЧА</h4>
                 <p class="text-on-dark-body max-w-[65ch]">{task}</p>
               </div>
               <div>
-                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">ЧТО СДЕЛАЛИ</h4>
+                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">РЕШЕНИЕ</h4>
                 <p class="text-on-dark-body max-w-[65ch]">{solution}</p>
-              </div>
-              <div>
-                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">РЕЗУЛЬТАТ</h4>
-                <p class="text-on-dark-body max-w-[65ch]">{result}</p>
               </div>
             </div>
           </div>
 
           <div class="flex flex-col items-start gap-6">
-              {metrics.map(({ number, description }) => (
-                <div class="flex flex-col gap-1">
-                  <div class="font-heading text-accent-on-dark tabular-nums" style="font-size: clamp(28px, 3vw, 44px); line-height: 1;">
-                    {number}
-                  </div>
-                  <div class="font-mono text-xs text-on-dark-muted uppercase tracking-[0.1em]">
-                    {description}
-                  </div>
+            <h4 class="text-sm font-bold font-mono text-on-dark-muted uppercase tracking-[0.14em]">ПО ДАННЫМ ОТРАСЛИ</h4>
+            {metrics.map(({ prefix, value, suffix, description, animate }) => (
+              <div class="flex flex-col gap-1">
+                <div class="font-heading text-on-dark whitespace-nowrap" style="font-size: clamp(24px, 2.2vw, 30px); line-height: 1;">
+                  {prefix}{animate === false ? value : <span class="ai-count inline-block" data-count={value}>{value}</span>}{suffix}
                 </div>
+                <div class="font-mono text-sm leading-snug text-on-dark-muted max-w-[34ch]">
+                  {description}
+                </div>
+              </div>
+            ))}
+            <ul class="font-mono text-xs text-on-dark-muted space-y-1">
+              {sources.map(({ label, href }) => (
+                <li>Источник: <a href={href} target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-accent-on-dark transition-colors duration-200">{label}</a></li>
               ))}
-            </div>
+            </ul>
+          </div>
         </article>
       ))}
     </div>
+
+    <p class="font-mono text-sm text-on-dark-muted max-w-[65ch] mt-8">
+      Цифры — данные вендоров и&nbsp;результаты их&nbsp;клиентов, а&nbsp;не&nbsp;наши. Результат у&nbsp;вас зависит от&nbsp;процессов и&nbsp;данных и&nbsp;не&nbsp;гарантируется.
+    </p>
   </div>
 </section>
+
+<script>
+  const counters = [...document.querySelectorAll<HTMLElement>('.ai-count')].filter((el) => Number(el.dataset.count) >= 2);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduced && 'IntersectionObserver' in window) {
+    const DURATION = 1400;
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
+
+    const isVisible = (el: HTMLElement) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top < innerHeight && rect.bottom > 0;
+    };
+
+    const zero = (el: HTMLElement) => {
+      if (el.dataset.zeroed) return;
+      el.style.minWidth = `${el.getBoundingClientRect().width / parseFloat(getComputedStyle(el).fontSize)}em`;
+      el.textContent = '0';
+      el.dataset.zeroed = 'true';
+    };
+
+    const run = (el: HTMLElement) => {
+      const target = Number(el.dataset.count);
+      let start = 0;
+      const step = (now: number) => {
+        if (!start) start = now;
+        const t = Math.min(1, (now - start) / DURATION);
+        el.textContent = String(Math.round(target * easeOut(t)));
+        if (t < 1) requestAnimationFrame(step);
+        else el.style.minWidth = '';
+      };
+      requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target as HTMLElement;
+        observer.unobserve(el);
+        near.unobserve(el);
+        if (el.dataset.zeroed) run(el);
+      }
+    }, { threshold: 0 });
+
+    const near = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        near.unobserve(entry.target);
+        if (!isVisible(entry.target as HTMLElement)) zero(entry.target as HTMLElement);
+      }
+    }, { rootMargin: '100% 0px 100% 0px' });
+
+    addEventListener('beforeprint', () => {
+      for (const el of counters) {
+        observer.unobserve(el);
+        near.unobserve(el);
+        el.textContent = el.dataset.count ?? '';
+        el.style.minWidth = '';
+      }
+    });
+
+    const init = async () => {
+      await document.fonts.ready;
+      for (const el of counters) {
+        if (isVisible(el)) continue;
+        near.observe(el);
+        observer.observe(el);
+      }
+    };
+    init();
+  }
+</script>

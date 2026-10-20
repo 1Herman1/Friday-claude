@@ -1,12 +1,12 @@
 ---
 ---
 
-<dialog id="contact-dialog" class="rounded-2xl border border-dark-line shadow-lg max-w-sm bg-dark text-on-dark" style="width: calc(100% - 2rem); margin: auto;">
-  <div class="p-8">
-    <div class="flex justify-between items-start mb-8">
-      <h2 class="text-2xl font-normal font-heading text-on-dark">Давайте обсудим вашу задачу</h2>
-      <button id="close-dialog" class="text-on-dark-muted hover:text-on-dark transition-colors p-3" aria-label="Закрыть диалог">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<dialog id="contact-dialog" tabindex="-1" aria-labelledby="contact-dialog-title" class="rounded-2xl border border-dark-line shadow-lg max-w-sm bg-dark text-on-dark" style="width: calc(100% - 2rem); margin: auto;">
+  <div class="p-6 sm:p-8">
+    <div class="flex items-start justify-between gap-3 mb-6 sm:mb-8">
+      <h2 id="contact-dialog-title" class="dialog-title flex-1 min-w-0 font-normal font-heading text-on-dark">Давайте обсудим вашу задачу</h2>
+      <button id="close-dialog" type="button" class="dialog-close shrink-0" aria-label="Закрыть">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -18,8 +18,8 @@
         <div class="flex-1">
           <div class="font-medium text-on-dark">Telegram</div>
           <div class="text-sm text-on-dark-muted">@h_and_b_team</div>
+          <div class="text-xs text-on-dark-muted mt-1">отвечаем быстрее всего</div>
         </div>
-        <div class="text-on-dark-muted text-xs">отвечаю быстрее всего</div>
       </a>
 
       <a href="tel:+79169655611" class="flex items-center gap-3 p-4 rounded-lg border border-dark-line hover:bg-dark-surface-hover transition-colors duration-200 min-h-[56px]">
@@ -42,59 +42,174 @@
 <script>
   const dialog = document.getElementById('contact-dialog') as HTMLDialogElement;
   const closeButton = document.getElementById('close-dialog') as HTMLButtonElement;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const CLOSE_FALLBACK_MS = 220;
+  const OPEN_TAP_GUARD_MS = 350;
+  let closing = false;
+  let openedAt = 0;
+  let fallbackTimer = 0;
 
-  // Open dialog
+  const emitState = (open: boolean) =>
+    window.dispatchEvent(new CustomEvent('contact-dialog-state', { detail: { open } }));
+
+  const onEnd = (e: AnimationEvent) => { if (e.target === dialog) dialog.close(); };
+
+  function cancelPendingClose() {
+    clearTimeout(fallbackTimer);
+    dialog.removeEventListener('animationend', onEnd);
+  }
+
   window.addEventListener('open-contact-dialog', () => {
+    if (dialog.open) return;
+    cancelPendingClose();
+    closing = false;
+    dialog.classList.remove('is-closing');
+    openedAt = performance.now();
     dialog.showModal();
+    dialog.focus({ preventScroll: true });
+    emitState(true);
   });
 
-  // Close dialog
-  closeButton?.addEventListener('click', () => {
-    dialog.close();
-  });
+  const isGuarded = (e: MouseEvent) => {
+    const dt = performance.now() - openedAt;
+    return dt < OPEN_TAP_GUARD_MS || (e.detail > 1 && dt < 600);
+  };
 
-  // Close on backdrop click
-  dialog?.addEventListener('click', (e) => {
-    const rect = dialog.getBoundingClientRect();
-    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
-      dialog.close();
-    }
-  });
+  dialog.addEventListener('mousedown', (e) => {
+    if (isGuarded(e)) e.preventDefault();
+  }, true);
 
-  // Close on Escape
-  dialog?.addEventListener('cancel', (e) => {
+  dialog.addEventListener('click', (e) => {
+    if (!isGuarded(e)) return;
     e.preventDefault();
-    dialog.close();
+    e.stopImmediatePropagation();
+  }, true);
+
+  function animatedClose() {
+    if (!dialog.open || closing) return;
+    closing = true;
+    if (reduceMotion.matches) { dialog.close(); return; }
+    const dialogStyle = getComputedStyle(dialog);
+    dialog.style.setProperty('--o0', dialogStyle.opacity);
+    dialog.style.setProperty('--t0', dialogStyle.transform);
+    dialog.style.setProperty('--b0', getComputedStyle(dialog, '::backdrop').opacity);
+    dialog.classList.add('is-closing');
+    dialog.addEventListener('animationend', onEnd);
+    fallbackTimer = window.setTimeout(() => dialog.close(), CLOSE_FALLBACK_MS);
+  }
+
+  dialog.addEventListener('close', () => {
+    if (dialog.open) return;
+    cancelPendingClose();
+    closing = false;
+    dialog.classList.remove('is-closing');
+    dialog.style.removeProperty('--o0');
+    dialog.style.removeProperty('--t0');
+    dialog.style.removeProperty('--b0');
+    emitState(false);
+  });
+
+  closeButton?.addEventListener('click', animatedClose);
+
+  const isOutside = (e: MouseEvent) => {
+    const r = dialog.getBoundingClientRect();
+    return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+  };
+  let downOnBackdrop = false;
+
+  dialog.addEventListener('pointerdown', (e) => {
+    downOnBackdrop = e.target === dialog && isOutside(e);
+  });
+
+  dialog.addEventListener('click', (e) => {
+    if (e.target !== dialog || !downOnBackdrop) return;
+    downOnBackdrop = false;
+    if (isOutside(e)) animatedClose();
+  });
+
+  dialog.addEventListener('cancel', (e) => {
+    if (!e.cancelable) return;
+    e.preventDefault();
+    animatedClose();
   });
 </script>
 
 <style>
   dialog {
-    backdrop-filter: blur(4px);
+    padding: 0;
+    transform-origin: 50% 50%;
+    -webkit-tap-highlight-color: transparent;
   }
+  dialog:focus,
+  dialog:focus-visible { outline: none; }
 
   dialog::backdrop {
-    background-color: rgb(0 0 0 / 0.4);
+    background-color: rgb(20 22 26 / 0.6);
   }
 
-  dialog[open] {
-    animation: slideIn 200ms ease-out;
+  dialog[open] { animation: dialog-in 240ms var(--ease-out) both; }
+  dialog[open]::backdrop { animation: backdrop-in 200ms var(--ease-out) both; }
+
+  dialog[open].is-closing { animation: dialog-out 160ms var(--ease-out) forwards; }
+  dialog[open].is-closing::backdrop { animation: backdrop-out 160ms var(--ease-out) forwards; }
+
+  @keyframes dialog-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes dialog-out {
+    from { opacity: var(--o0, 1); transform: var(--t0, none); }
+    to   { opacity: 0; transform: translateY(8px) scale(0.98); }
+  }
+  @keyframes backdrop-in  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes backdrop-out { from { opacity: var(--b0, 1); } to { opacity: 0; } }
+
+  .dialog-title {
+    font-size: clamp(1.25rem, 1rem + 1.2vw, 1.5rem);
+    line-height: 1.2;
+    padding-top: 6px;
+    text-wrap: balance;
   }
 
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+  .dialog-close {
+    width: 44px;
+    height: 44px;
+    margin: -2px -8px 0 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: var(--color-chip-bg);
+    border: 1px solid var(--color-chip-border);
+    color: var(--color-on-dark-muted);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease,
+      transform 120ms var(--ease-out);
+  }
+  @media (hover: hover) {
+    .dialog-close:hover {
+      background-color: var(--color-dark-line);
+      color: var(--color-on-dark);
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  }
+  .dialog-close:active { transform: scale(0.94); }
+  .dialog-close:focus { outline: none; }
+  .dialog-close:focus-visible {
+    outline: 2px solid var(--color-accent-on-dark);
+    outline-offset: 2px;
+    color: var(--color-on-dark);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    dialog[open] {
-      animation: none;
-    }
+    dialog[open],
+    dialog[open]::backdrop,
+    dialog[open].is-closing,
+    dialog[open].is-closing::backdrop { animation: none; }
+    .dialog-close { transition: none; }
+    .dialog-close:active { transform: none; }
   }
 </style>

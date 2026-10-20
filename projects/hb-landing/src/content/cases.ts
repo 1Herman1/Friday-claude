@@ -4,6 +4,9 @@ import domKeramiki from '../assets/cases/dom-keramiki.jpg';
 import primeFitness from '../assets/cases/prime-fitness.jpg';
 import potok from '../assets/cases/potok.jpg';
 import sovetnik from '../assets/cases/sovetnik.jpg';
+import zooMoscow from '../assets/cases/zoo-moscow.jpg';
+import proCosmetics from '../assets/cases/pro-cosmetics.jpg';
+import vetMoscow from '../assets/cases/vet-moscow.jpg';
 
 import smenaShot from '../assets/cases/shots/smena.jpg';
 import atlasShot from '../assets/cases/shots/atlas.jpg';
@@ -11,12 +14,29 @@ import domKeramikiShot from '../assets/cases/shots/dom-keramiki.jpg';
 import primeFitnessShot from '../assets/cases/shots/prime-fitness.jpg';
 import potokShot from '../assets/cases/shots/potok.jpg';
 import sovetnikShot from '../assets/cases/shots/sovetnik.jpg';
+import zooMoscowShot1 from '../assets/cases/shots/zoo-moscow-1.jpg';
+import zooMoscowShot2 from '../assets/cases/shots/zoo-moscow-2.jpg';
+import zooMoscowShot3 from '../assets/cases/shots/zoo-moscow-3.jpg';
+import proCosmeticsShot1 from '../assets/cases/shots/pro-cosmetics-1.jpg';
+import proCosmeticsShot2 from '../assets/cases/shots/pro-cosmetics-2.jpg';
+import proCosmeticsShot3 from '../assets/cases/shots/pro-cosmetics-3.jpg';
+import vetMoscowShot1 from '../assets/cases/shots/vet-moscow-1.jpg';
+import vetMoscowShot2 from '../assets/cases/shots/vet-moscow-2.jpg';
+import vetMoscowShot3 from '../assets/cases/shots/vet-moscow-3.jpg';
+
+export interface CaseShot {
+  src: ImageMetadata;
+  caption: string;
+}
 
 export interface Case {
   id: string;
   name: string;
   image: ImageMetadata;
-  shot: ImageMetadata;
+  coverTagsRight?: boolean;
+  coverPosition?: string;
+  shot?: ImageMetadata;
+  shots?: CaseShot[];
   tags: string[];
   task: string;
   solution: string;
@@ -24,6 +44,50 @@ export interface Case {
 }
 
 export const cases: Case[] = [
+  {
+    id: 'zoo-moscow',
+    name: 'Зоомагазин, Москва',
+    image: zooMoscow,
+    coverPosition: 'center 78%',
+    shots: [
+      { src: zooMoscowShot1, caption: 'Главная' },
+      { src: zooMoscowShot2, caption: 'Подбор корма' },
+      { src: zooMoscowShot3, caption: 'Версия для телефона' },
+    ],
+    tags: ['E-commerce', 'МойСклад', 'Подбор корма'],
+    task: 'Зоомагазин продавал на маркетплейсах. Нужен был свой магазин с админкой вместо продаж только на площадках: покупатели заказывают напрямую, с бонусами и без комиссии площадок в цене, а цены, остатки и фото сами приходят из складской программы МойСклад.',
+    solution: 'Сделали интернет-магазин с нуля: дизайн с упором на телефон (нижняя панель, баннеры листаются пальцем) · подбор корма для кошки или собаки — 8 вопросов, ответы сопоставляются с 49 тегами, которые система сама проставила по данным каталога · бонусы: 300 за регистрацию, 5% с заказа, бонусами можно оплатить до 50% чека · личный кабинет и подписка на корм −7% · 4 способа доставки с выбором пункта выдачи',
+    result: '520 товаров на витрине, 9 брендов. 1 398 из 1 406 фасовок сопоставили с МойСклад по артикулу, цены и остатки сверяются каждые 30 минут — 48 раз в сутки. Админка из 14 разделов: баннеры, статьи и цены доставки владелец правит сам. База для SEO: 10 статей, разметка, карта сайта. Магазин готовится к запуску.',
+  },
+  {
+    id: 'pro-cosmetics',
+    name: 'Магазин про-косметики',
+    image: proCosmetics,
+    coverTagsRight: true,
+    shots: [
+      { src: proCosmeticsShot1, caption: 'Главная: компьютер и телефон' },
+      { src: proCosmeticsShot2, caption: 'Подбор ухода: вопросы и программа' },
+      { src: proCosmeticsShot3, caption: 'Сцена «Бестселлеры»' },
+    ],
+    tags: ['E-commerce', 'Дизайн', 'Подбор ухода'],
+    task: 'Магазин профессиональной косметики работал на WordPress: страницы брендов, на которые вело меню, открывались с ошибкой 404. Покупатели двух типов: розничный видит цены сразу, косметолог — оптовые, и только после проверки документов. Нужен был свой магазин с такими правилами и с подбором ухода по типу кожи и задаче.',
+    solution: 'Сделали магазин с нуля: дизайн-система «Старое золото и морская синь» — один макет для компьютера, планшета и телефона · сцена «Бестселлеры» — при прокрутке рука показывает товары · подбор ухода — 6 вопросов (5 типов кожи, 8 задач), на выходе программа до 5 шагов с ценами · кабинет косметолога — оптовые цены открываются после проверки ИНН и диплома или сертификата · обмен с 1С',
+    result: 'Магазин на российском сервере, готовится к запуску. 52 товара в 9 категориях, больше 90 обновлений сайта, около 530 автоматических тестов. SEO подготовлено: свои заголовки и описания у товаров, категорий и статей, разметка FAQ.',
+  },
+  {
+    id: 'vet-moscow',
+    name: 'Ветклиника, Москва',
+    image: vetMoscow,
+    shots: [
+      { src: vetMoscowShot1, caption: 'Спрос по запросам' },
+      { src: vetMoscowShot2, caption: 'Доля справочников в выдаче' },
+      { src: vetMoscowShot3, caption: 'Запросы с подтверждённым спросом — фрагмент' },
+    ],
+    tags: ['SEO', 'Аналитика'],
+    task: 'Премиальная ветклиника с упором на хирургию готовится к открытию в Москве, сайта ещё нет. Цель — до запуска понять, по каким запросам у новой клиники реально есть место в поиске, под что строить сайт и во что вкладывать бюджет продвижения.',
+    solution: 'Собрали 117 запросов в 11 группах — от операций и симптомов до пород и района. Сняли 193 среза живой выдачи Яндекса и Google (1 871 результат, 331 домен), сверили спрос со статистикой Яндекса и посчитали, какую долю первой тройки держат справочники: Яндекс Карты, Zoon, 2ГИС. Сделали наглядный отчёт, стратегию на 12 месяцев в 4 стадии и коммерческое предложение из 13 пунктов с ценой каждого: стартовый состав и расширения к нему.',
+    result: 'Подтверждённый спрос по 20 запросам — 4 055 поисков в месяц. Районные запросы — по 17–36 поисков в месяц, и 66–100% первой тройки там у справочников, поэтому ставку на район мы из плана убрали. Место есть у стерилизации кошек и собак и кастрации собак (1 187 поисков в месяц, справочники 0–16%) и у симптомных запросов (справочников 0%) — на них и строится план сайта.',
+  },
   {
     id: 'smena',
     name: 'Смена',
@@ -50,8 +114,8 @@ export const cases: Case[] = [
     image: domKeramiki,
     shot: domKeramikiShot,
     tags: ['E-commerce', 'Интеграция'],
-    task: '12 000 товаров (плитка, керамика), каталог в 1С, нет интернет-магазина. Заказы принимали по телефону. Клиентам нужны фото, цены, расчёт метража для заказа.',
-    solution: 'Интернет-магазин на WordPress+WooCommerce с интеграцией 1С (синхронизация каталога, остатков, цен). Специальный калькулятор метража (выбираешь плитку → вводишь размеры → видишь, сколько нужно штук).',
+    task: '12 000 товаров (плитка, керамика), каталог в 1С, нет интернет-магазина. Заказы принимали по телефону. Клиентам нужны фото, цены, расчёт метража для заказа.',
+    solution: 'Интернет-магазин на WordPress+WooCommerce с интеграцией 1С (синхронизация каталога, остатков, цен). Специальный калькулятор метража (клиент выбирает плитку → вводит размеры → видит, сколько нужно штук).',
     result: 'Онлайн-выручка выросла в 2,4 раза за полгода. Тепловые карты показывают, какие плитки популярнее — можно оптимизировать закупки.',
   },
   {
@@ -80,7 +144,7 @@ export const cases: Case[] = [
     image: sovetnik,
     shot: sovetnikShot,
     tags: ['ИИ', 'E-commerce'],
-    task: 'Магазин косметики (3 000 средств). Клиенты не знают, какое средство выбрать: разные типы кожи, назначения, бренды. Служба поддержки — узкое место.',
+    task: 'Магазин косметики (3 000 средств). Клиенты не знают, какое средство выбрать: разные типы кожи, назначения, бренды. Служба поддержки — узкое место.',
     solution: 'На сайт встроили чат-бота с ИИ: 4 вопроса о типе кожи и проблемах → персональный набор из каталога → при сложных вопросах переводит на живого консультанта. Бот обучен только на данных магазина.',
     result: 'Конверсия +18%, средняя покупка +12%, нагрузка на поддержку −40% (они теперь консультируют только сложные случаи).',
   },
