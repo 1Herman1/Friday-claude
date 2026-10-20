@@ -1,6 +1,6 @@
 name: GEO Collect (XMLRiver)
 
-# Сбор выдачи Яндекса и ИИ-ответов через XMLRiver для проекта ветклиники.
+# Сбор выдачи Яндекса и ИИ-ответов через XMLRiver (тема и регион — входы).
 # Ключ живёт в секретах репозитория и никогда не попадает ни в репозиторий,
 # ни в переписку с агентом — GitHub маскирует его в логах.
 #
@@ -41,6 +41,10 @@ on:
         description: 'Поисковики через запятую: yandex | google | yandex,google'
         type: string
         default: 'yandex'
+      region:
+        description: 'Регион: moscow (lr=213) или числовой lr Яндекса (1 — Москва и область)'
+        type: string
+        default: 'moscow'
       queries_file:
         description: 'Файл со списком запросов (для точечного досбора)'
         type: string
@@ -119,7 +123,7 @@ jobs:
             --topic "${{ inputs.topic }}" \
             --provider xmlriver \
             --engines "${{ inputs.engines }}" \
-            --region moscow \
+            --region "${{ inputs.region }}" \
             --language ru \
             --cluster-queries-file /tmp/queries-clean.txt \
             --depth "${{ inputs.depth }}" \
@@ -148,7 +152,7 @@ jobs:
           set -euo pipefail
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A geo_agent docs/projects/vet-clinic 2>/dev/null || true
+          git add -A geo_agent 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "Новых данных нет — коммитить нечего."
             exit 0
@@ -163,6 +167,5 @@ jobs:
           name: geo-${{ inputs.topic }}-${{ inputs.mode }}
           path: |
             geo_agent/
-            docs/projects/vet-clinic/data/
           if-no-files-found: warn
           retention-days: 14
