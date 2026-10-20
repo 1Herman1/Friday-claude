@@ -102,7 +102,7 @@ def rebuild(cur, account_id):
     cur.execute("""
         WITH x AS (SELECT t.id, coalesce((SELECT sum(l.amount) FROM ledger_entries l
                                           WHERE l.trade_id = t.id AND l.kind = 'FUNDING'), 0) AS f
-                   FROM trades t WHERE t.account_id = %s)
+                   FROM trades t WHERE t.account_id = %s AND t.origin = 'IMPORT')  -- ручные сделки не трогаем
         UPDATE trades t SET funding = x.f, net_pnl = t.gross_pnl - t.fees + x.f, net_pnl_usd = t.gross_pnl - t.fees + x.f
         FROM x WHERE x.id = t.id""", (account_id,))
     return dict(trades=len(keep), stale=stale)

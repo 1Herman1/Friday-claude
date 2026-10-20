@@ -71,6 +71,32 @@ def resolve(cur, spec):
     return r
 
 
+ATT_DIR = Path(__file__).resolve().parents[1] / "data" / "attachments"
+MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif"}
+
+
+def save_image(cur, src, tid, note_id, dry):
+    """Скриншот из Telegram → data/attachments/<sha[:2]>/<sha>.<ext> + attachments (тот же формат, что веб)."""
+    import hashlib
+    import shutil
+    mime = MIME.get(src.suffix.lower())
+    if not mime:
+        sys.exit(f"не картинка: {src}")
+    data = src.read_bytes()
+    sha = hashlib.sha256(data).hexdigest()
+    key = f"{sha[:2]}/{sha}{'.jpg' if mime == 'image/jpeg' else src.suffix.lower()}"
+    cur.execute("SELECT id FROM attachments WHERE sha256 = %s AND trade_id IS NOT DISTINCT FROM %s AND deleted_at IS NULL", (sha, tid))
+    if (r := cur.fetchone()):
+        return str(r[0])
+    if not dry:
+        (ATT_DIR / sha[:2]).mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(src, ATT_DIR / key)
+    cur.execute(f"""INSERT INTO attachments (id, organization_id, kind, storage_key, mime, size_bytes, sha256, trade_id, note_id)
+                    VALUES (gen_random_uuid(), {ORG}, 'SCREENSHOT', %s || '#' || gen_random_uuid(), %s, %s, %s, %s, %s) RETURNING id""",
+                (key, mime, len(data), sha, tid, note_id))
+    return str(cur.fetchone()[0])
+
+
 def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -88,6 +114,8 @@ def main():
     a_.add_argument("--stop", type=float)
     a_.add_argument("--playbook")
     a_.add_argument("--tags")
+    a_.add_argument("--image", action="append", default=[], help="путь к скриншоту (можно несколько)")
+    a_.add_argument("--violated", help="коды нарушенных правил через запятую (rules.code), напр. no_averaging,stop_not_liq")
     a_.add_argument("--chat", type=int)
     a_.add_argument("--msg", type=int)
     a_.add_argument("--dry-run", action="store_true", help="всё выполнить и откатить (для тестов)")
@@ -138,9 +166,21 @@ def main():
                                 INSERT INTO trade_tags (trade_id, tag_id) SELECT %s, id FROM g ON CONFLICT DO NOTHING""",
                             (name, tid))
                 updated.append(f"tag:{name}")
+            for code in [x.strip() for x in (a.violated or "").split(",") if x.strip()]:
+                cur.execute(f"""INSERT INTO trade_rule_violations (trade_id, rule_id, comment)
+                                SELECT %s, id, 'telegram' FROM rules WHERE organization_id = {ORG} AND code = %s
+                                ON CONFLICT DO NOTHING RETURNING rule_id""", (tid, code))
+                if not cur.fetchone() and not cur.rowcount:
+                    cur.execute(f"SELECT 1 FROM rules WHERE organization_id = {ORG} AND code = %s", (code,))
+                    if not cur.fetchone():
+                        sys.exit(f"нет правила с кодом {code}")
+                updated.append(f"rule:{code}")
+        shots = []
+        for img in a.image:
+            shots.append(save_image(cur, Path(img), tid, note_id, a.dry_run))
         conn.rollback() if a.dry_run else conn.commit()
         print(json.dumps({"dry_run": a.dry_run, "note_id": str(note_id), "new": new, "trade": row(t) if t else None,
-                          "day": str(day) if day else None, "updated": updated,
+                          "day": str(day) if day else None, "updated": updated, "shots": shots,
                           "url": f"http://127.0.0.1:3100/trades/{tid}" if tid else None}, ensure_ascii=False))
 
 

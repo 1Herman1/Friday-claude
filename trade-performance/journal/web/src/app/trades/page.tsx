@@ -12,6 +12,7 @@ export default async function Trades({ searchParams }: { searchParams: Promise<F
     <div className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h1 className="text-xl font-semibold">Сделки <span className="text-zinc-500">({list.length})</span></h1>
+        <Link href="/trades/new" className="rounded-md border border-zinc-700 px-3 py-1 text-sm text-zinc-200 hover:bg-zinc-800">+ сделка вручную</Link>
         <FilterBar f={f} symbols={syms.map((x) => x.s)} action="/trades" />
       </div>
       <div className="overflow-x-auto rounded-xl border border-zinc-800">

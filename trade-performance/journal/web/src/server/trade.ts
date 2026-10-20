@@ -28,7 +28,7 @@ export async function tradeCard(id: string) {
     LEFT JOIN playbooks p ON p.id = t.playbook_id
     WHERE t.id = $1`, [id]);
   if (!t) return null;
-  const [fills, notes, tags, playbooks] = await Promise.all([
+  const [fills, notes, tags, playbooks, rules, shots] = await Promise.all([
     q<{ executed_at: Date; side: string; position_side: string; price: string; qty: string; fee: string; pnl: string | null; liq: boolean }>(`
       SELECT executed_at, side, position_side, price, qty, coalesce(fee_quote, 0) AS fee, realized_pnl AS pnl, is_liquidation AS liq
       FROM executions WHERE trade_id = $1 ORDER BY executed_at`, [id]),
@@ -36,8 +36,12 @@ export async function tradeCard(id: string) {
       SELECT id, text, transcript, kind, channel, created_at FROM notes WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
     q<{ name: string }>(`SELECT g.name FROM trade_tags tt JOIN tags g ON g.id = tt.tag_id WHERE tt.trade_id = $1 AND g.deleted_at IS NULL ORDER BY 1`, [id]),
     q<{ name: string }>(`SELECT name FROM playbooks WHERE deleted_at IS NULL ORDER BY 1`),
+    q<{ id: string; text: string; violated: boolean }>(`
+      SELECT r.id, r.text, EXISTS (SELECT 1 FROM trade_rule_violations v WHERE v.rule_id = r.id AND v.trade_id = $1) AS violated
+      FROM rules r WHERE r.kind = 'rule' AND r.active AND r.deleted_at IS NULL ORDER BY r.sort_order`, [id]),
+    q<{ id: string; created_at: Date }>(`SELECT id, created_at FROM attachments WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
   ]);
-  return { t, fills, notes, tags: tags.map((x) => x.name), playbooks: playbooks.map((x) => x.name) };
+  return { t, fills, notes, tags: tags.map((x) => x.name), playbooks: playbooks.map((x) => x.name), rules, shots };
 }
 
 export type Candle = { time: number; open: number; high: number; low: number; close: number };

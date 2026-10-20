@@ -19,8 +19,9 @@ function Card({ label, value, sub, tone }: { label: string; value: string; sub?:
 
 export default async function Dashboard({ searchParams }: { searchParams: Promise<Filters> }) {
   const f = await searchParams;
-  const [s, bySym, byMonth, byHour, byWd, list, syms] = await Promise.all([
+  const [s, bySym, byMonth, byHour, byWd, list, syms, byDur, bySide, byExec, byPb, byEmo] = await Promise.all([
     summary(f), groupBy(f, "symbol"), groupBy(f, "month"), groupBy(f, "hour"), groupBy(f, "weekday"), trades(f), symbols(),
+    groupBy(f, "duration"), groupBy(f, "side"), groupBy(f, "executor"), groupBy(f, "playbook"), groupBy(f, "emotion"),
   ]);
   const n = Number(s.n);
   const wr = n ? (Number(s.wins) / n) * 100 : 0;
@@ -52,6 +53,13 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
         <Card label="Макс. просадка" value={usd(maxDd, 0)} tone="text-rose-400" sub={`пик ${usd(peak, 0)}`} />
         <Card label="Ликвидации 💀" value={`${s.liq_n} · ${usd(s.liq_sum, 0)}`} tone="text-rose-400"
           sub={`без них: ${usd(s.noliq_sum, 0)}, WR ${num(nlwr, 0)}%`} />
+        <Card label="Матожидание на сделку" value={usd(s.expectancy)} tone={pnlClass(s.expectancy)} />
+        <Card label="Средний R" value={Number(s.r_n) ? `${num(s.r_avg, 2)}R` : "—"}
+          sub={Number(s.r_n) ? `${s.r_n} сделок со стопом · всего ${num(s.r_sum, 1)}R` : "нужен плановый стоп в карточке сделки"} />
+        <Card label="Серии подряд" value={`${s.max_win_streak} / ${s.max_loss_streak}`} sub="макс. прибыльных / убыточных" />
+        <Card label="Держу прибыль / убыток" value={`${num(s.dur_win_h, 1)} ч / ${num(s.dur_loss_h, 1)} ч`}
+          sub={Number(s.dur_loss_h) > Number(s.dur_win_h) ? "убытки держишь дольше прибыли" : "средняя длительность"}
+          tone={Number(s.dur_loss_h) > Number(s.dur_win_h) ? "text-amber-400" : ""} />
       </div>
 
       <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
@@ -64,6 +72,11 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
         <Bars title="По месяцам" rows={byMonth} />
         <Bars title="По времени входа (МСК, окна 3 ч)" rows={byHour} />
         <Bars title="По дням недели" rows={byWd} label={(k) => WD[Number(k)]} />
+        <Bars title="По длительности сделки" rows={byDur} />
+        <Bars title="Лонг / шорт" rows={bySide} label={(k) => (k === "LONG" ? "Лонг" : "Шорт")} />
+        <Bars title="По стратегии (плейбук)" rows={byPb} />
+        <Bars title="По эмоции до входа" rows={byEmo} />
+        <Bars title="Кто открыл (я / агенты)" rows={byExec} />
       </div>
     </div>
   );

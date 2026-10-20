@@ -51,12 +51,24 @@ export async function summary(f: Filters) {
       coalesce(sum(net_pnl) FILTER (WHERE NOT stop_is_liquidation),0) AS noliq_sum,
       count(*) FILTER (WHERE NOT stop_is_liquidation) AS noliq_n,
       count(*) FILTER (WHERE NOT stop_is_liquidation AND net_pnl > 0) AS noliq_wins,
-      min(opened_at) AS first, max(closed_at) AS last
+      min(opened_at) AS first, max(closed_at) AS last,
+      coalesce(avg(net_pnl),0) AS expectancy,
+      coalesce(avg(extract(epoch FROM closed_at - opened_at)/3600) FILTER (WHERE net_pnl > 0),0) AS dur_win_h,
+      coalesce(avg(extract(epoch FROM closed_at - opened_at)/3600) FILTER (WHERE net_pnl <= 0),0) AS dur_loss_h,
+      count(${R}) AS r_n, avg(${R}) AS r_avg, sum(${R}) AS r_sum
     ${FROM} ${w.sql}`, w.p);
-  return s;
+  // серии подряд (по времени закрытия)
+  const seq = await q<{ win: boolean }>(`SELECT t.net_pnl > 0 AS win ${FROM} ${w.sql} ORDER BY t.closed_at`, w.p);
+  let cw = 0, cl = 0, mw = 0, ml = 0;
+  for (const x of seq) { if (x.win) { cw++; cl = 0; } else { cl++; cw = 0; } mw = Math.max(mw, cw); ml = Math.max(ml, cl); }
+  return { ...(s as Record<string, string>), max_win_streak: String(mw), max_loss_streak: String(ml) } as Record<string, string>;
 }
 
-export async function groupBy(f: Filters, by: "symbol" | "month" | "hour" | "weekday" | "side") {
+// R-мультипликатор: net / риск. Риск = planned_risk_quote, иначе |вход − плановый стоп| × объём. Без стопа — null.
+const R = `(t.net_pnl / nullif(coalesce(t.planned_risk_quote, abs(t.entry_avg - t.planned_stop) * t.max_qty), 0))`;
+
+export type Slice = "symbol" | "month" | "hour" | "weekday" | "side" | "duration" | "executor" | "playbook" | "emotion";
+export async function groupBy(f: Filters, by: Slice) {
   const w = where(f);
   const key = {
     symbol: "i.base_asset",
@@ -64,11 +76,19 @@ export async function groupBy(f: Filters, by: "symbol" | "month" | "hour" | "wee
     hour: "lpad(((extract(hour FROM t.opened_at AT TIME ZONE 'Europe/Moscow')::int / 3) * 3)::text, 2, '0') || ':00'",
     weekday: "extract(isodow FROM t.opened_at AT TIME ZONE 'Europe/Moscow')::int::text",
     side: "t.side::text",
+    duration: `CASE WHEN t.closed_at - t.opened_at < interval '15 min' THEN '1|<15м' WHEN t.closed_at - t.opened_at < interval '1 hour' THEN '2|15м–1ч'
+                    WHEN t.closed_at - t.opened_at < interval '4 hour' THEN '3|1–4ч' WHEN t.closed_at - t.opened_at < interval '1 day' THEN '4|4–24ч'
+                    WHEN t.closed_at - t.opened_at < interval '3 day' THEN '5|1–3д' ELSE '6|>3д' END`,
+    executor: "CASE WHEN t.executor = 'HUMAN' THEN 'Я (руками)' ELSE coalesce((SELECT a.name FROM agents a WHERE a.id = t.agent_id), 'агент') END",
+    playbook: "coalesce((SELECT p.name FROM playbooks p WHERE p.id = t.playbook_id), 'без стратегии')",
+    emotion: "coalesce(t.emotion_before, 'не указана')",
   }[by];
-  return q<{ k: string; n: number; net: string; wins: number; liq: number }>(`
+  const rows = await q<{ k: string; n: number; net: string; wins: number; liq: number; sw: string; sl: string }>(`
     SELECT ${key} AS k, count(*)::int AS n, sum(t.net_pnl) AS net,
-           count(*) FILTER (WHERE t.net_pnl > 0)::int AS wins, count(*) FILTER (WHERE t.stop_is_liquidation)::int AS liq
+           count(*) FILTER (WHERE t.net_pnl > 0)::int AS wins, count(*) FILTER (WHERE t.stop_is_liquidation)::int AS liq,
+           coalesce(sum(t.net_pnl) FILTER (WHERE t.net_pnl > 0), 0) AS sw, coalesce(sum(t.net_pnl) FILTER (WHERE t.net_pnl <= 0), 0) AS sl
     ${FROM} ${w.sql} GROUP BY 1 ORDER BY ${by === "symbol" ? "3" : "1"}`, w.p);
+  return rows.map((r) => ({ ...r, k: r.k.replace(/^\d\|/, ""), pf: Number(r.sl) ? Number(r.sw) / -Number(r.sl) : null }));
 }
 
 export async function symbols() {

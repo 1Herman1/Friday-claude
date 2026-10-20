@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { tradeCard, candles, excursions, EMOTIONS } from "@/server/trade";
 import { usd, px, dt, num, pnlClass } from "@/lib/fmt";
 import TradeChart from "@/components/TradeChart";
-import { saveTrade } from "./actions";
+import { saveTrade, uploadShots, removeShot } from "./actions";
 
 export const dynamic = "force-dynamic";
 const STEP: Record<string, number> = { Min5: 300, Min15: 900, Min60: 3600, Hour4: 14400 };
@@ -17,7 +17,7 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const card = await tradeCard(id);
   if (!card) notFound();
-  const { t, fills, notes, tags, playbooks } = card;
+  const { t, fills, notes, tags, playbooks, rules, shots } = card;
   const c = await candles(t.symbol, new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const ex = excursions(c.data, t.side, Number(t.entry_avg), new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const durH = ((t.closed_at ? new Date(t.closed_at).getTime() : Date.now()) - new Date(t.opened_at).getTime()) / 3600e3;
@@ -115,6 +115,16 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
               <input name="planned_stop" defaultValue={t.planned_stop ? px(t.planned_stop) : ""} className={inp} />
             </label>
           </div>
+          <fieldset className="text-xs text-zinc-400">
+            <legend className="mb-1">Нарушенные правила</legend>
+            <div className="grid gap-1 sm:grid-cols-2">
+              {rules.map((r) => (
+                <label key={r.id} className="flex items-start gap-2 text-sm text-zinc-300">
+                  <input type="checkbox" name="violated" value={r.id} defaultChecked={r.violated} className="mt-1 accent-rose-500" />{r.text}
+                </label>
+              ))}
+            </div>
+          </fieldset>
           <label className="block text-xs text-zinc-400">Добавить заметку
             <textarea name="note" rows={2} className={inp} placeholder="Мысль по сделке — сохранится в ленту ниже" />
           </label>
@@ -130,6 +140,27 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
               ))}
             </div>
           )}
+        </form>
+      </div>
+
+      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
+        <h3 className="mb-2 text-sm font-medium text-zinc-300">Скриншоты ({shots.length})</h3>
+        {shots.length > 0 && (
+          <div className="mb-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {shots.map((a) => (
+              <div key={a.id} className="group relative">
+                <a href={`/att/${a.id}`} target="_blank"><img src={`/att/${a.id}`} alt="" className="w-full rounded-lg border border-zinc-800" /></a>
+                <form action={removeShot.bind(null, t.id, a.id)} className="absolute right-2 top-2 hidden group-hover:block">
+                  <button className="rounded bg-zinc-900/90 px-2 py-0.5 text-xs text-zinc-300">убрать</button>
+                </form>
+              </div>
+            ))}
+          </div>
+        )}
+        <form action={uploadShots.bind(null, t.id)} className="flex flex-wrap items-center gap-3 text-sm">
+          <input type="file" name="shots" accept="image/*" multiple className="text-zinc-400 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-800 file:px-3 file:py-1 file:text-zinc-200" />
+          <button className="rounded-md bg-zinc-100 px-3 py-1 font-medium text-zinc-900">Загрузить</button>
+          <span className="text-xs text-zinc-500">или пришли фото в топик «Дневник» — привяжу к сделке</span>
         </form>
       </div>
     </div>
