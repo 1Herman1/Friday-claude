@@ -80,19 +80,28 @@ jobs:
           [ -f "${{ inputs.out }}" ] || { echo "Файла нет — нечего коммитить."; exit 0; }
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          RELATED="$(dirname "${{ inputs.out }}")/wordstat-related.csv"
           git add "${{ inputs.out }}"
+          [ -f "$RELATED" ] && git add "$RELATED"
           if git diff --cached --quiet; then
             echo "Изменений нет."
             exit 0
           fi
           git commit -m "Wordstat: частотность запросов (регион ${{ inputs.region }})"
-          git push
+          # Пока шёл сбор, в ветку могли запушить другие сессии.
+          for i in 1 2 3; do
+            git pull --rebase -q && git push && exit 0
+            sleep 5
+          done
+          exit 1
 
       - name: Приложить артефактом
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: wordstat-${{ inputs.region }}
-          path: ${{ inputs.out }}
+          path: |
+            ${{ inputs.out }}
+            docs/projects/**/wordstat-related.csv
           if-no-files-found: warn
           retention-days: 14
