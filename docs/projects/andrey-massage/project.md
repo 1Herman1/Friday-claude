@@ -17,7 +17,7 @@
 - `research/01-luxury-channels.md` — исследование каналов люкс-сегмента (17.10)
 - `research/02-cases-social-education.md` — кейсы: соцсети и обучение мастеров
 - `research/03-producing-market.md` — рынок продюсирования и упаковки: цены, форматы
-- `data/queries-*.txt`, `data/wordstat-*.csv` — частотность Wordstat (XMLRiver)
+- `data/queries-*.txt` — списки запросов; `data/wordstat-moscow.csv`, `data/wordstat-related-moscow.csv` (Москва, 213); `data/russia/` (Россия, 225)
 - `strategy.md` — итоговая стратегия продюсирования и предложение H&B
 
 ## Выкатка
