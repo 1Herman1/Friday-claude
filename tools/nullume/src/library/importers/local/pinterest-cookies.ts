@@ -166,6 +166,15 @@ export const pinterestCookiesImporter: Importer = {
           .map((name) => `${name}=${session.cookies![name]}`)
           .join("; "),
         "X-Requested-With": "XMLHttpRequest",
+        // Без этих заголовков BaseSearchResource отвечает 403 «Invalid Resource Request»
+        // (проверено 2026-10-21): Pinterest отличает вызовы своего фронтенда по ним.
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36",
+        Referer: "https://www.pinterest.com/",
+        Accept: "application/json, text/javascript, */*, q=0.01",
+        "X-Pinterest-AppState": "active",
+        "X-Pinterest-Source-Url": `/search/pins/?q=${encodeURIComponent(query)}&rs=typed`,
+        "X-Pinterest-PWS-Handler": "www/search/[scope].js",
       };
 
       // Добавить X-CSRFToken если есть csrftoken в cookies
