@@ -290,6 +290,7 @@ model Organization {
   credentials   ExchangeCredential[]
   auditLogs     AuditLog[]
 
+  checklistRuns ChecklistRun[]
   @@map("organizations")
 }
 
@@ -763,6 +764,7 @@ model Trade {
   riskEvents        RiskEvent[]
   aiReviews         AiReview[]
 
+  checklistRuns ChecklistRun[]
   @@unique([accountId, externalPositionId])
   @@unique([organizationId, idempotencyKey])
   @@index([organizationId, closedAt])
@@ -1576,4 +1578,27 @@ model SignalSource {
   @@unique([organizationId, kind, name])
   @@index([organizationId, active])
   @@map("signal_sources")
+}
+
+/// Ф2: прохождение чек-листа перед входом. answers = {rules.code: true/false}; trade_id проставляет
+/// journal/core/tilt.py (ближайшая сделка той же монеты/стороны в течение 60 мин после прохождения).
+model ChecklistRun {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  userId         String?  @map("user_id") @db.Uuid
+  baseAsset      String?  @map("base_asset")
+  side           TradeSide?
+  answers        Json
+  allOk          Boolean  @map("all_ok")
+  verdict        String // go | pause | skip
+  tiltState      Json?    @map("tilt_state") // состояние на момент прохождения: убытков подряд, мин с последнего убытка
+  note           String?
+  tradeId        String?  @map("trade_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  trade        Trade?       @relation(fields: [tradeId], references: [id])
+
+  @@index([organizationId, createdAt])
+  @@map("checklist_runs")
 }

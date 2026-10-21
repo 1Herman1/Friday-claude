@@ -12,6 +12,10 @@ echo "$(date '+%F %T') rc=$RC $OUT" | tail -c 4000 >> "$LOG"
 if [ $RC -eq 0 ]; then
   rm -f "$FAILS"
   echo "$OUT" | tail -1 | "$PY" -c 'import sys,json; print(json.loads(sys.stdin.read()).get("closed_new") or "", end="")' 2>/dev/null
+  # Ф2: детектор тильта — алерт только по новым срабатываниям у сделок за 48 ч
+  "$PY" "$TP/journal/core/tilt.py" --alert 48 2>>"$LOG"
+  # Ф2: сигналы детекторов → signals + привязка сделок (молча)
+  "$PY" "$TP/journal/core/signals_sync.py" >>"$LOG" 2>&1
   exit 0
 fi
 N=$(( $(cat "$FAILS" 2>/dev/null || echo 0) + 1 )); echo $N > "$FAILS"

@@ -36,14 +36,18 @@ export async function tradeCard(id: string) {
       SELECT id, text, transcript, kind, channel, created_at FROM notes WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
     q<{ name: string }>(`SELECT g.name FROM trade_tags tt JOIN tags g ON g.id = tt.tag_id WHERE tt.trade_id = $1 AND g.deleted_at IS NULL ORDER BY 1`, [id]),
     q<{ name: string }>(`SELECT name FROM playbooks WHERE deleted_at IS NULL ORDER BY 1`),
-    q<{ id: string; text: string; violated: boolean }>(`
-      SELECT r.id, r.text, EXISTS (SELECT 1 FROM trade_rule_violations v WHERE v.rule_id = r.id AND v.trade_id = $1) AS violated
-      FROM rules r WHERE r.kind = 'rule' AND r.active AND r.deleted_at IS NULL ORDER BY r.sort_order`, [id]),
+    q<{ id: string; text: string; violated: boolean; comment: string | null }>(`
+      SELECT r.id, r.text, v.rule_id IS NOT NULL AS violated, v.comment
+      FROM rules r LEFT JOIN trade_rule_violations v ON v.rule_id = r.id AND v.trade_id = $1 WHERE r.kind = 'rule' AND r.active AND r.deleted_at IS NULL ORDER BY r.sort_order`, [id]),
     q<{ id: string; created_at: Date }>(`SELECT id, created_at FROM attachments WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
     q<{ id: string; created_at: Date; content_md: string; findings: { tags?: string[]; tilt_risk?: number } | null }>(
       `SELECT id, created_at, content_md, findings FROM ai_reviews WHERE trade_id = $1 AND status = 'done' ORDER BY created_at DESC`, [id]),
   ]);
-  return { t, fills, notes, tags: tags.map((x) => x.name), playbooks: playbooks.map((x) => x.name), rules, shots, reviews };
+  const [signal] = await q<{ source: string; kind: string; mode: string; side: string; setup_time: Date; entry: string; stop_loss: string;
+    take_profits: string[]; status: string; simulated_r: string | null }>(`
+    SELECT ss.name AS source, ss.kind, s.mode, s.side, s.setup_time, s.entry, s.stop_loss, s.take_profits, s.status, s.simulated_r
+    FROM trades t JOIN signals s ON s.id = t.signal_id JOIN signal_sources ss ON ss.id = s.source_id WHERE t.id = $1`, [id]);
+  return { signal: signal ?? null, t, fills, notes, tags: tags.map((x) => x.name), playbooks: playbooks.map((x) => x.name), rules, shots, reviews };
 }
 
 export type Candle = { time: number; open: number; high: number; low: number; close: number };

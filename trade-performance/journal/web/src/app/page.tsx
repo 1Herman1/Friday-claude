@@ -1,4 +1,5 @@
 import { summary, groupBy, trades, symbols, type Filters } from "@/server/stats";
+import { byRule, RULE_SHORT } from "@/server/tilt";
 import { usd, num, pnlClass, dt } from "@/lib/fmt";
 import EquityChart from "@/components/EquityChart";
 import Bars from "@/components/Bars";
@@ -19,9 +20,10 @@ function Card({ label, value, sub, tone }: { label: string; value: string; sub?:
 
 export default async function Dashboard({ searchParams }: { searchParams: Promise<Filters> }) {
   const f = await searchParams;
-  const [s, bySym, byMonth, byHour, byWd, list, syms, byDur, bySide, byExec, byPb, byEmo] = await Promise.all([
+  const [s, bySym, byMonth, byHour, byWd, list, syms, byDur, bySide, byExec, byPb, byEmo, byTilt, bySig, byRl] = await Promise.all([
     summary(f), groupBy(f, "symbol"), groupBy(f, "month"), groupBy(f, "hour"), groupBy(f, "weekday"), trades(f), symbols(),
     groupBy(f, "duration"), groupBy(f, "side"), groupBy(f, "executor"), groupBy(f, "playbook"), groupBy(f, "emotion"),
+    groupBy(f, "tilt"), groupBy(f, "signal"), byRule(),
   ]);
   const n = Number(s.n);
   const wr = n ? (Number(s.wins) / n) * 100 : 0;
@@ -77,6 +79,9 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
         <Bars title="По стратегии (плейбук)" rows={byPb} />
         <Bars title="По эмоции до входа" rows={byEmo} />
         <Bars title="Кто открыл (я / агенты)" rows={byExec} />
+        <Bars title="🧯 С нарушениями правил / чистые" rows={byTilt} />
+        <Bars title="🧯 Цена нарушений (сделка может быть в нескольких)" rows={byRl} label={(k) => RULE_SHORT[k] ?? k} />
+        <Bars title="📡 По сигналу" rows={bySig} />
       </div>
     </div>
   );

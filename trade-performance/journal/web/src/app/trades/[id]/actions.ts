@@ -32,8 +32,10 @@ export async function saveTrade(id: string, fd: FormData) {
              INSERT INTO trade_tags (trade_id, tag_id) SELECT $1, id FROM g ON CONFLICT DO NOTHING`, [id, name]);
   }
   // нарушенные правила
-  await q(`DELETE FROM trade_rule_violations WHERE trade_id = $1`, [id]);
-  for (const ruleId of fd.getAll("violated").map(String).filter(Boolean)) {
+  // снятые галочки убираем, остальные не трогаем (сохраняется comment «auto: …» от детектора тильта)
+  const checked = fd.getAll("violated").map(String).filter(Boolean);
+  await q(`DELETE FROM trade_rule_violations WHERE trade_id = $1 AND NOT (rule_id = ANY($2::uuid[]))`, [id, checked]);
+  for (const ruleId of checked) {
     await q(`INSERT INTO trade_rule_violations (trade_id, rule_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`, [id, ruleId]);
   }
   const note = s(fd.get("note"));

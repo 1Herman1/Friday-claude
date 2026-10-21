@@ -67,7 +67,7 @@ export async function summary(f: Filters) {
 // R-мультипликатор: net / риск. Риск = planned_risk_quote, иначе |вход − плановый стоп| × объём. Без стопа — null.
 const R = `(t.net_pnl / nullif(coalesce(t.planned_risk_quote, abs(t.entry_avg - t.planned_stop) * t.max_qty), 0))`;
 
-export type Slice = "symbol" | "month" | "hour" | "weekday" | "side" | "duration" | "executor" | "playbook" | "emotion";
+export type Slice = "symbol" | "month" | "hour" | "weekday" | "side" | "duration" | "executor" | "playbook" | "emotion" | "tilt" | "signal";
 export async function groupBy(f: Filters, by: Slice) {
   const w = where(f);
   const key = {
@@ -82,6 +82,9 @@ export async function groupBy(f: Filters, by: Slice) {
     executor: "CASE WHEN t.executor = 'HUMAN' THEN 'Я (руками)' ELSE coalesce((SELECT a.name FROM agents a WHERE a.id = t.agent_id), 'агент') END",
     playbook: "coalesce((SELECT p.name FROM playbooks p WHERE p.id = t.playbook_id), 'без стратегии')",
     emotion: "coalesce(t.emotion_before, 'не указана')",
+    // Ф2: флаги детектора тильта (journal/core/tilt.py) и источник сигнала
+    tilt: `CASE WHEN EXISTS (SELECT 1 FROM trade_rule_violations v WHERE v.trade_id = t.id) THEN '2|нарушения' ELSE '1|чистые' END`,
+    signal: "coalesce((SELECT ss.name FROM signals s JOIN signal_sources ss ON ss.id = s.source_id WHERE s.id = t.signal_id), 'без сигнала')",
   }[by];
   const rows = await q<{ k: string; n: number; net: string; wins: number; liq: number; sw: string; sl: string }>(`
     SELECT ${key} AS k, count(*)::int AS n, sum(t.net_pnl) AS net,

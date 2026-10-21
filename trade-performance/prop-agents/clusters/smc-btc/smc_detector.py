@@ -285,6 +285,8 @@ def main():
         for s in fresh:
             seen.add(f"{s['side']}|{s['time']}")
         json.dump(sorted(seen), open(STATE_PATH, "w"))
+        # для дневника (journal/core/signals_sync.py): все сетапы окна со свежими статусами
+        json.dump(setups, open(os.path.join(OUT_DIR, "setups_live.json"), "w"), ensure_ascii=False)
         if fresh:
             png = os.path.join(OUT_DIR, "live.png")
             plot(df, fresh[-1:], cfg, png, n=1)

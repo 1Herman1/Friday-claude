@@ -17,7 +17,7 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const card = await tradeCard(id);
   if (!card) notFound();
-  const { t, fills, notes, tags, playbooks, rules, shots, reviews } = card;
+  const { t, fills, notes, tags, playbooks, rules, shots, reviews, signal } = card;
   const c = await candles(t.symbol, new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const ex = excursions(c.data, t.side, Number(t.entry_avg), new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const durH = ((t.closed_at ? new Date(t.closed_at).getTime() : Date.now()) - new Date(t.opened_at).getTime()) / 3600e3;
@@ -120,7 +120,8 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
             <div className="grid gap-1 sm:grid-cols-2">
               {rules.map((r) => (
                 <label key={r.id} className="flex items-start gap-2 text-sm text-zinc-300">
-                  <input type="checkbox" name="violated" value={r.id} defaultChecked={r.violated} className="mt-1 accent-rose-500" />{r.text}
+                  <input type="checkbox" name="violated" value={r.id} defaultChecked={r.violated} className="mt-1 accent-rose-500" />
+                  <span>{r.text}{r.comment?.startsWith("auto:") && <span className="block text-xs text-amber-400">🧯 детектор: {r.comment.slice(5).trim()}</span>}</span>
                 </label>
               ))}
             </div>
@@ -142,6 +143,17 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
           )}
         </form>
       </div>
+
+      {signal && (
+        <div className="rounded-xl border border-sky-900/60 bg-sky-950/20 p-4 text-sm">
+          <h3 className="mb-1 font-medium text-sky-200">📡 Сигнал: {signal.source} ({signal.kind === "DETECTOR" ? "наш детектор" : signal.kind === "TELEGRAM_CHANNEL" ? "канал" : signal.kind})</h3>
+          <div className="text-zinc-300">
+            {signal.side === "LONG" ? "лонг" : "шорт"} · сетап {new Date(signal.setup_time).toLocaleString("ru-RU", { timeZone: "Europe/Moscow" })} ·
+            вход {px(signal.entry)} · стоп {px(signal.stop_loss)} · тейк {signal.take_profits.map(px).join(" / ")} ·
+            итог сигнала: {signal.status}{signal.simulated_r != null && ` (${Number(signal.simulated_r).toFixed(1)}R)`}
+          </div>
+        </div>
+      )}
 
       <div className="rounded-xl border border-violet-900/60 bg-violet-950/20 p-4">
         <h3 className="mb-2 text-sm font-medium text-violet-200">🧠 ИИ-разбор (Opus)</h3>
