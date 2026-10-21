@@ -28,7 +28,7 @@ export async function tradeCard(id: string) {
     LEFT JOIN playbooks p ON p.id = t.playbook_id
     WHERE t.id = $1`, [id]);
   if (!t) return null;
-  const [fills, notes, tags, playbooks, rules, shots] = await Promise.all([
+  const [fills, notes, tags, playbooks, rules, shots, reviews] = await Promise.all([
     q<{ executed_at: Date; side: string; position_side: string; price: string; qty: string; fee: string; pnl: string | null; liq: boolean }>(`
       SELECT executed_at, side, position_side, price, qty, coalesce(fee_quote, 0) AS fee, realized_pnl AS pnl, is_liquidation AS liq
       FROM executions WHERE trade_id = $1 ORDER BY executed_at`, [id]),
@@ -40,8 +40,10 @@ export async function tradeCard(id: string) {
       SELECT r.id, r.text, EXISTS (SELECT 1 FROM trade_rule_violations v WHERE v.rule_id = r.id AND v.trade_id = $1) AS violated
       FROM rules r WHERE r.kind = 'rule' AND r.active AND r.deleted_at IS NULL ORDER BY r.sort_order`, [id]),
     q<{ id: string; created_at: Date }>(`SELECT id, created_at FROM attachments WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
+    q<{ id: string; created_at: Date; content_md: string; findings: { tags?: string[]; tilt_risk?: number } | null }>(
+      `SELECT id, created_at, content_md, findings FROM ai_reviews WHERE trade_id = $1 AND status = 'done' ORDER BY created_at DESC`, [id]),
   ]);
-  return { t, fills, notes, tags: tags.map((x) => x.name), playbooks: playbooks.map((x) => x.name), rules, shots };
+  return { t, fills, notes, tags: tags.map((x) => x.name), playbooks: playbooks.map((x) => x.name), rules, shots, reviews };
 }
 
 export type Candle = { time: number; open: number; high: number; low: number; close: number };

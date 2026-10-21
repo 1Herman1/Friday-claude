@@ -17,7 +17,7 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const card = await tradeCard(id);
   if (!card) notFound();
-  const { t, fills, notes, tags, playbooks, rules, shots } = card;
+  const { t, fills, notes, tags, playbooks, rules, shots, reviews } = card;
   const c = await candles(t.symbol, new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const ex = excursions(c.data, t.side, Number(t.entry_avg), new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const durH = ((t.closed_at ? new Date(t.closed_at).getTime() : Date.now()) - new Date(t.opened_at).getTime()) / 3600e3;
@@ -141,6 +141,30 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
             </div>
           )}
         </form>
+      </div>
+
+      <div className="rounded-xl border border-violet-900/60 bg-violet-950/20 p-4">
+        <h3 className="mb-2 text-sm font-medium text-violet-200">🧠 ИИ-разбор (Opus)</h3>
+        {reviews.length === 0 ? (
+          <p className="text-sm text-zinc-500">Разбора ещё нет. В Telegram (Т6): «разбери #{t.n}».</p>
+        ) : (
+          reviews.map((r) => (
+            <div key={r.id} className="mb-3 last:mb-0">
+              <div className="mb-1 flex flex-wrap gap-1.5 text-xs text-zinc-500">
+                <span>{new Date(r.created_at).toLocaleString("ru-RU", { timeZone: "Europe/Moscow" })}</span>
+                {r.findings?.tilt_risk != null && <span className="rounded bg-rose-950 px-1.5 text-rose-300">тильт-риск {r.findings.tilt_risk}/3</span>}
+                {(r.findings?.tags ?? []).map((g) => <span key={g} className="rounded bg-zinc-800 px-1.5 text-zinc-300">{g}</span>)}
+              </div>
+              <div className="space-y-1 text-sm leading-relaxed text-zinc-200">
+                {r.content_md.split("\n").filter(Boolean).map((line, i) => (
+                  <p key={i} className={line.startsWith("- ") ? "pl-3" : ""}
+                     dangerouslySetInnerHTML={{ __html: line.replace(/&/g, "&amp;").replace(/</g, "&lt;")
+                       .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/`(.+?)`/g, "<code class='text-violet-300'>$1</code>").replace(/^- /, "• ") }} />
+                ))}
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
