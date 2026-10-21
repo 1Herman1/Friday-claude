@@ -8,12 +8,18 @@ import zooMoscow from '../assets/cases/zoo-moscow.jpg';
 import proCosmetics from '../assets/cases/pro-cosmetics.jpg';
 import vetMoscow from '../assets/cases/vet-moscow.jpg';
 
-import smenaShot from '../assets/cases/shots/smena.jpg';
-import atlasShot from '../assets/cases/shots/atlas.jpg';
-import domKeramikiShot from '../assets/cases/shots/dom-keramiki.jpg';
-import primeFitnessShot from '../assets/cases/shots/prime-fitness.jpg';
-import potokShot from '../assets/cases/shots/potok.jpg';
-import sovetnikShot from '../assets/cases/shots/sovetnik.jpg';
+import smenaShot1 from '../assets/cases/shots/smena-1.jpg';
+import smenaShot2 from '../assets/cases/shots/smena-2.jpg';
+import atlasShot1 from '../assets/cases/shots/atlas-1.jpg';
+import atlasShot2 from '../assets/cases/shots/atlas-2.jpg';
+import domKeramikiShot1 from '../assets/cases/shots/dom-keramiki-1.jpg';
+import domKeramikiShot2 from '../assets/cases/shots/dom-keramiki-2.jpg';
+import primeFitnessShot1 from '../assets/cases/shots/prime-fitness-1.jpg';
+import primeFitnessShot2 from '../assets/cases/shots/prime-fitness-2.jpg';
+import potokShot1 from '../assets/cases/shots/potok-1.jpg';
+import potokShot2 from '../assets/cases/shots/potok-2.jpg';
+import sovetnikShot1 from '../assets/cases/shots/sovetnik-1.jpg';
+import sovetnikShot2 from '../assets/cases/shots/sovetnik-2.jpg';
 import zooMoscowShot1 from '../assets/cases/shots/zoo-moscow-1.jpg';
 import zooMoscowShot2 from '../assets/cases/shots/zoo-moscow-2.jpg';
 import zooMoscowShot3 from '../assets/cases/shots/zoo-moscow-3.jpg';
@@ -36,7 +42,7 @@ export interface Case {
   image: ImageMetadata;
   coverTagsRight?: boolean;
   coverPosition?: string;
-  shot?: ImageMetadata;
+  mockup?: boolean;
   shots?: CaseShot[];
   tags: string[];
   task: string;
@@ -101,7 +107,11 @@ export const cases: Case[] = [
     id: 'smena',
     name: 'Смена',
     image: smena,
-    shot: smenaShot,
+    mockup: true,
+    shots: [
+      { src: smenaShot1, caption: 'Неделя по 14 точкам' },
+      { src: smenaShot2, caption: 'Автоподбор на смену' },
+    ],
     tags: ['SaaS', 'Графики'],
     task: 'Маленькая сеть кофеен (14 точек) тратила 3 часа на составление графика — через Google Sheets, визуализацию в Excel, согласование по email.',
     solution: 'Сделали веб-сервис: менеджер вводит данные о смене (дата, время, позиции), алгоритм подбирает людей с нужными навыками и свободным временем, проверяет ограничения (макс. часы, дни отдыха). Всё хранится в облаке, доступно с мобильного.',
@@ -111,7 +121,11 @@ export const cases: Case[] = [
     id: 'atlas',
     name: 'Атлас',
     image: atlas,
-    shot: atlasShot,
+    mockup: true,
+    shots: [
+      { src: atlasShot1, caption: 'Карточка договора' },
+      { src: atlasShot2, caption: 'Маршрут согласования' },
+    ],
     tags: ['Портал', 'Корпоративный'],
     task: 'Строительный холдинг (800 сотрудников) согласовывал договоры вручную: диспетчер создаёт форму, подрядчик заполняет, юрист проверяет, финансы одобряют. Всё по email и доступу на сервер. Средний срок — 9 дней.',
     solution: 'Портал с чётким workflow: форма → экспорт в Word → визуальный чеклист согласования (кто на каком этапе) → уведомления в email и Telegram.',
@@ -121,7 +135,11 @@ export const cases: Case[] = [
     id: 'dom-keramiki',
     name: 'Дом Керамики',
     image: domKeramiki,
-    shot: domKeramikiShot,
+    mockup: true,
+    shots: [
+      { src: domKeramikiShot1, caption: 'Карточка плитки' },
+      { src: domKeramikiShot2, caption: 'Калькулятор метража' },
+    ],
     tags: ['E-commerce', 'Интеграция'],
     task: '12 000 товаров (плитка, керамика), каталог в 1С, нет интернет-магазина. Заказы принимали по телефону. Клиентам нужны фото, цены, расчёт метража для заказа.',
     solution: 'Интернет-магазин на WordPress+WooCommerce с интеграцией 1С (синхронизация каталога, остатков, цен). Специальный калькулятор метража (клиент выбирает плитку → вводит размеры → видит, сколько нужно штук).',
@@ -131,7 +149,11 @@ export const cases: Case[] = [
     id: 'prime-fitness',
     name: 'Прайм.Фитнес',
     image: primeFitness,
-    shot: primeFitnessShot,
+    mockup: true,
+    shots: [
+      { src: primeFitnessShot1, caption: 'Расписание и запись' },
+      { src: primeFitnessShot2, caption: 'Напоминание за час' },
+    ],
     tags: ['Мобильное', 'Приложение'],
     task: 'Сеть фитнес-студий (8 филиалов). Посетители записывались к тренеру по телефону (50% звонков), узнавали расписание через WhatsApp-группы, забывали про тренировки.',
     solution: 'Мобильное приложение: расписание, бронь слота, push-напоминания за день и за час, история посещений, бонусы за регулярность.',
@@ -141,7 +163,11 @@ export const cases: Case[] = [
     id: 'potok',
     name: 'Поток',
     image: potok,
-    shot: potokShot,
+    mockup: true,
+    shots: [
+      { src: potokShot1, caption: 'Письмо → сделка в CRM' },
+      { src: potokShot2, caption: 'Расхождение в весе' },
+    ],
     tags: ['ИИ', 'Логистика'],
     task: 'Логистическая компания получает 400 заявок в день письмами (из разных источников). Диспетчер вручную читает письмо, ищет адрес доставки, вид груза, вес, создаёт запись в CRM, пишет черновик ответа.',
     solution: 'Подключили ИИ (Claude API): письмо с вложениями → ИИ извлекает данные → создаёт сделку в CRM → готовит черновик ответа. Диспетчер только проверяет и отправляет.',
@@ -151,7 +177,11 @@ export const cases: Case[] = [
     id: 'sovetnik',
     name: 'Советник',
     image: sovetnik,
-    shot: sovetnikShot,
+    mockup: true,
+    shots: [
+      { src: sovetnikShot1, caption: 'Консультант на сайте' },
+      { src: sovetnikShot2, caption: 'Набор из каталога' },
+    ],
     tags: ['ИИ', 'E-commerce'],
     task: 'Магазин косметики (3 000 средств). Клиенты не знают, какое средство выбрать: разные типы кожи, назначения, бренды. Служба поддержки — узкое место.',
     solution: 'На сайт встроили чат-бота с ИИ: 4 вопроса о типе кожи и проблемах → персональный набор из каталога → при сложных вопросах переводит на живого консультанта. Бот обучен только на данных магазина.',

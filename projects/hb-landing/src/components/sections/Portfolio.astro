@@ -137,7 +137,7 @@ const fullSizeSrc = new Map<ImageMetadata, string>(
                         href={shot.video ? videoUrl(shot.video.src) : fullSizeSrc.get(shot.src)}
                         target="_blank"
                         rel="noopener"
-                        aria-label={`Открыть ${shot.video ? 'видео' : 'скриншот'} в полном размере: ${shot.caption}`}
+                        aria-label={`Открыть ${shot.video ? 'видео' : caseItem.mockup ? 'макет экрана' : 'скриншот'} в полном размере: ${shot.caption} (в новой вкладке)`}
                         class="block rounded-[12px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-on-dark"
                       >
                         {shot.video ? (
@@ -156,8 +156,8 @@ const fullSizeSrc = new Map<ImageMetadata, string>(
                         ) : (
                           <Image
                             src={shot.src}
-                            alt={`Скриншот ${shotIndex + 1}: ${shot.caption}`}
-                            widths={[480, 960, 1400]}
+                            alt={`${caseItem.mockup ? 'Макет экрана' : 'Скриншот'} ${shotIndex + 1}: ${shot.caption}`}
+                            widths={[480, 960, 1400, 2000]}
                             sizes={isWide ? WIDE_SHOT_SIZES : SHOT_SIZES}
                             format="webp"
                             loading="lazy"
@@ -170,23 +170,7 @@ const fullSizeSrc = new Map<ImageMetadata, string>(
                       <figcaption class="text-xs font-mono text-on-dark-muted mt-2">{shot.caption}</figcaption>
                     </figure>
                   ))}
-                </div>
-              )}
-
-              {!caseItem.shots && caseItem.shot && (
-                <div class="pt-2">
-                  <Image
-                    src={caseItem.shot}
-                    alt={`Интерфейс ${caseItem.name}`}
-                    width={1280}
-                    format="webp"
-                    loading="lazy"
-                    decoding="async"
-                    sizes="100vw"
-                    class="w-full rounded-[12px] border"
-                    style="border-color: rgba(255, 255, 255, 0.12);"
-                  />
-                  <p class="text-xs font-mono text-on-dark-muted mt-2">Интерфейс продукта — макет</p>
+                  {caseItem.mockup && <p class="-mt-3 text-xs font-mono text-on-dark-muted">Примеры экранов — макет</p>}
                 </div>
               )}
 
@@ -212,18 +196,9 @@ const fullSizeSrc = new Map<ImageMetadata, string>(
     const details = article.querySelector('details');
     if (!details || !button) return;
 
-    // Store the original case name from aria-label
-    const originalLabel = button.getAttribute('aria-label') || '';
-    const caseName = originalLabel.split(': ')[1] || '';
-
     const toggle = () => {
       details.open = !details.open;
       button.setAttribute('aria-expanded', String(details.open));
-      if (details.open) {
-        button.setAttribute('aria-label', 'Свернуть');
-      } else {
-        button.setAttribute('aria-label', originalLabel);
-      }
       button.innerHTML = details.open ? 'Свернуть' : `Читать кейс ${arrowSvg}`;
     };
 
