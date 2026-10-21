@@ -13,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <span className="font-semibold">📓 Дневник трейдера</span>
             <Link href="/" className="text-zinc-300 hover:text-white">Дашборд</Link>
             <Link href="/trades" className="text-zinc-300 hover:text-white">Сделки</Link>
+            <Link href="/signals" className="text-zinc-300 hover:text-white">Сигналы</Link>
             <Link href="/checklist" className="text-zinc-300 hover:text-white">Чек-лист</Link>
             <span className="ml-auto text-xs text-zinc-500">MEXC Futures · локально</span>
           </nav>

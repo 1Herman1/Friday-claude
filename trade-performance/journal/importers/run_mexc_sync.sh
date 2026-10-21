@@ -16,6 +16,8 @@ if [ $RC -eq 0 ]; then
   "$PY" "$TP/journal/core/tilt.py" --alert 48 2>>"$LOG"
   # Ф2: сигналы детекторов → signals + привязка сделок (молча)
   "$PY" "$TP/journal/core/signals_sync.py" >>"$LOG" 2>&1
+  # Ф2: сканер пампов MEXC (+50%/24ч) → signals, пересчёт исходов, привязка шортов (молча)
+  "$PY" "$TP/journal/core/pump_scan.py" >>"$LOG" 2>&1
   exit 0
 fi
 N=$(( $(cat "$FAILS" 2>/dev/null || echo 0) + 1 )); echo $N > "$FAILS"
