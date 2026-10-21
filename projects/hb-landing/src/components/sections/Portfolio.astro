@@ -22,6 +22,7 @@ function splitSolution(solution: string) {
   };
 }
 
+const videoUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 const isOddCount = cases.length % 2 === 1;
 const fullSizeSrc = new Map<ImageMetadata, string>(
   await Promise.all(
@@ -133,23 +134,38 @@ const fullSizeSrc = new Map<ImageMetadata, string>(
                   {caseItem.shots.map((shot, shotIndex) => (
                     <figure>
                       <a
-                        href={fullSizeSrc.get(shot.src)}
+                        href={shot.video ? videoUrl(shot.video.src) : fullSizeSrc.get(shot.src)}
                         target="_blank"
                         rel="noopener"
-                        aria-label={`Открыть скриншот в полном размере: ${shot.caption}`}
+                        aria-label={`Открыть ${shot.video ? 'видео' : 'скриншот'} в полном размере: ${shot.caption}`}
                         class="block rounded-[12px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-on-dark"
                       >
-                        <Image
-                          src={shot.src}
-                          alt={`Скриншот ${shotIndex + 1}: ${shot.caption}`}
-                          widths={[480, 960, 1400]}
-                          sizes={isWide ? WIDE_SHOT_SIZES : SHOT_SIZES}
-                          format="webp"
-                          loading="lazy"
-                          decoding="async"
-                          class:list={['w-full rounded-[12px] border', isWide && 'md:aspect-[16/9] md:object-cover md:object-top']}
-                          style="border-color: rgba(255, 255, 255, 0.12);"
-                        />
+                        {shot.video ? (
+                          <video
+                            src={videoUrl(shot.video.src)}
+                            poster={videoUrl(shot.video.poster)}
+                            muted
+                            loop
+                            playsinline
+                            preload="none"
+                            data-case-video
+                            aria-label={`Видео: ${shot.caption}`}
+                            class:list={['w-full rounded-[12px] border', isWide && 'md:aspect-[16/9] md:object-cover md:object-top']}
+                            style="border-color: rgba(255, 255, 255, 0.12);"
+                          />
+                        ) : (
+                          <Image
+                            src={shot.src}
+                            alt={`Скриншот ${shotIndex + 1}: ${shot.caption}`}
+                            widths={[480, 960, 1400]}
+                            sizes={isWide ? WIDE_SHOT_SIZES : SHOT_SIZES}
+                            format="webp"
+                            loading="lazy"
+                            decoding="async"
+                            class:list={['w-full rounded-[12px] border', isWide && 'md:aspect-[16/9] md:object-cover md:object-top']}
+                            style="border-color: rgba(255, 255, 255, 0.12);"
+                          />
+                        )}
                       </a>
                       <figcaption class="text-xs font-mono text-on-dark-muted mt-2">{shot.caption}</figcaption>
                     </figure>
@@ -215,4 +231,15 @@ const fullSizeSrc = new Map<ImageMetadata, string>(
     cover?.addEventListener('click', toggle);
     button.setAttribute('aria-expanded', 'false');
   });
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) video.play().catch(() => undefined);
+        else video.pause();
+      });
+    });
+    document.querySelectorAll('[data-case-video]').forEach((video) => videoObserver.observe(video));
+  }
 </script>
