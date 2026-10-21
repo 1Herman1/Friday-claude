@@ -19,6 +19,9 @@
 - `research/03-producing-market.md` — рынок продюсирования и упаковки: цены, форматы
 - `data/queries-*.txt` — списки запросов; `data/wordstat-moscow.csv`, `data/wordstat-related-moscow.csv` (Москва, 213); `data/russia/` (Россия, 225)
 - `strategy.md` — итоговая стратегия продюсирования и предложение H&B
+- `kp.html` — коммерческое предложение Андрею (артефакт https://claude.ai/artifact/SmPAnjAffkzP3uegYWYJE5)
+- `hermes-tz.md` — ТЗ для Hermes: глубокая сборка по продюсированию
+- `ОТЧЁТ-семантика.md` — разбор Wordstat
 
 ## Выкатка
 

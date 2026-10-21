@@ -1,0 +1,289 @@
+<title>Личный бренд Андрея</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap&subset=cyrillic">
+<style>
+/* Layout: one reading column, numbered stages only where order is real, timeline as a ruler of weeks */
+:root {
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --fg: #191B1F;
+  --fg-muted: #545962;
+  --muted: #F1EFEA;
+  --line: #E8E6E1;
+  --accent: #C2410C;
+  --accent-strong: #9A3412;
+  --accent-soft: #FBEADF;
+  --ok: #3F6B4E;
+  --warn: #8A5A00;
+  --font-display: "Montserrat", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-body: "Open Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14161A; --surface: #1C1F24; --fg: #F4F4F1; --fg-muted: #B4B8BF;
+    --muted: #23272D; --line: #30343B; --accent: #F07A45; --accent-strong: #F59B70;
+    --accent-soft: #3A2318; --ok: #8CC09D; --warn: #E2B45C; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14161A; --surface: #1C1F24; --fg: #F4F4F1; --fg-muted: #B4B8BF;
+  --muted: #23272D; --line: #30343B; --accent: #F07A45; --accent-strong: #F59B70;
+  --accent-soft: #3A2318; --ok: #8CC09D; --warn: #E2B45C; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+}
+.wrap {
+  max-width: 880px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 56px 80px;
+  display: flex; flex-direction: column; gap: 64px;
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); font-weight: 800; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.45rem, 3vw, 1.9rem); font-weight: 700; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+p { margin: 0; max-width: 68ch; }
+section { display: flex; flex-direction: column; gap: 20px; }
+.eyebrow {
+  font-family: var(--font-display); font-weight: 600; font-size: 0.78rem;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent);
+}
+.lead { font-size: 1.15rem; color: var(--fg-muted); }
+.muted { color: var(--fg-muted); }
+.small { font-size: 0.9rem; }
+header.hero { display: flex; flex-direction: column; gap: 20px; }
+.hero .slash { color: var(--accent); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.fact b { display: block; font-family: var(--font-display); font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.fact span { color: var(--fg-muted); font-size: 0.9rem; }
+.answer { background: var(--accent-soft); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.answer h3 { color: var(--accent-strong); }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--font-display); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); background: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pill { display: inline-block; font-size: 0.78rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; background: var(--muted); color: var(--fg-muted); white-space: nowrap; }
+.pill.ok { color: var(--ok); }
+.pill.warn { color: var(--warn); }
+ol.stages { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+ol.stages li { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding-block: 18px; border-top: 1px solid var(--line); }
+ol.stages li:first-child { border-top: 0; }
+.stage-no { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; color: var(--accent); line-height: 1; }
+.stage-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.stage-head { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; }
+.when { font-size: 0.88rem; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; max-width: 68ch; }
+.gantt { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 16px; }
+.g { display: grid; grid-template-columns: 170px repeat(13, minmax(34px, 1fr)); gap: 4px; min-width: 640px; align-items: center; font-size: 0.85rem; }
+.g .lbl { color: var(--fg); padding-right: 8px; }
+.g .wk { color: var(--fg-muted); text-align: center; font-variant-numeric: tabular-nums; font-size: 0.75rem; }
+.g .bar { height: 16px; border-radius: 4px; background: var(--accent); }
+.g .bar.soft { background: var(--accent-soft); border: 1px solid var(--accent); }
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.step { border: 1px solid var(--line); border-radius: 10px; padding: 16px; background: var(--surface); display: flex; flex-direction: column; gap: 6px; }
+.step .t { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; }
+.step .w { font-size: 0.8rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.price-total { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: baseline; }
+.price-total b { font-family: var(--font-display); font-size: 1.6rem; }
+.note { border-left: 3px solid var(--line); padding-left: 14px; color: var(--fg-muted); font-size: 0.93rem; max-width: 68ch; }
+footer.contacts { border-top: 1px solid var(--line); padding-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+.contact-line { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.contact-line span { user-select: all; font-weight: 600; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  ol.stages li { grid-template-columns: 40px 1fr; gap: 12px; }
+}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">H&amp;B team · коммерческое предложение · 21.10.2026</div>
+  <h1>Личный бренд мастера глубокой работы с телом<span class="slash"> /</span></h1>
+  <p class="lead">Андрей, мы предлагаем выстроить систему, в которой новые клиенты приходят к вам по рекомендации, переписку и запись ведёт ассистент, а вы занимаетесь только работой.</p>
+  <div class="facts">
+    <div class="fact"><b>13 лет</b><span>практики, 5 500+ сеансов</span></div>
+    <div class="fact"><b>3–4 часа</b><span>один сеанс, один на один</span></div>
+    <div class="fact"><b>1 г</b><span>золота за час, ≈ 11 тыс. ₽</span></div>
+    <div class="fact"><b>3–6 семей</b><span>на абонементе — цель системы</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="eyebrow">Цель</div>
+  <h2>Что мы строим</h2>
+  <p>Ваше время ограничено: в месяц физически помещается около 90 часов работы. Поэтому мы не гонимся за потоком клиентов. Нужно 3–6 постоянных семей на ежемесячном абонементе и несколько людей, которые вас рекомендуют.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Загрузка</th><th>Часов в месяц</th><th>Доход в месяц</th></tr></thead>
+    <tbody>
+      <tr><td>3 семьи, сеанс раз в неделю</td><td class="num">≈ 45</td><td class="num">≈ 500 тыс. ₽</td></tr>
+      <tr><td>5–6 семей, сеанс раз в неделю</td><td class="num">≈ 90</td><td class="num">≈ 1 млн ₽</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted">Расчёт при цене 1 г золота за час по учётной цене ЦБ (11 162,78 ₽/г на 17.10.2026).</p>
+</section>
+
+<section>
+  <div class="eyebrow">Главный вопрос</div>
+  <h2>Можно ли выйти на люкс через соцсети и Instagram</h2>
+  <div class="answer">
+    <h3>Короткий ответ: соцсети клиентов не приводят, но подтверждают ваш уровень.</h3>
+    <p>Мы изучили мастеров с клиентами из шоу-бизнеса и королевских семей: Flávia Lanini, Joanna Czech, Meagan Holub. У всех путь один: сначала рекомендации и личные связи, потом соцсети. Состоятельный клиент не выбирает массажиста по ленте. Он спрашивает у своего ассистента, тренера или врача. Но перед первым сеансом он или его ассистент откроют ваш канал и страницу, и там должно быть видно мастера, а не объявление.</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Площадка</th><th>Зачем</th><th>Что публикуем</th></tr></thead>
+    <tbody>
+      <tr><td><b>Telegram</b><br><span class="pill ok">главный</span></td><td>Закрытый канал для клиентов и тех, кто вас рекомендует; открытая визитка «кто я»</td><td>2–4 поста в месяц: философия метода, почему сеанс длится 4 часа, тело после перелётов и нагрузок, график выездов</td></tr>
+      <tr><td><b>Instagram</b><br><span class="pill warn">только визитка</span></td><td>Англоязычная витрина для зарубежья: Мальдивы, Дубай, курорты, яхты</td><td>9–12 спокойных публикаций: руки, стол, свет, место. Без клиентов. Рекламу не покупаем: с 01.09.2025 она запрещена</td></tr>
+      <tr><td><b>VK</b></td><td>Площадка, где реклама в России разрешена, если она понадобится</td><td>Копия визитки, без активного ведения</td></tr>
+      <tr><td><b>YouTube / Rutube</b></td><td>Доверие: человек видит, как вы говорите и думаете</td><td>3–5 длинных роликов о методе в год</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">От вас — около 2 часов в месяц: голосовые заметки, из которых мы делаем посты, и одна съёмка в квартал. Мы не пишем про лечение, исцеление и отзывы «вылеченных»: это запрещено законом о рекламе и отпугивает именно состоятельных клиентов.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Поиск Яндекса</div>
+  <h2>Что ищут люди: 91 запрос в Wordstat</h2>
+  <p>Мы проверили, сколько раз в месяц в Яндексе ищут слова, связанные с вашей работой (Москва, октябрь 2026).</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Что ищут</th><th>Показов в месяц</th><th>Что это значит</th></tr></thead>
+    <tbody>
+      <tr><td>миофасциальный массаж</td><td class="num">2 708</td><td>Метод — самое сильное слово. Ваш текст строим вокруг «глубокой работы с мышцами и фасциями»</td></tr>
+      <tr><td>глубокий массаж</td><td class="num">817</td><td>То же</td></tr>
+      <tr><td>массажист на дом · частный массажист</td><td class="num">607 · 544</td><td>Ищут частного мастера с выездом</td></tr>
+      <tr><td>абонемент на массаж</td><td class="num">478</td><td>Абонемент — привычный людям формат</td></tr>
+      <tr><td>агентство домашнего персонала</td><td class="num">1 004</td><td>Состоятельные семьи ищут не массажиста, а агентство. Значит, идём через агентства</td></tr>
+      <tr><td>рублёвка, барвиха, «элитный», «премиальный» массаж</td><td class="num">нет данных</td><td>Ваши будущие клиенты массажиста в поиске не ищут</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Слова «VIP», «для мужчин», «на дому» в вашем тексте использовать нельзя: около трети такого спроса — интимные услуги. Подробный разбор — в отдельном отчёте по семантике.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Шаг до старта</div>
+  <h2>Почему оформиться нужно сейчас</h2>
+  <ul class="plain">
+    <li><b>Без договора и чека вас не возьмут</b> агентства персонала, клубы, отели, консьерж-службы. Именно они приводят клиентов люкс-уровня.</li>
+    <li><b>Самозанятость не подойдёт надолго.</b> Её годовой лимит — 2,4 млн ₽, это около 218 часов. При цели 500 тыс. ₽ в месяц лимит закончится примерно за 5 месяцев. Поэтому разумнее сразу открыть ИП на упрощённой системе налогов. Окончательно выбор подтвердит бухгалтер.</li>
+    <li><b>Текст объявления — тоже часть оформления.</b> Сейчас в нём «остеопатия», «правка органов», «работа с грыжами». Это медицинские услуги, для них нужна лицензия. Верховный суд в 2019 году признал медицинским даже расслабляющий массаж в салоне. Новый текст снимает этот риск.</li>
+    <li><b>Документы для клиентов:</b> оферта, анкета противопоказаний с согласием на обработку сведений о здоровье, шаблон соглашения о конфиденциальности для семей.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Этапы и сроки</div>
+  <h2>Как пойдёт работа</h2>
+  <ol class="stages">
+    <li><div class="stage-no">0</div><div class="stage-body"><div class="stage-head"><h3>Бесплатный прототип</h3><span class="when">неделя 1</span></div><p>Черновик позиционирования и прототип вашей закрытой страницы. Вы видите результат до того, как принимаете решение.</p></div></li>
+    <li><div class="stage-no">1</div><div class="stage-body"><div class="stage-head"><h3>Распаковка</h3><span class="when">недели 2–3</span></div><p>Два интервью по полтора часа, беседы с 3–5 постоянными клиентами, разбор вашего Telegram-канала. Итог: позиционирование, название метода, правила цены и записи.</p></div></li>
+    <li><div class="stage-no">2</div><div class="stage-body"><div class="stage-head"><h3>Фундамент</h3><span class="when">недели 3–7</span></div><p>Новый текст без медицины и эзотерики, досье мастера на русском и английском, закрытая страница с формой «кто вас рекомендовал», карточка в Яндекс Картах, фотосессия, оформление Telegram, документы для клиентов.</p></div></li>
+    <li><div class="stage-no">3</div><div class="stage-body"><div class="stage-head"><h3>Сеть рекомендателей</h3><span class="when">недели 6–13</span></div><p>Список из 30–50 организаций и людей, которые могут вас рекомендовать. Мы выходим к ним от имени H&amp;B team как ваши представители. Цель — 10–15 встреч и 3–5 постоянных партнёров.</p></div></li>
+    <li><div class="stage-no">4</div><div class="stage-body"><div class="stage-head"><h3>Система работы с клиентами</h3><span class="when">недели 6–10</span></div><p>ИИ-ассистент и учёт клиентов: подробно в разделе ниже.</p></div></li>
+    <li><div class="stage-no">5</div><div class="stage-body"><div class="stage-head"><h3>Сопровождение</h3><span class="when">месяцы 3–12</span></div><p>Контент, партнёры, отчёт раз в месяц: сколько часов вы отработали, сколько семей на абонементе, откуда пришёл каждый клиент.</p></div></li>
+    <li><div class="stage-no">6</div><div class="stage-body"><div class="stage-head"><h3>Расширение</h3><span class="when">после 6 месяцев, по желанию</span></div><p>Международный сертификат и заявки в программы приглашённых мастеров на курортах Мальдив на 2027 год. Авторский ритуал для одного отеля или клуба: вы обучаете 1–2 мастеров партнёра одному протоколу, а не всему методу. Ваша технология остаётся вашей.</p></div></li>
+  </ol>
+
+  <div class="gantt" role="img" aria-label="График этапов по неделям: прототип неделя 1, распаковка недели 2–3, фундамент недели 3–7, система недели 6–10, сеть недели 6–13, сопровождение с недели 9">
+    <div class="g">
+      <div class="lbl"></div>
+      <div class="wk">1</div><div class="wk">2</div><div class="wk">3</div><div class="wk">4</div><div class="wk">5</div><div class="wk">6</div><div class="wk">7</div><div class="wk">8</div><div class="wk">9</div><div class="wk">10</div><div class="wk">11</div><div class="wk">12</div><div class="wk">13</div>
+
+      <div class="lbl">0 · Прототип</div><div class="bar" style="grid-column: 2 / span 1"></div><div style="grid-column: 3 / span 12"></div>
+      <div class="lbl">1 · Распаковка</div><div style="grid-column: 2 / span 1"></div><div class="bar" style="grid-column: 3 / span 2"></div><div style="grid-column: 5 / span 10"></div>
+      <div class="lbl">2 · Фундамент</div><div style="grid-column: 2 / span 2"></div><div class="bar" style="grid-column: 4 / span 5"></div><div style="grid-column: 9 / span 6"></div>
+      <div class="lbl">4 · Система</div><div style="grid-column: 2 / span 5"></div><div class="bar" style="grid-column: 7 / span 5"></div><div style="grid-column: 12 / span 3"></div>
+      <div class="lbl">3 · Сеть</div><div style="grid-column: 2 / span 5"></div><div class="bar" style="grid-column: 7 / span 8"></div>
+      <div class="lbl">5 · Сопровождение</div><div style="grid-column: 2 / span 8"></div><div class="bar soft" style="grid-column: 10 / span 5"></div>
+    </div>
+  </div>
+  <p class="small muted">Сроки считаются с недели, когда вы подтвердили работу и прошли оформление. Задержка ответов с вашей стороны сдвигает график на столько же.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Поиск клиентов</div>
+  <h2>Где мы ищем ваших клиентов и за счёт чего</h2>
+  <p>Мы не пишем семьям напрямую и не собираем их контакты: это незаконно и разрушает репутацию мастера «по рекомендации». Мы идём к тем, кому эти семьи уже доверяют.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Канал</th><th>Как ищем</th><th>За счёт чего работает</th><th>Когда ждать</th></tr></thead>
+    <tbody>
+      <tr><td><b>Ваши клиенты за 13 лет</b></td><td>Составляем список, включая ушедших после повышения цены. Для каждого готовим личное сообщение от вас</td><td>Возвращаем их форматом, а не скидкой: семейный абонемент, выезд за город, закреплённая цена на 3–6 месяцев</td><td class="num">недели 3–6</td></tr>
+      <tr><td><b>Агентства домашнего персонала</b></td><td>Список агентств Москвы с ВИП-подбором, встреча от H&amp;B</td><td>Досье на двух языках, договор, проверка документов. Агентству вы интересны как редкий специалист</td><td class="num">1–3 месяца</td></tr>
+      <tr><td><b>Консьерж-службы элитных домов и посёлков</b></td><td>Управляющие компании и консьержи Рублёвки, Новой Риги, Барвихи, клубных домов в центре</td><td>Бесплатный пробный сеанс самому консьержу или управляющему, понятные правила записи</td><td class="num">1–3 месяца</td></tr>
+      <tr><td><b>Клубы и тренеры</b></td><td>Премиальные фитнес-, теннисные, гольф-клубы, персональные тренеры</td><td>Вознаграждение партнёру 10–20% с первого курса клиента, учёт в CRM</td><td class="num">1–2 месяца</td></tr>
+      <tr><td><b>Частные врачи и клиники</b></td><td>Спортивные врачи, реабилитологи, частные терапевты</td><td>Схема «врач лечит, мастер восстанавливает»: вы не заходите в медицину, врач вам доверяет</td><td class="num">2–4 месяца</td></tr>
+      <tr><td><b>Персональные банкиры</b></td><td>Персональные менеджеры private banking, через знакомых клиентов</td><td>Досье и рекомендация от постоянного клиента</td><td class="num">3–6 месяцев</td></tr>
+      <tr><td><b>Поиск, карты, нейросети</b></td><td>Страница под запросы «частный массажист», «глубокий миофасциальный массаж», «абонемент»; карточка в Картах; видимость в ответах Алисы и ChatGPT</td><td>Ассистенты семей ищут мастера в поиске и спрашивают нейросети</td><td class="num">2–4 месяца</td></tr>
+      <tr><td><b>Курорты и яхты</b></td><td>Программы приглашённых мастеров на Мальдивах, агентства яхтенного персонала</td><td>Международный сертификат, англоязычное досье, заявка на сезон</td><td class="num">6–12 месяцев</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Каждый новый клиент попадает в учёт с отметкой, кто его привёл. Так видно, какой канал работает, и так же прозрачно считается вознаграждение партнёрам и наше.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Работа с клиентами</div>
+  <h2>Ассистент, напоминания и расписание</h2>
+  <p>Во время четырёхчасового сеанса вы не можете отвечать на сообщения, а новый клиент ждать не будет. Эту часть берёт на себя ассистент.</p>
+  <div class="flow">
+    <div class="step"><div class="w">Заявка</div><div class="t">Отвечает ассистент</div><p class="small">Сдержанный тон дворецкого. Спрашивает, кто рекомендовал, где пройдёт сеанс, какая нужна частота.</p></div>
+    <div class="step"><div class="w">Правила</div><div class="t">Анкета и предоплата</div><p class="small">Анкета противопоказаний, предоплата 50–100%. Отмена позже чем за 48 часов оплачивается полностью.</p></div>
+    <div class="step"><div class="w">Запись</div><div class="t">Время из вашего календаря</div><p class="small">Ассистент предлагает только свободное время. Вы подтверждаете одним нажатием.</p></div>
+    <div class="step"><div class="w">Перед сеансом</div><div class="t">Напоминания</div><p class="small">Клиенту — за 48 часов, за сутки и за 3 часа: адрес, что подготовить. Вам — утром список дня.</p></div>
+    <div class="step"><div class="w">После</div><div class="t">Забота</div><p class="small">Сообщение на следующий день, удобные чаевые по QR, запись на следующий сеанс абонемента.</p></div>
+    <div class="step"><div class="w">Учёт</div><div class="t">Карточка клиента</div><p class="small">История сеансов, противопоказания, остаток часов абонемента, кто рекомендовал, дни рождения.</p></div>
+  </div>
+  <p class="note">Сведения о здоровье из анкеты закон относит к особой категории персональных данных. Мы храним их на серверах в России и берём письменное согласие клиента.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Стоимость</div>
+  <h2>Сколько стоит</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Блок</th><th>Что входит</th><th>Стоимость</th></tr></thead>
+    <tbody>
+      <tr><td><b>Прототип</b></td><td>Этап 0</td><td class="num">бесплатно</td></tr>
+      <tr><td><b>Фундамент</b></td><td>Этапы 1–2: распаковка, тексты, досье RU/EN, страница, карты, фото, документы</td><td class="num">150–200 тыс. ₽</td></tr>
+      <tr><td><b>Система</b></td><td>Этап 4: ИИ-ассистент, напоминания, учёт клиентов</td><td class="num">100–150 тыс. ₽</td></tr>
+      <tr><td><b>Сопровождение</b></td><td>Этапы 3 и 5: сеть рекомендателей, контент, отчёт раз в месяц; от 6 месяцев</td><td class="num">50–80 тыс. ₽/мес</td></tr>
+      <tr><td><b>Вознаграждение за клиентов</b></td><td>С выручки от новых клиентов, которых привели мы или наши партнёры, по учёту в CRM, 12 месяцев на клиента</td><td class="num">10–15%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="price-total"><b>Фундамент ≈ 14–18 ваших часов</b><span class="muted">окупается одной семьёй на абонементе (16 ч ≈ 178 тыс. ₽) за первый месяц</span></div>
+  <p class="small muted">Для сравнения, рынок Москвы: упаковка личного бренда «под ключ» 100–300 тыс. ₽, сайт-визитка в студии 45–120 тыс. ₽, ведение Telegram 45–100 тыс. ₽ в месяц, чат-бот записи 80–250 тыс. ₽. Оплата по этапам: каждый следующий начинается после приёмки предыдущего.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Чтобы начать</div>
+  <h2>Пять вопросов к вам</h2>
+  <ul class="plain">
+    <li>Сколько сеансов в неделю вам комфортно и сколько вы зарабатываете сейчас?</li>
+    <li>Готовы ли показывать лицо и голос в канале и роликах?</li>
+    <li>Готовы ли в будущем обучать 1–2 мастеров отеля или клуба одному протоколу?</li>
+    <li>Какой у вас диплом по классическому массажу: курсы или медицинский колледж?</li>
+    <li>Готовы ли открыть ИП в ближайший месяц?</li>
+  </ul>
+</section>
+
+<footer class="contacts">
+  <h3>H&amp;B team · Герман Брызгалов</h3>
+  <p class="muted">Сайты, цифровые сервисы, ИИ-ассистенты. Перед решением делаем бесплатный прототип.</p>
+  <div class="contact-line">
+    <span>+7 916 965 56 11</span>
+    <a href="https://1herman1.github.io/hb_landing/">1herman1.github.io/hb_landing</a>
+  </div>
+  <p class="small muted">Предложение носит информационный характер. Юридические и налоговые вопросы подтверждаются юристом и бухгалтером.</p>
+</footer>
+
+</div>
