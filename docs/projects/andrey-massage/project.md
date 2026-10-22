@@ -23,6 +23,9 @@
 - `hermes-tz.md` — ТЗ для Hermes: глубокая сборка по продюсированию
 - `ОТЧЁТ-семантика.md` — разбор Wordstat
 - `deck/` — презентация «Три пути» (артефакт https://claude.ai/artifact/AMXaeGsLZnGxeUf5dYsgMF)
+- `andrey-three-paths.pdf` / `.html` — презентация файлом (27 слайдов)
+- `research/06-international.md` — выход за рубеж: ОАЭ, Мальдивы, острова, яхты
+- `data/serp/`, `data/oblast/` — выдача Яндекса и частотность по богатым районам (22.10)
 - `answers-playbook.md` — что делать при каждом ответе Андрея, варианты оплаты
 
 ## Выкатка
