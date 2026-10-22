@@ -9,18 +9,12 @@ interface Metric {
   animate?: boolean;
 }
 
-interface Source {
-  label: string;
-  href: string;
-}
-
 interface Solution {
   title: string;
   who: string;
   task: string;
   solution: string;
   metrics: Metric[];
-  sources: Source[];
 }
 
 const solutions: Solution[] = [
@@ -34,7 +28,6 @@ const solutions: Solution[] = [
       { prefix: 'свыше ', value: 98, suffix: '%', description: 'точность подбора номенклатуры, было около 85%' },
       { prefix: 'менее ', value: 1, suffix: '%', description: 'КП с ошибками в ценах и артикулах, было до 10%' },
     ],
-    sources: [{ label: 'МБС, данные вендора', href: 'https://mbsgroup.ru/ai/1c/prodazhi/podborshchik-nomenklatury-dlya-kp/' }],
   },
   {
     title: 'Разбор тендерной документации',
@@ -46,7 +39,6 @@ const solutions: Solution[] = [
       { value: 93, suffix: '%', description: 'точность извлечения требований по сверке с разметкой экспертов' },
       { prefix: 'до ', value: 7, suffix: ' мин', description: 'на проверку 50‑страничного документа подрядчика' },
     ],
-    sources: [{ label: 'Doubletapp, кейс вендора на Хабре', href: 'https://habr.com/ru/companies/doubletapp/articles/1018940/' }],
   },
   {
     title: 'ИИ-консультант 24/7 по каталогу',
@@ -58,7 +50,6 @@ const solutions: Solution[] = [
       { value: 18, suffix: '%', description: 'конверсия обращения в заказ, было 13%' },
       { value: 72, description: 'заявки, обработанные в нерабочее время за первый месяц, было 0' },
     ],
-    sources: [{ label: 'ChatRex, кейс поставщика спецтехники', href: 'https://chatrex.pro/case-72-zayavki-s-ai-botom' }],
   },
   {
     title: 'Речевая аналитика звонков',
@@ -70,11 +61,10 @@ const solutions: Solution[] = [
       { prefix: '+', value: 9, suffix: ' млн ₽', description: 'продаж за квартал (+2 сделки)' },
       { value: 100, suffix: '%', description: 'звонков проверено; при ручном контроле обычно 5–⁠10%' },
     ],
-    sources: [{ label: 'KeshAI, кейс девелопера', href: 'https://keshai.ru/tpost/76gugysxh1-analiz-zvonkov-s-pomoschyu-ii-keis-devel' }],
   },
 ];
----
 
+---
 <section id="ai-cases" class="py-24 md:py-32 border-t border-dark-divider">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
     <SectionTitle number="03 /">
@@ -82,12 +72,12 @@ const solutions: Solution[] = [
     </SectionTitle>
 
     <p class="text-lg leading-relaxed text-on-dark-body max-w-[65ch] mb-12 md:mb-16">
-      Решения такого типа мы можем внедрить у&nbsp;вас. Цифры — из&nbsp;открытых кейсов и&nbsp;материалов вендоров, со&nbsp;ссылками на&nbsp;источники.
+      Такие решения возможны и&nbsp;для&nbsp;вашего бизнеса — вот что они&nbsp;дают.
     </p>
 
     <div class="space-y-12">
-      {solutions.map(({ title, who, task, solution, metrics, sources }) => (
-        <article class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 border-b border-dark-divider last:border-b-0">
+      {solutions.map(({ title, who, task, solution, metrics }) => (
+        <article class="pb-12 border-b border-dark-divider last:border-b-0 grid grid-cols-1 md:grid-cols-3 gap-x-8">
           <div class="md:col-span-2">
             <h3 class="text-3xl font-normal font-heading text-on-dark mb-6">{title}</h3>
             <div class="space-y-4">
@@ -96,45 +86,82 @@ const solutions: Solution[] = [
                 <p class="text-on-dark-body max-w-[65ch]">{who}</p>
               </div>
               <div>
-                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">ЗАДАЧА</h4>
-                <p class="text-on-dark-body max-w-[65ch]">{task}</p>
-              </div>
-              <div>
                 <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">РЕШЕНИЕ</h4>
                 <p class="text-on-dark-body max-w-[65ch]">{solution}</p>
               </div>
             </div>
           </div>
 
-          <div class="flex flex-col items-start gap-6">
-            <h4 class="text-sm font-bold font-mono text-on-dark-muted uppercase tracking-[0.14em]">ПО ДАННЫМ ОТРАСЛИ</h4>
-            {metrics.map(({ prefix, value, suffix, description, animate }) => (
-              <div class="flex flex-col gap-1">
-                <div class="font-heading text-on-dark whitespace-nowrap" style="font-size: clamp(24px, 2.2vw, 30px); line-height: 1;">
-                  {prefix}{animate === false ? value : <span class="ai-count inline-block" data-count={value}>{value}</span>}{suffix}
-                </div>
-                <div class="font-mono text-sm leading-snug text-on-dark-muted max-w-[34ch]">
-                  {description}
-                </div>
+          <details class="md:col-span-3">
+            <summary style="display: none;"></summary>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 pt-8">
+              <div class="md:col-span-2">
+                <h4 class="text-sm font-bold font-mono text-on-dark-muted mb-2 uppercase tracking-[0.14em]">ЗАДАЧА</h4>
+                <p class="text-on-dark-body max-w-[65ch]">{task}</p>
               </div>
-            ))}
-            <ul class="font-mono text-xs text-on-dark-muted space-y-1">
-              {sources.map(({ label, href }) => (
-                <li>Источник: <a href={href} target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-accent-on-dark transition-colors duration-200">{label}</a></li>
-              ))}
-            </ul>
-          </div>
+              <div class="flex flex-col items-start gap-6">
+                <h4 class="text-sm font-bold font-mono text-on-dark-muted uppercase tracking-[0.14em]">ВОЗМОЖНЫЙ РЕЗУЛЬТАТ</h4>
+                {metrics.map(({ prefix, value, suffix, description, animate }) => (
+                  <div class="flex flex-col gap-1">
+                    <div class="font-heading text-on-dark whitespace-nowrap" style="font-size: clamp(24px, 2.2vw, 30px); line-height: 1;">
+                      {prefix}{animate === false ? value : <span class="ai-count inline-block tabular-nums" data-count={value}>{value}</span>}{suffix}
+                    </div>
+                    <div class="font-mono text-sm leading-snug text-on-dark-muted max-w-[34ch]">
+                      {description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </details>
+
+          <button
+            type="button"
+            data-ai-toggle
+            aria-expanded="false"
+            class="md:col-span-3 justify-self-start mt-6 inline-flex items-center gap-2 min-h-[44px] text-on-dark-body hover:text-accent-on-dark transition-colors duration-300"
+          >
+            <span data-ai-label>Подробнее</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              data-ai-arrow
+              class="inline-block flex-shrink-0 text-accent-on-dark transition-transform duration-300"
+            >
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
         </article>
       ))}
     </div>
-
-    <p class="font-mono text-sm text-on-dark-muted max-w-[65ch] mt-8">
-      Цифры — данные вендоров и&nbsp;результаты их&nbsp;клиентов, а&nbsp;не&nbsp;наши. Результат у&nbsp;вас зависит от&nbsp;процессов и&nbsp;данных и&nbsp;не&nbsp;гарантируется.
-    </p>
   </div>
 </section>
 
 <script>
+  document.querySelectorAll<HTMLButtonElement>('[data-ai-toggle]').forEach((button) => {
+    const details = button.closest('article')?.querySelector('details');
+    const label = button.querySelector('[data-ai-label]');
+    const arrow = button.querySelector<SVGElement>('[data-ai-arrow]');
+    if (!details || !label || !arrow) return;
+
+    button.addEventListener('click', () => {
+      details.open = !details.open;
+    });
+    details.addEventListener('toggle', () => {
+      button.setAttribute('aria-expanded', String(details.open));
+      label.textContent = details.open ? 'Свернуть' : 'Подробнее';
+      arrow.style.transform = details.open ? 'rotate(-90deg)' : '';
+    });
+  });
+
   const counters = [...document.querySelectorAll<HTMLElement>('.ai-count')].filter((el) => Number(el.dataset.count) >= 2);
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -142,27 +169,13 @@ const solutions: Solution[] = [
     const DURATION = 1400;
     const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
 
-    const isVisible = (el: HTMLElement) => {
-      const rect = el.getBoundingClientRect();
-      return rect.top < innerHeight && rect.bottom > 0;
-    };
-
-    const zero = (el: HTMLElement) => {
-      if (el.dataset.zeroed) return;
-      el.style.minWidth = `${el.getBoundingClientRect().width / parseFloat(getComputedStyle(el).fontSize)}em`;
-      el.textContent = '0';
-      el.dataset.zeroed = 'true';
-    };
-
-    const run = (el: HTMLElement) => {
+    const countUp = (el: HTMLElement) => {
       const target = Number(el.dataset.count);
-      let start = 0;
+      const start = performance.now();
       const step = (now: number) => {
-        if (!start) start = now;
         const t = Math.min(1, (now - start) / DURATION);
         el.textContent = String(Math.round(target * easeOut(t)));
         if (t < 1) requestAnimationFrame(step);
-        else el.style.minWidth = '';
       };
       requestAnimationFrame(step);
     };
@@ -170,38 +183,18 @@ const solutions: Solution[] = [
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
-        const el = entry.target as HTMLElement;
-        observer.unobserve(el);
-        near.unobserve(el);
-        if (el.dataset.zeroed) run(el);
+        observer.unobserve(entry.target);
+        countUp(entry.target as HTMLElement);
       }
-    }, { threshold: 0 });
+    }, { threshold: 0.5 });
 
-    const near = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        near.unobserve(entry.target);
-        if (!isVisible(entry.target as HTMLElement)) zero(entry.target as HTMLElement);
-      }
-    }, { rootMargin: '100% 0px 100% 0px' });
+    for (const el of counters) {
+      el.textContent = '0';
+      observer.observe(el);
+    }
 
     addEventListener('beforeprint', () => {
-      for (const el of counters) {
-        observer.unobserve(el);
-        near.unobserve(el);
-        el.textContent = el.dataset.count ?? '';
-        el.style.minWidth = '';
-      }
+      for (const el of counters) el.textContent = el.dataset.count ?? '';
     });
-
-    const init = async () => {
-      await document.fonts.ready;
-      for (const el of counters) {
-        if (isVisible(el)) continue;
-        near.observe(el);
-        observer.observe(el);
-      }
-    };
-    init();
   }
 </script>

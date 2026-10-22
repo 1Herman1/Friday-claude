@@ -4,7 +4,7 @@ import Button from '../ui/Button.astro';
 const BASE_URL = import.meta.env.BASE_URL;
 ---
 
-<section class="w-full py-0 bg-dark relative overflow-hidden h-screen max-h-screen flex items-center justify-center border-t border-[rgba(244,244,241,0.14)]">
+<section class="w-full py-0 bg-dark relative overflow-hidden h-auto max-h-none aspect-[4/5] md:h-screen md:max-h-screen md:aspect-auto flex items-center justify-center border-t border-[rgba(244,244,241,0.14)]">
   <video
     id="banner-video"
     class="absolute inset-0 w-full h-full object-cover"
@@ -17,7 +17,7 @@ const BASE_URL = import.meta.env.BASE_URL;
     <source src={`${BASE_URL}media/banner/build-your-dream.mp4`} type="video/mp4" />
   </video>
 
-  <div class="absolute inset-0 bg-dark/45"></div>
+  <div class="absolute inset-0 bg-dark/45 [background-image:linear-gradient(to_bottom,transparent_65%,var(--color-dark))]"></div>
 
   <div class="relative z-10 max-w-6xl mx-auto px-5 md:px-8 text-center">
     <div class="mb-6">

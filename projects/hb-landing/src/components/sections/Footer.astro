@@ -1,25 +1,17 @@
 ---
 ---
 
-<footer class="bg-dark text-on-dark py-16 md:py-20">
+<footer class="bg-dark text-on-dark pt-16 md:pt-20 pb-4 md:pb-6">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <!-- Top line: copyright -->
-    <div class="text-on-dark-muted font-mono text-xs mb-8 md:mb-12">
-      H&B team © 2026 · Герман Брызгалов
-    </div>
-
-    <!-- Contact tiles grid -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
-      <!-- Telegram tile (accent) -->
+    <div class="grid grid-cols-2 gap-3 md:gap-4 md:max-w-lg">
       <a
         href="https://t.me/h_and_b_team"
-        class="flex items-center justify-center font-mono font-bold text-sm md:text-base p-3 md:p-4 border rounded-lg transition-colors duration-200 md:col-span-1 hover:opacity-90"
+        class="flex items-center justify-center font-mono font-bold text-sm md:text-base p-3 md:p-4 border rounded-lg transition-colors duration-200 hover:opacity-90"
         style="height: clamp(44px, 8vw, 56px); color: var(--color-foreground); background: var(--color-on-dark); border-color: rgba(244, 244, 241, 0.7);"
       >
         Telegram
       </a>
 
-      <!-- Phone tile -->
       <a
         href="tel:+79169655611"
         class="flex items-center justify-center font-mono font-bold text-sm md:text-base p-3 md:p-4 border rounded-lg transition-colors duration-200 hover:opacity-90"
@@ -27,33 +19,14 @@
       >
         Позвонить
       </a>
-
-      <!-- Email tile -->
-      <a
-        href="mailto:gera103546@gmail.com"
-        class="flex items-center justify-center font-mono font-bold text-sm md:text-base p-3 md:p-4 border rounded-lg transition-colors duration-200 hover:opacity-90"
-        style="height: clamp(44px, 8vw, 56px); color: var(--color-on-dark); border-color: rgba(244, 244, 241, 0.7);"
-      >
-        Email
-      </a>
     </div>
 
-    <!-- Top link -->
-    <div class="text-center">
-      <button
-        class="font-mono font-bold text-sm text-on-dark-muted hover:text-on-dark transition-colors duration-200 scroll-to-top inline-flex items-center justify-center min-h-11 min-w-11 px-4"
-        aria-label="Наверх"
-      >
-        Наверх
-      </button>
+    <div
+      aria-hidden="true"
+      class="font-heading font-normal uppercase text-on-dark whitespace-nowrap mt-10 md:mt-12 leading-[.85]"
+      style="font-size: clamp(64px, 20.6vw, 251px);"
+    >
+      H&B TEAM
     </div>
   </div>
 </footer>
-
-<script>
-  const scrollToTopBtn = document.querySelector('.scroll-to-top');
-  scrollToTopBtn?.addEventListener('click', () => {
-    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
-    window.scrollTo({ top: 0, behavior });
-  });
-</script>
