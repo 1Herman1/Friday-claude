@@ -86,3 +86,8 @@ status: digested
 
 ### Изменённые файлы
 - `~/.hermes/scripts/yt_watch.sh`
+
+## Фрагмент (23:51)
+
+**Просил** 23:51:
+  https://youtu.be/mqBR-DRQT_o?si=PWGzchrJ7k2oUlc6
