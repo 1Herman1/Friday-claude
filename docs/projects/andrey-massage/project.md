@@ -22,6 +22,8 @@
 - `kp.html` — коммерческое предложение Андрею (артефакт https://claude.ai/artifact/SmPAnjAffkzP3uegYWYJE5)
 - `hermes-tz.md` — ТЗ для Hermes: глубокая сборка по продюсированию
 - `ОТЧЁТ-семантика.md` — разбор Wordstat
+- `deck/` — презентация «Три пути» (артефакт https://claude.ai/artifact/AMXaeGsLZnGxeUf5dYsgMF)
+- `answers-playbook.md` — что делать при каждом ответе Андрея, варианты оплаты
 
 ## Выкатка
 
