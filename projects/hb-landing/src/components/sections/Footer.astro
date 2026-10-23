@@ -1,32 +1,30 @@
 ---
+const tileClass = 'flex items-center justify-center font-mono font-bold text-sm md:text-base p-3 md:p-4 border rounded-lg transition-colors duration-200 hover:bg-dark-surface-hover';
+const tileStyle = 'height: clamp(44px, 8vw, 56px); color: var(--color-on-dark); border-color: rgba(244, 244, 241, 0.7);';
 ---
 
 <footer class="bg-dark text-on-dark pt-16 md:pt-20 pb-4 md:pb-6">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
-    <div class="grid grid-cols-2 gap-3 md:gap-4 md:max-w-lg">
-      <a
-        href="https://t.me/h_and_b_team"
-        class="flex items-center justify-center font-mono font-bold text-sm md:text-base p-3 md:p-4 border rounded-lg transition-colors duration-200 hover:opacity-90"
-        style="height: clamp(44px, 8vw, 56px); color: var(--color-foreground); background: var(--color-on-dark); border-color: rgba(244, 244, 241, 0.7);"
-      >
-        Telegram
-      </a>
-
-      <a
-        href="tel:+79169655611"
-        class="flex items-center justify-center font-mono font-bold text-sm md:text-base p-3 md:p-4 border rounded-lg transition-colors duration-200 hover:opacity-90"
-        style="height: clamp(44px, 8vw, 56px); color: var(--color-on-dark); border-color: rgba(244, 244, 241, 0.7);"
-      >
-        Позвонить
-      </a>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 md:max-w-2xl md:mx-auto">
+      <a href="tel:+79169655611" class={tileClass} style={tileStyle}>Позвонить</a>
+      <a href="https://t.me/h_and_b_team" class={`${tileClass} -order-1 md:order-none`} style={tileStyle}>Telegram</a>
+      <a href="https://wa.me/79169655611" class={`hidden md:flex ${tileClass}`} style={tileStyle}>WhatsApp</a>
     </div>
 
-    <div
-      aria-hidden="true"
-      class="font-heading font-normal uppercase text-on-dark whitespace-nowrap mt-10 md:mt-12 leading-[.85]"
+    <button
+      type="button"
+      aria-label="Наверх"
+      class="scroll-to-top block w-full text-left font-heading font-normal uppercase text-on-dark hover:text-accent-on-dark whitespace-nowrap mt-10 md:mt-12 leading-[.85] cursor-pointer transition-colors duration-200 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-on-dark [-webkit-tap-highlight-color:transparent]"
       style="font-size: clamp(64px, 20.6vw, 251px);"
     >
       H&B TEAM
-    </div>
+    </button>
   </div>
 </footer>
+
+<script>
+  document.querySelector('.scroll-to-top')?.addEventListener('click', () => {
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    window.scrollTo({ top: 0, behavior });
+  });
+</script>
