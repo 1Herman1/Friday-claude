@@ -67,3 +67,25 @@ ALTER TABLE promo_code_redemptions
   ADD CONSTRAINT redemption_amounts_nonneg CHECK (
     "discountAmount" >= 0 AND "orderSubtotal" >= 0
   );
+
+-- ─────────────────────────── Видеоотзывы ───────────────────────────
+--
+-- Публикуемость видеоотзыва: без согласия, проверки контента и готовых файлов
+-- строка не может быть активной, даже если сервисный слой ошибётся. Срок
+-- согласия проверяется в запросах: CHECK по времени невозможен.
+
+ALTER TABLE video_reviews
+  ADD CONSTRAINT video_review_consent_complete CHECK (
+    NOT "consentConfirmed" OR ("consentConfirmedAt" IS NOT NULL AND "consentConfirmedById" IS NOT NULL)
+  ),
+  ADD CONSTRAINT video_review_review_complete CHECK (
+    NOT "contentReviewed" OR ("contentReviewedAt" IS NOT NULL AND "contentReviewedById" IS NOT NULL)
+  ),
+  ADD CONSTRAINT video_review_active_ready CHECK (
+    NOT "isActive" OR (
+      "consentConfirmed" AND "consentDocPath" IS NOT NULL AND "consentAllowSite"
+      AND "consentRevokedAt" IS NULL AND "contentReviewed"
+      AND "mp4Url" IS NOT NULL AND "posterUrl" IS NOT NULL AND "deletedAt" IS NULL
+    )
+  ),
+  ADD CONSTRAINT video_review_sort_nonneg CHECK ("sortOrder" >= 0);

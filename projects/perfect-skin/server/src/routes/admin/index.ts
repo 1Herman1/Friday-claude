@@ -5,6 +5,7 @@ import { ordersRoutes } from './orders.js'
 import { productsRoutes } from './products.js'
 import { promoRoutes } from './promo.js'
 import { postsRoutes } from './posts.js'
+import { videoReviewsRoutes } from './video-reviews.js'
 import { dashboardRoutes } from './dashboard.js'
 import { syncRoutes } from './sync.js'
 import { proRequestsRoutes } from './pro-requests.js'
@@ -52,6 +53,15 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
   const postsPreHandlers = [app.authenticate, checkRole(['super_admin', 'content_manager'])]
   await app.register(
     async (instance) => postsRoutes(instance, postsPreHandlers),
+    {
+      prefix: '/api/v1/admin',
+    }
+  )
+
+  // Video reviews routes: super_admin or content_manager
+  const videoReviewsPreHandlers = [app.authenticate, checkRole(['super_admin', 'content_manager'])]
+  await app.register(
+    async (instance) => videoReviewsRoutes(instance, videoReviewsPreHandlers),
     {
       prefix: '/api/v1/admin',
     }

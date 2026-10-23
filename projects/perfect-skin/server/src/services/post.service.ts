@@ -1,11 +1,12 @@
-import { db, type Prisma } from '../lib/db.js'
+import { db, type Prisma, type PostKind } from '../lib/db.js'
 import { type PriceViewer } from '../lib/pricing.js'
 import { ACTIVE, productVisibleFor } from '../lib/prisma-filters.js'
 import { ApiError } from '../lib/errors.js'
 
 export interface ListPostsOptions {
+  publicOnly?: boolean
   published?: boolean
-  isActive?: boolean
+  kind?: PostKind
   limit: number
   offset: number
 }
@@ -17,6 +18,10 @@ export interface CreatePostPayload {
   excerpt?: string | null
   coverImage?: string | null
   audience: 'public' | 'retail'
+  kind: PostKind
+  isAd: boolean
+  advertiser?: string | null
+  erid?: string | null
   seoTitle?: string | null
   seoDescription?: string | null
   publishedAt?: Date | null
@@ -29,6 +34,10 @@ export interface UpdatePostPayload {
   excerpt?: string | null
   coverImage?: string | null
   audience?: 'public' | 'retail'
+  kind?: PostKind
+  isAd?: boolean
+  advertiser?: string | null
+  erid?: string | null
   seoTitle?: string | null
   seoDescription?: string | null
   publishedAt?: Date | null
@@ -44,25 +53,36 @@ export interface ProductCard {
   minPrice: number | null
 }
 
-export class PostService {
-  /**
-   * List posts with optional filters. For admin: all posts including drafts.
-   */
-  async listPosts(options: ListPostsOptions) {
-    const where: Prisma.PostWhereInput = {
-      isActive: options.isActive !== false ? true : undefined,
-    }
+const LIST_SELECT = {
+  id: true,
+  slug: true,
+  title: true,
+  excerpt: true,
+  coverImage: true,
+  kind: true,
+  isAd: true,
+  advertiser: true,
+  erid: true,
+  isActive: true,
+  publishedAt: true,
+  createdAt: true,
+} satisfies Prisma.PostSelect
 
-    // If published filter is set, check publishedAt
-    if (options.published === true) {
-      where.publishedAt = { not: null }
-    } else if (options.published === false) {
-      where.publishedAt = null
-    }
+function publicPostWhere(now: Date): Prisma.PostWhereInput {
+  return { deletedAt: null, isActive: true, audience: 'public', publishedAt: { lte: now } }
+}
+
+export class PostService {
+  async listPosts(options: ListPostsOptions) {
+    const publishedAt = options.published === undefined ? undefined : options.published ? { not: null } : null
+    const where: Prisma.PostWhereInput = options.publicOnly
+      ? { ...publicPostWhere(new Date()), kind: options.kind }
+      : { deletedAt: null, isActive: true, kind: options.kind, publishedAt }
 
     const [items, total] = await Promise.all([
       db.post.findMany({
         where,
+        select: LIST_SELECT,
         orderBy: { publishedAt: 'desc' },
         take: options.limit,
         skip: options.offset,
@@ -73,18 +93,8 @@ export class PostService {
     return { items, total, limit: options.limit, offset: options.offset }
   }
 
-  /**
-   * Get post by slug. For public API: only published posts.
-   */
-  async getPostBySlug(slug: string, publishedOnly: boolean = false) {
-    const where: Prisma.PostWhereInput = { slug }
-
-    if (publishedOnly) {
-      where.isActive = true
-      where.publishedAt = { not: null }
-    }
-
-    const post = await db.post.findFirst({ where })
+  async getPublicPostBySlug(slug: string) {
+    const post = await db.post.findFirst({ where: { slug, ...publicPostWhere(new Date()) } })
 
     if (!post) {
       throw new ApiError(404, 'NOT_FOUND', 'Статья не найдена')
@@ -94,23 +104,8 @@ export class PostService {
   }
 
   /**
-   * Extract product slugs from markdown content [[product:slug]].
-   */
-  extractProductSlugs(content: string): string[] {
-    const regex = /\[\[product:([a-z0-9-]+)\]\]/g
-    const slugs = new Set<string>()
-    let match
-
-    while ((match = regex.exec(content)) !== null) {
-      slugs.add(match[1])
-    }
-
-    return Array.from(slugs)
-  }
-
-  /**
-   * Get products by slugs. Used to embed in post response.
-   * Filters out professional products for non-wholesale viewers.
+   * Товары, на которые ссылается статья. Учитывает, кто читает: профессиональные
+   * позиции гостю не отдаются.
    */
   async getProductsBySlug(slugs: string[], viewer: PriceViewer = null): Promise<ProductCard[]> {
     if (slugs.length === 0) return []
@@ -146,17 +141,13 @@ export class PostService {
     }))
   }
 
-  /**
-   * Create new post.
-   */
   async createPost(payload: CreatePostPayload) {
-    // Check slug uniqueness
-    const existing = await db.post.findFirst({ where: { slug: payload.slug } })
+    const existing = await db.post.findFirst({ where: { slug: payload.slug, deletedAt: null } })
     if (existing) {
       throw new ApiError(409, 'SLUG_EXISTS', 'Слаг уже занят')
     }
 
-    const post = await db.post.create({
+    return db.post.create({
       data: {
         title: payload.title,
         slug: payload.slug,
@@ -164,28 +155,26 @@ export class PostService {
         excerpt: payload.excerpt || null,
         coverImage: payload.coverImage || null,
         audience: payload.audience,
+        kind: payload.kind,
+        isAd: payload.isAd,
+        advertiser: payload.advertiser || null,
+        erid: payload.erid || null,
         seoTitle: payload.seoTitle || null,
         seoDescription: payload.seoDescription || null,
         publishedAt: payload.publishedAt || null,
         isActive: true,
       },
     })
-
-    return post
   }
 
-  /**
-   * Update post by id.
-   */
   async updatePost(id: string, payload: UpdatePostPayload) {
-    const post = await db.post.findUnique({ where: { id } })
+    const post = await db.post.findFirst({ where: { id, deletedAt: null } })
     if (!post) {
       throw new ApiError(404, 'NOT_FOUND', 'Статья не найдена')
     }
 
-    // Check slug uniqueness if changing
     if (payload.slug && payload.slug !== post.slug) {
-      const existing = await db.post.findFirst({ where: { slug: payload.slug } })
+      const existing = await db.post.findFirst({ where: { slug: payload.slug, deletedAt: null } })
       if (existing) {
         throw new ApiError(409, 'SLUG_EXISTS', 'Слаг уже занят')
       }
@@ -200,6 +189,10 @@ export class PostService {
         ...(payload.excerpt !== undefined && { excerpt: payload.excerpt }),
         ...(payload.coverImage !== undefined && { coverImage: payload.coverImage }),
         ...(payload.audience !== undefined && { audience: payload.audience }),
+        ...(payload.kind !== undefined && { kind: payload.kind }),
+        ...(payload.isAd !== undefined && { isAd: payload.isAd }),
+        ...(payload.advertiser !== undefined && { advertiser: payload.advertiser }),
+        ...(payload.erid !== undefined && { erid: payload.erid }),
         ...(payload.seoTitle !== undefined && { seoTitle: payload.seoTitle }),
         ...(payload.seoDescription !== undefined && { seoDescription: payload.seoDescription }),
         ...(payload.publishedAt !== undefined && { publishedAt: payload.publishedAt }),
@@ -208,11 +201,8 @@ export class PostService {
     })
   }
 
-  /**
-   * Delete post by id (soft delete via isActive flag).
-   */
   async deletePost(id: string) {
-    const post = await db.post.findUnique({ where: { id } })
+    const post = await db.post.findFirst({ where: { id, deletedAt: null } })
     if (!post) {
       throw new ApiError(404, 'NOT_FOUND', 'Статья не найдена')
     }

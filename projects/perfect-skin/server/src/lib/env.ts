@@ -29,6 +29,11 @@ export const proDocs = getDirWithDefault('PS_PRO_DOCS_DIR', isDevelopment ? './v
 // В разработке по умолчанию ./var/product-images, в боевом окружении обязателен.
 export const productImagesDir = getDirWithDefault('PS_PRODUCT_IMAGES_DIR', isDevelopment ? './var/product-images' : null)
 
+// Видеоотзывы: публичный каталог (раздаёт Nginx) и приватный для документов согласий (не раздаётся).
+// В боевом окружении обязательны оба.
+export const videoReviewsDir = getDirWithDefault('PS_VIDEO_REVIEWS_DIR', isDevelopment ? './var/video-reviews' : null)
+export const videoConsentsDir = getDirWithDefault('PS_VIDEO_CONSENTS_DIR', isDevelopment ? './var/video-consents' : null)
+
 // Email адрес для уведомлений менеджера о новых заявках на проверку.
 // Пусто = без уведомлений (опционально).
 export const proNotifyEmail = process.env.PS_PRO_NOTIFY_EMAIL || ''

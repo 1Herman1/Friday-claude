@@ -19,6 +19,7 @@ import deliveryRoutes from './routes/delivery/index.js'
 import ordersRoutes from './routes/orders/index.js'
 import authRoutes from './routes/auth/index.js'
 import postsRoutes from './routes/posts/index.js'
+import videoReviewsRoutes from './routes/video-reviews.js'
 import proRoutes from './routes/pro/index.js'
 import consultationsRoutes from './routes/consultations.js'
 import careRequestsRoutes from './routes/care-requests.js'
@@ -35,6 +36,9 @@ declare module 'fastify' {
 }
 
 const app = Fastify({
+  // За Nginx все запросы приходят с 127.0.0.1: без этого лимиты по IP общие на весь сайт.
+  // 'loopback' доверяет X-Forwarded-For только от петли, а Nginx его перезаписывает.
+  trustProxy: 'loopback',
   logger: {
     // Маскируем токены просмотра заявок в логах
     serializers: {
@@ -124,6 +128,13 @@ app.setErrorHandler((error, request, reply) => {
       .send(errorResponse(new ApiError(429, 'RATE_LIMITED', 'Слишком много запросов. Попробуйте позже')))
   }
 
+  // Файл больше лимита multipart: это 413 от клиента, а не сбой сервера.
+  if ((error as { code?: string }).code === 'FST_REQ_FILE_TOO_LARGE') {
+    return reply
+      .status(413)
+      .send(errorResponse(new ApiError(413, 'FILE_TOO_LARGE', 'Файл слишком большой')))
+  }
+
   app.log.error({ error, requestId: request.id })
   reply.status(500).send(
     errorResponse(
@@ -162,6 +173,7 @@ await app.register(careRequestsRoutes)
 
 // Register posts routes
 await app.register(postsRoutes, { prefix: '/api/v1' })
+await app.register(videoReviewsRoutes, { prefix: '/api/v1' })
 
 // Register review routes (for viewing applications via one-time links)
 await app.register(async (instance) => reviewRoutes(instance), { prefix: '/api/v1' })

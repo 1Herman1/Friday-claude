@@ -81,6 +81,8 @@ jobs:
             upsert_env PS_DADATA_API_KEY "$SVC_PS_DADATA_API_KEY"
             upsert_env PS_ADMIN_PASSWORD "$SVC_PS_ADMIN_PASSWORD"
             upsert_env PS_PRODUCT_IMAGES_DIR "/var/www/perfect-skin/uploads/products"
+            upsert_env PS_VIDEO_REVIEWS_DIR "/var/www/perfect-skin/uploads/video-reviews"
+            upsert_env PS_VIDEO_CONSENTS_DIR "/var/lib/perfect-skin/video-consents"
 
             echo "==> Fetching deploy/perfect-skin"
             git fetch origin deploy/perfect-skin
@@ -144,6 +146,21 @@ jobs:
             mkdir -p /var/www/perfect-skin/uploads/products
             rm -rf /var/www/perfect-skin/client/*
             cp -r projects/perfect-skin/client/dist/* /var/www/perfect-skin/client/
+
+            echo "==> Preparing video review storage and ffmpeg"
+            # Публичный каталог отдаёт Nginx; документы согласий — приватный, только для процесса (PM2 идёт под root).
+            # .tmp — рядом с каталогом, чтобы rename шёл в пределах одной файловой системы.
+            mkdir -p /var/www/perfect-skin/uploads/video-reviews /var/www/perfect-skin/uploads/video-reviews.tmp
+            mkdir -p /var/lib/perfect-skin/video-consents /var/lib/perfect-skin/video-consents.tmp
+            chmod 0700 /var/lib/perfect-skin/video-consents /var/lib/perfect-skin/video-consents.tmp
+            # ffmpeg без перекодирования снимает с роликов геолокацию и данные устройства. Без него загрузка не работает.
+            # Ставится один раз: при наличии бинарника apt не трогаем.
+            if ! command -v ffmpeg >/dev/null; then
+              export DEBIAN_FRONTEND=noninteractive
+              apt-get update -qq
+              apt-get install -y -qq --no-install-recommends ffmpeg
+            fi
+            ffmpeg -version | head -1
 
             echo "==> Sidecar health check for PM2 path consistency"
             EXPECTED_SCRIPT="$(pwd)/projects/perfect-skin/server/dist/index.js"

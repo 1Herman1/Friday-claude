@@ -928,4 +928,156 @@ export function registerCommonSchemas(app: FastifyInstance) {
       payout: { type: 'integer' },
     },
   })
+  app.addSchema({
+    $id: 'ps.postListItem',
+    type: 'object',
+    additionalProperties: false,
+    required: ['id', 'slug', 'title', 'excerpt', 'coverImage', 'kind', 'publishedAt', 'createdAt', 'isAd', 'advertiser', 'erid'],
+    properties: {
+      id: { type: 'string', format: 'uuid' },
+      slug: { type: 'string' },
+      title: { type: 'string' },
+      excerpt: { type: ['string', 'null'] },
+      coverImage: { type: ['string', 'null'] },
+      kind: { type: 'string', enum: ['article', 'news'] },
+      publishedAt: { type: 'string', format: 'date-time' },
+      createdAt: { type: 'string', format: 'date-time' },
+      isAd: { type: 'boolean' },
+      advertiser: { type: ['string', 'null'] },
+      erid: { type: ['string', 'null'] },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.postList',
+    type: 'object',
+    additionalProperties: false,
+    required: ['items', 'total', 'limit', 'offset'],
+    properties: {
+      items: { type: 'array', items: { $ref: 'ps.postListItem#' } },
+      total: { type: 'integer' },
+      limit: { type: 'integer' },
+      offset: { type: 'integer' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminPost',
+    type: 'object',
+    additionalProperties: false,
+    required: ['id', 'slug', 'title', 'body', 'kind', 'audience', 'isAd', 'isActive', 'createdAt', 'updatedAt'],
+    properties: {
+      id: { type: 'string', format: 'uuid' },
+      slug: { type: 'string' },
+      title: { type: 'string' },
+      body: { type: 'string' },
+      excerpt: { type: ['string', 'null'] },
+      coverImage: { type: ['string', 'null'] },
+      kind: { type: 'string', enum: ['article', 'news'] },
+      audience: { type: 'string', enum: ['public', 'retail'] },
+      isAd: { type: 'boolean' },
+      advertiser: { type: ['string', 'null'] },
+      erid: { type: ['string', 'null'] },
+      seoTitle: { type: ['string', 'null'] },
+      seoDescription: { type: ['string', 'null'] },
+      publishedAt: { type: ['string', 'null'], format: 'date-time' },
+      isActive: { type: 'boolean' },
+      createdAt: { type: 'string', format: 'date-time' },
+      updatedAt: { type: 'string', format: 'date-time' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.videoReviewPublic',
+    type: 'object',
+    additionalProperties: false,
+    required: ['id', 'authorName', 'caption', 'mp4Url', 'webmUrl', 'posterUrl', 'product'],
+    properties: {
+      id: { type: 'string', format: 'uuid' },
+      authorName: { type: 'string' },
+      caption: { type: ['string', 'null'] },
+      mp4Url: { type: 'string' },
+      webmUrl: { type: ['string', 'null'] },
+      posterUrl: { type: 'string' },
+      product: {
+        type: ['object', 'null'],
+        additionalProperties: false,
+        required: ['slug', 'name'],
+        properties: {
+          slug: { type: 'string' },
+          name: { type: 'string' },
+        },
+      },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.videoReviewList',
+    type: 'object',
+    additionalProperties: false,
+    required: ['items'],
+    properties: {
+      items: { type: 'array', items: { $ref: 'ps.videoReviewPublic#' } },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminVideoReview',
+    type: 'object',
+    additionalProperties: false,
+    required: ['id', 'authorName', 'sortOrder', 'isActive', 'hasConsentDoc', 'consentConfirmed', 'contentReviewed', 'createdAt', 'updatedAt'],
+    properties: {
+      id: { type: 'string', format: 'uuid' },
+      authorName: { type: 'string' },
+      caption: { type: ['string', 'null'] },
+      product: {
+        type: ['object', 'null'],
+        additionalProperties: false,
+        required: ['id', 'slug', 'name'],
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+          slug: { type: 'string' },
+          name: { type: 'string' },
+        },
+      },
+      mp4Url: { type: ['string', 'null'] },
+      webmUrl: { type: ['string', 'null'] },
+      posterUrl: { type: ['string', 'null'] },
+      sortOrder: { type: 'integer' },
+      isActive: { type: 'boolean' },
+      hasConsentDoc: { type: 'boolean' },
+      consentConfirmed: { type: 'boolean' },
+      consentConfirmedAt: { type: ['string', 'null'], format: 'date-time' },
+      consentConfirmedBy: {
+        type: ['object', 'null'],
+        additionalProperties: false,
+        required: ['id', 'name'],
+        properties: {
+          id: { type: 'string', format: 'uuid' },
+          name: { type: 'string' },
+        },
+      },
+      consentTemplateVersion: { type: ['string', 'null'] },
+      consentAllowSite: { type: 'boolean' },
+      consentAllowSocial: { type: 'boolean' },
+      consentAllowAds: { type: 'boolean' },
+      consentExpiresAt: { type: ['string', 'null'], format: 'date-time' },
+      consentRevokedAt: { type: ['string', 'null'], format: 'date-time' },
+      consentNote: { type: ['string', 'null'] },
+      contentReviewed: { type: 'boolean' },
+      contentReviewedAt: { type: ['string', 'null'], format: 'date-time' },
+      createdAt: { type: 'string', format: 'date-time' },
+      updatedAt: { type: 'string', format: 'date-time' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminVideoReviewList',
+    type: 'object',
+    additionalProperties: false,
+    required: ['items'],
+    properties: {
+      items: { type: 'array', items: { $ref: 'ps.adminVideoReview#' } },
+    },
+  })
 }

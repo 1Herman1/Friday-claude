@@ -3,8 +3,10 @@ import { z } from 'zod'
 import { postService } from '../../services/post.service.js'
 import { ApiError } from '../../lib/errors.js'
 import { viewerFromRequest } from '../../lib/pricing.js'
+import { extractProductSlugs } from '../../lib/post-body.js'
 
 const listSchema = z.object({
+  kind: z.enum(['article', 'news']).optional(),
   limit: z.coerce.number().int().min(1).max(60).optional().default(12),
   offset: z.coerce.number().int().min(0).optional().default(0),
 })
@@ -14,43 +16,22 @@ const slugSchema = z.object({
 })
 
 export default async function postsRoutes(app: FastifyInstance) {
-  // GET /api/v1/posts - list published posts only
+  // GET /api/v1/posts - опубликованные материалы без тела
   app.get(
     '/posts',
     {
+      config: { rateLimit: { max: 60, timeWindow: '1 minute' } },
       schema: {
         querystring: {
           type: 'object',
           properties: {
+            kind: { type: 'string', enum: ['article', 'news'] },
             limit: { type: 'integer', minimum: 1, maximum: 60 },
             offset: { type: 'integer', minimum: 0 },
           },
         },
         response: {
-          200: {
-            type: 'object',
-            additionalProperties: false,
-            required: ['items', 'total', 'limit', 'offset'],
-            properties: {
-              items: {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  properties: {
-                    id: { type: 'string' },
-                    slug: { type: 'string' },
-                    title: { type: 'string' },
-                    excerpt: { type: 'string', nullable: true },
-                    publishedAt: { type: 'string' },
-                    createdAt: { type: 'string' },
-                  },
-                },
-              },
-              total: { type: 'integer' },
-              limit: { type: 'integer' },
-              offset: { type: 'integer' },
-            },
-          },
+          200: { $ref: 'ps.postList#' },
           400: { $ref: 'ps.error#' },
         },
       },
@@ -62,18 +43,19 @@ export default async function postsRoutes(app: FastifyInstance) {
       }
 
       const data = await postService.listPosts({
-        published: true,
-        isActive: true,
+        publicOnly: true,
+        kind: result.data.kind,
         limit: result.data.limit,
         offset: result.data.offset,
       })
 
+      reply.header('Cache-Control', 'public, max-age=60')
       reply.code(200)
       return data
     }
   )
 
-  // GET /api/v1/posts/:slug - get published post by slug with embedded products
+  // GET /api/v1/posts/:slug - опубликованная статья с товарами; без кэша
   app.get(
     '/posts/:slug',
     {
@@ -97,6 +79,10 @@ export default async function postsRoutes(app: FastifyInstance) {
               body: { type: 'string' },
               excerpt: { type: 'string', nullable: true },
               coverImage: { type: 'string', nullable: true },
+              kind: { type: 'string', enum: ['article', 'news'] },
+              isAd: { type: 'boolean' },
+              advertiser: { type: ['string', 'null'] },
+              erid: { type: ['string', 'null'] },
               publishedAt: { type: 'string' },
               createdAt: { type: 'string' },
               products: {
@@ -135,11 +121,8 @@ export default async function postsRoutes(app: FastifyInstance) {
         throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации')
       }
 
-      const post = await postService.getPostBySlug(result.data.slug, true)
-
-      // Extract and fetch embedded products
-      const productSlugs = postService.extractProductSlugs(post.body)
-      const products = await postService.getProductsBySlug(productSlugs, viewerFromRequest(request))
+      const post = await postService.getPublicPostBySlug(result.data.slug)
+      const products = await postService.getProductsBySlug(extractProductSlugs(post.body), viewerFromRequest(request))
 
       reply.code(200)
       return {

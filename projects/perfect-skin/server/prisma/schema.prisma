@@ -118,6 +118,12 @@ enum Audience {
   retail
 }
 
+/// Тип публикации: статья или новость.
+enum PostKind {
+  article
+  news
+}
+
 enum BannerPage {
   home
   catalog
@@ -208,6 +214,9 @@ model User {
   consents         ConsentRecord[]
   proDocuments     ProDocument[]
   telegramLinks    TelegramLink[]
+  videoReviewsConsentConfirmed VideoReview[] @relation("VideoReviewConsentBy")
+  videoReviewsConsentRevoked   VideoReview[] @relation("VideoReviewConsentRevokedBy")
+  videoReviewsContentReviewed  VideoReview[] @relation("VideoReviewContentReviewedBy")
 
   @@index([email])
   @@index([phone])
@@ -393,6 +402,7 @@ model Product {
   cartItems    CartItem[]
   orderItems   OrderItem[]
   favorites    Favorite[]
+  videoReviews VideoReview[]
 
   @@index([slug])
   @@index([brandId])
@@ -736,6 +746,11 @@ model Post {
   body           String
   coverImage     String?
   audience       Audience  @default(public)
+  kind           PostKind  @default(article)
+  /// Маркировка рекламы (РКН): слоты выключены по умолчанию, заполняет менеджер.
+  isAd           Boolean   @default(false)
+  advertiser     String? // «ИП Рыбко А. А., ИНН …»
+  erid           String?
   seoTitle       String?
   seoDescription String?
   publishedAt    DateTime?
@@ -745,8 +760,58 @@ model Post {
   deletedAt      DateTime?
 
   @@index([audience, publishedAt])
+  @@index([kind, audience, publishedAt(sort: Desc)])
   @@index([slug])
   @@map("posts")
+}
+
+/// Видеоотзыв клиента. Публикуется только при полном наборе условий: согласие
+/// с документом, проверка контента, готовые файлы и срок согласия не истёк.
+/// Условие публикуемости — в services/video-review.service.ts и CHECK в БД.
+model VideoReview {
+  id                     String    @id @default(uuid())
+  authorName             String // публичная подпись ровно как в согласии: «Анна, Москва»
+  caption                String? // ≤140
+  mp4Url                 String? // выставляет только загрузка
+  webmUrl                String?
+  posterUrl              String?
+  productId              String?
+  sortOrder              Int       @default(0)
+  isActive               Boolean   @default(false)
+
+  consentConfirmed       Boolean   @default(false)
+  consentConfirmedAt     DateTime?
+  consentConfirmedById   String?
+  consentDocPath         String? // имя файла скана/PDF в приватном каталоге, выставляет только загрузка
+  consentTemplateVersion String? // версия шаблона согласия, напр. «2026-10»
+  consentAllowSite       Boolean   @default(false)
+  consentAllowSocial     Boolean   @default(false)
+  consentAllowAds        Boolean   @default(false)
+  consentExpiresAt       DateTime? // null = бессрочно по согласию
+  consentRevokedAt       DateTime?
+  consentRevokedById     String?
+  consentNote            String? // ≤300, где лежит оригинал
+
+  /// Второй независимый статус: РКН-возражение по контенту ролика.
+  contentReviewed        Boolean   @default(false)
+  contentReviewedAt      DateTime?
+  contentReviewedById    String?
+
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  deletedAt              DateTime?
+
+  product            Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  consentConfirmedBy User?     @relation("VideoReviewConsentBy", fields: [consentConfirmedById], references: [id], onDelete: Restrict)
+  consentRevokedBy   User?     @relation("VideoReviewConsentRevokedBy", fields: [consentRevokedById], references: [id], onDelete: Restrict)
+  contentReviewedBy  User?     @relation("VideoReviewContentReviewedBy", fields: [contentReviewedById], references: [id], onDelete: Restrict)
+
+  @@index([isActive, deletedAt, sortOrder])
+  @@index([productId])
+  @@index([consentConfirmedById])
+  @@index([consentRevokedById])
+  @@index([contentReviewedById])
+  @@map("video_reviews")
 }
 
 /// Предложение. Без назначений — видно всей аудитории, с назначениями — только

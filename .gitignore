@@ -26,3 +26,6 @@ hb-landing/.astro/
 # Смещения архиватора сессий — служебное состояние, у каждой машины своё
 .claude/.archive-state/
 __pycache__/
+
+# Perfect Skin: локальные загрузки dev-сервера (отзывы, документы, фото товаров)
+projects/perfect-skin/server/var/
