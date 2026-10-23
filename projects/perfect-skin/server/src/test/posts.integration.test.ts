@@ -119,6 +119,32 @@ describe('Posts integration', () => {
     expect(slugs).not.toContain(article.slug)
   })
 
+  it('фильтр kind=article не отдаёт новости', async () => {
+    const res = await app.inject({ method: 'GET', url: '/api/v1/posts?kind=article&limit=60' })
+    const items = JSON.parse(res.body).items as Array<{ slug: string; kind: string }>
+    expect(items.map((item) => item.slug)).toContain(article.slug)
+    expect(items.every((item) => item.kind === 'article')).toBe(true)
+  })
+
+  it('в kind=news не попадают отложенные, удалённые и розничные новости', async () => {
+    const future = await seedPost('news-future', { kind: 'news', publishedAt: new Date(Date.now() + 24 * HOUR) })
+    const deleted = await seedPost('news-deleted', { kind: 'news', isActive: false, deletedAt: new Date() })
+    const retail = await seedPost('news-retail', { kind: 'news', audience: 'retail' })
+    const res = await app.inject({ method: 'GET', url: '/api/v1/posts?kind=news&limit=60' })
+    const body = JSON.parse(res.body)
+    const slugs = body.items.map((item: { slug: string }) => item.slug)
+    for (const slug of [future.slug, deleted.slug, retail.slug]) expect(slugs).not.toContain(slug)
+    expect(body.total).toBe(body.items.length)
+  })
+
+  it('элемент публичного списка — только поля карточки, без служебных', async () => {
+    const res = await app.inject({ method: 'GET', url: '/api/v1/posts?limit=60' })
+    const mine = JSON.parse(res.body).items.find((item: { slug: string }) => item.slug === news.slug)
+    expect(Object.keys(mine).sort()).toEqual(
+      ['advertiser', 'coverImage', 'createdAt', 'erid', 'excerpt', 'id', 'isAd', 'kind', 'publishedAt', 'slug', 'title'],
+    )
+  })
+
   it('неизвестный kind отклоняется', async () => {
     const res = await app.inject({ method: 'GET', url: '/api/v1/posts?kind=video' })
     expect(res.statusCode).toBe(400)
