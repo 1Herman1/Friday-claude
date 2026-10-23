@@ -1,32 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { fetchPublicPostBySlug } from '@/lib/admin-api'
+import { fetchPublicPostBySlug, type PublicPost } from '@/lib/admin-api'
 import { renderMarkdown } from '@/lib/markdown'
-
-interface ProductCard {
-  id: string
-  slug: string
-  name: string
-  image: string | null
-  minPrice: number
-  brand: { id: string; name: string; slug: string } | null
-}
-
-interface Post {
-  id: string
-  slug: string
-  title: string
-  body: string
-  excerpt: string | null
-  publishedAt: string | null
-  createdAt: string
-  products: ProductCard[]
-}
+import { formatPostDate } from '@/lib/format'
+import { PostAdNote } from '@/components/blog/PostAdNote'
 
 export function BlogPostPage() {
   const { slug } = useParams()
   const navigate = useNavigate()
-  const [post, setPost] = useState<Post | null>(null)
+  const [post, setPost] = useState<PublicPost | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -80,12 +62,7 @@ export function BlogPostPage() {
     )
   }
 
-  const publishDate = new Date(post.publishedAt || post.createdAt)
-  const dateStr = publishDate.toLocaleDateString('ru-RU', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const dateStr = formatPostDate(post.publishedAt || post.createdAt)
 
   return (
     <div className="bg-background">
@@ -107,6 +84,9 @@ export function BlogPostPage() {
           <h1 className="text-h2 font-heading font-bold text-foreground mb-6">
             {post.title}
           </h1>
+
+          <p className="text-body-sm text-muted-foreground mb-2">Редакция Perfect Skin</p>
+          <PostAdNote isAd={post.isAd} advertiser={post.advertiser} erid={post.erid} className="mb-6" />
 
           {post.excerpt && (
             <p className="text-base text-muted-foreground leading-body mb-8">

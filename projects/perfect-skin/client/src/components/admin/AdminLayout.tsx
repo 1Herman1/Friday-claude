@@ -17,6 +17,7 @@ const navItems: NavItem[] = [
   { label: 'Заявки специалистов', href: '/admin/pro-requests' },
   { label: 'Консультации', href: '/admin/consultations' },
   { label: 'Статьи', href: '/admin/posts' },
+  { label: 'Видеоотзывы', href: '/admin/video-reviews' },
   { label: 'Обмен 1С', href: '/admin/sync' },
 ]
 

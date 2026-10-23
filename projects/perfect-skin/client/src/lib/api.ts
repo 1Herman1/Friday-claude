@@ -18,7 +18,7 @@ interface ErrorResponse {
   }
 }
 
-const getApiUrl = (): string => {
+export const getApiUrl = (): string => {
   const envUrl = import.meta.env.VITE_API_URL
   return envUrl || 'http://localhost:3000'
 }

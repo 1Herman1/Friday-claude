@@ -408,3 +408,44 @@ export function IconWheat({ className, size = 24, 'aria-hidden': ariaHidden = tr
     </svg>
   )
 }
+
+/** source: iconify/lucide "play", license: MIT — https://icon-sets.iconify.design/lucide/play/ */
+export function IconPlay({ className, size = 24, 'aria-hidden': ariaHidden = true, ...rest }: IconProps) {
+  return (
+    <svg {...defaults} width={size} height={size} className={className} aria-hidden={ariaHidden} {...rest}>
+      <polygon points="6 3 20 12 6 21 6 3" />
+    </svg>
+  )
+}
+
+/** source: iconify/lucide "pause", license: MIT — https://icon-sets.iconify.design/lucide/pause/ */
+export function IconPause({ className, size = 24, 'aria-hidden': ariaHidden = true, ...rest }: IconProps) {
+  return (
+    <svg {...defaults} width={size} height={size} className={className} aria-hidden={ariaHidden} {...rest}>
+      <rect x="6" y="4" width="4" height="16" rx="1" />
+      <rect x="14" y="4" width="4" height="16" rx="1" />
+    </svg>
+  )
+}
+
+/** source: iconify/lucide "volume-2", license: MIT — https://icon-sets.iconify.design/lucide/volume-2/ */
+export function IconVolume({ className, size = 24, 'aria-hidden': ariaHidden = true, ...rest }: IconProps) {
+  return (
+    <svg {...defaults} width={size} height={size} className={className} aria-hidden={ariaHidden} {...rest}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+    </svg>
+  )
+}
+
+/** source: iconify/lucide "volume-x", license: MIT — https://icon-sets.iconify.design/lucide/volume-x/ */
+export function IconVolumeOff({ className, size = 24, 'aria-hidden': ariaHidden = true, ...rest }: IconProps) {
+  return (
+    <svg {...defaults} width={size} height={size} className={className} aria-hidden={ariaHidden} {...rest}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <line x1="22" y1="9" x2="16" y2="15" />
+      <line x1="16" y1="9" x2="22" y2="15" />
+    </svg>
+  )
+}

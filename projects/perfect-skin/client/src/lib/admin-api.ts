@@ -1,4 +1,4 @@
-import { fetchApi } from './api'
+import { ApiError, fetchApi, fetchBlob, getApiUrl } from './api'
 import type { ProductDetails } from '@/types/api'
 
 /**
@@ -421,6 +421,8 @@ export async function adminGetPayoutReport(from: string, to: string): Promise<Pa
 
 // ============ Статьи (Posts) ============
 
+export type PostKind = 'article' | 'news'
+
 export interface AdminPost {
   id: string
   slug: string
@@ -429,6 +431,10 @@ export interface AdminPost {
   body: string
   coverImage: string | null
   audience: 'public' | 'retail'
+  kind: PostKind
+  isAd: boolean
+  advertiser: string | null
+  erid: string | null
   seoTitle: string | null
   seoDescription: string | null
   publishedAt: string | null
@@ -449,11 +455,13 @@ export interface AdminPostsListResponse {
  */
 export async function fetchAdminPosts(params?: {
   published?: boolean
+  kind?: PostKind
   limit?: number
   offset?: number
 }): Promise<AdminPostsListResponse> {
   const query = new URLSearchParams()
   if (params?.published !== undefined) query.append('published', String(params.published))
+  if (params?.kind !== undefined) query.append('kind', params.kind)
   if (params?.limit !== undefined) query.append('limit', String(params.limit))
   if (params?.offset !== undefined) query.append('offset', String(params.offset))
 
@@ -478,6 +486,10 @@ export async function createAdminPost(body: {
   excerpt?: string
   coverImage?: string
   audience?: 'public' | 'retail'
+  kind?: PostKind
+  isAd?: boolean
+  advertiser?: string | null
+  erid?: string | null
   seoTitle?: string
   seoDescription?: string
   publishedAt?: string | null
@@ -500,6 +512,10 @@ export async function updateAdminPost(
     excerpt?: string | null
     coverImage?: string | null
     audience?: 'public' | 'retail'
+    kind?: PostKind
+    isAd?: boolean
+    advertiser?: string | null
+    erid?: string | null
     seoTitle?: string | null
     seoDescription?: string | null
     publishedAt?: string | null
@@ -527,16 +543,39 @@ export async function deleteAdminPost(id: string): Promise<void> {
 /**
  * Получить список опубликованных статей (публик)
  */
+export interface PublicPostListItem {
+  id: string
+  slug: string
+  title: string
+  excerpt: string | null
+  coverImage: string | null
+  kind: PostKind
+  publishedAt: string
+  createdAt: string
+  isAd: boolean
+  advertiser: string | null
+  erid: string | null
+}
+
+export interface PublicPostsListResponse {
+  items: PublicPostListItem[]
+  total: number
+  limit: number
+  offset: number
+}
+
 export async function fetchPublicPosts(params?: {
+  kind?: PostKind
   limit?: number
   offset?: number
-}): Promise<AdminPostsListResponse> {
+}): Promise<PublicPostsListResponse> {
   const query = new URLSearchParams()
+  if (params?.kind !== undefined) query.append('kind', params.kind)
   if (params?.limit !== undefined) query.append('limit', String(params.limit))
   if (params?.offset !== undefined) query.append('offset', String(params.offset))
 
   const url = `/api/v1/posts${query.toString() ? `?${query.toString()}` : ''}`
-  return fetchApi<AdminPostsListResponse>(url)
+  return fetchApi<PublicPostsListResponse>(url)
 }
 
 export interface PublicPost extends AdminPost {
@@ -903,4 +942,237 @@ export async function adminReorderProductImages(
       body: JSON.stringify({ images }),
     }
   )
+}
+
+// ============ Видеоотзывы ============
+
+export interface PublicVideoReview {
+  id: string
+  authorName: string
+  caption: string | null
+  mp4Url: string
+  webmUrl: string | null
+  posterUrl: string
+  product: { slug: string; name: string } | null
+}
+
+/**
+ * Опубликованные видеоотзывы (витрина)
+ */
+export async function fetchVideoReviews(params?: {
+  limit?: number
+}): Promise<{ items: PublicVideoReview[] }> {
+  const query = new URLSearchParams()
+  if (params?.limit !== undefined) query.append('limit', String(params.limit))
+
+  const url = `/api/v1/video-reviews${query.toString() ? `?${query.toString()}` : ''}`
+  return fetchApi<{ items: PublicVideoReview[] }>(url)
+}
+
+export type VideoMediaSlot = 'mp4' | 'webm' | 'poster'
+
+export interface AdminVideoReview {
+  id: string
+  authorName: string
+  caption: string | null
+  mp4Url: string | null
+  webmUrl: string | null
+  posterUrl: string | null
+  product: { id: string; slug: string; name: string } | null
+  sortOrder: number
+  isActive: boolean
+  consentConfirmed: boolean
+  consentConfirmedAt: string | null
+  consentConfirmedBy: { id: string; name: string } | null
+  hasConsentDoc: boolean
+  consentTemplateVersion: string | null
+  consentAllowSite: boolean
+  consentAllowSocial: boolean
+  consentAllowAds: boolean
+  consentExpiresAt: string | null
+  consentRevokedAt: string | null
+  consentNote: string | null
+  contentReviewed: boolean
+  contentReviewedAt: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface AdminVideoReviewPatch {
+  authorName?: string
+  caption?: string | null
+  productId?: string | null
+  consentNote?: string | null
+  consentTemplateVersion?: string | null
+  consentAllowSite?: boolean
+  consentAllowSocial?: boolean
+  consentAllowAds?: boolean
+  consentExpiresAt?: string | null
+  consentConfirmed?: boolean
+  contentReviewed?: boolean
+  consentRevoked?: true
+  isActive?: boolean
+}
+
+export interface VideoMediaUploadResult {
+  slot: VideoMediaSlot
+  url: string
+  warnings: string[]
+}
+
+interface ApiErrorBody {
+  error?: { code?: string; message?: string; details?: Record<string, unknown> }
+}
+
+function parseErrorBody(text: string): ApiErrorBody {
+  try {
+    return JSON.parse(text) as ApiErrorBody
+  } catch {
+    return {}
+  }
+}
+
+/**
+ * Загрузка файла с прогрессом: fetch прогресс не отдаёт, поэтому XMLHttpRequest
+ */
+function postFile<T>(
+  path: string,
+  file: File,
+  limitMb: number,
+  onProgress?: (ratio: number) => void,
+): Promise<T> {
+  const form = new FormData()
+  form.append('file', file)
+
+  return new Promise<T>((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', new URL(path, getApiUrl()).toString())
+    xhr.withCredentials = true
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) onProgress?.(event.loaded / event.total)
+    }
+    xhr.onerror = () => reject(new ApiError(0, 'NETWORK_ERROR', 'Нет соединения с сервером'))
+    xhr.onload = () => {
+      // Лимит размера отдаёт nginx HTML-страницей, поэтому статус проверяем до разбора тела
+      if (xhr.status === 413) {
+        reject(new ApiError(413, 'PAYLOAD_TOO_LARGE', `Файл больше ${limitMb} МБ`))
+        return
+      }
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve((xhr.responseText ? JSON.parse(xhr.responseText) : {}) as T)
+        return
+      }
+      const body = parseErrorBody(xhr.responseText)
+      reject(
+        new ApiError(
+          xhr.status,
+          body.error?.code || 'UNKNOWN_ERROR',
+          body.error?.message || 'Не удалось загрузить файл',
+          body.error?.details,
+        ),
+      )
+    }
+    xhr.send(form)
+  })
+}
+
+/**
+ * Получить список видеоотзывов (админ), в порядке показа
+ */
+export async function adminListVideoReviews(): Promise<{ items: AdminVideoReview[] }> {
+  return fetchApi<{ items: AdminVideoReview[] }>('/api/v1/admin/video-reviews')
+}
+
+/**
+ * Получить видеоотзыв (админ)
+ */
+export async function adminGetVideoReview(id: string): Promise<AdminVideoReview> {
+  return fetchApi<AdminVideoReview>(`/api/v1/admin/video-reviews/${encodeURIComponent(id)}`)
+}
+
+/**
+ * Создать видеоотзыв
+ */
+export async function adminCreateVideoReview(body: {
+  authorName: string
+  caption?: string | null
+  productId?: string | null
+}): Promise<AdminVideoReview> {
+  return fetchApi<AdminVideoReview>('/api/v1/admin/video-reviews', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
+
+/**
+ * Обновить видеоотзыв. Публикация (isActive: true) может вернуть 409 VIDEO_NOT_READY
+ */
+export async function adminUpdateVideoReview(
+  id: string,
+  body: AdminVideoReviewPatch,
+): Promise<AdminVideoReview> {
+  return fetchApi<AdminVideoReview>(`/api/v1/admin/video-reviews/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  })
+}
+
+/**
+ * Задать порядок показа: ids в нужной последовательности
+ */
+export async function adminReorderVideoReviews(ids: string[]): Promise<void> {
+  return fetchApi<void>('/api/v1/admin/video-reviews/order', {
+    method: 'PUT',
+    body: JSON.stringify({ ids }),
+  })
+}
+
+/**
+ * Загрузить ролик (mp4 / webm) или постер
+ */
+export function uploadVideoMedia(
+  id: string,
+  slot: VideoMediaSlot,
+  file: File,
+  onProgress?: (ratio: number) => void,
+): Promise<VideoMediaUploadResult> {
+  return postFile<VideoMediaUploadResult>(
+    `/api/v1/admin/video-reviews/${encodeURIComponent(id)}/media/${slot}`,
+    file,
+    60,
+    onProgress,
+  )
+}
+
+/**
+ * Удалить ролик или постер
+ */
+export async function adminDeleteVideoMedia(id: string, slot: VideoMediaSlot): Promise<void> {
+  return fetchApi<void>(
+    `/api/v1/admin/video-reviews/${encodeURIComponent(id)}/media/${slot}`,
+    { method: 'DELETE' },
+  )
+}
+
+/**
+ * Загрузить документ согласия (pdf / jpg / png)
+ */
+export function uploadConsentDoc(
+  id: string,
+  file: File,
+  onProgress?: (ratio: number) => void,
+): Promise<void> {
+  return postFile<void>(
+    `/api/v1/admin/video-reviews/${encodeURIComponent(id)}/consent-doc`,
+    file,
+    10,
+    onProgress,
+  )
+}
+
+/**
+ * Скачать документ согласия
+ */
+export async function downloadConsentDoc(id: string): Promise<Blob> {
+  return fetchBlob(`/api/v1/admin/video-reviews/${encodeURIComponent(id)}/consent-doc`)
 }

@@ -31,3 +31,9 @@ export function pluralize(
   }
   return forms[2]
 }
+
+const POST_DATE = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+
+export function formatPostDate(iso: string): string {
+  return POST_DATE.format(new Date(iso)).replace(' г.', '')
+}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchAdminPostDetail, createAdminPost, updateAdminPost, deleteAdminPost, searchPublicProducts } from '@/lib/admin-api'
+import { fetchAdminPostDetail, createAdminPost, updateAdminPost, deleteAdminPost, searchPublicProducts, type PostKind } from '@/lib/admin-api'
 import { renderMarkdown } from '@/lib/markdown'
 
 interface Product {
@@ -18,6 +18,29 @@ interface FormData {
   body: string
   excerpt: string | null
   publishedAt: string | null
+  kind: PostKind
+  isAd: boolean
+  advertiser: string
+  erid: string
+}
+
+const CYRILLIC_TO_LATIN: Record<string, string> = {
+  а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i', й: 'y',
+  к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f',
+  х: 'kh', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'shch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya',
+}
+
+function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .split('')
+    .map((char) => CYRILLIC_TO_LATIN[char] ?? char)
+    .join('')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 100)
 }
 
 export function AdminPostEditPage() {
@@ -31,7 +54,12 @@ export function AdminPostEditPage() {
     body: '',
     excerpt: null,
     publishedAt: null,
+    kind: 'article',
+    isAd: false,
+    advertiser: '',
+    erid: '',
   })
+  const [slugTouched, setSlugTouched] = useState(false)
 
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
@@ -58,6 +86,10 @@ export function AdminPostEditPage() {
             body: post.body,
             excerpt: post.excerpt || null,
             publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : null,
+            kind: post.kind,
+            isAd: post.isAd,
+            advertiser: post.advertiser ?? '',
+            erid: post.erid ?? '',
           })
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Ошибка при загрузке')
@@ -91,19 +123,11 @@ export function AdminPostEditPage() {
     return () => clearTimeout(timer)
   }, [searchQuery])
 
-  // Auto-generate slug from title
+  // Слаг из заголовка — только для новой статьи и пока слаг не правили руками
   useEffect(() => {
-    if (!form.title) return
-
-    const slug = form.title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .slice(0, 100)
-
-    setForm((prev) => ({ ...prev, slug }))
-  }, [form.title])
+    if (!isNew || slugTouched) return
+    setForm((prev) => ({ ...prev, slug: slugify(prev.title) }))
+  }, [form.title, isNew, slugTouched])
 
   const handleSave = async () => {
     if (!form.title.trim() || !form.slug.trim() || !form.body.trim()) {
@@ -111,28 +135,27 @@ export function AdminPostEditPage() {
       return
     }
 
+    const payload = {
+      title: form.title,
+      slug: form.slug,
+      body: form.body,
+      excerpt: form.excerpt || undefined,
+      audience: 'public' as const,
+      kind: form.kind,
+      isAd: form.isAd,
+      advertiser: form.isAd ? form.advertiser.trim() || null : null,
+      erid: form.isAd ? form.erid.trim() || null : null,
+      publishedAt: form.publishedAt ? new Date(form.publishedAt).toISOString() : null,
+    }
+
     try {
       setSaving(true)
       setError(null)
 
       if (isNew) {
-        await createAdminPost({
-          title: form.title,
-          slug: form.slug,
-          body: form.body,
-          excerpt: form.excerpt || undefined,
-          audience: 'public',
-          publishedAt: form.publishedAt ? new Date(form.publishedAt).toISOString() : null,
-        })
+        await createAdminPost(payload)
       } else if (id) {
-        await updateAdminPost(id, {
-          title: form.title,
-          slug: form.slug,
-          body: form.body,
-          excerpt: form.excerpt || undefined,
-          audience: 'public',
-          publishedAt: form.publishedAt ? new Date(form.publishedAt).toISOString() : null,
-        })
+        await updateAdminPost(id, payload)
       }
 
       navigate('/admin/posts')
@@ -224,7 +247,10 @@ export function AdminPostEditPage() {
             <input
               type="text"
               value={form.slug}
-              onChange={(e) => setForm((prev) => ({ ...prev, slug: e.target.value }))}
+              onChange={(e) => {
+                setSlugTouched(true)
+                setForm((prev) => ({ ...prev, slug: e.target.value }))
+              }}
               placeholder="avtogeneriruyetsya-iz-zagolovka"
               className="w-full px-4 py-3 border border-border rounded-block bg-card text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-body-sm font-mono"
             />
@@ -303,6 +329,63 @@ export function AdminPostEditPage() {
               rows={20}
               className="w-full px-4 py-3 border border-border rounded-block bg-card text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary font-mono text-body-sm resize-none"
             />
+          </div>
+
+          {/* Kind */}
+          <div>
+            <label htmlFor="post-kind" className="block text-label font-semibold mb-2 text-foreground">
+              Тип материала
+            </label>
+            <select
+              id="post-kind"
+              value={form.kind}
+              onChange={(e) => setForm((prev) => ({ ...prev, kind: e.target.value === 'news' ? 'news' : 'article' }))}
+              className="w-full px-4 py-3 border border-border rounded-block bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="article">Статья</option>
+              <option value="news">Новость</option>
+            </select>
+          </div>
+
+          {/* Ad */}
+          <div className="space-y-4 p-6 bg-card border border-border rounded-block">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.isAd}
+                onChange={(e) => setForm((prev) => ({ ...prev, isAd: e.target.checked }))}
+                className="w-4 h-4 rounded border-border-strong"
+              />
+              <span className="text-label font-semibold text-foreground">Реклама</span>
+            </label>
+            {form.isAd && (
+              <>
+                <div>
+                  <label htmlFor="post-advertiser" className="block text-label font-semibold mb-2 text-foreground">
+                    Рекламодатель
+                  </label>
+                  <input
+                    id="post-advertiser"
+                    type="text"
+                    value={form.advertiser}
+                    onChange={(e) => setForm((prev) => ({ ...prev, advertiser: e.target.value }))}
+                    className="w-full px-4 py-3 border border-border rounded-block bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="post-erid" className="block text-label font-semibold mb-2 text-foreground">
+                    erid
+                  </label>
+                  <input
+                    id="post-erid"
+                    type="text"
+                    value={form.erid}
+                    onChange={(e) => setForm((prev) => ({ ...prev, erid: e.target.value }))}
+                    className="w-full px-4 py-3 border border-border rounded-block bg-card text-foreground font-mono text-body-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           {/* Publish date */}

@@ -1,19 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { fetchAdminPosts } from '@/lib/admin-api'
-
-interface Post {
-  id: string
-  slug: string
-  title: string
-  publishedAt: string | null
-  isActive: boolean
-  createdAt: string
-}
+import { fetchAdminPosts, type AdminPost, type PostKind } from '@/lib/admin-api'
 
 export function AdminPostsPage() {
-  const [posts, setPosts] = useState<Post[]>([])
-  
+  const [posts, setPosts] = useState<AdminPost[]>([])
+  const [kindFilter, setKindFilter] = useState<PostKind | ''>('')
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
@@ -21,9 +13,8 @@ export function AdminPostsPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const result = await fetchAdminPosts({ limit: 50, offset: 0 })
+        const result = await fetchAdminPosts({ kind: kindFilter || undefined, limit: 50, offset: 0 })
         setPosts(result.items || [])
-        
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Ошибка при загрузке')
       } finally {
@@ -31,7 +22,7 @@ export function AdminPostsPage() {
       }
     }
     load()
-  }, [])
+  }, [kindFilter])
 
   if (loading) {
     return (
@@ -55,6 +46,25 @@ export function AdminPostsPage() {
         </button>
       </div>
 
+      <div className="mb-6">
+        <label htmlFor="posts-kind" className="block text-label font-semibold mb-2 text-foreground">
+          Тип
+        </label>
+        <select
+          id="posts-kind"
+          value={kindFilter}
+          onChange={(e) => {
+            const value = e.target.value
+            setKindFilter(value === 'article' || value === 'news' ? value : '')
+          }}
+          className="px-4 py-2 border border-border rounded-block bg-card text-foreground min-h-11 focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          <option value="">Все</option>
+          <option value="article">Статьи</option>
+          <option value="news">Новости</option>
+        </select>
+      </div>
+
       {error && (
         <div className="mb-6 p-4 bg-destructive/10 text-destructive rounded-block">
           {error}
@@ -72,6 +82,9 @@ export function AdminPostsPage() {
               <tr>
                 <th className="px-6 py-4 text-left text-label font-semibold text-foreground uppercase">
                   Заголовок
+                </th>
+                <th className="px-6 py-4 text-left text-label font-semibold text-foreground uppercase">
+                  Тип
                 </th>
                 <th className="px-6 py-4 text-left text-label font-semibold text-foreground uppercase">
                   Статус
@@ -96,6 +109,9 @@ export function AdminPostsPage() {
                         <p className="text-body-sm text-muted-foreground">{post.slug}</p>
                       </div>
                     </Link>
+                  </td>
+                  <td className="px-6 py-4 text-body-sm text-foreground">
+                    {post.kind === 'news' ? 'Новость' : 'Статья'}
                   </td>
                   <td className="px-6 py-4">
                     <span className={`inline-block px-3 py-1 rounded-full text-label font-semibold ${

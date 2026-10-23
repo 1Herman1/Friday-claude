@@ -12,6 +12,8 @@ const AdminProductEditPage = lazy(() => import('@/components/admin/pages/AdminPr
 const AdminPromoPage = lazy(() => import('@/components/admin/pages/AdminPromoPage').then((m) => ({ default: m.AdminPromoPage })))
 const AdminPostsPage = lazy(() => import('@/components/admin/pages/AdminPostsPage').then((m) => ({ default: m.AdminPostsPage })))
 const AdminPostEditPage = lazy(() => import('@/components/admin/pages/AdminPostEditPage').then((m) => ({ default: m.AdminPostEditPage })))
+const AdminVideoReviewsPage = lazy(() => import('@/components/admin/pages/AdminVideoReviewsPage').then((m) => ({ default: m.AdminVideoReviewsPage })))
+const AdminVideoReviewEditPage = lazy(() => import('@/components/admin/pages/AdminVideoReviewEditPage').then((m) => ({ default: m.AdminVideoReviewEditPage })))
 const AdminSyncPage = lazy(() => import('@/components/admin/pages/AdminSyncPage').then((m) => ({ default: m.AdminSyncPage })))
 const AdminProRequestsPage = lazy(() => import('@/components/admin/pages/AdminProRequestsPage').then((m) => ({ default: m.AdminProRequestsPage })))
 const AdminConsultationsPage = lazy(() => import('@/components/admin/pages/AdminConsultationsPage').then((m) => ({ default: m.AdminConsultationsPage })))
@@ -37,6 +39,9 @@ const AdminLayoutWrapper = () => (
       <Route path="consultations" element={<Suspense fallback={fallback}><AdminConsultationsPage /></Suspense>} />
       <Route path="posts" element={<Suspense fallback={fallback}><AdminPostsPage /></Suspense>} />
       <Route path="posts/:id" element={<Suspense fallback={fallback}><AdminPostEditPage /></Suspense>} />
+      <Route path="video-reviews" element={<Suspense fallback={fallback}><AdminVideoReviewsPage /></Suspense>} />
+      <Route path="video-reviews/new" element={<Suspense fallback={fallback}><AdminVideoReviewEditPage /></Suspense>} />
+      <Route path="video-reviews/:id" element={<Suspense fallback={fallback}><AdminVideoReviewEditPage /></Suspense>} />
       <Route path="sync" element={<Suspense fallback={fallback}><AdminSyncPage /></Suspense>} />
     </Route>
   </Routes>
