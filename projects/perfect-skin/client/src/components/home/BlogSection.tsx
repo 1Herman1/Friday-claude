@@ -41,13 +41,19 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
             <PostTitleLink post={post} />
           </h3>
           {post.excerpt && <p className="mt-3 max-w-[46ch] text-body leading-body line-clamp-3">{post.excerpt}</p>}
-          <PostAdNote isAd={post.isAd} advertiser={post.advertiser} erid={post.erid} className="mt-3" />
+          <PostAdNote
+            isAd={post.isAd}
+            advertiser={post.advertiser}
+            erid={post.erid}
+            className="mt-3"
+            tone="text-accent-foreground"
+          />
         </div>
       </article>
     )
   }
   return (
-    <article className={`${frame} grid bg-muted`}>
+    <article className={`${frame} bg-muted`}>
       <img
         src={post.coverImage}
         alt=""
@@ -55,9 +61,10 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
         height={800}
         loading="lazy"
         decoding="async"
-        className="col-start-1 row-start-1 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover"
       />
-      <div className="col-start-1 row-start-1 mx-3 mb-3 self-end rounded-media bg-card p-5 md:mx-0 md:ml-4 md:mb-4 md:w-[min(28rem,calc(100%-2rem))] md:p-6">
+      <Link to={`/blog/${post.slug}`} tabIndex={-1} aria-hidden="true" className="absolute inset-0" />
+      <div className="absolute inset-x-3 bottom-3 rounded-media bg-card p-5 md:inset-x-auto md:left-4 md:bottom-4 md:w-[min(28rem,calc(100%-2rem))] md:p-6">
         <time dateTime={post.publishedAt} className={`${LABEL} text-muted-foreground`}>
           {formatPostDate(post.publishedAt)}
         </time>
@@ -75,13 +82,24 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
   )
 }
 
-function PostCard({ post }: { post: PublicPostListItem }) {
+interface PostCardProps {
+  post: PublicPostListItem
+  headingLevel?: 2 | 3
+  showKind?: boolean
+}
+
+export function PostCard({ post, headingLevel = 3, showKind = false }: PostCardProps) {
   const hasCover = Boolean(post.coverImage)
+  const Heading = headingLevel === 2 ? 'h2' : 'h3'
   const frame = hasCover
-    ? 'grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-4 p-3 md:flex md:flex-col md:items-stretch md:gap-0 md:overflow-hidden md:p-0'
-    : 'p-5 md:flex md:flex-col md:p-6'
+    ? 'bg-card grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-4 p-3 md:flex md:flex-col md:items-stretch md:gap-0 md:overflow-hidden md:p-0'
+    : 'flex flex-col bg-primary p-5 text-primary-foreground md:p-6'
+  const headingClass = hasCover
+    ? 'mt-1 font-heading font-semibold leading-[1.3] text-body line-clamp-3 md:mt-2 md:text-[1.125rem] md:leading-[1.25]'
+    : 'mt-3 text-[1.25rem] md:text-[1.375rem] leading-[1.2] font-bold [text-wrap:balance] line-clamp-4'
+  const headingLevelClass = headingLevel === 2 ? ' normal-case tracking-normal' : ''
   return (
-    <article className={`group relative rounded-block bg-card ${frame} ${CARD_MOTION}`}>
+    <article className={`group relative rounded-block ${frame} ${CARD_MOTION}`}>
       {hasCover && (
         <img
           src={post.coverImage ?? undefined}
@@ -93,27 +111,43 @@ function PostCard({ post }: { post: PublicPostListItem }) {
           className="size-24 rounded-media object-cover md:size-auto md:w-full md:aspect-[3/2] md:rounded-none xl:aspect-[4/3]"
         />
       )}
-      <div className={hasCover ? 'md:flex md:flex-1 md:flex-col md:p-5' : 'md:flex md:flex-1 md:flex-col'}>
-        <time dateTime={post.publishedAt} className={`${LABEL} text-muted-foreground`}>
+      <div className={hasCover ? 'md:flex md:flex-1 md:flex-col md:p-5' : 'flex flex-1 flex-col'}>
+        <time dateTime={post.publishedAt} className={`${LABEL} ${hasCover ? 'text-muted-foreground' : 'text-primary-foreground/80'}`}>
+          {showKind && `${post.kind === 'news' ? 'Новость' : 'Статья'} · `}
           {formatPostDate(post.publishedAt)}
         </time>
-        <h3
-          className={`font-heading font-semibold leading-[1.3] line-clamp-3 ${
-            hasCover ? 'mt-1 text-body md:mt-2 md:text-[1.125rem] md:leading-[1.25]' : 'mt-2 text-[1.125rem] leading-[1.25] md:mt-auto'
-          }`}
-        >
+        <Heading className={`${headingClass}${headingLevelClass}`}>
           <PostTitleLink post={post} />
-        </h3>
+        </Heading>
         {post.excerpt && (
           <p
-            className={`text-body-sm leading-body text-muted-foreground ${
-              hasCover ? 'hidden md:mt-2 md:line-clamp-3' : 'mt-2 line-clamp-5'
-            }`}
+            className={
+              hasCover
+                ? 'text-body-sm leading-body text-muted-foreground hidden md:mt-2 md:line-clamp-3'
+                : 'mt-3 text-body-sm leading-body text-primary-foreground/80 line-clamp-5'
+            }
           >
             {post.excerpt}
           </p>
         )}
-        <PostAdNote isAd={post.isAd} advertiser={post.advertiser} erid={post.erid} className="mt-2" />
+        <PostAdNote
+          isAd={post.isAd}
+          advertiser={post.advertiser}
+          erid={post.erid}
+          className="mt-2"
+          tone={hasCover ? 'text-muted-foreground' : 'text-primary-foreground/80'}
+        />
+        {!hasCover && (
+          <span
+            aria-hidden="true"
+            className="mt-auto hidden items-center gap-2 pt-6 font-heading text-body-sm font-semibold md:inline-flex"
+          >
+            Читать статью{' '}
+            <span className="transition-transform duration-200 ease-out group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
+              →
+            </span>
+          </span>
+        )}
       </div>
     </article>
   )

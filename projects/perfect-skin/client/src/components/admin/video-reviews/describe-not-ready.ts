@@ -11,11 +11,15 @@ const MISSING_LABELS: Record<string, string> = {
   expired: 'срок согласия истёк',
 }
 
+/** Причины, по которым отзыв не публикуется, человеческим языком */
+export function describeBlockers(blockers: readonly string[]): string {
+  return blockers.map((key) => MISSING_LABELS[key] ?? key).join(', ')
+}
+
 /** Текст для 409 VIDEO_NOT_READY: чего не хватает для публикации. Для других ошибок — null */
 export function describeNotReady(error: unknown): string | null {
   if (!(error instanceof ApiError) || error.code !== 'VIDEO_NOT_READY') return null
   const missing = error.details?.missing
   const keys = Array.isArray(missing) ? missing.filter((key): key is string => typeof key === 'string') : []
-  const labels = keys.map((key) => MISSING_LABELS[key] ?? key)
-  return `Нельзя опубликовать: ${labels.join(', ') || 'не все условия выполнены'}.`
+  return `Нельзя опубликовать: ${describeBlockers(keys) || 'не все условия выполнены'}.`
 }

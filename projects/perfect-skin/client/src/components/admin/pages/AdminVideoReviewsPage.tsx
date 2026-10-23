@@ -7,7 +7,7 @@ import {
   type AdminVideoReview,
 } from '@/lib/admin-api'
 import { IconCheck, IconChevronDown } from '@/components/icons'
-import { describeNotReady } from '@/components/admin/video-reviews/describe-not-ready'
+import { describeBlockers, describeNotReady } from '@/components/admin/video-reviews/describe-not-ready'
 
 const CHIPS: { key: 'consentConfirmed' | 'hasConsentDoc' | 'contentReviewed' | 'isActive'; label: string }[] = [
   { key: 'consentConfirmed', label: 'Согласие' },
@@ -15,6 +15,12 @@ const CHIPS: { key: 'consentConfirmed' | 'hasConsentDoc' | 'contentReviewed' | '
   { key: 'contentReviewed', label: 'Проверено' },
   { key: 'isActive', label: 'Опубликовано' },
 ]
+
+function publicationStatus(item: AdminVideoReview): string {
+  if (item.publishable) return 'Показан'
+  if (item.isActive) return `Скрыт: ${describeBlockers(item.publishBlockers)}`
+  return 'Скрыт'
+}
 
 const ICON_BUTTON =
   'inline-flex size-11 items-center justify-center rounded-pill border border-border-strong text-foreground hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors'
@@ -151,7 +157,7 @@ export function AdminVideoReviewsPage() {
                         onChange={() => togglePublish(item)}
                         className="w-4 h-4 rounded border-border-strong"
                       />
-                      <span className="text-body-sm text-foreground">{item.isActive ? 'Показан' : 'Скрыт'}</span>
+                      <span className="text-body-sm text-foreground">{publicationStatus(item)}</span>
                     </label>
                   </td>
                   <td className="px-6 py-4">

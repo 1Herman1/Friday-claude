@@ -113,7 +113,11 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
     const video = videoRef.current
     if (!video) return
     video.muted = muted
-    if (playing && inView && tabVisible) video.play().catch(() => {})
+    if (playing && inView && tabVisible) {
+      video.play().catch((error: unknown) => {
+        if (error instanceof Error && error.name === 'NotAllowedError') setPlaying(false)
+      })
+    }
     else video.pause()
   }, [active, mountVideo, muted, playing, inView, tabVisible])
 
@@ -280,11 +284,19 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
       </div>
 
       <div className="container-app">
-        <div className="mx-auto mt-6 grid max-w-[34rem] grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 md:gap-6">
-          <button type="button" aria-label="Предыдущий отзыв" onClick={() => goTo(active - 1)} className={ARROW}>
+        <div className="mx-auto mt-6 grid max-w-[34rem] grid-cols-2 items-center gap-x-3 gap-y-4 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-start md:gap-6">
+          <button
+            type="button"
+            aria-label="Предыдущий отзыв"
+            onClick={() => goTo(active - 1)}
+            className={`${ARROW} row-start-2 justify-self-start md:col-start-1 md:row-start-1`}
+          >
             <IconArrowRight size={20} className="rotate-180" />
           </button>
-          <div key={active} className="text-center animate-[fadeIn_200ms_ease-out] motion-reduce:animate-none">
+          <div
+            key={active}
+            className="col-span-2 row-start-1 text-center md:col-span-1 md:col-start-2 animate-[fadeIn_200ms_ease-out] motion-reduce:animate-none"
+          >
             <p className="font-heading text-body-sm font-semibold tabular-nums text-muted-foreground">
               {active + 1} / {n}
             </p>
@@ -301,7 +313,12 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
               </Link>
             )}
           </div>
-          <button type="button" aria-label="Следующий отзыв" onClick={() => goTo(active + 1)} className={ARROW}>
+          <button
+            type="button"
+            aria-label="Следующий отзыв"
+            onClick={() => goTo(active + 1)}
+            className={`${ARROW} row-start-2 justify-self-end md:col-start-3 md:row-start-1`}
+          >
             <IconArrowRight size={20} />
           </button>
         </div>

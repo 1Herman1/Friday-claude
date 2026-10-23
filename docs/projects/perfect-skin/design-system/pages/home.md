@@ -201,7 +201,19 @@ article.group.relative.grid.grid-cols-[6rem_minmax(0,1fr)].items-center.gap-4
 ```
 Анонс на телефоне у строк не показывается (`hidden md:line-clamp-3`) — иначе три
 строки текста в 96-пиксельной строке, а он доступен на странице статьи.
-Без обложки: `grid-cols-1`, миниатюры нет, `p-5`.
+
+**Без обложки — синяя типографская плитка** (значения из отчёта дизайнера, D2/D3):
+`article`: `group relative flex flex-col rounded-block bg-primary p-5 text-primary-foreground md:p-6`
+(+ hover/active как у карточки, на телефоне и на ≥ 768 одинаково);
+`time`: `LABEL text-primary-foreground/80`;
+`h3`: `mt-3 text-[1.25rem] md:text-[1.375rem] leading-[1.2] font-bold [text-wrap:balance] line-clamp-4`
+(шрифт заголовка — из базы `h3`);
+анонс: `mt-3 text-body-sm leading-body text-primary-foreground/80 line-clamp-5`;
+`PostAdNote` с `tone="text-primary-foreground/80"`;
+ссылка-подпись `Читать статью →` (только ≥ 768, прижата вниз `mt-auto`):
+`span aria-hidden="true" mt-auto hidden items-center gap-2 pt-6 font-heading text-body-sm font-semibold md:inline-flex`,
+стрелка сдвигается на hover (`group-hover:translate-x-1`, с `motion-reduce` — без сдвига).
+Текстовый блок — `flex flex-1 flex-col`. Карточка с обложкой остаётся `bg-card`.
 
 **≥ 768 — вертикальная карточка:**
 ```
@@ -212,9 +224,8 @@ article.group.relative.flex.flex-col.overflow-hidden.rounded-block.bg-card  (+ h
     h3   mt-2 font-heading text-[1.125rem] font-semibold leading-[1.25] line-clamp-3
     p    mt-2 text-body-sm leading-body text-muted-foreground line-clamp-3
 ```
-Без обложки: картинки нет, `p-6`, анонс `line-clamp-5`, `justify-between`
-(дата сверху, заголовок с анонсом прижаты вниз) — карточка тянется по высоте
-ряда.
+Без обложки — плитка из раздела выше (картинки нет, карточка тянется по высоте
+ряда, подпись «Читать статью» прижата вниз).
 
 Один компонент, не два: строка становится карточкой классами `md:`.
 `article`: `grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-4 p-3 md:flex md:flex-col md:items-stretch md:gap-0 md:p-0 md:overflow-hidden`;
@@ -228,6 +239,10 @@ article.group.relative.flex.flex-col.overflow-hidden.rounded-block.bg-card  (+ h
   растягиванием на всю карточку:
   `after:absolute after:inset-0 after:rounded-block after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-ring`.
   Имя ссылки = заголовок; дата и анонс не зачитываются внутри ссылки.
+  У главной статьи с обложкой плашка абсолютная, и растянутая ссылка накрывает
+  только её. Поэтому рядом с плашкой стоит второй оверлей на всю карточку:
+  `<Link tabIndex={-1} aria-hidden="true" className="absolute inset-0">` (без фокуса,
+  клик по фото ведёт на статью).
 - Hover: подъём `-translate-y-1` 200 мс (как у карточки товара) + у заголовка
   `group-hover:underline underline-offset-4 decoration-1`. Цвет не анимируется.
 - Active: `active:scale-97`, тот же transition 200 мс.
@@ -256,7 +271,7 @@ div.rounded-block.bg-card.p-6.md:p-8.xl:p-12.lg:grid.lg:grid-cols-12.lg:gap-6
     h2   text-h3 [text-wrap:balance]        (h2 по семантике, размер h3 — младше «Журнала»)
     p    mt-3 max-w-[32ch] text-body-sm leading-body text-muted-foreground
     Link mt-2 lg:mt-6 {LINK_MORE}  «Все новости →»
-  ul      mt-6 lg:col-span-8 lg:mt-0 -my-4 divide-y divide-border
+  ul      mt-2 -mb-4 lg:col-span-8 lg:-mt-4 divide-y divide-border
 ```
 
 | Ширина | Раскладка | Ширина строки |
@@ -277,7 +292,7 @@ li
       time  (LABEL, text-muted-foreground)
       h3    mt-1 font-heading text-body md:text-[1.125rem] font-semibold leading-[1.3] line-clamp-2
             group-hover:underline underline-offset-4 decoration-1
-      p     mt-1 text-body-sm leading-body text-muted-foreground line-clamp-1
+      p     hidden md:mt-1 md:line-clamp-1 text-body-sm leading-body text-muted-foreground
     IconArrowRight size={20}  hidden md:block text-primary
             transition-transform duration-200 ease-out group-hover:translate-x-1
             motion-reduce:transition-none motion-reduce:group-hover:translate-x-0

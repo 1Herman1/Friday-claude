@@ -46,7 +46,7 @@ function NewsRow({ item, withCover }: { item: PublicPostListItem; withCover: boo
             {item.title}
           </h3>
           {item.excerpt && (
-            <p className="mt-1 text-body-sm leading-body text-muted-foreground line-clamp-1">{item.excerpt}</p>
+            <p className="hidden md:mt-1 md:line-clamp-1 text-body-sm leading-body text-muted-foreground">{item.excerpt}</p>
           )}
           <PostAdNote isAd={item.isAd} advertiser={item.advertiser} erid={item.erid} className="mt-1" />
         </div>
@@ -88,7 +88,7 @@ export function NewsSection() {
               Все новости
             </MoreLink>
           </header>
-          <ul className="-my-4 mt-6 divide-y divide-border lg:col-span-8 lg:mt-0">
+          <ul className="mt-2 -mb-4 divide-y divide-border lg:col-span-8 lg:-mt-4">
             {list.map((item) => (
               <NewsRow key={item.id} item={item} withCover={withCover} />
             ))}

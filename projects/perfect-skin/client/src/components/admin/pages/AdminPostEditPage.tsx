@@ -70,6 +70,7 @@ export function AdminPostEditPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<Product[]>([])
   const [searchLoading, setSearchLoading] = useState(false)
+  const [searchError, setSearchError] = useState<string | null>(null)
   const [showSearch, setShowSearch] = useState(false)
 
   const bodyRef = useRef<HTMLTextAreaElement>(null)
@@ -80,12 +81,16 @@ export function AdminPostEditPage() {
       const load = async () => {
         try {
           const post = await fetchAdminPostDetail(id)
+          const publishedMs = post.publishedAt ? new Date(post.publishedAt).getTime() : null
           setForm({
             title: post.title,
             slug: post.slug,
             body: post.body,
             excerpt: post.excerpt || null,
-            publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : null,
+            publishedAt:
+              publishedMs === null
+                ? null
+                : new Date(publishedMs - new Date(publishedMs).getTimezoneOffset() * 60_000).toISOString().slice(0, 16),
             kind: post.kind,
             isAd: post.isAd,
             advertiser: post.advertiser ?? '',
@@ -105,22 +110,32 @@ export function AdminPostEditPage() {
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults([])
+      setSearchError(null)
       return
     }
 
+    let cancelled = false
     const timer = setTimeout(async () => {
+      setSearchLoading(true)
       try {
-        setSearchLoading(true)
         const results = await searchPublicProducts(searchQuery)
+        if (cancelled) return
         setSearchResults(results)
+        setSearchError(null)
       } catch (err) {
-        console.error('Search error:', err)
+        if (cancelled) return
+        setSearchResults([])
+        setSearchError(err instanceof Error ? err.message : 'Не удалось найти товар')
       } finally {
-        setSearchLoading(false)
+        if (!cancelled) setSearchLoading(false)
       }
     }, 300)
 
-    return () => clearTimeout(timer)
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
+      setSearchLoading(false)
+    }
   }, [searchQuery])
 
   // Слаг из заголовка — только для новой статьи и пока слаг не правили руками
@@ -139,7 +154,7 @@ export function AdminPostEditPage() {
       title: form.title,
       slug: form.slug,
       body: form.body,
-      excerpt: form.excerpt || undefined,
+      excerpt: form.excerpt || null,
       audience: 'public' as const,
       kind: form.kind,
       isAd: form.isAd,
@@ -300,6 +315,7 @@ export function AdminPostEditPage() {
                 {searchLoading && (
                   <p className="text-body-sm text-muted-foreground">Поиск…</p>
                 )}
+                {searchError && <p role="alert" className="text-body-sm text-destructive">{searchError}</p>}
                 {searchResults.length > 0 && (
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {searchResults.map((product) => (

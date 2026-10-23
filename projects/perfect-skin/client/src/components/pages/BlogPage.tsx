@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { fetchPublicPosts, type PostKind, type PublicPostListItem } from '@/lib/admin-api'
-import { formatPostDate } from '@/lib/format'
-import { LABEL } from '@/components/about/classes'
-import { PostAdNote } from '@/components/blog/PostAdNote'
+import { BTN_OUTLINE, LINK_MORE } from '@/components/about/classes'
+import { PostCard } from '@/components/home/BlogSection'
+
+const PAGE_SIZE = 12
 
 const TABS: { kind: PostKind | null; label: string }[] = [
   { kind: null, label: 'Все' },
@@ -17,37 +18,56 @@ const EMPTY_TEXT: Record<'all' | PostKind, string> = {
   news: 'Новостей пока нет',
 }
 
+interface Feed {
+  kind: PostKind | null
+  items: PublicPostListItem[]
+  total: number
+}
+
 export function BlogPage() {
   const [searchParams] = useSearchParams()
   const kindParam = searchParams.get('kind')
   const kind: PostKind | null = kindParam === 'article' || kindParam === 'news' ? kindParam : null
 
-  const [posts, setPosts] = useState<PublicPostListItem[]>([])
-  const [loading, setLoading] = useState(true)
+  const [feed, setFeed] = useState<Feed | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [loadingMore, setLoadingMore] = useState(false)
+
+  const visible = feed?.kind === kind ? feed : null
+  const posts = visible?.items ?? []
+  const loading = visible === null && error === null
 
   useEffect(() => {
+    let cancelled = false
     const load = async () => {
-      setLoading(true)
       setError(null)
       try {
-        const result = await fetchPublicPosts({ kind: kind ?? undefined, limit: 12, offset: 0 })
-        setPosts(result.items)
+        const result = await fetchPublicPosts({ kind: kind ?? undefined, limit: PAGE_SIZE, offset: 0 })
+        if (!cancelled) setFeed({ kind, items: result.items, total: result.total })
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Ошибка при загрузке')
-      } finally {
-        setLoading(false)
+        if (!cancelled) setError(err instanceof Error ? err.message : 'Ошибка при загрузке')
       }
     }
     load()
+    return () => {
+      cancelled = true
+    }
   }, [kind])
 
-  if (loading) {
-    return (
-      <div className="container-app py-24">
-        <div className="text-center text-muted-foreground">Загрузка…</div>
-      </div>
-    )
+  const loadMore = async () => {
+    if (!visible) return
+    setLoadingMore(true)
+    setError(null)
+    try {
+      const result = await fetchPublicPosts({ kind: kind ?? undefined, limit: PAGE_SIZE, offset: visible.items.length })
+      setFeed((prev) =>
+        prev && prev.kind === kind ? { ...prev, items: [...prev.items, ...result.items], total: result.total } : prev,
+      )
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ошибка при загрузке')
+    } finally {
+      setLoadingMore(false)
+    }
   }
 
   return (
@@ -80,52 +100,42 @@ export function BlogPage() {
       </div>
 
       {error && (
-        <div className="container-app mb-8 p-4 bg-destructive/10 text-destructive rounded-block">
-          {error}
+        <div className="container-app mb-8">
+          <div role="alert" className="rounded-block bg-destructive/10 p-4 text-destructive">
+            {error}
+          </div>
         </div>
       )}
 
-      {/* Posts Grid */}
-      {posts.length === 0 ? (
-        <div className="container-app py-12">
-          <div className="bg-card border border-border rounded-block p-12 text-center">
-            <p className="text-muted-foreground">{EMPTY_TEXT[kind ?? 'all']}</p>
-          </div>
-        </div>
-      ) : (
-        <div className="container-app pb-12 md:pb-20">
-          <div className="space-y-6">
-            {posts.map((post) => (
-              <Link
-                key={post.id}
-                to={`/blog/${post.slug}`}
-                className="group bg-card border border-border rounded-block p-6 hover:border-primary transition-colors block"
-              >
-                <div className="space-y-4">
-                  <h2 className="text-xl font-heading font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                    {post.title}
-                  </h2>
-
-                  {post.excerpt && (
-                    <p className="text-body text-muted-foreground line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                  )}
-
-                  <PostAdNote isAd={post.isAd} advertiser={post.advertiser} erid={post.erid} />
-
-                  <div className="flex items-center justify-between pt-2">
-                    <time dateTime={post.publishedAt} className={`${LABEL} text-muted-foreground`}>
-                      {formatPostDate(post.publishedAt)}
-                    </time>
-                    <span className="text-primary font-semibold">→</span>
-                  </div>
-                </div>
+      <div className="container-app pb-12 md:pb-20">
+        {loading ? (
+          <div className="py-24 text-center text-muted-foreground">Загрузка…</div>
+        ) : posts.length === 0 && !error ? (
+          <div className="py-12">
+            <div className="bg-card rounded-block p-12 text-center">
+              <p className="text-muted-foreground">{EMPTY_TEXT[kind ?? 'all']}</p>
+              <Link to="/catalog" className={`${LINK_MORE} mt-4`}>
+                Перейти в каталог <span aria-hidden="true">→</span>
               </Link>
-            ))}
+            </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+              {posts.map((post) => (
+                <PostCard key={post.id} post={post} headingLevel={2} showKind />
+              ))}
+            </div>
+            {visible && posts.length < visible.total && (
+              <div className="mt-8 flex justify-center">
+                <button type="button" onClick={loadMore} disabled={loadingMore} className={BTN_OUTLINE}>
+                  {loadingMore ? 'Загрузка…' : 'Показать ещё'}
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   )
 }

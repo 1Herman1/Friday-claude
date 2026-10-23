@@ -11,11 +11,13 @@ import {
   uploadVideoMedia,
   type AdminVideoReview,
   type AdminVideoReviewPatch,
+  type ProductSearchHit,
   type VideoMediaSlot,
 } from '@/lib/admin-api'
+import { ApiError } from '@/lib/api'
 import { describeNotReady } from '@/components/admin/video-reviews/describe-not-ready'
 
-type ProductHit = Awaited<ReturnType<typeof searchPublicProducts>>[number]
+type ProductHit = ProductSearchHit
 type Progress = Partial<Record<VideoMediaSlot | 'consentDoc', number>>
 
 interface ReviewForm {
@@ -93,7 +95,20 @@ function toPatch(form: ReviewForm): AdminVideoReviewPatch {
   }
 }
 
+function changedPatch(form: ReviewForm, saved: ReviewForm): AdminVideoReviewPatch {
+  const next = toPatch(form)
+  const base = toPatch(saved)
+  const changed: AdminVideoReviewPatch = {}
+  for (const key of Object.keys(next) as (keyof AdminVideoReviewPatch)[]) {
+    if (next[key] !== base[key]) Object.assign(changed, { [key]: next[key] })
+  }
+  return changed
+}
+
 function errorMessage(err: unknown, fallback: string): string {
+  if (err instanceof ApiError && err.code === 'CONFLICT_RETRY') {
+    return 'Отзыв изменился во время загрузки, обновите страницу'
+  }
   return err instanceof Error ? err.message : fallback
 }
 
@@ -156,6 +171,7 @@ export function AdminVideoReviewEditPage() {
 
   const [productQuery, setProductQuery] = useState('')
   const [productResults, setProductResults] = useState<ProductHit[]>([])
+  const [productError, setProductError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!id) return
@@ -177,14 +193,26 @@ export function AdminVideoReviewEditPage() {
     const query = productQuery.trim()
     if (!query) {
       setProductResults([])
+      setProductError(null)
       return
     }
-    const timer = window.setTimeout(() => {
-      searchPublicProducts(query)
-        .then(setProductResults)
-        .catch(() => setProductResults([]))
+    let cancelled = false
+    const timer = window.setTimeout(async () => {
+      try {
+        const hits = await searchPublicProducts(query)
+        if (cancelled) return
+        setProductResults(hits)
+        setProductError(null)
+      } catch (err) {
+        if (cancelled) return
+        setProductResults([])
+        setProductError(errorMessage(err, 'Не удалось найти товар'))
+      }
     }, 300)
-    return () => window.clearTimeout(timer)
+    return () => {
+      cancelled = true
+      window.clearTimeout(timer)
+    }
   }, [productQuery])
 
   if (loading) {
@@ -228,17 +256,18 @@ export function AdminVideoReviewEditPage() {
       navigate(`/admin/video-reviews/${created.id}`, { replace: true })
     } catch (err) {
       setError(errorMessage(err, 'Не удалось создать отзыв'))
+    } finally {
       setSaving(false)
     }
   }
 
   const save = async () => {
-    if (!id) return
+    if (!id || !review) return
     setSaving(true)
     setError(null)
     setNotice(null)
     try {
-      await adminUpdateVideoReview(id, toPatch(form))
+      await adminUpdateVideoReview(id, changedPatch(form, toForm(review)))
       await reloadAll()
       setNotice('Сохранено')
     } catch (err) {
@@ -302,7 +331,7 @@ export function AdminVideoReviewEditPage() {
     try {
       await uploadConsentDoc(id, file, (ratio) => setProgress((prev) => ({ ...prev, consentDoc: ratio })))
       setNotice('Документ загружен')
-      await refreshReview()
+      await reloadAll()
     } catch (err) {
       setError(errorMessage(err, 'Не удалось загрузить документ'))
     } finally {
@@ -408,6 +437,7 @@ export function AdminVideoReviewEditPage() {
                 className={FIELD}
               />
             )}
+            {productError && <p role="alert" className="mt-2 text-body-sm text-destructive">{productError}</p>}
             {productResults.length > 0 && (
               <div className="mt-2 max-h-64 space-y-1 overflow-y-auto">
                 {productResults.map((product) => (
@@ -491,8 +521,8 @@ export function AdminVideoReviewEditPage() {
                 <MediaField
                   inputId="review-poster"
                   label="Постер"
-                  accept="image/webp,image/jpeg,image/png,.webp,.jpg,.jpeg,.png"
-                  hint="WebP 720×1280"
+                  accept="image/jpeg,.jpg,.jpeg"
+                  hint="JPG 720×1280"
                   ratio={progress.poster}
                   onFile={(file) => uploadMedia('poster', file)}
                 >

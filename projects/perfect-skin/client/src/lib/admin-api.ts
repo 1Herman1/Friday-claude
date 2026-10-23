@@ -483,7 +483,7 @@ export async function createAdminPost(body: {
   title: string
   slug: string
   body: string
-  excerpt?: string
+  excerpt?: string | null
   coverImage?: string
   audience?: 'public' | 'retail'
   kind?: PostKind
@@ -599,20 +599,22 @@ export async function fetchPublicPostBySlug(slug: string): Promise<PublicPost> {
 /**
  * Поиск товаров (публик) для вставки в статью
  */
-export async function searchPublicProducts(query: string): Promise<Array<{
+export interface ProductSearchHit {
   id: string
   slug: string
   name: string
   image: string | null
   minPrice: number
   brand: { id: string; name: string; slug: string } | null
-}>> {
+}
+
+export async function searchPublicProducts(query: string): Promise<ProductSearchHit[]> {
   const params = new URLSearchParams()
   params.append('q', query)
   params.append('limit', '10')
 
-  return fetchApi(`/api/v1/products?${params.toString()}`)
-    .then((result: any) => result.items || [])
+  const result = await fetchApi<{ items?: ProductSearchHit[] }>(`/api/v1/products?${params.toString()}`)
+  return result.items ?? []
 }
 
 // ============ Синхронизация с 1С ============
@@ -971,6 +973,8 @@ export async function fetchVideoReviews(params?: {
 
 export type VideoMediaSlot = 'mp4' | 'webm' | 'poster'
 
+export type VideoPublishBlocker = 'mp4' | 'poster' | 'consent' | 'consentDoc' | 'site' | 'review' | 'revoked' | 'expired'
+
 export interface AdminVideoReview {
   id: string
   authorName: string
@@ -994,6 +998,8 @@ export interface AdminVideoReview {
   consentNote: string | null
   contentReviewed: boolean
   contentReviewedAt: string | null
+  publishable: boolean
+  publishBlockers: VideoPublishBlocker[]
   createdAt: string
   updatedAt: string
 }
