@@ -1025,7 +1025,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
     $id: 'ps.adminVideoReview',
     type: 'object',
     additionalProperties: false,
-    required: ['id', 'authorName', 'sortOrder', 'isActive', 'hasConsentDoc', 'consentConfirmed', 'contentReviewed', 'createdAt', 'updatedAt'],
+    required: ['id', 'authorName', 'sortOrder', 'isActive', 'publishable', 'publishBlockers', 'hasConsentDoc', 'consentConfirmed', 'contentReviewed', 'createdAt', 'updatedAt'],
     properties: {
       id: { type: 'string', format: 'uuid' },
       authorName: { type: 'string' },
@@ -1045,6 +1045,11 @@ export function registerCommonSchemas(app: FastifyInstance) {
       posterUrl: { type: ['string', 'null'] },
       sortOrder: { type: 'integer' },
       isActive: { type: 'boolean' },
+      publishable: { type: 'boolean' },
+      publishBlockers: {
+        type: 'array',
+        items: { type: 'string', enum: ['mp4', 'poster', 'consent', 'consentDoc', 'site', 'review', 'revoked', 'expired'] },
+      },
       hasConsentDoc: { type: 'boolean' },
       consentConfirmed: { type: 'boolean' },
       consentConfirmedAt: { type: ['string', 'null'], format: 'date-time' },

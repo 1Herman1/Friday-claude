@@ -7,7 +7,7 @@ import multipart from '@fastify/multipart'
 import prismaPlugin from './plugins/prisma.js'
 import authenticatePlugin from './plugins/authenticate.js'
 import { ApiError, errorResponse } from './lib/errors.js'
-import { isProduction } from './lib/env.js'
+import { isDevelopment, isProduction } from './lib/env.js'
 import { registerCommonSchemas } from './schemas/common.js'
 import productsRoutes from './routes/products/index.js'
 import categoriesRoutes from './routes/categories/index.js'
@@ -20,6 +20,7 @@ import ordersRoutes from './routes/orders/index.js'
 import authRoutes from './routes/auth/index.js'
 import postsRoutes from './routes/posts/index.js'
 import videoReviewsRoutes from './routes/video-reviews.js'
+import videoReviewMediaRoutes from './routes/video-review-media.js'
 import proRoutes from './routes/pro/index.js'
 import consultationsRoutes from './routes/consultations.js'
 import careRequestsRoutes from './routes/care-requests.js'
@@ -174,6 +175,7 @@ await app.register(careRequestsRoutes)
 // Register posts routes
 await app.register(postsRoutes, { prefix: '/api/v1' })
 await app.register(videoReviewsRoutes, { prefix: '/api/v1' })
+await app.register(videoReviewMediaRoutes, { streamLocally: isDevelopment })
 
 // Register review routes (for viewing applications via one-time links)
 await app.register(async (instance) => reviewRoutes(instance), { prefix: '/api/v1' })

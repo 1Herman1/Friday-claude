@@ -15,6 +15,7 @@ import { ApiError, errorResponse } from '../lib/errors.js'
 import { registerCommonSchemas } from '../schemas/common.js'
 import adminRoutes from '../routes/admin/index.js'
 import publicVideoReviewsRoutes from '../routes/video-reviews.js'
+import videoReviewMediaRoutes from '../routes/video-review-media.js'
 import { db, type Prisma } from '../lib/db.js'
 import { videoReviewsDir, videoConsentsDir } from '../lib/env.js'
 
@@ -54,6 +55,7 @@ async function build() {
   })
 
   await instance.register(publicVideoReviewsRoutes, { prefix: '/api/v1' })
+  await instance.register(videoReviewMediaRoutes, { streamLocally: false })
   await instance.register(adminRoutes)
   return instance
 }
@@ -384,4 +386,125 @@ describe('Video reviews: publication and protection', () => {
       expect(res.body).not.toContain(row.consentDocPath!)
     })
   })
+
+  describe('готовность в админке и замена медиа', () => {
+    it('админский ответ: publishable и причины; просроченный активный — с причиной expired', async () => {
+      const ready = await seedPublished()
+      const readyBody = JSON.parse((await api('GET', `/api/v1/admin/video-reviews/${ready.id}`, staff.content.token)).body)
+      expect(readyBody).toMatchObject({ publishable: true, publishBlockers: [] })
+
+      const notReviewed = await seedPublished({ isActive: false, contentReviewed: false, contentReviewedAt: null, contentReviewedById: null })
+      const notReviewedBody = JSON.parse((await api('GET', `/api/v1/admin/video-reviews/${notReviewed.id}`, staff.content.token)).body)
+      expect(notReviewedBody).toMatchObject({ isActive: false, publishable: false, publishBlockers: ['review'] })
+
+      const expired = await seedPublished({ consentExpiresAt: new Date(Date.now() - DAY) })
+      const expiredBody = JSON.parse((await api('GET', `/api/v1/admin/video-reviews/${expired.id}`, staff.content.token)).body)
+      expect(expiredBody).toMatchObject({ isActive: true, publishable: false, publishBlockers: ['expired'] })
+    })
+
+    it('новый постер снимает отзыв с публикации и сбрасывает проверку содержания', async () => {
+      const row = await seedPublished()
+      const res = await uploadPoster(row.id, staff.content.token, Buffer.from([0xff, 0xd8, 0xff, 0xd9]))
+      expect(res.statusCode).toBe(200)
+      const url = JSON.parse(res.body).url as string
+      createdFiles.push(url.slice(PREFIX.length))
+
+      const stored = await db.videoReview.findUniqueOrThrow({ where: { id: row.id } })
+      expect(stored).toMatchObject({ posterUrl: url, isActive: false, contentReviewed: false, contentReviewedAt: null })
+      expect(await exists(join(videoReviewsDir, row.posterUrl!.slice(PREFIX.length)))).toBe(false)
+      expect(await publicIds()).not.toContain(row.id)
+    })
+
+    it('постер в WebP отклоняется: допускается только JPG', async () => {
+      const row = await seedPublished()
+      const webp = Buffer.from('RIFF\0\0\0\0WEBPVP8 ', 'latin1')
+      const res = await uploadPoster(row.id, staff.content.token, webp)
+      expect(res.statusCode).toBe(400)
+      expect(JSON.parse(res.body).error.message).toBe('Постер — JPG')
+    })
+  })
+
+  describe('раздача файлов', () => {
+    async function media(url: string | null, token?: string) {
+      return app.inject({ method: 'GET', url: url!, headers: token ? { authorization: `Bearer ${token}` } : {} })
+    }
+
+    it('опубликованный файл: пустое тело и X-Accel-Redirect, тип по расширению, кэш 5 минут', async () => {
+      const row = await seedPublished()
+      const res = await media(row.mp4Url)
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toBe('')
+      expect(res.headers['x-accel-redirect']).toBe(`/_protected/video-reviews/${row.mp4Url!.slice(PREFIX.length)}`)
+      expect(res.headers['content-type']).toBe('video/mp4')
+      expect(res.headers['cache-control']).toBe('public, max-age=300')
+
+      expect((await media(row.webmUrl)).headers['content-type']).toBe('video/webm')
+      expect((await media(row.posterUrl)).headers['content-type']).toBe('image/jpeg')
+    })
+
+    it.each<[string, Record<string, unknown>]>([
+      ['снят с публикации', { isActive: false }],
+      ['срок согласия истёк', { consentExpiresAt: new Date(Date.now() - 1000) }],
+      ['согласие отозвано', { isActive: false, consentRevokedAt: new Date() }],
+    ])('%s — 404 и гостю, и покупателю, хотя файл на диске есть', async (_name, overrides) => {
+      const row = await seedPublished(overrides)
+      expect(await exists(join(videoReviewsDir, row.mp4Url!.slice(PREFIX.length)))).toBe(true)
+      expect((await media(row.mp4Url)).statusCode).toBe(404)
+      expect((await media(row.mp4Url, staff.customer.token)).statusCode).toBe(404)
+    })
+
+    it('сотрудник видит неопубликованный файл, ответ без кэша', async () => {
+      const row = await seedPublished({ isActive: false })
+      const res = await media(row.mp4Url, staff.content.token)
+      expect(res.statusCode).toBe(200)
+      expect(res.headers['cache-control']).toBe('private, no-store')
+    })
+
+    it('после отзыва согласия файл перестаёт отдаваться сразу, даже если ответ был в кэше', async () => {
+      const row = await seedPublished()
+      expect((await media(row.mp4Url)).statusCode).toBe(200)
+      await api('PATCH', `/api/v1/admin/video-reviews/${row.id}`, staff.content.token, { consentRevoked: true })
+      expect((await media(row.mp4Url)).statusCode).toBe(404)
+    })
+
+    it.each([`${randomUUID()}.exe`, 'not-a-uuid.mp4', randomUUID().toUpperCase() + '.mp4', '..%2F..%2Fetc%2Fpasswd'])(
+      'кривое имя %s — 404 даже для сотрудника',
+      async (name) => {
+        const res = await app.inject({
+          method: 'GET',
+          url: `/uploads/video-reviews/${name.includes('%') ? name : encodeURIComponent(name)}`,
+          headers: { authorization: `Bearer ${staff.super.token}` },
+        })
+        expect(res.statusCode).toBe(404)
+      },
+    )
+
+    it('без Nginx (разработка) файл отдаётся самим приложением', async () => {
+      const local = Fastify()
+      await local.register(authenticatePlugin)
+      await local.register(videoReviewMediaRoutes, { streamLocally: true })
+      const row = await seedPublished()
+      const res = await local.inject({ method: 'GET', url: row.mp4Url! })
+      await local.close()
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toBe('stub')
+      expect(res.headers['x-accel-redirect']).toBeUndefined()
+      expect(res.headers['content-type']).toBe('video/mp4')
+    })
+  })
 })
+
+async function uploadPoster(id: string, token: string, data: Buffer) {
+  const boundary = `----pubtest${randomUUID()}`
+  const payload = Buffer.concat([
+    Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="p.jpg"\r\nContent-Type: image/jpeg\r\n\r\n`),
+    data,
+    Buffer.from(`\r\n--${boundary}--\r\n`),
+  ])
+  return app.inject({
+    method: 'POST',
+    url: `/api/v1/admin/video-reviews/${id}/media/poster`,
+    headers: { authorization: `Bearer ${token}`, 'content-type': `multipart/form-data; boundary=${boundary}` },
+    payload,
+  })
+}

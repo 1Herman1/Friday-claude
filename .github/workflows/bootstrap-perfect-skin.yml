@@ -51,8 +51,9 @@ jobs:
             if ! command -v node >/dev/null; then
               curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
             fi
+            # ffmpeg чистит метаданные роликов видеоотзывов: без него загрузка не работает
             apt-get install -y -qq nodejs docker.io docker-compose-v2 \
-              nginx certbot python3-certbot-nginx postgresql-client git
+              nginx certbot python3-certbot-nginx postgresql-client git ffmpeg
             systemctl enable --now docker
             command -v pm2 >/dev/null || npm install -g pm2
             pm2 startup systemd -u root --hp /root >/dev/null || true
@@ -219,6 +220,9 @@ jobs:
             cd "$SRC/projects/perfect-skin/server"
 
             echo "==> Nginx"
+            mkdir -p /etc/nginx/snippets
+            cp "$SRC/projects/perfect-skin/deploy/nginx-perfect-skin-media.conf" \
+               /etc/nginx/snippets/perfect-skin-media.conf
             cp "$SRC/projects/perfect-skin/deploy/nginx-perfect-skin.conf" \
                /etc/nginx/sites-available/perfect-skin
             ln -sf /etc/nginx/sites-available/perfect-skin \

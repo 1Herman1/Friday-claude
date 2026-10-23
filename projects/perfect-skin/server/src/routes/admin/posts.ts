@@ -1,11 +1,14 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { postService } from '../../services/post.service.js'
 import { db } from '../../lib/db.js'
 import { ApiError } from '../../lib/errors.js'
 
+type PreHandlers = Array<(request: FastifyRequest, reply: FastifyReply) => Promise<void>>
+
 const listPostsSchema = z.object({
   published: z.enum(['true', 'false']).optional().transform((v) => v === 'true' ? true : v === 'false' ? false : undefined),
+  kind: z.enum(['article', 'news']).optional(),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   offset: z.coerce.number().int().min(0).default(0),
 })
@@ -13,6 +16,7 @@ const listPostsSchema = z.object({
 // Путь к картинке: абсолютный https-адрес или локальный путь из client/public (/photos/blog/x.webp).
 const COVER_IMAGE_PATTERN = /^(https:\/\/|\/)[A-Za-z0-9._~\/%-]{1,300}$/
 
+// Тело проверяет только zod: JSON-схема Fastify здесь отвергала бы null в полях, которые админка сбрасывает.
 const createPostSchema = z.object({
   title: z.string().min(1).max(200),
   slug: z.string().regex(/^[a-z0-9-]{1,100}$/),
@@ -46,9 +50,9 @@ const updatePostSchema = z.object({
   isActive: z.boolean().optional(),
 })
 
-export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
+export async function postsRoutes(app: FastifyInstance, preHandlers: PreHandlers) {
   // GET /api/v1/admin/posts - list all posts (including drafts)
-  app.get<{ Querystring: any; Reply: any }>(
+  app.get(
     '/posts',
     {
       preHandler: preHandlers,
@@ -57,6 +61,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
           type: 'object',
           properties: {
             published: { type: 'string', enum: ['true', 'false'] },
+            kind: { type: 'string', enum: ['article', 'news'] },
             limit: { type: 'integer', minimum: 1, maximum: 100 },
             offset: { type: 'integer', minimum: 0 },
           },
@@ -95,7 +100,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
         },
       },
     },
-    async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
+    async (request, reply) => {
       const result = listPostsSchema.safeParse(request.query)
       if (!result.success) {
         throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации')
@@ -103,6 +108,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
 
       const data = await postService.listPosts({
         published: result.data.published,
+        kind: result.data.kind,
         limit: result.data.limit,
         offset: result.data.offset,
       })
@@ -113,7 +119,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
   )
 
   // GET /api/v1/admin/posts/:id - get single post
-  app.get<{ Params: { id: string }; Reply: any }>(
+  app.get<{ Params: { id: string } }>(
     '/posts/:id',
     {
       preHandler: preHandlers,
@@ -133,7 +139,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
         },
       },
     },
-    async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+    async (request, reply) => {
       const found = await db.post.findFirst({
         where: { id: request.params.id, deletedAt: null },
       })
@@ -148,30 +154,11 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
   )
 
   // POST /api/v1/admin/posts - create new post
-  app.post<{ Body: any; Reply: any }>(
+  app.post(
     '/posts',
     {
       preHandler: preHandlers,
       schema: {
-        body: {
-          type: 'object',
-          required: ['title', 'slug', 'body'],
-          properties: {
-            title: { type: 'string', minLength: 1, maxLength: 200 },
-            slug: { type: 'string', pattern: '^[a-z0-9-]{1,100}$' },
-            body: { type: 'string', maxLength: 100_000 },
-            excerpt: { type: 'string', maxLength: 500 },
-            coverImage: { type: 'string', pattern: '^(https://|/)[A-Za-z0-9._~/%-]{1,300}$' },
-            audience: { type: 'string', enum: ['public', 'retail'] },
-            kind: { type: 'string', enum: ['article', 'news'] },
-            isAd: { type: 'boolean' },
-            advertiser: { type: ['string', 'null'], maxLength: 200 },
-            erid: { type: ['string', 'null'], maxLength: 100 },
-            seoTitle: { type: 'string', maxLength: 60 },
-            seoDescription: { type: 'string', maxLength: 160 },
-            publishedAt: { type: 'string', format: 'date-time' },
-          },
-        },
         response: {
           201: { $ref: 'ps.adminPost#' },
           400: { $ref: 'ps.error#' },
@@ -181,7 +168,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
         },
       },
     },
-    async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+    async (request, reply) => {
       const result = createPostSchema.safeParse(request.body)
       if (!result.success) {
         throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации')
@@ -195,7 +182,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
   )
 
   // PATCH /api/v1/admin/posts/:id - update post
-  app.patch<{ Params: { id: string }; Body: any; Reply: any }>(
+  app.patch<{ Params: { id: string } }>(
     '/posts/:id',
     {
       preHandler: preHandlers,
@@ -205,25 +192,6 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
           required: ['id'],
           properties: {
             id: { type: 'string', format: 'uuid' },
-          },
-        },
-        body: {
-          type: 'object',
-          properties: {
-            title: { type: 'string', minLength: 1, maxLength: 200 },
-            slug: { type: 'string', pattern: '^[a-z0-9-]{1,100}$' },
-            body: { type: 'string', maxLength: 100_000 },
-            excerpt: { type: 'string', maxLength: 500 },
-            coverImage: { type: 'string', pattern: '^(https://|/)[A-Za-z0-9._~/%-]{1,300}$' },
-            audience: { type: 'string', enum: ['public', 'retail'] },
-            kind: { type: 'string', enum: ['article', 'news'] },
-            isAd: { type: 'boolean' },
-            advertiser: { type: ['string', 'null'], maxLength: 200 },
-            erid: { type: ['string', 'null'], maxLength: 100 },
-            seoTitle: { type: 'string', maxLength: 60 },
-            seoDescription: { type: 'string', maxLength: 160 },
-            publishedAt: { type: 'string', format: 'date-time' },
-            isActive: { type: 'boolean' },
           },
         },
         response: {
@@ -236,7 +204,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
         },
       },
     },
-    async (request: FastifyRequest<{ Params: { id: string }; Body: any }>, reply: FastifyReply) => {
+    async (request, reply) => {
       const result = updatePostSchema.safeParse(request.body)
       if (!result.success) {
         throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации')
@@ -250,7 +218,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
   )
 
   // DELETE /api/v1/admin/posts/:id - soft delete post
-  app.delete<{ Params: { id: string }; Reply: any }>(
+  app.delete<{ Params: { id: string } }>(
     '/posts/:id',
     {
       preHandler: preHandlers,
@@ -270,7 +238,7 @@ export async function postsRoutes(app: FastifyInstance, preHandlers: any[]) {
         },
       },
     },
-    async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+    async (request, reply) => {
       await postService.deletePost(request.params.id)
       reply.code(204)
       return null

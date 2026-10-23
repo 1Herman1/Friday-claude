@@ -295,6 +295,13 @@ sudo nginx -t && sudo systemctl reload nginx
 Либо, если правка мелкая, внести её на сервере руками через
 workflow «Run Command on Perfect Skin VPS» и не забыть повторить в репозитории.
 
+Локации видеоотзывов живут в сниппете `nginx-perfect-skin-media.conf`, который
+подключается строкой `include` в обоих server-блоках. Чтобы выложить его на
+живой сервер, сначала выкатить код (deploy), затем через «Run Command on Perfect
+Skin VPS» запустить `bash projects/perfect-skin/deploy/apply-nginx-media.sh`
+(только diff), и ту же команду с `--apply`: бэкап, `nginx -t`, reload, при
+ошибке откат из бэкапа. Повтор безопасен.
+
 ### Оптовые цены и признак «профессиональный» из прайса
 
 Скрипт `server/prisma/import-prices.ts`, вход — `server/assets/price-import.json`

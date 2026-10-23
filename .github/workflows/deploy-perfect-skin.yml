@@ -49,6 +49,8 @@ jobs:
             set -euo pipefail
             cd /var/www/ps-src
 
+            command -v ffmpeg >/dev/null || echo "::warning::ffmpeg не установлен — загрузка видеоотзывов будет отклоняться"
+
             echo "==> Syncing service keys from GitHub secrets into projects/perfect-skin/server/.env"
             touch projects/perfect-skin/server/.env
             upsert_env() {
@@ -147,20 +149,13 @@ jobs:
             rm -rf /var/www/perfect-skin/client/*
             cp -r projects/perfect-skin/client/dist/* /var/www/perfect-skin/client/
 
-            echo "==> Preparing video review storage and ffmpeg"
-            # Публичный каталог отдаёт Nginx; документы согласий — приватный, только для процесса (PM2 идёт под root).
+            echo "==> Preparing video review storage"
+            # Ролики отдаёт приложение через Nginx по внутреннему адресу; каталог не покрывается корнем сайта.
+            # Документы согласий — приватный каталог, только для процесса (PM2 идёт под root).
             # .tmp — рядом с каталогом, чтобы rename шёл в пределах одной файловой системы.
             mkdir -p /var/www/perfect-skin/uploads/video-reviews /var/www/perfect-skin/uploads/video-reviews.tmp
             mkdir -p /var/lib/perfect-skin/video-consents /var/lib/perfect-skin/video-consents.tmp
             chmod 0700 /var/lib/perfect-skin/video-consents /var/lib/perfect-skin/video-consents.tmp
-            # ffmpeg без перекодирования снимает с роликов геолокацию и данные устройства. Без него загрузка не работает.
-            # Ставится один раз: при наличии бинарника apt не трогаем.
-            if ! command -v ffmpeg >/dev/null; then
-              export DEBIAN_FRONTEND=noninteractive
-              apt-get update -qq
-              apt-get install -y -qq --no-install-recommends ffmpeg
-            fi
-            ffmpeg -version | head -1
 
             echo "==> Sidecar health check for PM2 path consistency"
             EXPECTED_SCRIPT="$(pwd)/projects/perfect-skin/server/dist/index.js"

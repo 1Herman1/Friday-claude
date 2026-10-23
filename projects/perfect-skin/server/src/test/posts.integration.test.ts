@@ -240,6 +240,44 @@ describe('Posts integration', () => {
     expect(res.statusCode).toBe(404)
   })
 
+  it('правка с publishedAt: null переводит статью в черновик, пустые поля принимаются', async () => {
+    const post = await seedPost('to-draft')
+    const res = await app.inject({
+      method: 'PATCH',
+      url: `/api/v1/admin/posts/${post.id}`,
+      headers: { authorization: `Bearer ${tokens.content}` },
+      payload: { publishedAt: null, excerpt: null, coverImage: null, seoTitle: null, seoDescription: null, advertiser: null, erid: null },
+    })
+    expect(res.statusCode).toBe(200)
+    expect(JSON.parse(res.body).publishedAt).toBeNull()
+    expect((await db.post.findUniqueOrThrow({ where: { id: post.id } })).publishedAt).toBeNull()
+  })
+
+  it('создание с пустыми полями и без даты публикации — черновик', async () => {
+    const slug = `${PREFIX}null-fields-${Date.now()}`
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/v1/admin/posts',
+      headers: { authorization: `Bearer ${tokens.content}` },
+      payload: { title: 'Черновик', slug, body: 'Текст', excerpt: null, publishedAt: null, advertiser: null, erid: null },
+    })
+    expect(res.statusCode).toBe(201)
+    expect(JSON.parse(res.body).publishedAt).toBeNull()
+  })
+
+  it('админский список по kind=news отдаёт только новости', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/v1/admin/posts?kind=news&limit=100',
+      headers: { authorization: `Bearer ${tokens.super}` },
+    })
+    expect(res.statusCode).toBe(200)
+    const items = JSON.parse(res.body).items as Array<{ slug: string; kind: string }>
+    expect(items.length).toBeGreaterThan(0)
+    expect(items.every((item) => item.kind === 'news')).toBe(true)
+    expect(items.map((item) => item.slug)).not.toContain(article.slug)
+  })
+
   it('покупатель не видит админский список (403)', async () => {
     const res = await app.inject({
       method: 'GET',

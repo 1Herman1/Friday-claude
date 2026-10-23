@@ -2,7 +2,6 @@ import type { FileHandle } from 'node:fs/promises'
 import { ApiError } from './errors.js'
 
 export type VideoExt = 'mp4' | 'webm'
-export type PosterExt = 'jpg' | 'webp'
 export type ConsentDocExt = 'pdf' | 'jpg' | 'png'
 
 const MP4_BRANDS = ['isom', 'iso2', 'iso4', 'iso5', 'iso6', 'mp41', 'mp42', 'avc1', 'M4V ', 'dash', 'MSNV']
@@ -31,12 +30,9 @@ export function sniffVideo(head: Buffer): VideoExt {
   throw new ApiError(400, 'UNSUPPORTED_FILE', 'Нужен ролик в формате MP4 (H.264) или WebM')
 }
 
-export function sniffPoster(head: Buffer): PosterExt {
+export function sniffPoster(head: Buffer): 'jpg' {
   if (head[0] === 0xff && head[1] === 0xd8 && head[2] === 0xff) return 'jpg'
-  if (head.length >= 12 && head.toString('latin1', 0, 4) === 'RIFF' && head.toString('latin1', 8, 12) === 'WEBP') {
-    return 'webp'
-  }
-  throw new ApiError(400, 'UNSUPPORTED_FILE', 'Постер — JPG или WebP')
+  throw new ApiError(400, 'UNSUPPORTED_FILE', 'Постер — JPG')
 }
 
 export function sniffConsentDoc(head: Buffer): ConsentDocExt {

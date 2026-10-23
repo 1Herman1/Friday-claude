@@ -103,6 +103,7 @@ function readyWhere(now: Date): Prisma.VideoReviewWhereInput {
 }
 
 function toAdmin(row: AdminRow) {
+  const blockers = publishBlockers(row, new Date())
   return {
     id: row.id,
     authorName: row.authorName,
@@ -113,6 +114,8 @@ function toAdmin(row: AdminRow) {
     posterUrl: row.posterUrl,
     sortOrder: row.sortOrder,
     isActive: row.isActive,
+    publishable: row.isActive && blockers.length === 0,
+    publishBlockers: blockers,
     hasConsentDoc: row.consentDocPath !== null,
     consentConfirmed: row.consentConfirmed,
     consentConfirmedAt: row.consentConfirmedAt,
@@ -154,6 +157,41 @@ function slotData(slot: MediaSlot, url: string | null): Prisma.VideoReviewUnchec
   return { posterUrl: url }
 }
 
+function slotWhere(slot: MediaSlot, url: string | null): Prisma.VideoReviewWhereInput {
+  if (slot === 'mp4') return { mp4Url: url }
+  if (slot === 'webm') return { webmUrl: url }
+  return { posterUrl: url }
+}
+
+// Кэш «файл принадлежит публикуемому отзыву» для раздачи Range-запросами видео. Сбрасывается при любой правке.
+const PUBLISHABLE_CACHE_MS = 30_000
+const publishableCache = new Map<string, boolean>()
+let publishableCacheUntil = 0
+
+function resetPublishableCache() {
+  publishableCache.clear()
+  publishableCacheUntil = 0
+}
+
+/** Файл принадлежит отзыву, который сейчас публикуется: то же условие, что публичная выдача. */
+export async function isPublishableFile(name: string): Promise<boolean> {
+  const now = new Date()
+  if (now.getTime() >= publishableCacheUntil) {
+    publishableCache.clear()
+    publishableCacheUntil = now.getTime() + PUBLISHABLE_CACHE_MS
+  }
+  const cached = publishableCache.get(name)
+  if (cached !== undefined) return cached
+
+  const url = `${PUBLIC_PREFIX}${name}`
+  const owners = await db.videoReview.count({
+    where: { AND: [{ isActive: true }, readyWhere(now), { OR: [{ mp4Url: url }, { webmUrl: url }, { posterUrl: url }] }] },
+  })
+  const publishable = owners > 0
+  publishableCache.set(name, publishable)
+  return publishable
+}
+
 function tmpDirOf(dir: string) {
   return `${resolve(dir)}.tmp`
 }
@@ -189,10 +227,17 @@ async function readHead(path: string, size = 64): Promise<Buffer> {
   }
 }
 
+const FFMPEG_INPUT_FORMAT: Record<VideoExt, string> = { mp4: 'mov', webm: 'matroska' }
+
 // РКН: ffmpeg копирует потоки без перекодирования и не переносит метаданные (геолокация, устройство).
 // execFile, не shell: имя файла не попадает в командную строку. Любая ошибка — отказ, без оригинала.
+// Формат входа задан явно, протокол — только файл: ffmpeg не должен ходить по сети или читать чужие пути.
 async function stripVideoMetadata(input: string, output: string, ext: VideoExt): Promise<void> {
-  const args = ['-v', 'error', '-nostdin', '-i', input, '-map_metadata', '-1', '-map_chapters', '-1', '-c', 'copy']
+  const args = [
+    '-v', 'error', '-nostdin', '-protocol_whitelist', 'file',
+    '-f', FFMPEG_INPUT_FORMAT[ext], '-i', input,
+    '-map_metadata', '-1', '-map_chapters', '-1', '-c', 'copy',
+  ]
   if (ext === 'mp4') args.push('-movflags', '+faststart')
   args.push(output)
   try {
@@ -210,11 +255,10 @@ async function stripVideoMetadata(input: string, output: string, ext: VideoExt):
 async function prepareMedia(slot: MediaSlot, raw: string, tmpDir: string): Promise<{ path: string; ext: string }> {
   const head = await readHead(raw)
   if (slot === 'poster') {
-    const ext = sniffPoster(head)
-    const path = join(tmpDir, `${randomUUID()}.${ext}`)
-    const bytes = await readFile(raw)
-    await writeFile(path, ext === 'jpg' ? stripJpegMetadata(bytes) : bytes, { mode: 0o644 })
-    return { path, ext }
+    sniffPoster(head)
+    const path = join(tmpDir, `${randomUUID()}.jpg`)
+    await writeFile(path, stripJpegMetadata(await readFile(raw)), { mode: 0o644 })
+    return { path, ext: 'jpg' }
   }
 
   const kind = sniffVideo(head)
@@ -276,7 +320,13 @@ export async function createVideoReview(payload: VideoReviewCreate) {
   return toAdmin(row)
 }
 
-function buildUpdate(patch: VideoReviewPatch, actorId: string, now: Date): Prisma.VideoReviewUncheckedUpdateInput {
+/** Снятие любого условия публикации в той же записи снимает и саму публикацию: иначе нарушится CHECK в базе. */
+function buildUpdate(
+  current: { consentConfirmed: boolean; contentReviewed: boolean },
+  patch: VideoReviewPatch,
+  actorId: string,
+  now: Date,
+): Prisma.VideoReviewUncheckedUpdateInput {
   const data: Prisma.VideoReviewUncheckedUpdateInput = {}
   if (patch.authorName !== undefined) data.authorName = patch.authorName
   if (patch.caption !== undefined) data.caption = patch.caption
@@ -287,12 +337,13 @@ function buildUpdate(patch: VideoReviewPatch, actorId: string, now: Date): Prism
   if (patch.consentAllowSocial !== undefined) data.consentAllowSocial = patch.consentAllowSocial
   if (patch.consentAllowAds !== undefined) data.consentAllowAds = patch.consentAllowAds
   if (patch.consentExpiresAt !== undefined) data.consentExpiresAt = patch.consentExpiresAt
-  if (patch.consentConfirmed === true) {
+  // След пишем только при переходе false → true: повторное сохранение формы не переписывает, кто подтвердил.
+  if (patch.consentConfirmed === true && !current.consentConfirmed) {
     Object.assign(data, { consentConfirmed: true, consentConfirmedAt: now, consentConfirmedById: actorId })
   } else if (patch.consentConfirmed === false) {
     data.consentConfirmed = false
   }
-  if (patch.contentReviewed === true) {
+  if (patch.contentReviewed === true && !current.contentReviewed) {
     Object.assign(data, { contentReviewed: true, contentReviewedAt: now, contentReviewedById: actorId })
   } else if (patch.contentReviewed === false) {
     data.contentReviewed = false
@@ -308,7 +359,13 @@ function buildUpdate(patch: VideoReviewPatch, actorId: string, now: Date): Prism
       posterUrl: null,
     })
   }
-  if (patch.isActive === false) data.isActive = false
+  const unpublishes =
+    patch.isActive === false ||
+    patch.consentAllowSite === false ||
+    patch.consentConfirmed === false ||
+    patch.contentReviewed === false ||
+    (patch.consentExpiresAt !== undefined && patch.consentExpiresAt !== null && patch.consentExpiresAt <= now)
+  if (unpublishes) data.isActive = false
   return data
 }
 
@@ -335,7 +392,7 @@ export async function updateVideoReview(
       if (current.consentRevokedAt) throw new ApiError(409, 'CONSENT_REVOKED', 'Согласие отозвано: нужен новый документ')
     }
 
-    const next = await tx.videoReview.update({ where: { id }, data: buildUpdate(patch, actorId, now) })
+    const next = await tx.videoReview.update({ where: { id }, data: buildUpdate(current, patch, actorId, now) })
     const blockers = publishBlockers(next, now)
 
     if (patch.isActive === true) {
@@ -354,6 +411,7 @@ export async function updateVideoReview(
     const removedUrls = patch.consentRevoked ? [current.mp4Url, current.webmUrl, current.posterUrl] : []
     return { row: updated, removed: removedUrls }
   })
+  resetPublishableCache()
 
   if (patch.consentRevoked) {
     log.warn({ videoReviewId: id }, 'video consent revoked')
@@ -379,6 +437,7 @@ export async function deleteVideoReview(id: string, log: FastifyBaseLogger) {
     where: { id },
     data: { deletedAt: new Date(), isActive: false, mp4Url: null, webmUrl: null, posterUrl: null },
   })
+  resetPublishableCache()
   await removeFiles([current.mp4Url, current.webmUrl, current.posterUrl], log)
 }
 
@@ -388,6 +447,7 @@ export async function deleteVideoMedia(id: string, slot: MediaSlot, log: Fastify
     throw new ApiError(409, 'MEDIA_IN_USE', 'Снимите отзыв с публикации, прежде чем удалять ролик или постер')
   }
   await db.videoReview.update({ where: { id }, data: slotData(slot, null) })
+  resetPublishableCache()
   await removeFiles([slotUrl(current, slot)], log)
 }
 
@@ -414,9 +474,25 @@ export async function uploadVideoMedia(id: string, slot: MediaSlot, file: Multip
     work = null
 
     const url = `${PUBLIC_PREFIX}${finalName}`
-    const updated = await db.videoReview.update({ where: { id }, data: slotData(slot, url) })
+    // Запись только если слот всё ещё держит тот файл, что видели при входе: параллельная загрузка не перезапишет чужой.
+    const { count } = await db.videoReview.updateMany({
+      where: { id, deletedAt: null, consentRevokedAt: null, ...slotWhere(slot, slotUrl(current, slot)) },
+      data: {
+        ...slotData(slot, url),
+        isActive: false,
+        contentReviewed: false,
+        contentReviewedAt: null,
+        contentReviewedById: null,
+      },
+    })
+    if (count === 0) {
+      await rm(join(dir, finalName), { force: true })
+      throw new ApiError(409, 'CONFLICT_RETRY', 'Отзыв изменился во время загрузки, обновите страницу и загрузите файл снова')
+    }
+    resetPublishableCache()
     await removeFiles([slotUrl(current, slot)], log)
 
+    const updated = await db.videoReview.findUniqueOrThrow({ where: { id }, select: { posterUrl: true, webmUrl: true } })
     return { slot, url, warnings: mediaWarnings(slot, updated) }
   } finally {
     await rm(raw, { force: true })
@@ -440,8 +516,8 @@ export async function uploadConsentDoc(id: string, file: MultipartFile) {
     const name = `${randomUUID()}.${ext}`
     await rename(raw, join(dir, name))
 
-    const row = await db.videoReview.update({
-      where: { id },
+    const { count } = await db.videoReview.updateMany({
+      where: { id, deletedAt: null },
       data: {
         consentDocPath: name,
         consentConfirmed: false,
@@ -451,8 +527,13 @@ export async function uploadConsentDoc(id: string, file: MultipartFile) {
         consentRevokedById: null,
         isActive: false,
       },
-      include: ADMIN_INCLUDE,
     })
+    if (count === 0) {
+      await rm(join(dir, name), { force: true })
+      throw new ApiError(404, 'NOT_FOUND', 'Отзыв не найден')
+    }
+    resetPublishableCache()
+    const row = await db.videoReview.findUniqueOrThrow({ where: { id }, include: ADMIN_INCLUDE })
     return toAdmin(row)
   } finally {
     await rm(raw, { force: true })
