@@ -58,3 +58,8 @@ status: digested
 
 **Ответ** 14:40:
   Your request was not processed. Send it again if you still want me to carry it out.
+
+## Фрагмент (09:31)
+
+**Просил** 09:31:
+  Hermes, задание по Perfect Skin, уточнённое: как дизайнерски расположить текст на первом экране вместе с роликом. Нужна игра размерами, слоями или новая идея экрана. Четыре направления и что вернуть: docs/hermes/tasks/2026-10-22-perfect-skin-hero-references.md (ветка claude/greeting-nnz368). Ответ положи в docs/projects/perfect-skin/design-system/references/hero-v2.md и закоммить.
