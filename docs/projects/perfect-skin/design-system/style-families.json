@@ -411,6 +411,175 @@
           "pageUrl": "https://minimal.gallery/sonderdays/"
         }
       ]
+    },
+    {
+      "slug": "magazine-depth",
+      "name": "Обложка с глубиной",
+      "status": "proposed",
+      "descriptor": {
+        "name": "Обложка с глубиной",
+        "slug": "magazine-depth",
+        "summary": "Лицо по центру, огромное слово H1 стоит за головой (ролик с альфой), мелкие капс-подписи и кнопки по бокам — обложка журнала про уход.",
+        "palette": [
+          {
+            "hex": "#f4f2ec",
+            "role": "bg",
+            "ratio": 0.5
+          },
+          {
+            "hex": "#14202e",
+            "role": "text",
+            "ratio": 0.22,
+            "contrastOn": "#f4f2ec"
+          },
+          {
+            "hex": "#e4d3ac",
+            "role": "accent",
+            "ratio": 0.16
+          },
+          {
+            "hex": "#1f3a5f",
+            "role": "accent-ink",
+            "ratio": 0.08,
+            "contrastOn": "#f4f2ec"
+          },
+          {
+            "hex": "#8c8578",
+            "role": "muted",
+            "ratio": 0.04
+          }
+        ],
+        "type": {
+          "display": "Druk Wide, Archivo Black, Inter Tight",
+          "body": "Inter, Helvetica Neue",
+          "scale": [
+            12,
+            14,
+            16,
+            20,
+            28,
+            44,
+            72,
+            112
+          ],
+          "weightDisplay": 800,
+          "tracking": -0.03,
+          "caseAccent": "caps-labels"
+        },
+        "spacing": {
+          "base": 8,
+          "rhythm": [
+            8,
+            16,
+            24,
+            40,
+            64,
+            96
+          ],
+          "density": "balanced"
+        },
+        "radii": {
+          "small": 2,
+          "large": 999,
+          "pattern": "pill-vs-square"
+        },
+        "shadows": "flat",
+        "motion": {
+          "duration": [
+            160,
+            260
+          ],
+          "easing": "cubic-bezier(0.2, 0, 0, 1)",
+          "character": "calm"
+        },
+        "dials": {
+          "visualDensity": 0.4,
+          "designVariance": 0.6,
+          "decorLevel": 0.15,
+          "symmetry": 0.75
+        },
+        "decor": [
+          "слово за фигурой",
+          "мелкие капс-подписи колонками",
+          "пустой тёплый фон тон в тон"
+        ],
+        "dominant_pattern": "Центральный портрет, за ним огромное слово во всю ширину, голова перекрывает до трети букв, по бокам мелкий текст и кнопки",
+        "divergences": [
+          "Rhode ставит имя марки, у нас слово из H1 («ИСПАНИИ»)",
+          "Snellenberg двигает бегущую строку, у нас слово неподвижно (MOTION_INTENSITY=3)"
+        ],
+        "prompt_fragment": "magazine cover hero, centered calm portrait, oversized heavy grotesque word behind the head partially occluded, small uppercase captions in side columns, warm stone ground #F4F2EC, deep navy ink, soft daylight",
+        "negative_fragment": "purple blue gradient, gold text on light, rounded card grid, emoji, stock smiling faces, glossy 3d",
+        "mood": [
+          "редакционный",
+          "спокойный",
+          "глубина",
+          "обложка"
+        ],
+        "exemplars": [
+          "a059f4ff-8193-4139-90b0-d2b6d98bafd7",
+          "384587f3-4393-47cf-a061-f072ebe526a0",
+          "7b36a936-8e90-4cb1-87cc-0e9b3f8e5aa4",
+          "dcbe6565-85a2-40fe-b8f9-caeff4e259e2"
+        ],
+        "antiRefCheck": [
+          "голова закрывает не больше 35% слова",
+          "первая и последние буквы видны",
+          "текст не заходит на фигуру"
+        ]
+      },
+      "references": [
+        {
+          "source": "pinterest",
+          "sourceRef": "a059f4ff-8193-4139-90b0-d2b6d98bafd7",
+          "pageUrl": "https://www.pinterest.com/pin/e1_AfqPShywrh8Mt0lv3tj8GRCvrNwOCJIudVElAcd21qzqqY4zKgOa/",
+          "imageUrl": "https://i.pinimg.com/originals/25/45/95/2545956a702706dce4afa4e62150e168.png",
+          "author": "lelia404"
+        },
+        {
+          "source": "pinterest",
+          "sourceRef": "384587f3-4393-47cf-a061-f072ebe526a0",
+          "pageUrl": "https://www.pinterest.com/pin/e1_AfqPShziCTC8OZ03lr8mvlF-wYVZfrHVhYRwjPHB_mItL4jSeA-g/",
+          "imageUrl": "https://i.pinimg.com/originals/c9/e8/37/c9e837ef3fd29a94e7ad44291821a187.jpg",
+          "author": "kamdog7"
+        },
+        {
+          "source": "pinterest",
+          "sourceRef": "7b36a936-8e90-4cb1-87cc-0e9b3f8e5aa4",
+          "pageUrl": "https://www.pinterest.com/pin/e1_AfqPShwbQZJ-gthuPfIGpGebHTW-RXEaAWZIwKfyhsfyBK3L80NR/",
+          "imageUrl": "https://i.pinimg.com/originals/bb/67/b5/bb67b5b0b228a7629058e6e013b8698f.png",
+          "author": "moonchildexe"
+        },
+        {
+          "source": "pinterest",
+          "sourceRef": "dcbe6565-85a2-40fe-b8f9-caeff4e259e2",
+          "pageUrl": "https://www.pinterest.com/pin/e1_AfqPShzdQafmFc1L9LhvZvDw-_nCKVWvpGC1L4EJKIBAJb7ivdWV/",
+          "imageUrl": "https://i.pinimg.com/originals/4f/cb/ce/4fcbce11c431b01a155b356798c714d1.png",
+          "author": "csswinner"
+        },
+        {
+          "source": "pinterest",
+          "sourceRef": "3551336a-3f3f-4d74-8bc4-ae275f118c0c",
+          "pageUrl": "https://www.pinterest.com/pin/e1_AfqPShzWyCs0z-gFfCpqXSmat2Py5GeLz57qpQMoSaSuMAH4ocPX/",
+          "imageUrl": "https://i.pinimg.com/originals/09/3a/1a/093a1ada0406dcb102c3f4a87b9e17b6.jpg",
+          "author": "alendinezwonit"
+        },
+        {
+          "source": "pinterest",
+          "sourceRef": "74725009-04c0-4ad8-8912-0e8d2c1eb17f",
+          "pageUrl": "https://www.pinterest.com/pin/e1_AfqPShwRo2dm2e8Qe99v8jWqf0ZHVbC046VBpne1zJTXZ2YLgusV2A/",
+          "imageUrl": "https://i.pinimg.com/originals/90/5c/4a/905c4a22d4011501d6e99bd3f52f002f.jpg",
+          "author": "ideadotz"
+        },
+        {
+          "source": "pinterest",
+          "sourceRef": "a7b7229c-eeef-4ad0-a62c-10e3eacb056d",
+          "pageUrl": "https://www.pinterest.com/pin/e1_AfqPShxyTNxvF-KA1Js5kndWLRImFl5XINpTmmb14B14UCUFn-kQmQ/",
+          "imageUrl": "https://i.pinimg.com/originals/a2/31/83/a23183f84e4bf93b2bba4746c39f290c.jpg",
+          "author": "t0098904"
+        }
+      ],
+      "note": "Из hero-v2.md (идея A), развитие editorial-slab"
     }
   ]
 }
