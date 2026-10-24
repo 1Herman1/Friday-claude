@@ -1,0 +1,34 @@
+Пины Pinterest для баннера slider-layout (метка в Nullume: bmg-slider-layout). Отобрал Hermes 24.10.2026.
+Только внутренний референс: композиция, свет, цвет, раскладка. В вёрстку и публикацию не идут, права авторам не передавались.
+
+pin-01.jpg — https://www.pinterest.com/pin/e1_AfqPShybPOOnoCbL9S3AFiLwSfPDDSlmaX5_XwSrqy9FSIrVwzgndQ/
+  Что взять: Широкий баннер: текст слева, флаконы и ветки справа, светлый: пропорции десктоп-слайда
+  Запрос: skincare banner text left product right
+
+pin-02.jpg — https://www.pinterest.com/pin/e1_AfqPShwkYLn3etM0B4Cyk2VT45qmCpU-xy7Ldq55aH7QWMa0pf2-/
+  Что взять: Широкий: заголовок и иконки преимуществ слева, продукты справа: блок преимуществ в слайде
+  Запрос: skincare banner text left product right
+
+pin-03.jpg — https://www.pinterest.com/pin/e1_AfqPShxCfHcK-i6WDIIAb5ydn52qKbcZsLavVRz-FrGFdPuZFlk1Lw/
+  Что взять: Широкий бежевый: текст слева, продукты на подиуме справа: спокойная премиальная раскладка
+  Запрос: skincare banner text left product right
+
+pin-04.jpg — https://www.pinterest.com/pin/e1_AfqPShwqDi8_sYdOqOEP0TWdCFlfUERrMHrfvvo4Avq6ncW3U-klGg/
+  Что взять: Белый слайд: заголовок слева, медицинские флаконы на подиуме справа: ближе всего к стилю BMG
+  Запрос: cosmetics website hero slider
+
+pin-05.jpg — https://www.pinterest.com/pin/e1_AfqPShwIrDJ5bTkbAzZr-Q2EsP-I4oDwVUYTwDT-SZOka6befhCr/
+  Что взять: Кремовый слайд: заголовок с засечками слева, золотистый флакон справа: премиальная типографика
+  Запрос: cosmetics website hero slider
+
+pin-06.jpg — https://www.pinterest.com/pin/e1_AfqPShyZh2KUziBeIn_WfwfBKq0D2x1IEcIvQ7YEiOhE4RCU8wK2Ow/
+  Что взять: Мятно-светлый слайд: текст слева, рука с флаконами справа: воздух и баланс
+  Запрос: cosmetics website hero slider
+
+pin-07.jpg — https://www.pinterest.com/pin/e1_AfqPShxCy2_5Z09gkxIRtq8MCXepfquL30cNVkC7tfHed3VEGEJCeQ/
+  Что взять: Розовый слайд: продукт слева, текст в центре, модель справа: розовая гамма сайта
+  Запрос: beauty ecommerce banner layout pink
+
+pin-08.jpg — https://www.pinterest.com/pin/e1_AfqPShzPEKRXVcXOg3IlVI4pKZF5AJd2I8JWjjicP3TIQjFN2sqJ/
+  Что взять: Голубой слайд: текст и кнопка слева, линейка флаконов справа: композиция линейки
+  Запрос: skincare hero banner mobile
