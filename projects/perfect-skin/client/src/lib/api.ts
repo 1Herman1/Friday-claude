@@ -20,7 +20,9 @@ interface ErrorResponse {
 
 export const getApiUrl = (): string => {
   const envUrl = import.meta.env.VITE_API_URL
-  return envUrl || 'http://localhost:3000'
+  if (envUrl) return envUrl
+  // Прод без явного адреса — свой же сервер: работает и по IP, и по домену
+  return import.meta.env.DEV ? 'http://localhost:3000' : window.location.origin
 }
 
 export async function fetchApi<T>(

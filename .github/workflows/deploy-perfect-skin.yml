@@ -141,7 +141,7 @@ jobs:
             npm run build --workspace=@ps/server
 
             echo "==> Building client with API URL"
-            VITE_API_URL=https://new.perfect-skin.shop npm run build --workspace=@ps/client
+            npm run build --workspace=@ps/client
 
             echo "==> Deploying static files (before reload: new API must not meet the old bundle)"
             mkdir -p /var/www/perfect-skin/client
