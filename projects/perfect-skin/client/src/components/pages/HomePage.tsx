@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { hasDemoParam } from '@/lib/demo-mode'
 import { HeroSection } from '@/components/home/HeroSection'
 import { CtaTiles } from '@/components/home/CtaTiles'
 import { BrandsSection } from '@/components/home/BrandsSection'
@@ -12,6 +14,15 @@ import { NewsSection } from '@/components/home/NewsSection'
 import { FaqSection } from '@/components/home/FaqSection'
 
 export function HomePage() {
+  useEffect(() => {
+    if (!hasDemoParam()) return
+    const robots = document.createElement('meta')
+    robots.name = 'robots'
+    robots.content = 'noindex, nofollow'
+    document.head.append(robots)
+    return () => robots.remove()
+  }, [])
+
   return (
     <>
       {/* Hero */}

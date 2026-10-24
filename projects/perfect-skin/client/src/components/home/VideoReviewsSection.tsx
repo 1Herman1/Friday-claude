@@ -11,15 +11,35 @@ const MIN_REVIEWS = 3
 const MAX_REVIEWS = 12
 const SWIPE_MIN_PX = 40
 const SWIPE_MIN_SPEED = 0.3
+const EASE_OUT = 'cubic-bezier(0.23,1,0.32,1)'
 
-// Индекс = расстояние от активного ролика: сдвиг в % ширины слайда, масштаб, вуаль, z
-const LAYOUT = [
-  { x: 0, scale: 1, veil: 0, z: 40 },
-  { x: 62, scale: 0.84, veil: 0.35, z: 30 },
-  { x: 112, scale: 0.7, veil: 0.55, z: 20 },
-  { x: 152, scale: 0.58, veil: 0.75, z: 10 },
-]
-const FAR = { x: 176, scale: 0.48, veil: 0.75, z: 0 }
+type Slot = { x: number; depth: number; rot: number; scale: number; veil: number; layer: number }
+type Layout = { steps: Slot[]; far: Slot }
+type Pose = { transform: string; opacity: number; veil: number; layer: number; hidden: boolean }
+type Seam = { timers: number[]; frames: number[] }
+type VideoList = { items: PublicVideoReview[]; demo: boolean }
+
+// Объёмное кольцо: x — % ширины слайда, depth — доля --vr-w, rot — градусы
+const RING: Layout = {
+  steps: [
+    { x: 0, depth: 0, rot: 0, scale: 1, veil: 0, layer: 40 },
+    { x: 72, depth: 0.3, rot: 25, scale: 0.92, veil: 0.35, layer: 30 },
+    { x: 130, depth: 0.65, rot: 38, scale: 0.84, veil: 0.55, layer: 20 },
+    { x: 176, depth: 1.05, rot: 48, scale: 0.76, veil: 0.75, layer: 10 },
+  ],
+  far: { x: 195, depth: 1.5, rot: 56, scale: 0.68, veil: 0.75, layer: 0 },
+}
+
+// Плоская раскладка для prefers-reduced-motion
+const FLAT: Layout = {
+  steps: [
+    { x: 0, depth: 0, rot: 0, scale: 1, veil: 0, layer: 40 },
+    { x: 62, depth: 0, rot: 0, scale: 0.84, veil: 0.35, layer: 30 },
+    { x: 112, depth: 0, rot: 0, scale: 0.7, veil: 0.55, layer: 20 },
+    { x: 152, depth: 0, rot: 0, scale: 0.58, veil: 0.75, layer: 10 },
+  ],
+  far: { x: 176, depth: 0, rot: 0, scale: 0.48, veil: 0.75, layer: 0 },
+}
 
 type NavigatorWithConnection = Navigator & { connection?: { saveData?: boolean } }
 
@@ -29,10 +49,10 @@ const CONTROL =
 const ARROW =
   'inline-flex size-12 shrink-0 items-center justify-center rounded-pill border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-transform duration-160 ease-out active:scale-97 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring'
 
-async function loadVideoReviews(): Promise<PublicVideoReview[]> {
-  if (import.meta.env.DEV && isDemoSections()) return (await import('@/lib/home-demo')).DEMO_VIDEOS
+async function loadVideoReviews(): Promise<VideoList> {
+  if (isDemoSections()) return { items: (await import('@/lib/home-demo')).DEMO_VIDEOS, demo: true }
   const { items } = await fetchVideoReviews({ limit: MAX_REVIEWS })
-  return items.filter((item) => item.mp4Url && item.posterUrl).slice(0, MAX_REVIEWS)
+  return { items: items.filter((item) => item.mp4Url && item.posterUrl).slice(0, MAX_REVIEWS), demo: false }
 }
 
 /** Позиция слайда относительно активного по кругу: -n/2 < rel <= n/2 */
@@ -41,21 +61,67 @@ function relativeIndex(index: number, active: number, n: number): number {
   return rel > n / 2 ? rel - n : rel
 }
 
-function pose(rel: number, n: number, maxVisible: number) {
+function slotTransform(slot: Slot, sign: number): string {
+  return `translateX(${sign * slot.x}%) translateZ(calc(var(--vr-w) * ${-slot.depth})) rotateY(${sign * slot.rot}deg) scale(${slot.scale})`
+}
+
+function pose(rel: number, n: number, maxVisible: number, reduced: boolean): Pose {
   const dist = Math.abs(rel)
   const hidden = dist > maxVisible || (n % 2 === 0 && dist === n / 2)
-  const step = hidden ? FAR : LAYOUT[dist]
+  const layout = reduced ? FLAT : RING
+  const slot = hidden ? layout.far : layout.steps[dist]
   return {
-    x: (rel < 0 ? -1 : 1) * step.x,
-    scale: step.scale,
-    veil: step.veil,
-    z: step.z,
+    transform: slotTransform(slot, rel < 0 ? -1 : 1),
     opacity: hidden ? 0 : 1,
+    veil: slot.veil,
+    layer: slot.layer,
     hidden,
   }
 }
 
-function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
+function writePose(el: HTMLDivElement, target: Pose) {
+  el.style.transform = target.transform
+  el.style.opacity = String(target.opacity)
+}
+
+function cancelSeam(seam: Seam) {
+  seam.timers.forEach((id) => window.clearTimeout(id))
+  seam.frames.forEach((id) => cancelAnimationFrame(id))
+  seam.timers = []
+  seam.frames = []
+}
+
+// Перескок через шов кольца: за шаром на старой стороне (160 мс) → за шаром на новой → выход на место
+function crossSeam(el: HTMLDivElement, seam: Seam, from: number, to: number, target: Pose, fromVisible: boolean) {
+  const enter = (duration: number | null) => {
+    el.style.transition = 'none'
+    el.style.transform = slotTransform(RING.far, to < 0 ? -1 : 1)
+    el.style.opacity = '0'
+    seam.frames.push(
+      requestAnimationFrame(() => {
+        seam.frames.push(
+          requestAnimationFrame(() => {
+            seam.timers = []
+            seam.frames = []
+            el.style.transition = duration ? `transform ${duration}ms ${EASE_OUT}, opacity ${duration}ms ${EASE_OUT}` : ''
+            writePose(el, target)
+          }),
+        )
+      }),
+    )
+  }
+
+  if (fromVisible) {
+    el.style.transition = `transform 160ms ${EASE_OUT}, opacity 160ms ${EASE_OUT}`
+    el.style.transform = slotTransform(RING.far, from < 0 ? -1 : 1)
+    el.style.opacity = '0'
+    seam.timers.push(window.setTimeout(() => enter(240), 160))
+  } else {
+    enter(null)
+  }
+}
+
+function VideoCoverflow({ items, demo }: { items: PublicVideoReview[]; demo: boolean }) {
   const n = items.length
   const [active, setActive] = useState(0)
   const [playing, setPlaying] = useState(true)
@@ -75,6 +141,7 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
   const sceneRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const slideRefs = useRef<(HTMLDivElement | null)[]>([])
+  const seams = useRef<Seam[]>(Array.from({ length: n }, () => ({ timers: [], frames: [] })))
   const prevSlotsRef = useRef<number[]>([])
   const swipeStart = useRef<{ x: number; y: number; t: number } | null>(null)
   const swiped = useRef(false)
@@ -121,23 +188,25 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
     else video.pause()
   }, [active, mountVideo, muted, playing, inView, tabVisible])
 
-  // Перескок через шов круга: слайд, который улетает на другой край, появляется на месте без пролёта
   useLayoutEffect(() => {
-    const slots = Array.from({ length: n }, (_, i) => relativeIndex(i, active, n))
+    const rels = Array.from({ length: n }, (_, i) => relativeIndex(i, active, n))
     const prev = prevSlotsRef.current
-    prevSlotsRef.current = slots
-    if (reduced || prev.length !== n) return
-    slots.forEach((slot, i) => {
+    prevSlotsRef.current = rels
+    rels.forEach((rel, i) => {
       const el = slideRefs.current[i]
-      if (!el || Math.abs(slot - prev[i]) <= n / 2) return
-      el.style.transition = 'none'
-      el.style.opacity = '0'
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => {
-          el.style.transition = ''
-          el.style.opacity = String(pose(slot, n, maxVisible).opacity)
-        }),
-      )
+      if (!el) return
+      const seam = seams.current[i]
+      const pending = seam.timers.length + seam.frames.length > 0
+      cancelSeam(seam)
+      el.style.transition = ''
+      const target = pose(rel, n, maxVisible, reduced)
+      const crossed = prev.length === n && Math.abs(rel - prev[i]) > n / 2
+      if (!crossed || reduced) {
+        if (pending) writePose(el, target)
+        return
+      }
+      const fromVisible = !pending && !pose(prev[i], n, maxVisible, false).hidden
+      crossSeam(el, seam, prev[i], rel, target, fromVisible)
     })
   }, [active, n, maxVisible, reduced])
 
@@ -186,12 +255,12 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
         tabIndex={0}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
-        className="relative mx-auto h-[calc(var(--vr-w)*16/9)] touch-pan-y select-none rounded-block [--vr-w:14rem] md:[--vr-w:16.25rem] xl:[--vr-w:18.75rem] min-[1680px]:[--vr-w:21.25rem] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+        className="relative mx-auto h-[calc(var(--vr-w)*16/9)] touch-pan-y select-none rounded-block [--vr-w:14rem] md:[--vr-w:16.25rem] xl:[--vr-w:18.75rem] min-[1680px]:[--vr-w:21.25rem] [perspective:calc(var(--vr-w)*4)] [perspective-origin:50%_50%] motion-reduce:[perspective:none] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
       >
         {items.map((item, index) => {
           const isActive = index === active
-          const pos = pose(relativeIndex(index, active, n), n, maxVisible)
-          const label = `Видеоотзыв: ${item.authorName}${item.product ? `, ${item.product.name}` : ''}`
+          const pos = pose(relativeIndex(index, active, n), n, maxVisible, reduced)
+          const label = `${demo ? 'Пример отзыва. ' : ''}Видеоотзыв: ${item.authorName}${item.product ? `, ${item.product.name}` : ''}`
           return (
             <div
               key={item.id}
@@ -202,8 +271,8 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
               aria-roledescription="слайд"
               aria-label={`${index + 1} из ${n}`}
               aria-hidden={isActive ? undefined : true}
-              style={{ transform: `translateX(${pos.x}%) scale(${pos.scale})`, zIndex: pos.z, opacity: pos.opacity }}
-              className={`absolute top-0 left-[calc(50%_-_var(--vr-w)/2)] w-[var(--vr-w)] aspect-[9/16] overflow-hidden rounded-block bg-muted origin-center shadow-[0_24px_48px_-24px_rgb(20_32_46_/_0.45)] transition-[transform,opacity] duration-300 ease-out motion-reduce:transition-none ${pos.hidden ? 'pointer-events-none' : ''}`}
+              style={{ transform: pos.transform, zIndex: pos.layer, opacity: pos.opacity }}
+              className={`absolute top-0 left-[calc(50%_-_var(--vr-w)/2)] w-[var(--vr-w)] aspect-[9/16] overflow-hidden rounded-block bg-muted origin-center shadow-[0_24px_48px_-24px_rgb(20_32_46_/_0.45)] [backface-visibility:hidden] transition-[transform,opacity] duration-[400ms] ease-out motion-reduce:transition-none ${pos.hidden ? 'pointer-events-none' : ''}`}
             >
               {isActive && mountVideo ? (
                 <video
@@ -230,9 +299,18 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
                 />
               )}
 
+              {demo && (
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-3 left-3 rounded-pill bg-dark/70 px-3 py-1.5 font-heading text-label font-semibold uppercase tracking-wide text-dark-foreground backdrop-blur-sm"
+                >
+                  Пример отзыва
+                </span>
+              )}
+
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-background transition-opacity duration-300 ease-out motion-reduce:transition-none"
+                className="pointer-events-none absolute inset-0 bg-background transition-opacity duration-[400ms] ease-out motion-reduce:transition-none"
                 style={{ opacity: pos.veil }}
               />
 
@@ -323,7 +401,7 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
           </button>
         </div>
         <p className="sr-only" aria-live="polite">
-          Отзыв {active + 1} из {n}: {current.authorName}
+          Отзыв {active + 1} из {n}{demo ? ' (пример)' : ''}: {current.authorName}
         </p>
       </div>
     </div>
@@ -331,8 +409,8 @@ function VideoCoverflow({ items }: { items: PublicVideoReview[] }) {
 }
 
 export function VideoReviewsSection() {
-  const items = useHomeList(loadVideoReviews)
-  if (!items || items.length < MIN_REVIEWS) return null
+  const list = useHomeList<VideoList>(loadVideoReviews, { items: [], demo: false })
+  if (!list || list.items.length < MIN_REVIEWS) return null
 
   return (
     <section aria-labelledby="home-video-title" className="overflow-x-clip bg-background py-10 md:py-14">
@@ -344,7 +422,7 @@ export function VideoReviewsSection() {
           sub="Показывают средства, которыми пользуются, и рассказывают, как они подошли коже."
         />
       </div>
-      <VideoCoverflow items={items} />
+      <VideoCoverflow items={list.items} demo={list.demo} />
     </section>
   )
 }

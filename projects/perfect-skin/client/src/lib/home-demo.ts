@@ -81,8 +81,8 @@ export const DEMO_NEWS: PublicPostListItem[] = [
 export const DEMO_VIDEOS: PublicVideoReview[] = [
   {
     id: 'demo-v1',
-    authorName: 'Елена, Москва',
-    caption: 'Утром и вечером, кожа стала ровнее за месяц.',
+    authorName: 'Пример отзыва',
+    caption: 'Здесь будет короткая подпись покупателя',
     mp4Url: '/video/2-3.mp4',
     webmUrl: null,
     posterUrl: '/video/posters/poster-2-3.jpg',
@@ -90,8 +90,8 @@ export const DEMO_VIDEOS: PublicVideoReview[] = [
   },
   {
     id: 'demo-v2',
-    authorName: 'Марина, Казань',
-    caption: null,
+    authorName: 'Пример отзыва',
+    caption: 'Здесь будет короткая подпись покупателя',
     mp4Url: '/video/3-5.mp4',
     webmUrl: null,
     posterUrl: '/video/posters/poster-3-5.jpg',
@@ -99,8 +99,8 @@ export const DEMO_VIDEOS: PublicVideoReview[] = [
   },
   {
     id: 'demo-v3',
-    authorName: 'Ольга, Тверь',
-    caption: 'Пользуюсь вторую неделю, раздражения не было.',
+    authorName: 'Пример отзыва',
+    caption: 'Здесь будет короткая подпись покупателя',
     mp4Url: '/video/5-7.mp4',
     webmUrl: null,
     posterUrl: '/video/posters/poster-5-7.jpg',
@@ -108,8 +108,8 @@ export const DEMO_VIDEOS: PublicVideoReview[] = [
   },
   {
     id: 'demo-v4',
-    authorName: 'Ирина, Самара',
-    caption: 'Беру после работы, кожа не стянута.',
+    authorName: 'Пример отзыва',
+    caption: 'Здесь будет короткая подпись покупателя',
     mp4Url: '/video/7-9.mp4',
     webmUrl: null,
     posterUrl: '/video/posters/poster-7-9.jpg',
@@ -117,8 +117,8 @@ export const DEMO_VIDEOS: PublicVideoReview[] = [
   },
   {
     id: 'demo-v5',
-    authorName: 'Наталья, Сочи',
-    caption: 'Ровный тон к концу курса.',
+    authorName: 'Пример отзыва',
+    caption: 'Здесь будет короткая подпись покупателя',
     mp4Url: '/video/bestsellers/desktop/0-1.mp4',
     webmUrl: '/video/bestsellers/desktop/0-1.webm',
     posterUrl: '/video/bestsellers/desktop/k0.jpg',

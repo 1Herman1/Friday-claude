@@ -154,7 +154,7 @@ export function PostCard({ post, headingLevel = 3, showKind = false }: PostCardP
 }
 
 export function BlogSection() {
-  const items = useHomeList(loadArticles)
+  const items = useHomeList(loadArticles, [])
   if (!items || items.length < POSTS_COUNT) return null
 
   const [lead, ...rest] = items.slice(0, POSTS_COUNT)

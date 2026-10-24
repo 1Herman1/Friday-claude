@@ -60,7 +60,7 @@ function NewsRow({ item, withCover }: { item: PublicPostListItem; withCover: boo
 }
 
 export function NewsSection() {
-  const items = useHomeList(loadNews)
+  const items = useHomeList(loadNews, [])
   if (!items || items.length < MIN_NEWS) return null
   // Список отсортирован по publishedAt desc: первая новость — самая свежая
   if (Date.now() - new Date(items[0].publishedAt).getTime() > MAX_AGE_MS) return null
