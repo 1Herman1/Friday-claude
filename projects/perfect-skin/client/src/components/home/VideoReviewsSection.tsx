@@ -146,6 +146,8 @@ function VideoCoverflow({ items, demo }: { items: PublicVideoReview[]; demo: boo
   const swipeStart = useRef<{ x: number; y: number; t: number } | null>(null)
   const swiped = useRef(false)
 
+  useEffect(() => () => seams.current.forEach(cancelSeam), [])
+
   const goTo = (index: number) => {
     setActive(((index % n) + n) % n)
     setManualStart(null)
