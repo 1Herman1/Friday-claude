@@ -10,6 +10,9 @@
 
 Пути ниже даны от `docs/projects/beautymedgroup/`.
 
+Редакция 2 (24.10): решение Германа по заголовку А (§1), сверка с пинами
+Hermes (§12) — замены в А, Б, В; зона «Т» расширена до 40% (§2).
+
 ---
 
 ## 0. Что измерено на сайте (а не угадано)
@@ -43,21 +46,53 @@
 
 ## 1. Блокеры до генерации (без них картинка не спасёт слайд)
 
-1. **КРИТИЧНО (P2) — заголовок А не помещается в шаблон.** 79 знаков:
-   на 1440 — 4 строки, кружок превью **закрывает кнопку «Подробнее»**;
-   на 1280 и 1024 — 5 строк, кнопка закрыта целиком, текст заезжает на серый
-   блок; на ≥ 1700 — 7 строк, кнопка выпадает из плашки. Шаблон рассчитан на
-   35–45 знаков (действующие заголовки — до 40). Варианты для Германа:
-   - сократить: «Модифицированный пилинг Джесснера для любого типа кожи»
-     (53 знака; проверено — 3 строки везде, кнопка свободна); «Такого вы
-     ещё не видели!» уходит в описание товара;
-   - оставить текст и добавить CSS (ниже) — тогда 1440 в порядке, на
-     1024–1280 тесно (4 строки), **на ≥ 1700 всё равно не влезает**.
+1. **Заголовок А — решено (Герман, 24.10): два уровня в одном поле, текст
+   не сокращаем.** Исходная проблема: 79 знаков одним размером на 1440 дают
+   4 строки и кружок превью закрывает «Подробнее», на 1024–1280 кнопка
+   закрыта целиком, на ≥ 1700 кнопка выпадает из плашки
+   (`media/site/mock-title-a-collision.png`).
+   Решение — крупная строка-крючок и подзаголовок мельче, **только инлайн-
+   стилем внутри поля**, без «Дополнительных стилей». Размер подзаголовка в
+   `em` — он сам следует за брейкпоинтами темы (48 → 43 → 36 → 24 px):
+   21,6 px на 1301–1699, 19,4 px на ≥ 1700, 16,2 px на 744–1000, не меньше
+   15 px на телефоне (`max()`).
+
+   **Значение поля `nazvanie` для А (вставлять как есть):**
+
+   `Такого вы ещё не&nbsp;видели!<span style="display:block;margin-top:.35em;font-size:max(.45em,15px);line-height:1.3">Модифицированный пилинг Джесснера для любого типа&nbsp;кожи</span>`
+
+   Проверено на локальном макете со стилями темы, 7 ширин, координаты
+   сняты скриптом (снимок — `media/site/mock-title-a-two-level.png`):
+
+   | Ширина | Строки (крупно + мелко) | Кнопка в плашке | Кнопка и кружок |
+   |---|---|---|---|
+   | 1920 | 2 + 3 | да, 48 px до края | кружок сбоку, не задевает |
+   | 1440 | 1 + 1 | да | зазор 98 px |
+   | 1280 | 2 + 2 | да | зазор 14 px |
+   | 1024 | 2 + 2 | да | зазор 14 px |
+   | 834 | 2 + 2 | да | зазор 50 px |
+   | 390 | 2 + 2 | да | кружок справа, зазор 98 px |
+   | 360 | 2 + 2 | да | зазор 84 px |
+
+   `&nbsp;` держит «не видели!» и «типа кожи» вместе — без висячих слов.
+   На 1001–1300 вторая строка подзаголовка подходит к картинке на 38–40%
+   её ширины — поэтому зона «Т» в §2 расширена до 40%. После вставки через
+   REST проверить GET-ом, что `style` и `&nbsp;` сохранились (у
+   администратора `unfiltered_html` — должны), и посмотреть страницу.
 2. **ВАЖНО (P5) — заголовок Б на 1024–1280 даёт 4 строки, превью ложится
    на кнопку.** Лечится одной строкой в «Дополнительных стилях» (проверено
    на макете для Б и В на всех ширинах):
    `@media (min-width:744px) and (max-width:1699px){.product__name{font-size:40px;line-height:48px}}`
    `@media (min-width:1700px){.product__name{font-size:36px;line-height:44px;margin-bottom:32px}}`
+   С этими строками крупная строка А на 1024–1300 станет 40 px и уложится в
+   одну строку — значение поля А менять не нужно, оно работает и с ними, и
+   без них.
+   Инлайн-вариант для Б, если строки в «Дополнительные стили» ставить не
+   хотят (проверен на 7 ширинах: кнопка в плашке, кружок не задевает; на
+   1920 кнопка встаёт ровно на нижний край плашки):
+   `<span style="display:block;font-size:max(.75em,22px);line-height:1.2">Стерильные сыворотки для фракционной мезотерапии с&nbsp;пептидами и&nbsp;озоном</span>`
+   Минус инлайна: на 1440 заголовок Б будет 36 px против 48 у соседних
+   слайдов. CSS-строки меняют все слайды одинаково — для Б предпочтительнее.
 3. **ВАЖНО — фото коробки AQUA O3 WHITENING похоже на подделку-макет.**
    Строка свойств на коробке слово в слово как у ANTIAGING («Líneas de
    expresión | Hidratación | Redensificación»), а «WHITENING» на флаконах
@@ -78,10 +113,10 @@ y сверху.
 
 | Зона | Где | Правило | Откуда взялось |
 |---|---|---|---|
-| **Т — под текст** (красная) | x 0–35%, y 0–45% | пусто, только прозрачность | на 1024–1300 строки заголовка заходят в картинку до 35% ширины и 45% высоты |
+| **Т — под текст** (красная) | x 0–40%, y 0–45% | пусто, только прозрачность | на 1001–1300 строки заголовка заходят в картинку до 40% ширины (у 1024) и до 34% высоты (у 1280–1300); запас до 45% — на случай другого заголовка |
 | **П — под превью** (красная) | x 0–15%, y 45–78% | пусто | на ≥ 1700 сюда ложится кружок превью |
-| **Н — только низкое** (жёлтая) | x 15–35% при y > 58%; x 0–15% при y > 78% | только низкие плотные объекты: мазок, капля, ломтик | стыкует товар с текстом «лестницей» вниз-влево |
-| **Г — герой** (зелёная) | x 38–92%, y 6–100% | главный товар, центр массы на x 55–62% | правее текста, над розой |
+| **Н — только низкое** (жёлтая) | x 15–40% при y > 58%; x 0–15% при y > 78% | только низкие плотные объекты: мазок, капля, ломтик | стыкует товар с текстом «лестницей» вниз-влево |
+| **Г — герой** (зелёная) | x 40–92%, y 6–100% | главный товар, центр массы на x 55–62% | правее текста, над розой |
 | Поля | справа 94–100%, сверху 0–6% | пусто | на ≥ 1700 правый край кадра — не край экрана: срезанный объект будет висеть в воздухе |
 | Полупрозрачное | y ≥ 32% | пузырьки, капли, гель, стекло — только ниже линии | выше картинка лежит на розовом/белом, а сгенерированное стекло несёт в себе серый `#E9E9E9` — будет грязное пятно |
 | Белое и светлое | верх не выше y 10%; правее x 62% — не выше y 30% | белые тубы, коробки, колпачки | правее 64–71% верхняя полоса лежит на белом фоне — белый край растворится |
@@ -154,7 +189,7 @@ x 55–62%; у всех трёх свободен одинаковый левы�
 | Плашка под текстом | `#FFF1F4` |
 | Дуги розы на сайте | `#FFD9DF` |
 | Акцент сайта (hover кнопки) | `#F08597` |
-| Разрешённые цвета реквизита | прозрачное стекло, слоновая кость / шампань `#EFE6DA`, тёплый оранжевый геля, розовый грейпфрут `#F2A08A`, розовое золото `#C99A84` |
+| Разрешённые цвета реквизита | прозрачное стекло, слоновая кость / шампань `#EFE6DA`, тёплый оранжевый геля, розовый грейпфрут `#F2A08A`, розовое золото / металл шампань `#C99A84` |
 | Запрещено в реквизите | насыщенные зелёный, синий, фиолетовый; розовый того же тона, что дуги розы (сольётся); чёрный крупными пятнами |
 
 Цвета товаров (оранжевый гель, янтарь флаконов, жёлтая сыворотка,
@@ -195,7 +230,7 @@ letters, numbers, logos, watermarks or brand marks anywhere else.
 
 ```
 Keep the upper-left area completely empty, plain background only: the left
-35% of the width from the top down to 45% of the height, and the left 15% of
+40% of the width from the top down to 45% of the height, and the left 15% of
 the width down to 78% of the height. Nothing touches or is cut by the left,
 right or top edges; all objects stand on the bottom edge of the frame. Keep a
 small empty margin at the top and on the right.
@@ -245,7 +280,7 @@ second hand, deformed fingers`.
 | Кисть-веер, прислонена к тубе справа, веер вверху | 54–76 | 6–100 | — | модель |
 | Мазок геля с гранулами, диагональ «на стене» за тубой | 36–90 | 36–74 | — | модель |
 | Густая капля геля на полу слева спереди | 30–42 | 88–100 | — | модель |
-| Два тонких ломтика розового грейпфрута справа спереди | 70–92 | 70–100 | — | модель |
+| Половинка розового грейпфрута срезом к камере, у правого основания тубы | 68–88 | 72–100 | — | модель |
 
 - Свет сверху слева: блик по левой кромке тубы, тени вправо.
 - Воздух: весь левый верхний клин (зоны Т и П), полоса над веером.
@@ -267,7 +302,7 @@ second hand, deformed fingers`.
 |---|---|---|---|
 | Туба | 34–58 | 14–94 | 348,143 – 594,963 |
 | Кисть-веер | 50–72 | 4–94 | — |
-| Ломтики грейпфрута | 62–86 | 76–96 | — |
+| Половинка грейпфрута | 62–84 | 72–96 | — |
 | Густая капля геля | 16–32 | 84–96 | — |
 
 Убрано: мазок на стене — на 346 px он превращается в рябь, а текстуру на
@@ -291,8 +326,9 @@ leaning against the right side of the tube, the fan near the top of the
 frame;
 3) a small glossy dollop of the same gel with granules on the floor in front
 of the tube on the left;
-4) two thin translucent slices of pink grapefruit at the front right, one
-lying flat and one leaning against it, softly backlit so the flesh glows.
+4) one half of a pink grapefruit at the front right, next to the base of the
+tube, cut face turned towards the camera and slightly up, juicy translucent
+flesh catching the light from the upper left.
 Nothing else in the frame.
 [FRAME-DESKTOP]
 Avoid: [negative], lying tube, open cap, pipette, dropper bottles.
@@ -304,7 +340,8 @@ Image 1 is a square layout plate with the ISSEIMI PEELING INTENSIVO tube
 standing slightly left of centre, about 80% of the frame height. Keep it
 exactly. Add: a professional fan brush (slim matte taupe handle, rose-gold
 ferrule, soft brown-orange bristles) leaning against the right side of the
-tube; two thin translucent pink grapefruit slices at the front right; a small
+tube; one half of a pink grapefruit, cut face towards the camera, at the
+front right; a small
 glossy dollop of the orange gel with granules from image 2 at the front left.
 No swatch on the wall. Nothing else.
 [FRAME-MOBILE]
@@ -348,8 +385,8 @@ no text. Avoid: [negative].
 | Коробка WHITENING (середина) | 52–82 | 49–79,6 | 686,408 – 1037,662 | вырезка |
 | Коробка FIRMING (верх, анфас) | 58–88 | 35,5–59,2 | 756,295 – 1107,493 | вырезка |
 | Пара флаконов FIRMING, спереди слева | 30–46 | 79–100 | 428,657 – 616,832 | вырезка |
-| Дермапен, лежит перед стопкой, кончик влево | 50–90 | 90–100 | — | модель (без логотипа) |
-| Микропузырьки 8–10 шт., 3 размера | 36–56 (+2–3 у верхней коробки на 86–92) | 40–76 | — | модель |
+| Дермапен, лежит перед стопкой, кончик влево; корпус — сатинированный металл шампань / розовое золото | 50–90 | 90–100 | — | модель (без логотипа) |
+| Прозрачные сферы-пузырьки 5–7 шт., диаметр 2–6% ширины кадра | 40–56 (+1–2 у верхней коробки на 86–92) | 46–76 | — | модель |
 
 - Ширина коробки — 30% кадра: при большей стопка поднимается выше 30% и
   белая верхняя коробка правее 69% ложится на белый фон — край пропадёт.
@@ -358,12 +395,16 @@ no text. Avoid: [negative].
 - Стык с текстом: флаконы — низкий объект в зоне Н, от них пузырьки
   поднимаются вправо к стопке — та же диагональ, что у А.
 - Белые коробки над розовыми дугами розы — дуги дают контраст белому.
-- Дермапен — матовый белый с тонким кольцом розового золота: рифмуется с
-  кистью А, не спорит с серо-голубыми углами коробок.
+- Дермапен — сатинированный металл цвета шампань / розового золота (так
+  его подают пины `slider-b/pins/pin-06`, `pin-07`): тёплый металл отделяется
+  от белых коробок (белый прибор на белом терялся), рифмуется с оправой
+  кисти А, не спорит с серо-голубыми углами коробок.
+- Пузырьков меньше и они крупнее (пин `pin-02`): при выводе 668 px мелкие
+  пузырьки превращаются в пыль. Бесцветные — в отличие от золотистых сфер В.
 
 ### 7.2. Превью 251×212
 Основной вариант: процедура — вымышленная девушка, ¾, глаза закрыты, рука
-косметолога в белой перчатке держит белый дермапен у скулы; кадр плотный,
+косметолога в белой перчатке держит дермапен (металл шампань) у скулы; кадр плотный,
 лицо и прибор заполняют круг (на телефоне круг 122 px — мелкие детали не
 прочитаются). Светлая гамма: белый, телесный, бледно-розовый.
 Запасной (как в ТЗ): пара флаконов FIRMING из `…05.54` + пузырьки на
@@ -392,14 +433,14 @@ FIRMING vials stands in front on the left. Keep every box and vial exactly as
 it is. Make the stack physically believable with soft contact shadows where
 each box rests on the one below and where everything stands. Add exactly:
 1) a sleek generic microneedling pen lying on the floor in front of the
-stack, slightly angled, tip pointing left: matte white body, one thin
-brushed rose-gold ring, transparent needle cartridge tip, no display, no
-buttons with symbols, no logo, no text;
-2) eight to ten tiny crisp clear micro-spheres like air bubbles in three
-sizes, rising from the vials through the empty space between the vials and
-the stack, between 40% and 76% of the frame height, plus two or three small
-ones next to the top box on the right — a quiet hint of ozone and sterility,
-not foam.
+stack, slightly angled, tip pointing left: satin-finished champagne /
+rose-gold metal body, transparent needle cartridge tip with a white base, no
+display, no buttons with symbols, no logo, no text;
+2) five to seven crisp, perfectly clear colourless spheres like air bubbles,
+different sizes (the largest about 6% of the frame width), rising from the
+vials through the empty space between the vials and the stack, between 46%
+and 76% of the frame height, plus one or two next to the top box on the
+right — a quiet hint of ozone and sterility, not foam.
 Nothing else in the frame.
 [FRAME-DESKTOP]
 Avoid: [negative], cosmetologist, face, gloves, blue device, device screen.
@@ -411,8 +452,8 @@ Image 1 is a square layout plate: three ISSEIMI AQUA O3 boxes stacked in a
 stepped pile right of centre (ANTIAGING bottom, WHITENING middle, FIRMING
 top) and a pair of amber AQUA O3 FIRMING vials in front on the left. Keep
 them exactly. Add soft contact shadows between the boxes and on the floor,
-and eight tiny crisp clear micro-spheres rising from the vials on the left
-side. No device. Nothing else.
+and five crisp clear colourless spheres of different sizes rising from the
+vials on the left side. No device. Nothing else.
 [FRAME-MOBILE]
 Avoid: [negative], microneedling pen, device.
 ```
@@ -420,8 +461,8 @@ Avoid: [negative], microneedling pen, device.
 передаём, чтобы не скопировать лицо модели):
 ```
 High-key close-up beauty treatment photograph composed for a circular crop.
-A cosmetologist's hand in a white nitrile glove holds a matte white
-microneedling pen with a clear tip against the cheekbone of a young woman
+A cosmetologist's hand in a white nitrile glove holds a satin champagne
+metal microneedling pen with a clear tip against the cheekbone of a young woman
 with clean, smooth, natural skin, eyes closed, calm relaxed expression, face
 in three-quarter view filling most of the frame. Soft daylight from the upper
 left; white, warm skin and pale pink tones. The woman is a fictional person
@@ -462,19 +503,21 @@ micro-spheres around them; soft light from the upper left. Avoid: [negative].
 | Стекло пипетки, кончик | ~49–56 | 25–52 | — | исходник + достройка стекла |
 | Капля в полёте | ~56 | 52–58 | — | исходник |
 | Флакон в ладони | 49–63 | 58–93 | 651,483 – 815,774 | вырезка |
-| Складка шёлка-шампань за рукой справа + 2–3 капли сыворотки на ней | 66–92 | 52–100 | — | модель |
+| 3–4 крупные глянцевые золотистые сферы сыворотки, диаметр 4–9% ширины | 64–90 (одна может быть на 42–46) | 40–80 | — | модель |
 
 - Колонна узкая и высокая — В отличается от А и Б силуэтом, но держит ту же
   сетку: пустой левый верх, масса справа от центра, рука встаёт с пола.
 - Флакон — ~35% высоты кадра: компромисс ради целой пипетки (её длина
-  примерно равна флакону). Масса добирается рукой и шёлком.
+  примерно равна флакону). Масса добирается рукой и сферами.
 - Груша на y 9% — левее 62%, лежит над розовой плашкой; на ≥ 1700 — над
   белым на 1% высоты, допустимо.
-- Падающая капля и капли на шёлке — ниже 32%; стекло пипетки частично в
+- Падающая капля и сферы — ниже 32%; стекло пипетки частично в
   верхней полосе — тонкое, серый оттенок внутри почти не заметен.
-- Шёлк цвета шампань, не розовый: розовый слился бы с дугами розы; шампань
-  рифмуется с золотым кольцом и жёлтой сывороткой. Метафора «эффекта
-  фотошопа» — идеально гладкая поверхность, без лица.
+- Вместо шёлка — золотистые сферы сыворотки (пин `slider-c/pins/pin-07`,
+  у Hermes — «эффект стеклянной кожи без лица»). Это буквальная метафора
+  «эффекта фотошопа»: идеально гладкая глянцевая поверхность, и они того же
+  цвета, что сыворотка во флаконе. От пузырьков Б отличаются цветом
+  (золото против бесцветных) и размером (крупнее, меньше штук).
 
 ### 8.2. Превью 251×212
 Макро: кончик стеклянной пипетки с крупной золотистой каплей, вот-вот
@@ -485,11 +528,11 @@ micro-spheres around them; soft light from the upper left. Avoid: [negative].
 |---|---|---|---|
 | Рука с открытым флаконом | 12–89 | 18–100 | 123,184 – 911,1024 |
 | Флакон | 40–61 | 18–78 | 410,184 – 625,799 |
-| Низкая складка шёлка справа за рукой | 64–94 | 66–100 | — |
+| Две золотистые сферы справа от флакона | 66–90 | 40–70 | — |
 
 Убрано: пипетка с падающей каплей (в квадрате с целой пипеткой флакон
 сжимается до ~110 px на экране; каплю на пипетке показывает кружок превью
-над картинкой) и капли на шёлке. Вместо падения — одна глянцевая капля на
+над картинкой); сфер две вместо 3–4. Вместо падения — одна глянцевая капля на
 кромке горлышка.
 
 Общий принцип мобайла для всей серии: **второстепенное сообщение уходит в
@@ -509,14 +552,15 @@ Complete the pipette upwards along its own axis: clear straight glass, ending
 in the polished gold collar and white rubber bulb exactly as in image 2, the
 whole dropper floating in the air, slightly tilted as in image 1. Remove any
 fingers holding the pipette. Extend the wrist naturally so the hand leaves
-the frame only through the bottom edge. Behind the hand on the right, add a
-soft fold of champagne-ivory silk satin with a smooth liquid sheen rising
-from the bottom edge, with two or three small glossy golden serum droplets
-resting on it. Natural, well-groomed hand, nude pink manicure, real skin
-texture. Nothing else in the frame.
+the frame only through the bottom edge. To the right of the bottle, add three
+or four large glossy golden serum spheres of different sizes floating in the
+air, perfectly smooth, with soft highlights from the upper left and the same
+golden colour as the serum in the bottle.
+Natural, well-groomed hand, nude pink manicure, real skin texture. Nothing
+else in the frame.
 [FRAME-DESKTOP]
 Avoid: [negative с правкой для В], white blouse, black bow, fabric behind the
-hand other than the satin fold, second hand, cut-off pipette, pink satin.
+hand, satin, silk, second hand, cut-off pipette, pink spheres.
 ```
 **Мобайл** (вход 1 — мобильная подложка без пипетки):
 ```
@@ -526,11 +570,11 @@ ISSEIMI COLLAGEN BOOSTER bottle in the centre, the bottle about 60% of the
 frame height. Keep the bottle, label and hand exactly. No pipette. Add a
 single glossy golden drop of serum resting on the rim of the bottle neck and
 running slightly down the outside of the neck. Extend the wrist so the hand
-leaves the frame only through the bottom edge. A low soft fold of
-champagne-ivory satin behind the hand at the lower right. Nothing else.
+leaves the frame only through the bottom edge. Two large glossy golden serum
+spheres float to the right of the bottle. Nothing else.
 [FRAME-MOBILE]
 Avoid: [negative с правкой для В], pipette, dropper, white blouse, black bow,
-second hand, pink satin.
+second hand, satin, silk.
 ```
 **Превью** (вход — исходник, для цвета сыворотки):
 ```
@@ -590,12 +634,16 @@ CSS (готовит Claude, вставляет Герман): на < 744 скр�
 читаемости и премиальности; минус — Б так не сделать (три серии). Сетка
 зон та же; герой на x 50–80%.
 
-**Альтернатива 2 — «подиум».** Товар на низком цилиндре из матового гипса
-цвета слоновой кости или пыльной розы (`#EBD3D3`, темнее дуг розы); верх
-подиума на y ~70%, подиум стоит на нижней кромке. Брать, если пины массово
-показывают подиумы. Плюс — товар «на сцене», кадр собраннее; минус — ещё
-одна плоскость поверх серого блока, сложнее держать воздух; для Б подиум
-ступенчатый (три цилиндра).
+**Альтернатива 2 — «подиум»** (пины её поддерживают: `slider-layout/pins/
+pin-03`, `pin-04`, `slider-b/pins/pin-03`, `slider-a/pins/pin-05`). Низкий
+белый матовый цилиндр (как в `slider-layout/pin-04`, который Hermes отметил
+как самый близкий к BMG): высота 18–22% кадра, стоит на нижней кромке, x
+40–92%; товар стоит на нём. Плюс, которого нет у основной раскладки: тени
+падают на подиум, а он часть объекта, поэтому **тени переживают вырезку
+фона**, а товар не висит на кромке. Минус: подиум забирает пятую часть
+высоты — туба А уменьшится с 80% до ~60% кадра, стопка Б не поместится
+под линией 30% (для Б — только широкая низкая плита 10–12%); В с рукой
+подиум не нужен. Если Герман выберет подиум — для всей серии, кроме В.
 
 Чего не брать из пинов, как бы ни нравилось: тёмные фоны, цветные градиенты,
 брызги-короны, лепестки и спа-реквизит, лица крупным планом, текст на
@@ -618,6 +666,44 @@ CSS (готовит Claude, вставляет Герман): на < 744 скр�
 - [ ] Превью: круг d = 208, градиент `#F7F5F6`→`#EAE7E8`, объект
       читается на 122 px.
 - [ ] brand-guard пройден.
+
+---
+
+## 12. Сверка с пинами Hermes (24.10)
+
+Пины в `media/client/slider-*/pins/` — только идея, в генерацию не идут.
+
+**А — подтверждают основу, одна замена.** Туба + текстура + цитрус —
+`pin-05`, `pin-06`; текстура как главный акцент — `pin-03`, `pin-07`,
+`pin-08`; превью-мазок на светлом — `pin-04`. Замена: **два тонких ломтика
+грейпфрута → половинка срезом к камере** (`pin-05`): на 668 px тонкие
+ломтики превращаются в рябь, половинка читается одним пятном. Не берём:
+мраморный подиум и оранжевый фон (`pin-05`), лента геля прямо из горлышка
+(`pin-03`, `pin-07`) — для неё тубу надо открыть и повернуть, то есть
+перерисовать упаковку.
+
+**Б — подтверждают «коробки + флаконы + дермапен», две замены.** Коробка
+с флаконами в одном кадре — `pin-04`, `pin-05`; дермапен рядом с продуктом
+— `pin-06`; пузыри — `pin-02`. Замены: **корпус дермапена — металл шампань /
+розовое золото** вместо матового белого (`pin-06`, `pin-07`); **пузырьков
+5–7, крупнее** вместо 8–10 мелких (`pin-02`). Арка-подиум (`pin-03`) — в
+альтернативу 2. Процедура широким кадром (`pin-07`) в круге 122 px не
+прочитается — в превью остаётся плотный кадр.
+
+**В — подтверждают основу, одна замена.** Пипетка парит над открытым
+флаконом, капля падает — `pin-01`, почти наша десктопная раскладка; капля с
+пипетки для превью — `pin-03`, `pin-04`; жест руки с флаконом — `pin-08`.
+Замена: **шёлк → 3–4 золотистые сферы сыворотки** (`pin-07`). Не берём:
+лужу сыворотки на полу (`pin-02`) — под рукой в воздухе её некуда положить;
+цветы и пионы (`pin-06`).
+
+**Общая раскладка — подтверждают.** Текст слева, товар справа, светлый
+фон, много воздуха — `pin-01`, `pin-03`, `pin-04`, `pin-06`. Подиум в трёх
+пинах из восьми — усилил альтернативу 2 конкретными цифрами (§10), в основу
+не беру: он съедает пятую часть высоты под товар. Не берём: тени от листьев
+и окна (`pin-01`–`pin-03`) — падают на фон, который вырезается, и тянут в
+«домашний спа»; ряд иконок преимуществ (`pin-02`) — в шаблоне слайда нет
+места; модель сбоку (`pin-07`).
 
 ---
 
