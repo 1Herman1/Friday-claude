@@ -52,6 +52,17 @@ if [ "$STAGE" = blog-covers ]; then
   CB="$COVER Use the exact ISSEIMI COLLAGEN BOOSTER frosted glass dropper bottle with gold collar and white bulb, and its white-and-mint box, from the reference photo. Copy the label and box text letter by letter from the reference, invent no other text. Bottle standing, box leaning behind it, a few glossy clear serum droplets on the stone in front."
   BR="$COVER Use exactly three products from the reference photos: the ISSEIMI SCRUBLOTION bottle (white, blue band, silver cap), the ISSEIMI KERATHOR 50 PLUS bottle (white, violet band, silver cap) and the GLACÉE Cleansing Balm white pump bottle. Copy every label letter by letter from its own reference photo, never mix brands, all caps silver. Arrange them as a calm group on low travertine blocks of different heights; a sheer translucent white chiffon fabric floats softly behind them as if moved by a light breeze, suggesting air."
   AP="$COVER One fresh green-golden apple and one apple cut in half showing clean pale flesh and seeds, fine water droplets on the apple skin, and a small clear glass petri dish with a few drops of translucent golden serum beside them. No packaging, no bottles, no labels."
+  # Повтор с точными строками этикеток: первый прогон путал мелкий текст
+  if [ "${FRAMES:-}" = labels ]; then
+    BR="$BR Exact label text, nothing else: SCRUBLOTION bottle — 'ISSÉIMI MD' / 'MADRID' / 'SCRUBLOTION' / 'Scrub desmaquillante'; KERATHOR bottle — 'ISSÉIMI' / 'MADRID' / 'KERATHOR 50 PLUS' / 'Solución isotónica'; GLACÉE bottle — 'GLACÉE' / 'SKINCARE' / 'Cleansing Balm' / 'Bálsamo Desmaquillante Facial' / 'DAY & NIGHT' / '200 ML 6.8 FL. OZ'."
+    CB="$CB Exact text: bottle — 'ISSEIMI' / 'COLLAGEN BOOSTER' / 'Vitalizante'; box front — 'ISSÉIMI' / 'MADRID' / 'COLLAGEN BOOSTER' / 'Sérum Vitalizante con FCE*' / 'Revitalising Serum with EGF*'."
+    for v in 3 4 5; do
+      gen_image "pochemu-kozha-ne-zadyhaetsya-v$v" 3:2 "$BR" "$R/scrub-lotion-krem-dlya-snyatiya-makiyazha.jpg" "$R/kerathor-plus-izotonicheskij-tonik.jpg" "$R/cleansing-balm-ochishhayushhij-balzam.jpg" &
+    done
+    gen_image "hvatit-kormit-kozhu-kollagenom-v3" 3:2 "$CB" "$R/collagen-booster-vosstanavlivayushhaya-syvorotka.jpg" &
+    wait
+    exit 0
+  fi
   for v in $(seq 1 "${VARIANTS:-2}"); do
     gen_image "hvatit-kormit-kozhu-kollagenom-v$v" 3:2 "$CB" "$R/collagen-booster-vosstanavlivayushhaya-syvorotka.jpg" &
     gen_image "pochemu-kozha-ne-zadyhaetsya-v$v" 3:2 "$BR" "$R/scrub-lotion-krem-dlya-snyatiya-makiyazha.jpg" "$R/kerathor-plus-izotonicheskij-tonik.jpg" "$R/cleansing-balm-ochishhayushhij-balzam.jpg" &
