@@ -112,7 +112,7 @@ export function renderMarkdown(content: string, options: MarkdownRendererOptions
             sizes="(min-width: 768px) 720px, 100vw"
             alt={alt}
             width={1600}
-            height={1067}
+            height={1074}
             loading="lazy"
             decoding="async"
             className="w-full h-auto rounded-block bg-muted"
