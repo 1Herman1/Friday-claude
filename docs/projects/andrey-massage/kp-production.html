@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Продюсирование: Андрей</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;600;700&display=swap">
+<style>
+/* Document layout: one reading column; months as a 2-column grid of ledgers */
+:root {
+  --bg: #F3EEE6; --paper: #FBF8F3; --fg: #2B2621; --muted: #6B6157;
+  --line: #DCCFBC; --accent: #7A5A38; --band: #E4D9C8; --dark: #2A211B; --on-dark: #EFE6D8;
+  --display: "Cormorant Garamond", Georgia, serif; --body: "Manrope", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 48px max(16px, env(safe-area-inset-left, 0px)) 64px; display: flex; flex-direction: column; gap: 44px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1 { font-family: var(--display); font-weight: 500; font-size: 52px; line-height: 1.05; }
+h2 { font-family: var(--display); font-weight: 500; font-size: 34px; line-height: 1.15; }
+h3 { font-size: 17px; font-weight: 700; }
+p { margin: 0; max-width: 70ch; }
+.eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+section { display: flex; flex-direction: column; gap: 16px; }
+.cover { background: var(--dark); color: var(--on-dark); border-radius: 14px; padding: 44px; display: flex; flex-direction: column; gap: 20px; }
+.cover .eyebrow { color: #D29A6A; }
+.cover p { color: #C9BBA8; font-size: 17px; }
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 8px; }
+.facts div { border-top: 1px solid #6B5A4C; padding-top: 10px; }
+.facts b { display: block; font-family: var(--display); font-size: 28px; font-weight: 500; color: var(--on-dark); }
+.facts span { font-size: 13px; color: #C9BBA8; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; background: var(--band); }
+td.num, th.num { text-align: right; white-space: nowrap; }
+.phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.phase-card { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+.phase-card .m { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.months { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.month { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 6px; break-inside: avoid; }
+.month header { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+.mno { color: var(--accent); font-weight: 700; }
+.phase { color: var(--muted); }
+.when { color: var(--muted); font-size: 13px; }
+.month table td { font-size: 13.5px; padding: 6px 4px; }
+.month tr.total td { font-weight: 700; border-bottom: 0; border-top: 2px solid var(--accent); padding-top: 8px; }
+.note { background: var(--band); border-radius: 10px; padding: 16px 20px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+.totals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.totals div { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.totals b { display: block; font-family: var(--display); font-size: 30px; font-weight: 500; }
+.totals span { color: var(--muted); font-size: 13px; }
+footer { border-top: 1px solid var(--line); padding-top: 20px; display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 13px; }
+footer b { color: var(--fg); font-size: 15px; }
+@media (max-width: 720px) {
+  .facts, .phases, .months, .two, .totals { grid-template-columns: 1fr; }
+  h1 { font-size: 38px; }
+}
+@page { size: A4; margin: 14mm 12mm; }
+@media print {
+  html, body { background: #FBF8F3; font-size: 12.5px; }
+  .wrap { padding: 0; gap: 26px; max-width: none; }
+  .month table td { font-size: 11.5px; }
+  .phase-card, .totals div, .note { break-inside: avoid; }
+  section { break-inside: auto; }
+  .page-break { break-before: page; }
+  .keep { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="cover">
+  <div class="eyebrow">H&amp;B team · коммерческое предложение · 25.10.2026</div>
+  <h1>Продюсирование личного бренда мастера глубокой работы с телом</h1>
+  <p>Андрей, по итогам встречи вы выбрали путь «Тихий люкс» с переходом в медиа. Ниже — что мы делаем как продюсеры, план на 12 месяцев и стоимость каждого месяца.</p>
+  <div class="facts">
+    <div><b>12 месяцев</b><span>план работы</span></div>
+    <div><b>3 этапа</b><span>фундамент → система → медиа</span></div>
+    <div><b>2–3 семьи</b><span>на абонементе к 6-му месяцу</span></div>
+    <div><b>2–4 недели</b><span>лист ожидания к 18-му месяцу</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="eyebrow">Наша роль</div>
+  <h2>Мы — продюсеры, а не менеджеры</h2>
+  <div class="two">
+    <div>
+      <h3>Что делает продюсер H&amp;B</h3>
+      <ul>
+        <li>Отвечает за стратегию и результат: позиционирование, имя метода, цену</li>
+        <li>Строит сеть рекомендателей и выводит вас в медиа</li>
+        <li>Ведёт команду: копирайтер, фотограф, оператор, монтажёр, дизайнер</li>
+        <li>Раз в месяц даёт отчёт: часы, семьи на абонементе, источники клиентов, рост каналов</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Чего мы не делаем</h3>
+      <ul>
+        <li>Не продаём ваши сеансы и не берём деньги клиентов</li>
+        <li>Не переписываемся с клиентами от вашего имени — это делает ассистент</li>
+        <li>Не используем медицинские обещания и «до/после»</li>
+        <li>Не раскрываем вашу технику в открытом доступе</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="keep">
+  <div class="eyebrow">Путь</div>
+  <h2>Тихий люкс, затем медиа</h2>
+  <div class="phases">
+    <div class="phase-card"><span class="m">Месяцы 1–3 · Фундамент</span><h3>Тихий люкс</h3><p>Позиционирование, название метода, досье, закрытая страница, сеть рекомендателей, встречи с партнёрами, ассистент записи.</p></div>
+    <div class="phase-card"><span class="m">Месяцы 4–6 · Система и выход</span><h3>Переход</h3><p>Учёт клиентов и абонементов, первая съёмка, открытый Telegram и Max, Instagram, подготовка товарного знака.</p></div>
+    <div class="phase-card"><span class="m">Месяцы 7–12 · Медиа</span><h3>Публичный мастер</h3><p>Интервью и подкасты, колонка в медиа, коллаборации, съёмка раз в квартал, статьи о методе.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Что входит в продюсирование · 70 000 ₽ в месяц</div>
+  <h2>Ежемесячная работа продюсера</h2>
+  <div class="note"><p>Стратегия и контент-план на месяц · управление командой и сроками · поиск рекомендателей, площадок и партнёров для коллабораций · сопровождение на встречах · ежемесячный отчёт и созвон по итогам. Остальные строки месяца — конкретные услуги, которые выполняются в этом месяце.</p></div>
+</section>
+
+<section class="page-break">
+  <div class="eyebrow">План по месяцам</div>
+  <h2>12 месяцев: что делаем и сколько стоит</h2>
+  <div class="months">
+<article class="month"><header><span class="mno">Месяц 1</span><span class="phase">Фундамент</span></header>
+<h3>Позиционирование и образ мастера</h3><p class="when">Ноябрь 2026</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Распаковка: 2 интервью, позиционирование, ценовые правила</td><td class="num">35 000 ₽</td></tr><tr><td>Название метода и словарь «можно / нельзя»</td><td class="num">15 000 ₽</td></tr><tr><td>Новый текст объявления и описание услуг</td><td class="num">15 000 ₽</td></tr><tr><td>Досье мастера на русском, PDF</td><td class="num">20 000 ₽</td></tr><tr><td>Фотосессия «руки, стол, свет»</td><td class="num">25 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">180 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 2</span><span class="phase">Фундамент</span></header>
+<h3>Витрина и сеть рекомендателей</h3><p class="when">Декабрь 2026</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Закрытая страница-визитка</td><td class="num">49 000 ₽</td></tr><tr><td>Английская версия досье</td><td class="num">12 000 ₽</td></tr><tr><td>Карточка в Яндекс Картах и профиль в Яндекс Услугах</td><td class="num">12 000 ₽</td></tr><tr><td>Карта 30–50 рекомендателей и набор для партнёров</td><td class="num">25 000 ₽</td></tr><tr><td>Закрытый Telegram-канал: запуск и ведение</td><td class="num">20 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">188 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 3</span><span class="phase">Фундамент</span></header>
+<h3>Встречи и ассистент</h3><p class="when">Январь 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>ИИ-ассистент записи в Telegram или WhatsApp</td><td class="num">79 000 ₽</td></tr><tr><td>Организация 4 встреч с партнёрами</td><td class="num">24 000 ₽</td></tr><tr><td>Ведение закрытого Telegram</td><td class="num">20 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">193 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 4</span><span class="phase">Система</span></header>
+<h3>Учёт клиентов и абонементы</h3><p class="when">Февраль 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Учёт клиентов, абонементов и рекомендаций</td><td class="num">39 000 ₽</td></tr><tr><td>Напоминания клиентам и календарь</td><td class="num">15 000 ₽</td></tr><tr><td>Две статьи о методе для поиска</td><td class="num">14 000 ₽</td></tr><tr><td>Ведение закрытого Telegram</td><td class="num">20 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">158 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 5</span><span class="phase">Выход в медиа</span></header>
+<h3>Первая съёмка и открытый канал</h3><p class="when">Март 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Съёмка роликов, смена: 6–8 роликов</td><td class="num">45 000 ₽</td></tr><tr><td>Монтаж 6 роликов</td><td class="num">18 000 ₽</td></tr><tr><td>Открытый Telegram и зеркало в Max: ведение</td><td class="num">25 000 ₽</td></tr><tr><td>Instagram: оформление и 4 публикации</td><td class="num">20 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">178 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 6</span><span class="phase">Выход в медиа</span></header>
+<h3>Имя метода и нейросети</h3><p class="when">Апрель 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Instagram: 4 публикации</td><td class="num">20 000 ₽</td></tr><tr><td>Telegram и Max: ведение</td><td class="num">25 000 ₽</td></tr><tr><td>Монтаж 4 роликов</td><td class="num">12 000 ₽</td></tr><tr><td>Видимость в ответах нейросетей</td><td class="num">18 000 ₽</td></tr><tr><td>Подготовка к регистрации товарного знака</td><td class="num">10 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">155 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 7</span><span class="phase">Медиа</span></header>
+<h3>Первое интервью и коллаборации</h3><p class="when">Май 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Instagram: 4 публикации</td><td class="num">20 000 ₽</td></tr><tr><td>Telegram и Max: ведение</td><td class="num">25 000 ₽</td></tr><tr><td>Интервью или подкаст: поиск площадки и подготовка</td><td class="num">15 000 ₽</td></tr><tr><td>Коллаборация с партнёром того же круга</td><td class="num">10 000 ₽</td></tr><tr><td>Монтаж 4 роликов</td><td class="num">12 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">152 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 8</span><span class="phase">Медиа</span></header>
+<h3>Вторая съёмка</h3><p class="when">Июнь 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Съёмка роликов, смена</td><td class="num">45 000 ₽</td></tr><tr><td>Монтаж 6 роликов</td><td class="num">18 000 ₽</td></tr><tr><td>Instagram: 4 публикации</td><td class="num">20 000 ₽</td></tr><tr><td>Telegram и Max: ведение</td><td class="num">25 000 ₽</td></tr><tr><td>Интервью или подкаст</td><td class="num">15 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">193 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 9</span><span class="phase">Медиа</span></header>
+<h3>Колонка в медиа</h3><p class="when">Июль 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Instagram: 4 публикации</td><td class="num">20 000 ₽</td></tr><tr><td>Telegram и Max: ведение</td><td class="num">25 000 ₽</td></tr><tr><td>Колонка в lifestyle-издании</td><td class="num">20 000 ₽</td></tr><tr><td>Коллаборация</td><td class="num">10 000 ₽</td></tr><tr><td>Монтаж 4 роликов</td><td class="num">12 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">157 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 10</span><span class="phase">Медиа</span></header>
+<h3>Поиск и интервью</h3><p class="when">Август 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Instagram: 4 публикации</td><td class="num">20 000 ₽</td></tr><tr><td>Telegram и Max: ведение</td><td class="num">25 000 ₽</td></tr><tr><td>Интервью или подкаст</td><td class="num">15 000 ₽</td></tr><tr><td>Две статьи о методе</td><td class="num">14 000 ₽</td></tr><tr><td>Монтаж 4 роликов</td><td class="num">12 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">156 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 11</span><span class="phase">Медиа</span></header>
+<h3>Третья съёмка</h3><p class="when">Сентябрь 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Съёмка роликов, смена</td><td class="num">45 000 ₽</td></tr><tr><td>Монтаж 6 роликов</td><td class="num">18 000 ₽</td></tr><tr><td>Instagram: 4 публикации</td><td class="num">20 000 ₽</td></tr><tr><td>Telegram и Max: ведение</td><td class="num">25 000 ₽</td></tr><tr><td>Коллаборация</td><td class="num">10 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">188 000 ₽</td></tr></table></article>
+<article class="month"><header><span class="mno">Месяц 12</span><span class="phase">Итоги года</span></header>
+<h3>Итоги и план второго года</h3><p class="when">Октябрь 2027</p>
+<table><tr><td>Продюсирование</td><td class="num">70 000 ₽</td></tr><tr><td>Instagram: 4 публикации</td><td class="num">20 000 ₽</td></tr><tr><td>Telegram и Max: ведение</td><td class="num">25 000 ₽</td></tr><tr><td>Интервью или подкаст</td><td class="num">15 000 ₽</td></tr><tr><td>Монтаж 4 роликов</td><td class="num">12 000 ₽</td></tr><tr><td>Итоговый аудит и стратегия второго года</td><td class="num">30 000 ₽</td></tr>
+<tr class="total"><td>Итого за месяц</td><td class="num">172 000 ₽</td></tr></table></article>
+  </div>
+</section>
+
+<section class="page-break">
+  <div class="eyebrow">Итоги</div>
+  <h2>Стоимость по месяцам</h2>
+  <div class="totals">
+    <div><b>1 052 000 ₽</b><span>месяцы 1–6</span></div>
+    <div><b>2 070 000 ₽</b><span>месяцы 1–12</span></div>
+    <div><b>172 500 ₽</b><span>в среднем в месяц</span></div>
+  </div>
+  <table>
+    <tr><th>Месяц</th><th>Этап</th><th class="num">Итого</th></tr>
+<tr><td>1</td><td>Фундамент</td><td class="num">180 000 ₽</td></tr><tr><td>2</td><td>Фундамент</td><td class="num">188 000 ₽</td></tr><tr><td>3</td><td>Фундамент</td><td class="num">193 000 ₽</td></tr><tr><td>4</td><td>Система</td><td class="num">158 000 ₽</td></tr><tr><td>5</td><td>Выход в медиа</td><td class="num">178 000 ₽</td></tr><tr><td>6</td><td>Выход в медиа</td><td class="num">155 000 ₽</td></tr><tr><td>7</td><td>Медиа</td><td class="num">152 000 ₽</td></tr><tr><td>8</td><td>Медиа</td><td class="num">193 000 ₽</td></tr><tr><td>9</td><td>Медиа</td><td class="num">157 000 ₽</td></tr><tr><td>10</td><td>Медиа</td><td class="num">156 000 ₽</td></tr><tr><td>11</td><td>Медиа</td><td class="num">188 000 ₽</td></tr><tr><td>12</td><td>Итоги года</td><td class="num">172 000 ₽</td></tr>
+  </table>
+</section>
+
+<section class="keep">
+  <div class="eyebrow">Ожидаемый результат (оценка)</div>
+  <h2>Что вы получаете по этапам</h2>
+  <table>
+    <tr><th>К концу</th><th>Клиенты и доход</th><th>Медиа</th></tr>
+    <tr><td>3-го месяца</td><td>Первая семья на абонементе из вашей базы; 10–15 встреч с рекомендателями</td><td>Закрытый Telegram, страница, досье на двух языках</td></tr>
+    <tr><td>6-го месяца</td><td>2–3 семьи на абонементе, выручка от 470 тыс. ₽ в месяц</td><td>Telegram 1 000–1 300, Instagram 2 000–3 000</td></tr>
+    <tr><td>12-го месяца</td><td>4–5 семей, выручка 0,7–1 млн ₽ в месяц; 1–2 новых клиента в месяц из медиа; цена для новых +10–15%</td><td>Telegram 2 000–2 500, Instagram 4 000–6 000</td></tr>
+  </table>
+  <p style="color:var(--muted);font-size:13px">Оценка по рыночным бенчмаркам и кейсам 2025–2026. Точные цифры зависят от вашей загрузки, тёплой базы и готовности к публичности.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Условия</div>
+  <h2>Как мы работаем</h2>
+  <div class="two">
+    <div>
+      <h3>Оплата</h3>
+      <ul>
+        <li>Месяц оплачивается до 5-го числа: продюсирование и услуги месяца</li>
+        <li>Крупные разовые услуги (страница, ассистент, учёт) — 50% на старте, 50% после приёмки</li>
+        <li>Договор и акт на каждый месяц</li>
+        <li>Минимальный срок — 6 месяцев, дальше расторжение с предупреждением за 30 дней</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Оплачивается отдельно, напрямую исполнителям</h3>
+      <ul>
+        <li>Юрист: оферта, договоры с партнёрами, соглашения о конфиденциальности</li>
+        <li>Пошлины Роспатента за товарный знак: около 27–38,5 тыс. ₽</li>
+        <li>Рекламный бюджет на посевы, если решите ускорять рост</li>
+        <li>Аренда студии для съёмок, если снимаем не у вас</li>
+      </ul>
+    </div>
+  </div>
+  <div class="two">
+    <div>
+      <h3>Что нужно от вас</h3>
+      <ul>
+        <li>ИП до первого договора с партнёром</li>
+        <li>2–3 часа в месяц: интервью, согласование, голосовые заметки</li>
+        <li>Одна съёмка в квартал и личные сообщения вашим клиентам</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Гибкость</h3>
+      <ul>
+        <li>Порядок услуг внутри этапа можно менять</li>
+        <li>Если какая-то услуга уже сделана, мы убираем её из месяца</li>
+        <li>Результат каждого месяца видно в отчёте</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>H&amp;B team · Герман Брызгалов</b>
+  <span>+7 916 965 56 11 · 1herman1.github.io/hb_landing</span>
+  <span>Предложение действует 30 дней. Юридические и налоговые вопросы подтверждают юрист и бухгалтер.</span>
+</footer>
+
+</div>
+</body>
+</html>
