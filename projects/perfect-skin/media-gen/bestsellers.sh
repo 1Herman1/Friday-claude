@@ -44,6 +44,23 @@ gen_video() { # out_name aspect prompt first last
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
+# Обложки статей блога 3:2: левая треть пустая под плашку с заголовком
+if [ "$STAGE" = blog-covers ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/blog"
+  R="$OUT/refs"
+  COVER="Premium editorial still life for a skincare journal cover of a pharmacy-grade Spanish skincare shop. Warm light travertine stone surface in colour #F4F2EC with a matching warm cream background, soft diffused morning daylight from the left, gentle long soft shadows. Calm, precise, expensive, airy. All objects stand in the right two thirds of the frame; the left third is empty calm background for a text plate. No people, no hands, no text overlays, no watermark. Photorealistic, natural colour, shallow depth of field."
+  CB="$COVER Use the exact ISSEIMI COLLAGEN BOOSTER frosted glass dropper bottle with gold collar and white bulb, and its white-and-mint box, from the reference photo. Copy the label and box text letter by letter from the reference, invent no other text. Bottle standing, box leaning behind it, a few glossy clear serum droplets on the stone in front."
+  BR="$COVER Use exactly three products from the reference photos: the ISSEIMI SCRUBLOTION bottle (white, blue band, silver cap), the ISSEIMI KERATHOR 50 PLUS bottle (white, violet band, silver cap) and the GLACÉE Cleansing Balm white pump bottle. Copy every label letter by letter from its own reference photo, never mix brands, all caps silver. Arrange them as a calm group on low travertine blocks of different heights; a sheer translucent white chiffon fabric floats softly behind them as if moved by a light breeze, suggesting air."
+  AP="$COVER One fresh green-golden apple and one apple cut in half showing clean pale flesh and seeds, fine water droplets on the apple skin, and a small clear glass petri dish with a few drops of translucent golden serum beside them. No packaging, no bottles, no labels."
+  for v in $(seq 1 "${VARIANTS:-2}"); do
+    gen_image "hvatit-kormit-kozhu-kollagenom-v$v" 3:2 "$CB" "$R/collagen-booster-vosstanavlivayushhaya-syvorotka.jpg" &
+    gen_image "pochemu-kozha-ne-zadyhaetsya-v$v" 3:2 "$BR" "$R/scrub-lotion-krem-dlya-snyatiya-makiyazha.jpg" "$R/kerathor-plus-izotonicheskij-tonik.jpg" "$R/cleansing-balm-ochishhayushhij-balzam.jpg" &
+    gen_image "yabloko-kotoroe-ne-stareet-v$v" 3:2 "$AP" &
+  done
+  wait
+  exit 0
+fi
+
 if [ "$STAGE" = pad2 ]; then
   W="$ROOT/docs/projects/perfect-skin/media/bestsellers-v3"; OUT="$W"
   P="This image is a smaller photo placed on a flat plain canvas. Outpaint only the plain border: extend the light stone tabletop and the flat matte warm wall seamlessly to all edges so it becomes one continuous, natural photograph taken with the camera farther back. Do not change anything inside the inner photo. Soft diffused daylight, no glare, no props, no hands, no text."
