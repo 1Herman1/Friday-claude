@@ -44,6 +44,34 @@ gen_video() { # out_name aspect prompt first last
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
+# Иллюстрации внутри статей блога 3:2. FRAMES — только эти имена через пробел
+if [ "$STAGE" = blog-inline ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/blog/inline"
+  mkdir -p "$OUT"
+  R="$ROOT/docs/projects/perfect-skin/media/blog/refs"
+  ST="Premium editorial still life for a pharmacy-grade Spanish skincare journal article. Warm light travertine stone surfaces in colour #F4F2EC with a matching warm cream background, soft diffused morning daylight from the left, gentle long soft shadows, calm, precise, expensive, airy composition. No people, no faces, no hands, no text, no letters, no logos, no labels unless stated, no watermark. Photorealistic, natural colour, shallow depth of field."
+  declare -A P=(
+    [hvatit-kormit-kozhu-kollagenom-1]="$ST Extreme macro of a single drop of clear golden serum spreading on polished travertine, backlit, warm amber highlights and tiny reflections inside the drop."
+    [hvatit-kormit-kozhu-kollagenom-2]="$ST Three small identical clear glass dropper vials with golden serum standing on three travertine steps of rising height from left to right, like a calm progression."
+    [pochemu-kozha-ne-zadyhaetsya-1]="$ST A sheer white chiffon fabric floating in a soft stream of air above a travertine block, fine dust particles glowing in a beam of sunlight. No products."
+    [pochemu-kozha-ne-zadyhaetsya-2]="$ST Flat lay of an evening cleansing ritual on travertine: round cotton pads, a folded natural linen towel, a soft swatch of creamy balm texture, and the exact GLACÉE Cleansing Balm white pump bottle from the reference photo with its label copied letter by letter."
+    [pochemu-kozha-ne-zadyhaetsya-3]="$ST A pale green jade gua sha stone and a jade face roller resting on travertine, a few glossy drops of facial oil beside them."
+    [yabloko-kotoroe-ne-stareet-1]="$ST Natural sources of polyphenols arranged on travertine: a fresh green apple slice, a small bunch of dark grapes, a few fresh green tea leaves and a handful of blueberries."
+    [yabloko-kotoroe-ne-stareet-2]="$ST Two glass petri dishes with pale cream plant cell culture next to a fresh green apple, a glass laboratory flask and a pipette, warm clean light, scientific yet calm."
+    [yabloko-kotoroe-ne-stareet-3]="$ST A precise row of identical unlabeled amber glass dropper bottles on a travertine ledge, perfectly aligned, conveying pharmaceutical standardisation."
+  )
+  for name in "${!P[@]}"; do
+    [ -n "${FRAMES:-}" ] && [[ " $FRAMES " != *" $name "* ]] && continue
+    refs=()
+    [ "$name" = pochemu-kozha-ne-zadyhaetsya-2 ] && refs=("$R/cleansing-balm-ochishhayushhij-balzam.jpg")
+    for v in $(seq 1 "${VARIANTS:-2}"); do
+      gen_image "$name-v$v" 3:2 "${P[$name]}" "${refs[@]}" &
+    done
+  done
+  wait
+  exit 0
+fi
+
 # Обложки статей блога 3:2: левая треть пустая под плашку с заголовком
 if [ "$STAGE" = blog-covers ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/blog"
