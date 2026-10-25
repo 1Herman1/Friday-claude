@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Эквитас · ИИ и цифровые споры</title>
+<meta name="description" content="Права на контент нейросетей, договоры с ИИ-разработчиками, дипфейки и утечки данных. Гражданские споры компаний в судах Москвы и МО. Закон об ИИ с 01.03.2027.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#141518;
+  --bg-2:#1B1D21;
+  --bg-3:#22252A;
+  --line:#34373D;
+  --fg:#ECE6DA;
+  --fg-2:#B9B2A4;
+  --brass:#C9A66B;
+  --brass-hi:#E2C48E;
+  --brass-lo:#8C7244;
+  --on-brass:#16130D;
+  --serif:"Cormorant Garamond", "Times New Roman", serif;
+  --sans:"IBM Plex Sans", system-ui, sans-serif;
+  --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:72px;--s7:112px;
+  --wrap:1200px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 17px/1.6 var(--sans);overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 max(20px,4vw)}
+.eyebrow{font:500 12px/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08;margin:0;letter-spacing:-.005em}
+h2{font-size:clamp(34px,4.4vw,54px)}
+h3{font-size:26px;line-height:1.2}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 26px;border:1px solid var(--brass);font:500 15px/1.2 var(--sans);letter-spacing:.02em;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn{transition:background-color .2s ease,color .2s ease}
+.btn-solid{background:var(--brass);color:var(--on-brass)}
+.btn-solid:hover{background:var(--brass-hi)}
+.btn-ghost{background:transparent;color:var(--fg)}
+.btn-ghost:hover{background:var(--bg-3)}
+:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px}
+
+/* header */
+.hdr{border-bottom:1px solid var(--line)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:80px}
+.logo{display:flex;flex-direction:column;text-decoration:none;line-height:1.1}
+.logo b{font:600 24px/1.1 var(--serif);letter-spacing:.02em}
+.logo small{font:500 11px/1.4 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--fg-2);margin-top:4px}
+.nav{display:flex;gap:24px;font-size:15px;white-space:nowrap}
+.nav a{text-decoration:none;color:var(--fg-2);padding:12px 0}
+.nav a:hover{color:var(--fg)}
+.hdr-cta{display:flex;align-items:center;gap:var(--s3)}
+.phone{display:inline-flex;align-items:center;min-height:44px;font:500 16px/1 var(--sans);text-decoration:none;white-space:nowrap}
+
+/* hero */
+.hero{padding:var(--s6) 0 var(--s7);position:relative}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:var(--s5);align-items:center}
+.hero h1{font-size:clamp(40px,5.4vw,74px);margin-top:var(--s3)}
+.hero h1 em{font-style:italic;color:var(--brass-hi)}
+.hero .lead{margin-top:var(--s4);max-width:34em;color:var(--fg-2);font-size:19px}
+.hero .acts{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s5)}
+.facts{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);margin-top:var(--s5);padding-top:var(--s3);border-top:1px solid var(--line);font-size:14px;color:var(--fg-2)}
+.facts b{display:block;font:500 22px/1.2 var(--serif);color:var(--fg)}
+.scales{width:100%;max-width:460px;justify-self:center}
+.scales svg{width:100%;height:auto;display:block}
+.beam{transform-origin:240px 150px;transform-box:view-box;animation:settle 5.5s cubic-bezier(.22,.61,.36,1) .3s both}
+.pan-l{transform-origin:110px 150px;transform-box:view-box;animation:hang-l 5.5s cubic-bezier(.22,.61,.36,1) .3s both}
+.pan-r{transform-origin:370px 150px;transform-box:view-box;animation:hang-r 5.5s cubic-bezier(.22,.61,.36,1) .3s both}
+@keyframes settle{0%{transform:rotate(-7deg)}45%{transform:rotate(2.2deg)}75%{transform:rotate(-.6deg)}100%{transform:rotate(0)}}
+@keyframes hang-l{0%{transform:translateY(16px)}45%{transform:translateY(-5px)}75%{transform:translateY(1.4px)}100%{transform:translateY(0)}}
+@keyframes hang-r{0%{transform:translateY(-16px)}45%{transform:translateY(5px)}75%{transform:translateY(-1.4px)}100%{transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.beam,.pan-l,.pan-r{animation:none}}
+
+/* sections */
+section{padding:var(--s7) 0}
+.sec-head{display:grid;grid-template-columns:1.25fr 1fr;gap:var(--s5);align-items:end;margin-bottom:var(--s6)}
+.sec-head p{color:var(--fg-2);max-width:36em}
+.alt{background:var(--bg-2)}
+
+/* directions ledger */
+.ledger{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.ledger li{display:grid;grid-template-columns:80px 1fr 1.2fr auto;gap:var(--s4);align-items:baseline;padding:var(--s4) 0;border-bottom:1px solid var(--line)}
+.ledger .n{font:500 15px/1 var(--sans);color:var(--brass);letter-spacing:.08em;white-space:nowrap}
+.ledger .wt{width:14px;height:17px;margin-right:10px;vertical-align:-2px}
+.ledger p{color:var(--fg-2)}
+.ledger a{display:inline-flex;align-items:center;min-height:44px;color:var(--brass-hi);text-decoration:none;font-size:15px;white-space:nowrap}
+.ledger a:hover{text-decoration:underline;text-underline-offset:4px}
+
+/* steps as scale */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--s3);list-style:none;margin:0;padding:0;position:relative}
+.steps::before{content:"";position:absolute;left:0;right:0;top:11px;height:1px;background:var(--brass-lo)}
+.steps li{position:relative;padding-top:var(--s5)}
+.steps li::before{content:"";position:absolute;top:0;left:0;width:1px;height:23px;background:var(--brass)}
+.steps .k{font:500 13px/1 var(--sans);color:var(--brass);letter-spacing:.1em}
+.steps h3{font-size:24px;margin:var(--s2) 0 var(--s1)}
+.steps p{font-size:15px;color:var(--fg-2)}
+.steps .t{display:block;margin-top:var(--s2);font-size:13px;color:var(--fg);letter-spacing:.04em}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--brass-lo)}
+.calc-in,.calc-out{padding:var(--s5)}
+.calc-out{background:var(--bg-3)}
+.field-s{margin-bottom:var(--s4)}
+.field-s label,.field-s .lbl{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2);margin-bottom:var(--s1)}
+.fake-input{display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:0 var(--s2);background:var(--bg);border:1px solid var(--line);font-size:20px}
+.seg{display:flex;flex-wrap:wrap;gap:var(--s1)}
+.seg span{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s2);border:1px solid var(--line);font-size:15px;color:var(--fg-2)}
+.seg span.on{border-color:var(--brass);color:var(--fg)}
+.out-row{display:flex;justify-content:space-between;gap:var(--s2);align-items:baseline;padding:var(--s2) 0;border-bottom:1px solid var(--line)}
+.out-row span{color:var(--fg-2);font-size:15px}
+.out-row b{font:500 26px/1.2 var(--serif);text-align:right;white-space:nowrap}
+.out-total b{color:var(--brass-hi);font-size:34px}
+.note{margin-top:var(--s3);font-size:13px;color:var(--fg-2)}
+.dial{margin-top:var(--s3)}
+.dial svg{display:block;width:100%;max-width:340px;height:auto;margin:0 auto}
+
+/* cases */
+.cases{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s5)}
+.case{padding-top:var(--s3);border-top:1px solid var(--brass-lo)}
+.case .no{font:500 13px/1.4 var(--sans);color:var(--brass);letter-spacing:.06em}
+.case h3{margin:var(--s2) 0 var(--s3)}
+.case dl{margin:0;display:grid;gap:var(--s2)}
+.case dt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2)}
+.case dd{margin:2px 0 0;font-size:16px}
+.disclaim{margin-top:var(--s5);font-size:14px;color:var(--fg-2);max-width:48em}
+
+/* lawyer */
+.lawyer{display:grid;grid-template-columns:320px 1fr;gap:var(--s6);align-items:start}
+.monogram{aspect-ratio:4/5;background:var(--bg-3);border:1px solid var(--line);display:grid;place-items:center}
+.monogram svg{width:58%;height:auto}
+.lawyer h3{font-size:clamp(32px,3.6vw,44px);margin-top:var(--s2)}
+.lawyer .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3) var(--s5);margin-top:var(--s4);padding-top:var(--s4);border-top:1px solid var(--line)}
+.lawyer .meta dt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2)}
+.lawyer .meta dd{margin:4px 0 0}
+.lawyer blockquote{margin:var(--s4) 0 0;font:italic 500 24px/1.4 var(--serif);color:var(--fg);max-width:30em}
+
+/* form */
+.form-wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:var(--s6)}
+form{display:grid;gap:var(--s3)}
+.f label{display:block;font-size:14px;color:var(--fg-2);margin-bottom:var(--s1)}
+.f input,.f textarea{width:100%;min-height:52px;padding:14px var(--s2);background:var(--bg);color:var(--fg);border:1px solid var(--line);font:400 17px/1.4 var(--sans);border-radius:0}
+.f textarea{min-height:120px;resize:vertical}
+.f input:focus,.f textarea:focus{border-color:var(--brass);outline:none}
+.hint{font-size:13px;color:var(--fg-2);margin-top:6px}
+.consent{display:flex;gap:var(--s2);align-items:flex-start;font-size:14px;color:var(--fg-2);cursor:pointer}
+.consent input{flex:none;width:24px;height:24px;margin:10px;accent-color:var(--brass)}
+.consent span{padding-top:10px}
+.consent a{color:var(--brass-hi)}
+
+/* footer */
+.ftr{border-top:1px solid var(--line);padding:var(--s6) 0 var(--s5);font-size:14px;color:var(--fg-2)}
+.ftr .cols{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:var(--s5)}
+.ftr b{color:var(--fg);font-weight:500}
+.ftr p+p{margin-top:6px}
+.ftr .legal{margin-top:var(--s5);padding-top:var(--s3);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4)}
+.ftr a{display:inline-flex;align-items:center;min-height:44px}
+
+@media (max-width:1180px){.nav{display:none}}
+@media (min-width:1181px){.hdr .phone{display:none}.logo{flex:none}}
+@media (max-width:1020px){
+  .hero .wrap,.sec-head,.form-wrap,.lawyer,.calc{grid-template-columns:1fr}
+  .scales{max-width:380px;order:-1}
+  .steps{grid-template-columns:1fr;gap:0}
+  .steps::before{left:11px;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .steps li{padding:0 0 var(--s4) var(--s5)}
+  .steps li::before{top:6px;left:0;width:23px;height:1px}
+  .ledger li{grid-template-columns:56px 1fr;gap:var(--s1) var(--s3)}
+  .ledger li p,.ledger li a{grid-column:2}
+  .lawyer .monogram{max-width:200px}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .phone{display:none}
+  .hdr .wrap{min-height:68px}
+  .logo b{font-size:21px}
+  .hdr .btn{padding:10px 16px;font-size:14px}
+  section{padding:var(--s6) 0}
+  .hero{padding:var(--s4) 0 var(--s6)}
+  .hero .lead{font-size:17px}
+  .scales{max-width:300px}
+  .cases{grid-template-columns:1fr}
+  .calc-in,.calc-out{padding:var(--s3)}
+  .out-total b{font-size:28px}
+  .ftr .cols,.lawyer .meta{grid-template-columns:1fr}
+  .hero .acts .btn{flex:1 1 100%}
+}
+/* ===== AI page ===== */
+.nav a[aria-current="page"]{color:var(--fg);box-shadow:inset 0 -1px 0 var(--brass)}
+.crumbs{padding-top:var(--s3);font-size:14px;color:var(--fg-2)}
+.crumbs ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 10px}
+.crumbs li+li::before{content:"/";margin-right:10px;color:var(--brass-lo)}
+.crumbs a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+.crumbs a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
+.crumbs [aria-current]{display:inline-flex;align-items:center;min-height:44px;color:var(--fg)}
+.hero-ai{padding-top:var(--s4)}
+.hero-ai h1{font-size:clamp(38px,4.8vw,66px)}
+.author-line{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4);margin-top:var(--s4);font-size:15px;color:var(--fg-2)}
+.author-line b{color:var(--fg);font-weight:500}
+.chk{display:inline-block;font:500 11px/1.5 var(--sans);letter-spacing:.04em;color:var(--brass);border:1px dashed var(--brass-lo);padding:0 5px;margin-left:6px;white-space:nowrap;vertical-align:2px;text-transform:none}
+.upd{font-size:14px;color:var(--fg-2)}
+
+/* situations */
+.sits{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--s5);border-top:1px solid var(--line)}
+.sits li{border-bottom:1px solid var(--line)}
+.sits li:last-child{grid-column:1/-1}
+.sits a{display:grid;grid-template-columns:48px 1fr;gap:var(--s2);padding:var(--s4) 0;text-decoration:none;min-height:44px}
+.sits .n{font:500 15px/1.6 var(--sans);color:var(--brass);letter-spacing:.08em}
+.sits h3{font-size:24px}
+.sits p{margin-top:var(--s1);color:var(--fg-2);font-size:16px}
+.sits .go{display:inline-block;margin-top:var(--s2);font-size:14px;color:var(--brass-hi)}
+.sits a:hover h3{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+
+/* clusters */
+.cluster{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:var(--s5);padding:var(--s5) 0;border-top:1px solid var(--line);scroll-margin-top:24px}
+.cluster:last-child{border-bottom:1px solid var(--line)}
+.cluster .k{font:500 13px/1.4 var(--sans);color:var(--brass);letter-spacing:.12em;text-transform:uppercase}
+.cluster h3{font-size:clamp(28px,3vw,36px);margin:var(--s2) 0 var(--s3)}
+.cluster .short{font-size:18px;line-height:1.6}
+.cluster dl{margin:0;display:grid;gap:var(--s3)}
+.cluster dt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2);margin-bottom:var(--s1)}
+.cluster dd{margin:0}
+.cluster ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.cluster li{position:relative;padding-left:22px}
+.cluster li::before{content:"";position:absolute;left:0;top:.8em;width:12px;height:1px;background:var(--brass)}
+.aside-note{margin-top:var(--s3);padding:var(--s2) var(--s3);background:var(--bg-3);border:1px solid var(--line);font-size:15px;color:var(--fg-2)}
+.aside-note b{color:var(--fg);font-weight:500}
+.xlink{display:inline-flex;align-items:center;min-height:44px;margin-top:var(--s2);color:var(--brass-hi);font-size:15px;text-underline-offset:4px}
+
+/* practice table */
+.tbl{overflow-x:auto;border-top:1px solid var(--brass-lo)}
+.tbl:focus-visible{outline-offset:6px}
+.tbl table{width:100%;min-width:880px;border-collapse:collapse;font-size:15px}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:var(--s3) var(--s2) var(--s3) 0;border-bottom:1px solid var(--line)}
+.tbl thead th{font:500 12px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2);padding-top:var(--s2);padding-bottom:var(--s2)}
+.tbl tbody th{font-weight:500;width:28%}
+.tbl tbody th span{display:block;font-weight:400;color:var(--fg-2);font-size:14px;margin-top:4px}
+.tbl tbody th .chk{display:inline-block;margin-top:6px;font-size:11px;color:var(--brass)}
+.tbl td{color:var(--fg-2)}
+.tbl td:last-child{color:var(--fg)}
+.scroll-hint{display:none;font-size:13px;color:var(--fg-2);margin-bottom:var(--s1)}
+@media (max-width:920px){.scroll-hint{display:block}}
+.tbl-cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s1) var(--s3);margin-bottom:var(--s2)}
+
+/* law timeline */
+.law{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:var(--s6);align-items:start}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:1px;background:var(--brass-lo)}
+.tl li{position:relative;padding:0 0 var(--s4) var(--s5)}
+.tl li:last-child{padding-bottom:0}
+.tl li::before{content:"";position:absolute;left:2px;top:9px;width:9px;height:9px;transform:rotate(45deg);background:var(--bg-2);border:1px solid var(--brass)}
+.tl li.key::before{background:var(--brass);width:11px;height:11px;left:1px;top:8px}
+.tl time{display:block;font:500 24px/1.3 var(--serif);color:var(--fg)}
+.tl li.key time{color:var(--brass-hi);font-size:30px}
+.tl p{margin-top:4px}
+.tl .who{display:block;margin-top:6px;font-size:14px;color:var(--fg-2)}
+.check{padding:var(--s4);border:1px solid var(--brass-lo);background:var(--bg-3)}
+.check h3{font-size:26px;margin-bottom:var(--s3)}
+.check ol{margin:0;padding:0;list-style:none;counter-reset:c;display:grid;gap:var(--s2)}
+.check li{counter-increment:c;display:grid;grid-template-columns:32px 1fr;gap:var(--s1)}
+.check li::before{content:counter(c,decimal-leading-zero);font:500 13px/1.8 var(--sans);color:var(--brass);letter-spacing:.08em}
+
+/* faq */
+.faq{border-top:1px solid var(--line);max-width:920px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:var(--s3);min-height:64px;padding:var(--s2) 0;cursor:pointer}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary h3{font-size:24px;line-height:1.25}
+.faq summary::after{content:"";flex:none;width:14px;height:14px;background:linear-gradient(var(--brass),var(--brass)) center/14px 1.5px no-repeat,linear-gradient(var(--brass),var(--brass)) center/1.5px 14px no-repeat}
+.faq details[open] summary::after{background:linear-gradient(var(--brass),var(--brass)) center/14px 1.5px no-repeat}
+.faq summary:hover h3{color:var(--brass-hi)}
+.faq .ans{padding:0 0 var(--s4);color:var(--fg-2);max-width:46em}
+
+/* quiz */
+.quiz{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);border:1px solid var(--brass-lo)}
+.quiz-q{padding:var(--s5)}
+.quiz-r{padding:var(--s5);background:var(--bg-3)}
+.qi{margin:0 0 var(--s4);padding:0;border:0}
+.qi:last-child{margin-bottom:0}
+.qi legend,.qi .lbl{display:block;padding:0;margin-bottom:var(--s1);font-size:15px;color:var(--fg);text-transform:none;letter-spacing:0}
+.qi .lbl b{color:var(--brass);font-weight:500;margin-right:8px}
+.quiz .badge{display:inline-block;margin-bottom:var(--s3);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2);border:1px solid var(--line);padding:4px 10px}
+.quiz-r h3{font-size:28px;margin-bottom:var(--s3)}
+.quiz-r h4{margin:var(--s3) 0 var(--s1);font:500 12px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2)}
+.quiz-r ul{margin:0;padding:0;list-style:none;display:grid;gap:var(--s1);font-size:15px}
+.quiz-r li{position:relative;padding-left:22px}
+.quiz-r li::before{content:"";position:absolute;left:0;top:.8em;width:12px;height:1px;background:var(--brass)}
+
+/* links */
+.links{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--s5);border-top:1px solid var(--line)}
+.links li{border-bottom:1px solid var(--line)}
+.links a{display:flex;flex-direction:column;justify-content:center;min-height:88px;padding:var(--s3) 0;text-decoration:none}
+.links small{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2)}
+.links span{font:500 22px/1.3 var(--serif);margin-top:6px}
+.links a:hover span{color:var(--brass-hi)}
+
+/* author */
+.author{display:grid;grid-template-columns:120px 1fr;gap:var(--s4);align-items:center;padding-top:var(--s4);border-top:1px solid var(--line)}
+.author .monogram{aspect-ratio:1}
+.author p+p{margin-top:6px}
+.author .upd{margin-top:var(--s1)}
+
+/* hero chip/weight */
+.scales .chip-grid rect{fill:#2C2F35}
+.scales .chip-grid rect.on{fill:#C9A66B}
+
+@media (max-width:1020px){
+  .cluster,.law,.quiz{grid-template-columns:1fr}
+  .cluster{gap:var(--s3)}
+  .sits,.links{grid-template-columns:1fr}
+  .law{gap:var(--s5)}
+}
+@media (max-width:640px){
+  .quiz-q,.quiz-r,.check{padding:var(--s3)}
+  .faq summary h3{font-size:21px}
+  .sits h3{font-size:22px}
+  .author{grid-template-columns:72px 1fr;gap:var(--s3)}
+  .tl li.key time{font-size:26px}
+  .hero .wrap>div{min-width:0}
+  .hero .acts .btn{white-space:normal;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="a.html" aria-label="Эквитас, адвокатское бюро — на главную">
+      <b>Эквитас</b>
+      <small>Адвокатское бюро · Aequitas</small>
+    </a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="a.html#practice">Направления</a>
+      <a href="a.html#process">Как работаем</a>
+      <a href="a.html#calc">Стоимость</a>
+      <a href="a.html#cases">Разборы дел</a>
+      <a href="a-ai.html" aria-current="page">ИИ и цифровые споры</a>
+    </nav>
+    <div class="hdr-cta">
+      <a class="phone num" href="tel:+74950000000">+7 495 000-00-00</a>
+      <a class="btn btn-solid" href="#request">Разбор ситуации</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<nav class="crumbs wrap" aria-label="Навигационная цепочка">
+  <ol>
+    <li><a href="a.html">Главная</a></li>
+    <li><a href="a.html#practice">Практика</a></li>
+    <li><span aria-current="page">ИИ и цифровые споры</span></li>
+  </ol>
+</nav>
+
+<!-- 1. H1 + lead -->
+<section class="hero hero-ai" aria-labelledby="h1">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Направление практики · обновлено: октябрь 2026</p>
+      <h1 id="h1">ИИ и цифровые споры: <em>права на ИИ-контент, дипфейки, договоры с&nbsp;разработчиками</em></h1>
+      <p class="lead">Компании заказывают контент у нейросетей, встраивают ИИ в сервисы и сталкиваются с дипфейками. Адвокат Глеб … ведёт гражданские споры об этом: права на ИИ-контент, договоры с ИИ-разработчиками, использование изображения и голоса, утечки данных. Досудебная работа и суды Москвы и области. Основная часть закона об ИИ вступает в силу 1&nbsp;марта 2027 года.<span class="chk">[сверить]</span></p>
+      <p class="author-line"><span><b>Глеб …</b>, адвокат</span><span class="num">реестровый № 77/0000</span><span>Адвокатская палата г. Москвы</span></p>
+      <div class="acts">
+        <a class="btn btn-solid" href="#request">Обсудить ситуацию</a>
+        <a class="btn btn-ghost" href="#quiz">Кому принадлежат права на ИИ-контент</a>
+      </div>
+      <div class="facts">
+        <div><b class="num">01.03.2027</b>основная часть закона об ИИ</div>
+        <div><b class="num">6 дел</b>в обзоре практики 2023–2026</div>
+        <div><b>Гражданская сторона</b>досудебно и в судах Москвы и МО</div>
+      </div>
+    </div>
+    <div class="scales" aria-hidden="true">
+      <svg viewBox="0 0 480 520" fill="none" stroke-linecap="round">
+        <defs>
+          <linearGradient id="br" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#E7CB96"/><stop offset=".55" stop-color="#C9A66B"/><stop offset="1" stop-color="#8C7244"/>
+          </linearGradient>
+        </defs>
+        <path d="M150 112 A 120 120 0 0 1 330 112" stroke="#5A5040" stroke-width="1"/>
+        <g stroke="#8C7244" stroke-width="1">
+          <line x1="240" y1="30" x2="240" y2="44"/>
+          <line x1="209" y1="34" x2="211" y2="45"/><line x1="271" y1="34" x2="269" y2="45"/>
+          <line x1="180" y1="44" x2="185" y2="53"/><line x1="300" y1="44" x2="295" y2="53"/>
+          <line x1="156" y1="62" x2="163" y2="69"/><line x1="324" y1="62" x2="317" y2="69"/>
+        </g>
+        <rect x="234" y="140" width="12" height="300" fill="url(#br)"/>
+        <rect x="226" y="140" width="28" height="6" fill="#E2C48E"/>
+        <path d="M190 470 h100 l-14 -30 h-72 z" fill="url(#br)"/>
+        <rect x="160" y="470" width="160" height="10" fill="#8C7244"/>
+        <line x1="120" y1="500" x2="360" y2="500" stroke="#34373D"/>
+        <g class="beam">
+          <line x1="240" y1="150" x2="240" y2="64" stroke="url(#br)" stroke-width="3"/>
+          <path d="M236 66 L240 54 L244 66 z" fill="#E2C48E"/>
+          <rect x="100" y="146" width="280" height="8" rx="1" fill="url(#br)"/>
+          <circle cx="240" cy="150" r="11" fill="#141518" stroke="#E2C48E" stroke-width="2"/>
+          <circle cx="240" cy="150" r="3" fill="#E2C48E"/>
+          <circle cx="110" cy="150" r="5" fill="#E2C48E"/>
+          <circle cx="370" cy="150" r="5" fill="#E2C48E"/>
+          <g stroke="#141518" stroke-width="1"><line x1="150" y1="147" x2="150" y2="153"/><line x1="180" y1="147" x2="180" y2="153"/><line x1="210" y1="147" x2="210" y2="153"/><line x1="270" y1="147" x2="270" y2="153"/><line x1="300" y1="147" x2="300" y2="153"/><line x1="330" y1="147" x2="330" y2="153"/></g>
+        </g>
+        <!-- left pan: chip / pixel -->
+        <g class="pan-l">
+          <path d="M110 150 L70 300 M110 150 L150 300" stroke="#B49159" stroke-width="1.2"/>
+          <g stroke="#B49159" stroke-width="1.4">
+            <line x1="92" y1="246" x2="92" y2="238"/><line x1="104" y1="246" x2="104" y2="238"/><line x1="116" y1="246" x2="116" y2="238"/><line x1="128" y1="246" x2="128" y2="238"/>
+            <line x1="80" y1="258" x2="72" y2="258"/><line x1="80" y1="270" x2="72" y2="270"/><line x1="80" y1="282" x2="72" y2="282"/>
+            <line x1="140" y1="258" x2="148" y2="258"/><line x1="140" y1="270" x2="148" y2="270"/><line x1="140" y1="282" x2="148" y2="282"/>
+          </g>
+          <rect x="80" y="246" width="60" height="50" fill="#1B1D21" stroke="url(#br)" stroke-width="2"/>
+          <g class="chip-grid">
+            <rect x="92" y="255" width="10" height="10"/><rect class="on" x="105" y="255" width="10" height="10"/><rect x="118" y="255" width="10" height="10"/>
+            <rect class="on" x="92" y="268" width="10" height="10"/><rect class="on" x="105" y="268" width="10" height="10"/><rect x="118" y="268" width="10" height="10"/>
+            <rect x="92" y="281" width="10" height="10"/><rect x="105" y="281" width="10" height="10"/><rect class="on" x="118" y="281" width="10" height="10"/>
+          </g>
+          <path d="M56 300 h108 a54 22 0 0 1 -108 0 z" fill="url(#br)"/>
+          <ellipse cx="110" cy="300" rx="54" ry="5" fill="#E2C48E"/>
+        </g>
+        <!-- right pan: weight with § -->
+        <g class="pan-r">
+          <path d="M370 150 L330 300 M370 150 L410 300" stroke="#B49159" stroke-width="1.2"/>
+          <circle cx="370" cy="244" r="8" stroke="#E2C48E" stroke-width="3"/>
+          <path d="M340 298 L348 254 H392 L400 298 Z" fill="url(#br)"/>
+          <line x1="348" y1="254" x2="392" y2="254" stroke="#E2C48E" stroke-width="2"/>
+          <text x="370" y="290" text-anchor="middle" font-family="Cormorant Garamond, Times New Roman, serif" font-size="34" font-weight="600" fill="#16130D">§</text>
+          <path d="M316 300 h108 a54 22 0 0 1 -108 0 z" fill="url(#br)"/>
+          <ellipse cx="370" cy="300" rx="54" ry="5" fill="#E2C48E"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 2. situations -->
+<section class="alt" aria-labelledby="h-sit">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">С чем приходят</p><h2 id="h-sit">Пять ситуаций, с которыми обращаются компании</h2></div>
+      <p>Каждая ведёт к разделу ниже: короткий ответ, что делает адвокат, какие документы нужны и когда обращаться.</p>
+    </div>
+    <ol class="sits">
+      <li><a href="#prava"><span class="n num">01</span><div><h3>Подрядчик сдал работу, сделанную нейросетью</h3><p>Логотип, тексты или код созданы с помощью ИИ, и непонятно, перешли ли права и можно ли регистрировать товарный знак.</p><span class="go">Права на ИИ-контент →</span></div></a></li>
+      <li><a href="#otvetstvennost"><span class="n num">02</span><div><h3>Компания внедрила ИИ-сервис</h3><p>Чат-бот или аналитика ошиблись перед клиентом, и нужно понять, кто отвечает: компания, разработчик или поставщик модели.</p><span class="go">Ответственность за ошибку ИИ →</span></div></a></li>
+      <li><a href="#dipfejki"><span class="n num">03</span><div><h3>Лицо или голос директора в чужом ролике</h3><p>В рекламе или соцсетях появилось видео, которого он не записывал.</p><span class="go">Дипфейки, изображение, голос →</span></div></a></li>
+      <li><a href="#prava"><span class="n num">04</span><div><h3>Ваш контент использовала нейросеть</h3><p>Фотографии, иллюстрации или тексты компании воспроизводятся в сгенерированном контенте конкурента.</p><span class="go">Права на ИИ-контент →</span></div></a></li>
+      <li><a href="#dannye"><span class="n num">05</span><div><h3>Утечка данных у компании или подрядчика</h3><p>Клиенты предъявляют претензии, и нужно определить, кто и в каком объёме за это отвечает.</p><span class="go">Утечка данных: гражданская ответственность →</span></div></a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 3. what we do -->
+<section aria-labelledby="h-do">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Что делаем</p><h2 id="h-do">Пять направлений внутри практики</h2></div>
+      <p>Только гражданская сторона: договоры, права, компенсации, претензии и иски. Исход дела адвокат не обещает — он оценивает позицию и документы.</p>
+    </div>
+
+    <article class="cluster" id="prava" aria-labelledby="h-prava">
+      <div>
+        <p class="k">01 · Права на ИИ-контент</p>
+        <h3 id="h-prava">Кому принадлежит результат работы нейросети</h3>
+        <p class="short">Автором по Гражданскому кодексу может быть только человек (ст. 1228, 1257 ГК РФ). Охрана результата зависит от творческого вклада человека и условий сервиса, а передача прав подрядчиком — от договора.</p>
+        <a class="xlink" href="#quiz">Опросник: какие факторы влияют на охрану вашего ИИ-контента →</a>
+      </div>
+      <dl>
+        <div><dt>Что делает адвокат</dt><dd><ul>
+          <li>Оценивает творческий вклад человека и условия сервиса на дату генерации</li>
+          <li>Проверяет договор с подрядчиком: что передано и какие гарантии даны</li>
+          <li>Готовит претензию или иск о защите исключительного права и компенсации</li>
+          <li>Отвечает на претензии правообладателей к компании</li>
+        </ul></dd></div>
+        <div><dt>Какие документы нужны</dt><dd>Договор и акт приёмки, история запросов и промежуточные версии, пользовательское соглашение сервиса, переписка о задании.</dd></div>
+        <div><dt>Когда обращаться</dt><dd>До регистрации товарного знака и запуска рекламы на ИИ-материалах; сразу после обнаружения копии вашего контента.</dd></div>
+      </dl>
+    </article>
+
+    <article class="cluster" id="dogovory" aria-labelledby="h-dog">
+      <div>
+        <p class="k">02 · Договоры</p>
+        <h3 id="h-dog">Договоры с ИИ-разработчиками и ИИ в договорах</h3>
+        <p class="short">Использование ИИ само по себе договор не порочит, если результат принят. Спорят о другом: качество и приёмка, права на модель и данные, ответственность за ошибку сервиса.</p>
+        <a class="xlink" href="a.html#practice">Спор с подрядчиком о качестве и приёмке результата →</a>
+      </div>
+      <dl>
+        <div><dt>Что делает адвокат</dt><dd><ul>
+          <li>Проверяет условия о допустимости ИИ, доле ручной доработки и гарантиях</li>
+          <li>Распределяет ответственность за ошибку модели и обучающие данные</li>
+          <li>Ведёт спор о качестве, приёмке и оплате результата</li>
+          <li>Готовит требования к подрядчику о возмещении убытков</li>
+        </ul></dd></div>
+        <div><dt>Какие документы нужны</dt><dd>Договор, техническое задание, акты, переписка о сдаче работы, лицензии на модели и данные.</dd></div>
+        <div><dt>Когда обращаться</dt><dd>До подписания договора на разработку и до 1 марта 2027 года — для пересмотра действующих договоров.<span class="chk">[сверить]</span></dd></div>
+      </dl>
+    </article>
+
+    <article class="cluster" id="dipfejki" aria-labelledby="h-dip">
+      <div>
+        <p class="k">03 · Дипфейки</p>
+        <h3 id="h-dip">Изображение, голос и деловая репутация</h3>
+        <p class="short">Изображение человека охраняется ст. 152.1 ГК РФ, деловая репутация компании — ст. 152 ГК РФ. Ролик с директором, которого он не записывал, можно потребовать удалить и взыскать компенсацию.</p>
+        <p class="aside-note"><b>Уголовно-правовую сторону (мошенничество) не ведём:</b> занимаемся удалением, компенсацией и требованиями к рекламодателю и площадке.</p>
+        <a class="xlink" href="a.html#practice">Ролик порочит компанию: иск о защите деловой репутации →</a>
+      </div>
+      <dl>
+        <div><dt>Что делает адвокат</dt><dd><ul>
+          <li>Организует фиксацию публикации, например нотариальным осмотром</li>
+          <li>Направляет требования об удалении рекламодателю и площадке</li>
+          <li>Готовит иск о защите изображения, голоса и деловой репутации</li>
+          <li>Взыскивает компенсацию с рекламодателя</li>
+        </ul></dd></div>
+        <div><dt>Какие документы нужны</dt><dd>Ссылки и записи публикации, протокол осмотра, документы о полномочиях директора, сведения о рекламодателе.</dd></div>
+        <div><dt>Когда обращаться</dt><dd>Сразу после обнаружения — пока публикация доступна и её можно зафиксировать.</dd></div>
+      </dl>
+    </article>
+
+    <article class="cluster" id="dannye" aria-labelledby="h-dan">
+      <div>
+        <p class="k">04 · Утечка данных</p>
+        <h3 id="h-dan">Гражданская ответственность оператора и регресс к подрядчику</h3>
+        <p class="short">Субъект данных вправе требовать компенсации морального вреда (ч. 2 ст. 24 Федерального закона № 152-ФЗ). Для компании важно, можно ли переложить убытки на обработчика данных по договору.</p>
+      </div>
+      <dl>
+        <div><dt>Что делает адвокат</dt><dd><ul>
+          <li>Оценивает претензии клиентов и доказанность утечки у этого оператора</li>
+          <li>Представляет компанию по искам субъектов данных</li>
+          <li>Готовит регрессные требования к подрядчику-обработчику</li>
+        </ul></dd></div>
+        <div><dt>Какие документы нужны</dt><dd>Договор с обработчиком, документы о мерах защиты, внутренние акты расследования, претензии клиентов.</dd></div>
+        <div><dt>Когда обращаться</dt><dd>При первых претензиях клиентов — до ответа на них.</dd></div>
+      </dl>
+    </article>
+
+    <article class="cluster" id="otvetstvennost" aria-labelledby="h-otv">
+      <div>
+        <p class="k">05 · Ответственность и закон 2027</p>
+        <h3 id="h-otv">Кто отвечает за ошибку ИИ</h3>
+        <p class="short">Сейчас — по общим нормам ГК: по договору отвечает сторона, принявшая обязательство, вне договора — причинитель вреда. С 1 марта 2027 года закон об ИИ распределяет ответственность между разработчиком и тем, кто применяет ИИ.<span class="chk">[сверить]</span></p>
+        <a class="xlink" href="a.html#practice">Когда убытки от решения взыскивают с директора лично →</a>
+      </div>
+      <dl>
+        <div><dt>Что делает адвокат</dt><dd><ul>
+          <li>Разбирает цепочку: компания — разработчик — поставщик модели</li>
+          <li>Ведёт споры с клиентами о вреде от ошибки сервиса</li>
+          <li>Предъявляет требования к разработчику по договору</li>
+        </ul></dd></div>
+        <div><dt>Какие документы нужны</dt><dd>Договоры по цепочке поставки ИИ, журналы работы сервиса, предупреждения пользователям, претензии клиентов.</dd></div>
+        <div><dt>Когда обращаться</dt><dd>После первой претензии клиента — и заранее, при подготовке к 1 марта 2027 года.</dd></div>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<!-- 4. practice -->
+<section id="practice-ai" class="alt" aria-labelledby="h-cases">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Судебная практика</p><h2 id="h-cases">Дела 2023–2026: что решили суды</h2></div>
+      <p>Опубликованные акты судов по ИИ и дипфейкам. Обзор нейтральный: это не дела бюро, а практика, на которую опирается позиция.</p>
+    </div>
+    <div class="tbl-cap"><p class="upd">Обновлено: октябрь 2026</p><p class="upd">Номера и инстанции — по картотеке арбитражных дел<span class="chk">[сверить каждое дело]</span></p></div>
+    <p class="scroll-hint">Таблица прокручивается вбок →</p>
+    <div class="tbl" role="region" aria-labelledby="h-cases" tabindex="0">
+      <table>
+        <thead><tr><th scope="col">Дело</th><th scope="col">Суть</th><th scope="col">Что решил суд</th></tr></thead>
+        <tbody>
+          <tr><th scope="row" class="num">А40-200471/2023<span>Арбитражный суд г. Москвы, решение 30.11.2023; 9 ААС<span class="chk">[сверить]</span></span></th><td>Ролик с дипфейком актёра использован в рекламе без разрешения правообладателя</td><td>Дипфейк — технический инструмент монтажа, ролик создан творческим трудом людей и охраняется; взыскана компенсация 500 тыс. ₽</td></tr>
+          <tr><th scope="row">Пресненский районный суд г. Москвы<span>2025; апелляционная жалоба подана в 2026<span class="chk">[сверить статус]</span></span></th><td>Изображения, сгенерированные по текстовому запросу (промпту)</td><td>Не объект авторского права: ввод промпта суд счёл механическим действием без творческого вклада. Решение обжалуется</td></tr>
+          <tr><th scope="row" class="num">А56-102880/2024<span>Арбитражный суд г. Санкт-Петербурга и Ленинградской обл.<span class="chk">[сверить]</span></span></th><td>Заказчик оспаривал договор, потому что стратегию подготовила нейросеть</td><td>В иске отказано: ИИ как инструмент — не порок, если результат принят</td></tr>
+          <tr><th scope="row" class="num">А22-447/2024<span>Арбитражный суд Республики Калмыкия<span class="chk">[сверить]</span></span></th><td>Упущенную выгоду обосновывали ответом нейросети</td><td>Ответ нейросети не принят как доказательство</td></tr>
+          <tr><th scope="row" class="num">А60-39444/2024<span>Суд по интеллектуальным правам, 2025<span class="chk">[сверить]</span></span></th><td>К жалобе приложен анализ дела, выполненный DeepSeek</td><td>Расценён как частное мнение, судебные акты не опровергает</td></tr>
+          <tr><th scope="row" class="num">А60-8560/2025<span>Арбитражный суд Свердловской обл.<span class="chk">[сверить]</span></span></th><td>Ответчик ссылался на то, что спорное фото сгенерировано ИИ</td><td>Ссылка без доказательств отклонена</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <a class="xlink" href="a.html#practice">Арбитражные споры компаний — все направления →</a>
+  </div>
+</section>
+
+<!-- 5. law -->
+<section id="law" aria-labelledby="h-law">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Закон об ИИ</p><h2 id="h-law">Что меняется с 1 марта 2027 года</h2></div>
+      <p>Формулировки — по тексту закона, вступающего в силу 01.03.2027, без прогнозов практики. Номер федерального закона укажем после публикации.<span class="chk">[сверить номер ФЗ]</span></p>
+    </div>
+    <div class="law">
+      <ol class="tl">
+        <li><time datetime="2026-06-10" class="num">10.06.2026</time><p>Обязательная маркировка ИИ-контента отклонена; площадки с аудиторией свыше 500 тыс. в сутки обязаны дать возможность маркировки.</p><span class="who">Площадки, бренды с пользовательским контентом</span></li>
+        <li><time datetime="2026-08-02" class="num">02.08.2026</time><p>Действует ст. 50 AI Act ЕС — раскрытие дипфейков.</p><span class="who">Компании, работающие с ЕС</span></li>
+        <li><time datetime="2026-08">Август 2026</time><p>Внесён законопроект о маркировке ИИ-контента № 1317978-8.<span class="chk">[сверить стадию]</span></p><span class="who">Маркетинг, площадки — следить за чтениями</span></li>
+        <li><time>1 сентября</time><p>Вступают первые нормы закона о развитии технологий ИИ (законопроект № 1271570-8).<span class="chk">[сверить год и перечень норм]</span></p><span class="who">Компании, внедряющие ИИ</span></li>
+        <li class="key"><time datetime="2027-03-01" class="num">01.03.2027</time><p>Основная часть закона: сервисы сообщают, кому принадлежат права на сгенерированное; обучение на правомерно полученных произведениях не считается нарушением; ответственность за ошибку ИИ — на разработчике (дефект модели, данные, отсутствие предупреждений) или на лице, применяющем ИИ и извлекающем выгоду; модели делятся на «суверенные» и «национальные».<span class="chk">[сверить статус после СФ и подписи]</span></p><span class="who">Все, кто внедряет или заказывает ИИ</span></li>
+      </ol>
+      <div class="check">
+        <h3>Что проверить в договорах до этой даты</h3>
+        <ol>
+          <li>Кто отвечает перед клиентом за ошибку модели и в каком размере.</li>
+          <li>Гарантии разработчика по обучающим данным: откуда они получены и на каком праве.</li>
+          <li>Кому принадлежат права на результат и что передаётся по договору.</li>
+          <li>Кто обязан предупреждать пользователей о работе ИИ и в какой форме.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. FAQ -->
+<section id="faq" class="alt" aria-labelledby="h-faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Вопросы</p><h2 id="h-faq">Частые вопросы</h2></div>
+      <p>Короткие ответы по Гражданскому кодексу и опубликованной практике. Это не юридическое заключение по вашей ситуации.</p>
+    </div>
+    <div class="faq">
+      <details><summary><h3>Кому принадлежат права на изображение или текст, созданные нейросетью?</h3></summary><p class="ans">По Гражданскому кодексу автором может быть только человек, чьим творческим трудом создан результат (ст. 1228, 1257 ГК РФ). Если вклад человека ограничен текстовым запросом, суд может не признать результат объектом авторского права — так решил Пресненский районный суд Москвы в 2025 году, решение обжалуется.<span class="chk">[сверить]</span> Если человек дорабатывал результат — обрабатывал, монтировал, компоновал, — арбитражные суды охрану признают.</p></details>
+      <details><summary><h3>Можно ли использовать картинки из нейросети в рекламе и на упаковке?</h3></summary><p class="ans">Можно, если это допускают условия сервиса: в пользовательском соглашении указано, разрешено ли коммерческое использование и на каком тарифе. Отдельный риск — сходство с чужим произведением, товарным знаком или изображением человека: за нарушение отвечает тот, кто использует результат, а не нейросеть.</p></details>
+      <details><summary><h3>Подрядчик сделал логотип нейросетью. Чьи права?</h3></summary><p class="ans">Это определяет договор. Если результат не охраняется, передавать по нему исключительное право нечего, поэтому в договоре нужны условия о допустимости ИИ, доле ручной доработки, гарантиях и ответственности подрядчика. Сам факт использования ИИ договор не порочит: в деле А56-102880/2024 суд отказал заказчику, оспаривавшему договор из-за стратегии, подготовленной нейросетью, — результат был принят.</p></details>
+      <details><summary><h3>Является ли дипфейк объектом авторского права?</h3></summary><p class="ans">В деле А40-200471/2023 Арбитражный суд города Москвы признал дипфейк техническим инструментом монтажа, а ролик — результатом творческого труда людей; апелляция решение оставила в силе.<span class="chk">[сверить]</span> С компании, использовавшей ролик в рекламе без разрешения, взыскано 500 тыс. рублей компенсации.</p></details>
+      <details><summary><h3>Что делать, если в рекламе использовали дипфейк с директором компании?</h3></summary><p class="ans">Зафиксировать публикацию (например, нотариальным осмотром страницы) и направить требование об удалении рекламодателю и площадке. Изображение человека охраняется ст. 152.1 ГК РФ, а если ролик порочит компанию, возможен иск о защите деловой репутации по ст. 152 ГК РФ. Мошенничество с дипфейками — уголовная сфера, ею занимаются правоохранительные органы.</p></details>
+      <details><summary><h3>Кто отвечает за ошибку ИИ-сервиса?</h3></summary><p class="ans">Сейчас — по общим нормам Гражданского кодекса: по договору отвечает сторона, принявшая обязательство перед клиентом, вне договора — причинитель вреда. С 1 марта 2027 года закон об ИИ распределяет ответственность между разработчиком (дефект модели, данные, отсутствие предупреждений) и тем, кто применяет ИИ и извлекает из этого выгоду.<span class="chk">[сверить]</span> Договоры с ИИ-подрядчиками разумно пересмотреть до этой даты.</p></details>
+      <details><summary><h3>Можно ли получить компенсацию за утечку персональных данных?</h3></summary><p class="ans">Субъект данных вправе требовать компенсации морального вреда независимо от имущественного ущерба (ч. 2 ст. 24 Федерального закона № 152-ФЗ). Суд оценивает, доказана ли утечка именно у этого оператора и какие последствия наступили. Для компании значение имеют договор с обработчиком данных и документы о мерах защиты: от них зависит, можно ли переложить убытки на подрядчика.</p></details>
+      <details><summary><h3>Принимает ли суд ответ нейросети как доказательство?</h3></summary><p class="ans">По опубликованной практике — нет. В деле А22-447/2024 упущенную выгоду не признали доказанной ответом нейросети, а в деле А60-39444/2024 анализ от DeepSeek суд счёл частным мнением. Голая ссылка «это сгенерировано ИИ» тоже не освобождает от ответственности (А60-8560/2025).</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 7. quiz (static example) -->
+<section id="quiz" aria-labelledby="h-quiz">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Опросник</p><h2 id="h-quiz">Кому принадлежат права на ИИ-контент</h2></div>
+      <p>Шесть вопросов — какие факторы влияют на охрану вашего ИИ-контента. Результат — перечень факторов риска и нужных документов, а не вердикт «охраняется / не охраняется».</p>
+    </div>
+    <div class="quiz" role="group" aria-label="Пример заполненного опросника">
+      <div class="quiz-q">
+        <span class="badge">Пример заполнения</span>
+        <div class="qi field-s"><span class="lbl"><b class="num">1</b>Кто создал результат?</span><div class="seg"><span>Сотрудник компании</span><span class="on">Подрядчик</span><span>Сервис без доработки</span></div></div>
+        <div class="qi field-s"><span class="lbl"><b class="num">2</b>Какой вклад человека?</span><div class="seg"><span>Только запрос</span><span class="on">Запрос и отбор вариантов</span><span>Существенная доработка</span></div></div>
+        <div class="qi field-s"><span class="lbl"><b class="num">3</b>Что разрешают условия сервиса?</span><div class="seg"><span>Только личное использование</span><span class="on">Коммерческое использование</span><span>Не знаю</span></div></div>
+        <div class="qi field-s"><span class="lbl"><b class="num">4</b>Что сказано об ИИ в договоре с исполнителем?</span><div class="seg"><span>Договора нет</span><span class="on">Ничего</span><span>Есть условия и гарантии</span></div></div>
+        <div class="qi field-s"><span class="lbl"><b class="num">5</b>Как будет использован результат?</span><div class="seg"><span>Внутренние материалы</span><span>Реклама и упаковка</span><span class="on">Товарный знак</span></div></div>
+        <div class="qi field-s"><span class="lbl"><b class="num">6</b>Похож ли результат на чужое произведение, знак или человека?</span><div class="seg"><span>Нет</span><span class="on">Возможно</span><span>Да</span></div></div>
+      </div>
+      <div class="quiz-r">
+        <h3>Факторы риска</h3>
+        <ul>
+          <li>Вклад человека ограничен запросом и отбором — охрана результата под вопросом (Пресненский суд, 2025, решение обжалуется<span class="chk">[сверить]</span>).</li>
+          <li>Договор не регулирует ИИ — неясно, какое право подрядчик передал.</li>
+          <li>Регистрация товарного знака — нужна проверка сходства и прав на исходник.</li>
+          <li>Возможное сходство с чужим объектом — претензии предъявят тому, кто использует результат.</li>
+        </ul>
+        <h4>Документы для оценки</h4>
+        <ul>
+          <li>Договор с подрядчиком и акт приёмки</li>
+          <li>История запросов и промежуточные версии</li>
+          <li>Условия сервиса на дату генерации</li>
+          <li>Переписка о задании</li>
+        </ul>
+        <p class="note">Не является юридическим заключением. Оценку по документам даёт адвокат.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. CTA form -->
+<section id="request" class="alt" aria-labelledby="h-rq">
+  <div class="wrap form-wrap">
+    <div>
+      <p class="eyebrow">Заявка</p>
+      <h2 id="h-rq">Опишите ситуацию</h2>
+      <p style="margin-top:var(--s3);color:var(--fg-2);max-width:30em">Что создано, кем и по какому договору. Адвокат ответит, какие документы нужны для оценки, и договорится о встрече.</p>
+    </div>
+    <form action="#" onsubmit="return false">
+      <div class="f"><label for="ai-name">Имя</label><input id="ai-name" name="name" autocomplete="name" required></div>
+      <div class="f"><label for="ai-contact">Телефон или email</label><input id="ai-contact" name="contact" autocomplete="tel" required></div>
+      <div class="f"><label for="ai-msg">Коротко о ситуации</label><textarea id="ai-msg" name="message" aria-describedby="ai-msg-h"></textarea><p class="hint" id="ai-msg-h">Не указывайте здесь сведения о здоровье, паспортные данные и другую чувствительную информацию.</p></div>
+      <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных в соответствии с <a href="#policy">политикой обработки ПД</a></span></label>
+      <div><button class="btn btn-solid" type="submit">Отправить заявку</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- 9. links -->
+<section aria-labelledby="h-links">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Смежные направления</p><h2 id="h-links">Если спор шире ИИ</h2></div>
+      <p>ИИ часто оказывается деталью обычного спора: о договоре, о репутации, об ответственности директора.</p>
+    </div>
+    <ul class="links">
+      <li><a href="a.html#practice"><small>Договорные споры</small><span>Спор с подрядчиком о качестве и приёмке результата</span></a></li>
+      <li><a href="a.html#practice"><small>Деловая репутация</small><span>Ролик порочит компанию: иск о защите деловой репутации</span></a></li>
+      <li><a href="a.html#practice"><small>Корпоративные споры</small><span>Когда убытки от решения взыскивают с директора лично</span></a></li>
+      <li><a href="a.html#practice"><small>Арбитражные споры</small><span>Иски между компаниями в судах Москвы и МО</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 10. author -->
+<section class="alt" aria-labelledby="h-au" style="padding:var(--s6) 0">
+  <div class="wrap">
+    <h2 id="h-au" class="eyebrow" style="font:500 12px/1.4 var(--sans)">Автор страницы</h2>
+    <div class="author" style="margin-top:var(--s3)">
+      <div class="monogram" aria-hidden="true">
+        <svg viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="56" stroke="#8C7244"/><circle cx="60" cy="60" r="48" stroke="#34373D"/><text x="60" y="76" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="48" fill="#C9A66B">Г</text></svg>
+      </div>
+      <div>
+        <p>Автор: <b>Глеб …</b>, адвокат, <span class="num">реестровый № 77/0000</span>, Адвокатская палата г. Москвы.</p>
+        <p class="upd">Обновлено: октябрь 2026. Следующий пересмотр — до 01.03.2027.</p>
+        <a class="xlink" href="a.html#top">Страница адвоката →</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="cols">
+      <div><p><b>Адвокатское бюро «Эквитас»</b></p><p>Адвокатская палата г. Москвы</p><p class="num">ИНН 7700000000 · ОГРН 0000000000000</p></div>
+      <div><p><b>Адрес</b></p><p>г. Москва, ул. Примерная, д. 0, офис 0</p><p>Выезд по Москве и МО</p></div>
+      <div><p><b>Связь</b></p><p class="num">+7 495 000-00-00</p><p>office@example.ru</p></div>
+    </div>
+    <div class="legal"><a href="#policy" id="policy">Политика обработки персональных данных</a><span style="align-self:center">© 2026 Эквитас</span></div>
+  </div>
+</footer>
+</body>
+</html>

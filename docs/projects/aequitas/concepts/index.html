@@ -41,12 +41,41 @@ iframe{display:block;width:100%;height:720px;border:0;background:#fff}
 .tablewrap{overflow-x:auto}
 .rec{margin-top:32px;padding-top:24px;border-top:2px solid var(--fg);font-size:20px;max-width:46em}
 .rec b{color:var(--accent)}
+.new{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 24px;align-items:center;padding:20px 24px;margin:0 0 40px;background:var(--surface);border:1px solid var(--line);font-family:system-ui, sans-serif}
+.new .tag{margin:0}
+.new p{margin:0}
+.new .open{margin-top:0}
+.ideas{width:100%;min-width:760px;border-collapse:collapse;font-family:system-ui, sans-serif;font-size:15px;margin-top:16px}
+.ideas th,.ideas td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.ideas thead th{color:var(--fg-2);font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.ideas td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.heroes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:24px;font-family:system-ui, sans-serif;font-size:15px}
+.heroes h3{font-family:Georgia, serif;font-size:21px;line-height:1.25;margin:0 0 8px;font-weight:600}
+.heroes p{margin:0 0 8px}
+.heroes .rec-tag{color:var(--accent);font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px}
+.refs{font-family:system-ui, sans-serif;font-size:15px;margin-top:32px}
+.refs h3{font-family:Georgia, serif;font-size:21px;margin:0 0 4px;font-weight:600}
+.refs .warn{color:var(--fg-2);margin:0 0 16px}
+.refs ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px}
+.refs li{border-bottom:1px solid var(--line)}
+.refs a{display:block;min-height:44px;padding:10px 0;color:var(--fg);text-underline-offset:4px}
+.refs a span{color:var(--fg-2);margin-left:6px}
+.sub{font-family:system-ui, sans-serif;color:var(--fg-2);max-width:46em;margin:12px 0 0}
+@media (max-width:760px){.new{grid-template-columns:minmax(0,1fr)}.heroes,.refs ul{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:760px){.desc{grid-template-columns:minmax(0,1fr);gap:20px}dl{grid-template-columns:minmax(0,1fr);gap:2px 0}dd{margin-bottom:10px}iframe{height:600px}}
 </style>
 
 <div class="outer"><div class="in">
   <h1>Эквитас: пять стилей главной</h1>
-  <p class="intro">Пять настроений для адвокатской практики по гражданским делам: клиенты — компании и собственники, Москва и МО. Тексты и структура во всех пяти одинаковые (первый экран, пять направлений, этапы, калькулятор, разборы дел, адвокат, заявка), отличается только подача. Каждый макет можно прокрутить прямо в окне или открыть во весь экран.</p>
+  <p class="intro">Пять настроений для адвокатской практики по гражданским делам: клиенты — компании и собственники, Москва и МО. Тексты и структура во всех пяти одинаковые (первый экран, шесть направлений, этапы, калькулятор, разборы дел, адвокат, заявка), отличается только подача. Каждый макет можно прокрутить прямо в окне или открыть во весь экран.</p>
+
+  <div class="new" role="note" aria-labelledby="new-h">
+    <div>
+      <p class="tag" id="new-h">Новое · 25.10.2026</p>
+      <p>Макет отдельной страницы «ИИ и цифровые споры» в стиле A: все 10 блоков ТЗ, обзор практики, календарь закона, пример опросника и форма. Во всех пяти главных добавлено шестое направление со ссылкой на неё.</p>
+    </div>
+    <a class="open" href="#sai">Открыть страницу ИИ-споров</a>
+  </div>
 
   <section class="style" aria-labelledby="sa">
     <div class="desc">
@@ -58,7 +87,7 @@ iframe{display:block;width:100%;height:720px;border:0;background:#fff}
       <dl>
         <dt>Палитра</dt><dd><div class="sw"><span><i style="background:#141518"></i>графит</span><span><i style="background:#22252A"></i>сукно</span><span><i style="background:#C9A66B"></i>латунь</span><span><i style="background:#ECE6DA"></i>слоновая кость</span></div></dd>
         <dt>Шрифты</dt><dd>Cormorant Garamond (заголовки) + IBM Plex Sans (текст)</dd>
-        <dt>Герой</dt><dd>Латунные весы-прибор со шкалой; коромысло один раз приходит в равновесие</dd>
+        <dt>Герой</dt><dd>Латунные весы-прибор со шкалой; коромысло один раз приходит в равновесие. Добавлено: латунная гирька у каждого направления, шкала со стрелкой в калькуляторе</dd>
         <dt>Впечатление</dt><dd>«Здесь всё взвешено и посчитано, мне не будут продавать»</dd>
       </dl>
     </div>
@@ -153,5 +182,75 @@ iframe{display:block;width:100%;height:720px;border:0;background:#fff}
       </table>
     </div>
     <p class="rec"><b>Рекомендация:</b> основой по-прежнему остаётся A «Вечерний кабинет» — он единственный прямо попадает в бриф «тёмный, солидный, с золотом»; если владельцу важнее выглядеть современно и «по-банковски», чем по-кабинетному, сильнейшая альтернатива — E «Равновесие», а из D стоит забрать крупную типографику и строгую сетку для калькулятора и разборов дел.</p>
+  </section>
+
+  <section class="style" aria-labelledby="sid">
+    <h2 id="sid">Идеи Гермеса</h2>
+    <p class="sub">Пять направлений дизайна и три героя-объекта из подборки референсов (Pinterest через Nullume, 25.10.2026). С — солидность, Н — новизна для ниши юристов, оценки 1–5.</p>
+    <div class="tablewrap">
+      <table class="ideas">
+        <thead><tr><th scope="col">Идея</th><th scope="col">С</th><th scope="col">Н</th><th scope="col">Сложность</th><th scope="col">Настроение</th><th scope="col">Ложится на макет</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">1. Типографика-монумент</th><td class="n">5</td><td class="n">4</td><td>низкая</td><td>торжественно, «высечено»</td><td>C «Камень и малахит» (вместе с камнем из идеи 5); крупный кегль — из D</td></tr>
+          <tr><th scope="row">2. Тёмная материя</th><td class="n">5</td><td class="n">3</td><td>средняя</td><td>кабинет вечером, тишина, прибор на столе</td><td>A «Вечерний кабинет» — основная</td></tr>
+          <tr><th scope="row">3. Документ как интерфейс</th><td class="n">4</td><td class="n">5</td><td>средняя</td><td>точность, всё по пунктам</td><td>B «Бумага и чернила»</td></tr>
+          <tr><th scope="row">4. Равновесие в движении</th><td class="n">3</td><td class="n">5</td><td>высокая</td><td>драма спора, приходящая в баланс</td><td>Не отдельный стиль, а моторика для A; ближе всего по духу — E</td></tr>
+          <tr><th scope="row">5. Архитектура</th><td class="n">5</td><td class="n">2</td><td>средняя</td><td>вечность закона, камень</td><td>C «Камень и малахит»</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="heroes">
+      <div><p class="rec-tag">Рекомендован · для A</p><h3>Латунные весы-прибор</h3><p>Как живёт: коромысло один раз приходит в равновесие, гирька отмечает каждое направление, стрелка на шкале показывает итог расчёта.</p></div>
+      <div><p class="rec-tag">Для B</p><h3>Печать и перо</h3><p>Как живёт: перо выводит подпись под заголовком, оттиск печати отмечает завершённое дело и отправленную заявку.</p></div>
+      <div><p class="rec-tag">Персонаж инструментов</p><h3>Песочные часы</h3><p>Как живёт: только в инструментах — песок досыпается до даты срока давности; в первый экран не ставим, чтобы не пугать.</p></div>
+    </div>
+    <div class="refs">
+      <h3>Референсы</h3>
+      <p class="warn">Только внутренний референс: лицензия неизвестна, на сайт не ставим. Ссылки открывают пины на Pinterest.</p>
+      <ul>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShx-UO2b9OHeczVKuKxf32cWX_h8sO6vg0TF2dOXGK1EXi-n/" target="_blank" rel="noopener noreferrer">Ashcroft Typefaces, постер антиквы<span>· Типографика-монумент</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShxDHtEVxwZXZrUZNJWzV-e8eYa_GKpCQeKMLUuKLdN2UXRB/" target="_blank" rel="noopener noreferrer">Высеченные буквы в известняке<span>· Типографика-монумент</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShycB5AphMaETChnGZjYTxfBrPXDRJcCqVDwEplh08T_hMheBw/" target="_blank" rel="noopener noreferrer">«Sometimes Times», тихий центрированный экран<span>· Типографика-монумент</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShxu2Md_4erWFFq-_zCedDx7wSPtS-NOhwlysp4rm3aq0Hmuuw/" target="_blank" rel="noopener noreferrer">Тёмный интерьерный сайт «Aurelia»<span>· Тёмная материя</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShyseLgldtntgx53Vz4RSV6Tg-trY_H7iv196DgCVfuukNSzNg/" target="_blank" rel="noopener noreferrer">Латунная чаша, свет на металле<span>· Тёмная материя</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShxkWWCwm1OCeVA8-X9ssXl6CzORbpGWarp-TNSCRJ7GfmSh/" target="_blank" rel="noopener noreferrer">Dark Luxury Palette, мудборд материалов<span>· Тёмная материя</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShyw6rKroJQR6RxmKTCJentywst3HC4hahaGTptoXKIWrAwXag/" target="_blank" rel="noopener noreferrer">Разворот с номерами абзацев на поле<span>· Документ как интерфейс</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShzlG_OhgmM29jFEOOUkVYsA0oE2qNMvSHQuGEc07gugE4Ie/" target="_blank" rel="noopener noreferrer">Оглавление журнала с трёхзначными номерами<span>· Документ как интерфейс</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShxUJi9wXzhE-vVseXF_cEt1bbA21nm-3OjbTauYO_d05KU/" target="_blank" rel="noopener noreferrer">Страница с маргиналиями<span>· Документ как интерфейс</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShwjqtWGlS0q0bho4iZlBtPPTCsQo4S3qUO9OSPZ8kGhYGAP/" target="_blank" rel="noopener noreferrer">Typographic Balance, камень и дерево на коромысле<span>· Равновесие в движении</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShwVkgj4kPOTe3WY2Flswjy8rbnUOSxkT7yl_IPCmD63fNsN/" target="_blank" rel="noopener noreferrer">«Equilibrio», диагональ чёрного и белого<span>· Равновесие в движении</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShzK2LMtC3MTVVMIwm8C8nljqRj099q7XHSr8-dWsctuF0mN/" target="_blank" rel="noopener noreferrer">Геометрический постер: два круга на нитях<span>· Равновесие в движении</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShw9qM1STljvd7RfpD3glSxaDLMVCc4TcgHkMvQKa3r5iPJH3w/" target="_blank" rel="noopener noreferrer">Римская колонна в темноте<span>· Архитектура</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShxw07l0HvPZDqYLhVn3D6IrG168smr9W4WnwHzdz9-lltSRuQ/" target="_blank" rel="noopener noreferrer">Calvo Law — подача знака (антиреф по сюжету)<span>· Архитектура</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShyp8Q3n-bTGB4olvZSt3js1L1sAo6s1vLoZCQYRvPdjv6uT/" target="_blank" rel="noopener noreferrer">Monthly Material: Travertine<span>· Архитектура</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShxB6Zw3EVlemGBVYnHXUeA_UbwBRFgtcGwDoL4d8HfRkTyP/" target="_blank" rel="noopener noreferrer">Складные монетные весы<span>· Герой · весы</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShxkkiZl71uEcWW8rP7RUHeQPh3h7_3DV96SCum0UhxRoxQi/" target="_blank" rel="noopener noreferrer">Весы с противовесом, латунь и чёрная колонна<span>· Герой · весы</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShyi2-RNrWgeBl0Q10rfNB2bsRfjVjHbzS5u8jj53JeqFNBI/" target="_blank" rel="noopener noreferrer">Тёмный сайт с 3D-объектом в первом экране<span>· Герой · весы</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShy2BihzgbctbLp1A0JQRsv5kG4CCPQL1oS-_7H-ceiOkPcxgA/" target="_blank" rel="noopener noreferrer">Весы со шкалами и делениями (графика)<span>· Герой · весы</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShxvKQPxB457UxFdMm-DcA5VQr3g73x9jdMBXdVy644CekR-YA/" target="_blank" rel="noopener noreferrer">Латунная печать на чёрном<span>· Герой · печать и перо</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShyG8CKpHPRNae4r3NSxSP3K3thFdYXmQxgTyiZFGv2Jz_mT/" target="_blank" rel="noopener noreferrer">Перьевая ручка в луче света<span>· Герой · печать и перо</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShwK84LWEQ3nlNxUBm3bR5bC9ION20PvDy9ZA3Aj1GMR_IBn/" target="_blank" rel="noopener noreferrer">Документ с подписью и сургучной печатью<span>· Герой · печать и перо</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShwM0uLk395ITa76idGRFHtr4xraSRw5sBtXZbTkUVOGuibbgg/" target="_blank" rel="noopener noreferrer">Песочные часы в луче света<span>· Герой · песочные часы</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShzdULrCHieW8GDyabUj-nVs1vku7OS7DIyvj1xbhIWR85iK/" target="_blank" rel="noopener noreferrer">Макро горловины, золотой песок<span>· Герой · песочные часы</span></a></li>
+        <li><a href="https://www.pinterest.com/pin/e1_AfqPShzC-Vk8hvHergpRFDlxO6e4FIJh2ZAk76tvCGmVbhrANiGC/" target="_blank" rel="noopener noreferrer">3D-сайт студии с латунным объектом<span>· Герой · песочные часы</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="style" aria-labelledby="sai">
+    <div class="desc">
+      <div>
+        <p class="tag">Страница направления · стиль A</p>
+        <h2 id="sai">«ИИ и цифровые споры»</h2>
+        <p class="mood">Отдельная страница под рост индустрии и закон об ИИ с 01.03.2027. Те же токены, шрифты, шапка и подвал, что у A. Герой — те же латунные весы: на одной чаше чип-«пиксель», на другой гирька с §.</p>
+      </div>
+      <dl>
+        <dt>Блоки</dt><dd>H1 и лид с адвокатом, пять ситуаций, пять направлений, практика 2023–2026, календарь закона, 8 вопросов FAQ, пример опросника, заявка, смежные направления, автор</dd>
+        <dt>Пометки</dt><dd>Факты, которые нужно проверить до публикации, отмечены «[сверить]»</dd>
+        <dt>Чего нет</dt><dd>Уголовной стороны дипфейков, обещаний исхода, вердикта в опроснике</dd>
+      </dl>
+    </div>
+    <div class="frame"><iframe src="a-ai.html" loading="lazy" title="Страница «ИИ и цифровые споры» в стиле A" style="height:720px"></iframe></div>
+    <a class="open" href="a-ai.html">Открыть страницу ИИ-споров</a>
   </section>
 </div></div>
