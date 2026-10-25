@@ -100,6 +100,28 @@ export function renderMarkdown(content: string, options: MarkdownRendererOptions
       continue
     }
 
+    // Иллюстрация: только свои файлы из /photos/blog, рядом лежит копия -800
+    const imageMatch = paragraph.match(/^!\[([^\]]+)\]\((\/photos\/blog\/[a-z0-9-]+)\.webp\)$/)
+    if (imageMatch) {
+      const [, alt, base] = imageMatch
+      elements.push(
+        <figure key={`figure-${key++}`} className="my-8">
+          <img
+            src={`${base}.webp`}
+            srcSet={`${base}-800.webp 800w, ${base}.webp 1600w`}
+            sizes="(min-width: 768px) 720px, 100vw"
+            alt={alt}
+            width={1600}
+            height={1067}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-auto rounded-block bg-muted"
+          />
+        </figure>
+      )
+      continue
+    }
+
     // Check if it's a heading
     if (paragraph.startsWith('##')) {
       const match = paragraph.match(/^(#{2,3})\s+(.+)$/)

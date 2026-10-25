@@ -87,6 +87,9 @@ async function runDb(prisma: PrismaClient, posts: LoadedPost[], apply: boolean):
     for (const slug of extractProductSlugs(file.body)) {
       if (!activeProducts.has(slug)) warnings.push(`${name}: товар [[product:${slug}]] не найден среди активных`)
     }
+    for (const [, src] of file.body.matchAll(/^!\[[^\]]+\]\((\/photos\/blog\/[a-z0-9-]+\.webp)\)$/gm)) {
+      if (!fs.existsSync(path.join(CLIENT_PUBLIC, src))) warnings.push(`${name}: нет иллюстрации ${src} в client/public`)
+    }
 
     const row = bySlug.get(file.slug)
     if (row && !row.isActive) {
