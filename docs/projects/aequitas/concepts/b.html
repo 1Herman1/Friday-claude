@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Эквитас · Бумага и чернила</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3EEE3;
+  --paper:#FBF8F1;
+  --paper-2:#EAE3D4;
+  --rule:#CBC0AA;
+  --ink:#1D2333;
+  --ink-2:#4A4F5C;
+  --seal:#9B2D20;
+  --seal-soft:#E9D3CB;
+  --on-ink:#F6F2E9;
+  --serif:"Literata", Georgia, serif;
+  --sans:"Golos Text", system-ui, sans-serif;
+  --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:72px;--s7:112px;
+  --wrap:1160px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--sans);overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 max(20px,4vw)}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.12;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(30px,3.8vw,46px)}
+h3{font-size:22px;line-height:1.25}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.kicker{font:500 13px/1.4 var(--sans);letter-spacing:.08em;color:var(--seal)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;border:1.5px solid var(--ink);font:500 16px/1.2 var(--sans);text-decoration:none;cursor:pointer;border-radius:2px}
+.btn{transition:background-color .2s ease,color .2s ease}
+.btn-ink{background:var(--ink);color:var(--on-ink)}
+.btn-ink:hover{background:#2E3650}
+.btn-line{background:transparent;color:var(--ink)}
+.btn-line:hover{background:var(--paper-2)}
+:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
+
+/* running head */
+.run{border-bottom:1px solid var(--rule);font-size:13px;color:var(--ink-2)}
+.run .wrap{display:flex;justify-content:space-between;gap:var(--s2);min-height:36px;align-items:center}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:84px}
+.logo{text-decoration:none;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:10px 0}
+.logo b{font:600 26px/1 var(--serif)}
+.logo span{font-size:14px;color:var(--ink-2)}
+.logo i{font:italic 400 14px/1 var(--serif);color:var(--seal);font-style:italic}
+.nav{display:flex;gap:var(--s4);font-size:15px}
+.nav a{text-decoration:none;padding:12px 0;color:var(--ink-2)}
+.nav a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:5px}
+.hdr{border-bottom:2px solid var(--ink)}
+
+/* hero */
+.hero{padding:var(--s6) 0 var(--s7)}
+.hero .wrap{display:grid;grid-template-columns:1.35fr .65fr;gap:var(--s6);align-items:center}
+.hero h1{font-size:clamp(36px,4.3vw,58px);margin-top:var(--s3)}
+.hero h1 .soft{font-weight:400;font-style:italic;color:var(--ink-2)}
+.hero .lead{margin-top:var(--s4);max-width:33em;font-size:19px;color:var(--ink-2)}
+.acts{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s5)}
+.reg{margin-top:var(--s5);font-size:14px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4)}
+.reg b{color:var(--ink);font-weight:500}
+.sheet{position:relative;max-width:440px;width:100%;justify-self:center}
+.sheet svg{display:block;width:100%;height:auto}
+.sig{stroke-dasharray:640;stroke-dashoffset:640;animation:write 3.2s cubic-bezier(.45,.05,.25,1) .6s forwards}
+.nib{animation:nib 3.2s cubic-bezier(.45,.05,.25,1) .6s forwards;transform-box:view-box}
+@keyframes write{to{stroke-dashoffset:0}}
+@keyframes nib{0%{transform:translate(-150px,6px)}100%{transform:translate(0,0)}}
+@media (prefers-reduced-motion:reduce){.sig{animation:none;stroke-dashoffset:0}.nib{animation:none}}
+
+section{padding:var(--s7) 0}
+.head{display:grid;grid-template-columns:200px 1fr;gap:var(--s5);margin-bottom:var(--s5)}
+.head .kicker{padding-top:12px}
+.head p.sub{margin-top:var(--s2);color:var(--ink-2);max-width:38em}
+.ruled{border-top:1px solid var(--rule)}
+
+/* toc */
+.toc{list-style:none;margin:0;padding:0}
+.toc li{display:grid;grid-template-columns:200px 1fr;gap:var(--s5);padding:var(--s3) 0;border-bottom:1px solid var(--rule)}
+.toc .para{font:400 15px/1.6 var(--serif);color:var(--seal);padding-top:4px}
+.toc a{display:flex;align-items:baseline;gap:var(--s2);text-decoration:none;min-height:44px}
+.toc a .t{font:600 23px/1.3 var(--serif)}
+.toc a .dots{flex:1;border-bottom:1.5px dotted var(--rule);transform:translateY(-6px);min-width:24px}
+.toc a .go{font-size:15px;color:var(--ink-2);white-space:nowrap}
+.toc a:hover .t{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
+.toc p{color:var(--ink-2);margin-top:6px;max-width:40em;font-size:16px}
+
+/* clauses */
+.clauses{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:var(--s4) var(--s6)}
+.clauses li{display:grid;grid-template-columns:64px 1fr;gap:var(--s2)}
+.clauses .pn{font:400 34px/1 var(--serif);color:var(--seal)}
+.clauses h3{margin-bottom:6px}
+.clauses p{color:var(--ink-2);font-size:16px}
+.clauses .dur{display:inline-block;margin-top:var(--s1);font-size:14px;color:var(--ink);border-bottom:1px solid var(--rule)}
+
+/* calc as form */
+.calc{background:var(--paper);padding:var(--s5);box-shadow:0 1px 0 var(--rule),0 18px 40px -28px rgba(29,35,51,.35)}
+.calc-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--s2);padding-bottom:var(--s3);border-bottom:2px solid var(--ink)}
+.calc-top h3{font-size:26px}
+.calc-top span{font-size:14px;color:var(--ink-2)}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5);margin-top:var(--s4)}
+.line{padding:var(--s2) 0;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;gap:var(--s2);align-items:baseline}
+.line span{color:var(--ink-2);font-size:15px}
+.line b{font:600 20px/1.3 var(--serif);text-align:right;white-space:nowrap}
+.line.total{border-bottom:2px solid var(--ink)}
+.line.total b{font-size:30px;color:var(--seal)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s1)}
+.chips span{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--rule);font-size:15px;color:var(--ink-2);border-radius:2px}
+.chips span.on{border-color:var(--ink);background:var(--ink);color:var(--on-ink)}
+.fieldline{display:flex;justify-content:space-between;align-items:baseline;min-height:52px;border-bottom:1.5px solid var(--ink);font:600 26px/1.3 var(--serif);margin-bottom:var(--s4)}
+.lbl{display:block;font-size:13px;letter-spacing:.06em;color:var(--ink-2);margin-bottom:var(--s1)}
+.calc .note{margin-top:var(--s3);font-size:14px;color:var(--ink-2)}
+
+/* cases */
+.case{display:grid;grid-template-columns:200px 1fr;gap:var(--s5);padding:var(--s5) 0;border-top:1px solid var(--rule)}
+.case:last-of-type{border-bottom:1px solid var(--rule)}
+.case .no{font-size:14px;color:var(--ink-2)}
+.case .no b{display:block;font:600 18px/1.4 var(--serif);color:var(--seal);margin-bottom:4px}
+.case h3{font-size:26px;margin-bottom:var(--s3)}
+.case .triad{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4)}
+.case .triad dt{font:italic 400 15px/1.4 var(--serif);color:var(--seal);margin-bottom:4px}
+.case .triad dd{margin:0;font-size:16px}
+.disc{margin-top:var(--s3);font-size:14px;color:var(--ink-2);max-width:46em}
+
+/* lawyer */
+.lawyer{display:grid;grid-template-columns:200px 1fr 1fr;gap:var(--s5);align-items:start}
+.lawyer h3{font-size:clamp(30px,3.4vw,42px)}
+.lawyer .role{color:var(--ink-2);margin-top:var(--s1)}
+.lawyer dl{margin:0;display:grid;gap:var(--s2)}
+.lawyer dt{font-size:13px;letter-spacing:.06em;color:var(--ink-2)}
+.lawyer dd{margin:2px 0 0}
+.lawyer .words{font:italic 400 21px/1.5 var(--serif);margin-top:var(--s3)}
+.signline{margin-top:var(--s4);display:flex;align-items:flex-end;gap:var(--s2)}
+.signline svg{width:160px;height:auto}
+.signline span{font-size:13px;color:var(--ink-2);padding-bottom:6px}
+
+/* form */
+.req{background:var(--ink);color:var(--on-ink)}
+.req .kicker{color:#E7B9AC}
+.req .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:var(--s6)}
+.req p.sub{color:#C9CCD6;margin-top:var(--s3);max-width:30em}
+form{display:grid;gap:var(--s3)}
+.f label{display:block;font-size:14px;color:#C9CCD6;margin-bottom:var(--s1)}
+.f input,.f textarea{width:100%;min-height:52px;padding:14px 16px;background:#272E42;border:0;border-bottom:1.5px solid #8C93A6;color:var(--on-ink);font:400 17px/1.4 var(--sans);border-radius:0}
+.f textarea{min-height:120px;resize:vertical}
+.f input:focus,.f textarea:focus{outline:none;border-bottom-color:var(--on-ink);background:#2E3650}
+.hint{font-size:13px;color:#C9CCD6;margin-top:6px}
+.consent{display:flex;gap:var(--s2);align-items:flex-start;font-size:14px;color:#C9CCD6;cursor:pointer}
+.consent input{flex:none;width:24px;height:24px;margin:10px;accent-color:#E7B9AC}
+.consent span{padding-top:10px}
+.consent a{color:var(--on-ink)}
+.req .btn{border-color:var(--on-ink);background:var(--on-ink);color:var(--ink)}
+.req .btn:hover{background:#E4DED1}
+
+.ftr{padding:var(--s6) 0 var(--s4);font-size:14px;color:var(--ink-2)}
+.ftr .cols{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:var(--s5)}
+.ftr b{color:var(--ink);font-weight:500}
+.ftr p+p{margin-top:4px}
+.ftr .legal{margin-top:var(--s5);padding-top:var(--s2);border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s2);align-items:center}
+.ftr a{display:inline-flex;align-items:center;min-height:44px}
+
+@media (max-width:1020px){
+  .nav{display:none}
+  .hero .wrap,.req .wrap{grid-template-columns:1fr}
+  .sheet{max-width:360px}
+  .head,.toc li,.case,.lawyer{grid-template-columns:1fr;gap:var(--s2)}
+  .lawyer{gap:var(--s4)}
+  .clauses{grid-template-columns:1fr}
+  .calc-grid{grid-template-columns:1fr;gap:var(--s4)}
+  .sheet{order:-1;max-width:300px}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .run .wrap span:last-child{display:none}
+  .hdr .wrap{min-height:72px}
+  .logo span,.logo i{display:none}
+  .hdr .btn{padding:10px 16px;font-size:14px}
+  section{padding:var(--s6) 0}
+  .hero{padding:var(--s4) 0 var(--s6)}
+  .hero .lead{font-size:17px}
+  .acts .btn{flex:1 1 100%}
+  .toc a{flex-wrap:wrap}
+  .toc a .dots,.toc a .go{display:none}
+  .toc a .t{font-size:21px}
+  .calc{padding:var(--s3)}
+  .case .triad{grid-template-columns:1fr;gap:var(--s2)}
+  .ftr .cols{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="run"><div class="wrap"><span>Москва и Московская область · выезд к клиенту</span><span class="num">Реестр адвокатов г. Москвы № 77/0000</span></div></div>
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Эквитас, адвокатское бюро — на главную"><b>Эквитас</b><span>Адвокатское бюро</span><i>Aequitas</i></a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#practice">Направления</a>
+      <a href="#process">Порядок работы</a>
+      <a href="#calc">Расчёт</a>
+      <a href="#cases">Разборы дел</a>
+    </nav>
+    <a class="btn btn-ink" href="#request">Записаться</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="h1">
+  <div class="wrap">
+    <div>
+      <p class="kicker">Адвокатская практика по гражданским делам</p>
+      <h1 id="h1">Гражданские споры компаний. <span class="soft">Арбитраж, долги, конфликты участников.</span> Москва и&nbsp;Московская область</h1>
+      <p class="lead">Адвокат приезжает к вам — в офис, на объект, на переговоры. Первая встреча — разбор документов и честная оценка рисков, без обещаний исхода.</p>
+      <div class="acts">
+        <a class="btn btn-ink" href="#request">Записаться на разбор документов</a>
+        <a class="btn btn-line" href="#calc">Рассчитать госпошлину и сроки</a>
+      </div>
+      <p class="reg"><span><b>Адвокат с 2009 года</b></span><span>Адвокатская палата г. Москвы</span></p>
+    </div>
+    <div class="sheet" aria-hidden="true">
+      <svg viewBox="0 0 440 500" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="58" y="34" width="330" height="440" fill="#E3DACA"/>
+        <rect x="44" y="20" width="330" height="440" fill="#FBF8F1" stroke="#CBC0AA"/>
+        <text x="76" y="68" font-family="Literata, serif" font-size="13" fill="#4A4F5C">г. Москва</text>
+        <text x="342" y="68" text-anchor="end" font-family="Literata, serif" font-size="13" fill="#4A4F5C">25.10.2026</text>
+        <text x="209" y="112" text-anchor="middle" font-family="Literata, serif" font-size="19" font-weight="600" fill="#1D2333">ПРАВОВАЯ ПОЗИЦИЯ</text>
+        <text x="209" y="134" text-anchor="middle" font-family="Literata, serif" font-size="12" font-style="italic" fill="#4A4F5C">и смета по делу</text>
+        <g stroke="#CBC0AA" stroke-width="1.2">
+          <line x1="76" y1="170" x2="342" y2="170"/><line x1="76" y1="190" x2="330" y2="190"/><line x1="76" y1="210" x2="342" y2="210"/>
+          <line x1="76" y1="230" x2="300" y2="230"/><line x1="76" y1="262" x2="342" y2="262"/><line x1="76" y1="282" x2="336" y2="282"/>
+          <line x1="76" y1="302" x2="260" y2="302"/>
+        </g>
+        <text x="76" y="352" font-family="Golos Text, sans-serif" font-size="11" fill="#4A4F5C">Адвокат</text>
+        <line x1="76" y1="404" x2="250" y2="404" stroke="#1D2333" stroke-width="1"/>
+        <!-- seal -->
+        <g transform="translate(296 382)" opacity=".9">
+          <circle r="44" stroke="#9B2D20" stroke-width="2"/>
+          <circle r="35" stroke="#9B2D20" stroke-width="1"/>
+          <path id="sealpath" d="M -39 0 A 39 39 0 1 1 39 0 A 39 39 0 1 1 -39 0" />
+          <text font-family="Golos Text, sans-serif" font-size="7.4" letter-spacing="1.6" fill="#9B2D20"><textPath href="#sealpath">АДВОКАТСКОЕ БЮРО · ЭКВИТАС · МОСКВА ·</textPath></text>
+          <text y="7" text-anchor="middle" font-family="Literata, serif" font-size="22" fill="#9B2D20">Э</text>
+        </g>
+        <!-- signature -->
+        <path class="sig" d="M88 396 c 10 -30 22 -42 28 -30 c 6 12 -14 34 -6 36 c 10 2 22 -36 34 -34 c 10 2 -4 30 6 30 c 12 0 20 -26 30 -24 c 8 2 2 20 10 20 c 14 0 30 -18 60 -10" stroke="#1D2333" stroke-width="2.2"/>
+        <!-- nib -->
+        <g class="nib">
+          <g transform="translate(252 384) rotate(-38)">
+            <path d="M0 0 L-9 -34 L0 -48 L9 -34 Z" fill="#1D2333"/>
+            <path d="M0 0 L0 -26" stroke="#FBF8F1" stroke-width="1"/>
+            <circle cx="0" cy="-28" r="2.4" fill="#FBF8F1"/>
+            <rect x="-11" y="-120" width="22" height="74" rx="3" fill="#1D2333"/>
+            <rect x="-11" y="-62" width="22" height="6" fill="#9B2D20"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="practice" aria-labelledby="h-pr">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Раздел I</p>
+      <div><h2 id="h-pr">Направления практики</h2><p class="sub">Только гражданские дела. Каждое ведёт адвокат лично — от первой встречи до исполнительного листа.</p></div>
+    </div>
+    <ol class="toc ruled">
+      <li><span class="para">§ 1</span><div><a href="#request"><span class="t">Арбитражные споры</span><span class="dots"></span><span class="go">подробнее</span></a><p>Иски между компаниями в арбитражных судах Москвы и МО, апелляция и кассация.</p></div></li>
+      <li><span class="para">§ 2</span><div><a href="#request"><span class="t">Взыскание дебиторской задолженности</span><span class="dots"></span><span class="go">подробнее</span></a><p>Контрагент не платит: претензия, иск, обеспечительные меры, исполнение.</p></div></li>
+      <li><span class="para">§ 3</span><div><a href="#request"><span class="t">Корпоративные споры и субсидиарная ответственность</span><span class="dots"></span><span class="go">подробнее</span></a><p>Конфликт участников ООО, выход из общества, ответственность директора по долгам компании.</p></div></li>
+      <li><span class="para">§ 4</span><div><a href="#request"><span class="t">Договорные споры</span><span class="dots"></span><span class="go">подробнее</span></a><p>Неисполнение договоров поставки, подряда и услуг; неустойка и убытки.</p></div></li>
+      <li><span class="para">§ 5</span><div><a href="#request"><span class="t">Земельные и имущественные споры</span><span class="dots"></span><span class="go">подробнее</span></a><p>Права на участки и здания, границы, аренда, оспаривание сделок с недвижимостью.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="process" class="ruled" aria-labelledby="h-st">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Раздел II</p>
+      <div><h2 id="h-st">Порядок работы</h2><p class="sub">Сроки и стоимость каждого этапа фиксируются письменно — до начала работы.</p></div>
+    </div>
+    <ol class="clauses">
+      <li><span class="pn num">1.</span><div><h3>Разбор ситуации</h3><p>Встреча у вас, изучение договоров, актов и переписки.</p><span class="dur">1–3 дня</span></div></li>
+      <li><span class="pn num">2.</span><div><h3>Позиция и смета</h3><p>Письменная оценка рисков, план действий и цена каждого этапа.</p><span class="dur">3–5 дней</span></div></li>
+      <li><span class="pn num">3.</span><div><h3>Претензия или иск</h3><p>Досудебная претензия; при отказе — исковое заявление и обеспечительные меры.</p><span class="dur">от 30 дней</span></div></li>
+      <li><span class="pn num">4.</span><div><h3>Суд</h3><p>Заседания, доказательства, экспертизы; при необходимости — обжалование.</p><span class="dur">3–9 месяцев</span></div></li>
+      <li><span class="pn num">5.</span><div><h3>Исполнение</h3><p>Исполнительный лист, банк должника, приставы, контроль поступления денег.</p><span class="dur">1–6 месяцев</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="calc" class="ruled" aria-labelledby="h-calc">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Раздел III</p>
+      <div><h2 id="h-calc">Сколько стоит и сколько длится спор</h2><p class="sub">Расчёт виден сразу, без регистрации и без звонка.</p></div>
+    </div>
+    <div class="calc" role="group" aria-label="Пример расчёта">
+      <div class="calc-top"><h3>Справка-расчёт</h3><span>госпошлина — по ст. 333.21 НК РФ, действующая редакция</span></div>
+      <div class="calc-grid">
+        <div>
+          <span class="lbl">Сумма требований</span>
+          <div class="fieldline num"><span>4 800 000</span><span>₽</span></div>
+          <span class="lbl">Тип спора</span>
+          <div class="chips" style="margin-bottom:var(--s4)"><span class="on">Взыскание долга</span><span>Договорный</span><span>Корпоративный</span></div>
+          <span class="lbl">Инстанции</span>
+          <div class="chips"><span class="on">Первая</span><span class="on">Апелляция</span><span>Кассация</span></div>
+        </div>
+        <div>
+          <div class="line"><span>Госпошлина в арбитражный суд</span><b class="num">169 000 ₽</b></div>
+          <div class="line"><span>Ориентир по длительности</span><b class="num">5–9 мес.</b></div>
+          <div class="line"><span>Работа адвоката, от</span><b class="num">180 000 ₽</b></div>
+          <div class="line total"><span>Ориентир всего, от</span><b class="num">349 000 ₽</b></div>
+          <p class="note">Это пример. Точную смету даём после разбора документов — она зависит от позиции ответчика и объёма доказательств.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cases" class="ruled" aria-labelledby="h-cs">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Раздел IV</p>
+      <div><h2 id="h-cs">Разборы дел</h2><p class="sub">Ниже — условные примеры для макета. На сайте будут реальные дела с номерами из картотеки арбитражных дел, только с согласия доверителя.</p></div>
+    </div>
+    <article class="case">
+      <p class="no num"><b>№ А40-000000/2025 (пример)</b>Арбитражный суд г. Москвы</p>
+      <div>
+        <h3>Поставщик оборудования полгода не получал оплату</h3>
+        <dl class="triad">
+          <div><dt>Ситуация</dt><dd>Покупатель принял оборудование на 16,8 млн ₽ и перестал отвечать на письма.</dd></div>
+          <div><dt>Что сделали</dt><dd>Претензия, иск с обеспечительной мерой — арест счетов ответчика на сумму долга.</dd></div>
+          <div><dt>Чем закончилось</dt><dd>Иск удовлетворён частично: 14,2 млн ₽ и неустойка; исполнено через банк за 5 недель.</dd></div>
+        </dl>
+      </div>
+    </article>
+    <article class="case">
+      <p class="no num"><b>№ А41-000000/2025 (пример)</b>Арбитражный суд Московской области</p>
+      <div>
+        <h3>Участник ООО вышел из общества и не получил долю</h3>
+        <dl class="triad">
+          <div><dt>Ситуация</dt><dd>Общество занизило стоимость доли, ссылаясь на «упрощённую» отчётность.</dd></div>
+          <div><dt>Что сделали</dt><dd>Судебная оценочная экспертиза чистых активов и расчёт действительной стоимости.</dd></div>
+          <div><dt>Чем закончилось</dt><dd>Суд взыскал стоимость доли по экспертизе; решение устояло в апелляции.</dd></div>
+        </dl>
+      </div>
+    </article>
+    <p class="disc">Результат одного дела не означает такого же результата в другом: каждое решение зависит от доказательств и позиции сторон.</p>
+  </div>
+</section>
+
+<section class="ruled" aria-labelledby="h-lw">
+  <div class="wrap lawyer">
+    <p class="kicker">Раздел V · Адвокат</p>
+    <div>
+      <h3 id="h-lw">Глеб …</h3>
+      <p class="role">Адвокат, арбитражные и гражданские споры</p>
+      <p class="words">«На первой встрече скажу, где ваша позиция сильна, а где слаба. Обещать исход я не вправе — и не буду».</p>
+      <div class="signline" aria-hidden="true">
+        <svg viewBox="0 0 160 50" fill="none"><path d="M6 38 c 10 -30 22 -42 28 -30 c 6 12 -14 34 -6 36 c 10 2 22 -36 34 -34 c 10 2 -4 30 6 30 c 12 0 20 -26 30 -24 c 8 2 2 20 10 20 c 14 0 30 -18 48 -12" stroke="#1D2333" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <dl>
+      <div><dt>Реестровый номер</dt><dd class="num">№ 77/0000</dd></div>
+      <div><dt>Адвокатская палата</dt><dd>Адвокатская палата г. Москвы</dd></div>
+      <div><dt>Стаж</dt><dd class="num">с 2009 года</dd></div>
+      <div><dt>Формат</dt><dd>Выезд к клиенту по Москве и МО</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="request" class="req" aria-labelledby="h-rq">
+  <div class="wrap">
+    <div>
+      <p class="kicker">Заявка</p>
+      <h2 id="h-rq" style="margin-top:var(--s2)">Изложите суть в двух фразах</h2>
+      <p class="sub">Адвокат перезвонит в течение рабочего дня и договорится о встрече. Подробности — лично, по документам.</p>
+    </div>
+    <form action="#" onsubmit="return false">
+      <div class="f"><label for="b-name">Имя</label><input id="b-name" name="name" autocomplete="name" required></div>
+      <div class="f"><label for="b-contact">Телефон или email</label><input id="b-contact" name="contact" autocomplete="tel" required></div>
+      <div class="f"><label for="b-msg">Коротко о ситуации</label><textarea id="b-msg" name="message" aria-describedby="b-msg-h"></textarea><p class="hint" id="b-msg-h">Не указывайте сведения о здоровье, паспортные данные и другую чувствительную информацию.</p></div>
+      <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных в соответствии с <a href="#policy">политикой обработки ПД</a></span></label>
+      <div><button class="btn" type="submit">Отправить заявку</button></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="cols">
+      <div><p><b>Адвокатское бюро «Эквитас»</b></p><p>Адвокатская палата г. Москвы</p><p class="num">ИНН 7700000000 · ОГРН 0000000000000</p></div>
+      <div><p><b>Адрес</b></p><p>г. Москва, ул. Примерная, д. 0, офис 0</p><p>Выезд по Москве и МО</p></div>
+      <div><p><b>Связь</b></p><p class="num">+7 495 000-00-00</p><p>office@example.ru</p></div>
+    </div>
+    <div class="legal"><a href="#policy" id="policy">Политика обработки персональных данных</a><span>© 2026 Эквитас</span></div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<title>Эквитас: три стиля</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{
+  --bg:#F5F2EC;
+  --surface:#FFFFFF;
+  --fg:#1F2024;
+  --fg-2:#55575E;
+  --line:#DCD7CC;
+  --accent:#8A6A35;
+  --frame:#E9E4DA;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#141518;--surface:#1C1E22;--fg:#ECE8E0;--fg-2:#AAA59B;--line:#34363C;--accent:#D2B07A;--frame:#24262B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141518;--surface:#1C1E22;--fg:#ECE8E0;--fg-2:#AAA59B;--line:#34363C;--accent:#D2B07A;--frame:#24262B;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);margin:0;font:400 16px/1.6 Georgia, "Times New Roman", serif}
+.outer{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:40px 64px}
+.in{max-width:1180px;margin:0 auto}
+h1{font-size:clamp(30px,4vw,44px);line-height:1.15;margin:0 0 12px;font-weight:600}
+h2{font-size:28px;line-height:1.2;margin:0;font-weight:600}
+.intro{max-width:46em;color:var(--fg-2);margin:0 0 40px;font-family:system-ui, sans-serif;font-size:16px}
+.style{border-top:1px solid var(--line);padding:40px 0}
+.desc{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;margin-bottom:24px;font-family:system-ui, sans-serif}
+.tag{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+.mood{font-family:Georgia, serif;font-size:19px;margin:12px 0 0}
+dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 20px;font-size:15px}
+dt{color:var(--fg-2)}
+dd{margin:0}
+.sw{display:flex;flex-wrap:wrap;gap:8px}
+.sw span{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--fg-2)}
+.sw i{display:inline-block;width:28px;height:28px;border:1px solid var(--line)}
+.frame{background:var(--frame);padding:8px}
+iframe{display:block;width:100%;height:720px;border:0;background:#fff}
+.open{display:inline-flex;align-items:center;min-height:44px;margin-top:12px;color:var(--accent);font-family:system-ui, sans-serif;font-weight:600;text-underline-offset:4px}
+.cmp{width:100%;border-collapse:collapse;font-family:system-ui, sans-serif;font-size:15px;margin-top:16px}
+.cmp th,.cmp td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.cmp th{font-weight:600}
+.cmp thead th{color:var(--fg-2);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.tablewrap{overflow-x:auto}
+.rec{margin-top:32px;padding-top:24px;border-top:2px solid var(--fg);font-size:20px;max-width:46em}
+.rec b{color:var(--accent)}
+@media (max-width:760px){.desc{grid-template-columns:minmax(0,1fr);gap:20px}dl{grid-template-columns:minmax(0,1fr);gap:2px 0}dd{margin-bottom:10px}iframe{height:600px}}
+</style>
+
+<div class="outer"><div class="in">
+  <h1>Эквитас: три стиля главной</h1>
+  <p class="intro">Три настроения для адвокатской практики по гражданским делам: клиенты — компании и собственники, Москва и МО. Тексты и структура во всех трёх одинаковые (первый экран, пять направлений, этапы, калькулятор, разборы дел, адвокат, заявка), отличается только подача. Каждый макет можно прокрутить прямо в окне или открыть во весь экран.</p>
+
+  <section class="style" aria-labelledby="sa">
+    <div class="desc">
+      <div>
+        <p class="tag">Стиль A · тёмный</p>
+        <h2 id="sa">«Вечерний кабинет» — графит и латунь</h2>
+        <p class="mood">Кабинет после восьми вечера: тихо, лампа, латунный прибор на столе. Ближе всего к просьбе владельца — солидно, по-мужски, тёмные тона с золотом, но золото работает как инструмент (деления, шкала), а не как позолота.</p>
+      </div>
+      <dl>
+        <dt>Палитра</dt><dd><div class="sw"><span><i style="background:#141518"></i>графит</span><span><i style="background:#22252A"></i>сукно</span><span><i style="background:#C9A66B"></i>латунь</span><span><i style="background:#ECE6DA"></i>слоновая кость</span></div></dd>
+        <dt>Шрифты</dt><dd>Cormorant Garamond (заголовки) + IBM Plex Sans (текст)</dd>
+        <dt>Герой</dt><dd>Латунные весы-прибор со шкалой; коромысло один раз приходит в равновесие</dd>
+        <dt>Впечатление</dt><dd>«Здесь всё взвешено и посчитано, мне не будут продавать»</dd>
+      </dl>
+    </div>
+    <div class="frame"><iframe src="a.html" loading="lazy" title="Стиль A: Вечерний кабинет — графит и латунь"></iframe></div>
+    <a class="open" href="a.html">Открыть во весь экран</a>
+  </section>
+
+  <section class="style" aria-labelledby="sb">
+    <div class="desc">
+      <div>
+        <p class="tag">Стиль B · светлый</p>
+        <h2 id="sb">«Бумага и чернила» — документ с подписью</h2>
+        <p class="mood">Сайт как правовая позиция на бумаге: параграфы, разделы, справка-расчёт, печать и подпись. Светлый, но не «лёгкий»: тёмно-синие чернила и киноварь печати держат строгость. Тёмный только блок заявки.</p>
+      </div>
+      <dl>
+        <dt>Палитра</dt><dd><div class="sw"><span><i style="background:#F3EEE3"></i>бумага</span><span><i style="background:#1D2333"></i>чернила</span><span><i style="background:#9B2D20"></i>киноварь печати</span><span><i style="background:#CBC0AA"></i>линовка</span></div></dd>
+        <dt>Шрифты</dt><dd>Literata (заголовки) + Golos Text (текст)</dd>
+        <dt>Герой</dt><dd>Лист «Правовая позиция» с печатью; перо проводит подпись</dd>
+        <dt>Впечатление</dt><dd>«Со мной говорят документами и цифрами, всё прозрачно»</dd>
+      </dl>
+    </div>
+    <div class="frame"><iframe src="b.html" loading="lazy" title="Стиль B: Бумага и чернила — документ с подписью"></iframe></div>
+    <a class="open" href="b.html">Открыть во весь экран</a>
+  </section>
+
+  <section class="style" aria-labelledby="sc">
+    <div class="desc">
+      <div>
+        <p class="tag">Стиль C · тёмный с камнем</p>
+        <h2 id="sc">«Камень и малахит» — римское право</h2>
+        <p class="mood">Отсылка к латинскому имени: колонна, высеченная надпись AEQVITAS, латинские максимы с переводом над каждым разделом. Глубокий зелёный вместо привычного чёрного и бордо, травертиновые полосы как материал, терракота — акцент.</p>
+      </div>
+      <dl>
+        <dt>Палитра</dt><dd><div class="sw"><span><i style="background:#0F231C"></i>малахит</span><span><i style="background:#E2D7C5"></i>травертин</span><span><i style="background:#D48C64"></i>терракота</span><span><i style="background:#14261F"></i>базальт</span></div></dd>
+        <dt>Шрифты</dt><dd>Forum (заголовки, римская капитель) + Manrope (текст)</dd>
+        <dt>Герой</dt><dd>Колонна с антаблементом; надпись проявляется, как высеченная</dd>
+        <dt>Впечатление</dt><dd>«Традиция и вес, это не однодневка»</dd>
+      </dl>
+    </div>
+    <div class="frame"><iframe src="c.html" loading="lazy" title="Стиль C: Камень и малахит — римское право"></iframe></div>
+    <a class="open" href="c.html">Открыть во весь экран</a>
+  </section>
+
+  <section class="style" aria-labelledby="scmp">
+    <h2 id="scmp">Сравнение</h2>
+    <div class="tablewrap">
+      <table class="cmp">
+        <thead><tr><th scope="col">Критерий</th><th scope="col">A · Вечерний кабинет</th><th scope="col">B · Бумага и чернила</th><th scope="col">C · Камень и малахит</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Солидность</th><td>Высокая, «дорогой кабинет»</td><td>Высокая, но через порядок, а не через цвет</td><td>Высокая, «вес институции»</td></tr>
+          <tr><th scope="row">Характер</th><td>Спокойный, вечерний, точный</td><td>Деловой, прозрачный, документальный</td><td>Торжественный, исторический</td></tr>
+          <tr><th scope="row">Попадание в бриф</th><td>Прямое: тёмный, мужской, латунь</td><td>Частичное: светлый вместо тёмного</td><td>Близкое: тёмный, но зелень вместо золота</td></tr>
+          <tr><th scope="row">Сложность вёрстки</th><td>Средняя</td><td>Средняя: калькулятор-справка ложится естественно</td><td>Выше: фактуры камня, «ступени», две подложки</td></tr>
+          <tr><th scope="row">Риск</th><td>Скатиться в «типовой тёмный люкс» с золотом, если ослабить прибор-весы</td><td>Владелец может счесть недостаточно «мужским»</td><td>Латынь и колонна легко становятся пафосом и «юрфирмой из 2005-го»</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="rec"><b>Рекомендация:</b> брать A «Вечерний кабинет» как основу — он прямо отвечает просьбе владельца, а весы-прибор и открытый калькулятор держат тему «взвешено и посчитано»; из B стоит забрать подачу справки-расчёта и разборов дел.</p>
+  </section>
+</div></div>

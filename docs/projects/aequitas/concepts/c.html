@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Эквитас · Камень и малахит</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F231C;
+  --bg-2:#163027;
+  --line:#2C4A3F;
+  --fg:#E8DFCF;
+  --fg-2:#B5AE9F;
+  --terra:#D48C64;
+  --stone:#E2D7C5;
+  --stone-2:#D3C6B0;
+  --stone-ink:#14261F;
+  --stone-ink-2:#4C5550;
+  --terra-dk:#94452A;
+  --serif:"Forum", "Times New Roman", serif;
+  --sans:"Manrope", system-ui, sans-serif;
+  --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:72px;--s7:120px;
+  --wrap:1200px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 17px/1.65 var(--sans);overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 max(20px,4vw)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.1;margin:0}
+h2{font-size:clamp(34px,4.4vw,56px);letter-spacing:.01em}
+h3{font-size:25px;line-height:1.2;letter-spacing:.01em}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.maxim{font:400 15px/1.4 var(--serif);letter-spacing:.24em;text-transform:uppercase;color:var(--terra)}
+.maxim span{display:block;font:400 14px/1.5 var(--sans);letter-spacing:.02em;text-transform:none;color:var(--fg-2);margin-top:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 28px;font:600 15px/1.2 var(--sans);letter-spacing:.04em;text-decoration:none;cursor:pointer;border:1px solid var(--stone)}
+.btn{transition:background-color .2s ease,color .2s ease}
+.btn-stone{background:var(--stone);color:var(--stone-ink)}
+.btn-stone:hover{background:#F0E8DA}
+.btn-ghost{background:transparent;color:var(--fg)}
+.btn-ghost:hover{background:var(--bg-2)}
+:focus-visible{outline:2px solid var(--terra);outline-offset:3px}
+
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:88px}
+.logo{text-decoration:none;display:flex;flex-direction:column}
+.logo b{font:400 25px/1 var(--serif);letter-spacing:.2em;text-transform:uppercase}
+.logo small{font:500 11px/1.4 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--fg-2);margin-top:6px}
+.nav{display:flex;gap:var(--s4);font-size:15px}
+.nav a{text-decoration:none;color:var(--fg-2);padding:12px 0}
+.nav a:hover{color:var(--fg)}
+
+/* hero */
+.hero{padding:var(--s5) 0 0;position:relative}
+.hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--s5);align-items:end}
+.hero-text{padding-bottom:var(--s7)}
+.hero h1{font-size:clamp(40px,5.2vw,72px);letter-spacing:.005em;margin-top:var(--s3)}
+.hero .lead{margin-top:var(--s4);max-width:33em;color:var(--fg-2);font-size:19px}
+.acts{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s5)}
+.column{justify-self:center;width:100%;max-width:400px}
+.column svg{display:block;width:100%;height:auto}
+.inscr{clip-path:inset(0 100% 0 0);animation:carve 1.6s cubic-bezier(.33,0,.2,1) .5s forwards}
+@keyframes carve{to{clip-path:inset(0 0 0 0)}}
+@media (prefers-reduced-motion:reduce){.inscr{animation:none;clip-path:none}}
+.plinth{height:14px;background:var(--stone-2)}
+
+section{padding:var(--s7) 0}
+.stone{background:var(--stone);color:var(--stone-ink)}
+.stone .maxim{color:var(--terra-dk)}
+.stone .maxim span{color:var(--stone-ink-2)}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5);align-items:end;margin-bottom:var(--s6)}
+.sec-head h2{margin-top:var(--s3)}
+.sec-head p{color:var(--stone-ink-2);max-width:34em}
+.dark .sec-head p{color:var(--fg-2)}
+
+/* plaques */
+.plaques{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--s3);list-style:none;margin:0;padding:0}
+.plaques li{grid-column:span 2;background:#EDE5D7;padding:var(--s4) var(--s4) var(--s3);display:flex;flex-direction:column;gap:var(--s2);min-height:260px}
+.plaques li:nth-child(4),.plaques li:nth-child(5){grid-column:span 3}
+.plaques .rn{font:400 44px/1 var(--serif);color:var(--terra-dk);letter-spacing:.06em}
+.plaques p{color:var(--stone-ink-2);font-size:16px;flex:1}
+.plaques a{display:inline-flex;align-items:center;min-height:44px;font-weight:600;font-size:15px;color:var(--stone-ink);text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--terra-dk)}
+
+/* steps as stairs */
+.stairs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:end;list-style:none;margin:0;padding:0}
+.stairs li{background:var(--bg-2);padding:var(--s3);display:flex;flex-direction:column;justify-content:flex-end}
+.stairs li:nth-child(1){min-height:220px}
+.stairs li:nth-child(2){min-height:260px}
+.stairs li:nth-child(3){min-height:300px}
+.stairs li:nth-child(4){min-height:340px}
+.stairs li:nth-child(5){min-height:380px;background:#1D3B30}
+.stairs .rn{font:400 18px/1 var(--serif);letter-spacing:.2em;color:var(--terra)}
+.stairs h3{margin:var(--s2) 0 var(--s1);font-size:23px}
+.stairs p{font-size:15px;color:var(--fg-2)}
+.stairs .t{margin-top:var(--s2);padding-top:var(--s2);border-top:1px solid var(--line);font-size:14px;color:var(--fg)}
+.stairs-base{height:10px;background:var(--line);margin-top:6px}
+
+/* calc */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:var(--s6)}
+.lbl{display:block;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-ink-2);margin-bottom:var(--s1)}
+.big-in{display:flex;justify-content:space-between;align-items:baseline;min-height:64px;border-bottom:2px solid var(--stone-ink);font:400 40px/1.2 var(--serif);margin-bottom:var(--s4)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s1);margin-bottom:var(--s4)}
+.chips span{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid #B4A88F;font-size:15px;color:var(--stone-ink-2)}
+.chips span.on{background:var(--stone-ink);border-color:var(--stone-ink);color:var(--stone)}
+.res{background:var(--bg);color:var(--fg);padding:var(--s5)}
+.res .row{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s2);padding:var(--s2) 0;border-bottom:1px solid var(--line)}
+.res .row span{color:var(--fg-2);font-size:15px}
+.res .row b{font:400 28px/1.2 var(--serif);text-align:right;white-space:nowrap}
+.res .row.total b{font-size:38px;color:var(--terra)}
+.res .note{margin-top:var(--s3);font-size:14px;color:var(--fg-2)}
+
+/* cases */
+.cases{display:grid;grid-template-columns:1fr 1fr;gap:var(--s6)}
+.case .no{font:400 17px/1.4 var(--serif);letter-spacing:.14em;color:var(--terra)}
+.case .court{font-size:14px;color:var(--fg-2)}
+.case h3{font-size:30px;margin:var(--s3) 0}
+.case ol{list-style:none;margin:0;padding:0;display:grid;gap:var(--s3)}
+.case li{display:grid;grid-template-columns:44px 1fr;gap:var(--s2)}
+.case li .rn{font:400 18px/1.5 var(--serif);color:var(--terra);letter-spacing:.1em}
+.case li b{display:block;font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2);margin-bottom:2px}
+.disc{margin-top:var(--s6);font-size:14px;color:var(--fg-2);max-width:46em}
+
+/* lawyer */
+.lawyer{display:grid;grid-template-columns:1fr 1.3fr;gap:var(--s6);align-items:center}
+.bust{aspect-ratio:1;max-width:400px;width:100%;background:#D3C6B0;display:grid;place-items:center}
+.bust svg{width:70%;height:auto}
+.lawyer h2{margin-top:var(--s3)}
+.lawyer .words{margin-top:var(--s3);font-size:19px;color:var(--stone-ink);max-width:30em}
+.lawyer dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3) var(--s5);margin:var(--s5) 0 0;padding-top:var(--s4);border-top:1px solid #B4A88F}
+.lawyer dt{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-ink-2)}
+.lawyer dd{margin:4px 0 0}
+
+/* form */
+.form-wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:var(--s6)}
+.form-wrap .sub{margin-top:var(--s3);color:var(--fg-2);max-width:30em}
+form{display:grid;gap:var(--s3)}
+.f label{display:block;font-size:14px;color:var(--fg-2);margin-bottom:var(--s1)}
+.f input,.f textarea{width:100%;min-height:54px;padding:14px 16px;background:var(--bg-2);border:1px solid var(--line);color:var(--fg);font:400 17px/1.4 var(--sans);border-radius:0}
+.f textarea{min-height:120px;resize:vertical}
+.f input:focus,.f textarea:focus{outline:none;border-color:var(--stone)}
+.hint{font-size:13px;color:var(--fg-2);margin-top:6px}
+.consent{display:flex;gap:var(--s2);align-items:flex-start;font-size:14px;color:var(--fg-2);cursor:pointer}
+.consent input{flex:none;width:24px;height:24px;margin:10px;accent-color:var(--terra)}
+.consent span{padding-top:10px}
+.consent a{color:var(--fg)}
+
+.ftr{background:var(--stone);color:var(--stone-ink-2);padding:var(--s6) 0 var(--s4);font-size:14px}
+.ftr .cols{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:var(--s5)}
+.ftr b{color:var(--stone-ink);font-weight:600}
+.ftr p+p{margin-top:4px}
+.ftr .legal{margin-top:var(--s5);padding-top:var(--s2);border-top:1px solid #B4A88F;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:var(--s2)}
+.ftr a{display:inline-flex;align-items:center;min-height:44px;color:var(--stone-ink)}
+
+@media (max-width:1020px){
+  .nav{display:none}
+  .hero .wrap,.sec-head,.calc,.cases,.lawyer,.form-wrap{grid-template-columns:1fr}
+  .hero-text{padding-bottom:var(--s4)}
+  .column{max-width:320px}
+  .plaques{grid-template-columns:1fr 1fr}
+  .plaques li,.plaques li:nth-child(4){grid-column:span 1;min-height:0}
+  .plaques li:nth-child(5){grid-column:span 2}
+  .stairs{grid-template-columns:1fr;gap:6px}
+  .stairs li,.stairs li:nth-child(n){min-height:0}
+  .stairs li:nth-child(1){margin-right:32%}
+  .stairs li:nth-child(2){margin-right:24%}
+  .stairs li:nth-child(3){margin-right:16%}
+  .stairs li:nth-child(4){margin-right:8%}
+  .bust{max-width:280px}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .hdr .wrap{min-height:72px}
+  .logo b{font-size:21px;letter-spacing:.14em}
+  .hdr .btn{padding:10px 16px;font-size:14px}
+  section{padding:var(--s6) 0}
+  .hero .lead{font-size:17px}
+  .acts .btn{flex:1 1 100%}
+  .column{max-width:240px}
+  .plaques{grid-template-columns:1fr}
+  .plaques li,.plaques li:nth-child(n){grid-column:auto;padding:var(--s3)}
+  .stairs li:nth-child(n){margin-right:0}
+  .big-in{font-size:32px}
+  .res{padding:var(--s3)}
+  .res .row b{font-size:24px}
+  .res .row.total b{font-size:30px}
+  .lawyer dl,.ftr .cols{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Эквитас, адвокатское бюро — на главную"><b>Эквитас</b><small>Адвокатское бюро · Aequitas</small></a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#practice">Направления</a>
+      <a href="#process">Как работаем</a>
+      <a href="#calc">Стоимость и сроки</a>
+      <a href="#cases">Разборы дел</a>
+    </nav>
+    <a class="btn btn-stone" href="#request">Записаться</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="h1">
+  <div class="wrap">
+    <div class="hero-text">
+      <p class="maxim">Aequitas sequitur legem<span>Справедливость следует закону</span></p>
+      <h1 id="h1">Гражданские споры компаний. Арбитраж, долги, конфликты участников. Москва и&nbsp;Московская область</h1>
+      <p class="lead">Адвокат приезжает к вам — в офис, на объект, на переговоры. Первая встреча — разбор документов и честная оценка рисков, без обещаний исхода.</p>
+      <div class="acts">
+        <a class="btn btn-stone" href="#request">Записаться на разбор документов</a>
+        <a class="btn btn-ghost" href="#calc">Сколько стоит спор</a>
+      </div>
+    </div>
+    <div class="column" aria-hidden="true">
+      <svg viewBox="0 0 400 560" fill="none">
+        <defs>
+          <linearGradient id="trav" x1="0" x2="1">
+            <stop offset="0" stop-color="#BFB29A"/><stop offset=".35" stop-color="#E6DCCB"/><stop offset=".7" stop-color="#D8CCB6"/><stop offset="1" stop-color="#A99C84"/>
+          </linearGradient>
+          <pattern id="vein" width="60" height="18" patternUnits="userSpaceOnUse">
+            <path d="M0 9 q15 -5 30 0 t30 0" stroke="#B9AC93" stroke-width=".6" opacity=".55"/>
+          </pattern>
+        </defs>
+        <!-- entablature -->
+        <rect x="0" y="20" width="400" height="22" fill="#D6CAB4"/>
+        <rect x="10" y="42" width="380" height="74" fill="url(#trav)"/>
+        <rect x="10" y="42" width="380" height="74" fill="url(#vein)"/>
+        <g class="inscr">
+          <text x="200" y="92" text-anchor="middle" font-family="Forum, serif" font-size="40" letter-spacing="10" fill="#5C5242">AEQVITAS</text>
+          <text x="200" y="91" text-anchor="middle" font-family="Forum, serif" font-size="40" letter-spacing="10" fill="#2E2A22" opacity=".7">AEQVITAS</text>
+        </g>
+        <rect x="20" y="116" width="360" height="10" fill="#C2B59D"/>
+        <!-- capital -->
+        <rect x="90" y="126" width="220" height="16" fill="#DED3C0"/>
+        <path d="M108 142 h184 q-10 26 -40 30 h-104 q-30 -4 -40 -30z" fill="url(#trav)"/>
+        <rect x="128" y="172" width="144" height="10" fill="#CFC3AD"/>
+        <!-- shaft with flutes -->
+        <rect x="134" y="182" width="132" height="378" fill="url(#trav)"/>
+        <g stroke="#A99C84" stroke-width="1.2" opacity=".8">
+          <line x1="150" y1="186" x2="150" y2="560"/><line x1="167" y1="186" x2="167" y2="560"/><line x1="184" y1="186" x2="184" y2="560"/>
+          <line x1="200" y1="186" x2="200" y2="560"/><line x1="216" y1="186" x2="216" y2="560"/><line x1="233" y1="186" x2="233" y2="560"/><line x1="250" y1="186" x2="250" y2="560"/>
+        </g>
+        <rect x="134" y="182" width="132" height="378" fill="url(#vein)" opacity=".5"/>
+      </svg>
+    </div>
+  </div>
+  <div class="plinth"></div>
+</section>
+
+<section id="practice" class="stone" aria-labelledby="h-pr">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="maxim">Pacta sunt servanda<span>Договоры должны исполняться</span></p><h2 id="h-pr">Пять направлений практики</h2></div>
+      <p>Только гражданские дела. Каждое направление ведёт адвокат лично — от первой встречи до исполнительного листа.</p>
+    </div>
+    <ol class="plaques">
+      <li><span class="rn">I</span><h3>Арбитражные споры</h3><p>Иски между компаниями в арбитражных судах Москвы и МО, апелляция и кассация.</p><a href="#request">Подробнее</a></li>
+      <li><span class="rn">II</span><h3>Взыскание дебиторской задолженности</h3><p>Контрагент не платит: претензия, иск, обеспечительные меры, исполнение.</p><a href="#request">Подробнее</a></li>
+      <li><span class="rn">III</span><h3>Корпоративные споры и субсидиарная ответственность</h3><p>Конфликт участников ООО, выход из общества, ответственность директора.</p><a href="#request">Подробнее</a></li>
+      <li><span class="rn">IV</span><h3>Договорные споры</h3><p>Неисполнение договоров поставки, подряда и услуг; неустойка и убытки.</p><a href="#request">Подробнее</a></li>
+      <li><span class="rn">V</span><h3>Земельные и имущественные споры</h3><p>Права на участки и здания, границы, аренда, оспаривание сделок с недвижимостью.</p><a href="#request">Подробнее</a></li>
+    </ol>
+  </div>
+</section>
+
+<section id="process" class="dark" aria-labelledby="h-st">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="maxim">Audiatur et altera pars<span>Пусть будет выслушана и другая сторона</span></p><h2 id="h-st">Как мы работаем</h2></div>
+      <p>Пять ступеней. Срок и стоимость каждой фиксируем письменно до начала работы.</p>
+    </div>
+    <ol class="stairs">
+      <li><span class="rn">I</span><h3>Разбор ситуации</h3><p>Встреча у вас, договоры и переписка.</p><span class="t">1–3 дня</span></li>
+      <li><span class="rn">II</span><h3>Позиция и смета</h3><p>Оценка рисков, план, цена этапов.</p><span class="t">3–5 дней</span></li>
+      <li><span class="rn">III</span><h3>Претензия или иск</h3><p>Досудебная претензия, затем иск.</p><span class="t">от 30 дней</span></li>
+      <li><span class="rn">IV</span><h3>Суд</h3><p>Заседания, доказательства, обжалование.</p><span class="t">3–9 месяцев</span></li>
+      <li><span class="rn">V</span><h3>Исполнение</h3><p>Исполнительный лист, банк, приставы.</p><span class="t">1–6 месяцев</span></li>
+    </ol>
+    <div class="stairs-base"></div>
+  </div>
+</section>
+
+<section id="calc" class="stone" aria-labelledby="h-calc">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="maxim">Instrumentum<span>Инструмент — без регистрации</span></p><h2 id="h-calc">Сколько стоит и сколько длится спор</h2></div>
+      <p>Госпошлина считается по действующей редакции ст. 333.21 НК РФ. Ориентир по срокам — по практике арбитражных судов Москвы и МО.</p>
+    </div>
+    <div class="calc" role="group" aria-label="Пример расчёта">
+      <div>
+        <span class="lbl">Сумма требований</span>
+        <div class="big-in num"><span>4 800 000</span><span>₽</span></div>
+        <span class="lbl">Тип спора</span>
+        <div class="chips"><span class="on">Взыскание долга</span><span>Договорный</span><span>Корпоративный</span></div>
+        <span class="lbl">Инстанции</span>
+        <div class="chips"><span class="on">Первая</span><span class="on">Апелляция</span><span>Кассация</span></div>
+      </div>
+      <div class="res">
+        <div class="row"><span>Госпошлина в арбитражный суд</span><b class="num">169 000 ₽</b></div>
+        <div class="row"><span>Ориентир по длительности</span><b class="num">5–9 мес.</b></div>
+        <div class="row"><span>Работа адвоката, от</span><b class="num">180 000 ₽</b></div>
+        <div class="row total"><span>Ориентир всего, от</span><b class="num">349 000 ₽</b></div>
+        <p class="note">Это пример. Точную смету даём после разбора документов: она зависит от позиции ответчика и объёма доказательств.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cases" class="dark" aria-labelledby="h-cs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="maxim">Ubi ius, ibi remedium<span>Где есть право, есть и средство защиты</span></p><h2 id="h-cs">Разборы дел</h2></div>
+      <p>Ниже — условные примеры для макета. На сайте будут реальные дела с номерами из картотеки арбитражных дел, только с согласия доверителя.</p>
+    </div>
+    <div class="cases">
+      <article class="case">
+        <p class="no num">А40-000000/2025 (пример)</p><p class="court">Арбитражный суд г. Москвы</p>
+        <h3>Поставщик оборудования полгода не получал оплату</h3>
+        <ol>
+          <li><span class="rn">I</span><p><b>Ситуация</b>Покупатель принял оборудование на 16,8 млн ₽ и перестал отвечать на письма.</p></li>
+          <li><span class="rn">II</span><p><b>Что сделали</b>Претензия, иск с обеспечительной мерой — арест счетов ответчика на сумму долга.</p></li>
+          <li><span class="rn">III</span><p><b>Чем закончилось</b>Иск удовлетворён частично: 14,2 млн ₽ и неустойка; исполнено через банк за 5 недель.</p></li>
+        </ol>
+      </article>
+      <article class="case">
+        <p class="no num">А41-000000/2025 (пример)</p><p class="court">Арбитражный суд Московской области</p>
+        <h3>Участник ООО вышел из общества и не получил долю</h3>
+        <ol>
+          <li><span class="rn">I</span><p><b>Ситуация</b>Общество занизило стоимость доли, ссылаясь на «упрощённую» отчётность.</p></li>
+          <li><span class="rn">II</span><p><b>Что сделали</b>Судебная оценочная экспертиза чистых активов и расчёт действительной стоимости.</p></li>
+          <li><span class="rn">III</span><p><b>Чем закончилось</b>Суд взыскал стоимость доли по экспертизе; решение устояло в апелляции.</p></li>
+        </ol>
+      </article>
+    </div>
+    <p class="disc">Результат одного дела не означает такого же результата в другом: каждое решение зависит от доказательств и позиции сторон.</p>
+  </div>
+</section>
+
+<section class="stone" aria-labelledby="h-lw">
+  <div class="wrap lawyer">
+    <div class="bust" aria-hidden="true">
+      <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" stroke="#94452A"/><rect x="32" y="32" width="136" height="136" stroke="#B4A88F"/><text x="100" y="128" text-anchor="middle" font-family="Forum, serif" font-size="88" fill="#14261F">Г</text></svg>
+    </div>
+    <div>
+      <p class="maxim">Advocatus<span>Адвокат, который ведёт ваше дело</span></p>
+      <h2 id="h-lw">Глеб …</h2>
+      <p class="words">«На первой встрече скажу, где ваша позиция сильна, а где слаба. Обещать исход я не вправе — и не буду».</p>
+      <dl>
+        <div><dt>Реестровый номер</dt><dd class="num">№ 77/0000</dd></div>
+        <div><dt>Адвокатская палата</dt><dd>Адвокатская палата г. Москвы</dd></div>
+        <div><dt>Стаж</dt><dd class="num">с 2009 года</dd></div>
+        <div><dt>Формат</dt><dd>Выезд по Москве и МО</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="request" class="dark" aria-labelledby="h-rq">
+  <div class="wrap form-wrap">
+    <div>
+      <p class="maxim">Initium<span>Начало</span></p>
+      <h2 id="h-rq" style="margin-top:var(--s3)">Расскажите, что случилось</h2>
+      <p class="sub">Адвокат перезвонит в течение рабочего дня и договорится о встрече. Подробности — лично, по документам.</p>
+    </div>
+    <form action="#" onsubmit="return false">
+      <div class="f"><label for="c-name">Имя</label><input id="c-name" name="name" autocomplete="name" required></div>
+      <div class="f"><label for="c-contact">Телефон или email</label><input id="c-contact" name="contact" autocomplete="tel" required></div>
+      <div class="f"><label for="c-msg">Коротко о ситуации</label><textarea id="c-msg" name="message" aria-describedby="c-msg-h"></textarea><p class="hint" id="c-msg-h">Не указывайте сведения о здоровье, паспортные данные и другую чувствительную информацию.</p></div>
+      <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных в соответствии с <a href="#policy">политикой обработки ПД</a></span></label>
+      <div><button class="btn btn-stone" type="submit">Отправить заявку</button></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="cols">
+      <div><p><b>Адвокатское бюро «Эквитас»</b></p><p>Адвокатская палата г. Москвы</p><p class="num">ИНН 7700000000 · ОГРН 0000000000000</p></div>
+      <div><p><b>Адрес</b></p><p>г. Москва, ул. Примерная, д. 0, офис 0</p><p>Выезд по Москве и МО</p></div>
+      <div><p><b>Связь</b></p><p class="num">+7 495 000-00-00</p><p>office@example.ru</p></div>
+    </div>
+    <div class="legal"><a href="#policy" id="policy">Политика обработки персональных данных</a><span>© 2026 Эквитас</span></div>
+  </div>
+</footer>
+</body>
+</html>
