@@ -17,7 +17,7 @@ add('cover',f'''<p style="font-size:24px;letter-spacing:6px;text-transform:upper
 def card3(items,col='#7A5A38',tc='#3E3730'):
     return '<div style="display:flex;gap:48px">'+''.join(f'<div style="flex:1;display:flex;flex-direction:column;gap:12px;border-top:2px solid {col};padding:22px 0 0 0"><p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:{col}">{a}</p><h3 style="font-family:\'Cormorant Garamond\', Georgia, serif;font-size:52px;font-weight:500;line-height:1.05">{b}</h3><p style="font-size:26px;line-height:1.45;color:{tc}">{c}</p></div>' for a,b,c in items)+'</div>'
 add('path',H('Что ты выбрал','Сначала тихий люкс, потом медиа')+card3([
- ('Месяцы 1–3','Фундамент','Позиционирование, имя метода, досье, фото, страница, карта рекомендателей'),
+ ('Месяцы 1–3','Фундамент','Позиционирование, упаковка имени, досье, фото, страница, карта рекомендателей'),
  ('Месяцы 4–6','Тихий люкс','Встречи с рекомендателями, закрытый канал, ассистент записи и учёт клиентов'),
  ('Месяцы 7–12','Медиа','Съёмки, Instagram, открытый Telegram и Max, интервью, колонка, коллаборации')])
  +'<p style="font-size:28px;line-height:1.45;color:#6B6157">Первые клиенты приходят через рекомендации, медиа подключаются, когда образ и система уже готовы.</p>'+FT('H&amp;B team · План'))
@@ -69,7 +69,7 @@ add('you',H('Что нужно от тебя','Всего 2–3 часа в ме
  ('Каждый месяц','Решения','Согласовать тексты, сходить на встречи, написать своим клиентам')])+FT('Остальное делает команда H&amp;B'))
 add('close','''<p style="font-size:24px;letter-spacing:6px;text-transform:uppercase;color:#D29A6A">Следующий шаг</p>
 <div style="display:flex;flex-direction:column;gap:32px"><h2 style="font-family:'Cormorant Garamond', Georgia, serif;font-size:120px;font-weight:500;line-height:1.0">Начинаем с распаковки</h2>
-<p style="font-size:36px;line-height:1.4;color:#C9BBA8;width:1300px">Назначаем два интервью, и через месяц у тебя на руках позиционирование, имя метода и новый текст.</p></div>
+<p style="font-size:36px;line-height:1.4;color:#C9BBA8;width:1300px">Назначаем два интервью, и через месяц у тебя на руках позиционирование, упакованное имя и новый текст.</p></div>
 <div style="display:flex;flex-direction:column;gap:8px"><p style="font-size:32px;font-weight:600">H&amp;B team · Герман Брызгалов</p><p style="font-size:28px;color:#C9BBA8">+7 916 965 56 11 · 1herman1.github.io/hb_landing</p></div>''',
  "background:#2A211B;color:#EFE6D8;font-family:'Manrope', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between")
 order=['cover','path','pay','producer']+[f'm{k}' for k in range(1,7)]+['total','result','obj','you','close']
