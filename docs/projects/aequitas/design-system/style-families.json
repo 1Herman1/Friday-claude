@@ -1,0 +1,249 @@
+{
+  "project": "aequitas",
+  "page": "home",
+  "collectedAt": "2026-10-25",
+  "source": "docs/projects/aequitas/design-system/references/ideas.md",
+  "families": [
+    {
+      "slug": "dark-matter",
+      "name": "Тёмная материя",
+      "status": "proposed",
+      "concept": "concepts/a.html",
+      "hero": "латунные весы-прибор",
+      "descriptor": {
+        "name": "Тёмная материя",
+        "slug": "dark-matter",
+        "summary": "Графит и чернила, латунь только на делениях и линиях, один источник света на предмете.",
+        "palette": [
+          {
+            "hex": "#16171A",
+            "role": "bg"
+          },
+          {
+            "hex": "#1F2024",
+            "role": "surface"
+          },
+          {
+            "hex": "#E9E4DA",
+            "role": "text",
+            "contrast": 14.15
+          },
+          {
+            "hex": "#C9A46A",
+            "role": "accent",
+            "contrast": 7.68
+          },
+          {
+            "hex": "#9A958B",
+            "role": "muted",
+            "contrast": 6.01
+          }
+        ],
+        "type": {
+          "display": "Cormorant Garamond",
+          "body": "IBM Plex Sans",
+          "mono": "IBM Plex Mono",
+          "cyrillic": true
+        },
+        "motion": {
+          "duration": [
+            400,
+            800
+          ],
+          "easing": "cubic-bezier(0.2,0,0,1)",
+          "character": "calm"
+        },
+        "dials": {
+          "designVariance": 6,
+          "motionIntensity": 4,
+          "visualDensity": 3
+        },
+        "decor": [
+          "луч света на предмете",
+          "латунные деления",
+          "тонкие линейки"
+        ]
+      },
+      "references": [
+        {
+          "refId": "3821a4fa-12cd-41fc-8669-2e805a49ae0b",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShxu2Md_4erWFFq-_zCedDx7wSPtS-NOhwlysp4rm3aq0Hmuuw/",
+          "image": "https://i.pinimg.com/originals/a1/f4/78/a1f478e9dcb5eeaee072e4a326a5528e.png",
+          "license": "unknown — internal reference only"
+        },
+        {
+          "refId": "bb534ccb-496f-41ff-b3c3-d52d18b3a329",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShyseLgldtntgx53Vz4RSV6Tg-trY_H7iv196DgCVfuukNSzNg/",
+          "image": "https://i.pinimg.com/originals/bb/27/c8/bb27c85f8d820de4c911ee75a4be09e5.png",
+          "license": "unknown — internal reference only"
+        },
+        {
+          "refId": "44c18a66-3d06-496d-a8c5-0b056b51060d",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShxkWWCwm1OCeVA8-X9ssXl6CzORbpGWarp-TNSCRJ7GfmSh/",
+          "image": "https://i.pinimg.com/originals/02/dc/09/02dc097ad4a39867383875ce479b14b3.png",
+          "license": "unknown — internal reference only"
+        }
+      ]
+    },
+    {
+      "slug": "document-interface",
+      "name": "Документ как интерфейс",
+      "status": "proposed",
+      "concept": "concepts/b.html",
+      "hero": "печать и перо",
+      "descriptor": {
+        "name": "Документ как интерфейс",
+        "slug": "document-interface",
+        "summary": "Сайт как юридический документ: поля, нумерация параграфов, сноски на полях, подпись и печать.",
+        "palette": [
+          {
+            "hex": "#F3EFE6",
+            "role": "bg"
+          },
+          {
+            "hex": "#1B1C1F",
+            "role": "text",
+            "contrast": 14.85
+          },
+          {
+            "hex": "#7A2420",
+            "role": "seal",
+            "contrast": 8.71
+          },
+          {
+            "hex": "#8A6A35",
+            "role": "rule",
+            "contrast": 4.36,
+            "note": "только линии и крупный текст"
+          },
+          {
+            "hex": "#5E5B55",
+            "role": "muted",
+            "contrast": 5.9
+          }
+        ],
+        "type": {
+          "display": "Literata",
+          "body": "Golos Text",
+          "mono": "JetBrains Mono",
+          "cyrillic": true
+        },
+        "motion": {
+          "duration": [
+            200,
+            400
+          ],
+          "easing": "ease-out",
+          "character": "static"
+        },
+        "dials": {
+          "designVariance": 5,
+          "motionIntensity": 2,
+          "visualDensity": 4
+        },
+        "decor": [
+          "§-нумерация",
+          "маргиналии",
+          "подпись и печать"
+        ]
+      },
+      "references": [
+        {
+          "refId": "de82538c-6494-428f-a69b-eaaf79f21a1d",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShyw6rKroJQR6RxmKTCJentywst3HC4hahaGTptoXKIWrAwXag/",
+          "image": "https://i.pinimg.com/originals/72/84/d1/7284d186bb17be4363727c1e6ae79702.jpg",
+          "license": "unknown — internal reference only"
+        },
+        {
+          "refId": "6396f497-0438-4e71-be11-7dcec642d6bf",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShzlG_OhgmM29jFEOOUkVYsA0oE2qNMvSHQuGEc07gugE4Ie/",
+          "image": "https://i.pinimg.com/originals/27/fd/8c/27fd8cd56bdcc593f6689e605c447923.jpg",
+          "license": "unknown — internal reference only"
+        },
+        {
+          "refId": "b96524a6-7598-4240-80a9-057941c1e520",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShxUJi9wXzhE-vVseXF_cEt1bbA21nm-3OjbTauYO_d05KU/",
+          "image": "https://i.pinimg.com/originals/16/05/07/1605071452903c80fd3fdf158ad80ec7.jpg",
+          "license": "unknown — internal reference only"
+        }
+      ]
+    },
+    {
+      "slug": "type-monument",
+      "name": "Типографика-монумент",
+      "status": "proposed",
+      "concept": "concepts/c.html",
+      "hero": "весы в графике или без героя",
+      "descriptor": {
+        "name": "Типографика-монумент",
+        "slug": "type-monument",
+        "summary": "Огромная антиква на чернильном фоне, текст как высеченный, почти без картинок; камень как фактура.",
+        "palette": [
+          {
+            "hex": "#121311",
+            "role": "bg"
+          },
+          {
+            "hex": "#ECE6D8",
+            "role": "text",
+            "contrast": 14.98
+          },
+          {
+            "hex": "#B8935A",
+            "role": "accent",
+            "contrast": 6.53
+          },
+          {
+            "hex": "#8C877C",
+            "role": "muted",
+            "contrast": 5.21
+          }
+        ],
+        "type": {
+          "display": "Forum / Cormorant Garamond",
+          "body": "Manrope",
+          "mono": "IBM Plex Mono",
+          "cyrillic": true
+        },
+        "motion": {
+          "duration": [
+            400,
+            600
+          ],
+          "easing": "ease-out",
+          "character": "calm"
+        },
+        "dials": {
+          "designVariance": 7,
+          "motionIntensity": 3,
+          "visualDensity": 2
+        },
+        "decor": [
+          "высеченные буквы",
+          "точки-разделители",
+          "служебные подписи по углам"
+        ]
+      },
+      "references": [
+        {
+          "refId": "2aeb6801-f0b5-4c4e-8e30-f599e236d560",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShx-UO2b9OHeczVKuKxf32cWX_h8sO6vg0TF2dOXGK1EXi-n/",
+          "image": "https://i.pinimg.com/originals/56/34/b2/5634b2a68d7345faa9675e0a81a1c515.jpg",
+          "license": "unknown — internal reference only"
+        },
+        {
+          "refId": "0b4316f1-9f95-4d5d-9d9b-e96634fe3b51",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShxDHtEVxwZXZrUZNJWzV-e8eYa_GKpCQeKMLUuKLdN2UXRB/",
+          "image": "https://i.pinimg.com/originals/78/27/0b/78270b41f003a3dd54ff9c432ece4342.jpg",
+          "license": "unknown — internal reference only"
+        },
+        {
+          "refId": "863e36a4-b587-4b87-8633-f05917f18a6d",
+          "pin": "https://www.pinterest.com/pin/e1_AfqPShycB5AphMaETChnGZjYTxfBrPXDRJcCqVDwEplh08T_hMheBw/",
+          "image": "https://i.pinimg.com/originals/b2/80/69/b2806944c68d5a4a14a427c21f3c4ec5.png",
+          "license": "unknown — internal reference only"
+        }
+      ]
+    }
+  ]
+}
