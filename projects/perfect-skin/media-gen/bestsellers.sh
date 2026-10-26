@@ -44,6 +44,47 @@ gen_video() { # out_name aspect prompt first last
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
+# Товары в готовых иллюстрациях статей: первая картинка — утверждённая сцена,
+# дальше официальные фото товаров. FRAMES — только эти имена через пробел
+if [ "$STAGE" = blog-products ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/blog/inline"
+  R="$ROOT/docs/projects/perfect-skin/media/blog/refs"
+  CBR="$R/collagen-booster-vosstanavlivayushhaya-syvorotka.jpg"
+  SCR="$R/scrub-lotion-krem-dlya-snyatiya-makiyazha.jpg"
+  KER="$R/kerathor-plus-izotonicheskij-tonik.jpg"
+  TTS="$ROOT/projects/perfect-skin/client/public/products/tts-energizing-mask-maska-so-stvolovymi-kletkami.jpg"
+  KEEP="Edit the first image. Keep the composition, camera angle, light, shadows, stone surfaces, background and every existing object exactly as they are. Add only the product described below, photographed in the same light and at a realistic scale for the scene. Copy the product's shape, colours, logo and label text letter by letter from its reference photo; add no other text anywhere."
+  T_CB="label text exactly: bottle 'ISSEIMI' / 'COLLAGEN BOOSTER' / 'Vitalizante'"
+  T_SC="label text exactly: 'ISSÉIMI MD' / 'MADRID' / 'SCRUBLOTION' / 'Scrub desmaquillante'"
+  T_KE="label text exactly: 'ISSÉIMI' / 'MADRID' / 'KERATHOR 50 PLUS' / 'Solución isotónica'"
+  declare -A P=(
+    [hvatit-kormit-kozhu-kollagenom-1]="$KEEP Place the ISSEIMI COLLAGEN BOOSTER frosted glass dropper bottle with gold collar standing on the stone behind the serum drop, slightly to the right, in soft focus; $T_CB."
+    [hvatit-kormit-kozhu-kollagenom-2]="$KEEP Replace only the dropper vial on the highest step with the ISSEIMI COLLAGEN BOOSTER frosted glass dropper bottle with gold collar and white bulb; $T_CB."
+    [pochemu-kozha-ne-zadyhaetsya-1]="$KEEP Stand the ISSEIMI SCRUBLOTION bottle (white, blue band, silver cap) and the ISSEIMI KERATHOR 50 PLUS bottle (white, violet band, silver cap) side by side on the travertine block under the floating fabric; SCRUBLOTION $T_SC; KERATHOR $T_KE."
+    [pochemu-kozha-ne-zadyhaetsya-2]="$KEEP Lay the ISSEIMI SCRUBLOTION bottle (white, blue band, silver cap) on the stone next to the GLACÉE Cleansing Balm bottle, keeping the balm bottle and its label unchanged; $T_SC."
+    [yabloko-kotoroe-ne-stareet-1]="$KEEP Stand the ISSEIMI KERATHOR 50 PLUS bottle (white, violet band, silver cap) on the travertine among the fruit, at the back right; $T_KE."
+    [yabloko-kotoroe-ne-stareet-2]="$KEEP Place the ISSEIMI TTS ENERGIZING MASK jar from the reference photo on the stone next to the apple, copying its jar and label exactly."
+  )
+  declare -A B=(
+    [hvatit-kormit-kozhu-kollagenom-1]="hvatit-kormit-kozhu-kollagenom-1-v1.png $CBR"
+    [hvatit-kormit-kozhu-kollagenom-2]="hvatit-kormit-kozhu-kollagenom-2-v1.png $CBR"
+    [pochemu-kozha-ne-zadyhaetsya-1]="pochemu-kozha-ne-zadyhaetsya-1-v1.png $SCR $KER"
+    [pochemu-kozha-ne-zadyhaetsya-2]="pochemu-kozha-ne-zadyhaetsya-2-v1.png $SCR"
+    [yabloko-kotoroe-ne-stareet-1]="yabloko-kotoroe-ne-stareet-1-v2.png $KER"
+    [yabloko-kotoroe-ne-stareet-2]="yabloko-kotoroe-ne-stareet-2-v2.png $TTS"
+  )
+  for name in "${!P[@]}"; do
+    [ -n "${FRAMES:-}" ] && [[ " $FRAMES " != *" $name "* ]] && continue
+    read -r base refs <<<"${B[$name]}"
+    for v in $(seq 1 "${VARIANTS:-2}"); do
+      # shellcheck disable=SC2086
+      gen_image "$name-p$v" 3:2 "${P[$name]}" "$OUT/$base" $refs &
+    done
+  done
+  wait
+  exit 0
+fi
+
 # Иллюстрации внутри статей блога 3:2. FRAMES — только эти имена через пробел
 if [ "$STAGE" = blog-inline ]; then
   OUT="$ROOT/docs/projects/perfect-skin/media/blog/inline"
