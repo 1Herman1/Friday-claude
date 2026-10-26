@@ -1,0 +1,24 @@
+{
+ "acf": {
+  "glavnyj_slajder": [
+   {
+    "foto_tovara": 1743,
+    "foto_primer_ispolzovaniya": 1740,
+    "nazvanie": "Такого вы ещё не&nbsp;видели!<span style=\"display:block;margin-top:.35em;font-family:Montserrat,sans-serif;font-size:max(.42em,15px);line-height:1.35\">Модифицированный пилинг Джесснера для любого типа&nbsp;кожи</span>",
+    "ssylka": "/katalog/himicheskie-pilingi/peeling-intensivo-intensivnyj-fiziko-himicheskij-piling/"
+   },
+   {
+    "foto_tovara": 1744,
+    "foto_primer_ispolzovaniya": 1741,
+    "nazvanie": "Стерильные<br>сыворотки<span style=\"display:block;margin-top:.35em;font-family:Montserrat,sans-serif;font-size:max(.42em,15px);line-height:1.35\">для фракционной мезотерапии с&nbsp;пептидами и&nbsp;озоном</span>",
+    "ssylka": "/katalog/mikronidling/"
+   },
+   {
+    "foto_tovara": 1745,
+    "foto_primer_ispolzovaniya": 1742,
+    "nazvanie": "Сыворотка Collagen Booster<span style=\"display:block;margin-top:.35em;font-family:Montserrat,sans-serif;font-size:max(.42em,15px);line-height:1.35\">с&nbsp;эффектом «фотошопа»</span>",
+    "ssylka": "/katalog/isseimi/collagen-booster-vosstanavlivayushhaya-syvorotka/"
+   }
+  ]
+ }
+}
