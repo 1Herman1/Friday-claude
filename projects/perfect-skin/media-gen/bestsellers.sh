@@ -63,7 +63,7 @@ if [ "$STAGE" = blog-products ]; then
     [pochemu-kozha-ne-zadyhaetsya-1]="$KEEP Stand the ISSEIMI SCRUBLOTION bottle (white, blue band, silver cap) and the ISSEIMI KERATHOR 50 PLUS bottle (white, violet band, silver cap) side by side on the travertine block under the floating fabric; SCRUBLOTION $T_SC; KERATHOR $T_KE."
     [pochemu-kozha-ne-zadyhaetsya-2]="$KEEP Lay the ISSEIMI SCRUBLOTION bottle (white, blue band, silver cap) on the stone next to the GLACÉE Cleansing Balm bottle, keeping the balm bottle and its label unchanged; $T_SC."
     [yabloko-kotoroe-ne-stareet-1]="$KEEP Stand the ISSEIMI KERATHOR 50 PLUS bottle (white, violet band, silver cap) on the travertine among the fruit, at the back right; $T_KE."
-    [yabloko-kotoroe-ne-stareet-2]="$KEEP Place the ISSEIMI TTS ENERGIZING MASK jar from the reference photo on the stone next to the apple, copying its jar and label exactly."
+    [yabloko-kotoroe-ne-stareet-2]="$KEEP Lay the ISSEIMI TTS sheet-mask sachet from the reference photo flat on the stone in front of the apple: a flat white foil sachet, not a jar, with the colour stripe block on the left side; copy 'ISSÉIMI' / 'MADRID' / 'TTS Transdermal Therapeutic System' / 'Máscara Autoajustable' exactly; small body text may stay unreadable but must not form other words."
   )
   declare -A B=(
     [hvatit-kormit-kozhu-kollagenom-1]="hvatit-kormit-kozhu-kollagenom-1-v1.png $CBR"
