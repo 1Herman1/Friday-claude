@@ -54,8 +54,8 @@ export function ProSection() {
           </h2>
 
           {showList && (
-            <div className="mt-8 md:mt-12 border-t border-dark-foreground/15 xl:grid xl:grid-cols-12 xl:gap-12">
-              <div className="xl:col-span-8">
+            <div className="mt-8 md:mt-12 border-t border-dark-foreground/15 md:grid md:grid-cols-12 md:gap-8 xl:gap-12">
+              <div className="md:col-span-7 xl:col-span-8">
                 <p className="pt-4 text-label font-semibold uppercase tracking-wide text-dark-foreground/60">
                   Для кабинета · цены после проверки
                 </p>
@@ -83,10 +83,8 @@ export function ProSection() {
                         key={product.id}
                         index={i}
                         product={product}
-                        active={i === active}
-                        onActivate={() => setActive(i)}
-                        imageFailed={imageErrors.has(product.id)}
-                        onImageError={() => setImageErrors((prev) => new Set([...prev, product.id]))}
+                        selected={i === active}
+                        onSelect={() => setActive(i)}
                       />
                     ))}
                   </ul>
@@ -94,33 +92,44 @@ export function ProSection() {
                 )}
               </div>
 
-              {/* Компьютер: одно окно с фото строки под курсором или в фокусе */}
+              {/* Компьютер: одно окно с фото выбранного кликом товара */}
               {!loading && products.length > 0 && (
-                <div className="hidden xl:block xl:col-span-4 pt-12">
+                <div className="hidden md:block md:col-span-5 xl:col-span-4 md:pt-12">
                   <div className="relative h-full min-h-[24rem] bg-card rounded-block overflow-hidden">
-                    {products.map((product, i) => (
-                      <div
-                        key={product.id}
-                        aria-hidden="true"
-                        className={`absolute inset-0 p-4 flex items-center justify-center transition-opacity duration-200 motion-reduce:transition-none ${
-                          i === active ? 'opacity-100' : 'opacity-0'
-                        }`}
-                      >
-                        {product.image && !imageErrors.has(product.id) ? (
-                          <img
-                            src={cardImage(product) ?? ''}
-                            alt=""
-                            className="w-full h-full object-contain scale-[1.6]"
-                            loading="lazy"
-                            decoding="async"
-                            width={480}
-                            height={600}
-                          />
-                        ) : (
-                          <span className="font-heading font-bold text-h2 text-dark/30">{volumeOf(product)}</span>
-                        )}
-                      </div>
-                    ))}
+                    {products.map((product, i) => {
+                      const hasPhoto = !!product.image && !imageErrors.has(product.id)
+                      return (
+                        <div
+                          key={product.id}
+                          aria-hidden="true"
+                          className={`absolute inset-0 flex flex-col p-4 transition-[opacity,transform] duration-200 motion-reduce:transition-none ${
+                            i === active ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]'
+                          }`}
+                        >
+                          <div className="relative flex-1 min-h-0 flex items-center justify-center overflow-hidden">
+                            {hasPhoto ? (
+                              <img
+                                src={cardImage(product) ?? ''}
+                                alt=""
+                                className="w-full h-full object-contain scale-[1.15]"
+                                loading="lazy"
+                                decoding="async"
+                                width={480}
+                                height={600}
+                                onError={() => setImageErrors((prev) => new Set([...prev, product.id]))}
+                              />
+                            ) : (
+                              <span className="font-heading font-bold text-h2 tabular-nums text-muted-foreground">
+                                {volumeOf(product)}
+                              </span>
+                            )}
+                          </div>
+                          <p className="pt-3 font-heading font-bold uppercase leading-tight text-body text-foreground">
+                            {splitName(product.name).title}
+                          </p>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               )}
@@ -464,61 +473,41 @@ function cubicBezier(x1: number, y1: number, x2: number, y2: number): (x: number
 interface IndexRowProps {
   index: number
   product: ProProduct
-  active: boolean
-  onActivate: () => void
-  imageFailed: boolean
-  onImageError: () => void
+  selected: boolean
+  onSelect: () => void
 }
 
-function IndexRow({ index, product, active, onActivate, imageFailed, onImageError }: IndexRowProps) {
+function IndexRow({ index, product, selected, onSelect }: IndexRowProps) {
   const { title, desc } = splitName(product.name)
   const volume = volumeOf(product)
   return (
-    <li
-      tabIndex={0}
-      onMouseEnter={onActivate}
-      onFocus={onActivate}
-      className="group grid grid-cols-[auto_1fr] md:grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-6 py-4 md:py-5 min-h-11 border-b border-dark-foreground/15 outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm cursor-default"
-    >
-      <span className="flex items-center gap-3 md:gap-5">
+    <li className="border-b border-dark-foreground/15">
+      <button
+        type="button"
+        onClick={onSelect}
+        aria-current={selected ? 'true' : undefined}
+        className="group w-full grid grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-6 px-2 -mx-2 py-4 md:py-5 min-h-11 text-left cursor-pointer rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      >
         <span className="font-heading font-semibold text-body-sm md:text-body text-accent tabular-nums w-6">
           {String(index + 1).padStart(2, '0')}
         </span>
-        {/* Телефон и планшет: маленькое фото в строке */}
-        <span className="xl:hidden block w-16 h-16 md:w-20 md:h-20 shrink-0 bg-card rounded-media overflow-hidden p-1.5">
-          {product.image && !imageFailed ? (
-            <img
-              src={cardImage(product) ?? ''}
-              alt=""
-              className="w-full h-full object-contain scale-[1.3]"
-              loading="lazy"
-              decoding="async"
-              width={80}
-              height={80}
-              onError={onImageError}
-            />
-          ) : null}
-        </span>
-      </span>
-      <span className="min-w-0">
-        <span
-          className={`block font-heading font-bold uppercase leading-tight text-[clamp(1.05rem,2.2vw,2.1rem)] transition-colors duration-200 ${
-            active ? 'xl:text-accent text-dark-foreground' : 'text-dark-foreground xl:text-dark-foreground/70'
-          }`}
-        >
-          {title}
-        </span>
-        {desc && <span className="block mt-1 text-body-sm text-dark-foreground/70">{desc}</span>}
-        {product.brand && (
-          <span className="block mt-1 text-label uppercase tracking-wide text-dark-foreground/60">
-            {product.brand.name}
-            {volume && <span className="md:hidden text-dark-foreground/80 font-semibold tabular-nums"> · {volume}</span>}
+        <span className="min-w-0">
+          <span
+            className={`block font-heading font-bold uppercase leading-tight text-[clamp(1.05rem,2.2vw,2.1rem)] transition-colors duration-200 motion-reduce:transition-none ${
+              selected ? 'text-accent' : 'text-dark-foreground/70 group-hover:text-accent'
+            }`}
+          >
+            {title}
           </span>
-        )}
-      </span>
-      <span className="hidden md:block font-heading font-semibold text-body text-dark-foreground/80 tabular-nums whitespace-nowrap">
-        {volume}
-      </span>
+          {desc && <span className="block mt-1 text-body-sm text-dark-foreground/70">{desc}</span>}
+          {product.brand && (
+            <span className="block mt-1 text-label uppercase tracking-wide text-dark-foreground/60">{product.brand.name}</span>
+          )}
+        </span>
+        <span className="font-heading font-semibold text-body text-dark-foreground/80 tabular-nums whitespace-nowrap">
+          {volume}
+        </span>
+      </button>
     </li>
   )
 }

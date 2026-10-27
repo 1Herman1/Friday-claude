@@ -196,6 +196,12 @@ export function buildProductCard(product: ProductWithRelations, viewer: PriceVie
 }
 
 const PRO_SHOWCASE_LIMIT = 6
+// Пул больше лимита: с фото выносим из последних N новинок, а не только из первых четырёх.
+const PRO_SHOWCASE_POOL = 48
+
+export function photoFirst<T extends { images: string[] }>(items: T[]): T[] {
+  return [...items.filter((p) => p.images.length > 0), ...items.filter((p) => p.images.length === 0)]
+}
 
 export async function getProducts(
   prisma: PrismaClient,
@@ -204,7 +210,8 @@ export async function getProducts(
 ): Promise<{ items: ProductCardDTO[]; total: number; limit: number; offset: number }> {
   // ?pro=1 для не-специалиста — это витрина секции на главной, а не поиск по
   // кабинетному каталогу: поиск и фильтры отбрасываем, выдачу ограничиваем.
-  if (filters.pro && !canSeeProfessional(viewer)) {
+  const showcase = !!filters.pro && !canSeeProfessional(viewer)
+  if (showcase) {
     filters = {
       ...filters,
       q: undefined,
@@ -425,14 +432,16 @@ export async function getProducts(
         },
       },
       orderBy,
-      take: filters.limit,
+      take: showcase ? PRO_SHOWCASE_POOL : filters.limit,
       skip: filters.offset,
     }),
     prisma.product.count({ where }),
   ])
 
+  const page = showcase ? photoFirst(items).slice(0, filters.limit) : items
+
   return {
-    items: items.map((p) => buildProductCard(p, viewer)),
+    items: page.map((p) => buildProductCard(p, viewer)),
     total,
     limit: filters.limit,
     offset: filters.offset,
