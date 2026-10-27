@@ -24,6 +24,20 @@ const FORBIDDEN: Array<[RegExp, string]> = [
   [/разноуровнев|воски пчелиный|наличию мимических|свежеести|и0 нанесите/i, 'опечатка до сверки'],
 ]
 
+// Названия состава, которые сверка убрала (таблица, раздел 12). Только для состава, не для текстов карточек: «Гидролат лаванды» в actives 3 FLOWER сверкой оставлен.
+// Без slug — у всех товаров с INCI, со slug — у одного. «Гидролат лаванды» у CHIA DETOX и «Гидролат цветков апельсина» у NATURAL CLEANSING MILK оставлены, поэтому правило точечное
+interface OldName {
+  pattern: RegExp
+  label: string
+  slug?: string
+}
+
+const OLD_INGREDIENTS: OldName[] = [
+  { pattern: /^EGF$/, label: 'EGF (в INCI TTS ESSENTIAL его нет)', slug: 'tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska' },
+  { pattern: /^Экстракт лаванды$/i, label: 'экстракт лаванды' },
+  { pattern: /^Гидролат (цветков апельсина|лаванды|гамамелиса)$/i, label: 'гидролат', slug: '3-flower-serum-multi-uvlazhnyayushhaya-syvorotka' },
+]
+
 // Остаётся по решению сверки: у O3 DEPUR есть фосфолипидный носитель в INCI (вопрос владельцу, см. отчёт)
 const ALLOWED: Record<string, RegExp> = { 'o3-depur-krem-s-ozonom': /инкапсулир/i }
 
@@ -88,6 +102,39 @@ function snapshotScope(): Scope[] {
     )
 }
 
+function catalogIngredients(): Record<string, string[]> {
+  const catalog = readJson(`${ASSETS}/catalog-curated.json`) as { products: Array<{ slug: string; ingredients: string[] }> }
+  return Object.fromEntries(
+    catalog.products
+      .filter((product) => inciSlugs.has(product.slug))
+      .map((product): [string, string[]] => [product.slug, product.ingredients]),
+  )
+}
+
+function snapshotIngredients(): Record<string, string[]> {
+  const snapshot = readJson(SNAPSHOT) as {
+    products: Array<{ detail: { slug: string; ingredients: Array<{ name: string }> } }>
+  }
+  return Object.fromEntries(
+    snapshot.products
+      .filter((product) => inciSlugs.has(product.detail.slug))
+      .map((product): [string, string[]] => [product.detail.slug, product.detail.ingredients.map((item) => item.name)]),
+  )
+}
+
+function violationsOf(scope: Scope[], oldNames: OldName[] = []): string[] {
+  return scope.flatMap(({ slug, source, text }) => {
+    if (ALLOWED[slug]?.test(text)) return []
+    const labels = [
+      ...FORBIDDEN.filter(([pattern]) => pattern.test(text)).map(([, label]) => label),
+      ...oldNames
+        .filter((rule) => rule.pattern.test(text) && (!rule.slug || rule.slug === slug))
+        .map((rule) => rule.label),
+    ]
+    return labels.map((label) => `${source}: ${label} — «${text.slice(0, 80)}»`)
+  })
+}
+
 describe('ISSEIMI с INCI: собранные данные не содержат формулировок вне официального состава', () => {
   const scopes = {
     карточки: cardScope(),
@@ -102,11 +149,23 @@ describe('ISSEIMI с INCI: собранные данные не содержат
   })
 
   it.each(Object.entries(scopes))('в данных (%s) нет запрещённых формулировок', (_, scope) => {
-    const violations = scope.flatMap(({ slug, source, text }) =>
-      FORBIDDEN.filter(([pattern]) => pattern.test(text) && !ALLOWED[slug]?.test(text)).map(
-        ([, label]) => `${source}: ${label} — «${text.slice(0, 80)}»`,
-      ),
+    expect(violationsOf(scope)).toEqual([])
+  })
+})
+
+describe('ISSEIMI с INCI: состав в снимке совпадает с catalog-curated и без старых названий', () => {
+  const catalog = catalogIngredients()
+  const snapshot = snapshotIngredients()
+
+  it('снимок содержит тот же состав, что catalog-curated, у всех товаров с INCI', () => {
+    expect(Object.keys(snapshot)).toHaveLength(Object.keys(catalog).length)
+    expect(snapshot).toEqual(catalog)
+  })
+
+  it('в составе каталога и снимка нет названий, которые сверка убрала', () => {
+    const scope: Scope[] = Object.entries({ каталог: catalog, снимок: snapshot }).flatMap(([source, items]) =>
+      Object.entries(items).flatMap(([slug, names]) => names.map((text) => ({ slug, source: `${source} ${slug}`, text }))),
     )
-    expect(violations).toEqual([])
+    expect(violationsOf(scope, OLD_INGREDIENTS)).toEqual([])
   })
 })
