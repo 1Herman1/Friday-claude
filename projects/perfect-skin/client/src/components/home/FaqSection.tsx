@@ -221,14 +221,14 @@ export function FaqSection() {
     <>
       <section id="faq" className="bg-background py-10 md:py-14">
         <div className="container-app">
-          <div className="max-w-prose mb-12 md:mb-16">
+          <div className="max-w-3xl mx-auto mb-12 md:mb-16">
             <h2 className="text-h2 font-heading font-bold mb-4">
               Вопросы и ответы
             </h2>
           </div>
 
           {/* FAQ List */}
-          <div className="max-w-prose space-y-0">
+          <div className="max-w-3xl mx-auto space-y-0">
             {faqData.map((item, index) => (
               <FaqRow key={item.id} item={item} divider={index < faqData.length - 1} />
             ))}
