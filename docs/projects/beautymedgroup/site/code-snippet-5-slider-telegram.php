@@ -40,3 +40,22 @@ add_action('template_redirect', function () {
         return str_replace('WhatsApp: <a href="https://wa.me/+79891812454"', 'WhatsApp / Telegram: <a href="https://wa.me/+79891812454"', $html);
     });
 });
+
+add_action('template_redirect', function () {
+    if (!is_page('kontakty')) {
+        return;
+    }
+    ob_start(function ($html) {
+        $html = preg_replace(
+            '~(обратиться в WhatsApp или Telegram:)\s*</span>~u',
+            '$1<br><a href="tel:+79891812454" style="display:inline-block;margin-top:8px;white-space:nowrap;font-size:18px;color:inherit;text-decoration:none">+7 (989) 181-24-54</a></span>',
+            $html,
+            1
+        );
+        return str_replace(
+            '<a href="tel:+74951203677" class="contacts-item__phone-link">+ 7 (495) 120-36-77</a>',
+            '<a href="tel:+74951203677" class="contacts-item__phone-link">+ 7 (495) 120-36-77</a> <a href="tel:+79891812454" class="contacts-item__phone-link" style="white-space:nowrap">+ 7 (989) 181-24-54</a>',
+            $html
+        );
+    });
+});
