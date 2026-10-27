@@ -47,6 +47,21 @@ gen_video() { # out_name aspect prompt first last
 # Только проверка баланса: шаги Balance до и после в workflow, без генерации
 [ "$STAGE" = balance ] && exit 0
 
+# Правая часть плитки «Подобрать косметику» на главной, 16:9: ритуал из трёх шагов
+if [ "$STAGE" = cta-quiz ]; then
+  OUT="$ROOT/docs/projects/perfect-skin/media/cta"; mkdir -p "$OUT"
+  P="$ROOT/projects/perfect-skin/client/public/products"
+  BASE="Premium editorial still life for a pharmacy-grade Spanish skincare shop, illustrating a personal three-step skincare routine (cleanse, treat, moisturise). Light travertine stone in colour #F4F2EC with a matching warm cream background, soft diffused morning daylight from the left, gentle long soft shadows, calm, precise, expensive, airy, generous empty space around the objects. Three low travertine blocks of rising height stand left to right like steps. No people, no hands, no text overlays, no numbers, no watermark. Photorealistic, natural colour, shallow depth of field."
+  PR="$BASE On the steps, left to right: the ISSEIMI SEA FOAM cleansing foam bottle, the ISSEIMI COLLAGEN BOOSTER dropper bottle, the ISSEIMI PURE MARINE WATER cream jar, each exactly as in its own reference photo. Copy every label letter by letter from its reference, invent no text, never mix labels."
+  TX="$BASE No packaging and no labels at all. On the steps, left to right, three textures: a soft dome of white cleansing foam with fine bubbles, a few glossy drops of clear golden serum with a glass pipette lying beside them, a smooth swirl of white cream."
+  for v in 1 2; do
+    gen_image "quiz-products-v$v" 16:9 "$PR" "$P/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj.jpg" "$P/collagen-booster-vosstanavlivayushhaya-syvorotka.jpg" "$P/pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodo.jpg" &
+    gen_image "quiz-textures-v$v" 16:9 "$TX" &
+  done
+  wait
+  exit 0
+fi
+
 # Товары в готовых иллюстрациях статей: первая картинка — утверждённая сцена,
 # дальше официальные фото товаров. FRAMES — только эти имена через пробел
 if [ "$STAGE" = blog-products ]; then
