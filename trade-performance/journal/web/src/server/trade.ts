@@ -47,7 +47,8 @@ export async function tradeCard(id: string) {
     take_profits: string[]; status: string; simulated_r: string | null }>(`
     SELECT ss.name AS source, ss.kind, s.mode, s.side, s.setup_time, s.entry, s.stop_loss, s.take_profits, s.status, s.simulated_r
     FROM trades t JOIN signals s ON s.id = t.signal_id JOIN signal_sources ss ON ss.id = s.source_id WHERE t.id = $1`, [id]);
-  return { signal: signal ?? null, t, fills, notes, tags: tags.map((x) => x.name), playbooks: playbooks.map((x) => x.name), rules, shots, reviews };
+  const [run] = await q<{ n: number }>(`SELECT count(*)::int AS n FROM ai_reviews WHERE trade_id = $1 AND status = 'running' AND created_at > now() - interval '10 minutes'`, [id]);
+  return { running: run.n > 0, signal: signal ?? null, t, fills, notes, tags: tags.map((x) => x.name), playbooks: playbooks.map((x) => x.name), rules, shots, reviews };
 }
 
 export type Candle = { time: number; open: number; high: number; low: number; close: number };

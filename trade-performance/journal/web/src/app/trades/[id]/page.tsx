@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { tradeCard, candles, excursions, EMOTIONS } from "@/server/trade";
 import { usd, px, dt, num, pnlClass } from "@/lib/fmt";
 import TradeChart from "@/components/TradeChart";
-import { saveTrade, uploadShots, removeShot } from "./actions";
+import { saveTrade, uploadShots, removeShot, editNote, removeNote, runReview } from "./actions";
+import { SEGMENTS, SEG_LABEL, RANDOM_TAG } from "@/server/stats";
 
 export const dynamic = "force-dynamic";
 const STEP: Record<string, number> = { Min5: 300, Min15: 900, Min60: 3600, Hour4: 14400 };
@@ -17,7 +18,7 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const card = await tradeCard(id);
   if (!card) notFound();
-  const { t, fills, notes, tags, playbooks, rules, shots, reviews, signal } = card;
+  const { t, fills, notes, tags, playbooks, rules, shots, reviews, signal, running } = card;
   const c = await candles(t.symbol, new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const ex = excursions(c.data, t.side, Number(t.entry_avg), new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const durH = ((t.closed_at ? new Date(t.closed_at).getTime() : Date.now()) - new Date(t.opened_at).getTime()) / 3600e3;
@@ -33,6 +34,8 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
         <h1 className="text-xl font-semibold">#{t.n} · {t.base} <span className={t.side === "LONG" ? "text-emerald-400" : "text-rose-400"}>{t.side === "LONG" ? "Лонг" : "Шорт"}</span></h1>
         <span className={`text-xl font-semibold tabular-nums ${pnlClass(t.net_pnl)}`}>{usd(t.net_pnl)}</span>
         {t.liq && <span className="rounded bg-rose-900/60 px-2 py-0.5 text-xs text-rose-200">💀 ликвидация</span>}
+        {(() => { const sg = Object.keys(SEGMENTS).find((k) => tags.includes(SEGMENTS[k])); return sg ? <Link href={`/trades?seg=${sg}`} className={`rounded px-2 py-0.5 text-xs ${sg === "OK" ? "bg-emerald-950 text-emerald-300" : "bg-amber-950 text-amber-300"}`}>{SEG_LABEL[sg]}</Link> : null; })()}
+        {tags.includes(RANDOM_TAG) && <Link href="/trades?rnd=only" className="rounded bg-zinc-800 px-2 py-0.5 text-xs text-zinc-300">🎲 случайная</Link>}
         {t.status === "OPEN" && <span className="rounded bg-sky-900/60 px-2 py-0.5 text-xs text-sky-200">открыта</span>}
         <div className="ml-auto flex gap-3 text-sm">
           {t.prev_id && <Link href={`/trades/${t.prev_id}`} className="text-zinc-400 hover:text-zinc-200">← пред.</Link>}
@@ -40,7 +43,7 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
         </div>
       </div>
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-3">
+      <div id="trade-chart" className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-3">
         <div className="mb-1 text-xs text-zinc-500">{t.symbol} · MEXC · {IV[c.interval]} · время МСК</div>
         <TradeChart candles={c.data} step={STEP[c.interval]} entry={Number(t.entry_avg)} exit={t.exit_avg ? Number(t.exit_avg) : null}
           stop={t.planned_stop ? Number(t.planned_stop) : null}
@@ -130,18 +133,33 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
             <textarea name="note" rows={2} className={inp} placeholder="Мысль по сделке — сохранится в ленту ниже" />
           </label>
           <button className="rounded-md bg-zinc-100 px-4 py-1.5 text-sm font-medium text-zinc-900">Сохранить</button>
-
-          {notes.length > 0 && (
-            <div className="space-y-2 border-t border-zinc-800 pt-3">
-              {notes.map((n) => (
-                <div key={n.id} className="text-sm">
-                  <div className="text-xs text-zinc-500">{dt(n.created_at)} · {n.channel === "TELEGRAM" ? (n.kind === "VOICE" ? "🎙 Telegram" : "Telegram") : "веб"}</div>
-                  <div className="whitespace-pre-wrap">{n.text ?? n.transcript}</div>
-                </div>
-              ))}
-            </div>
-          )}
         </form>
+      </div>
+
+      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
+        <h3 className="mb-2 text-sm font-medium text-zinc-300">Заметки ({notes.length})</h3>
+        {notes.length === 0 && <p className="text-sm text-zinc-500">Пока нет. Добавь в форме выше или голосом/текстом в топик «Дневник» с номером #{t.n}.</p>}
+        <div className="space-y-3">
+          {notes.map((n) => (
+            <div key={n.id} className="rounded-lg border border-zinc-800/80 p-3 text-sm">
+              <div className="mb-1 flex items-center gap-3 text-xs text-zinc-500">
+                <span>{dt(n.created_at)} · {n.channel === "TELEGRAM" ? (n.kind === "VOICE" ? "🎙 Telegram" : "Telegram") : "веб"}</span>
+                <form action={removeNote.bind(null, t.id, n.id)} className="ml-auto">
+                  <button className="text-zinc-500 hover:text-rose-400" title="удалить заметку">удалить</button>
+                </form>
+              </div>
+              <details>
+                <summary className="cursor-pointer list-none whitespace-pre-wrap text-zinc-200 [&::-webkit-details-marker]:hidden">
+                  {n.text ?? n.transcript} <span className="ml-1 text-xs text-sky-400">✎ изменить</span>
+                </summary>
+                <form action={editNote.bind(null, t.id, n.id)} className="mt-2 space-y-2">
+                  <textarea name="text" defaultValue={n.text ?? n.transcript ?? ""} rows={4} className={inp} />
+                  <button className="rounded-md bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-900">Сохранить заметку</button>
+                </form>
+              </details>
+            </div>
+          ))}
+        </div>
       </div>
 
       {signal && (
@@ -156,9 +174,16 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
       )}
 
       <div className="rounded-xl border border-violet-900/60 bg-violet-950/20 p-4">
-        <h3 className="mb-2 text-sm font-medium text-violet-200">🧠 ИИ-разбор (Opus)</h3>
+        <div className="mb-2 flex items-center gap-3">
+          <h3 className="text-sm font-medium text-violet-200">🧠 ИИ-разбор (Opus)</h3>
+          {running ? <span className="text-xs text-violet-300">⏳ агент разбирает сделку (1–3 мин), обнови страницу</span> : (
+            <form action={runReview.bind(null, t.id)} className="ml-auto">
+              <button className="rounded-md border border-violet-700 px-3 py-1 text-xs text-violet-200 hover:bg-violet-900/40">{reviews.length ? "Разобрать заново" : "Разобрать агентом"}</button>
+            </form>
+          )}
+        </div>
         {reviews.length === 0 ? (
-          <p className="text-sm text-zinc-500">Разбора ещё нет. В Telegram (Т6): «разбери #{t.n}».</p>
+          <p className="text-sm text-zinc-500">Разбора ещё нет. Кнопка справа или в Telegram (Т6): «разбери #{t.n}».</p>
         ) : (
           reviews.map((r) => (
             <div key={r.id} className="mb-3 last:mb-0">

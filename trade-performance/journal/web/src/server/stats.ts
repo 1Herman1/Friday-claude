@@ -1,7 +1,24 @@
 import "server-only";
 import { q } from "./db";
 
-export type Filters = { from?: string; to?: string; side?: string; symbol?: string; liq?: string };
+export type Filters = { from?: string; to?: string; side?: string; symbol?: string; liq?: string;
+  seg?: string; rnd?: string; tag?: string; sort?: string };
+
+// сегменты риска (ставит core/risk_audit.py тегом) и случайные сделки
+export const SEGMENTS: Record<string, string> = {
+  OK: "риск: по стратегии", ADD_POSITION: "риск: доливка/усреднение", ADD_MARGIN: "риск: добавлена маржа", OVER_RISK: "риск: больше входной маржи",
+};
+export const SEG_LABEL: Record<string, string> = {
+  OK: "✅ по стратегии", ADD_POSITION: "➕ доливка/усреднение", ADD_MARGIN: "🛟 добавлена маржа", OVER_RISK: "⚠️ больше риска",
+};
+export const RANDOM_TAG = "случайная";
+const hasTag = (k: number) => `EXISTS (SELECT 1 FROM trade_tags tt JOIN tags g ON g.id = tt.tag_id WHERE tt.trade_id = t.id AND g.name = $${k})`;
+export const SORTS: Record<string, [string, string]> = {
+  date_desc: ["сначала новые", "t.opened_at DESC"], date_asc: ["сначала старые", "t.opened_at ASC"],
+  pnl_desc: ["PnL: от большего", "t.net_pnl DESC"], pnl_asc: ["PnL: от меньшего", "t.net_pnl ASC"],
+  dur_desc: ["длительность ↓", "(t.closed_at - t.opened_at) DESC"], dur_asc: ["длительность ↑", "(t.closed_at - t.opened_at) ASC"],
+  size_desc: ["объём ↓", "(t.entry_avg * t.max_qty) DESC"], size_asc: ["объём ↑", "(t.entry_avg * t.max_qty) ASC"],
+};
 
 // Фильтры → WHERE. Время дня считаем по МСК (timezone пользователя).
 function where(f: Filters) {
@@ -13,6 +30,11 @@ function where(f: Filters) {
   if (f.symbol) { p.push(f.symbol); c.push(`i.base_asset = $${p.length}`); }
   if (f.liq === "only") c.push("t.stop_is_liquidation");
   if (f.liq === "exclude") c.push("NOT t.stop_is_liquidation");
+  if (f.seg === "OUT") { c.push(`NOT ${hasTag(p.push(SEGMENTS.OK))}`); }
+  else if (f.seg && SEGMENTS[f.seg]) { p.push(SEGMENTS[f.seg]); c.push(hasTag(p.length)); }
+  if (f.rnd === "only") { p.push(RANDOM_TAG); c.push(hasTag(p.length)); }
+  if (f.rnd === "exclude") { p.push(RANDOM_TAG); c.push(`NOT ${hasTag(p.length)}`); }
+  if (f.tag) { p.push(f.tag); c.push(hasTag(p.length)); }
   return { sql: "WHERE " + c.join(" AND "), p };
 }
 
@@ -21,19 +43,27 @@ const FROM = "FROM trades t JOIN instruments i ON i.id = t.instrument_id";
 export type TradeRow = {
   id: string; n: number; symbol: string; side: string; opened_at: Date; closed_at: Date;
   entry_avg: string; exit_avg: string; notional: string; gross_pnl: string; fees: string; net_pnl: string;
-  liq: boolean; dur_h: string; fills: number; cum: string;
+  liq: boolean; dur_h: string; fills: number; cum: string; tags: string[] | null; reviewed: boolean;
 };
+
+export async function allTags() {
+  return q<{ name: string; n: number }>(`SELECT g.name, count(*)::int AS n FROM tags g JOIN trade_tags tt ON tt.tag_id = g.id
+    WHERE g.deleted_at IS NULL GROUP BY 1 ORDER BY 2 DESC, 1`);
+}
 
 export async function trades(f: Filters) {
   const w = where(f);
   return q<TradeRow>(`
-    SELECT t.id, row_number() OVER (ORDER BY t.opened_at)::int AS n, i.base_asset AS symbol, t.side,
+    SELECT t.id, o.n, i.base_asset AS symbol, t.side,
+           (SELECT array_agg(g.name ORDER BY g.name) FROM trade_tags tt JOIN tags g ON g.id = tt.tag_id WHERE tt.trade_id = t.id AND g.deleted_at IS NULL) AS tags,
+           EXISTS (SELECT 1 FROM ai_reviews a WHERE a.trade_id = t.id AND a.status = 'done') AS reviewed,
            t.opened_at, t.closed_at, t.entry_avg, t.exit_avg, (t.entry_avg * t.max_qty) AS notional,
            t.gross_pnl, t.fees, t.net_pnl, t.stop_is_liquidation AS liq,
            round(extract(epoch FROM t.closed_at - t.opened_at) / 3600, 1) AS dur_h,
            (SELECT count(*) FROM executions e WHERE e.trade_id = t.id)::int AS fills,
            sum(t.net_pnl) OVER (ORDER BY t.closed_at) AS cum
-    ${FROM} ${w.sql} ORDER BY t.opened_at`, w.p);
+    ${FROM} JOIN (SELECT id, row_number() OVER (ORDER BY opened_at)::int AS n FROM trades WHERE deleted_at IS NULL) o ON o.id = t.id
+    ${w.sql} ORDER BY ${(SORTS[f.sort ?? ""] ?? SORTS.date_desc)[1]}, t.opened_at DESC`, w.p);
 }
 
 export async function summary(f: Filters) {

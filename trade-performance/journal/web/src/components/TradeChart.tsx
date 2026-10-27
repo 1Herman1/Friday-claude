@@ -13,7 +13,13 @@ export default function TradeChart({ candles, fills, entry, exit, stop, step }: 
       height: 420,
       layout: { background: { type: ColorType.Solid, color: "transparent" }, textColor: "#a1a1aa" },
       grid: { vertLines: { color: "#27272a" }, horzLines: { color: "#27272a" } },
-      timeScale: { timeVisible: true, borderColor: "#3f3f46" },
+      timeScale: {
+        timeVisible: true, borderColor: "#3f3f46",
+        // подписи оси тоже в МСК (по умолчанию библиотека рисует UTC)
+        tickMarkFormatter: (t: number, kind: number) => new Date(t * 1000).toLocaleString("ru-RU", kind >= 3
+          ? { timeZone: "Europe/Moscow", hour: "2-digit", minute: "2-digit" }
+          : { timeZone: "Europe/Moscow", day: "2-digit", month: "2-digit" }),
+      },
       rightPriceScale: { borderColor: "#3f3f46" },
       localization: { locale: "ru-RU", timeFormatter: (t: number) => new Date(t * 1000).toLocaleString("ru-RU", { timeZone: "Europe/Moscow", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) },
     });

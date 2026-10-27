@@ -46,6 +46,32 @@ export async function saveTrade(id: string, fd: FormData) {
   revalidatePath(`/trades/${id}`);
 }
 
+export async function editNote(tradeId: string, noteId: string, fd: FormData) {
+  const text = s(fd.get("text"));
+  if (!text) return;
+  // транскрипт голосового тоже перезаписываем: показываем text ?? transcript
+  await q(`UPDATE notes SET text = $3, updated_at = now() WHERE id = $1 AND trade_id = $2`, [noteId, tradeId, text]);
+  revalidatePath(`/trades/${tradeId}`);
+}
+
+export async function removeNote(tradeId: string, noteId: string) {
+  // мягкое удаление: запись остаётся в БД с deleted_at
+  await q(`UPDATE notes SET deleted_at = now() WHERE id = $1 AND trade_id = $2`, [noteId, tradeId]);
+  revalidatePath(`/trades/${tradeId}`);
+}
+
+export async function runReview(tradeId: string) {
+  // ИИ-разбор агентом (Opus): в фоне, ~1–2 мин; результат появится в блоке «ИИ-разбор» после обновления страницы
+  const { spawn } = await import("node:child_process");
+  const path = await import("node:path");
+  const root = path.resolve(process.cwd(), "../..");
+  const p = spawn(path.join(root, "prop-agents/.venv/bin/python"), [path.join(root, "journal/review/agent_pass.py"), "--trade", tradeId, "--force"],
+    { cwd: root, detached: true, stdio: "ignore" });
+  p.unref();
+  await q(`INSERT INTO ai_reviews (id, organization_id, user_id, trade_id, kind, status) VALUES (gen_random_uuid(), ${ORG}, ${USER}, $1, 'trade', 'running')`, [tradeId]).catch(() => null);
+  revalidatePath(`/trades/${tradeId}`);
+}
+
 export async function uploadShots(id: string, fd: FormData) {
   for (const f of fd.getAll("shots")) {
     if (f instanceof File && f.size > 0) await saveImage(f, id, ORG);
