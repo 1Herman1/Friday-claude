@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Эквитас · Равновесие · Поверенный</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Commissioner:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D1524;
+  --bg-2:#111B2D;
+  --bg-3:#18243A;
+  --line:#2A3950;
+  --fg:#E7EBF1;
+  --fg-2:#A7B1C0;
+  --plat:#D5DBE3;
+  --plat-hi:#EEF1F5;
+  --silver:#9AA5B5;
+  --silver-lo:#5E6B7E;
+  --on-plat:#0D1524;
+  --fig:#D5DBE3;
+  --fig-lo:#4F5D72;
+  --head:"Jost", "Helvetica Neue", sans-serif;
+  --sans:"Commissioner", system-ui, sans-serif;
+  --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:72px;--s7:120px;
+  --wrap:1240px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 17px/1.6 var(--sans);overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 max(20px,4vw)}
+h1,h2,h3{font-family:var(--head);font-weight:300;line-height:1.1;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(34px,4.2vw,56px)}
+h3{font-size:24px;line-height:1.25;font-weight:400}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.eyebrow{display:flex;align-items:center;gap:12px;font:500 12px/1.4 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--silver)}
+.eyebrow::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:var(--plat)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:14px 30px;border:1px solid var(--plat);border-radius:999px;font:500 15px/1.2 var(--sans);letter-spacing:.02em;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn{transition:background-color .2s ease,color .2s ease}
+.btn-plat{background:var(--plat);color:var(--on-plat)}
+.btn-plat:hover{background:var(--plat-hi)}
+.btn-ghost{background:transparent;color:var(--fg)}
+.btn-ghost:hover{background:var(--bg-3)}
+:focus-visible{outline:2px solid var(--plat-hi);outline-offset:3px}
+
+/* header */
+.hdr{border-bottom:1px solid var(--line)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);min-height:84px}
+.logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+.logo svg{flex:none;width:34px;height:auto}
+.logo span{display:flex;flex-direction:column;line-height:1}
+.logo b{font:400 20px/1 var(--head);letter-spacing:.3em;text-transform:uppercase}
+.logo small{white-space:nowrap;font:500 11px/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--fg-2);margin-top:6px}
+.nav{display:flex;gap:32px;font-size:15px;white-space:nowrap}
+.nav a{text-decoration:none;color:var(--fg-2);padding:12px 0}
+.nav a:hover{color:var(--fg)}
+.hdr-cta{display:flex;align-items:center;gap:var(--s3)}
+.phone{display:inline-flex;align-items:center;min-height:44px;font:500 16px/1 var(--sans);text-decoration:none;white-space:nowrap}
+
+/* hero */
+.hero{padding:var(--s6) 0 var(--s7);background:radial-gradient(ellipse 70% 60% at 78% 45%,#16223A 0%,var(--bg) 70%)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:var(--s5);align-items:center}
+.hero h1{font-size:clamp(36px,4.3vw,62px);margin-top:var(--s3)}
+.hero h1 em{font-style:normal;color:var(--silver)}
+.hero .lead{margin-top:var(--s4);max-width:32em;color:var(--fg-2);font-size:19px}
+.hero .acts{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s5)}
+.facts{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr);margin-top:var(--s6);border-top:1px solid var(--line);font-size:14px;color:var(--fg-2)}
+.facts div{padding:var(--s3) var(--s3) 0 0}
+.facts div+div{padding-left:var(--s3);border-left:1px solid var(--line)}
+.facts b{display:block;font:400 22px/1.2 var(--head);color:var(--fg);margin-bottom:4px}
+.balance{width:100%;max-width:600px;justify-self:center}
+.balance svg{display:block;width:100%;height:auto}
+.lever{transform-origin:290px 250px;transform-box:view-box;animation:level 2.8s cubic-bezier(.3,0,.12,1) .35s both}
+@keyframes level{from{transform:rotate(-8deg)}to{transform:rotate(0)}}
+@media (prefers-reduced-motion:reduce){.lever{animation:none}}
+
+/* layout */
+section{padding:var(--s7) 0}
+.alt{background:var(--bg-2)}
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s6);align-items:start}
+.split.rev{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.sec-intro h2{margin-top:var(--s3)}
+.sec-intro p{margin-top:var(--s3);color:var(--fg-2);max-width:30em}
+.sec-head{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--s6);align-items:end;margin-bottom:var(--s6)}
+.sec-head h2{margin-top:var(--s3)}
+.sec-head p{color:var(--fg-2);max-width:30em}
+
+/* directions */
+.dirs{list-style:none;margin:0;padding:0;border-top:1px solid var(--plat)}
+.dirs li{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:var(--s1) var(--s3);align-items:baseline;padding:var(--s4) 0;border-bottom:1px solid var(--line)}
+.dirs .n{font:400 15px/1 var(--head);color:var(--silver);letter-spacing:.1em}
+.dirs p{grid-column:2;color:var(--fg-2);margin-top:var(--s1)}
+.dirs a{grid-column:3;grid-row:1;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:1px solid var(--line);border-radius:999px;font-size:14px;text-decoration:none;color:var(--fg);white-space:nowrap}
+.dirs a:hover{border-color:var(--plat)}
+
+/* steps on an axis */
+.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--s3);list-style:none;margin:0;padding:0;position:relative}
+.steps::before{content:"";position:absolute;left:0;right:0;top:20px;height:1px;background:var(--silver-lo)}
+.steps li{position:relative;padding-top:64px}
+.steps .dot{position:absolute;left:0;top:20px;border-radius:50%;background:var(--plat);transform:translateY(-50%)}
+.steps li:nth-child(1) .dot{width:10px;height:10px}
+.steps li:nth-child(2) .dot{width:16px;height:16px}
+.steps li:nth-child(3) .dot{width:22px;height:22px}
+.steps li:nth-child(4) .dot{width:34px;height:34px}
+.steps li:nth-child(5) .dot{width:26px;height:26px}
+.steps .k{font:500 12px/1 var(--sans);letter-spacing:.18em;color:var(--silver)}
+.steps h3{margin:var(--s2) 0 var(--s1)}
+.steps p{font-size:15px;color:var(--fg-2)}
+.steps .t{display:inline-block;margin-top:var(--s2);padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--fg)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--s3)}
+.calc-in{padding:var(--s5);background:var(--bg-3);border:1px solid var(--line);border-radius:4px}
+.calc-out{padding:var(--s5);background:var(--plat);color:var(--on-plat);border-radius:4px}
+.field-s{margin-bottom:var(--s4)}
+.field-s:last-child{margin-bottom:0}
+.field-s .lbl{display:block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-2);margin-bottom:var(--s1)}
+.fake-input{display:flex;align-items:center;justify-content:space-between;min-height:60px;padding:0 var(--s3);background:var(--bg);border:1px solid var(--line);border-radius:4px;font:300 32px/1 var(--head)}
+.seg{display:flex;flex-wrap:wrap;gap:var(--s1)}
+.seg span{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:1px solid var(--line);border-radius:999px;font-size:15px;color:var(--fg-2)}
+.seg span.on{border-color:var(--plat);color:var(--fg);background:#22304A}
+.out-row{display:flex;justify-content:space-between;gap:var(--s2);align-items:baseline;padding:var(--s2) 0;border-bottom:1px solid #AEB7C4}
+.out-row span{color:#3C4656;font-size:15px}
+.out-row b{font:400 24px/1.2 var(--head);text-align:right;white-space:nowrap}
+.out-total{display:block;border-bottom:0;padding-top:var(--s4)}
+.out-total span{display:block}
+.out-total b{display:block;text-align:left;margin-top:var(--s1);font-size:clamp(44px,4.6vw,60px);font-weight:300;line-height:1}
+.note{margin-top:var(--s3);font-size:13px;color:#3C4656}
+
+/* cases */
+.cases{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--s3);align-items:stretch}
+.case{padding:var(--s5);border:1px solid var(--line);border-radius:4px}
+.case+.case{background:var(--bg-3)}
+.case .no{font:500 13px/1.5 var(--sans);color:var(--silver);letter-spacing:.04em}
+.case h3{font-size:clamp(24px,2.3vw,30px);font-weight:300;margin:var(--s2) 0 var(--s3)}
+.case dl{margin:0;display:grid;gap:var(--s3)}
+.case dt{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-2)}
+.case dd{margin:4px 0 0;font-size:16px}
+.disclaim{margin-top:var(--s5);font-size:14px;color:var(--fg-2);max-width:48em}
+
+/* lawyer */
+.disk{aspect-ratio:1;width:100%;max-width:340px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#2A3A56 0%,#16223A 62%,#111B2D 100%);border:1px solid var(--line);display:grid;place-items:center;position:relative}
+.disk::after{content:"";position:absolute;inset:14px;border-radius:50%;border:1px solid #33435E}
+.disk span{font:300 128px/1 var(--head);color:var(--plat)}
+.lawyer h3{font-size:clamp(34px,3.8vw,52px);font-weight:300;margin-top:var(--s3)}
+.lawyer blockquote{margin:var(--s4) 0 0;font:300 23px/1.5 var(--head);color:var(--fg);max-width:30em}
+.lawyer .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s3) var(--s5);margin:var(--s5) 0 0;padding-top:var(--s4);border-top:1px solid var(--line)}
+.lawyer .meta dt{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-2)}
+.lawyer .meta dd{margin:4px 0 0}
+.lawyer-side{display:flex;justify-content:center}
+
+/* form */
+form{display:grid;gap:var(--s3);padding:var(--s5);background:var(--bg-2);border:1px solid var(--line);border-radius:4px}
+.f label{display:block;font-size:14px;color:var(--fg-2);margin-bottom:var(--s1)}
+.f input,.f textarea{width:100%;min-height:54px;padding:14px 18px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:4px;font:400 17px/1.4 var(--sans)}
+.f textarea{min-height:120px;resize:vertical}
+.f input:focus,.f textarea:focus{border-color:var(--plat);outline:none}
+.hint{font-size:13px;color:var(--fg-2);margin-top:6px}
+.consent{display:flex;gap:var(--s1);align-items:flex-start;font-size:14px;color:var(--fg-2);cursor:pointer}
+.consent input{flex:none;width:24px;height:24px;margin:10px;accent-color:var(--plat)}
+.consent span{padding-top:10px}
+.consent a{color:var(--plat)}
+
+/* footer */
+.ftr{border-top:1px solid var(--line);padding:var(--s6) 0 var(--s5);font-size:14px;color:var(--fg-2)}
+.ftr .cols{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,4fr) minmax(0,3fr);gap:var(--s5)}
+.ftr b{color:var(--fg);font-weight:500}
+.ftr p+p{margin-top:6px}
+.ftr .legal{margin-top:var(--s5);padding-top:var(--s3);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4)}
+.ftr a{display:inline-flex;align-items:center;min-height:44px}
+
+
+/* character: Poverenny */
+.pov{width:100%;max-width:520px;justify-self:center;color:var(--fig)}
+.pov svg{display:block;width:100%;height:auto;stroke-width:1.25}
+.pov .win{color:var(--fig-lo)}
+.pov .sky{color:var(--fig-lo);opacity:.85}
+.pov .crease{opacity:.5}
+.pov .d{stroke-dasharray:1 1.2;stroke-dashoffset:1.05;animation:draw 1.2s cubic-bezier(.22,.61,.36,1) forwards}
+.pov .win .d{animation-delay:0s}
+.pov .sky .d{animation-delay:.12s}
+.pov .fig .d{animation-delay:.3s}
+.pov .floor{animation-delay:.2s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pov .beam{transform-origin:300px 120px;transform-box:view-box;animation:settle 2.4s cubic-bezier(.33,0,.2,1) 1.45s both}
+.pov .pan-l{transform-origin:274px 121px;transform-box:view-box;animation:counter 2.4s cubic-bezier(.33,0,.2,1) 1.45s both}
+.pov .pan-r{transform-origin:326px 121px;transform-box:view-box;animation:counter 2.4s cubic-bezier(.33,0,.2,1) 1.45s both}
+@keyframes settle{0%{transform:rotate(-6deg)}45%{transform:rotate(1.8deg)}75%{transform:rotate(-.5deg)}100%{transform:rotate(0)}}
+@keyframes counter{0%{transform:rotate(6deg)}45%{transform:rotate(-1.8deg)}75%{transform:rotate(.5deg)}100%{transform:rotate(0)}}
+@media (prefers-reduced-motion:reduce){
+  .pov .d{animation:none;stroke-dasharray:none;stroke-dashoffset:0}
+  .pov .beam,.pov .pan-l,.pov .pan-r{animation:none}
+}
+.pose,.mini{display:block;height:auto;color:var(--fig);stroke-width:1.5}
+.pose path,.mini path{vector-effect:non-scaling-stroke}
+.pose .crease,.mini .crease,.pose .thin,.mini .thin{opacity:.55}
+.poses{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--s3);align-items:end;margin:0 0 var(--s4)}
+.poses svg{height:190px;width:auto;max-width:100%}
+.hat{margin-top:var(--s5)}
+.hat svg{height:220px;width:auto}
+@media (max-width:1020px){
+  .pov{max-width:340px;order:-1}
+  .poses{grid-template-columns:repeat(3,auto);justify-content:start;gap:var(--s4)}
+  .poses svg{height:112px}
+  .hat{margin-top:var(--s4)}
+  .hat svg{height:150px}
+}
+@media (max-width:640px){
+  .pov{max-width:250px}
+  .poses svg{height:96px}
+  .hat svg{height:130px}
+}
+
+.pov{--bg:#132036}
+.pov .axis{color:#5E6B7E;stroke-dasharray:10 4 2 4}
+.pov .axis .d{animation:none;stroke-dasharray:10 4 2 4;stroke-dashoffset:0;opacity:0;animation:fadein .6s ease 1.2s forwards}
+.pov .dim{color:#7D899B}
+.pov .dim .d{animation-delay:.9s}
+@keyframes fadein{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.pov .axis .d{animation:none;opacity:1}}
+.gauge{--bg:#D5DBE3;display:flex;align-items:flex-end;gap:var(--s2);margin-top:var(--s3)}
+.gauge .mini{flex:none;width:76px;color:var(--on-plat)}
+.gauge .ruler{flex:1 1 auto;min-width:0;height:auto;display:block}
+@media (max-width:640px){.gauge .mini{width:60px}}
+
+@media (max-width:1260px){.nav{display:none}}
+@media (min-width:1261px){.hdr .phone{display:none}}
+@media (max-width:1020px){
+  .hero .wrap,.split,.split.rev,.sec-head,.calc,.cases{grid-template-columns:minmax(0,1fr)}
+  .split,.sec-head{gap:var(--s4)}
+  .balance{max-width:440px;order:-1}
+  .steps{grid-template-columns:minmax(0,1fr);gap:0}
+  .steps::before{left:17px;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .steps li{padding:0 0 var(--s4) 64px}
+  .steps .dot{left:17px;top:10px;transform:translate(-50%,-50%)}
+  .steps h3{margin-top:var(--s1)}
+  .lawyer-side{justify-content:flex-start}
+  .disk{max-width:200px;width:200px}
+  .disk span{font-size:80px}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .phone{display:none}
+  .hdr .wrap{min-height:72px}
+  .logo svg{width:26px}
+  .logo b{font-size:17px;letter-spacing:.2em}
+  .logo small{font-size:10px;letter-spacing:.1em;white-space:normal}
+  .hdr .btn{min-height:44px;padding:10px 16px;font-size:14px}
+  section{padding:var(--s6) 0}
+  .hero{padding:var(--s3) 0 var(--s6)}
+  .hero .lead{font-size:17px}
+  .balance{max-width:340px}
+  .facts{grid-template-columns:minmax(0,1fr)}
+  .facts div,.facts div+div{padding:var(--s2) 0;border-left:0;border-bottom:1px solid var(--line)}
+  .hero .acts .btn{flex:1 1 100%;white-space:normal;text-align:center}
+  .dirs li{grid-template-columns:40px minmax(0,1fr)}
+  .dirs a{grid-column:2;grid-row:3;justify-self:start;margin-top:var(--s1)}
+  .calc-in,.calc-out,.case,form{padding:var(--s3)}
+  .fake-input{font-size:26px;padding:0 var(--s2)}
+  .out-row b{font-size:20px}
+  .out-total b{font-size:44px}
+  .ftr .cols,.lawyer .meta{grid-template-columns:minmax(0,1fr)}
+  .lawyer blockquote{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Эквитас, адвокатское бюро — на главную">
+      <svg viewBox="0 0 34 24" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="#D5DBE3"/><rect x="25" y="5" width="6" height="13" fill="#9AA5B5"/><rect x="1" y="19" width="32" height="1.5" fill="#D5DBE3"/></svg>
+      <span><b>Эквитас</b><small>Адвокатское бюро · Aequitas</small></span>
+    </a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#practice">Направления</a>
+      <a href="#process">Как работаем</a>
+      <a href="#calc">Стоимость</a>
+      <a href="#cases">Разборы дел</a>
+      <a href="a-ai.html">ИИ и цифровые споры</a>
+    </nav>
+    <div class="hdr-cta">
+      <a class="phone num" href="tel:+74950000000">+7 495 000-00-00</a>
+      <a class="btn btn-plat" href="#request">Разбор ситуации</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="h1">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Адвокатская практика по гражданским делам</p>
+      <h1 id="h1">Гражданские споры компаний. <em>Арбитраж, долги, конфликты участников.</em> Москва и&nbsp;Московская область</h1>
+      <p class="lead">Адвокат приезжает к вам — в офис, на объект, на переговоры. Первая встреча — разбор документов и честная оценка рисков, без обещаний исхода.</p>
+      <div class="acts">
+        <a class="btn btn-plat" href="#request">Записаться на разбор документов</a>
+        <a class="btn btn-ghost" href="#calc">Прикинуть стоимость спора</a>
+      </div>
+      <div class="facts">
+        <div><b class="num">с 2009 года</b>адвокатский стаж</div>
+        <div><b class="num">№ 77/0000</b>в реестре адвокатов г. Москвы</div>
+        <div><b>Москва и МО</b>выезд к клиенту</div>
+      </div>
+    </div>
+    <div class="pov" aria-hidden="true">
+      <svg class="hero-svg" viewBox="0 0 520 600" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g class="win"><path class="d" pathLength="1" d="M40 40 H280 V520 H40 Z"/><path class="d" pathLength="1" d="M52 52 H268 V508 H52 Z"/><path class="d" pathLength="1" d="M160 52 V508 M52 170 H268 M52 300 H268"/><path class="d" pathLength="1" d="M26 520 H294 M32 530 H288"/></g><g class="sky"><path class="d" pathLength="1" d="M52 500 H268"/><path class="d" pathLength="1" d="M60 500 V404 L72 398 V500 M76 500 V378 H90 V500 M94 500 V418 L106 410 V500 M110 500 V436 H120 V500"/><path class="d" pathLength="1" d="M120 470 H134 V500"/><path class="d" pathLength="1" d="M134 500 V464 H146 V452 H156 V500 M214 500 V452 H204 V464 H216 V500 M204 500 V500"/><path class="d" pathLength="1" d="M156 500 V444 H162 V422 H168 V398 H172 V384 H176 V372 H184 V384 H188 V398 H192 V422 H198 V444 H204 V500"/><path class="d" pathLength="1" d="M176 372 L180 352 L184 372 M180 352 V326"/><path class="d" pathLength="1" d="M166 470 V488 M174 470 V488 M180 470 V488 M186 470 V488 M194 470 V488 M170 430 V440 M180 430 V440 M190 430 V440"/><path class="d" pathLength="1" d="M216 484 H228 V476 H240 V500"/><path class="d" pathLength="1" d="M248 500 L252.5 412 M262 500 L257.5 412 M251 412 H259 V406 H251 Z M252.5 406 L254.5 360 M257.5 406 L255.5 360 M255 360 V336"/><path class="d" pathLength="1" d="M240 488 H248 M262 492 H268"/></g><g class="axis"><path class="d" pathLength="1" d="M360 86 V594"/><path class="d" pathLength="1" d="M250 120 H470"/></g><g class="dim"><path class="d" pathLength="1" d="M440 102 H506 M440 577 H506"/><path class="d" pathLength="1" d="M498 102 V577"/><path class="d" pathLength="1" d="M498 102 L495 110 M498 102 L501 110 M498 577 L495 569 M498 577 L501 569"/><path class="d" pathLength="1" d="M494 102.0 H502 M494 165.3 H502 M494 228.7 H502 M494 292.0 H502 M494 355.3 H502 M494 418.6 H502 M494 482.0 H502 M494 545.3 H502 "/></g><g class="fig" transform="translate(60 0)"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L282 356 M300 300 L318 356"/><path class="d" pathLength="1" d="M292 315 L300 321 L308 315"/><path class="d" pathLength="1" d="M256 326 L280 327 M320 327 L344 326"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M323 217 L342 215 M326 216.5 L330 208 L334 216"/><path class="d" pathLength="1" d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path class="d" pathLength="1" d="M224 360 H240 M223.5 365 H240.5"/><path class="d" pathLength="1" d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path class="d" pathLength="1" d="M363 196 C367 226 369 256 369 286 C369 312 373 336 376 360 M350 234 C351 262 352 290 354 312 C355 330 358 346 360 360"/><path class="d" pathLength="1" d="M360 360 H376 M359.5 365 H376.5"/><path d="M340 379 L398 382 L394 466 L336 463 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M340 379 L398 382 L394 466 L336 463 Z"/><path class="d" pathLength="1" d="M339 391 L397 394"/><path d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365"/><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g class="beam"><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g class="pan-l"><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g class="pan-r"><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></g><path class="d floor" pathLength="1" d="M250 580 H470"/></svg>
+    </div>
+  </div>
+</section>
+
+<section id="practice" class="alt" aria-labelledby="h-pr">
+  <div class="wrap split">
+    <div class="sec-intro">
+      <p class="eyebrow">Направления</p>
+      <h2 id="h-pr">Шесть типов споров, которые мы ведём</h2>
+      <p>Только гражданские дела. Каждое направление ведёт адвокат лично — от первой встречи до исполнительного листа.</p>
+    </div>
+    <ol class="dirs">
+      <li><span class="n num">01</span><h3>Арбитражные споры</h3><a href="#request">Подробнее</a><p>Иски между компаниями в арбитражных судах Москвы и МО, апелляция и кассация.</p></li>
+      <li><span class="n num">02</span><h3>Взыскание дебиторской задолженности</h3><a href="#request">Подробнее</a><p>Контрагент не платит: претензия, иск, обеспечительные меры, исполнение.</p></li>
+      <li><span class="n num">03</span><h3>Корпоративные споры и субсидиарная ответственность</h3><a href="#request">Подробнее</a><p>Конфликт участников ООО, выход из общества, ответственность директора по долгам.</p></li>
+      <li><span class="n num">04</span><h3>Договорные споры</h3><a href="#request">Подробнее</a><p>Неисполнение договора поставки, подряда, услуг; неустойка и убытки.</p></li>
+      <li><span class="n num">05</span><h3>Земельные и имущественные споры</h3><a href="#request">Подробнее</a><p>Права на участки и здания, границы, аренда, сделки с недвижимостью.</p></li>
+      <li><span class="n num">06</span><h3>ИИ и цифровые споры</h3><a href="a-ai.html">Подробнее</a><p>Права на ИИ-контент, договоры с ИИ-разработчиками, дипфейки, утечки данных.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="process" aria-labelledby="h-st">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Как мы работаем</p><h2 id="h-st">Пять этапов, у каждого — срок и цена</h2></div>
+      <p>Вы знаете, что произойдёт дальше и сколько это стоит, ещё до подписания соглашения.</p>
+    </div>
+    <div class="poses" aria-hidden="true"><svg class="pose" viewBox="214 92 172 492" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297 312 L282 356 M303 311 L318 356"/><path class="d" pathLength="1" d="M244 298 C244 320 244 340 242 352 M356 298 C356 320 356 340 358 352"/><path class="d" pathLength="1" d="M237 196 C230 222 228 256 236 292 C244 300 254 296 260 286 M248 234 C247 256 247 270 252 280 L258 276"/><path class="d" pathLength="1" d="M363 196 C370 222 372 256 364 292 C356 300 346 296 340 286 M352 234 C353 256 353 270 348 280 L342 276"/><path d="M258 236 L334 228 L340 304 L264 312 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M258 236 L334 228 L340 304 L264 312 Z"/><path class="d thin" pathLength="1" d="M272 252 L322 247 M273 266 L324 261 M274 280 L308 277"/><path d="M256 262 C249 268 251 283 259 285 C265 285 267 270 263 262 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M256 262 C249 268 251 283 259 285 C265 285 267 270 263 262 Z"/><path d="M344 255 C351 259 351 275 343 278 C337 278 335 264 338 256 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M344 255 C351 259 351 275 343 278 C337 278 335 264 338 256 Z"/><g transform="rotate(-7 300 172)"><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></g></svg><svg class="pose" viewBox="214 92 352 492" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L282 356 M300 300 L318 356"/><path class="d" pathLength="1" d="M292 315 L300 321 L308 315"/><path class="d" pathLength="1" d="M256 326 L280 327 M320 327 L344 326"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path class="d" pathLength="1" d="M224 360 H240 M223.5 365 H240.5"/><path class="d" pathLength="1" d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path class="d" pathLength="1" d="M350 234 C352 280 355 320 358 352"/><path class="d" pathLength="1" d="M363 196 C376 214 388 240 396 264 L424 318 M352 234 C358 252 368 270 380 284 L410 330"/><path d="M404 334 L452 326 L460 336 L412 344 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M404 334 L452 326 L460 336 L412 344 Z"/><path d="M410 330 C412 340 420 344 428 340 C434 334 430 322 424 318 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M410 330 C412 340 420 344 428 340 C434 334 430 322 424 318"/><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g><g><path class="d" pathLength="1" d="M490 330 V560 M462 577 H518 L508 560 H472 Z"/><path class="d" pathLength="1" d="M440 322 H486 M494 322 H540"/><path class="d" pathLength="1" d="M486 322 A4 4 0 1 0 494 322 A4 4 0 1 0 486 322"/><path class="d" pathLength="1" d="M487 313 A3 3 0 1 0 493 313 A3 3 0 1 0 487 313"/><path class="d" pathLength="1" d="M440 322 L424 372 M440 322 L456 372 M421 372 H459 M421 372 A19 9 0 0 0 459 372"/><path class="d" pathLength="1" d="M540 322 L524 372 M540 322 L556 372 M521 372 H559 M521 372 A19 9 0 0 0 559 372"/><path class="d" pathLength="1" d="M528 371 L552 368 M530 367 L550 364"/></g></svg><svg class="pose" viewBox="180 92 240 492" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L292 318 M300 300 L308 318"/><path class="d" pathLength="1" d="M244 290 C244 300 244 310 244 318 M356 290 C356 300 356 310 356 318"/><path class="d" pathLength="1" d="M237 196 C232 222 230 254 236 284 C244 300 252 314 258 322 M248 234 C248 258 250 272 258 286 L270 318"/><path class="d" pathLength="1" d="M363 196 C368 222 370 254 364 284 C356 300 338 314 326 322 M352 234 C352 258 350 272 344 286 L330 310"/><path d="M200 318 H400 L414 340 V577 H186 V340 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M200 318 H400 M186 340 H414 M200 318 L186 340 M400 318 L414 340 M186 340 V577 M414 340 V577 M198 354 H402"/><path class="d" pathLength="1" d="M262 323 L326 321 L334 336 L256 338 Z"/><path class="d thin" pathLength="1" d="M276 329 L318 328"/><path d="M256 320 C254 330 262 334 272 332 C278 330 276 320 270 317 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M256 320 C254 330 262 334 272 332 C278 330 276 320 270 317 Z"/><path class="d thin" pathLength="1" d="M330 316 C338 292 350 272 368 250 C362 276 350 296 334 316"/><path class="d" pathLength="1" d="M322 330 L366 254"/><path d="M322 312 C314 316 314 328 322 330 C330 330 334 320 330 310 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M322 312 C314 316 314 328 322 330 C330 330 334 320 330 310 Z"/><g transform="rotate(6 300 172)"><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></g></svg></div>
+    <ol class="steps">
+      <li><i class="dot" aria-hidden="true"></i><span class="k num">ЭТАП 1</span><h3>Разбор ситуации</h3><p>Встреча у вас, изучение договоров и переписки.</p><span class="t">1–3 дня</span></li>
+      <li><i class="dot" aria-hidden="true"></i><span class="k num">ЭТАП 2</span><h3>Позиция и смета</h3><p>Письменная оценка рисков, план и стоимость каждого этапа.</p><span class="t">3–5 дней</span></li>
+      <li><i class="dot" aria-hidden="true"></i><span class="k num">ЭТАП 3</span><h3>Претензия или иск</h3><p>Досудебная претензия, при отказе — исковое заявление.</p><span class="t">от 30 дней</span></li>
+      <li><i class="dot" aria-hidden="true"></i><span class="k num">ЭТАП 4</span><h3>Суд</h3><p>Заседания, доказательства, при необходимости — обжалование.</p><span class="t">3–9 месяцев</span></li>
+      <li><i class="dot" aria-hidden="true"></i><span class="k num">ЭТАП 5</span><h3>Исполнение</h3><p>Исполнительный лист, банк, приставы, контроль взыскания.</p><span class="t">1–6 месяцев</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="calc" class="alt" aria-labelledby="h-calc">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Инструмент</p><h2 id="h-calc">Сколько стоит и сколько длится спор</h2></div>
+      <p>Расчёт виден сразу, без регистрации. Госпошлина — по действующей редакции ст. 333.21 НК РФ.</p>
+    </div>
+    <div class="calc" role="group" aria-label="Пример расчёта">
+      <div class="calc-in">
+        <div class="field-s"><span class="lbl">Сумма требований</span><div class="fake-input num"><span>4 800 000</span><span>₽</span></div></div>
+        <div class="field-s"><span class="lbl">Тип спора</span><div class="seg"><span class="on">Взыскание долга</span><span>Договорный</span><span>Корпоративный</span></div></div>
+        <div class="field-s"><span class="lbl">Инстанции</span><div class="seg"><span class="on">Первая</span><span class="on">Апелляция</span><span>Кассация</span></div></div>
+      </div>
+      <div class="calc-out">
+        <div class="out-row"><span>Госпошлина в арбитражный суд</span><b class="num">169 000 ₽</b></div>
+        <div class="out-row"><span>Ориентир по длительности</span><b class="num">5–9 мес.</b></div>
+        <div class="out-row"><span>Работа адвоката, от</span><b class="num">180 000 ₽</b></div>
+        <div class="out-row out-total"><span>Ориентир всего, от</span><b class="num">349 000 ₽</b></div>
+        <div class="gauge"><svg class="mini" viewBox="214 92 294 492" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L282 356 M300 300 L318 356"/><path class="d" pathLength="1" d="M292 315 L300 321 L308 315"/><path class="d" pathLength="1" d="M256 326 L280 327 M320 327 L344 326"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M323 217 L342 215 M326 216.5 L330 208 L334 216"/><path class="d" pathLength="1" d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path class="d" pathLength="1" d="M224 360 H240 M223.5 365 H240.5"/><path class="d" pathLength="1" d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path class="d" pathLength="1" d="M350 234 C352 280 355 320 358 352"/><path class="d" pathLength="1" d="M363 196 C376 214 386 240 392 266 C400 262 410 252 418 240 M352 234 C358 252 366 268 374 282 C388 280 402 266 410 252"/><path class="d" pathLength="1" d="M422 234 L500 140"/><path class="d" pathLength="1" d="M497.5 140 A2.5 2.5 0 1 0 502.5 140 A2.5 2.5 0 1 0 497.5 140"/><path d="M410 252 C404 240 410 230 420 230 C428 232 428 244 418 250 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M410 252 C404 240 410 230 420 230 C428 232 428 244 418 250 Z"/><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></svg><svg class="ruler" viewBox="0 0 270 84" role="img" aria-label="Шкала от нуля до 1 млн ₽, отметка на 349 000 ₽"><line x1="12" y1="52" x2="258" y2="52" stroke="#0D1524" stroke-width="1.5"/><g stroke="#3C4656" stroke-width="1"><line x1="12.0" y1="30" x2="12.0" y2="52"/><line x1="36.6" y1="40" x2="36.6" y2="52"/><line x1="61.2" y1="40" x2="61.2" y2="52"/><line x1="85.8" y1="40" x2="85.8" y2="52"/><line x1="110.4" y1="40" x2="110.4" y2="52"/><line x1="135.0" y1="30" x2="135.0" y2="52"/><line x1="159.6" y1="40" x2="159.6" y2="52"/><line x1="184.2" y1="40" x2="184.2" y2="52"/><line x1="208.8" y1="40" x2="208.8" y2="52"/><line x1="233.4" y1="40" x2="233.4" y2="52"/><line x1="258.0" y1="30" x2="258.0" y2="52"/></g><line x1="12" y1="52" x2="97.9" y2="52" stroke="#0D1524" stroke-width="4"/><path d="M97.9 24 L92 14 H103.8 Z" fill="#0D1524"/><line x1="97.9" y1="24" x2="97.9" y2="52" stroke="#0D1524" stroke-width="1.5"/><g font-family="Commissioner, sans-serif" font-size="13" fill="#3C4656"><text x="12" y="74">0</text><text x="135" y="74" text-anchor="middle">500 тыс.</text><text x="258" y="74" text-anchor="end">1 млн ₽</text></g></svg></div>
+        <p class="note">Пример. Точную смету даём после разбора документов: она зависит от позиции ответчика и объёма доказательств.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cases" aria-labelledby="h-cs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">Разборы дел</p><h2 id="h-cs">Как это выглядит на практике</h2></div>
+      <p>Ниже — условные примеры для макета. На сайте будут реальные дела с номерами из картотеки арбитражных дел, только с согласия доверителя.</p>
+    </div>
+    <div class="cases">
+      <article class="case">
+        <p class="no num">Дело № А40-000000/2025 (пример) · Арбитражный суд г. Москвы</p>
+        <h3>Поставщик оборудования полгода не получал оплату</h3>
+        <dl>
+          <div><dt>Ситуация</dt><dd>Покупатель принял оборудование на 16,8 млн ₽ и перестал отвечать на письма.</dd></div>
+          <div><dt>Что сделали</dt><dd>Претензия, иск с обеспечительной мерой — арест счетов ответчика на сумму долга.</dd></div>
+          <div><dt>Чем закончилось</dt><dd>Иск удовлетворён частично, взыскано 14,2 млн ₽ и неустойка; исполнено через банк за 5 недель.</dd></div>
+        </dl>
+      </article>
+      <article class="case">
+        <p class="no num">Дело № А41-000000/2025 (пример) · Арбитражный суд Московской области</p>
+        <h3>Участник ООО вышел из общества и не получил долю</h3>
+        <dl>
+          <div><dt>Ситуация</dt><dd>Общество занизило стоимость доли, ссылаясь на «упрощённую» отчётность.</dd></div>
+          <div><dt>Что сделали</dt><dd>Судебная оценочная экспертиза чистых активов, расчёт действительной стоимости.</dd></div>
+          <div><dt>Чем закончилось</dt><dd>Суд взыскал стоимость доли по экспертизе; решение устояло в апелляции.</dd></div>
+        </dl>
+      </article>
+    </div>
+    <p class="disclaim">Результат одного дела не означает такого же результата в другом: каждое решение зависит от доказательств и позиции сторон.</p>
+  </div>
+</section>
+
+<section class="alt" aria-labelledby="h-lw">
+  <div class="wrap split">
+    <div class="lawyer-side"><div class="disk" aria-hidden="true"><span>Г</span></div></div>
+    <div class="lawyer">
+      <p class="eyebrow">Адвокат</p>
+      <h3 id="h-lw">Глеб …</h3>
+      <blockquote>«На первой встрече я скажу, где у вас сильная позиция, а где слабая. Обещать исход я не вправе — и не буду».</blockquote>
+      <dl class="meta">
+        <div><dt>Реестровый номер</dt><dd class="num">№ 77/0000</dd></div>
+        <div><dt>Палата</dt><dd>Адвокатская палата г. Москвы</dd></div>
+        <div><dt>Стаж</dt><dd class="num">с 2009 года</dd></div>
+        <div><dt>Практика</dt><dd>Арбитражные и гражданские споры</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="request" aria-labelledby="h-rq">
+  <div class="wrap split">
+    <div class="sec-intro">
+      <p class="eyebrow">Заявка</p>
+      <h2 id="h-rq">Расскажите, что случилось</h2>
+      <p>Адвокат перезвонит в течение рабочего дня и договорится о встрече. Подробности обсудим лично — в форме достаточно пары фраз.</p>
+      <div class="hat" aria-hidden="true"><svg class="mini" viewBox="214 40 190 544" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L282 356 M300 300 L318 356"/><path class="d" pathLength="1" d="M292 315 L300 321 L308 315"/><path class="d" pathLength="1" d="M256 326 L280 327 M320 327 L344 326"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path class="d" pathLength="1" d="M224 360 H240 M223.5 365 H240.5"/><path class="d" pathLength="1" d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path class="d" pathLength="1" d="M350 234 C352 280 355 320 358 352"/><path class="d" pathLength="1" d="M363 196 C378 176 394 144 398 112 L350 82 M356 226 C368 196 380 156 383 122 L344 98"/><g transform="rotate(-9 340 90)"><path class="d" pathLength="1" d="M260 92 Q298 101 336 92 M270 92 C268 72 276 54 298 54 C320 54 328 72 326 92 M271 83 Q298 89 325 83"/></g><path d="M344 98 C336 96 334 84 342 80 C350 78 354 86 352 92 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M344 98 C336 96 334 84 342 80 C350 78 354 86 352 92"/><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></svg></div>
+    </div>
+    <form action="#" onsubmit="return false">
+      <div class="f"><label for="e-name">Имя</label><input id="e-name" name="name" autocomplete="name" required></div>
+      <div class="f"><label for="e-contact">Телефон или email</label><input id="e-contact" name="contact" autocomplete="tel" required></div>
+      <div class="f"><label for="e-msg">Коротко о ситуации</label><textarea id="e-msg" name="message" aria-describedby="e-msg-h"></textarea><p class="hint" id="e-msg-h">Не указывайте здесь сведения о здоровье, паспортные данные и другую чувствительную информацию.</p></div>
+      <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на обработку персональных данных в соответствии с <a href="#policy">политикой обработки ПД</a></span></label>
+      <div><button class="btn btn-plat" type="submit">Отправить заявку</button></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="cols">
+      <div><p><b>Адвокатское бюро «Эквитас»</b></p><p>Адвокатская палата г. Москвы</p><p class="num">ИНН 7700000000 · ОГРН 0000000000000</p></div>
+      <div><p><b>Адрес</b></p><p>г. Москва, ул. Примерная, д. 0, офис 0</p><p>Выезд по Москве и МО</p></div>
+      <div><p><b>Связь</b></p><p class="num">+7 495 000-00-00</p><p>office@example.ru</p></div>
+    </div>
+    <div class="legal"><a href="#policy" id="policy">Политика обработки персональных данных</a><span style="align-self:center">© 2026 Эквитас</span></div>
+  </div>
+</footer>
+</body>
+</html>
