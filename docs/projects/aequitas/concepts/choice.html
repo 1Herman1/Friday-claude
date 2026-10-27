@@ -1,0 +1,753 @@
+<title>Эквитас: доска выбора</title>
+<meta charset="utf-8">
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+:root{
+  --bg:#F5F2EC;
+  --surface:#FFFFFF;
+  --fg:#1F2024;
+  --fg-2:#55575E;
+  --line:#DCD7CC;
+  --line-2:#C9C2B4;
+  --accent:#7A5C2B;
+  --accent-bg:#F1E8D6;
+  --warn:#9B2D20;
+  --focus:#1F2024;
+  --serif:"Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans:"IBM Plex Sans", system-ui, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#141518;--surface:#1C1E22;--fg:#ECE8E0;--fg-2:#AAA59B;--line:#34363C;--line-2:#4A4C53;--accent:#D2B07A;--accent-bg:#2A261F;--warn:#E8968A;--focus:#ECE8E0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141518;--surface:#1C1E22;--fg:#ECE8E0;--fg-2:#AAA59B;--line:#34363C;--line-2:#4A4C53;--accent:#D2B07A;--accent-bg:#2A261F;--warn:#E8968A;--focus:#ECE8E0;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);margin:0;font:400 16px/1.55 var(--sans)}
+.outer{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:40px 72px}
+.in{max-width:1240px;margin:0 auto}
+a{color:var(--accent);text-underline-offset:4px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;line-height:1.12;font-variant-numeric:lining-nums}
+h1{font-size:clamp(34px,5vw,52px)}
+h2{font-size:clamp(28px,3.4vw,38px)}
+h3{font-size:24px;line-height:1.2}
+p{margin:0}
+.eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 10px}
+.lead{max-width:48em;color:var(--fg-2);margin:14px 0 0;font-size:17px}
+.rules{max-width:48em;color:var(--fg-2);margin:10px 0 0;font-size:15px}
+
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:28px 0 0;padding:12px 0;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.bar b{font-weight:600;margin-right:4px}
+.cnt{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--line-2);background:var(--surface);text-decoration:none;color:var(--fg);font-size:15px}
+.cnt span{font-variant-numeric:tabular-nums;font-weight:600}
+.cnt[data-state="ok"]{border-color:var(--accent);background:var(--accent-bg)}
+.cnt[data-state="ok"] span{color:var(--accent)}
+.cnt[data-state="over"]{border-color:var(--warn)}
+.cnt[data-state="over"] span{color:var(--warn)}
+
+.block{padding:56px 0 8px}
+.block-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:8px 24px;border-bottom:2px solid var(--fg);padding-bottom:14px;margin-bottom:24px}
+.block-head p{color:var(--fg-2);font-size:15px;max-width:40em}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(min(100%,272px),1fr))}
+.grid.wide{grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+
+.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);padding:20px;min-width:0;transition:border-color .2s ease, box-shadow .2s ease}
+.card:has(input:checked){border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.card .no{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-2);font-weight:600;margin:0 0 6px;display:flex;gap:10px;flex-wrap:wrap}
+.card .no em{font-style:normal;color:var(--accent)}
+.card h3{margin-bottom:8px}
+.card .mood{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.35;margin-bottom:14px}
+.card dl{margin:0 0 14px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;font-size:14px}
+.card dt{color:var(--fg-2)}
+.card dd{margin:0}
+.card .txt{font-size:15px;margin-bottom:12px}
+.card .meta{font-size:14px;color:var(--fg-2);margin-bottom:6px}
+.card .meta b{color:var(--fg);font-weight:600}
+.pm{list-style:none;margin:0 0 14px;padding:0;font-size:14px;display:grid;gap:4px}
+.pm li{padding-left:22px;position:relative}
+.pm li::before{position:absolute;left:0;top:0;font-weight:600;color:var(--accent)}
+.pm .plus::before{content:"+"}
+.pm .risk::before{content:"!";color:var(--warn)}
+.foot{margin-top:auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding-top:12px;border-top:1px solid var(--line)}
+.foot a{display:inline-flex;align-items:center;min-height:44px;font-weight:600;font-size:15px}
+.foot .nomock{font-size:14px;color:var(--fg-2);min-height:44px;display:inline-flex;align-items:center}
+.links{display:flex;flex-wrap:wrap;gap:0 16px}
+
+.pick{margin-left:auto;position:relative;display:inline-flex;align-items:center;gap:10px;min-height:44px;min-width:132px;padding:0 16px;border:1px solid var(--fg);cursor:pointer;font-weight:600;font-size:15px;user-select:none;background:transparent;color:var(--fg)}
+.pick input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pick .box{width:20px;height:20px;border:1.5px solid currentColor;display:inline-grid;place-items:center;flex:none}
+.pick .box svg{width:14px;height:14px;opacity:0}
+.pick:has(input:checked){background:var(--fg);color:var(--bg)}
+.pick:has(input:checked) .box svg{opacity:1}
+.pick:has(input:focus-visible){outline:2px solid var(--focus);outline-offset:3px}
+.pick .on{display:none}
+.pick:has(input:checked) .on{display:inline}
+.pick:has(input:checked) .off{display:none}
+
+.pv{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--line);margin:-20px -20px 18px;border-bottom:1px solid var(--line)}
+.pv iframe{position:absolute;left:0;top:0;width:1280px;height:800px;border:0;transform-origin:0 0;transform:scale(var(--k,.28));pointer-events:none;background:#fff}
+.sw{display:flex;flex-wrap:wrap;gap:6px}
+.sw i{display:inline-block;width:26px;height:26px;border:1px solid var(--line-2)}
+
+.art{position:relative;height:224px;display:grid;place-items:end center;padding-bottom:14px;margin:0 0 14px;color:var(--fg);background:var(--bg);border:1px solid var(--line)}
+.art svg{height:176px;width:auto;max-width:100%;overflow:visible}
+.art svg *{vector-effect:non-scaling-stroke}
+.tag-rec{position:absolute;left:10px;top:10px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--accent);background:var(--surface);border:1px solid var(--accent);padding:2px 8px}
+
+.plates{display:grid;gap:8px;margin:0 0 14px}
+.plate{display:flex;align-items:center;gap:14px;min-height:108px;padding:14px 16px;border:1px solid var(--line)}
+.plate.lt{background:#F3EEE3;color:#1D2333;--pbg:#F3EEE3;--pac:#8A6A35;--psub:#4A4F5C}
+.plate.dk{background:#141518;color:#ECE6DA;--pbg:#141518;--pac:#C9A66B;--psub:#B9B2A4}
+.plate .mk{width:60px;height:60px;flex:none;overflow:visible}
+.plate .mk.big{width:68px;height:68px}
+.plate .mk.word{width:100%;max-width:236px;height:auto;flex:1 1 auto}
+.wm{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.wm b{font-family:var(--serif);font-weight:600;font-size:25px;letter-spacing:.01em}
+.wm small{white-space:nowrap;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;margin-top:5px;color:var(--psub);font-weight:500}
+.sketch{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-2);font-weight:600}
+
+.choice{margin-top:64px;border-top:2px solid var(--fg);padding-top:28px}
+.choice .cols{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));margin:20px 0 24px}
+.choice h3{font-size:22px;margin-bottom:8px;display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.choice h3 span{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--fg-2);font-variant-numeric:tabular-nums}
+.choice ol{margin:0;padding-left:22px;font-size:15px;display:grid;gap:4px}
+.choice .empty{color:var(--fg-2);font-size:15px}
+.hint{font-size:15px;color:var(--fg-2);margin-bottom:12px}
+.hint.ok{color:var(--accent);font-weight:600}
+.copyrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:12px}
+.btn{min-height:48px;padding:0 22px;border:0;background:var(--fg);color:var(--bg);font:600 16px/1 var(--sans);cursor:pointer}
+.btn:hover{opacity:.9}
+.status{font-size:15px;color:var(--fg-2);min-height:1.5em}
+textarea{width:100%;min-height:96px;resize:vertical;padding:12px 14px;border:1px solid var(--line-2);background:var(--surface);color:var(--fg);font:400 15px/1.5 var(--sans)}
+label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (max-width:520px){
+  .card{padding:16px}
+  .pv{margin:-16px -16px 16px}
+  .bar{position:static}
+  .bar b{width:100%}
+  .cnt{flex:1 1 auto;justify-content:center;padding:0 8px;font-size:14px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="lg1" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <circle cx="32" cy="32" r="25.5" fill="none" stroke="currentColor" stroke-width=".7"/>
+    <text x="32" y="44.2" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="35" fill="currentColor">Э</text>
+  </symbol>
+  <symbol id="lg2" viewBox="0 0 64 64">
+    <text x="32" y="48" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="500" font-size="54" fill="currentColor">Æ</text>
+    <path d="M10 56 H54" stroke="var(--pac)" stroke-width="1"/>
+  </symbol>
+  <symbol id="lg3" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M32 10 V20"/>
+      <path d="M9 23 H55"/>
+      <circle cx="32" cy="23" r="3.2" fill="var(--pbg)"/>
+      <path d="M32 26.5 V51"/>
+      <path d="M24 51 H40 L42 56 H22 Z"/>
+      <path d="M13 23 L7 38 M13 23 L19 38 M5 38 H21 A8 5 0 0 1 5 38 Z"/>
+      <path d="M51 23 L45 38 M51 23 L57 38 M43 38 H59 A8 5 0 0 1 43 38 Z"/>
+    </g>
+    <path d="M28.5 10 H35.5" stroke="var(--pac)" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="lg4" viewBox="0 0 64 64">
+    <rect x="6" y="6" width="52" height="52" fill="currentColor"/>
+    <text x="32" y="47" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="44" fill="var(--pbg)">§</text>
+  </symbol>
+  <symbol id="lg5" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="32" r="29.5" stroke-width="1.6"/>
+      <path d="M32 47 V20" stroke-width="1.6"/>
+      <circle cx="32" cy="16.5" r="2.4" stroke-width="1.4"/>
+      <path d="M17 23.5 H47" stroke-width="1.6"/>
+      <path d="M19.5 24 L15 33.5 M19.5 24 L24 33.5 M12.5 33.5 H26.5 A7 4.2 0 0 1 12.5 33.5" stroke-width="1.3"/>
+      <path d="M44.5 24 L40 33.5 M44.5 24 L49 33.5 M37.5 33.5 H51.5 A7 4.2 0 0 1 37.5 33.5" stroke-width="1.3"/>
+      <path d="M13 53 C19 48.5 24.5 47 28.5 46.5 L32 51.5 L35.5 46.5 C39.5 47 45 48.5 51 53" stroke-width="1.5"/>
+      <path d="M32 51.5 L30.6 55 L32 58 L33.4 55 Z" stroke="var(--pac)" stroke-width="1.2"/>
+    </g>
+  </symbol>
+  <symbol id="lg6" viewBox="0 0 236 76">
+    <g fill="none" stroke="var(--pac)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M66 12 H100"/>
+      <path d="M83 12 L79 19.5 H87 Z"/>
+      <circle cx="66" cy="12" r="1.8" fill="var(--pac)"/>
+      <circle cx="100" cy="12" r="1.8" fill="var(--pac)"/>
+    </g>
+    <text y="46" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="31" fill="currentColor"><tspan x="20">Э</tspan><tspan x="52">К</tspan><tspan x="83">В</tspan><tspan x="114">И</tspan><tspan x="146">Т</tspan><tspan x="177">А</tspan><tspan x="208">С</tspan></text>
+    <path d="M8 56 H228" stroke="currentColor" stroke-width=".7" opacity=".55"/>
+    <text x="118" y="71" text-anchor="middle" font-family="IBM Plex Sans, system-ui, sans-serif" font-weight="500" font-size="9" letter-spacing="3.6" fill="currentColor">АДВОКАТСКОЕ БЮРО</text>
+  </symbol>
+  <symbol id="lg7" viewBox="0 0 64 64">
+    <circle cx="20" cy="33" r="12" fill="currentColor"/>
+    <rect x="45" y="20" width="9" height="25" fill="currentColor"/>
+    <path d="M5 46 H59" stroke="currentColor" stroke-width="2.4"/>
+    <path d="M32 47.5 L27 57 H37 Z" fill="var(--pac)"/>
+  </symbol>
+  <symbol id="lg8" viewBox="0 0 100 100">
+    <defs><path id="sealpath" d="M50 50 m-36.5 0 a36.5 36.5 0 1 1 73 0 a36.5 36.5 0 1 1 -73 0"/></defs>
+    <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="2"/>
+    <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width=".6"/>
+    <circle cx="50" cy="50" r="31" fill="none" stroke="currentColor" stroke-width="1"/>
+    <text font-family="IBM Plex Sans, system-ui, sans-serif" font-weight="600" font-size="7.6" letter-spacing="1.05" fill="currentColor"><textPath href="#sealpath" startOffset="0" textLength="224" lengthAdjust="spacing">АДВОКАТСКОЕ БЮРО · ЭКВИТАС · МОСКВА ·</textPath></text>
+    <text x="50" y="61" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="32" fill="currentColor">Э</text>
+    <path d="M38 67.5 H62" stroke="var(--pac)" stroke-width="1"/>
+  </symbol>
+  <symbol id="ck" viewBox="0 0 14 14"><path d="M2 7.5 L5.5 11 L12 3.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+
+<div class="outer">
+<div class="in">
+
+<header>
+  <p class="eyebrow">Эквитас · Адвокатское бюро · Aequitas</p>
+  <h1>Доска выбора: стиль, персонаж, логотип</h1>
+  <p class="lead">Отметьте по три варианта в каждом блоке — так мы сузим поле до направлений, которые стоит довести. Порядок не важен, отметки сохраняются в этом браузере. Внизу страницы — готовый текст выбора, его можно скопировать и отправить.</p>
+  <p class="rules">Общее правило для всех вариантов — солидность и этика адвоката: без «лучших», обещаний исхода, Фемиды, молотка и мультяшности. Логотипы ниже — эскизы направления, а не финальная отрисовка.</p>
+</header>
+
+<nav class="bar" aria-label="Счётчик выбора">
+  <b>Выбрано:</b>
+  <a class="cnt" href="#styles" data-count="style">Стиль <span>0 из 3</span></a>
+  <a class="cnt" href="#chars" data-count="char">Персонаж <span>0 из 3</span></a>
+  <a class="cnt" href="#logos" data-count="logo">Логотип <span>0 из 3</span></a>
+  <a class="cnt" href="#choice">Ваш выбор ↓</a>
+</nav>
+
+<!-- ============ STYLES ============ -->
+<section class="block" id="styles" aria-labelledby="h-styles">
+  <div class="block-head">
+    <h2 id="h-styles">1. Стиль</h2>
+    <p>Пять макетов главной с одинаковыми текстами — отличается только подача. В превью — первый экран, полный макет открывается по ссылке. С — солидность, Н — новизна для ниши (оценки Гермеса, 1–5).</p>
+  </div>
+  <div class="grid wide">
+
+    <article class="card">
+      <div class="pv"><iframe src="a.html" title="Превью стиля A «Вечерний кабинет»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <p class="no">Стиль A <em>тёмный</em></p>
+      <h3>«Вечерний кабинет»</h3>
+      <p class="mood">Кабинет после восьми вечера: тихо, лампа, латунный прибор на столе.</p>
+      <dl>
+        <dt>Палитра</dt><dd><span class="sw"><i style="background:#141518" title="графит"></i><i style="background:#22252A" title="сукно"></i><i style="background:#C9A66B" title="латунь"></i><i style="background:#ECE6DA" title="слоновая кость"></i></span></dd>
+        <dt>Шрифты</dt><dd>Cormorant Garamond + IBM Plex Sans</dd>
+        <dt>Идея</dt><dd>«Тёмная материя» · С 5 · Н 3</dd>
+      </dl>
+      <ul class="pm">
+        <li class="plus">Прямо попадает в бриф: тёмный, мужской, латунь как инструмент.</li>
+        <li class="risk">Без прибора-весов скатывается в «типовой тёмный люкс».</li>
+      </ul>
+      <div class="foot">
+        <a href="a.html">Открыть макет</a>
+        <label class="pick"><input type="checkbox" data-group="style" value="A" data-label="A «Вечерний кабинет»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> стиль A «Вечерний кабинет»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="pv"><iframe src="b.html" title="Превью стиля B «Бумага и чернила»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <p class="no">Стиль B <em>светлый</em></p>
+      <h3>«Бумага и чернила»</h3>
+      <p class="mood">Правовая позиция на бумаге: параграфы, справка-расчёт, печать и подпись.</p>
+      <dl>
+        <dt>Палитра</dt><dd><span class="sw"><i style="background:#F3EEE3" title="бумага"></i><i style="background:#1D2333" title="чернила"></i><i style="background:#9B2D20" title="киноварь печати"></i><i style="background:#CBC0AA" title="линовка"></i></span></dd>
+        <dt>Шрифты</dt><dd>Literata + Golos Text</dd>
+        <dt>Идея</dt><dd>«Документ как интерфейс» · С 4 · Н 5</dd>
+      </dl>
+      <ul class="pm">
+        <li class="plus">Самый новый ход для ниши, лучше всех продаёт калькуляторы.</li>
+        <li class="risk">Светлый вместо тёмного — владелец может счесть недостаточно «мужским».</li>
+      </ul>
+      <div class="foot">
+        <a href="b.html">Открыть макет</a>
+        <label class="pick"><input type="checkbox" data-group="style" value="B" data-label="B «Бумага и чернила»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> стиль B «Бумага и чернила»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="pv"><iframe src="c.html" title="Превью стиля C «Камень и малахит»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <p class="no">Стиль C <em>тёмный с камнем</em></p>
+      <h3>«Камень и малахит»</h3>
+      <p class="mood">Римское право: колонна, высеченная надпись, латинские максимы.</p>
+      <dl>
+        <dt>Палитра</dt><dd><span class="sw"><i style="background:#0F231C" title="малахит"></i><i style="background:#E2D7C5" title="травертин"></i><i style="background:#D48C64" title="терракота"></i><i style="background:#14261F" title="базальт"></i></span></dd>
+        <dt>Шрифты</dt><dd>Forum + Manrope</dd>
+        <dt>Идея</dt><dd>«Типографика-монумент» С 5 · Н 4 + «Архитектура» С 5 · Н 2</dd>
+      </dl>
+      <ul class="pm">
+        <li class="plus">Вес институции, минимум картинок — дёшево в производстве.</li>
+        <li class="risk">Латынь и колонна легко становятся пафосом «юрфирмы из 2005-го».</li>
+      </ul>
+      <div class="foot">
+        <a href="c.html">Открыть макет</a>
+        <label class="pick"><input type="checkbox" data-group="style" value="C" data-label="C «Камень и малахит»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> стиль C «Камень и малахит»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="pv"><iframe src="d.html" title="Превью стиля D «Монумент»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <p class="no">Стиль D <em>светлый, типографический</em></p>
+      <h3>«Монумент»</h3>
+      <p class="mood">Холодный камень, линейка сетки и крупная антиква вместо картинок.</p>
+      <dl>
+        <dt>Палитра</dt><dd><span class="sw"><i style="background:#EDEDEA" title="холодный камень"></i><i style="background:#15171A" title="графитовые чернила"></i><i style="background:#6B1E25" title="оксблад"></i><i style="background:#C4C4BE" title="линейка сетки"></i></span></dd>
+        <dt>Шрифты</dt><dd>Noto Serif Display + Onest</dd>
+        <dt>Идея</dt><dd>«Типографика-монумент», крупный кегль · С 5 · Н 4</dd>
+      </dl>
+      <ul class="pm">
+        <li class="plus">Держится на шрифте и сетке — самая простая вёрстка.</li>
+        <li class="risk">Холодность: может показаться отстранённым собственнику с личной бедой.</li>
+      </ul>
+      <div class="foot">
+        <a href="d.html">Открыть макет</a>
+        <label class="pick"><input type="checkbox" data-group="style" value="D" data-label="D «Монумент»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> стиль D «Монумент»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="pv"><iframe src="e.html" title="Превью стиля E «Равновесие»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <p class="no">Стиль E <em>тёмный, геометрический</em></p>
+      <h3>«Равновесие»</h3>
+      <p class="mood">Чернильный синий и платина: две неравные массы приходят в баланс.</p>
+      <dl>
+        <dt>Палитра</dt><dd><span class="sw"><i style="background:#0D1524" title="чернильный синий"></i><i style="background:#18243A" title="сине-серый"></i><i style="background:#D5DBE3" title="платина"></i><i style="background:#9AA5B5" title="серебро"></i></span></dd>
+        <dt>Шрифты</dt><dd>Jost + Commissioner</dd>
+        <dt>Идея</dt><dd>«Равновесие в движении» · С 3 · Н 5</dd>
+      </dl>
+      <ul class="pm">
+        <li class="plus">Современно и сдержанно, язык частного банкинга.</li>
+        <li class="risk">Похож на банк или консалтинг больше, чем на адвоката.</li>
+      </ul>
+      <div class="foot">
+        <a href="e.html">Открыть макет</a>
+        <label class="pick"><input type="checkbox" data-group="style" value="E" data-label="E «Равновесие»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> стиль E «Равновесие»</span></label>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ CHARACTERS ============ -->
+<section class="block" id="chars" aria-labelledby="h-chars">
+  <div class="block-head">
+    <h2 id="h-chars">2. Персонаж / герой</h2>
+    <p>Предмет или фигура, которая живёт на всём сайте: первый экран, этапы, калькулятор, заявка. Рисунки — схема силуэта в одну линию; финал рисует иллюстратор.</p>
+  </div>
+  <div class="grid">
+
+    <article class="card">
+      <div class="art"><span class="tag-rec">Рекомендованный герой</span><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Весы-прибор: стойка, коромысло, две чаши и шкала">
+        <path d="M61.6 33.6 A26 26 0 0 1 98.4 33.6" stroke-width="1"/>
+        <path d="M80 26 V21 M89.9 28 L91.9 23.4 M70.1 28 L68.1 23.4 M98.4 33.6 L101.9 30.1 M61.6 33.6 L58.1 30.1" stroke-width="1"/>
+        <path d="M80 48 V24"/>
+        <path d="M30 52 H130"/>
+        <circle cx="80" cy="52" r="4"/>
+        <path d="M80 56 V128"/>
+        <path d="M66 128 H94 L100 140 H60 Z"/>
+        <path d="M44 146 H116" stroke-width="1"/>
+        <path d="M34 52 L22 92 M34 52 L46 92 M19 92 H49 A15 7 0 0 1 19 92 Z"/>
+        <path d="M126 52 L114 92 M126 52 L138 92 M111 92 H141 A15 7 0 0 1 111 92 Z"/>
+      </svg></div>
+      <p class="no">Вариант 1 <em>объект</em></p>
+      <h3>Весы-прибор</h3>
+      <p class="txt">Не Фемида, а точный инструмент. Коромысло один раз приходит в равновесие в первом экране, гирька отмечает направления, стрелка на шкале показывает итог расчёта.</p>
+      <p class="meta"><b>Сочетается:</b> A, E (платиной), D</p>
+      <div class="foot">
+        <span class="links"><a href="a.html">Макет A</a></span>
+        <label class="pick"><input type="checkbox" data-group="char" value="1" data-label="Весы-прибор"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> персонаж «Весы-прибор»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="art"><span class="tag-rec">Рекомендован Гермесом</span><svg viewBox="205 96 210 490" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Поверенный: фигура в костюме-тройке одной линией, вместо головы — весы"><g><path d="M242 352 Q262 356 282 356"/><path d="M358 352 Q338 356 318 356"/><path d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path d="M276 384 L277 556 M324 384 L323 556"/><path d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path d="M289 179 L300 232 L311 179"/><path d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path d="M300 300 L282 356 M300 300 L318 356"/><path d="M292 315 L300 321 L308 315"/><path d="M256 326 L280 327 M320 327 L344 326"/><path d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path d="M323 217 L342 215 M326 216.5 L330 208 L334 216"/><path d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path d="M224 360 H240 M223.5 365 H240.5"/><path d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path d="M363 196 C367 226 369 256 369 286 C369 312 373 336 376 360 M350 234 C351 262 352 290 354 312 C355 330 358 346 360 360"/><path d="M360 360 H376 M359.5 365 H376.5"/><path d="M340 379 L398 382 L394 466 L336 463 Z" fill="var(--surface)" stroke="none"/><path d="M340 379 L398 382 L394 466 L336 463 Z"/><path d="M339 391 L397 394"/><path d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365" fill="var(--surface)" stroke="none"/><path d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365"/><path d="M300 172 V124 M300 116 V110"/><path d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path d="M273 120 H296 M304 120 H327"/><path d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></svg></div>
+      <p class="no">Вариант 2 <em>фигура</em></p>
+      <h3>«Поверенный»</h3>
+      <p class="txt">Джентльмен одной линией, лица нет — голова-весы. Стоит у окна с силуэтом Москвы, линия дорисовывается при входе; ниже — три позы над этапами, у заявки снимает шляпу.</p>
+      <p class="meta"><b>Сочетается:</b> A, E</p>
+      <div class="foot">
+        <span class="links"><a href="a-char.html">Макет A</a><a href="e-char.html">Макет E</a></span>
+        <label class="pick"><input type="checkbox" data-group="char" value="2" data-label="«Поверенный»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> персонаж «Поверенный»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="art"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Литера Æ: лигатура антиквой, вершина A — голова, перекладина — бабочка">
+        <circle cx="72" cy="18" r="6.5"/>
+        <path d="M30 138 L72 30"/>
+        <path d="M72 30 H128 V42" />
+        <path d="M84 30 V138"/>
+        <path d="M84 84 H118 M118 78 V90"/>
+        <path d="M84 138 H132 V124"/>
+        <path d="M20 138 H42 M76 138 H92" />
+        <path d="M49 100 H84" stroke-width="1"/>
+        <path d="M58 95 L66 100 L58 105 Z M74 95 L66 100 L74 105 Z"/>
+        <path d="M14 150 H146" stroke-width="1"/>
+      </svg></div>
+      <p class="no">Вариант 3 <em>фигура из знака</em></p>
+      <h3>«Литера Æ»</h3>
+      <p class="txt">Фигура из лигатуры: вершина «A» — голова, перекладина — бабочка, «E» — кабинет за спиной. В первом экране перекладина коротко кивает, в «Как мы работаем» три шага выходят из горизонталей «E».</p>
+      <p class="meta"><b>Сочетается:</b> A, C, D</p>
+      <div class="foot">
+        <span class="nomock">Макета нет</span>
+        <label class="pick"><input type="checkbox" data-group="char" value="3" data-label="«Литера Æ»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> персонаж «Литера Æ»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="art"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Печать и перо: латунная печать с оттиском и перьевая ручка с росчерком">
+        <circle cx="54" cy="34" r="10"/>
+        <path d="M49 43.5 C49 60 44 74 42 90 M59 43.5 C59 60 64 74 66 90"/>
+        <path d="M36 90 H72 V102 H36 Z"/>
+        <path d="M40 96 H68" stroke-width=".8"/>
+        <ellipse cx="54" cy="128" rx="28" ry="9"/>
+        <ellipse cx="54" cy="128" rx="20" ry="6" stroke-width=".8"/>
+        <path d="M144.5 28.1 L115.1 91.5 M135.5 23.9 L106.1 87.3 M135.5 23.9 L144.5 28.1"/>
+        <path d="M114.5 69.2 L123.5 73.4" stroke-width="1"/>
+        <path d="M115.1 91.5 L101.4 109.4 L106.1 87.3"/>
+        <path d="M110.6 89.4 L104.6 102.5" stroke-width=".8"/>
+        <path d="M101 112 C106 122 112 104 120 113 S134 121 148 108" stroke-width="1.2"/>
+        <path d="M14 146 H146" stroke-width="1"/>
+      </svg></div>
+      <p class="no">Вариант 4 <em>объект</em></p>
+      <h3>Печать и перо</h3>
+      <p class="txt">Появляются там, где что-то скрепляется: перо выводит подпись под заголовком, оттиск печати отмечает завершённое дело и отправленную заявку.</p>
+      <p class="meta"><b>Сочетается:</b> B, A</p>
+      <div class="foot">
+        <span class="links"><a href="b.html">Макет B</a></span>
+        <label class="pick"><input type="checkbox" data-group="char" value="4" data-label="Печать и перо"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> персонаж «Печать и перо»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="art"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Песочные часы в металлической рамке">
+        <path d="M46 22 H114 M50 28 H110 M46 138 H114 M50 132 H110"/>
+        <path d="M54 28 V132 M106 28 V132" stroke-width="1"/>
+        <path d="M62 30 C62 62 76 72 78 80 C76 88 62 98 62 130"/>
+        <path d="M98 30 C98 62 84 72 82 80 C84 88 98 98 98 130"/>
+        <path d="M66 52 Q80 58 94 52" stroke-width="1"/>
+        <path d="M80 82 V118" stroke-width="1" stroke-dasharray="2 3"/>
+        <path d="M65 128 Q80 106 95 128" stroke-width="1"/>
+        <path d="M30 148 H130" stroke-width="1"/>
+      </svg></div>
+      <p class="no">Вариант 5 <em>только инструменты</em></p>
+      <h3>Песочные часы</h3>
+      <p class="txt">Персонаж калькуляторов: песок досыпается до даты срока давности, показывает длительность этапов. В первый экран не ставим — «время уходит» читается как запугивание.</p>
+      <p class="meta"><b>Сочетается:</b> с любым стилем как второй герой</p>
+      <div class="foot">
+        <span class="nomock">Макета нет</span>
+        <label class="pick"><input type="checkbox" data-group="char" value="5" data-label="Песочные часы (инструменты)"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> персонаж «Песочные часы»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="art"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Знак параграфа во всю высоту, через него проходит отвес">
+        <text x="80" y="112" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="500" font-size="118" fill="currentColor" stroke="none">§</text>
+        <path d="M80 6 V138" stroke-width="1"/>
+        <path d="M80 138 L74.5 142 L80 156 L85.5 142 Z"/>
+        <path d="M58 6 H102" stroke-width="1"/>
+      </svg></div>
+      <p class="no">Вариант 6 <em>знак, из стиля D</em></p>
+      <h3>Знак § как герой</h3>
+      <p class="txt">Иллюстраций нет — героем работает гигантский параграф. Отвес один раз опускается сверху вниз и задаёт ось страницы; дальше § нумерует разделы.</p>
+      <p class="meta"><b>Сочетается:</b> D, B</p>
+      <div class="foot">
+        <span class="links"><a href="d.html">Макет D</a></span>
+        <label class="pick"><input type="checkbox" data-group="char" value="6" data-label="Знак §"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> персонаж «Знак параграфа»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="art"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Колонна с антаблементом и надписью AEQVITAS">
+        <path d="M14 14 H146 M20 20 H140"/>
+        <path d="M24 20 V46 H136 V20"/>
+        <text x="80" y="38.5" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="15" letter-spacing="3.2" fill="currentColor" stroke="none">AEQVITAS</text>
+        <path d="M30 46 V52 H130 V46"/>
+        <path d="M50 58 H110 M50 52 V58 M110 52 V58"/>
+        <path d="M54 58 Q58 68 64 68 H96 Q102 68 106 58"/>
+        <path d="M62 68 V136 M98 68 V136"/>
+        <path d="M71 72 V132 M80 72 V132 M89 72 V132" stroke-width=".8"/>
+        <path d="M56 136 H104 V142 H56 Z M50 142 H110 V148 H50 Z"/>
+      </svg></div>
+      <p class="no">Вариант 7 <em>архитектура, из стиля C</em></p>
+      <h3>Колонна AEQVITAS</h3>
+      <p class="txt">Одна колонна с антаблементом вместо колоннады-клише. Надпись проявляется, как высеченная; над разделами — латинские максимы с переводом.</p>
+      <p class="meta"><b>Сочетается:</b> C</p>
+      <div class="foot">
+        <span class="links"><a href="c.html">Макет C</a></span>
+        <label class="pick"><input type="checkbox" data-group="char" value="7" data-label="Колонна AEQVITAS"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> персонаж «Колонна AEQVITAS»</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="art"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Две массы, диск и брусок, на рычаге со смещённой опорой">
+        <circle cx="53" cy="68" r="23.5"/>
+        <path d="M122 55 H137 V92 H122 Z"/>
+        <path d="M14 92 H146"/>
+        <circle cx="80" cy="92" r="3"/>
+        <path d="M80 95 V124"/>
+        <path d="M74 124 H86 L89 131 H71 Z"/>
+        <path d="M40 132 H120" stroke-width="1"/>
+        <path d="M53 100 H129.5 M53 97 V103 M80 97 V103 M129.5 97 V103" stroke-width=".8"/>
+      </svg></div>
+      <p class="no">Вариант 8 <em>геометрия, из стиля E</em></p>
+      <h3>Две массы на оси</h3>
+      <p class="txt">Диск и брусок на тонком рычаге: рычаг один раз плавно выходит в горизонталь. Разделы держат ту же идею — несимметричная сетка 5 к 7.</p>
+      <p class="meta"><b>Сочетается:</b> E, D</p>
+      <div class="foot">
+        <span class="links"><a href="e.html">Макет E</a></span>
+        <label class="pick"><input type="checkbox" data-group="char" value="8" data-label="Две массы на оси"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> персонаж «Две массы на оси»</span></label>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ LOGOS ============ -->
+<section class="block" id="logos" aria-labelledby="h-logos">
+  <div class="block-head">
+    <h2 id="h-logos">3. Логотип</h2>
+    <p>Восемь направлений знака, каждое на светлом и тёмном фоне. Это эскизы: показывают идею и пропорции, финальную отрисовку и кернинг делает дизайнер после выбора.</p>
+  </div>
+  <div class="grid">
+
+    <article class="card">
+      <div class="plates">
+        <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+        <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+      </div>
+      <p class="no">Логотип 1 <span class="sketch">эскиз</span></p>
+      <h3>Монограмма «Э» в медальоне</h3>
+      <p class="meta"><b>Стиль:</b> A, B, C · <b>персонаж:</b> весы-прибор, печать</p>
+      <ul class="pm">
+        <li class="plus">Читается по-русски сразу, классика без риска.</li>
+        <li class="risk">Медальон с буквой — частый ход, нужна своя прорисовка «Э».</li>
+      </ul>
+      <div class="foot"><span></span>
+        <label class="pick"><input type="checkbox" data-group="logo" value="1" data-label="1 Монограмма «Э»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> логотип 1, монограмма Э</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="plates">
+        <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+        <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+      </div>
+      <p class="no">Логотип 2 <span class="sketch">эскиз</span></p>
+      <h3>Лигатура «Æ»</h3>
+      <p class="meta"><b>Стиль:</b> A, C, D · <b>персонаж:</b> «Литера Æ»</p>
+      <ul class="pm">
+        <li class="plus">Уникальна и связывает с латинским именем Aequitas.</li>
+        <li class="risk">Латиница: русскому клиенту «Æ» нужно пояснять.</li>
+      </ul>
+      <div class="foot"><span></span>
+        <label class="pick"><input type="checkbox" data-group="logo" value="2" data-label="2 Лигатура «Æ»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> логотип 2, лигатура Æ</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="plates">
+        <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+        <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+      </div>
+      <p class="no">Логотип 3 <span class="sketch">эскиз</span></p>
+      <h3>Весы-прибор</h3>
+      <p class="meta"><b>Стиль:</b> A, E · <b>персонаж:</b> весы-прибор, «Поверенный»</p>
+      <ul class="pm">
+        <li class="plus">Смысл «мера» без Фемиды, прямо связан с героем.</li>
+        <li class="risk">Весы — частый знак юристов, отличаться придётся геометрией.</li>
+      </ul>
+      <div class="foot"><span></span>
+        <label class="pick"><input type="checkbox" data-group="logo" value="3" data-label="3 Весы-прибор"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> логотип 3, весы-прибор</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="plates">
+        <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+        <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+      </div>
+      <p class="no">Логотип 4 <span class="sketch">эскиз</span></p>
+      <h3>Знак § в плашке</h3>
+      <p class="meta"><b>Стиль:</b> D, B · <b>персонаж:</b> знак §</p>
+      <ul class="pm">
+        <li class="plus">Мгновенно «право», держится в иконке сайта и аватарке.</li>
+        <li class="risk">Общий символ — слабо защищается как товарный знак.</li>
+      </ul>
+      <div class="foot"><span></span>
+        <label class="pick"><input type="checkbox" data-group="logo" value="4" data-label="4 Знак § в плашке"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> логотип 4, знак параграфа</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="plates">
+        <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+        <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+      </div>
+      <p class="no">Логотип 5 <span class="sketch">эскиз</span></p>
+      <h3>Голова «Поверенного»</h3>
+      <p class="meta"><b>Стиль:</b> A, E · <b>персонаж:</b> «Поверенный»</p>
+      <ul class="pm">
+        <li class="plus">Знак и есть персонаж — приём pgplaw без мультяшности.</li>
+        <li class="risk">В мелком размере детали сливаются, нужна упрощённая версия.</li>
+      </ul>
+      <div class="foot"><span></span>
+        <label class="pick"><input type="checkbox" data-group="logo" value="5" data-label="5 Голова «Поверенного»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> логотип 5, голова Поверенного</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="plates">
+        <div class="plate lt"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div>
+        <div class="plate dk"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div>
+      </div>
+      <p class="no">Логотип 6 <span class="sketch">эскиз</span></p>
+      <h3>Словесный знак «ЭКВИТАС»</h3>
+      <p class="meta"><b>Стиль:</b> любой, сильнее всего C, D · <b>персонаж:</b> любой</p>
+      <ul class="pm">
+        <li class="plus">Самый солидный и читаемый; коромысло над «В» — тихий намёк.</li>
+        <li class="risk">Без отдельного знака сложнее с иконкой сайта и аватаркой.</li>
+      </ul>
+      <div class="foot"><span></span>
+        <label class="pick"><input type="checkbox" data-group="logo" value="6" data-label="6 Словесный знак «ЭКВИТАС»"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> логотип 6, словесный знак</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="plates">
+        <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+        <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+      </div>
+      <p class="no">Логотип 7 <span class="sketch">эскиз</span></p>
+      <h3>Две массы на оси</h3>
+      <p class="meta"><b>Стиль:</b> E · <b>персонаж:</b> две массы</p>
+      <ul class="pm">
+        <li class="plus">Современно, абстрактно, хорошо запоминается.</li>
+        <li class="risk">Не сразу читается как право — ближе к банку и консалтингу.</li>
+      </ul>
+      <div class="foot"><span></span>
+        <label class="pick"><input type="checkbox" data-group="logo" value="7" data-label="7 Две массы на оси"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> логотип 7, две массы</span></label>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="plates">
+        <div class="plate lt"><svg class="mk big" aria-hidden="true"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+        <div class="plate dk"><svg class="mk big" aria-hidden="true"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
+      </div>
+      <p class="no">Логотип 8 <span class="sketch">эскиз</span></p>
+      <h3>Печать-оттиск</h3>
+      <p class="meta"><b>Стиль:</b> B, C · <b>персонаж:</b> печать и перо</p>
+      <ul class="pm">
+        <li class="plus">«Скреплено» — документальность и порядок.</li>
+        <li class="risk">Круговая надпись не читается мелко, для иконки — только «Э».</li>
+      </ul>
+      <div class="foot"><span></span>
+        <label class="pick"><input type="checkbox" data-group="logo" value="8" data-label="8 Печать-оттиск"><span class="box"><svg aria-hidden="true"><use href="#ck"/></svg></span><span class="off">Выбрать</span><span class="on">Выбрано</span><span class="vh"> логотип 8, печать-оттиск</span></label>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ CHOICE ============ -->
+<section class="choice" id="choice" aria-labelledby="h-choice">
+  <p class="eyebrow">Итог</p>
+  <h2 id="h-choice">Ваш выбор</h2>
+  <div class="cols">
+    <div><h3>Стили <span data-n="style">0 из 3</span></h3><ol data-list="style"></ol><p class="empty" data-empty="style">Пока ничего не отмечено.</p></div>
+    <div><h3>Персонажи <span data-n="char">0 из 3</span></h3><ol data-list="char"></ol><p class="empty" data-empty="char">Пока ничего не отмечено.</p></div>
+    <div><h3>Логотипы <span data-n="logo">0 из 3</span></h3><ol data-list="logo"></ol><p class="empty" data-empty="logo">Пока ничего не отмечено.</p></div>
+  </div>
+  <p class="hint" id="hint" aria-live="polite">Отметьте ровно три в каждом блоке.</p>
+  <div class="copyrow">
+    <button type="button" class="btn" id="copy">Скопировать выбор</button>
+    <span class="status" id="status" role="status" aria-live="polite"></span>
+  </div>
+  <label class="ta" for="out">Текст для отправки</label>
+  <textarea id="out" readonly></textarea>
+</section>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var KEY = 'aequitas-choice-v1';
+  var GROUPS = {style:'Стили', char:'Персонажи', logo:'Логотипы'};
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('input[data-group]'));
+  var out = document.getElementById('out');
+  var hint = document.getElementById('hint');
+  var status = document.getElementById('status');
+
+  function id(b){ return b.dataset.group + ':' + b.value; }
+
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+    if (Array.isArray(saved)) boxes.forEach(function(b){ b.checked = saved.indexOf(id(b)) !== -1; });
+  } catch (e) {}
+
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(boxes.filter(function(b){ return b.checked; }).map(id))); } catch (e) {}
+  }
+
+  function update(){
+    var parts = [], allOk = true, over = [];
+    Object.keys(GROUPS).forEach(function(g){
+      var picked = boxes.filter(function(b){ return b.dataset.group === g && b.checked; });
+      var n = picked.length;
+      var state = n === 3 ? 'ok' : (n > 3 ? 'over' : 'low');
+      if (n !== 3) allOk = false;
+      if (n > 3) over.push(GROUPS[g].toLowerCase());
+      var label = n + ' из 3';
+      var c = document.querySelector('[data-count="' + g + '"]');
+      c.dataset.state = state;
+      c.querySelector('span').textContent = label;
+      document.querySelector('[data-n="' + g + '"]').textContent = label;
+      var list = document.querySelector('[data-list="' + g + '"]');
+      list.textContent = '';
+      picked.forEach(function(b){
+        var li = document.createElement('li');
+        li.textContent = b.dataset.label;
+        list.appendChild(li);
+      });
+      document.querySelector('[data-empty="' + g + '"]').hidden = n > 0;
+      parts.push(GROUPS[g] + ': ' + (n ? picked.map(function(b){ return b.dataset.label; }).join(', ') : '—') + '.');
+    });
+    out.value = parts.join('\n');
+    if (allOk) { hint.textContent = 'По три в каждом блоке — выбор готов к отправке.'; hint.className = 'hint ok'; }
+    else if (over.length) { hint.textContent = 'Больше трёх: ' + over.join(', ') + ' — снимите лишнее. Нужно ровно три в каждом блоке.'; hint.className = 'hint'; }
+    else { hint.textContent = 'Отметьте ровно три в каждом блоке.'; hint.className = 'hint'; }
+    status.textContent = '';
+  }
+
+  boxes.forEach(function(b){ b.addEventListener('change', function(){ save(); update(); }); });
+  update();
+
+  function fallback(){
+    out.focus();
+    out.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    status.textContent = ok ? 'Скопировано.' : 'Текст выделен — нажмите Ctrl+C (на телефоне — «Копировать»).';
+  }
+
+  document.getElementById('copy').addEventListener('click', async function(){
+    try {
+      await navigator.clipboard.writeText(out.value);
+      status.textContent = 'Скопировано — вставьте в сообщение.';
+    } catch (e) { fallback(); }
+  });
+
+  var pvs = document.querySelectorAll('.pv');
+  function fit(el){ el.style.setProperty('--k', (el.clientWidth / 1280).toFixed(4)); }
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(function(entries){ entries.forEach(function(en){ fit(en.target); }); });
+    pvs.forEach(function(el){ ro.observe(el); });
+  } else {
+    pvs.forEach(fit);
+    window.addEventListener('resize', function(){ pvs.forEach(fit); });
+  }
+})();
+</script>
