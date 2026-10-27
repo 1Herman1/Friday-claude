@@ -311,7 +311,7 @@ li
     div
       time  (LABEL, text-muted-foreground)
       h3    mt-1 font-heading text-body md:text-[1.125rem] font-semibold leading-[1.3] line-clamp-2
-            group-hover:text-muted-foreground (без подчёркивания) underline-offset-4 decoration-1
+            group-hover:text-muted-foreground transition-colors (без подчёркивания)
       p     hidden md:mt-1 md:line-clamp-1 text-body-sm leading-body text-muted-foreground
     IconArrowRight size={20}  hidden md:block text-primary
             transition-transform duration-200 ease-out group-hover:translate-x-1
