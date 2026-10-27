@@ -178,9 +178,13 @@ tbody td b{color:var(--fg);font-weight:500}
 .hero-c h3{font-size:var(--h3)}
 .hero-c p{font-size:var(--fs-xs);color:var(--fg-2);line-height:1.45}
 .hero-c p b{color:var(--fg);font-weight:500}
-.gen{margin:0}
-.gen .ph{aspect-ratio:1/1;background:var(--bg-3)}
-.gen figcaption{font-size:var(--fs-xs);color:var(--fg-2);margin-top:6px}
+.sk{display:grid;gap:var(--gap-s);grid-template-columns:repeat(2,minmax(0,1fr))}
+.sk figure{margin:0}
+.sk img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border:1px solid var(--line);background:#141518}
+.sk.sq img{aspect-ratio:1/1}
+.sk figcaption{margin-top:6px;font-size:var(--fs-xs);line-height:1.35;color:var(--fg-2)}
+.sk figcaption b{display:block;color:var(--fg);font-weight:500}
+.sk .note{align-self:center;font-size:var(--fs-xs);line-height:1.45;color:var(--fg-2);border-top:1px solid var(--brass-lo);padding-top:var(--gap-s)}
 
 
 .heroes{display:grid;gap:var(--gap-s) var(--gap);grid-template-columns:minmax(0,1fr)}
@@ -295,6 +299,7 @@ tbody td b{color:var(--fg);font-weight:500}
 @media (min-width:640px){
   .heroes{grid-template-columns:repeat(2,minmax(0,1fr))}
   .logos{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sk{grid-template-columns:repeat(4,minmax(0,1fr))}
   .in{padding:32px 32px 40px}
   .hx{height:160px}
 }
@@ -334,6 +339,7 @@ tbody td b{color:var(--fg);font-weight:500}
   .poses svg{height:clamp(90px,8.6cqw,150px)}
   .logos{grid-template-columns:repeat(4,minmax(0,1fr))}
   .plate{min-height:clamp(84px,7cqw,112px)}
+  .sk{grid-template-columns:repeat(8,minmax(0,1fr));margin-top:var(--gap)}
   .recs li{grid-template-columns:clamp(250px,22cqw,340px) minmax(0,1fr) minmax(0,1.1fr);gap:var(--gap)}
   .steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap)}
   .steps::before{left:0;right:0;top:11px;bottom:auto;width:auto;height:1px}
@@ -767,7 +773,7 @@ tbody td b{color:var(--fg);font-weight:500}
  <path d="M214 161.5 C226 165.5 250 165.5 262 161.5" stroke="#F6E3B4" stroke-width=".6" opacity=".7"/>
 </g>
 </g>
-</svg></div><p class="k">Вариант 1 · объект</p><h3>Весы-прибор</h3><p>Коромысло один раз приходит в равновесие, гирька отмечает направления, стрелка шкалы — итог расчёта.</p><p><b>Стили:</b> A, E (платиной), D</p><p class="ex"><b>Исполнение:</b> «Латунь в свете лампы»: объёмный металл с бликом и тенью на столе — точный прибор, а не символ.</p><figure class="gen" data-slot="hero-1" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+</svg></div><p class="k">Вариант 1 · объект</p><h3>Весы-прибор</h3><p>Коромысло один раз приходит в равновесие, гирька отмечает направления, стрелка шкалы — итог расчёта.</p><p><b>Стили:</b> A, E (платиной), D</p><p class="ex"><b>Исполнение:</b> «Латунь в свете лампы»: объёмный металл с бликом и тенью на столе — точный прибор, а не символ.</p></article>
     <article class="hero-c"><div class="art-h"><span class="rec">Рекомендован Гермесом</span><svg class="hv hv2" viewBox="0 0 300 260" role="img" aria-label="«Поверенный» в технике гравюры: фигура в костюме-тройке у арочного окна с силуэтом Москвы, вместо головы — латунные весы">
 <defs>
  <pattern id="h2_hv" width="8" height="2.3" patternUnits="userSpaceOnUse"><path d="M0 .6 H8" stroke="#22302C" stroke-width=".5"/></pattern>
@@ -832,7 +838,7 @@ tbody td b{color:var(--fg);font-weight:500}
 </g>
 <rect x="4.5" y="4.5" width="291" height="251" fill="none" stroke="#22302C" stroke-width="1.1"/>
 <rect x="7.5" y="7.5" width="285" height="245" fill="none" stroke="#22302C" stroke-width=".4"/>
-</svg></div><p class="k">Вариант 2 · фигура</p><h3>«Поверенный»</h3><p>Джентльмен в гравюре, голова — латунные весы. Стоит у окна с Москвой, позы над этапами, у заявки снимает шляпу.</p><p><b>Стили:</b> A, E</p><p class="ex"><b>Исполнение:</b> «Гравюра как на банкноте»: тени штрихом, бумага и одна латунная деталь — голова-весы; язык ценных бумаг.</p><figure class="gen" data-slot="hero-2" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+</svg></div><p class="k">Вариант 2 · фигура</p><h3>«Поверенный»</h3><p>Джентльмен в гравюре, голова — латунные весы. Стоит у окна с Москвой, позы над этапами, у заявки снимает шляпу.</p><p><b>Стили:</b> A, E</p><p class="ex"><b>Исполнение:</b> «Гравюра как на банкноте»: тени штрихом, бумага и одна латунная деталь — голова-весы; язык ценных бумаг.</p></article>
     <article class="hero-c"><div class="art-h"><svg class="hv hv3" viewBox="0 0 300 260" role="img" aria-label="Лигатура Æ в стиле ар-деко с золотыми гранями на фоне ступенчатых лучей; перекладина «A» — бабочка, над ней воротничок">
 <defs>
  <radialGradient id="h3_bg" cx="50%" cy="78%" r="80%"><stop offset="0" stop-color="#1B3A30"/><stop offset=".6" stop-color="#11231D"/><stop offset="1" stop-color="#0A1512"/></radialGradient>
@@ -859,7 +865,7 @@ tbody td b{color:var(--fg);font-weight:500}
 <rect x="18" y="226" width="264" height="10" fill="url(#h3_gd)"/>
 <path d="M18 226.5 H282" stroke="#F3DDA8" stroke-width=".8"/>
 <path d="M18 240 H282 M18 244 H282" stroke="#C9A66B" stroke-width=".6" opacity=".6"/>
-</svg></div><p class="k">Вариант 3 · фигура из знака</p><h3>«Литера Æ»</h3><p>Перекладина «A» — бабочка, по граням проходит блик; шаги работы выходят из горизонталей «E».</p><p><b>Стили:</b> A, C, D</p><p class="ex"><b>Исполнение:</b> «Ар-деко, шрифтовой плакат»: монолитная лигатура с золотыми фасками на ступенчатых лучах — знак как архитектура.</p><figure class="gen" data-slot="hero-3" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+</svg></div><p class="k">Вариант 3 · фигура из знака</p><h3>«Литера Æ»</h3><p>Перекладина «A» — бабочка, по граням проходит блик; шаги работы выходят из горизонталей «E».</p><p><b>Стили:</b> A, C, D</p><p class="ex"><b>Исполнение:</b> «Ар-деко, шрифтовой плакат»: монолитная лигатура с золотыми фасками на ступенчатых лучах — знак как архитектура.</p></article>
     <article class="hero-c"><div class="art-h"><svg class="hv hv4" viewBox="0 0 300 260" role="img" aria-label="Натюрморт: лист договора на ореховом столе, подпись чернилами, перьевая ручка и сургучная печать с оттиском «Э»">
 <defs>
  <linearGradient id="h4_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34261B"/><stop offset="1" stop-color="#16100C"/></linearGradient>
@@ -901,7 +907,7 @@ tbody td b{color:var(--fg);font-weight:500}
 <text x="205.4" y="212.9" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="22" fill="#3E0C0A">Э</text>
 <text x="206" y="213.5" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="22" fill="#7A1C17">Э</text>
 <ellipse cx="195" cy="190" rx="7" ry="3.4" fill="#FFFFFF" opacity=".22" transform="rotate(-30 195 190)"/>
-</svg></div><p class="k">Вариант 4 · объект</p><h3>Печать и перо</h3><p>Перо выводит подпись под заголовком, оттиск отмечает завершённое дело и отправленную заявку.</p><p><b>Стили:</b> B, A</p><p class="ex"><b>Исполнение:</b> «Натюрморт с чернилами»: сургуч, лаковое перо и живая подпись — предметы, которыми скрепляют дело.</p><figure class="gen" data-slot="hero-4" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+</svg></div><p class="k">Вариант 4 · объект</p><h3>Печать и перо</h3><p>Перо выводит подпись под заголовком, оттиск отмечает завершённое дело и отправленную заявку.</p><p><b>Стили:</b> B, A</p><p class="ex"><b>Исполнение:</b> «Натюрморт с чернилами»: сургуч, лаковое перо и живая подпись — предметы, которыми скрепляют дело.</p></article>
    </div>
   </div>
  </div></div>
@@ -942,7 +948,7 @@ tbody td b{color:var(--fg);font-weight:500}
 <path d="M90 214 V223 A60 7.5 0 0 0 210 223 V214 Z" fill="url(#h5_cyl)"/><ellipse cx="150" cy="214" rx="60" ry="7.5" fill="url(#h5_pt)"/><ellipse cx="150" cy="214" rx="60" ry="7.5" fill="none" stroke="#F6E3B4" stroke-width=".6" opacity=".8"/>
 <path d="M90 34 V43 A60 7.5 0 0 0 210 43 V34 Z" fill="url(#h5_cyl)"/><ellipse cx="150" cy="34" rx="60" ry="7.5" fill="url(#h5_pt)"/><ellipse cx="150" cy="34" rx="60" ry="7.5" fill="none" stroke="#F6E3B4" stroke-width=".6" opacity=".8"/>
 <circle cx="104" cy="230" r="4" fill="url(#h5_cyl)"/><circle cx="196" cy="230" r="4" fill="url(#h5_cyl)"/><circle cx="150" cy="232.5" r="4" fill="url(#h5_cyl)"/>
-</svg></div><p class="k">Вариант 5 · инструменты</p><h3>Песочные часы</h3><p>Только в калькуляторах: срок давности и длительность этапов. В первый экран не ставим.</p><p><b>Стили:</b> любой, как второй герой</p><p class="ex"><b>Исполнение:</b> «Стекло и латунь»: прозрачное стекло и пересыпающийся песок показывают срок спокойно, без драмы.</p><figure class="gen" data-slot="hero-5" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+</svg></div><p class="k">Вариант 5 · инструменты</p><h3>Песочные часы</h3><p>Только в калькуляторах: срок давности и длительность этапов. В первый экран не ставим.</p><p><b>Стили:</b> любой, как второй герой</p><p class="ex"><b>Исполнение:</b> «Стекло и латунь»: прозрачное стекло и пересыпающийся песок показывают срок спокойно, без драмы.</p></article>
     <article class="hero-c"><div class="art-h"><svg class="hv hv6" viewBox="0 0 300 260" role="img" aria-label="Знак параграфа, оттиснутый высокой печатью на плотной бумаге; перед ним покачивается латунный отвес">
 <defs>
  <filter id="h6_paper" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="9"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .22  0 0 0 -.9 .55"/></filter>
@@ -968,7 +974,7 @@ tbody td b{color:var(--fg);font-weight:500}
  <path d="M150 207 H156.5 L150 226 Z" fill="#5A4424" opacity=".45"/>
  <path d="M144.5 208 L150 223" stroke="#FFF1CC" stroke-width=".6" opacity=".8"/>
 </g>
-</svg></div><p class="k">Вариант 6 · знак</p><h3>Знак § как герой</h3><p>Гигантский параграф; отвес один раз опускается и задаёт ось страницы, дальше § нумерует разделы.</p><p><b>Стили:</b> D, B</p><p class="ex"><b>Исполнение:</b> «Высокая печать»: оттиск в плотной бумаге и отвес — строгая типографика вместо иллюстрации.</p><figure class="gen" data-slot="hero-6" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+</svg></div><p class="k">Вариант 6 · знак</p><h3>Знак § как герой</h3><p>Гигантский параграф; отвес один раз опускается и задаёт ось страницы, дальше § нумерует разделы.</p><p><b>Стили:</b> D, B</p><p class="ex"><b>Исполнение:</b> «Высокая печать»: оттиск в плотной бумаге и отвес — строгая типографика вместо иллюстрации.</p></article>
     <article class="hero-c"><div class="art-h"><svg class="hv hv7" viewBox="0 0 300 260" role="img" aria-label="Дорическая колонна из травертина в жёстком боковом свете: каннелюры, капитель, антаблемент с триглифами и высеченной надписью AEQVITAS">
 <defs>
  <linearGradient id="h7_bg" x1="0" x2="1"><stop offset="0" stop-color="#3A332C"/><stop offset=".5" stop-color="#1F1B18"/><stop offset="1" stop-color="#100E0C"/></linearGradient>
@@ -1019,7 +1025,7 @@ tbody td b{color:var(--fg);font-weight:500}
  <rect width="300" height="260" filter="url(#h7_po)" opacity=".45"/>
  <g class="hv7-light"><rect x="-40" y="0" width="90" height="260" fill="url(#h7_lb)" transform="skewX(-18)"/></g>
 </g>
-</svg></div><p class="k">Вариант 7 · архитектура</p><h3>Колонна AEQVITAS</h3><p>Одна колонна вместо колоннады-клише; надпись проявляется, как высеченная.</p><p><b>Стили:</b> C</p><p class="ex"><b>Исполнение:</b> «Камень и свет»: травертин, каннелюры и высеченная надпись в жёстком боковом свете — масса и вес.</p><figure class="gen" data-slot="hero-7" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+</svg></div><p class="k">Вариант 7 · архитектура</p><h3>Колонна AEQVITAS</h3><p>Одна колонна вместо колоннады-клише; надпись проявляется, как высеченная.</p><p><b>Стили:</b> C</p><p class="ex"><b>Исполнение:</b> «Камень и свет»: тёмный гранит, дорические каннелюры и высеченная надпись в жёстком боковом свете — масса и вес.</p></article>
     <article class="hero-c"><div class="art-h"><svg class="hv hv8" viewBox="0 0 300 260" role="img" aria-label="Две массы на оси: глянцевая платиновая сфера и матовый брусок на тонком рычаге над латунной опорой">
 <defs>
  <linearGradient id="h8_bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#132036"/><stop offset=".72" stop-color="#0D1626"/><stop offset=".72" stop-color="#101B2E"/><stop offset="1" stop-color="#080D17"/></linearGradient>
@@ -1058,7 +1064,7 @@ tbody td b{color:var(--fg);font-weight:500}
  <ellipse cx="238" cy="143" rx="16" ry="1.4" fill="#000" opacity=".5" filter="url(#h8_b1)"/>
 </g>
 <circle cx="136" cy="145.2" r="2.4" fill="#F3DDA8"/>
-</svg></div><p class="k">Вариант 8 · геометрия</p><h3>Две массы на оси</h3><p>Диск и брусок на рычаге со смещённой опорой; рычаг один раз выходит в горизонталь.</p><p><b>Стили:</b> E, D</p><p class="ex"><b>Исполнение:</b> «3D-рендер, платина»: глянцевая сфера и матовый брусок на чернильно-синем — инженерная точность.</p><figure class="gen" data-slot="hero-8" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+</svg></div><p class="k">Вариант 8 · геометрия</p><h3>Две массы на оси</h3><p>Диск и брусок на рычаге со смещённой опорой; рычаг один раз выходит в горизонталь.</p><p><b>Стили:</b> E, D</p><p class="ex"><b>Исполнение:</b> «3D-рендер, платина»: глянцевая сфера и матовый брусок на чернильно-синем — инженерная точность.</p></article>
    </div>
   </div>
  </div></div>
@@ -1152,7 +1158,6 @@ tbody td b{color:var(--fg);font-weight:500}
     <p class="xs muted">Вопрос владельцу: знак — весы или литера «Æ»? От ответа зависит голова персонажа, поэтому знак утверждаем раньше финальных поз. Открыть макеты: <a href="a-char.html">стиль A</a> · <a href="e-char.html">стиль E</a>.</p>
    </div>
   </div>
-  <figure class="gen" data-slot="hero-2-pose" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure>
  </div></div>
 </section>
 
@@ -1167,7 +1172,7 @@ tbody td b{color:var(--fg);font-weight:500}
     <h2 class="h2" id="t14">Классика: буква, лигатура, прибор, параграф</h2>
     <p class="small muted">Финальную отрисовку и кернинг делает дизайнер после выбора.</p>
    </div>
-   <div class="logos"><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 1 · эскиз</p><h3>Монограмма «Э» в медальоне</h3><p class="m"><b>Стиль:</b> A, B, C · <b>герой:</b> весы-прибор, печать</p><ul class="pm"><li class="plus">Читается по-русски сразу, классика без риска.</li><li class="risk">Медальон с буквой — частый ход, нужна своя прорисовка «Э».</li></ul><figure class="gen" data-slot="logo-1" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 2 · эскиз</p><h3>Лигатура «Æ»</h3><p class="m"><b>Стиль:</b> A, C, D · <b>герой:</b> «Литера Æ»</p><ul class="pm"><li class="plus">Уникальна и связывает с латинским именем Aequitas.</li><li class="risk">Латиница: русскому клиенту «Æ» нужно пояснять.</li></ul><figure class="gen" data-slot="logo-2" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 3 · эскиз</p><h3>Весы-прибор</h3><p class="m"><b>Стиль:</b> A, E · <b>герой:</b> весы-прибор, «Поверенный»</p><ul class="pm"><li class="plus">Смысл «мера» без Фемиды, прямо связан с героем.</li><li class="risk">Весы — частый знак юристов, отличаться придётся геометрией.</li></ul><figure class="gen" data-slot="logo-3" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 4 · эскиз</p><h3>Знак § в плашке</h3><p class="m"><b>Стиль:</b> D, B · <b>герой:</b> знак §</p><ul class="pm"><li class="plus">Мгновенно «право», держится в иконке сайта и аватарке.</li><li class="risk">Общий символ — слабо защищается как товарный знак.</li></ul><figure class="gen" data-slot="logo-4" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article></div>
+   <div class="logos"><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 1 · эскиз</p><h3>Монограмма «Э» в медальоне</h3><p class="m"><b>Стиль:</b> A, B, C · <b>герой:</b> весы-прибор, печать</p><ul class="pm"><li class="plus">Читается по-русски сразу, классика без риска.</li><li class="risk">Медальон с буквой — частый ход, нужна своя прорисовка «Э».</li></ul></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 2 · эскиз</p><h3>Лигатура «Æ»</h3><p class="m"><b>Стиль:</b> A, C, D · <b>герой:</b> «Литера Æ»</p><ul class="pm"><li class="plus">Уникальна и связывает с латинским именем Aequitas.</li><li class="risk">Латиница: русскому клиенту «Æ» нужно пояснять.</li></ul></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 3 · эскиз</p><h3>Весы-прибор</h3><p class="m"><b>Стиль:</b> A, E · <b>герой:</b> весы-прибор, «Поверенный»</p><ul class="pm"><li class="plus">Смысл «мера» без Фемиды, прямо связан с героем.</li><li class="risk">Весы — частый знак юристов, отличаться придётся геометрией.</li></ul></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 4 · эскиз</p><h3>Знак § в плашке</h3><p class="m"><b>Стиль:</b> D, B · <b>герой:</b> знак §</p><ul class="pm"><li class="plus">Мгновенно «право», держится в иконке сайта и аватарке.</li><li class="risk">Общий символ — слабо защищается как товарный знак.</li></ul></article></div>
   </div>
  </div></div>
 </section>
@@ -1181,19 +1186,49 @@ tbody td b{color:var(--fg);font-weight:500}
     <h2 class="h2" id="t15">Характер: персонаж, слово, геометрия, печать</h2>
     <p class="small muted">Каждый знак проверен на светлом и тёмном фоне: так он будет жить на бланке и на сайте.</p>
    </div>
-   <div class="logos"><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 5 · эскиз</p><h3>Голова «Поверенного»</h3><p class="m"><b>Стиль:</b> A, E · <b>герой:</b> «Поверенный»</p><ul class="pm"><li class="plus">Знак и есть персонаж — приём pgplaw без мультяшности.</li><li class="risk">В мелком размере детали сливаются, нужна упрощённая версия.</li></ul><figure class="gen" data-slot="logo-5" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div><div class="plate dk"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div></div><p class="k">Логотип 6 · эскиз</p><h3>Словесный знак «ЭКВИТАС»</h3><p class="m"><b>Стиль:</b> любой, сильнее всего C, D · <b>герой:</b> любой</p><ul class="pm"><li class="plus">Самый солидный и читаемый; коромысло над «В» — тихий намёк.</li><li class="risk">Без отдельного знака сложнее с иконкой сайта и аватаркой.</li></ul><figure class="gen" data-slot="logo-6" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 7 · эскиз</p><h3>Две массы на оси</h3><p class="m"><b>Стиль:</b> E · <b>герой:</b> две массы</p><ul class="pm"><li class="plus">Современно, абстрактно, хорошо запоминается.</li><li class="risk">Не сразу читается как право — ближе к банку и консалтингу.</li></ul><figure class="gen" data-slot="logo-7" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk big" aria-hidden="true" focusable="false"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk big" aria-hidden="true" focusable="false"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 8 · эскиз</p><h3>Печать-оттиск</h3><p class="m"><b>Стиль:</b> B, C · <b>герой:</b> печать и перо</p><ul class="pm"><li class="plus">«Скреплено» — документальность и порядок.</li><li class="risk">Круговая надпись не читается мелко, для иконки — только «Э».</li></ul><figure class="gen" data-slot="logo-8" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article></div>
+   <div class="logos"><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 5 · эскиз</p><h3>Голова «Поверенного»</h3><p class="m"><b>Стиль:</b> A, E · <b>герой:</b> «Поверенный»</p><ul class="pm"><li class="plus">Знак и есть персонаж — приём pgplaw без мультяшности.</li><li class="risk">В мелком размере детали сливаются, нужна упрощённая версия.</li></ul></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div><div class="plate dk"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div></div><p class="k">Логотип 6 · эскиз</p><h3>Словесный знак «ЭКВИТАС»</h3><p class="m"><b>Стиль:</b> любой, сильнее всего C, D · <b>герой:</b> любой</p><ul class="pm"><li class="plus">Самый солидный и читаемый; коромысло над «В» — тихий намёк.</li><li class="risk">Без отдельного знака сложнее с иконкой сайта и аватаркой.</li></ul></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 7 · эскиз</p><h3>Две массы на оси</h3><p class="m"><b>Стиль:</b> E · <b>герой:</b> две массы</p><ul class="pm"><li class="plus">Современно, абстрактно, хорошо запоминается.</li><li class="risk">Не сразу читается как право — ближе к банку и консалтингу.</li></ul></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk big" aria-hidden="true" focusable="false"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk big" aria-hidden="true" focusable="false"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 8 · эскиз</p><h3>Печать-оттиск</h3><p class="m"><b>Стиль:</b> B, C · <b>герой:</b> печать и перо</p><ul class="pm"><li class="plus">«Скреплено» — документальность и порядок.</li><li class="risk">Круговая надпись не читается мелко, для иконки — только «Э».</li></ul></article></div>
   </div>
  </div></div>
 </section>
 
-<!-- 16 RECOMMENDATION -->
+<!-- 16 SKETCHES -->
 <section class="slide" id="s16" tabindex="-1" aria-labelledby="t16">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>16</b> · Рекомендация</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>16</b> · ИИ-эскизы героев</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">Нейросеть · после двух кругов правок</p>
+    <h2 class="h2" id="t16">Герои вживую: материал, свет, настроение</h2>
+    <p class="small muted">Это не финал, а проверка направления: так герой может выглядеть на сайте. Финальную иллюстрацию рисует художник по выбранному варианту.</p>
+   </div>
+   <div class="sk"><figure><img src="sketches/hero-scales.webp" alt="Латунные весы на письменном столе под лампой" loading="lazy" decoding="async"><figcaption><b>1 · Весы-прибор</b>Латунь в свете лампы</figcaption></figure><figure><img src="sketches/hero-poverenny.webp" alt="Линейный рисунок: джентльмен с весами вместо головы у окна с видом на Москву" loading="lazy" decoding="async"><figcaption><b>2 · «Поверенный»</b>Линия по графиту, голова-весы</figcaption></figure><figure><img src="sketches/logo-ae.webp" alt="Лигатура Æ латунной линией на графите" loading="lazy" decoding="async"><figcaption><b>3 · «Литера Æ»</b>Лигатура как знак</figcaption></figure><figure><img src="sketches/hero-seal-pen.webp" alt="Латунная печать, перьевая ручка и росчерк на бумаге" loading="lazy" decoding="async"><figcaption><b>4 · Печать и перо</b>Натюрморт с чернилами</figcaption></figure><figure><img src="sketches/hero-hourglass.webp" alt="Песочные часы в латунной оправе на столе" loading="lazy" decoding="async"><figcaption><b>5 · Песочные часы</b>Стекло и латунь</figcaption></figure><figure><img src="sketches/logo-section.webp" alt="Знак параграфа в латунной квадратной плашке" loading="lazy" decoding="async"><figcaption><b>6 · Знак §</b>Плашка с параграфом</figcaption></figure><figure><img src="sketches/hero-column.webp" alt="Дорическая гранитная колонна в боковом свете" loading="lazy" decoding="async"><figcaption><b>7 · Колонна</b>Камень и свет</figcaption></figure><figure><img src="sketches/hero-masses.webp" alt="Сфера и брусок в равновесии на рычаге, чернильно-синий фон" loading="lazy" decoding="async"><figcaption><b>8 · Две массы</b>3D-рендер, платина</figcaption></figure></div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 17 SKETCHES -->
+<section class="slide" id="s17" tabindex="-1" aria-labelledby="t17">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>17</b> · ИИ-эскизы знаков</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">Нейросеть · только символ, без надписи</p>
+    <h2 class="h2" id="t17">Знаки в латуни на графите</h2>
+    <p class="small muted">Надпись «Эквитас» нейросеть не пишет: кириллицу она искажает. Слово набирается шрифтом в векторе, как на предыдущих слайдах.</p>
+   </div>
+   <div class="sk sq"><figure><img src="sketches/logo-e.webp" alt="Буква Э в двойном круге" loading="lazy" decoding="async"><figcaption><b>1 · Монограмма «Э»</b>Медальон</figcaption></figure><figure><img src="sketches/logo-ae.webp" alt="Лигатура Æ с линией снизу" loading="lazy" decoding="async"><figcaption><b>2 · Лигатура «Æ»</b>Финал — в векторе</figcaption></figure><figure><img src="sketches/logo-scales.webp" alt="Линейные весы на ступенчатом основании" loading="lazy" decoding="async"><figcaption><b>3 · Весы-прибор</b>Линия, ступенчатое основание</figcaption></figure><figure><img src="sketches/logo-section.webp" alt="Знак параграфа в квадрате" loading="lazy" decoding="async"><figcaption><b>4 · Знак § в плашке</b>Плашка</figcaption></figure><figure><img src="sketches/logo-poverenny.webp" alt="Весы вместо головы над воротником и галстуком в круге" loading="lazy" decoding="async"><figcaption><b>5 · Голова «Поверенного»</b>Весы над воротником</figcaption></figure><figure><img src="sketches/logo-masses.webp" alt="Круг и прямоугольник на рычаге с латунной опорой" loading="lazy" decoding="async"><figcaption><b>7 · Две массы на оси</b>Абстракция</figcaption></figure><figure><img src="sketches/logo-seal.webp" alt="Круглая печать с весами в центре" loading="lazy" decoding="async"><figcaption><b>8 · Печать-оттиск</b>Без надписи</figcaption></figure><p class="note"><b>6 · Словесный знак</b><br>Только вектор: в нём всё держится на буквах, а их нейросеть пишет с ошибками.</p></div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 18 RECOMMENDATION -->
+<section class="slide" id="s18" tabindex="-1" aria-labelledby="t18">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>18</b> · Рекомендация</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body">
    <div class="stack">
     <p class="eyebrow">Стиль + герой + логотип</p>
-    <h2 class="h2" id="t16">Три связки, которые держатся на одной идее</h2>
+    <h2 class="h2" id="t18">Три связки, которые держатся на одной идее</h2>
    </div>
    <ol class="recs">
     <li>
@@ -1251,14 +1286,14 @@ tbody td b{color:var(--fg);font-weight:500}
  </div></div>
 </section>
 
-<!-- 17 NEXT -->
-<section class="slide" id="s17" tabindex="-1" aria-labelledby="t17">
+<!-- 19 NEXT -->
+<section class="slide" id="s19" tabindex="-1" aria-labelledby="t19">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>17</b> · Что дальше</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>19</b> · Что дальше</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body">
    <div class="stack">
     <p class="eyebrow">План</p>
-    <h2 class="h2" id="t17">Четыре шага от выбора до вёрстки</h2>
+    <h2 class="h2" id="t19">Четыре шага от выбора до вёрстки</h2>
    </div>
    <ol class="steps">
     <li><span class="k num">ШАГ 1</span><h3>Выбрать по три</h3><p>Стиль, герой и логотип — по три варианта в каждом блоке, можно с комментарием.</p><span class="t">Владелец</span></li>
@@ -1278,7 +1313,7 @@ tbody td b{color:var(--fg);font-weight:500}
 
 <nav class="nav" aria-label="Навигация по слайдам">
  <button type="button" id="prev" aria-label="Предыдущий слайд"><span aria-hidden="true">←</span><span class="lbl">Назад</span></button>
- <span class="cnt num" id="cnt" aria-live="polite">1 <span>/ 17</span></span>
+ <span class="cnt num" id="cnt" aria-live="polite">1 <span>/ 19</span></span>
  <button type="button" id="next" aria-label="Следующий слайд"><span class="lbl">Далее</span><span aria-hidden="true">→</span></button>
 </nav>
 
