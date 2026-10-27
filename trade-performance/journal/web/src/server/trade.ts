@@ -32,14 +32,14 @@ export async function tradeCard(id: string) {
     q<{ executed_at: Date; side: string; position_side: string; price: string; qty: string; fee: string; pnl: string | null; liq: boolean }>(`
       SELECT executed_at, side, position_side, price, qty, coalesce(fee_quote, 0) AS fee, realized_pnl AS pnl, is_liquidation AS liq
       FROM executions WHERE trade_id = $1 ORDER BY executed_at`, [id]),
-    q<{ id: string; text: string | null; transcript: string | null; kind: string; channel: string; created_at: Date }>(`
-      SELECT id, text, transcript, kind, channel, created_at FROM notes WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
+    q<{ id: string; text: string | null; transcript: string | null; kind: string; channel: string; created_at: Date; diary: string | null }>(`
+      SELECT id, text, transcript, kind, channel, created_at, parsed->>'diary_entry' AS diary FROM notes WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
     q<{ name: string }>(`SELECT g.name FROM trade_tags tt JOIN tags g ON g.id = tt.tag_id WHERE tt.trade_id = $1 AND g.deleted_at IS NULL ORDER BY 1`, [id]),
     q<{ name: string }>(`SELECT name FROM playbooks WHERE deleted_at IS NULL ORDER BY 1`),
     q<{ id: string; text: string; violated: boolean; comment: string | null }>(`
       SELECT r.id, r.text, v.rule_id IS NOT NULL AS violated, v.comment
       FROM rules r LEFT JOIN trade_rule_violations v ON v.rule_id = r.id AND v.trade_id = $1 WHERE r.kind = 'rule' AND r.active AND r.deleted_at IS NULL ORDER BY r.sort_order`, [id]),
-    q<{ id: string; created_at: Date }>(`SELECT id, created_at FROM attachments WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
+    q<{ id: string; created_at: Date; kind: string; diary: boolean }>(`SELECT id, created_at, kind::text AS kind, note_id IS NOT NULL AS diary FROM attachments WHERE trade_id = $1 AND deleted_at IS NULL ORDER BY created_at`, [id]),
     q<{ id: string; created_at: Date; content_md: string; findings: { tags?: string[]; tilt_risk?: number } | null }>(
       `SELECT id, created_at, content_md, findings FROM ai_reviews WHERE trade_id = $1 AND status = 'done' ORDER BY created_at DESC`, [id]),
   ]);
@@ -54,24 +54,57 @@ export async function tradeCard(id: string) {
 export type Candle = { time: number; open: number; high: number; low: number; close: number };
 
 // свечи с площадки исполнения (MEXC, публичный API), окно = сделка ± запас
-export async function candles(symbol: string, from: Date, to: Date | null) {
+export type CandleSource = "MEXC" | "Binance" | "Bybit" | "реконструкция";
+const BN_IV: Record<string, string> = { Min5: "5m", Min15: "15m", Min60: "1h", Hour4: "4h" };
+const BY_IV: Record<string, string> = { Min5: "5", Min15: "15", Min60: "60", Hour4: "240" };
+
+async function getJson(url: string, live: boolean) {
+  const r = await fetch(url, { next: { revalidate: live ? 60 : 86400 }, headers: { "User-Agent": "Mozilla/5.0" } });
+  return r.json();
+}
+
+// История свечей: MEXC → Binance Futures → Bybit linear. Делистнутые на MEXC контракты (code 1001) MEXC не отдаёт вообще.
+export async function candles(symbol: string, from: Date, to: Date | null): Promise<{ interval: string; data: Candle[]; source: CandleSource | null }> {
   const start = Math.floor(from.getTime() / 1000);
   const end = Math.floor((to ?? new Date()).getTime() / 1000);
   const dur = Math.max(end - start, 60);
   const [interval, step] = dur < 6 * 3600 ? ["Min5", 300] : dur < 3 * 86400 ? ["Min15", 900] : dur < 15 * 86400 ? ["Min60", 3600] : ["Hour4", 14400];
   const pad = Math.max(dur * 0.6, step * 40);
+  const a = Math.floor(start - pad), b = Math.floor(end + pad / 2);
+  const live = !to;
   const apiSym = API_ALIASES[symbol] ?? symbol.replace(/USDT$/, "_USDT");
-  const url = `https://contract.mexc.com/api/v1/contract/kline/${apiSym}?interval=${interval}&start=${Math.floor(start - pad)}&end=${Math.floor(end + pad / 2)}`;
   try {
-    const r = await fetch(url, { next: { revalidate: to ? 86400 : 60 } });
-    const j = await r.json();
+    const j = await getJson(`https://contract.mexc.com/api/v1/contract/kline/${apiSym}?interval=${interval}&start=${a}&end=${b}`, live);
     const d = j?.data;
-    if (!d?.time?.length) return { interval, data: [] as Candle[] };
-    const data: Candle[] = d.time.map((tm: number, k: number) => ({ time: tm, open: d.open[k], high: d.high[k], low: d.low[k], close: d.close[k] }));
-    return { interval, data };
-  } catch {
-    return { interval, data: [] as Candle[] };
+    if (d?.time?.length) return { interval, source: "MEXC", data: d.time.map((tm: number, k: number) => ({ time: tm, open: d.open[k], high: d.high[k], low: d.low[k], close: d.close[k] })) };
+  } catch {}
+  try {
+    const j = await getJson(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}&interval=${BN_IV[interval]}&startTime=${a * 1000}&endTime=${b * 1000}&limit=1500`, live);
+    if (Array.isArray(j) && j.length) return { interval, source: "Binance", data: j.map((k: string[]) => ({ time: Number(k[0]) / 1000, open: +k[1], high: +k[2], low: +k[3], close: +k[4] })) };
+  } catch {}
+  try {
+    const j = await getJson(`https://api.bybit.com/v5/market/kline?category=linear&symbol=${symbol}&interval=${BY_IV[interval]}&start=${a * 1000}&end=${b * 1000}&limit=1000`, live);
+    const l: string[][] = j?.result?.list ?? [];
+    if (l.length) return { interval, source: "Bybit", data: l.map((k) => ({ time: Number(k[0]) / 1000, open: +k[1], high: +k[2], low: +k[3], close: +k[4] })).reverse() };
+  } catch {}
+  return { interval, data: [], source: null };
+}
+
+// Когда рынка нет нигде: часовые «свечи» из собственных исполнений (цены сделок), между ними цена тянется горизонтально.
+// Это НЕ рынок — только хронология входов/выходов на 1ч.
+export function reconstruct(fills: { executed_at: Date; price: string }[]): Candle[] {
+  if (!fills.length) return [];
+  const H = 3600, by = new Map<number, number[]>();
+  for (const f of fills) { const h = Math.floor(new Date(f.executed_at).getTime() / 1000 / H) * H; by.set(h, [...(by.get(h) ?? []), Number(f.price)]); }
+  const hs = [...by.keys()].sort((x, y) => x - y);
+  const out: Candle[] = [];
+  let last = by.get(hs[0])![0];
+  for (let h = hs[0] - 3 * H; h <= hs[hs.length - 1] + 3 * H; h += H) {
+    const p = by.get(h);
+    if (p) { out.push({ time: h, open: last, high: Math.max(last, ...p), low: Math.min(last, ...p), close: p[p.length - 1] }); last = p[p.length - 1]; }
+    else out.push({ time: h, open: last, high: last, low: last, close: last });
   }
+  return out.length > 2000 ? out.filter((c) => by.has(c.time) || c.time % (4 * H) === 0) : out;
 }
 
 // MFE/MAE по свечам внутри сделки, в % от средней цены входа

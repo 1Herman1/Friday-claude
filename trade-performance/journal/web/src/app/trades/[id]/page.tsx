@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { tradeCard, candles, excursions, EMOTIONS } from "@/server/trade";
+import { tradeCard, candles, excursions, reconstruct, EMOTIONS } from "@/server/trade";
 import { usd, px, dt, num, pnlClass } from "@/lib/fmt";
 import TradeChart from "@/components/TradeChart";
 import { saveTrade, uploadShots, removeShot, editNote, removeNote, runReview } from "./actions";
@@ -11,15 +11,43 @@ const STEP: Record<string, number> = { Min5: 300, Min15: 900, Min60: 3600, Hour4
 const IV: Record<string, string> = { Min5: "5м", Min15: "15м", Min60: "1ч", Hour4: "4ч" };
 
 function Row({ k, v, cls }: { k: string; v: React.ReactNode; cls?: string }) {
-  return <div className="flex justify-between gap-4 py-1 text-sm"><span className="text-zinc-400">{k}</span><span className={`tabular-nums ${cls ?? ""}`}>{v}</span></div>;
+  return <div className="flex justify-between gap-4 border-b border-zinc-800/50 py-1.5 text-sm last:border-0"><span className="text-zinc-500">{k}</span><span className={`tabular-nums ${cls ?? ""}`}>{v}</span></div>;
 }
+const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const inl = (x: string) => esc(x).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+// заметка из дневника: «### Полка» → раскрывающиеся блоки
+function Diary({ text }: { text: string }) {
+  const [head, ...secs] = text.split(/^### /m);
+  return (
+    <div className="space-y-2">
+      <div className="whitespace-pre-wrap text-sm text-zinc-300" dangerouslySetInnerHTML={{ __html: inl(head.trim()) }} />
+      {secs.map((sct, i) => {
+        const [title, ...body] = sct.split("\n");
+        return (
+          <details key={i} open={i < 2} className="group rounded-lg bg-zinc-950/60 px-3 py-2">
+            <summary className="cursor-pointer list-none text-xs font-medium uppercase tracking-wider text-amber-300/90 [&::-webkit-details-marker]:hidden">
+              <span className="mr-1 inline-block transition group-open:rotate-90">›</span>{title}
+            </summary>
+            <div className="mt-1.5 whitespace-pre-wrap text-sm leading-relaxed text-zinc-200" dangerouslySetInnerHTML={{ __html: inl(body.join("\n").trim()) }} />
+          </details>
+        );
+      })}
+    </div>
+  );
+}
+const box = "rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-4";
+const h3 = "mb-3 text-xs font-medium uppercase tracking-wider text-zinc-500";
 
 export default async function TradePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const card = await tradeCard(id);
   if (!card) notFound();
   const { t, fills, notes, tags, playbooks, rules, shots, reviews, signal, running } = card;
-  const c = await candles(t.symbol, new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
+  const mk = await candles(t.symbol, new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
+  const c = mk.data.length ? mk : { interval: "Min60", data: reconstruct(fills), source: "реконструкция" as const };
+  const diary = notes.filter((n) => n.diary);
+  const other = notes.filter((n) => !n.diary);
+  const dshots = shots.filter((a) => a.diary);
   const ex = excursions(c.data, t.side, Number(t.entry_avg), new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const durH = ((t.closed_at ? new Date(t.closed_at).getTime() : Date.now()) - new Date(t.opened_at).getTime()) / 3600e3;
   const notional = Number(t.entry_avg) * Number(t.max_qty);
@@ -29,32 +57,65 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <Link href="/trades" className="text-sm text-zinc-400 hover:text-zinc-200">← сделки</Link>
-        <h1 className="text-xl font-semibold">#{t.n} · {t.base} <span className={t.side === "LONG" ? "text-emerald-400" : "text-rose-400"}>{t.side === "LONG" ? "Лонг" : "Шорт"}</span></h1>
-        <span className={`text-xl font-semibold tabular-nums ${pnlClass(t.net_pnl)}`}>{usd(t.net_pnl)}</span>
+      <div className="flex items-center gap-3 text-sm text-zinc-500">
+        <Link href="/trades" className="hover:text-zinc-200">← все сделки</Link>
+        <div className="ml-auto flex gap-2">
+          {t.prev_id && <Link href={`/trades/${t.prev_id}`} className="rounded-lg border border-zinc-800 px-3 py-1 hover:border-zinc-600 hover:text-zinc-200">← #{t.n - 1}</Link>}
+          {t.next_id && <Link href={`/trades/${t.next_id}`} className="rounded-lg border border-zinc-800 px-3 py-1 hover:border-zinc-600 hover:text-zinc-200">#{t.n + 1} →</Link>}
+        </div>
+      </div>
+      <div className={`${box} flex flex-wrap items-center gap-x-6 gap-y-3`}>
+        <div>
+          <div className="text-xs text-zinc-500">#{t.n} · {dt(t.opened_at)} → {dt(t.closed_at)} · {num(durH, 1)} ч</div>
+          <h1 className="mt-0.5 flex items-center gap-2 text-2xl font-semibold tracking-tight">{t.base}
+            <span className={`rounded-md px-2 py-0.5 text-xs font-medium ${t.side === "LONG" ? "bg-emerald-500/15 text-emerald-300" : "bg-rose-500/15 text-rose-300"}`}>{t.side === "LONG" ? "LONG" : "SHORT"}</span>
+          </h1>
+        </div>
+        <div className="flex gap-6 text-sm tabular-nums">
+          <div><div className="text-xs text-zinc-500">Вход → выход</div>{px(t.entry_avg)} → {t.exit_avg ? px(t.exit_avg) : "—"}</div>
+          <div><div className="text-xs text-zinc-500">Объём</div>${num(notional, 0)}</div>
+          {ex && <div><div className="text-xs text-zinc-500">MFE / MAE</div><span className="text-emerald-400">+{num(ex.mfe, 1)}%</span> / <span className="text-rose-400">−{num(ex.mae, 1)}%</span></div>}
+        </div>
+        <span className={`ml-auto text-3xl font-semibold tabular-nums ${pnlClass(t.net_pnl)}`}>{usd(t.net_pnl)}</span>
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        {diary.length > 0 && <a href="#diary" className="rounded-md bg-amber-500/15 px-2 py-0.5 text-xs text-amber-300">📓 дневник №{diary.map((n) => n.diary).join(", ")}</a>}
         {t.liq && <span className="rounded bg-rose-900/60 px-2 py-0.5 text-xs text-rose-200">💀 ликвидация</span>}
         {(() => { const sg = Object.keys(SEGMENTS).find((k) => tags.includes(SEGMENTS[k])); return sg ? <Link href={`/trades?seg=${sg}`} className={`rounded px-2 py-0.5 text-xs ${sg === "OK" ? "bg-emerald-950 text-emerald-300" : "bg-amber-950 text-amber-300"}`}>{SEG_LABEL[sg]}</Link> : null; })()}
         {tags.includes(RANDOM_TAG) && <Link href="/trades?rnd=only" className="rounded bg-zinc-800 px-2 py-0.5 text-xs text-zinc-300">🎲 случайная</Link>}
         {t.status === "OPEN" && <span className="rounded bg-sky-900/60 px-2 py-0.5 text-xs text-sky-200">открыта</span>}
-        <div className="ml-auto flex gap-3 text-sm">
-          {t.prev_id && <Link href={`/trades/${t.prev_id}`} className="text-zinc-400 hover:text-zinc-200">← пред.</Link>}
-          {t.next_id && <Link href={`/trades/${t.next_id}`} className="text-zinc-400 hover:text-zinc-200">след. →</Link>}
-        </div>
       </div>
 
-      <div id="trade-chart" className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-3">
-        <div className="mb-1 text-xs text-zinc-500">{t.symbol} · MEXC · {IV[c.interval]} · время МСК</div>
+      <div id="trade-chart" className="rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-3">
+        <div className="mb-1 flex flex-wrap gap-2 text-xs text-zinc-500">
+          <span>{t.symbol} · {c.source ?? "нет данных"} · {IV[c.interval]} · время МСК</span>
+          {c.source && c.source !== "MEXC" && c.source !== "реконструкция" && <span className="rounded bg-sky-500/10 px-1.5 text-sky-300">контракт делистнут на MEXC — свечи с {c.source}</span>}
+          {c.source === "реконструкция" && <span className="rounded bg-amber-500/10 px-1.5 text-amber-300">рынка нет ни на MEXC, ни на Binance/Bybit — линия построена по твоим исполнениям (1ч), это хронология входов/выходов, не рынок</span>}
+        </div>
         <TradeChart candles={c.data} step={STEP[c.interval]} entry={Number(t.entry_avg)} exit={t.exit_avg ? Number(t.exit_avg) : null}
           stop={t.planned_stop ? Number(t.planned_stop) : null}
           fills={fills.map((f) => ({ t: Math.floor(new Date(f.executed_at).getTime() / 1000), price: Number(f.price), qty: Number(f.qty),
             open: (f.side === "BUY") === (f.position_side === "long"), side: f.position_side, liq: f.liq }))} />
       </div>
 
+      {diary.length > 0 && (
+        <div id="diary" className="rounded-2xl border border-amber-900/40 bg-amber-950/10 p-4">
+          <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-amber-300/80">📓 Из рукописного дневника</h3>
+          <div className={`grid gap-4 ${dshots.length ? "lg:grid-cols-[1fr_420px]" : ""}`}>
+            <div className="space-y-4">{diary.map((n) => <Diary key={n.id} text={n.text ?? ""} />)}</div>
+            {dshots.length > 0 && (
+              <div className="grid content-start gap-2">
+                {dshots.map((a) => <a key={a.id} href={`/att/${a.id}`} target="_blank"><img src={`/att/${a.id}`} alt="скрин из дневника" className="w-full rounded-lg border border-zinc-800 transition hover:border-amber-700" /></a>)}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-4 lg:grid-cols-[340px_1fr]">
         <div className="space-y-4">
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
-            <h3 className="mb-2 text-sm font-medium text-zinc-300">Факт</h3>
+          <div className={box}>
+            <h3 className={h3}>Факт</h3>
             <Row k="Открыта" v={dt(t.opened_at)} />
             <Row k="Закрыта" v={dt(t.closed_at)} />
             <Row k="Длительность" v={`${num(durH, 1)} ч`} />
@@ -67,8 +128,8 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
             {ex && <Row k="MFE / MAE (по свечам)" v={<><span className="text-emerald-400">+{num(ex.mfe, 2)}%</span> / <span className="text-rose-400">−{num(ex.mae, 2)}%</span></>} />}
             {stopPct !== null && <Row k="Стоп от входа" v={`${num(stopPct, 2)}%`} />}
           </div>
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
-            <h3 className="mb-2 text-sm font-medium text-zinc-300">Исполнения ({fills.length})</h3>
+          <div className={box}>
+            <h3 className={h3}>Исполнения · {fills.length}</h3>
             <div className="space-y-1 text-xs tabular-nums">
               {fills.map((f, i) => {
                 const open = (f.side === "BUY") === (f.position_side === "long");
@@ -85,8 +146,8 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
           </div>
         </div>
 
-        <form action={action} className="space-y-4 rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
-          <h3 className="text-sm font-medium text-zinc-300">Разбор (заполняешь ты)</h3>
+        <form action={action} className={`${box} space-y-4`}>
+          <h3 className={h3}>Мой разбор</h3>
           <label className="block text-xs text-zinc-400">Причина входа / сетап словами
             <textarea name="entry_reason" defaultValue={t.entry_reason ?? ""} rows={3} className={inp} placeholder="Что увидел, почему вошёл, где был стоп" />
           </label>
@@ -136,11 +197,11 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
         </form>
       </div>
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
-        <h3 className="mb-2 text-sm font-medium text-zinc-300">Заметки ({notes.length})</h3>
-        {notes.length === 0 && <p className="text-sm text-zinc-500">Пока нет. Добавь в форме выше или голосом/текстом в топик «Дневник» с номером #{t.n}.</p>}
+      <div className={box}>
+        <h3 className={h3}>Заметки · {other.length}</h3>
+        {other.length === 0 && <p className="text-sm text-zinc-500">Пока нет. Добавь в форме выше или голосом/текстом в топик «Дневник» с номером #{t.n}.</p>}
         <div className="space-y-3">
-          {notes.map((n) => (
+          {other.map((n) => (
             <div key={n.id} className="rounded-lg border border-zinc-800/80 p-3 text-sm">
               <div className="mb-1 flex items-center gap-3 text-xs text-zinc-500">
                 <span>{dt(n.created_at)} · {n.channel === "TELEGRAM" ? (n.kind === "VOICE" ? "🎙 Telegram" : "Telegram") : "веб"}</span>
@@ -173,7 +234,7 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
         </div>
       )}
 
-      <div className="rounded-xl border border-violet-900/60 bg-violet-950/20 p-4">
+      <div className="rounded-2xl border border-violet-900/50 bg-violet-950/15 p-4">
         <div className="mb-2 flex items-center gap-3">
           <h3 className="text-sm font-medium text-violet-200">🧠 ИИ-разбор (Opus)</h3>
           {running ? <span className="text-xs text-violet-300">⏳ агент разбирает сделку (1–3 мин), обнови страницу</span> : (
@@ -204,8 +265,8 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
         )}
       </div>
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4">
-        <h3 className="mb-2 text-sm font-medium text-zinc-300">Скриншоты ({shots.length})</h3>
+      <div className={box}>
+        <h3 className={h3}>Скриншоты · {shots.length}</h3>
         {shots.length > 0 && (
           <div className="mb-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {shots.map((a) => (

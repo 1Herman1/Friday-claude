@@ -43,7 +43,7 @@ const FROM = "FROM trades t JOIN instruments i ON i.id = t.instrument_id";
 export type TradeRow = {
   id: string; n: number; symbol: string; side: string; opened_at: Date; closed_at: Date;
   entry_avg: string; exit_avg: string; notional: string; gross_pnl: string; fees: string; net_pnl: string;
-  liq: boolean; dur_h: string; fills: number; cum: string; tags: string[] | null; reviewed: boolean;
+  liq: boolean; dur_h: string; fills: number; cum: string; tags: string[] | null; reviewed: boolean; diary: string | null;
 };
 
 export async function allTags() {
@@ -57,6 +57,7 @@ export async function trades(f: Filters) {
     SELECT t.id, o.n, i.base_asset AS symbol, t.side,
            (SELECT array_agg(g.name ORDER BY g.name) FROM trade_tags tt JOIN tags g ON g.id = tt.tag_id WHERE tt.trade_id = t.id AND g.deleted_at IS NULL) AS tags,
            EXISTS (SELECT 1 FROM ai_reviews a WHERE a.trade_id = t.id AND a.status = 'done') AS reviewed,
+           (SELECT string_agg(nd.parsed->>'diary_entry', ',') FROM notes nd WHERE nd.trade_id = t.id AND nd.deleted_at IS NULL AND nd.parsed->>'source' = 'diary_docx') AS diary,
            t.opened_at, t.closed_at, t.entry_avg, t.exit_avg, (t.entry_avg * t.max_qty) AS notional,
            t.gross_pnl, t.fees, t.net_pnl, t.stop_is_liquidation AS liq,
            round(extract(epoch FROM t.closed_at - t.opened_at) / 3600, 1) AS dur_h,
