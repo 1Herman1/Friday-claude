@@ -1,0 +1,2940 @@
+{
+  "generatedAt": "2026-10-27T15:23:58.763Z",
+  "bmgProducts": 92,
+  "ours": 89,
+  "matches": [
+    {
+      "slug": "podarochnyj-nabor-bee-venom-s-pchelinym-yadom-dlya-razglazhivaniya-morshhin-i-ustraneniya-tusklosti-kozhi",
+      "source": "catalog-curated",
+      "name": "Подарочный набор «Bee Venom» с пчелиным ядом для разглаживания морщин и устранения тусклости кожи",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 477,
+        "name": "BEEVENOM CREAM Антивозрастной крем",
+        "slug": "bee-venom-cream-antivozrastnoj-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/bee-venom-cream-antivozrastnoj-krem/",
+        "sku": "2045",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/bee-venom-cream-antivozrastnoj-krem/1.jpg"
+      ],
+      "score": 0.52,
+      "confidence": "вероятно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "BEEVENOM CREAM Антивозрастной крем",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/bee-venom-cream-antivozrastnoj-krem/",
+          "score": 0.52
+        }
+      ]
+    },
+    {
+      "slug": "podarochnyj-nabor-expert-team-box-2-dlya-tonizaczii-kozhi-i-ustraneniya-otekov-krugov-vokrug-glaz",
+      "source": "catalog-curated",
+      "name": "Подарочный набор «Expert Team. Box 2» для тонизации кожи и устранения отеков кругов вокруг глаз",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "podarochnyj-nabor-expert-team-box-1-dlya-glubokogo-ochishheniya-i-uvlazhneniya-kozhi",
+      "source": "catalog-curated",
+      "name": "Подарочный набор «Expert Team. Box 1» для глубокого очищения и увлажнения кожи",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "podarochnyj-nabor-expert-team-full-box-dlya-uhoda-za-muzhskoj-kozhej",
+      "source": "catalog-curated",
+      "name": "Подарочный набор «Expert Team. Full Box» для ухода за мужской кожей",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "podarochnyj-nabor-obnovlennaya-kozha-dlya-liftinga-i-ukrepleniya-kozhi",
+      "source": "catalog-curated",
+      "name": "Подарочный набор «Обновленная кожа» для лифтинга и укрепления кожи",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "TTS ESSENTIAL MASK Укрепляющая и обновляющая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska/",
+          "score": 0.48
+        },
+        {
+          "name": "FLUIDO VISCOSO FORTE Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluido-viscoso-forte-syvorotka-obnovlyayushhaya/",
+          "score": 0.36
+        },
+        {
+          "name": "REGENERATIVO CELLULAR Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/regenerativo-cellular-syvorotka-obnovlyayushhaya/",
+          "score": 0.36
+        }
+      ]
+    },
+    {
+      "slug": "podarochnyj-nabor-obnovlennaya-kozha-dlya-korrekczii-vozrastnyh-izmenenij-kozhi-licza-i-vek",
+      "source": "catalog-curated",
+      "name": "Подарочный набор «Обновленная кожа» для коррекции возрастных изменений кожи лица и век",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "FLUIDO VISCOSO FORTE Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluido-viscoso-forte-syvorotka-obnovlyayushhaya/",
+          "score": 0.36
+        },
+        {
+          "name": "REGENERATIVO CELLULAR Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/regenerativo-cellular-syvorotka-obnovlyayushhaya/",
+          "score": 0.36
+        },
+        {
+          "name": "FLUVIX Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluvix-syvorotka-obnovlyayushhaya/",
+          "score": 0.36
+        }
+      ]
+    },
+    {
+      "slug": "korpo-slim-crema-anticzellyulitnyj-i-modeliruyushhij-krem",
+      "source": "catalog-curated",
+      "name": "KORPO SLIM CREMA Антицеллюлитный и моделирующий крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "korpo-slim-gel-ukreplyayushhij-gel-dlya-nog",
+      "source": "catalog-curated",
+      "name": "KORPO SLIM GEL Укрепляющий гель для ног",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "o3-depur-krem-s-ozonom",
+      "source": "catalog-curated",
+      "name": "O3 DEPUR Крем с озоном",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 482,
+        "name": "O3 DEPUR Крем с озоном",
+        "slug": "o3-depur-krem-s-ozonom",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/o3-depur-krem-s-ozonom/",
+        "sku": "2046",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/o3-depur-krem-s-ozonom/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "O3 DEPUR Крем с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/o3-depur-krem-s-ozonom/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "fluido-viscoso-forte-syvorotka-obnovlyayushhaya",
+      "source": "catalog-curated",
+      "name": "FLUIDO VISCOSO FORTE Сыворотка обновляющая",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 481,
+        "name": "FLUIDO VISCOSO FORTE Сыворотка обновляющая",
+        "slug": "fluido-viscoso-forte-syvorotka-obnovlyayushhaya",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluido-viscoso-forte-syvorotka-obnovlyayushhaya/",
+        "sku": "2037",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/fluido-viscoso-forte-syvorotka-obnovlyayushhaya/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "FLUIDO VISCOSO FORTE Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluido-viscoso-forte-syvorotka-obnovlyayushhaya/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "dermosun-spf-50-solnczezashhitnyj-krem",
+      "source": "catalog-curated",
+      "name": "DERMOSUN SPF 50 Солнцезащитный крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "bb-cream-matiruyushhij-krem",
+      "source": "catalog-curated",
+      "name": "BB CREAM Матирующий крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "K & B BUTTER CREAM Крем с баобабом и карите",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy/",
+          "score": 0.48
+        },
+        {
+          "name": "BEEVENOM CREAM Антивозрастной крем",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/bee-venom-cream-antivozrastnoj-krem/",
+          "score": 0.3
+        }
+      ]
+    },
+    {
+      "slug": "beevenom-serum-syvorotka-pchelinyj-yad",
+      "source": "catalog-curated",
+      "name": "BEEVENOM SERUM Антивозрастная сыворотка",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "ВEEVENOM SERUM Антивозрастная сыворотка",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/veevenom-serum-syvorotka-pchelinyj-yad/",
+          "score": 0.39
+        },
+        {
+          "name": "BEEVENOM CREAM Антивозрастной крем",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/bee-venom-cream-antivozrastnoj-krem/",
+          "score": 0.3
+        }
+      ]
+    },
+    {
+      "slug": "bee-venom-cream-antivozrastnoj-krem",
+      "source": "catalog-curated",
+      "name": "BEEVENOM CREAM Антивозрастной крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 477,
+        "name": "BEEVENOM CREAM Антивозрастной крем",
+        "slug": "bee-venom-cream-antivozrastnoj-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/bee-venom-cream-antivozrastnoj-krem/",
+        "sku": "2045",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/bee-venom-cream-antivozrastnoj-krem/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "BEEVENOM CREAM Антивозрастной крем",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/bee-venom-cream-antivozrastnoj-krem/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami",
+      "source": "catalog-curated",
+      "name": "CONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 445,
+        "name": "CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами",
+        "slug": "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami/",
+        "sku": "2004",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami/1.jpg"
+      ],
+      "score": 0.82,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami/",
+          "score": 0.82
+        },
+        {
+          "name": "СONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami/",
+          "score": 0.39
+        }
+      ]
+    },
+    {
+      "slug": "regenerativo-cellular-syvorotka-obnovlyayushhaya",
+      "source": "catalog-curated",
+      "name": "REGENERATIVO CELLULAR Сыворотка обновляющая",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 475,
+        "name": "REGENERATIVO CELLULAR Сыворотка обновляющая",
+        "slug": "regenerativo-cellular-syvorotka-obnovlyayushhaya",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/regenerativo-cellular-syvorotka-obnovlyayushhaya/",
+        "sku": "2040",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/regenerativo-cellular-syvorotka-obnovlyayushhaya/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "REGENERATIVO CELLULAR Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/regenerativo-cellular-syvorotka-obnovlyayushhaya/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska",
+      "source": "catalog-curated",
+      "name": "TTS ESSENTIAL MASK Укрепляющая и обновляющая маска",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 474,
+        "name": "TTS ESSENTIAL MASK Укрепляющая и обновляющая маска",
+        "slug": "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska/",
+        "sku": "2029",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "TTS ESSENTIAL MASK Укрепляющая и обновляющая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska/",
+          "score": 1
+        },
+        {
+          "name": "TTS BRIGHTENING MASK Депигментирующая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-brightening-mask-depigmentiruyushhaya-maska/",
+          "score": 0.36
+        },
+        {
+          "name": "TTS MOISTURIZING MASK Увлажняющая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-moisturizing-mask-uvlazhnyayushhaya-maska/",
+          "score": 0.36
+        }
+      ]
+    },
+    {
+      "slug": "tts-moisturizing-mask-uvlazhnyayushhaya-maska",
+      "source": "catalog-curated",
+      "name": "TTS MOISTURIZING MASK Увлажняющая маска",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 473,
+        "name": "TTS MOISTURIZING MASK Увлажняющая маска",
+        "slug": "tts-moisturizing-mask-uvlazhnyayushhaya-maska",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-moisturizing-mask-uvlazhnyayushhaya-maska/",
+        "sku": "2028",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/tts-moisturizing-mask-uvlazhnyayushhaya-maska/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "TTS MOISTURIZING MASK Увлажняющая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-moisturizing-mask-uvlazhnyayushhaya-maska/",
+          "score": 1
+        },
+        {
+          "name": "TTS BRIGHTENING MASK Депигментирующая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-brightening-mask-depigmentiruyushhaya-maska/",
+          "score": 0.37
+        },
+        {
+          "name": "TTS ESSENTIAL MASK Укрепляющая и обновляющая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska/",
+          "score": 0.36
+        }
+      ]
+    },
+    {
+      "slug": "tts-energizing-mask-maska-so-stvolovymi-kletkami",
+      "source": "catalog-curated",
+      "name": "TTS ENERGIZING MASK Энергизирующая маска",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 472,
+        "name": "TTS ENERGIZING MASK Маска со стволовыми клетками",
+        "slug": "tts-energizing-mask-maska-so-stvolovymi-kletkami",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-energizing-mask-maska-so-stvolovymi-kletkami/",
+        "sku": "2027",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/tts-energizing-mask-maska-so-stvolovymi-kletkami/1.jpg"
+      ],
+      "score": 0.83,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "TTS ENERGIZING MASK Маска со стволовыми клетками",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-energizing-mask-maska-so-stvolovymi-kletkami/",
+          "score": 0.83
+        },
+        {
+          "name": "TTS BRIGHTENING MASK Депигментирующая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-brightening-mask-depigmentiruyushhaya-maska/",
+          "score": 0.37
+        },
+        {
+          "name": "TTS MOISTURIZING MASK Увлажняющая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-moisturizing-mask-uvlazhnyayushhaya-maska/",
+          "score": 0.37
+        }
+      ]
+    },
+    {
+      "slug": "tts-o3-ozono-kislorodnaya-maska-s-ozonom",
+      "source": "catalog-curated",
+      "name": "TTS O3 OZONO Кислородная маска с озоном",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "nutriestimul-antivozrastnoj-pitatelnyj-krem",
+      "source": "catalog-curated",
+      "name": "NUTRIESTIMUL Антивозрастной питательный крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 470,
+        "name": "NUTRIESTIMUL Антивозрастной питательный крем",
+        "slug": "nutriestimul-antivozrastnoj-pitatelnyj-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/nutriestimul-antivozrastnoj-pitatelnyj-krem/",
+        "sku": "2039",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/nutriestimul-antivozrastnoj-pitatelnyj-krem/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "NUTRIESTIMUL Антивозрастной питательный крем",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/nutriestimul-antivozrastnoj-pitatelnyj-krem/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "crema-elite-ultra-uvlazhnyayushhij-krem",
+      "source": "catalog-curated",
+      "name": "CREMA ELITE Ультра увлажняющий крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 469,
+        "name": "CREMA ELITE Ультра увлажняющий крем",
+        "slug": "crema-elite-ultra-uvlazhnyayushhij-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/crema-elite-ultra-uvlazhnyayushhij-krem/",
+        "sku": "2038",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/crema-elite-ultra-uvlazhnyayushhij-krem/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "вероятно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "CREMA ELITE Ультра увлажняющий крем",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/crema-elite-ultra-uvlazhnyayushhij-krem/",
+          "score": 1
+        },
+        {
+          "name": "Crema Elite Ультраувлажняющий крем",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/crema-elite-ultrauvlazhnyayushhij-krem/",
+          "score": 0.95
+        }
+      ]
+    },
+    {
+      "slug": "kerathor-plus-izotonicheskij-tonik",
+      "source": "catalog-curated",
+      "name": "KERATHOR PLUS Изотонический тоник",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 468,
+        "name": "KERATHOR 50 PLUS Изотонический тоник",
+        "slug": "kerathor-plus-izotonicheskij-tonik",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/kerathor-plus-izotonicheskij-tonik/",
+        "sku": "2035",
+        "photosTotal": 3
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/kerathor-plus-izotonicheskij-tonik/1.jpg",
+        "docs/projects/perfect-skin/media/bmg-products/images/kerathor-plus-izotonicheskij-tonik/2.jpg",
+        "docs/projects/perfect-skin/media/bmg-products/images/kerathor-plus-izotonicheskij-tonik/3.jpg"
+      ],
+      "score": 0.86,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "KERATHOR 50 PLUS Изотонический тоник",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/kerathor-plus-izotonicheskij-tonik/",
+          "score": 0.86
+        }
+      ]
+    },
+    {
+      "slug": "collagen-booster-vosstanavlivayushhaya-syvorotka",
+      "source": "catalog-curated",
+      "name": "COLLAGEN BOOSTER Восстанавливающая сыворотка",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 467,
+        "name": "COLLAGEN BOOSTER Восстанавливающая сыворотка",
+        "slug": "collagen-booster-vosstanavlivayushhaya-syvorotka",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/collagen-booster-vosstanavlivayushhaya-syvorotka/",
+        "sku": "2041",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/collagen-booster-vosstanavlivayushhaya-syvorotka/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "COLLAGEN BOOSTER Восстанавливающая сыворотка",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/collagen-booster-vosstanavlivayushhaya-syvorotka/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
+      "source": "catalog-curated",
+      "name": "TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1098,
+        "name": "TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник",
+        "slug": "0-tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/0-tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik/",
+        "sku": "221",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/0-tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "вероятно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/0-tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik/",
+          "score": 1
+        },
+        {
+          "name": "TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha",
+      "source": "catalog-curated",
+      "name": "EMULSION HIGIENIZANTE Крем-скраб для снятия макияжа",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1097,
+        "name": "EMULSION HIGIENIZANTE  Крем-скраб для снятия макияжа",
+        "slug": "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha-1000ml",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha-1000ml/",
+        "sku": "2020",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha-1000ml/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "вероятно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "EMULSION HIGIENIZANTE  Крем-скраб для снятия макияжа",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha-1000ml/",
+          "score": 1
+        },
+        {
+          "name": "EMULSION HIGIENIZANTE Крем-скраб для снятия макияжа",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "oxioderm-maska-s-ozonom",
+      "source": "catalog-curated",
+      "name": "OXIODERM Маска с озоном",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 449,
+        "name": "OXIODERM Маска с озоном",
+        "slug": "oxioderm-maska-s-ozonom",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/oxioderm-maska-s-ozonom/",
+        "sku": "10075",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/oxioderm-maska-s-ozonom/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "OXIODERM Маска с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/oxioderm-maska-s-ozonom/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "senitul-vosstanavlivayushhaya-maska",
+      "source": "catalog-curated",
+      "name": "SENITUL Восстанавливающая маска",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 448,
+        "name": "SENITUL Восстанавливающая маска",
+        "slug": "senitul-vosstanavlivayushhaya-maska",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/senitul-vosstanavlivayushhaya-maska/",
+        "sku": "",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/senitul-vosstanavlivayushhaya-maska/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "SENITUL Восстанавливающая маска",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/senitul-vosstanavlivayushhaya-maska/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "fluvix-syvorotka-obnovlyayushhaya",
+      "source": "catalog-curated",
+      "name": "FLUVIX Сыворотка обновляющая",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 447,
+        "name": "FLUVIX Сыворотка обновляющая",
+        "slug": "fluvix-syvorotka-obnovlyayushhaya",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluvix-syvorotka-obnovlyayushhaya/",
+        "sku": "10072",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/fluvix-syvorotka-obnovlyayushhaya/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "FLUVIX Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluvix-syvorotka-obnovlyayushhaya/",
+          "score": 1
+        },
+        {
+          "name": "FLUVIX  Сыворотка регенерирующая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluvix-syvorotka-regeneriruyushhaya/",
+          "score": 0.85
+        }
+      ]
+    },
+    {
+      "slug": "depurative-crema-ochishhayushhij-krem",
+      "source": "catalog-curated",
+      "name": "DEPURATIVE CREMA Очищающий крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "Crema Elite Ультраувлажняющий крем",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/crema-elite-ultrauvlazhnyayushhij-krem/",
+          "score": 0.3
+        }
+      ]
+    },
+    {
+      "slug": "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami",
+      "source": "catalog-curated",
+      "name": "CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 445,
+        "name": "CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами",
+        "slug": "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami/",
+        "sku": "2004",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami/",
+          "score": 1
+        },
+        {
+          "name": "СONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami/",
+          "score": 0.32
+        }
+      ]
+    },
+    {
+      "slug": "biocell-syvorotka-obnovlyayushhaya",
+      "source": "catalog-curated",
+      "name": "BIOCELL Сыворотка обновляющая",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 444,
+        "name": "BIOCELL Сыворотка обновляющая",
+        "slug": "biocell-syvorotka-obnovlyayushhaya",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/biocell-syvorotka-obnovlyayushhaya/",
+        "sku": "2002",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/biocell-syvorotka-obnovlyayushhaya/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "BIOCELL Сыворотка обновляющая",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/biocell-syvorotka-obnovlyayushhaya/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej",
+      "source": "catalog-curated",
+      "name": "HIDRORRENOVADORA Крем для стимулирования тканей",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 443,
+        "name": "HIDRORRENOVADORA Крем для стимулирования тканей",
+        "slug": "hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej/",
+        "sku": "2003",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "HIDRORRENOVADORA Крем для стимулирования тканей",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "keradetox-keratoliticheskij-tonik",
+      "source": "catalog-curated",
+      "name": "KERADETOX Кератолитический тоник",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "scrub-lotion-krem-dlya-snyatiya-makiyazha",
+      "source": "catalog-curated",
+      "name": "SCRUB LOTION Крем для снятия макияжа",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 441,
+        "name": "SCRUB LOTION Крем для снятия макияжа",
+        "slug": "scrub-lotion-krem-dlya-snyatiya-makiyazha",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/scrub-lotion-krem-dlya-snyatiya-makiyazha/",
+        "sku": "2067",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/scrub-lotion-krem-dlya-snyatiya-makiyazha/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "SCRUB LOTION Крем для снятия макияжа",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/scrub-lotion-krem-dlya-snyatiya-makiyazha/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba",
+      "source": "catalog-curated",
+      "name": "BAOBAB OIL ILLUMINATOR AND REPAIRER Восстанавливающее масло баобаба",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 397,
+        "name": "О3 BAOBAB OIL Восстанавливающее  масло баобаба",
+        "slug": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba/",
+        "sku": "10050",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba/1.jpg"
+      ],
+      "score": 0.72,
+      "confidence": "вероятно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "О3 BAOBAB OIL Восстанавливающее  масло баобаба",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba/",
+          "score": 0.72
+        }
+      ]
+    },
+    {
+      "slug": "rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom",
+      "source": "catalog-curated",
+      "name": "ROSE HIP OIL + O3 Регенерирующее масло шиповника с озоном",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "O3 ROSA MOSQUETA OIL Регенерирующее  масло шиповника  с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom/",
+          "score": 0.39
+        },
+        {
+          "name": "O3 JOJOBA OIL Себорегулирующее  масло жожоба  с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom/",
+          "score": 0.33
+        }
+      ]
+    },
+    {
+      "slug": "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom",
+      "source": "catalog-curated",
+      "name": "JOJOBA OIL + O3 Себорегулирующее масло жожоба с озоном",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 394,
+        "name": "O3 JOJOBA OIL Себорегулирующее  масло жожоба  с озоном",
+        "slug": "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom/",
+        "sku": "10120",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "O3 JOJOBA OIL Себорегулирующее  масло жожоба  с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom/",
+          "score": 1
+        },
+        {
+          "name": "O3 ROSA MOSQUETA OIL Регенерирующее  масло шиповника  с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom/",
+          "score": 0.33
+        }
+      ]
+    },
+    {
+      "slug": "365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami",
+      "source": "catalog-curated",
+      "name": "365 NIGHT REPAIR CREAM Обновляющий крем с виноградными кислотами",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 393,
+        "name": "365 NIGHT REPAIR CREAM Обновляющий крем с виноградными кислотами",
+        "slug": "365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami/",
+        "sku": "22006",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "365 NIGHT REPAIR CREAM Обновляющий крем с виноградными кислотами",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka",
+      "source": "catalog-curated",
+      "name": "3 FLOWER SERUM Мульти увлажняющая сыворотка",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 392,
+        "name": "3 FLOWER SERUM Мультиувлажняющая сыворотка",
+        "slug": "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/3-flower-serum-multi-uvlazhnyayushhaya-syvorotka/",
+        "sku": "22008",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/3-flower-serum-multi-uvlazhnyayushhaya-syvorotka/1.jpg"
+      ],
+      "score": 0.95,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "3 FLOWER SERUM Мультиувлажняющая сыворотка",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/3-flower-serum-multi-uvlazhnyayushhaya-syvorotka/",
+          "score": 0.95
+        },
+        {
+          "name": "Набор № 3 GLACEE. КОСТА ДЕЛЬ ФАРО",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/nabor3-glacee-kosta-del-faro/",
+          "score": 0.35
+        },
+        {
+          "name": "Набор № 3 ISSEIMI. Антивозрастной баланс-уход для комбинированной обезвоженной кожи",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/nabor-3-isseimi-antivozrastnoj-balans-uhod-dlya-kombinirovannoj-obezvozhennoj-kozhi/",
+          "score": 0.35
+        }
+      ]
+    },
+    {
+      "slug": "chia-protect-oil-maslo-chia-s-ozonom",
+      "source": "catalog-curated",
+      "name": "CHIA PROTECT OIL Масло чиа с озоном",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 391,
+        "name": "CHIA PROTECT OIL Масло чиа с озоном",
+        "slug": "chia-protect-oil-maslo-chia-s-ozonom",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/chia-protect-oil-maslo-chia-s-ozonom/",
+        "sku": "22007",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/chia-protect-oil-maslo-chia-s-ozonom/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "CHIA PROTECT OIL Масло чиа с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/chia-protect-oil-maslo-chia-s-ozonom/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "chia-detox-cream-uvlazhnyayushhij-krem-s-chia",
+      "source": "catalog-curated",
+      "name": "CHIA DETOX CREAM Увлажняющий крем с чиа",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 390,
+        "name": "CHIA DETOX CREAM Увлажняющий крем с чиа",
+        "slug": "chia-detox-cream-uvlazhnyayushhij-krem-s-chia",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/chia-detox-cream-uvlazhnyayushhij-krem-s-chia/",
+        "sku": "22005",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/chia-detox-cream-uvlazhnyayushhij-krem-s-chia/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "CHIA DETOX CREAM Увлажняющий крем с чиа",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/chia-detox-cream-uvlazhnyayushhij-krem-s-chia/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj",
+      "source": "catalog-curated",
+      "name": "PURE MARINE WATER CREAM Увлажняющий крем с морской водой",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 389,
+        "name": "PURE MARINE WATER CREAM Увлажняющий крем с морской водой",
+        "slug": "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj/",
+        "sku": "22004",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "PURE MARINE WATER CREAM Увлажняющий крем с морской водой",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "natural-tonic-naturalnyj-tonik-dlya-licza",
+      "source": "catalog-curated",
+      "name": "NATURAL TONIC Натуральный тоник для лица",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1078,
+        "name": "NATURAL TONIC Натуральный тоник для лица",
+        "slug": "natural-tonic-naturalnyj-tonik-dlya-licza-500ml",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-tonic-naturalnyj-tonik-dlya-licza-500ml/",
+        "sku": "22011",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/natural-tonic-naturalnyj-tonik-dlya-licza-500ml/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "вероятно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "NATURAL TONIC Натуральный тоник для лица",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-tonic-naturalnyj-tonik-dlya-licza-500ml/",
+          "score": 1
+        },
+        {
+          "name": "NATURAL TONIC Натуральный тоник для лица",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-tonic-naturalnyj-tonik-dlya-licza/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza",
+      "source": "catalog-curated",
+      "name": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1076,
+        "name": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
+        "slug": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza-500ml",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza-500ml/",
+        "sku": "22009",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza-500ml/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "вероятно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza-500ml/",
+          "score": 1
+        },
+        {
+          "name": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi",
+      "source": "catalog-curated",
+      "name": "REDENSIFICANTE Реденсифицирующий крем для зрелой кожи",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "eye-resistance-krem-dlya-glaz",
+      "source": "catalog-curated",
+      "name": "EYE RESISTANCE Крем для глаз",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 318,
+        "name": "EYE RESISTANCE Крем для глаз",
+        "slug": "eye-resistance-krem-dlya-glaz",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/eye-resistance-krem-dlya-glaz/",
+        "sku": "10127",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/eye-resistance-krem-dlya-glaz/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "EYE RESISTANCE Крем для глаз",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/eye-resistance-krem-dlya-glaz/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "hydrocombat-krem-s-ozonom",
+      "source": "catalog-curated",
+      "name": "HYDROCOMBAT Крем с озоном",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 317,
+        "name": "HYDROCOMBAT Крем с озоном",
+        "slug": "hydrocombat-krem-s-ozonom",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/hydrocombat-krem-s-ozonom/",
+        "sku": "10126",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/hydrocombat-krem-s-ozonom/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "HYDROCOMBAT Крем с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/hydrocombat-krem-s-ozonom/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "balance-toner-tonik-s-morskoj-termalnoj-vodoj",
+      "source": "catalog-curated",
+      "name": "BALANCE TONER Тоник с морской термальной водой",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 316,
+        "name": "BALANCE TONER Тоник с морской термальной водой",
+        "slug": "balance-toner-tonik-s-morskoj-termalnoj-vodoj",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/balance-toner-tonik-s-morskoj-termalnoj-vodoj/",
+        "sku": "10125",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/balance-toner-tonik-s-morskoj-termalnoj-vodoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "BALANCE TONER Тоник с морской термальной водой",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/balance-toner-tonik-s-morskoj-termalnoj-vodoj/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj",
+      "source": "catalog-curated",
+      "name": "ENERGEL Очищающий гель с морской термальной водой",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 309,
+        "name": "ENERGEL Очищающий гель с морской термальной водой",
+        "slug": "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj/",
+        "sku": "10124",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "ENERGEL Очищающий гель с морской термальной водой",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "serum-triple-accion-syvorotka-trojnogo-dejstviya",
+      "source": "catalog-curated",
+      "name": "SERUM TRIPLE ACCIÓN Сыворотка тройного действия",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 308,
+        "name": "SERUM TRIPLE ACCIÓN Сыворотка тройного действия",
+        "slug": "serum-triple-accion-syvorotka-trojnogo-dejstviya",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/serum-triple-accion-syvorotka-trojnogo-dejstviya/",
+        "sku": "10082",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/serum-triple-accion-syvorotka-trojnogo-dejstviya/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "SERUM TRIPLE ACCIÓN Сыворотка тройного действия",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/serum-triple-accion-syvorotka-trojnogo-dejstviya/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "contour-k-krem-dlya-glaz",
+      "source": "catalog-curated",
+      "name": "CONTOUR-K Крем для глаз",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 307,
+        "name": "CONTOUR-K Крем для глаз",
+        "slug": "contour-k-krem-dlya-glaz",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/contour-k-krem-dlya-glaz/",
+        "sku": "10123",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/contour-k-krem-dlya-glaz/1.png"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "CONTOUR-K Крем для глаз",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/contour-k-krem-dlya-glaz/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "reti-bogatyj-retinolom-krem",
+      "source": "catalog-curated",
+      "name": "RETI+ Богатый ретинолом крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 306,
+        "name": "RETI+ Богатый ретинолом крем",
+        "slug": "reti-bogatyj-retinolom-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/reti-bogatyj-retinolom-krem/",
+        "sku": "10121",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/reti-bogatyj-retinolom-krem/1.png"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "RETI+ Богатый ретинолом крем",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/reti-bogatyj-retinolom-krem/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "gen-adn-ukreplyayushhij-krem",
+      "source": "catalog-curated",
+      "name": "GEN ADN Укрепляющий крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 305,
+        "name": "GEN ADN Укрепляющий крем",
+        "slug": "gen-adn-ukreplyayushhij-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/gen-adn-ukreplyayushhij-krem/",
+        "sku": "10061",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/gen-adn-ukreplyayushhij-krem/1.png"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "GEN ADN Укрепляющий крем",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/gen-adn-ukreplyayushhij-krem/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "antiox-c-antioksidantnyj-krem",
+      "source": "catalog-curated",
+      "name": "ANTIOX-C Антиоксидантный крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 304,
+        "name": "ANTIOX-C Антиоксидантный крем",
+        "slug": "antiox-c-antioksidantnyj-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/antiox-c-antioksidantnyj-krem/",
+        "sku": "10122",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/antiox-c-antioksidantnyj-krem/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "ANTIOX-C Антиоксидантный крем",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/antiox-c-antioksidantnyj-krem/",
+          "score": 1
+        },
+        {
+          "name": "Liposome-C Антиоксидантная сыворотка",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/liposome-c-antioksidantnaya-syvorotka/",
+          "score": 0.3
+        }
+      ]
+    },
+    {
+      "slug": "hidrorrevitalizante-vosstanavlivayushhij-krem",
+      "source": "catalog-curated",
+      "name": "HIDRORREVITALIZANTE Восстанавливающий крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 303,
+        "name": "HIDRORREVITALIZANTE Восстанавливающий крем",
+        "slug": "hidrorrevitalizante-vosstanavlivayushhij-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/hidrorrevitalizante-vosstanavlivayushhij-krem/",
+        "sku": "10080",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/hidrorrevitalizante-vosstanavlivayushhij-krem/1.png"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "HIDRORREVITALIZANTE Восстанавливающий крем",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/hidrorrevitalizante-vosstanavlivayushhij-krem/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "dinamizante-vosstanavlivayushhij-krem",
+      "source": "catalog-curated",
+      "name": "DINAMIZANTE Восстанавливающий крем",
+      "article": null,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 293,
+        "name": "DINAMIZANTE Восстанавливающий крем",
+        "slug": "dinamizante-vosstanavlivayushhij-krem",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/dinamizante-vosstanavlivayushhij-krem/",
+        "sku": "10081",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/dinamizante-vosstanavlivayushhij-krem/1.png"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [],
+      "candidates": [
+        {
+          "name": "DINAMIZANTE Восстанавливающий крем",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/dinamizante-vosstanavlivayushhij-krem/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "purifying-water-miczellyarnaya-voda",
+      "source": "retail-products",
+      "name": "PURIFYING WATER Мицеллярная очищающая вода с термальными микроэлементами",
+      "article": 10128,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1575,
+        "name": "Purifying Water Мицеллярная вода",
+        "slug": "purifying-water-miczellyarnaya-voda",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/purifying-water-miczellyarnaya-voda/",
+        "sku": "10128",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/purifying-water-miczellyarnaya-voda/1.jpg"
+      ],
+      "score": 0.95,
+      "confidence": "точно",
+      "reasons": [
+        "sku",
+        "image"
+      ],
+      "candidates": [
+        {
+          "name": "Purifying Water Мицеллярная вода",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/purifying-water-miczellyarnaya-voda/",
+          "score": 0.95
+        }
+      ]
+    },
+    {
+      "slug": "cleansing-balm-ochishhayushhij-balzam",
+      "source": "retail-products",
+      "name": "CLEANSING BALM Очищающий бальзам",
+      "article": 10129,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1581,
+        "name": "Cleansing Balm Очищающий бальзам",
+        "slug": "cleansing-balm-ochishhayushhij-balzam",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/cleansing-balm-ochishhayushhij-balzam/",
+        "sku": "10129",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/cleansing-balm-ochishhayushhij-balzam/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku",
+        "image"
+      ],
+      "candidates": [
+        {
+          "name": "Cleansing Balm Очищающий бальзам",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/cleansing-balm-ochishhayushhij-balzam/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "cbd-night-mask-nochnaya-vosstanavlivayushhaya-maska",
+      "source": "retail-products",
+      "name": "CBD NIGHT MASK Ночная восстанавливающая маска с каннабидиолом и мелатонином",
+      "article": 10130,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1584,
+        "name": "Маска CBD – Ночная маска CBD",
+        "slug": "maska-cbd-nochnaya-maska-cbd",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/maska-cbd-nochnaya-maska-cbd/",
+        "sku": "10130",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/maska-cbd-nochnaya-maska-cbd/1.jpg"
+      ],
+      "score": 0.95,
+      "confidence": "точно",
+      "reasons": [
+        "sku",
+        "image"
+      ],
+      "candidates": [
+        {
+          "name": "Маска CBD – Ночная маска CBD",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/maska-cbd-nochnaya-maska-cbd/",
+          "score": 0.95
+        }
+      ]
+    },
+    {
+      "slug": "4d-hyal-cross-superuvlazhnyayushhaya-syvorotka",
+      "source": "retail-products",
+      "name": "4D HYAL CROSS Суперувлажняющая сыворотка с гиалуроновой кислотой",
+      "article": 10131,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1583,
+        "name": "4D Hyal Cross Суперувлажняющая сыворотка",
+        "slug": "4d-hyal-cross-superuvlazhnyayushhaya-syvorotka",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/4d-hyal-cross-superuvlazhnyayushhaya-syvorotka/",
+        "sku": "10131",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/4d-hyal-cross-superuvlazhnyayushhaya-syvorotka/1.jpg"
+      ],
+      "score": 0.95,
+      "confidence": "точно",
+      "reasons": [
+        "sku",
+        "image"
+      ],
+      "candidates": [
+        {
+          "name": "4D Hyal Cross Суперувлажняющая сыворотка",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/4d-hyal-cross-superuvlazhnyayushhaya-syvorotka/",
+          "score": 0.95
+        }
+      ]
+    },
+    {
+      "slug": "liposome-c-antioksidantnaya-syvorotka",
+      "source": "retail-products",
+      "name": "LIPOSOME-C Антиоксидантная сыворотка",
+      "article": 10132,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1582,
+        "name": "Liposome-C Антиоксидантная сыворотка",
+        "slug": "liposome-c-antioksidantnaya-syvorotka",
+        "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/liposome-c-antioksidantnaya-syvorotka/",
+        "sku": "10132",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/liposome-c-antioksidantnaya-syvorotka/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku",
+        "image"
+      ],
+      "candidates": [
+        {
+          "name": "Liposome-C Антиоксидантная сыворотка",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/liposome-c-antioksidantnaya-syvorotka/",
+          "score": 1
+        },
+        {
+          "name": "ANTIOX-C Антиоксидантный крем",
+          "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/antiox-c-antioksidantnyj-krem/",
+          "score": 0.3
+        }
+      ]
+    },
+    {
+      "slug": "sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj",
+      "source": "retail-products",
+      "name": "SEA FOAM Очищающая пенка с морской водой",
+      "article": 2114,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1593,
+        "name": "Sea Foam Очищающая пенка с морской водой",
+        "slug": "sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj/",
+        "sku": "2114",
+        "photosTotal": 2
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj/1.jpg",
+        "docs/projects/perfect-skin/media/bmg-products/images/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj/2.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku",
+        "image"
+      ],
+      "candidates": [
+        {
+          "name": "Sea Foam Очищающая пенка с морской водой",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "blockmelan-depigmentiruyushhaya-syvorotka",
+      "source": "retail-products",
+      "name": "BLOCKMELAN Депигментирующая сыворотка",
+      "article": 2069,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": {
+        "id": 1599,
+        "name": "Blockmelan Депигментирующая сыворотка",
+        "slug": "blockmelan-depigmentiruyushhaya-syvorotka",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/blockmelan-depigmentiruyushhaya-syvorotka/",
+        "sku": "2069",
+        "photosTotal": 4
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/blockmelan-depigmentiruyushhaya-syvorotka/1.jpg",
+        "docs/projects/perfect-skin/media/bmg-products/images/blockmelan-depigmentiruyushhaya-syvorotka/2.jpg",
+        "docs/projects/perfect-skin/media/bmg-products/images/blockmelan-depigmentiruyushhaya-syvorotka/3.jpg",
+        "docs/projects/perfect-skin/media/bmg-products/images/blockmelan-depigmentiruyushhaya-syvorotka/4.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku",
+        "image"
+      ],
+      "candidates": [
+        {
+          "name": "Blockmelan Депигментирующая сыворотка",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/blockmelan-depigmentiruyushhaya-syvorotka/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "hydra-view-gidra-krem-dlya-vek",
+      "source": "retail-products",
+      "name": "HYDRA VIEW Гидра-крем для век",
+      "article": 2117,
+      "ourPhoto": true,
+      "ourPhotoWhere": [
+        "public/products",
+        "assets/products",
+        "products-optimized/card.webp"
+      ],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "aquao3-gf-antiaging-syvorotka-s-ozonom-omolazhivayuschiy-kontsentrat",
+      "source": "pro-products",
+      "name": "AQUAO3 (GF) ANTIAGING Сыворотка с озоном / омолаживающий концентрат",
+      "article": 2064,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 722,
+        "name": "АQUA O3 ANTIAGING СЫВОРОТКА С ОЗОНОМ Омолаживающий коктейль для кожи с признаками старения",
+        "slug": "aqua-o3-antiaging-syvorotka-s-ozonom-omolazhivayushhij-koktejl-dlya-kozhi-s-priznakami-stareniya",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-antiaging-syvorotka-s-ozonom-omolazhivayushhij-koktejl-dlya-kozhi-s-priznakami-stareniya/",
+        "sku": "2064",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/aqua-o3-antiaging-syvorotka-s-ozonom-omolazhivayushhij-koktejl-dlya-kozhi-s-priznakami-stareniya/1.jpg"
+      ],
+      "score": 0.5,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "АQUA O3 ANTIAGING СЫВОРОТКА С ОЗОНОМ Омолаживающий коктейль для кожи с признаками старения",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-antiaging-syvorotka-s-ozonom-omolazhivayushhij-koktejl-dlya-kozhi-s-priznakami-stareniya/",
+          "score": 0.5
+        },
+        {
+          "name": "Aqua O3 Whitening Депигментирующая сыворотка с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/",
+          "score": 0.31
+        },
+        {
+          "name": "AQUA O3 LIPO СЫВОРОТКА С ОЗОНОМ Антицеллюлитный коктейль",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/",
+          "score": 0.3
+        }
+      ]
+    },
+    {
+      "slug": "aqua-o3-whitening-depigmentiruyuschaya-syvorotka-s-ozonom",
+      "source": "pro-products",
+      "name": "AQUA O3 WHITENING Депигментирующая сыворотка с озоном",
+      "article": 2063,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1592,
+        "name": "Aqua O3 Whitening Депигментирующая сыворотка с озоном",
+        "slug": "aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/",
+        "sku": "2063",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "Aqua O3 Whitening Депигментирующая сыворотка с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/",
+          "score": 1
+        },
+        {
+          "name": "AQUA O3 LIPO СЫВОРОТКА С ОЗОНОМ Антицеллюлитный коктейль",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/",
+          "score": 0.38
+        },
+        {
+          "name": "AQUA O3 FIRMING СЫВОРОТКА С ОЗОНОМ  Укрепляющий коктейль для лица",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza/",
+          "score": 0.38
+        }
+      ]
+    },
+    {
+      "slug": "aquao3-firming-syvorotka-s-ozonom-liftingovyy-kontsentrat",
+      "source": "pro-products",
+      "name": "AQUAO3 FIRMING Сыворотка с озоном / лифтинговый концентрат",
+      "article": 2062,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 728,
+        "name": "AQUA O3 FIRMING СЫВОРОТКА С ОЗОНОМ  Укрепляющий коктейль для лица",
+        "slug": "aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza/",
+        "sku": "2062",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza/1.jpg"
+      ],
+      "score": 0.83,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "AQUA O3 FIRMING СЫВОРОТКА С ОЗОНОМ  Укрепляющий коктейль для лица",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza/",
+          "score": 0.83
+        },
+        {
+          "name": "Aqua O3 Whitening Депигментирующая сыворотка с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/",
+          "score": 0.35
+        },
+        {
+          "name": "AQUA O3 LIPO СЫВОРОТКА С ОЗОНОМ Антицеллюлитный коктейль",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "aquao3-repair-syvorotka-s-ozonom-vosstanavlivayuschiy-kontsentrat",
+      "source": "pro-products",
+      "name": "AQUAO3 REPAIR Сыворотка с озоном / восстанавливающий концентрат",
+      "article": 2061,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 729,
+        "name": "АQUA O3 REPAIR СЫВОРОТКА С ОЗОНОМ   Коктейль против рубцов и растяжек",
+        "slug": "aqua-o3-repair-syvorotka-s-ozonom-koktejl-protiv-rubczov-i-rastyazhek",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-repair-syvorotka-s-ozonom-koktejl-protiv-rubczov-i-rastyazhek/",
+        "sku": "2061",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/aqua-o3-repair-syvorotka-s-ozonom-koktejl-protiv-rubczov-i-rastyazhek/1.jpg"
+      ],
+      "score": 0.5,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "АQUA O3 REPAIR СЫВОРОТКА С ОЗОНОМ   Коктейль против рубцов и растяжек",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-repair-syvorotka-s-ozonom-koktejl-protiv-rubczov-i-rastyazhek/",
+          "score": 0.5
+        },
+        {
+          "name": "Aqua O3 Whitening Депигментирующая сыворотка с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/",
+          "score": 0.35
+        },
+        {
+          "name": "AQUA O3 LIPO СЫВОРОТКА С ОЗОНОМ Антицеллюлитный коктейль",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "aquao3-lipo-syvorotka-s-ozonom-lipoliticheskiy-kontsentrat",
+      "source": "pro-products",
+      "name": "AQUAO3 LIPO Сыворотка с озоном / липолитический концентрат",
+      "article": 2060,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 730,
+        "name": "AQUA O3 LIPO СЫВОРОТКА С ОЗОНОМ Антицеллюлитный коктейль",
+        "slug": "aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/",
+        "sku": "2060",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/1.jpg"
+      ],
+      "score": 0.85,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "AQUA O3 LIPO СЫВОРОТКА С ОЗОНОМ Антицеллюлитный коктейль",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/",
+          "score": 0.85
+        },
+        {
+          "name": "Aqua O3 Whitening Депигментирующая сыворотка с озоном",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/",
+          "score": 0.35
+        },
+        {
+          "name": "AQUA O3 FIRMING СЫВОРОТКА С ОЗОНОМ  Укрепляющий коктейль для лица",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza/",
+          "score": 0.33
+        }
+      ]
+    },
+    {
+      "slug": "egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta",
+      "source": "pro-products",
+      "name": "EGF HIDROSOLUBLE Сыворотка с Эпидермальным Фактором Роста",
+      "article": 2014,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1196,
+        "name": "EGF Hidrosoluble  Сыворотка с Эпидермальным Фактором Роста",
+        "slug": "egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta/",
+        "sku": "2014",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "EGF Hidrosoluble  Сыворотка с Эпидермальным Фактором Роста",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta/",
+          "score": 1
+        },
+        {
+          "name": "FGF Hidrosoluble Сыворотка с Фактором Роста Фибробластов",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov",
+      "source": "pro-products",
+      "name": "FGF HIDROSOLUBLE Сыворотка с Фактором Роста Фибробластов",
+      "article": 2015,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1198,
+        "name": "FGF Hidrosoluble Сыворотка с Фактором Роста Фибробластов",
+        "slug": "fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov/",
+        "sku": "2015",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "FGF Hidrosoluble Сыворотка с Фактором Роста Фибробластов",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov/",
+          "score": 1
+        },
+        {
+          "name": "EGF Hidrosoluble  Сыворотка с Эпидермальным Фактором Роста",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoy-kislotoy",
+      "source": "pro-products",
+      "name": "ACIDO HIALURONICO + PEPTIDOS HIDROSOLUBLE Сыворотка с гиалуроновой кислотой",
+      "article": 2016,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1200,
+        "name": "Acido Hialuronico + Peptidos Hidrosoluble Сыворотка с гиалуроновой кислотой",
+        "slug": "acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoj-kislotoj",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoj-kislotoj/",
+        "sku": "2016",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoj-kislotoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "Acido Hialuronico + Peptidos Hidrosoluble Сыворотка с гиалуроновой кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoj-kislotoj/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem",
+      "source": "pro-products",
+      "name": "SILICIO ORGANICO + PEPTIDOS HIDROSOLUBLE Сыворотка с органическим кремнием",
+      "article": 2017,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1202,
+        "name": "Silicio Organico + Peptidos Hidrosoluble Сыворотка с органическим кремнием",
+        "slug": "silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem/",
+        "sku": "2017",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "Silicio Organico + Peptidos Hidrosoluble Сыворотка с органическим кремнием",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s",
+      "source": "pro-products",
+      "name": "VITAMINA C + PEPTIDOS HIDROSOLUBLE Сыворотка с витамином С",
+      "article": 2018,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1204,
+        "name": "Vitamina C + Peptidos Hidrosoluble Сыворотка с витамином С",
+        "slug": "vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s/",
+        "sku": "2018",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "Vitamina C + Peptidos Hidrosoluble Сыворотка с витамином С",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "peeling-intensivo-intensivnyy-fiziko-himicheskiy-piling",
+      "source": "pro-products",
+      "name": "PEELING INTENSIVO Интенсивный физико-химический пилинг",
+      "article": 2005,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1619,
+        "name": "PEELING INTENSIVO Интенсивный физико-химический пилинг",
+        "slug": "peeling-intensivo-intensivnyj-fiziko-himicheskij-piling",
+        "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/peeling-intensivo-intensivnyj-fiziko-himicheskij-piling/",
+        "sku": "2005",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/peeling-intensivo-intensivnyj-fiziko-himicheskij-piling/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "PEELING INTENSIVO Интенсивный физико-химический пилинг",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/peeling-intensivo-intensivnyj-fiziko-himicheskij-piling/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "acido-piruvico-eksfoliiruyuschiy-eliksir-s-pirovinogradnoy-kislotoy",
+      "source": "pro-products",
+      "name": "ACIDO PIRUVICO Эксфолиирующий эликсир с пировиноградной кислотой",
+      "article": 2006,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1613,
+        "name": "ACIDO PIRUVICO Эксфолиирующий эликсир с пировиноградной кислотой",
+        "slug": "acido-piruvico-eksfoliiruyushhij-eliksir-s-pirovinogradnoj-kislotoj",
+        "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-piruvico-eksfoliiruyushhij-eliksir-s-pirovinogradnoj-kislotoj/",
+        "sku": "2006",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/acido-piruvico-eksfoliiruyushhij-eliksir-s-pirovinogradnoj-kislotoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "ACIDO PIRUVICO Эксфолиирующий эликсир с пировиноградной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-piruvico-eksfoliiruyushhij-eliksir-s-pirovinogradnoj-kislotoj/",
+          "score": 1
+        },
+        {
+          "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/",
+          "score": 0.34
+        },
+        {
+          "name": "ÁCIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "acido-mandelico-eksfoliiruyuschiy-eliksir-s-mindalnoy-kislotoy",
+      "source": "pro-products",
+      "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+      "article": 2007,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1618,
+        "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+        "slug": "acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj",
+        "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/",
+        "sku": "2007",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/",
+          "score": 1
+        },
+        {
+          "name": "ÁCIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/",
+          "score": 0.34
+        },
+        {
+          "name": "ACIDO LACTICO Эксфолиирующий эликсир с молочной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "acido-glicolico-eksfoliiruyuschiy-eliksir-s-glikolevoy-kislotoy",
+      "source": "pro-products",
+      "name": "ACIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+      "article": 2008,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1617,
+        "name": "ÁCIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+        "slug": "acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj",
+        "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/",
+        "sku": "2008",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "ÁCIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/",
+          "score": 1
+        },
+        {
+          "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/",
+          "score": 0.34
+        },
+        {
+          "name": "ACIDO LACTICO Эксфолиирующий эликсир с молочной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "acido-lactico-eksfoliiruyuschiy-eliksir-s-molochnoy-kislotoy",
+      "source": "pro-products",
+      "name": "ACIDO LACTICO Эксфолиирующий эликсир с молочной кислотой",
+      "article": 2009,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1616,
+        "name": "ACIDO LACTICO Эксфолиирующий эликсир с молочной кислотой",
+        "slug": "acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj",
+        "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj/",
+        "sku": "2009",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "ACIDO LACTICO Эксфолиирующий эликсир с молочной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj/",
+          "score": 1
+        },
+        {
+          "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/",
+          "score": 0.34
+        },
+        {
+          "name": "ÁCIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "acido-kojico-eksfoliiruyuschiy-eliksir-s-koyevoy-kislotoy",
+      "source": "pro-products",
+      "name": "ACIDO KOJICO Эксфолиирующий эликсир с койевой кислотой",
+      "article": 2011,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1612,
+        "name": "ACIDO KOJICO Эксфолиирующий эликсир с койевой кислотой",
+        "slug": "acido-kojico-eksfoliiruyushhij-eliksir-s-kojevoj-kislotoj",
+        "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-kojico-eksfoliiruyushhij-eliksir-s-kojevoj-kislotoj/",
+        "sku": "2011",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/acido-kojico-eksfoliiruyushhij-eliksir-s-kojevoj-kislotoj/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "ACIDO KOJICO Эксфолиирующий эликсир с койевой кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-kojico-eksfoliiruyushhij-eliksir-s-kojevoj-kislotoj/",
+          "score": 1
+        },
+        {
+          "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/",
+          "score": 0.34
+        },
+        {
+          "name": "ÁCIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/",
+          "score": 0.34
+        }
+      ]
+    },
+    {
+      "slug": "solucion-neutralizante-neytralizuyuschiy-rastvor",
+      "source": "pro-products",
+      "name": "SOLUCION NEUTRALIZANTE Нейтрализующий раствор",
+      "article": 2012,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1604,
+        "name": "SOLUCION NEUTRALIZANTE Нейтрализующий раствор",
+        "slug": "solucion-neutralizante-nejtralizuyushhij-rastvor",
+        "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/solucion-neutralizante-nejtralizuyushhij-rastvor/",
+        "sku": "2012",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/solucion-neutralizante-nejtralizuyushhij-rastvor/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "SOLUCION NEUTRALIZANTE Нейтрализующий раствор",
+          "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/solucion-neutralizante-nejtralizuyushhij-rastvor/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "kgf-gel-acondicionador-vosstanavlivayuschiy-gel-dlya-kozhi",
+      "source": "pro-products",
+      "name": "KGF GEL ACONDICIONADOR Восстанавливающий гель для кожи",
+      "article": 2013,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1208,
+        "name": "KGF Gel Acondicionador Восстанавливающий гель для кожи",
+        "slug": "kgf-gel-acondicionador-vosstanavlivayushhij-gel-dlya-kozhi",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/kgf-gel-acondicionador-vosstanavlivayushhij-gel-dlya-kozhi/",
+        "sku": "2013",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/kgf-gel-acondicionador-vosstanavlivayushhij-gel-dlya-kozhi/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "KGF Gel Acondicionador Восстанавливающий гель для кожи",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/kgf-gel-acondicionador-vosstanavlivayushhij-gel-dlya-kozhi/",
+          "score": 1
+        }
+      ]
+    },
+    {
+      "slug": "advance-repair-obnovlyayuschiy-krem",
+      "source": "pro-products",
+      "name": "ADVANCE REPAIR Обновляющий крем",
+      "article": 2143,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": null,
+      "bmgPhotos": [],
+      "score": null,
+      "confidence": "нет",
+      "reasons": [],
+      "candidates": []
+    },
+    {
+      "slug": "mascarilla-atp-alabastro-alebastrovaya-maska-s-atf",
+      "source": "pro-products",
+      "name": "MASCARILLA ATP + ALABASTRO «алебастровая» маска с АТФ",
+      "article": 2032,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1194,
+        "name": "Mascarilla ATP + Alabastro  Энергетическая маска с АТФ и алебастром для лица",
+        "slug": "mascarilla-atp-alabastro-energeticheskaya-maska-s-atf-i-alebastrom-dlya-licza",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/mascarilla-atp-alabastro-energeticheskaya-maska-s-atf-i-alebastrom-dlya-licza/",
+        "sku": "2032",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/mascarilla-atp-alabastro-energeticheskaya-maska-s-atf-i-alebastrom-dlya-licza/1.jpg"
+      ],
+      "score": 0.95,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "Mascarilla ATP + Alabastro  Энергетическая маска с АТФ и алебастром для лица",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/mascarilla-atp-alabastro-energeticheskaya-maska-s-atf-i-alebastrom-dlya-licza/",
+          "score": 0.95
+        }
+      ]
+    },
+    {
+      "slug": "mascarilla-peel-off-vitamina-c-maska-s-vitaminom-s-alginatnaya",
+      "source": "pro-products",
+      "name": "MASCARILLA PEEL OFF VITAMINA C Маска с витамином С / альгинатная",
+      "article": 22002,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1480,
+        "name": "PEEL-OFF MASK  Маска с витамином С",
+        "slug": "peel-off-mask-maska-s-vitaminom-s",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/peel-off-mask-maska-s-vitaminom-s/",
+        "sku": "22002",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/peel-off-mask-maska-s-vitaminom-s/1.jpg"
+      ],
+      "score": 0.5,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "PEEL-OFF MASK  Маска с витамином С",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/peel-off-mask-maska-s-vitaminom-s/",
+          "score": 0.5
+        }
+      ]
+    },
+    {
+      "slug": "charcoal-mask-maska-s-ugolnym-poroshkom-alginatnaya",
+      "source": "pro-products",
+      "name": "CHARCOAL MASK Маска с угольным порошком / альгинатная",
+      "article": 22003,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1085,
+        "name": "CHARCOAL MASK Маска с угольным порошком",
+        "slug": "charcoal-mask-maska-s-ugolnym-poroshkom",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/charcoal-mask-maska-s-ugolnym-poroshkom/",
+        "sku": "22003",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/charcoal-mask-maska-s-ugolnym-poroshkom/1.jpg"
+      ],
+      "score": 0.96,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "CHARCOAL MASK Маска с угольным порошком",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/charcoal-mask-maska-s-ugolnym-poroshkom/",
+          "score": 0.96
+        }
+      ]
+    },
+    {
+      "slug": "k-b-butter-cream-krem-s-maslami-baobaba-i-karite-dlya-bazovogo-zakrytiya-protsedury-i-massazha",
+      "source": "pro-products",
+      "name": "K&B BUTTER CREAM Крем с маслами баобаба и карите для базового закрытия процедуры и массажа",
+      "article": 22001,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1080,
+        "name": "K & B BUTTER CREAM Крем с баобабом и карите",
+        "slug": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy/",
+        "sku": "22001",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy/1.jpg"
+      ],
+      "score": 0.5,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "K & B BUTTER CREAM Крем с баобабом и карите",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy/",
+          "score": 0.5
+        }
+      ]
+    },
+    {
+      "slug": "orange-esential-oil-tsitrusovoe-maslo-chistoe-efirnoe-maslo",
+      "source": "pro-products",
+      "name": "ORANGE ESENTIAL OIL Цитрусовое масло, чистое эфирное масло",
+      "article": 22010,
+      "ourPhoto": false,
+      "ourPhotoWhere": [],
+      "bmg": {
+        "id": 1212,
+        "name": "Orange Esential Oil Цитрусовое масло, чистое эфирное масло",
+        "slug": "orange-esential-oil-czitrusovoe-maslo-chistoe-efirnoe-maslo",
+        "permalink": "https://beautymedgroup.ru/katalog/isseimi/orange-esential-oil-czitrusovoe-maslo-chistoe-efirnoe-maslo/",
+        "sku": "22010",
+        "photosTotal": 1
+      },
+      "bmgPhotos": [
+        "docs/projects/perfect-skin/media/bmg-products/images/orange-esential-oil-czitrusovoe-maslo-chistoe-efirnoe-maslo/1.jpg"
+      ],
+      "score": 1,
+      "confidence": "точно",
+      "reasons": [
+        "sku"
+      ],
+      "candidates": [
+        {
+          "name": "Orange Esential Oil Цитрусовое масло, чистое эфирное масло",
+          "permalink": "https://beautymedgroup.ru/katalog/isseimi/orange-esential-oil-czitrusovoe-maslo-chistoe-efirnoe-maslo/",
+          "score": 1
+        }
+      ]
+    }
+  ]
+}

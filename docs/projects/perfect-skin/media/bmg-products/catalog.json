@@ -1,0 +1,1923 @@
+{
+  "meta": {
+    "base": "https://beautymedgroup.ru",
+    "method": "wc-store-api",
+    "fetchedAt": "2026-10-27T15:23:58.593Z",
+    "products": 92,
+    "images": 107,
+    "imagesOk": 107,
+    "imagesFailed": 0
+  },
+  "products": [
+    {
+      "id": 1692,
+      "name": "Набор № 5 GLACEE. САГРАДА",
+      "slug": "nabor5-glacee-sagrada",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/nabor5-glacee-sagrada/",
+      "sku": "0000-1-5",
+      "categories": [
+        "GLACÉE Skincare",
+        "GLACÉE Skincare Man Line",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor5-glacee-sagrada",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/glacee-nabor-2026-000.jpg",
+          "alt": "GLACEE-nabor-2026-000",
+          "file": "images/nabor5-glacee-sagrada/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2026/02/glacee-nabor-2026-men-002.jpg",
+          "alt": "GLACEE-nabor-2026-men-002",
+          "file": "images/nabor5-glacee-sagrada/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1691,
+      "name": "Набор № 4 GLACEE. СИЕСТА",
+      "slug": "nabor4-glacee-siesta",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/nabor4-glacee-siesta/",
+      "sku": "0000-1-4",
+      "categories": [
+        "GLACÉE Skincare",
+        "GLACÉE Skincare Man Line",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor4-glacee-siesta",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/glacee-nabor-2026-000.jpg",
+          "alt": "GLACEE-nabor-2026-000",
+          "file": "images/nabor4-glacee-siesta/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2026/02/glacee-nabor-2026-men-003.jpg",
+          "alt": "GLACEE-nabor-2026-men-003",
+          "file": "images/nabor4-glacee-siesta/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1686,
+      "name": "Набор № 3 GLACEE. КОСТА ДЕЛЬ ФАРО",
+      "slug": "nabor3-glacee-kosta-del-faro",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/nabor3-glacee-kosta-del-faro/",
+      "sku": "0000-1-3",
+      "categories": [
+        "GLACÉE Skincare",
+        "GLACÉE Skincare Man Line",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor3-glacee-kosta-del-faro",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/glacee-nabor-2026-000.jpg",
+          "alt": "GLACEE-nabor-2026-000",
+          "file": "images/nabor3-glacee-kosta-del-faro/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2026/02/glacee-nabor-2026-men-001.jpg",
+          "alt": "GLACEE-nabor-2026-men-001",
+          "file": "images/nabor3-glacee-kosta-del-faro/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1675,
+      "name": "Набор № 1 ISSEIMI. Трио совершенства",
+      "slug": "nabor1-isseimi-trio-sovershenstva",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/nabor1-isseimi-trio-sovershenstva/",
+      "sku": "0000-0-1",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor1-isseimi-trio-sovershenstva",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-000.jpg",
+          "alt": "ISSEIMI-nabor-2026-000",
+          "file": "images/nabor1-isseimi-trio-sovershenstva/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-001.jpg",
+          "alt": "ISSEIMI-nabor-2026-001",
+          "file": "images/nabor1-isseimi-trio-sovershenstva/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1674,
+      "name": "Набор № 2 ISSEIMI. Глубокое увлажнение",
+      "slug": "nabor2-isseimi-glubokoe-uvlazhnenie",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/nabor2-isseimi-glubokoe-uvlazhnenie/",
+      "sku": "0000-0-2",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor2-isseimi-glubokoe-uvlazhnenie",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-000.jpg",
+          "alt": "ISSEIMI-nabor-2026-000",
+          "file": "images/nabor2-isseimi-glubokoe-uvlazhnenie/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-002.jpg",
+          "alt": "ISSEIMI-nabor-2026-002",
+          "file": "images/nabor2-isseimi-glubokoe-uvlazhnenie/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1673,
+      "name": "Набор № 3 ISSEIMI. Антивозрастной баланс-уход для комбинированной обезвоженной кожи",
+      "slug": "nabor-3-isseimi-antivozrastnoj-balans-uhod-dlya-kombinirovannoj-obezvozhennoj-kozhi",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/nabor-3-isseimi-antivozrastnoj-balans-uhod-dlya-kombinirovannoj-obezvozhennoj-kozhi/",
+      "sku": "0000-0-3",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor-3-isseimi-antivozrastnoj-balans-uhod-dlya-kombinirovannoj-obezvozhennoj-kozhi",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-000.jpg",
+          "alt": "ISSEIMI-nabor-2026-000",
+          "file": "images/nabor-3-isseimi-antivozrastnoj-balans-uhod-dlya-kombinirovannoj-obezvozhennoj-kozhi/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-003.jpg",
+          "alt": "ISSEIMI-nabor-2026-003",
+          "file": "images/nabor-3-isseimi-antivozrastnoj-balans-uhod-dlya-kombinirovannoj-obezvozhennoj-kozhi/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1672,
+      "name": "Набор № 4 ESSEIMI. Восстановление",
+      "slug": "nabor-4-esseimi-vosstanovlenie",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/nabor-4-esseimi-vosstanovlenie/",
+      "sku": "0000-0-4",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor-4-esseimi-vosstanovlenie",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-000.jpg",
+          "alt": "ISSEIMI-nabor-2026-000",
+          "file": "images/nabor-4-esseimi-vosstanovlenie/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-004.jpg",
+          "alt": "ISSEIMI-nabor-2026-004",
+          "file": "images/nabor-4-esseimi-vosstanovlenie/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1671,
+      "name": "Набор № 5 ISSEIMI. Испанская формула сияния",
+      "slug": "nabor5-ispanskaya-formula-siyaniya",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/nabor5-ispanskaya-formula-siyaniya/",
+      "sku": "0000-0-5",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor5-ispanskaya-formula-siyaniya",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-005.jpg",
+          "alt": "ISSEIMI-nabor-2026-005",
+          "file": "images/nabor5-ispanskaya-formula-siyaniya/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1670,
+      "name": "Набор № 6 ESSEIMI. Базовый уход",
+      "slug": "nabor6-esseimi-bazovyj-uhod",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/nabor6-esseimi-bazovyj-uhod/",
+      "sku": "0000-0-6",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor6-esseimi-bazovyj-uhod",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/isseimi-nabor-2026-006.jpg",
+          "alt": "ISSEIMI-nabor-2026-006",
+          "file": "images/nabor6-esseimi-bazovyj-uhod/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1669,
+      "name": "Набор № 1 GLACEE.  Сокровище Кастилии",
+      "slug": "nabor1-glacee-sokrovishhe-kastilii",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/nabor1-glacee-sokrovishhe-kastilii/",
+      "sku": "0000-1",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor1-glacee-sokrovishhe-kastilii",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/glacee-nabor-2026-000.jpg",
+          "alt": "GLACEE-nabor-2026-000",
+          "file": "images/nabor1-glacee-sokrovishhe-kastilii/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/glacee-nabor-2026-001.jpg",
+          "alt": "GLACEE-nabor-2026-001",
+          "file": "images/nabor1-glacee-sokrovishhe-kastilii/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1655,
+      "name": "Набор № 2 GLACEE. Триумвират молодости",
+      "slug": "nabor2-glacee-triumvirat-molodosti",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/nabor2-glacee-triumvirat-molodosti/",
+      "sku": "0000-2",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом",
+        "Подарочные наборы"
+      ],
+      "dir": "images/nabor2-glacee-triumvirat-molodosti",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/glacee-nabor-2026-000.jpg",
+          "alt": "GLACEE-nabor-2026-000",
+          "file": "images/nabor2-glacee-triumvirat-molodosti/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/12/glacee-nabor-2026-002.jpg",
+          "alt": "GLACEE-nabor-2026-002",
+          "file": "images/nabor2-glacee-triumvirat-molodosti/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1619,
+      "name": "PEELING INTENSIVO Интенсивный физико-химический пилинг",
+      "slug": "peeling-intensivo-intensivnyj-fiziko-himicheskij-piling",
+      "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/peeling-intensivo-intensivnyj-fiziko-himicheskij-piling/",
+      "sku": "2005",
+      "categories": [
+        "ISSEIMI Peeling Pro",
+        "Профессиональный уход",
+        "Химические пилинги",
+        "Уход за лицом"
+      ],
+      "dir": "images/peeling-intensivo-intensivnyj-fiziko-himicheskij-piling",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/peeling-intensivo-isseimi-2005-3.jpg",
+          "alt": "PEELING INTENSIVO-ISSEIMI 2005-3",
+          "file": "images/peeling-intensivo-intensivnyj-fiziko-himicheskij-piling/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1618,
+      "name": "ACIDO MANDELICO Эксфолиирующий эликсир с миндальной кислотой",
+      "slug": "acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj",
+      "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/",
+      "sku": "2007",
+      "categories": [
+        "ISSEIMI Peeling Pro",
+        "Профессиональный уход",
+        "Химические пилинги",
+        "Уход за лицом"
+      ],
+      "dir": "images/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/acido-mandelico-isseimi-2007-1.jpg",
+          "alt": "ACIDO MANDELICO-ISSEIMI-2007-1",
+          "file": "images/acido-mandelico-eksfoliiruyushhij-eliksir-s-mindalnoj-kislotoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1617,
+      "name": "ÁCIDO GLICOLICO Эксфолиирующий эликсир с гликолевой кислотой",
+      "slug": "acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj",
+      "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/",
+      "sku": "2008",
+      "categories": [
+        "ISSEIMI Peeling Pro",
+        "Профессиональный уход",
+        "Химические пилинги",
+        "Уход за лицом"
+      ],
+      "dir": "images/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/acido-glicolico-isseimi-2008-1.jpg",
+          "alt": "ACIDO GLICOLICO-ISSEIMI-2008-1",
+          "file": "images/acido-glicolico-eksfoliiruyushhij-eliksir-s-glikolevoj-kislotoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1616,
+      "name": "ACIDO LACTICO Эксфолиирующий эликсир с молочной кислотой",
+      "slug": "acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj",
+      "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj/",
+      "sku": "2009",
+      "categories": [
+        "ISSEIMI Peeling Pro",
+        "Профессиональный уход",
+        "Химические пилинги",
+        "Уход за лицом"
+      ],
+      "dir": "images/acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/acido-lactico-isseimi-2009-1.jpg",
+          "alt": "ACIDO LACTICO-ISSEIMI-2009-1",
+          "file": "images/acido-lactico-eksfoliiruyushhij-eliksir-s-molochnoj-kislotoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1613,
+      "name": "ACIDO PIRUVICO Эксфолиирующий эликсир с пировиноградной кислотой",
+      "slug": "acido-piruvico-eksfoliiruyushhij-eliksir-s-pirovinogradnoj-kislotoj",
+      "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-piruvico-eksfoliiruyushhij-eliksir-s-pirovinogradnoj-kislotoj/",
+      "sku": "2006",
+      "categories": [
+        "ISSEIMI Peeling Pro",
+        "Профессиональный уход",
+        "Химические пилинги",
+        "Уход за лицом"
+      ],
+      "dir": "images/acido-piruvico-eksfoliiruyushhij-eliksir-s-pirovinogradnoj-kislotoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/acido-piruvico-isseimi-2006.jpg",
+          "alt": "ACIDO PIRUVICO-ISSEIMI-2006",
+          "file": "images/acido-piruvico-eksfoliiruyushhij-eliksir-s-pirovinogradnoj-kislotoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1612,
+      "name": "ACIDO KOJICO Эксфолиирующий эликсир с койевой кислотой",
+      "slug": "acido-kojico-eksfoliiruyushhij-eliksir-s-kojevoj-kislotoj",
+      "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/acido-kojico-eksfoliiruyushhij-eliksir-s-kojevoj-kislotoj/",
+      "sku": "2011",
+      "categories": [
+        "ISSEIMI Peeling Pro",
+        "Профессиональный уход",
+        "Химические пилинги",
+        "Уход за лицом"
+      ],
+      "dir": "images/acido-kojico-eksfoliiruyushhij-eliksir-s-kojevoj-kislotoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/acido-kojico-isseimi-2011-1.jpg",
+          "alt": "ACIDO KOJICO-ISSEIMI-2011-1",
+          "file": "images/acido-kojico-eksfoliiruyushhij-eliksir-s-kojevoj-kislotoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1604,
+      "name": "SOLUCION NEUTRALIZANTE Нейтрализующий раствор",
+      "slug": "solucion-neutralizante-nejtralizuyushhij-rastvor",
+      "permalink": "https://beautymedgroup.ru/katalog/himicheskie-pilingi/solucion-neutralizante-nejtralizuyushhij-rastvor/",
+      "sku": "2012",
+      "categories": [
+        "ISSEIMI Peeling Pro",
+        "Профессиональный уход",
+        "Химические пилинги",
+        "Уход за лицом"
+      ],
+      "dir": "images/solucion-neutralizante-nejtralizuyushhij-rastvor",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/solucion-neutralizante-isseimi-2012-1.jpg",
+          "alt": "SOLUCION NEUTRALIZANTE-ISSEIMI-2012-1",
+          "file": "images/solucion-neutralizante-nejtralizuyushhij-rastvor/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1599,
+      "name": "Blockmelan Депигментирующая сыворотка",
+      "slug": "blockmelan-depigmentiruyushhaya-syvorotka",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/blockmelan-depigmentiruyushhaya-syvorotka/",
+      "sku": "2069",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/blockmelan-depigmentiruyushhaya-syvorotka",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/blockmelan-2069-2.jpg",
+          "alt": "Blockmelan-2069-2",
+          "file": "images/blockmelan-depigmentiruyushhaya-syvorotka/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/blockmelan-2069-3.jpg",
+          "alt": "Blockmelan-2069-3",
+          "file": "images/blockmelan-depigmentiruyushhaya-syvorotka/2.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/blockmelan-2069.jpg",
+          "alt": "Blockmelan-2069",
+          "file": "images/blockmelan-depigmentiruyushhaya-syvorotka/3.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/blockmelan-2069-1.jpg",
+          "alt": "Blockmelan-2069-1",
+          "file": "images/blockmelan-depigmentiruyushhaya-syvorotka/4.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1593,
+      "name": "Sea Foam Очищающая пенка с морской водой",
+      "slug": "sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj/",
+      "sku": "2114",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/sea-foam-2114.jpg",
+          "alt": "Sea Foam-2114",
+          "file": "images/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/sea-foam-2114-3.jpg",
+          "alt": "Sea Foam-2114-3",
+          "file": "images/sea-foam-ochishhayushhaya-penka-s-morskoj-vodoj/2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1592,
+      "name": "Aqua O3 Whitening Депигментирующая сыворотка с озоном",
+      "slug": "aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/",
+      "sku": "2063",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом",
+        "Микронидлинг"
+      ],
+      "dir": "images/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/03/kartinka-v-obrabotke.jpg",
+          "alt": "beautymedgroup",
+          "file": "images/aqua-o3-whitening-depigmentiruyushhaya-syvorotka-s-ozonom/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1588,
+      "name": "TTS BRIGHTENING MASK Депигментирующая маска",
+      "slug": "tts-brightening-mask-depigmentiruyushhaya-maska",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-brightening-mask-depigmentiruyushhaya-maska/",
+      "sku": "",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/tts-brightening-mask-depigmentiruyushhaya-maska",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/tts-brightening.jpg",
+          "alt": "TTS-brightening",
+          "file": "images/tts-brightening-mask-depigmentiruyushhaya-maska/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1584,
+      "name": "Маска CBD – Ночная маска CBD",
+      "slug": "maska-cbd-nochnaya-maska-cbd",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/maska-cbd-nochnaya-maska-cbd/",
+      "sku": "10130",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/maska-cbd-nochnaya-maska-cbd",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/cbd-sleeping-mask-1.jpg",
+          "alt": "cbd-sleeping-mask-1",
+          "file": "images/maska-cbd-nochnaya-maska-cbd/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1583,
+      "name": "4D Hyal Cross Суперувлажняющая сыворотка",
+      "slug": "4d-hyal-cross-superuvlazhnyayushhaya-syvorotka",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/4d-hyal-cross-superuvlazhnyayushhaya-syvorotka/",
+      "sku": "10131",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/4d-hyal-cross-superuvlazhnyayushhaya-syvorotka",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/serum-4d-hyal-cross.jpg",
+          "alt": "serum-4d-hyal-cross",
+          "file": "images/4d-hyal-cross-superuvlazhnyayushhaya-syvorotka/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1582,
+      "name": "Liposome-C Антиоксидантная сыворотка",
+      "slug": "liposome-c-antioksidantnaya-syvorotka",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/liposome-c-antioksidantnaya-syvorotka/",
+      "sku": "10132",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/liposome-c-antioksidantnaya-syvorotka",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/serum-liposome-c.jpg",
+          "alt": "serum-liposome-c",
+          "file": "images/liposome-c-antioksidantnaya-syvorotka/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1581,
+      "name": "Cleansing Balm Очищающий бальзам",
+      "slug": "cleansing-balm-ochishhayushhij-balzam",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/cleansing-balm-ochishhayushhij-balzam/",
+      "sku": "10129",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/cleansing-balm-ochishhayushhij-balzam",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/cleansing-1.jpg",
+          "alt": "cleansing-1",
+          "file": "images/cleansing-balm-ochishhayushhij-balzam/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1575,
+      "name": "Purifying Water Мицеллярная вода",
+      "slug": "purifying-water-miczellyarnaya-voda",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/purifying-water-miczellyarnaya-voda/",
+      "sku": "10128",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/purifying-water-miczellyarnaya-voda",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2025/10/purifing-water.jpg",
+          "alt": "purifing-water",
+          "file": "images/purifying-water-miczellyarnaya-voda/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1480,
+      "name": "PEEL-OFF MASK  Маска с витамином С",
+      "slug": "peel-off-mask-maska-s-vitaminom-s",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/peel-off-mask-maska-s-vitaminom-s/",
+      "sku": "22002",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/peel-off-mask-maska-s-vitaminom-s",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/03/mask-vit-c-isseime-nat.jpg",
+          "alt": "PEEL-OFF MASK Маска с витамином С",
+          "file": "images/peel-off-mask-maska-s-vitaminom-s/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1212,
+      "name": "Orange Esential Oil Цитрусовое масло, чистое эфирное масло",
+      "slug": "orange-esential-oil-czitrusovoe-maslo-chistoe-efirnoe-maslo",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/orange-esential-oil-czitrusovoe-maslo-chistoe-efirnoe-maslo/",
+      "sku": "22010",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/orange-esential-oil-czitrusovoe-maslo-chistoe-efirnoe-maslo",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/orange-esential-oil.jpg",
+          "alt": "Orange-Esential-Oil",
+          "file": "images/orange-esential-oil-czitrusovoe-maslo-chistoe-efirnoe-maslo/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1208,
+      "name": "KGF Gel Acondicionador Восстанавливающий гель для кожи",
+      "slug": "kgf-gel-acondicionador-vosstanavlivayushhij-gel-dlya-kozhi",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/kgf-gel-acondicionador-vosstanavlivayushhij-gel-dlya-kozhi/",
+      "sku": "2013",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/kgf-gel-acondicionador-vosstanavlivayushhij-gel-dlya-kozhi",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/kgf-gel-regenerador-de-piel-esseime.jpg",
+          "alt": "KGF Gel Acondicionador Восстанавливающий гель для кожи",
+          "file": "images/kgf-gel-acondicionador-vosstanavlivayushhij-gel-dlya-kozhi/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1206,
+      "name": "Crema Elite Ультраувлажняющий крем",
+      "slug": "crema-elite-ultrauvlazhnyayushhij-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/crema-elite-ultrauvlazhnyayushhij-krem/",
+      "sku": "2024",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/crema-elite-ultrauvlazhnyayushhij-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/elite-200ml-esseime.jpg",
+          "alt": "Crema Elite Ультраувлажняющий крем",
+          "file": "images/crema-elite-ultrauvlazhnyayushhij-krem/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1204,
+      "name": "Vitamina C + Peptidos Hidrosoluble Сыворотка с витамином С",
+      "slug": "vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s/",
+      "sku": "2018",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/vitamina-c-esseime.jpg",
+          "alt": "Vitamina C + Peptidos Hidrosoluble Сыворотка с витамином С",
+          "file": "images/vitamina-c-peptidos-hidrosoluble-syvorotka-s-vitaminom-s/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1202,
+      "name": "Silicio Organico + Peptidos Hidrosoluble Сыворотка с органическим кремнием",
+      "slug": "silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem/",
+      "sku": "2017",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/silicio-organico-esseime.jpg",
+          "alt": "Смешать несколько капель Silicio Organico + Peptidos Hidrosoluble с гелем-носителем KGF Gel Acondicionador / GEN ADN Morpholifting / активными сыворотками в соответствие с выбранным протоколом MIMETIC SKIN",
+          "file": "images/silicio-organico-peptidos-hidrosoluble-syvorotka-s-organicheskim-kremniem/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1200,
+      "name": "Acido Hialuronico + Peptidos Hidrosoluble Сыворотка с гиалуроновой кислотой",
+      "slug": "acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoj-kislotoj",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoj-kislotoj/",
+      "sku": "2016",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoj-kislotoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/acido-hialuronico-esseime.jpg",
+          "alt": "Acido Hialuronico + Peptidos Hidrosoluble Сыворотка с гиалуроновой кислотой",
+          "file": "images/acido-hialuronico-peptidos-hidrosoluble-syvorotka-s-gialuronovoj-kislotoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1198,
+      "name": "FGF Hidrosoluble Сыворотка с Фактором Роста Фибробластов",
+      "slug": "fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov/",
+      "sku": "2015",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/fgf-esseime.jpg",
+          "alt": "FGF Hidrosoluble Сыворотка с Фактором Роста Фибробластов",
+          "file": "images/fgf-hidrosoluble-syvorotka-s-faktorom-rosta-fibroblastov/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1196,
+      "name": "EGF Hidrosoluble  Сыворотка с Эпидермальным Фактором Роста",
+      "slug": "egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta/",
+      "sku": "2014",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/egf-esseime.jpg",
+          "alt": "EGF Hidrosoluble Сыворотка с Эпидермальным Фактором Роста",
+          "file": "images/egf-hidrosoluble-syvorotka-s-epidermalnym-faktorom-rosta/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1194,
+      "name": "Mascarilla ATP + Alabastro  Энергетическая маска с АТФ и алебастром для лица",
+      "slug": "mascarilla-atp-alabastro-energeticheskaya-maska-s-atf-i-alebastrom-dlya-licza",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/mascarilla-atp-alabastro-energeticheskaya-maska-s-atf-i-alebastrom-dlya-licza/",
+      "sku": "2032",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/mascarilla-atp-alabastro-energeticheskaya-maska-s-atf-i-alebastrom-dlya-licza",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/mascarilla-atp-2-esseime.jpg",
+          "alt": "Mascarilla ATP + Alabastro Энергетическая маска с АТФ и алебастром для лица",
+          "file": "images/mascarilla-atp-alabastro-energeticheskaya-maska-s-atf-i-alebastrom-dlya-licza/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1105,
+      "name": "FLUVIX  Сыворотка регенерирующая",
+      "slug": "fluvix-syvorotka-regeneriruyushhaya",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluvix-syvorotka-regeneriruyushhaya/",
+      "sku": "10071",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI MD",
+        "Уход за лицом"
+      ],
+      "dir": "images/fluvix-syvorotka-regeneriruyushhaya",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/fluvix.jpg",
+          "alt": "FLUVIX Сыворотка регенерирующая",
+          "file": "images/fluvix-syvorotka-regeneriruyushhaya/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1098,
+      "name": "TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник",
+      "slug": "0-tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/0-tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik/",
+      "sku": "221",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base"
+      ],
+      "dir": "images/0-tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/tonico-facial-equilibrante-1000ml.jpg",
+          "alt": "TONICO-FACIAL-EQUILIBRANTE-1000ml",
+          "file": "images/0-tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1097,
+      "name": "EMULSION HIGIENIZANTE  Крем-скраб для снятия макияжа",
+      "slug": "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha-1000ml",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha-1000ml/",
+      "sku": "2020",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha-1000ml",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/04/emulsion-higienizante-1000ml.jpg",
+          "alt": "EMULSION HIGIENIZANTE",
+          "file": "images/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha-1000ml/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1085,
+      "name": "CHARCOAL MASK Маска с угольным порошком",
+      "slug": "charcoal-mask-maska-s-ugolnym-poroshkom",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/charcoal-mask-maska-s-ugolnym-poroshkom/",
+      "sku": "22003",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/charcoal-mask-maska-s-ugolnym-poroshkom",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/03/mask-carbon-charcoal-isseime-nat.jpg",
+          "alt": "CHARCOAL MASK Маска с угольным порошком",
+          "file": "images/charcoal-mask-maska-s-ugolnym-poroshkom/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1080,
+      "name": "K & B BUTTER CREAM Крем с баобабом и карите",
+      "slug": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy/",
+      "sku": "22001",
+      "categories": [
+        "Массажные средства",
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/03/butter-cream-kb-isseime-nat.jpg",
+          "alt": "K & B BUTTER CREAM Крем с баобабом и карите",
+          "file": "images/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba-copy/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1078,
+      "name": "NATURAL TONIC Натуральный тоник для лица",
+      "slug": "natural-tonic-naturalnyj-tonik-dlya-licza-500ml",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-tonic-naturalnyj-tonik-dlya-licza-500ml/",
+      "sku": "22011",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/natural-tonic-naturalnyj-tonik-dlya-licza-500ml",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/03/natural-tonic-500ml.jpg",
+          "alt": "NATURAL TONIC-500ml",
+          "file": "images/natural-tonic-naturalnyj-tonik-dlya-licza-500ml/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 1076,
+      "name": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
+      "slug": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza-500ml",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza-500ml/",
+      "sku": "22009",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza-500ml",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2024/03/lechelimpiadora-nat-500-ml-isseime-nat.jpg",
+          "alt": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
+          "file": "images/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza-500ml/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 730,
+      "name": "AQUA O3 LIPO СЫВОРОТКА С ОЗОНОМ Антицеллюлитный коктейль",
+      "slug": "aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/",
+      "sku": "2060",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом",
+        "Микронидлинг"
+      ],
+      "dir": "images/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/06/aqua-lipo.jpg",
+          "alt": "Aqua-Lipo",
+          "file": "images/aqua-o3-lipo-syvorotka-s-ozonom-anticzellyulitnyj-koktejl/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 729,
+      "name": "АQUA O3 REPAIR СЫВОРОТКА С ОЗОНОМ   Коктейль против рубцов и растяжек",
+      "slug": "aqua-o3-repair-syvorotka-s-ozonom-koktejl-protiv-rubczov-i-rastyazhek",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-repair-syvorotka-s-ozonom-koktejl-protiv-rubczov-i-rastyazhek/",
+      "sku": "2061",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом",
+        "Микронидлинг"
+      ],
+      "dir": "images/aqua-o3-repair-syvorotka-s-ozonom-koktejl-protiv-rubczov-i-rastyazhek",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/06/aqua-repair.jpg",
+          "alt": "Aqua-Repair",
+          "file": "images/aqua-o3-repair-syvorotka-s-ozonom-koktejl-protiv-rubczov-i-rastyazhek/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 728,
+      "name": "AQUA O3 FIRMING СЫВОРОТКА С ОЗОНОМ  Укрепляющий коктейль для лица",
+      "slug": "aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza/",
+      "sku": "2062",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом",
+        "Микронидлинг"
+      ],
+      "dir": "images/aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/06/aqua-firming.jpg",
+          "alt": "Aqua-Firming",
+          "file": "images/aqua-o3-firming-syvorotka-s-ozonom-ukreplyayushhij-koktejl-dlya-licza/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 722,
+      "name": "АQUA O3 ANTIAGING СЫВОРОТКА С ОЗОНОМ Омолаживающий коктейль для кожи с признаками старения",
+      "slug": "aqua-o3-antiaging-syvorotka-s-ozonom-omolazhivayushhij-koktejl-dlya-kozhi-s-priznakami-stareniya",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/aqua-o3-antiaging-syvorotka-s-ozonom-omolazhivayushhij-koktejl-dlya-kozhi-s-priznakami-stareniya/",
+      "sku": "2064",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом",
+        "Уход за телом",
+        "Микронидлинг"
+      ],
+      "dir": "images/aqua-o3-antiaging-syvorotka-s-ozonom-omolazhivayushhij-koktejl-dlya-kozhi-s-priznakami-stareniya",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/06/aqua-antiaging.jpg",
+          "alt": "Aqua-Antiaging",
+          "file": "images/aqua-o3-antiaging-syvorotka-s-ozonom-omolazhivayushhij-koktejl-dlya-kozhi-s-priznakami-stareniya/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 482,
+      "name": "O3 DEPUR Крем с озоном",
+      "slug": "o3-depur-krem-s-ozonom",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/o3-depur-krem-s-ozonom/",
+      "sku": "2046",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/o3-depur-krem-s-ozonom",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/o3-depur.jpg",
+          "alt": "O3-DEPUR",
+          "file": "images/o3-depur-krem-s-ozonom/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 481,
+      "name": "FLUIDO VISCOSO FORTE Сыворотка обновляющая",
+      "slug": "fluido-viscoso-forte-syvorotka-obnovlyayushhaya",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluido-viscoso-forte-syvorotka-obnovlyayushhaya/",
+      "sku": "2037",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/fluido-viscoso-forte-syvorotka-obnovlyayushhaya",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/viscoso-forte.jpg",
+          "alt": "VISCOSO-FORTE",
+          "file": "images/fluido-viscoso-forte-syvorotka-obnovlyayushhaya/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 478,
+      "name": "ВEEVENOM SERUM Антивозрастная сыворотка",
+      "slug": "veevenom-serum-syvorotka-pchelinyj-yad",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/veevenom-serum-syvorotka-pchelinyj-yad/",
+      "sku": "2044",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/veevenom-serum-syvorotka-pchelinyj-yad",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/beevenom-serum.jpg",
+          "alt": "BEEVENOM-SERUM",
+          "file": "images/veevenom-serum-syvorotka-pchelinyj-yad/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 477,
+      "name": "BEEVENOM CREAM Антивозрастной крем",
+      "slug": "bee-venom-cream-antivozrastnoj-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/bee-venom-cream-antivozrastnoj-krem/",
+      "sku": "2045",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/bee-venom-cream-antivozrastnoj-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/beevenom-crema.jpg",
+          "alt": "BEEVENOM-CREMA",
+          "file": "images/bee-venom-cream-antivozrastnoj-krem/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 476,
+      "name": "СONTORNO DE OJOS Мультиувлажняющий крем для век с пептидами",
+      "slug": "sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami/",
+      "sku": "2043",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/contorno-de-ojos.jpg",
+          "alt": "CONTORNO-DE-OJOS",
+          "file": "images/sontorno-de-ojos-multiuvlazhnyayushhij-krem-dlya-vek-s-peptidami/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 475,
+      "name": "REGENERATIVO CELLULAR Сыворотка обновляющая",
+      "slug": "regenerativo-cellular-syvorotka-obnovlyayushhaya",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/regenerativo-cellular-syvorotka-obnovlyayushhaya/",
+      "sku": "2040",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/regenerativo-cellular-syvorotka-obnovlyayushhaya",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/regenerativo-celular.jpg",
+          "alt": "REGENERATIVO-CELULAR",
+          "file": "images/regenerativo-cellular-syvorotka-obnovlyayushhaya/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 474,
+      "name": "TTS ESSENTIAL MASK Укрепляющая и обновляющая маска",
+      "slug": "tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska/",
+      "sku": "2029",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/tts-moisturizing-mask.jpg",
+          "alt": "TTS-MOISTURIZING-MASK",
+          "file": "images/tts-essential-mask-ukreplyayushhaya-i-obnovlyayushhaya-maska/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 473,
+      "name": "TTS MOISTURIZING MASK Увлажняющая маска",
+      "slug": "tts-moisturizing-mask-uvlazhnyayushhaya-maska",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-moisturizing-mask-uvlazhnyayushhaya-maska/",
+      "sku": "2028",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/tts-moisturizing-mask-uvlazhnyayushhaya-maska",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/tts-moisturizing-mask-1.jpg",
+          "alt": "TTS-MOISTURIZING-MASK (1)",
+          "file": "images/tts-moisturizing-mask-uvlazhnyayushhaya-maska/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 472,
+      "name": "TTS ENERGIZING MASK Маска со стволовыми клетками",
+      "slug": "tts-energizing-mask-maska-so-stvolovymi-kletkami",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/tts-energizing-mask-maska-so-stvolovymi-kletkami/",
+      "sku": "2027",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/tts-energizing-mask-maska-so-stvolovymi-kletkami",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/tts-moisturizing-mask-2.jpg",
+          "alt": "TTS-MOISTURIZING-MASK (2)",
+          "file": "images/tts-energizing-mask-maska-so-stvolovymi-kletkami/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 470,
+      "name": "NUTRIESTIMUL Антивозрастной питательный крем",
+      "slug": "nutriestimul-antivozrastnoj-pitatelnyj-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/nutriestimul-antivozrastnoj-pitatelnyj-krem/",
+      "sku": "2039",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/nutriestimul-antivozrastnoj-pitatelnyj-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/nutriestimul.jpg",
+          "alt": "NUTRIESTIMUL",
+          "file": "images/nutriestimul-antivozrastnoj-pitatelnyj-krem/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 469,
+      "name": "CREMA ELITE Ультра увлажняющий крем",
+      "slug": "crema-elite-ultra-uvlazhnyayushhij-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/crema-elite-ultra-uvlazhnyayushhij-krem/",
+      "sku": "2038",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/crema-elite-ultra-uvlazhnyayushhij-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/elite-crema-hidratante.jpg",
+          "alt": "ELITE-Crema-Hidratante",
+          "file": "images/crema-elite-ultra-uvlazhnyayushhij-krem/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 468,
+      "name": "KERATHOR 50 PLUS Изотонический тоник",
+      "slug": "kerathor-plus-izotonicheskij-tonik",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/kerathor-plus-izotonicheskij-tonik/",
+      "sku": "2035",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/kerathor-plus-izotonicheskij-tonik",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/kerathor-50-plus.jpg",
+          "alt": "KERATHOR-50-PLUS",
+          "file": "images/kerathor-plus-izotonicheskij-tonik/1.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/kerathor-50plus-800x800-1.jpg",
+          "alt": "Kerathor-50Plus-800×800",
+          "file": "images/kerathor-plus-izotonicheskij-tonik/2.jpg"
+        },
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/kerathor-50plus-800x800-textura.jpg",
+          "alt": "Kerathor-50Plus-800×800-textura",
+          "file": "images/kerathor-plus-izotonicheskij-tonik/3.jpg"
+        }
+      ]
+    },
+    {
+      "id": 467,
+      "name": "COLLAGEN BOOSTER Восстанавливающая сыворотка",
+      "slug": "collagen-booster-vosstanavlivayushhaya-syvorotka",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/collagen-booster-vosstanavlivayushhaya-syvorotka/",
+      "sku": "2041",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/collagen-booster-vosstanavlivayushhaya-syvorotka",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/collagen-booster.jpg",
+          "alt": "COLLAGEN-BOOSTER",
+          "file": "images/collagen-booster-vosstanavlivayushhaya-syvorotka/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 466,
+      "name": "TONICO FACIAL EQUILIBRANTE Освежающий и тонизирующий тоник",
+      "slug": "tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik/",
+      "sku": "2034",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/tonico-facial-equilibrante.jpg",
+          "alt": "TONICO-FACIAL-EQUILIBRANTE",
+          "file": "images/tonico-facial-equilibrante-osvezhayushhij-i-toniziruyushhij-tonik/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 465,
+      "name": "EMULSION HIGIENIZANTE Крем-скраб для снятия макияжа",
+      "slug": "emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha/",
+      "sku": "2033",
+      "categories": [
+        "ISSEIMI Base",
+        "Уход за лицом"
+      ],
+      "dir": "images/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/emulsion-higienizante200ml.jpg",
+          "alt": "EMULSION-HIGIENIZANTE200ml",
+          "file": "images/emulsion-higienizante-krem-skrab-dlya-snyatiya-makiyazha/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 449,
+      "name": "OXIODERM Маска с озоном",
+      "slug": "oxioderm-maska-s-ozonom",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/oxioderm-maska-s-ozonom/",
+      "sku": "10075",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI MD",
+        "Уход за лицом",
+        "Парафармацевтика"
+      ],
+      "dir": "images/oxioderm-maska-s-ozonom",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/oxioderm.jpg",
+          "alt": "OXIODERM",
+          "file": "images/oxioderm-maska-s-ozonom/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 448,
+      "name": "SENITUL Восстанавливающая маска",
+      "slug": "senitul-vosstanavlivayushhaya-maska",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/senitul-vosstanavlivayushhaya-maska/",
+      "sku": "",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI MD",
+        "Уход за лицом",
+        "Парафармацевтика"
+      ],
+      "dir": "images/senitul-vosstanavlivayushhaya-maska",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/senitul.jpg",
+          "alt": "SENITUL",
+          "file": "images/senitul-vosstanavlivayushhaya-maska/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 447,
+      "name": "FLUVIX Сыворотка обновляющая",
+      "slug": "fluvix-syvorotka-obnovlyayushhaya",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/fluvix-syvorotka-obnovlyayushhaya/",
+      "sku": "10072",
+      "categories": [
+        "ISSEIMI MD",
+        "Уход за лицом",
+        "Парафармацевтика"
+      ],
+      "dir": "images/fluvix-syvorotka-obnovlyayushhaya",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/fluvix-1.jpg",
+          "alt": "FLUVIX-1",
+          "file": "images/fluvix-syvorotka-obnovlyayushhaya/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 445,
+      "name": "CONTORNO DE OJOS MD Мультиувлажняющий крем с пептидами",
+      "slug": "contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami/",
+      "sku": "2004",
+      "categories": [
+        "ISSEIMI MD",
+        "Уход за лицом"
+      ],
+      "dir": "images/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/ojos-md.jpg",
+          "alt": "ojos md",
+          "file": "images/contorno-de-ojos-md-multiuvlazhnyayushhij-krem-s-peptidami/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 444,
+      "name": "BIOCELL Сыворотка обновляющая",
+      "slug": "biocell-syvorotka-obnovlyayushhaya",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/biocell-syvorotka-obnovlyayushhaya/",
+      "sku": "2002",
+      "categories": [
+        "ISSEIMI MD",
+        "Уход за лицом"
+      ],
+      "dir": "images/biocell-syvorotka-obnovlyayushhaya",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/biocell.jpg",
+          "alt": "Biocell",
+          "file": "images/biocell-syvorotka-obnovlyayushhaya/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 443,
+      "name": "HIDRORRENOVADORA Крем для стимулирования тканей",
+      "slug": "hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej/",
+      "sku": "2003",
+      "categories": [
+        "ISSEIMI MD",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/hidrorrenovadora-1.jpg",
+          "alt": "hidrorrenovadora",
+          "file": "images/hidrorrenovadora-krem-dlya-stimulirovaniya-tkanej/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 441,
+      "name": "SCRUB LOTION Крем для снятия макияжа",
+      "slug": "scrub-lotion-krem-dlya-snyatiya-makiyazha",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/scrub-lotion-krem-dlya-snyatiya-makiyazha/",
+      "sku": "2067",
+      "categories": [
+        "ISSEIMI MD",
+        "Уход за лицом"
+      ],
+      "dir": "images/scrub-lotion-krem-dlya-snyatiya-makiyazha",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/04/2067.jpg",
+          "alt": "2067",
+          "file": "images/scrub-lotion-krem-dlya-snyatiya-makiyazha/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 397,
+      "name": "О3 BAOBAB OIL Восстанавливающее  масло баобаба",
+      "slug": "baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba/",
+      "sku": "10050",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/baobab-30ml-scaled.jpg",
+          "alt": "Baobab 30ml",
+          "file": "images/baobab-oil-illuminator-and-repairer-vosstanavlivayushhee-maslo-baobaba/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 395,
+      "name": "O3 ROSA MOSQUETA OIL Регенерирующее  масло шиповника  с озоном",
+      "slug": "rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom/",
+      "sku": "10049",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом",
+        "Уход за телом"
+      ],
+      "dir": "images/rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/rosamosqueta30ml-scaled.jpg",
+          "alt": "RosaMosqueta30ml",
+          "file": "images/rose-hip-oil-o3-regeneriruyushhee-maslo-shipovnika-s-ozonom/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 394,
+      "name": "O3 JOJOBA OIL Себорегулирующее  масло жожоба  с озоном",
+      "slug": "jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom/",
+      "sku": "10120",
+      "categories": [
+        "Профессиональный уход",
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/jojoba-o3-scaled.jpg",
+          "alt": "JOJOBA OIL + O3 Себорегулирующее масло жожоба с озоном",
+          "file": "images/jojoba-oil-o3-seboreguliruyushhee-maslo-zhozhoba-s-ozonom/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 393,
+      "name": "365 NIGHT REPAIR CREAM Обновляющий крем с виноградными кислотами",
+      "slug": "365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami/",
+      "sku": "22006",
+      "categories": [
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/crema-365-night-repair.jpg",
+          "alt": "Ignacio Bataller",
+          "file": "images/365-night-repair-cream-obnovlyayushhij-krem-s-vinogradnymi-kislotami/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 392,
+      "name": "3 FLOWER SERUM Мультиувлажняющая сыворотка",
+      "slug": "3-flower-serum-multi-uvlazhnyayushhaya-syvorotka",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/3-flower-serum-multi-uvlazhnyayushhaya-syvorotka/",
+      "sku": "22008",
+      "categories": [
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/3-flower-serum-multi-uvlazhnyayushhaya-syvorotka",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/3-flowers-serum.jpg",
+          "alt": "Ignacio Bataller",
+          "file": "images/3-flower-serum-multi-uvlazhnyayushhaya-syvorotka/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 391,
+      "name": "CHIA PROTECT OIL Масло чиа с озоном",
+      "slug": "chia-protect-oil-maslo-chia-s-ozonom",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/chia-protect-oil-maslo-chia-s-ozonom/",
+      "sku": "22007",
+      "categories": [
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/chia-protect-oil-maslo-chia-s-ozonom",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/chia-protect-oil.jpg",
+          "alt": "Ignacio Bataller",
+          "file": "images/chia-protect-oil-maslo-chia-s-ozonom/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 390,
+      "name": "CHIA DETOX CREAM Увлажняющий крем с чиа",
+      "slug": "chia-detox-cream-uvlazhnyayushhij-krem-s-chia",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/chia-detox-cream-uvlazhnyayushhij-krem-s-chia/",
+      "sku": "22005",
+      "categories": [
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/chia-detox-cream-uvlazhnyayushhij-krem-s-chia",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/crema-chia-detox.jpg",
+          "alt": "Ignacio Bataller",
+          "file": "images/chia-detox-cream-uvlazhnyayushhij-krem-s-chia/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 389,
+      "name": "PURE MARINE WATER CREAM Увлажняющий крем с морской водой",
+      "slug": "pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj/",
+      "sku": "22004",
+      "categories": [
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/crema-pure-marine-water.jpg",
+          "alt": "Ignacio Bataller",
+          "file": "images/pure-marine-water-cream-uvlazhnyayushhij-krem-s-morskoj-vodoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 388,
+      "name": "NATURAL TONIC Натуральный тоник для лица",
+      "slug": "natural-tonic-naturalnyj-tonik-dlya-licza",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-tonic-naturalnyj-tonik-dlya-licza/",
+      "sku": "2081",
+      "categories": [
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/natural-tonic-naturalnyj-tonik-dlya-licza",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/toniconatural.jpg",
+          "alt": "toniconatural",
+          "file": "images/natural-tonic-naturalnyj-tonik-dlya-licza/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 387,
+      "name": "NATURAL CLEANSING MILK Натуральный очищающий крем для лица",
+      "slug": "natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza",
+      "permalink": "https://beautymedgroup.ru/katalog/isseimi/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza/",
+      "sku": "2082",
+      "categories": [
+        "ISSEIMI Nat Collection",
+        "Уход за лицом"
+      ],
+      "dir": "images/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/leche-limpiadora-natural-1.jpg",
+          "alt": "LECHE-LIMPIADORA-NATURAL-1",
+          "file": "images/natural-cleansing-milk-naturalnyj-ochishhayushhij-krem-dlya-licza/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 285,
+      "name": "REDENSIFICANTЕ Реденсифицирующий крем для зрелой кожи",
+      "slug": "redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi/",
+      "sku": "10052",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/redensificante_redensificziruyushhij_krem_dlya_zreloj_kozhi.png",
+          "alt": "REDENSIFICANTЕ_РЕДЕНСИФИЦИРУЮЩИЙ_КРЕМ_ДЛЯ_ЗРЕЛОЙ_КОЖИ",
+          "file": "images/redensificante-redensificziruyushhij-krem-dlya-zreloj-kozhi/1.png"
+        }
+      ]
+    },
+    {
+      "id": 318,
+      "name": "EYE RESISTANCE Крем для глаз",
+      "slug": "eye-resistance-krem-dlya-glaz",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/eye-resistance-krem-dlya-glaz/",
+      "sku": "10127",
+      "categories": [
+        "GLACÉE Skincare",
+        "GLACÉE Skincare Man Line",
+        "Уход за лицом"
+      ],
+      "dir": "images/eye-resistance-krem-dlya-glaz",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/eye-resistance-krem-dlya-glaz-2.jpg",
+          "alt": "EYE RESISTANCE Крем для глаз",
+          "file": "images/eye-resistance-krem-dlya-glaz/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 317,
+      "name": "HYDROCOMBAT Крем с озоном",
+      "slug": "hydrocombat-krem-s-ozonom",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/hydrocombat-krem-s-ozonom/",
+      "sku": "10126",
+      "categories": [
+        "GLACÉE Skincare",
+        "GLACÉE Skincare Man Line",
+        "Уход за лицом"
+      ],
+      "dir": "images/hydrocombat-krem-s-ozonom",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/hydrocombat-krem-s-ozonom-1.jpg",
+          "alt": "HYDROCOMBAT КРЕМ С ОЗОНОМ",
+          "file": "images/hydrocombat-krem-s-ozonom/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 316,
+      "name": "BALANCE TONER Тоник с морской термальной водой",
+      "slug": "balance-toner-tonik-s-morskoj-termalnoj-vodoj",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/balance-toner-tonik-s-morskoj-termalnoj-vodoj/",
+      "sku": "10125",
+      "categories": [
+        "GLACÉE Skincare",
+        "GLACÉE Skincare Man Line",
+        "Уход за лицом"
+      ],
+      "dir": "images/balance-toner-tonik-s-morskoj-termalnoj-vodoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/balance-toner-3.jpg",
+          "alt": "Balance toner",
+          "file": "images/balance-toner-tonik-s-morskoj-termalnoj-vodoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 309,
+      "name": "ENERGEL Очищающий гель с морской термальной водой",
+      "slug": "energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj/",
+      "sku": "10124",
+      "categories": [
+        "GLACÉE Skincare",
+        "GLACÉE Skincare Man Line",
+        "Уход за лицом"
+      ],
+      "dir": "images/energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj-2.jpg",
+          "alt": "ENERGEL ОЧИЩАЮЩИЙ ГЕЛЬ С МОРСКОЙ ТЕРМАЛЬНОЙ ВОДОЙ",
+          "file": "images/energel-ochishhayushhij-gel-s-morskoj-termalnoj-vodoj/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 308,
+      "name": "SERUM TRIPLE ACCIÓN Сыворотка тройного действия",
+      "slug": "serum-triple-accion-syvorotka-trojnogo-dejstviya",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/serum-triple-accion-syvorotka-trojnogo-dejstviya/",
+      "sku": "10082",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/serum-triple-accion-syvorotka-trojnogo-dejstviya",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/serum-triple-accion-syvorotka-trojnogo-dejstviya.jpg",
+          "alt": "SERUM TRIPLE ACCIÓN СЫВОРОТКА ТРОЙНОГО ДЕЙСТВИЯ",
+          "file": "images/serum-triple-accion-syvorotka-trojnogo-dejstviya/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 307,
+      "name": "CONTOUR-K Крем для глаз",
+      "slug": "contour-k-krem-dlya-glaz",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/contour-k-krem-dlya-glaz/",
+      "sku": "10123",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/contour-k-krem-dlya-glaz",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/contour-k-krem-dlya-glaz.png",
+          "alt": "Contour-K КРЕМ ДЛЯ ГЛАЗ",
+          "file": "images/contour-k-krem-dlya-glaz/1.png"
+        }
+      ]
+    },
+    {
+      "id": 306,
+      "name": "RETI+ Богатый ретинолом крем",
+      "slug": "reti-bogatyj-retinolom-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/reti-bogatyj-retinolom-krem/",
+      "sku": "10121",
+      "categories": [
+        "GLACÉE Skincare",
+        "GLACÉE Skincare Man Line",
+        "Уход за лицом"
+      ],
+      "dir": "images/reti-bogatyj-retinolom-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/reti-bogatyj-retinolom-krem.png",
+          "alt": "RETI+ Богатый ретинолом крем",
+          "file": "images/reti-bogatyj-retinolom-krem/1.png"
+        }
+      ]
+    },
+    {
+      "id": 305,
+      "name": "GEN ADN Укрепляющий крем",
+      "slug": "gen-adn-ukreplyayushhij-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/gen-adn-ukreplyayushhij-krem/",
+      "sku": "10061",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/gen-adn-ukreplyayushhij-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/gen-adn-ukreplyayushhij-krem.png",
+          "alt": "GEN ADN УКРЕПЛЯЮЩИЙ КРЕМ",
+          "file": "images/gen-adn-ukreplyayushhij-krem/1.png"
+        }
+      ]
+    },
+    {
+      "id": 304,
+      "name": "ANTIOX-C Антиоксидантный крем",
+      "slug": "antiox-c-antioksidantnyj-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/antiox-c-antioksidantnyj-krem/",
+      "sku": "10122",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/antiox-c-antioksidantnyj-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/photo_2023-03-17_17-48-30.jpg",
+          "alt": "photo_2023-03-17_17-48-30",
+          "file": "images/antiox-c-antioksidantnyj-krem/1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 303,
+      "name": "HIDRORREVITALIZANTE Восстанавливающий крем",
+      "slug": "hidrorrevitalizante-vosstanavlivayushhij-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/hidrorrevitalizante-vosstanavlivayushhij-krem/",
+      "sku": "10080",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/hidrorrevitalizante-vosstanavlivayushhij-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/hidrorrevitalizante_vosstanavlivayushhij_krem.png",
+          "alt": "HIDRORREVITALIZANTE_ВОССТАНАВЛИВАЮЩИЙ_КРЕМ",
+          "file": "images/hidrorrevitalizante-vosstanavlivayushhij-krem/1.png"
+        }
+      ]
+    },
+    {
+      "id": 293,
+      "name": "DINAMIZANTE Восстанавливающий крем",
+      "slug": "dinamizante-vosstanavlivayushhij-krem",
+      "permalink": "https://beautymedgroup.ru/katalog/glacee-skincare/dinamizante-vosstanavlivayushhij-krem/",
+      "sku": "10081",
+      "categories": [
+        "GLACÉE Skincare",
+        "Уход за лицом"
+      ],
+      "dir": "images/dinamizante-vosstanavlivayushhij-krem",
+      "images": [
+        {
+          "src": "https://beautymedgroup.ru/wp-content/uploads/2023/03/dinamizante-vosstanavlivayushhij-krem.png",
+          "alt": "DINAMIZANTE ВОССТАНАВЛИВАЮЩИЙ КРЕМ",
+          "file": "images/dinamizante-vosstanavlivayushhij-krem/1.png"
+        }
+      ]
+    }
+  ]
+}
