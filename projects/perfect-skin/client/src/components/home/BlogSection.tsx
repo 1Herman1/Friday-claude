@@ -53,7 +53,7 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
     )
   }
   return (
-    <article className={`${frame} bg-muted`}>
+    <article className={`group relative overflow-hidden rounded-block bg-muted md:col-span-2 md:aspect-[3/2] xl:col-span-2 ${CARD_MOTION}`}>
       <img
         src={post.coverImage}
         alt=""
@@ -61,20 +61,18 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
         height={800}
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="block aspect-[3/2] w-full object-cover md:absolute md:inset-0 md:aspect-auto md:h-full"
       />
       <Link to={`/blog/${post.slug}`} tabIndex={-1} aria-hidden="true" className="absolute inset-0" />
-      <div className="absolute inset-x-3 bottom-3 rounded-media bg-card p-5 md:inset-x-auto md:left-4 md:bottom-4 md:w-[min(28rem,calc(100%-2rem))] md:p-6">
+      <div className="bg-card p-5 md:absolute md:left-4 md:bottom-4 md:w-[min(22rem,40%)] md:rounded-media md:p-4">
         <time dateTime={post.publishedAt} className={`${LABEL} text-muted-foreground`}>
           {formatPostDate(post.publishedAt)}
         </time>
-        <h3 className="mt-2 font-heading text-[1.25rem] md:text-[1.5rem] font-bold leading-[1.2] text-foreground line-clamp-3">
+        <h3 className="mt-2 font-heading text-[1.125rem] md:text-[1.25rem] font-bold leading-[1.2] text-foreground line-clamp-3 md:line-clamp-4">
           <PostTitleLink post={post} />
         </h3>
         {post.excerpt && (
-          <p className="mt-2 text-body-sm leading-body text-muted-foreground line-clamp-2 md:line-clamp-3">
-            {post.excerpt}
-          </p>
+          <p className="mt-2 text-body-sm leading-body text-muted-foreground line-clamp-2 md:hidden">{post.excerpt}</p>
         )}
         <PostAdNote isAd={post.isAd} advertiser={post.advertiser} erid={post.erid} className="mt-2" />
       </div>
@@ -92,11 +90,11 @@ export function PostCard({ post, headingLevel = 3, showKind = false }: PostCardP
   const hasCover = Boolean(post.coverImage)
   const Heading = headingLevel === 2 ? 'h2' : 'h3'
   const frame = hasCover
-    ? 'bg-card grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-4 p-3 md:flex md:flex-col md:items-stretch md:gap-0 md:overflow-hidden md:p-0'
+    ? 'bg-card grid grid-cols-[7rem_minmax(0,1fr)] items-center gap-4 p-3 md:flex md:flex-col md:items-stretch md:gap-0 md:overflow-hidden md:p-0'
     : 'flex flex-col bg-primary p-5 text-primary-foreground md:p-6'
   const headingClass = hasCover
-    ? 'mt-1 font-heading font-semibold leading-[1.3] text-body line-clamp-3 md:mt-2 md:text-[1.125rem] md:leading-[1.25]'
-    : 'mt-3 text-[1.25rem] md:text-[1.375rem] leading-[1.2] font-bold [text-wrap:balance] line-clamp-4'
+    ? 'mt-1 font-heading font-semibold leading-[1.3] text-body line-clamp-3 md:mt-2 md:text-[1.0625rem] md:leading-[1.25]'
+    : 'mt-3 text-[1.25rem] leading-[1.2] font-bold [text-wrap:balance] line-clamp-4'
   const headingLevelClass = headingLevel === 2 ? ' normal-case tracking-normal' : ''
   return (
     <article className={`group relative rounded-block ${frame} ${CARD_MOTION}`}>
@@ -108,7 +106,7 @@ export function PostCard({ post, headingLevel = 3, showKind = false }: PostCardP
           height={800}
           loading="lazy"
           decoding="async"
-          className="size-24 rounded-media object-cover md:size-auto md:w-full md:aspect-[3/2] md:rounded-none xl:aspect-[4/3]"
+          className="w-28 aspect-[3/2] rounded-media object-cover md:size-auto md:w-full md:aspect-[3/2] md:rounded-none"
         />
       )}
       <div className={hasCover ? 'md:flex md:flex-1 md:flex-col md:p-5' : 'flex flex-1 flex-col'}>

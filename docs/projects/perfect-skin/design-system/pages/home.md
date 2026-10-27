@@ -149,29 +149,38 @@ HeroSection → CtaTiles → BrandsSection → CategoryAccordion → BestsellerS
 
 | Ширина | Контейнер (контент) | Главная (статья 1) | Статьи 2–3 |
 |---|---|---|---|
-| 390 | 342 px | на всю ширину, плитка `aspect-[4/5]` (342×428) | строки 342 px: миниатюра 96×96 слева |
-| 768 | 672 px | `md:col-span-2`, `md:aspect-[2/1]` (672×336) | 2 колонки по 324 px, обложка `aspect-[3/2]` (324×216) |
-| 1024 | 928 px | 928×464 | 2 колонки по 452 px, обложка 452×301 |
-| 1440 | 1248 px | `xl:col-span-2` (612 px), высота = высоте ряда, `xl:aspect-auto xl:min-h-[26rem]` | по 294 px, обложка `aspect-[4/3]` (294×220) |
+| 390 | 342 px | на всю ширину: фото `aspect-[3/2]` (342×228), текст ниже фото на `bg-card` | строки 342 px: миниатюра 112×75 слева (`w-28 aspect-[3/2]`) |
+| 768 | 672 px | `md:col-span-2`, `md:aspect-[3/2]` (672×448), плашка слева внизу | 2 колонки по 324 px, обложка `aspect-[3/2]` (324×216) |
+| 1024 | 928 px | `md:aspect-[3/2]` (928×619) | 2 колонки по 452 px, обложка 452×301 |
+| 1440 | 1248 px | `xl:col-span-2` (612 px), фото 612×408 (3:2), плашка 208×136 | по 294 px, обложка `aspect-[3/2]` (294×196) |
 | 1920 | 1248 px (контейнер упирается в 1440) | как 1440 | как 1440 |
 
 На `xl` сетка из 4 колонок: главная занимает 2, статьи 2 и 3 — по одной, все
 в одном ряду одинаковой высоты (grid stretch).
 
-#### 1.1 Главная статья с обложкой — фото + плашка поверх
+#### 1.1 Главная статья с обложкой — фото целиком + плашка поверх
+
+Обложки сгенерированы 3:2 (1600×1074): `object-cover` в рамке 3:2 показывает
+кадр целиком. Левая треть кадра пустая под плашку, товар — в правых двух третях.
+
+- **≥ 768:** рамка `aspect-[3/2]`, плашка абсолютная, слева внизу, шириной не
+  больше `min(22rem, 40%)`, только дата и заголовок. Площадь плашки ≈ 11% площади
+  фото (замер: 1440 — 208×136 из 612×408; 768 — 228×136 из 672×448).
+- **< 768:** фото 3:2 сверху целиком, текст (дата, заголовок, анонс в 2 строки)
+  ниже фото на `bg-card`, без наложения.
 
 ```
 article.group.relative.overflow-hidden.rounded-block.bg-muted
-        aspect-[4/5] md:col-span-2 md:aspect-[2/1] xl:col-span-2 xl:aspect-auto xl:min-h-[26rem]
+        md:col-span-2 md:aspect-[3/2] xl:col-span-2
         transition-transform duration-200 ease-out hover:-translate-y-1 active:scale-97
         motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100
-  img  absolute inset-0 h-full w-full object-cover   alt=""  loading="lazy" decoding="async"
-  div (плашка) absolute inset-x-3 bottom-3 rounded-media bg-card p-5
-               md:inset-x-auto md:left-4 md:bottom-4 md:w-[min(28rem,calc(100%-2rem))] md:p-6
+  img  block aspect-[3/2] w-full object-cover md:absolute md:inset-0 md:aspect-auto md:h-full   alt=""  loading="lazy" decoding="async"
+  div (плашка) bg-card p-5 md:absolute md:left-4 md:bottom-4 md:w-[min(22rem, 40%)] md:rounded-media md:p-4
     time  (LABEL, text-muted-foreground)
-    h3    mt-2 font-heading text-[1.25rem] md:text-[1.5rem] font-bold leading-[1.2] text-foreground line-clamp-3
+    h3    mt-2 font-heading text-[1.125rem] md:text-[1.25rem] font-bold leading-[1.2] text-foreground line-clamp-3
       Link (растянутая ссылка, см. 1.4)
-    p     mt-2 text-body-sm leading-body text-muted-foreground line-clamp-2 md:line-clamp-3
+    p     mt-2 text-body-sm leading-body text-muted-foreground line-clamp-2 md:hidden   (анонс только < 768)
+    PostAdNote  mt-2
 ```
 
 Плашка сплошная `bg-card` — контраст текста не зависит от фото (16.5:1 /
@@ -192,9 +201,9 @@ article.group.relative.overflow-hidden.rounded-block.bg-muted
 
 **< 768 — строка:**
 ```
-article.group.relative.grid.grid-cols-[6rem_minmax(0,1fr)].items-center.gap-4
+article.group.relative.grid.grid-cols-[7rem_minmax(0,1fr)].items-center.gap-4
         rounded-block bg-card p-3  (+ те же hover/active, что у главной)
-  img  size-24 rounded-media object-cover  alt=""
+  img  w-28 aspect-[3/2] rounded-media object-cover  alt=""   (112×75, кадр целиком, без обрезки товара)
   div
     time (LABEL, text-muted-foreground)
     h3   mt-1 font-heading text-body font-semibold leading-[1.3] line-clamp-3
@@ -206,7 +215,7 @@ article.group.relative.grid.grid-cols-[6rem_minmax(0,1fr)].items-center.gap-4
 `article`: `group relative flex flex-col rounded-block bg-primary p-5 text-primary-foreground md:p-6`
 (+ hover/active как у карточки, на телефоне и на ≥ 768 одинаково);
 `time`: `LABEL text-primary-foreground/80`;
-`h3`: `mt-3 text-[1.25rem] md:text-[1.375rem] leading-[1.2] font-bold [text-wrap:balance] line-clamp-4`
+`h3`: `mt-3 text-[1.25rem] leading-[1.2] font-bold [text-wrap:balance] line-clamp-4`
 (шрифт заголовка — из базы `h3`);
 анонс: `mt-3 text-body-sm leading-body text-primary-foreground/80 line-clamp-5`;
 `PostAdNote` с `tone="text-primary-foreground/80"`;
@@ -218,19 +227,19 @@ article.group.relative.grid.grid-cols-[6rem_minmax(0,1fr)].items-center.gap-4
 **≥ 768 — вертикальная карточка:**
 ```
 article.group.relative.flex.flex-col.overflow-hidden.rounded-block.bg-card  (+ hover/active)
-  img  w-full object-cover aspect-[3/2] xl:aspect-[4/3]  alt=""   (без своего радиуса — режет карточка)
+  img  w-full object-cover aspect-[3/2]  alt=""   (без своего радиуса — режет карточка; 3:2 на всех ширинах, без xl-варианта)
   div  flex flex-1 flex-col p-5
     time (LABEL, text-muted-foreground)
-    h3   mt-2 font-heading text-[1.125rem] font-semibold leading-[1.25] line-clamp-3
+    h3   mt-2 font-heading text-[1.0625rem] font-semibold leading-[1.25] line-clamp-3
     p    mt-2 text-body-sm leading-body text-muted-foreground line-clamp-3
 ```
 Без обложки — плитка из раздела выше (картинки нет, карточка тянется по высоте
 ряда, подпись «Читать статью» прижата вниз).
 
 Один компонент, не два: строка становится карточкой классами `md:`.
-`article`: `grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-4 p-3 md:flex md:flex-col md:items-stretch md:gap-0 md:p-0 md:overflow-hidden`;
-`img`: `size-24 rounded-media md:size-auto md:w-full md:aspect-[3/2] md:rounded-none xl:aspect-[4/3]`;
-текстовый `div`: `md:flex md:flex-1 md:flex-col md:p-5`; `h3`: `text-body leading-[1.3] md:mt-2 md:text-[1.125rem] md:leading-[1.25]`;
+`article`: `grid grid-cols-[7rem_minmax(0,1fr)] items-center gap-4 p-3 md:flex md:flex-col md:items-stretch md:gap-0 md:p-0 md:overflow-hidden`;
+`img`: `w-28 aspect-[3/2] rounded-media object-cover md:size-auto md:w-full md:aspect-[3/2] md:rounded-none`;
+текстовый `div`: `md:flex md:flex-1 md:flex-col md:p-5`; `h3`: `text-body leading-[1.3] md:mt-2 md:text-[1.0625rem] md:leading-[1.25]`;
 анонс: `hidden md:mt-2 md:line-clamp-3` (`line-clamp` сам ставит `display: -webkit-box`, `md:block` не добавлять).
 
 #### 1.4 Ссылка, состояния, a11y
