@@ -1,0 +1,956 @@
+<title>Эквитас: вариативность дизайна</title>
+<meta charset="utf-8">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,600&family=Golos+Text:wght@400;500&family=Forum&family=Manrope:wght@400;500&family=Noto+Serif+Display:wght@300;400&family=Onest:wght@400;500&family=Jost:wght@300;400;500&family=Commissioner:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#141518;
+  --bg-2:#1B1D21;
+  --bg-3:#22252A;
+  --line:#34373D;
+  --fg:#ECE6DA;
+  --fg-2:#B9B2A4;
+  --brass:#C9A66B;
+  --brass-hi:#E2C48E;
+  --brass-lo:#8C7244;
+  --on-brass:#16130D;
+  --paper:#F3EEE3;
+  --paper-ink:#1D2333;
+  --paper-ink-2:#4A4F5C;
+  --serif:"Cormorant Garamond","Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--sans);overflow-x:hidden}
+[hidden]{display:none!important}
+a{color:var(--brass-hi);text-underline-offset:4px}
+a:hover{color:var(--fg)}
+p{margin:0}
+h1,h2,h3{font-family:var(--serif);font-weight:500;margin:0;line-height:1.08;letter-spacing:-.005em;font-variant-numeric:lining-nums}
+:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- deck shell ---------- */
+.deck{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:88px}
+.slide{display:flex;align-items:center;justify-content:center;padding:16px 0 0;outline:none}
+.frame{width:100%;max-width:1480px;container-type:inline-size;background:var(--bg-2);border-top:1px solid var(--brass-lo)}
+.in{
+  --fs:16px;--fs-s:14.5px;--fs-xs:13px;--h1:44px;--h2:34px;--h3:22px;--gap:24px;--gap-s:14px;--sbg:var(--bg-2);
+  display:flex;flex-direction:column;gap:var(--gap);padding:24px 20px 32px;min-height:100%;font-size:var(--fs)
+}
+.sh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line);font:500 var(--fs-xs)/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-2)}
+.sh .no{color:var(--brass);letter-spacing:.1em}
+.sh .no b{font-weight:500;color:var(--brass-hi)}
+.sh .r{display:none}
+.body{flex:1 1 auto;display:grid;gap:var(--gap);align-content:center;min-width:0}
+.eyebrow{font:500 var(--fs-xs)/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+.h2{font-size:var(--h2)}
+.h2 em{font-style:italic;color:var(--brass-hi)}
+.lead{color:var(--fg-2);max-width:40em}
+.muted{color:var(--fg-2)}
+.small{font-size:var(--fs-s)}
+.xs{font-size:var(--fs-xs)}
+.stack{display:grid;gap:var(--gap-s);align-content:start;min-width:0}
+
+/* nav */
+.nav{position:fixed;z-index:10;right:max(16px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:4px;padding:4px;background:var(--bg);border:1px solid var(--line)}
+.nav button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:44px;padding:0 14px;background:transparent;color:var(--fg);border:1px solid transparent;font:500 15px/1 var(--sans);cursor:pointer;transition:background-color .2s ease,border-color .2s ease}
+.nav button:hover{background:var(--bg-3);border-color:var(--line)}
+.nav button[aria-disabled="true"]{color:#7E786D;cursor:default;background:transparent;border-color:transparent}
+.nav .cnt{min-width:76px;text-align:center;font:500 15px/1 var(--sans);color:var(--brass-hi)}
+.nav .cnt span{color:var(--fg-2)}
+
+/* ---------- 1 cover ---------- */
+.g-cover{display:grid;gap:var(--gap);align-items:center}
+.cover-mark{max-width:300px;justify-self:center;width:100%}
+.cover-mark svg{display:block;width:100%;height:auto}
+.cover h1{font-size:var(--h1);font-weight:500;line-height:1.02}
+.cover h1 small{display:block;margin-top:.35em;font:500 var(--fs-s)/1.4 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--fg-2)}
+.cover .title{font:italic 500 calc(var(--h2) * 1.05)/1.1 var(--serif);color:var(--brass-hi);margin-top:var(--gap)}
+.cover .meta{display:flex;flex-wrap:wrap;gap:8px 32px;margin-top:var(--gap);padding-top:var(--gap-s);border-top:1px solid var(--line);font-size:var(--fs-s);color:var(--fg-2)}
+.cover .meta b{display:block;font:500 calc(var(--h3) * .95)/1.2 var(--serif);color:var(--fg)}
+.cover-mark .beam{transform-origin:240px 150px;transform-box:view-box;animation:settle 5.5s cubic-bezier(.22,.61,.36,1) .3s both}
+.cover-mark .pan-l{transform-origin:110px 150px;transform-box:view-box;animation:hang-l 5.5s cubic-bezier(.22,.61,.36,1) .3s both}
+.cover-mark .pan-r{transform-origin:370px 150px;transform-box:view-box;animation:hang-r 5.5s cubic-bezier(.22,.61,.36,1) .3s both}
+@keyframes settle{0%{transform:rotate(-7deg)}45%{transform:rotate(2.2deg)}75%{transform:rotate(-.6deg)}100%{transform:rotate(0)}}
+@keyframes hang-l{0%{transform:translateY(16px)}45%{transform:translateY(-5px)}75%{transform:translateY(1.4px)}100%{transform:translateY(0)}}
+@keyframes hang-r{0%{transform:translateY(-16px)}45%{transform:translateY(5px)}75%{transform:translateY(-1.4px)}100%{transform:translateY(0)}}
+
+/* ---------- ledger rows ---------- */
+.ledger{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.ledger li{display:grid;grid-template-columns:minmax(0,1fr);gap:2px 24px;padding:var(--gap-s) 0;border-bottom:1px solid var(--line)}
+.ledger dt,.ledger .k{font:500 var(--fs-xs)/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+.ledger .v{font:500 var(--h3)/1.25 var(--serif)}
+.ledger .d{color:var(--fg-2);font-size:var(--fs-s)}
+.g-2{display:grid;gap:var(--gap)}
+.no-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.no-list li{display:flex;gap:12px;align-items:baseline;color:var(--fg)}
+.no-list li::before{content:"";flex:none;width:14px;height:1px;background:var(--brass);transform:translateY(-.3em)}
+.statement{font:500 calc(var(--h2) * 1.1)/1.12 var(--serif)}
+.statement em{font-style:italic;color:var(--brass-hi)}
+
+/* ---------- 3 how to read ---------- */
+.g-3{display:grid;gap:var(--gap)}
+.pick3{display:grid;gap:10px;padding-top:var(--gap-s);border-top:1px solid var(--brass-lo);align-content:start}
+.pick3 .n{display:flex;align-items:center;gap:10px;font:500 var(--fs-xs)/1 var(--sans);letter-spacing:.12em;color:var(--brass)}
+.pick3 .n svg{width:14px;height:17px}
+.pick3 h3{font-size:calc(var(--h2) * .9)}
+.pick3 .cnt3{font:500 var(--h3)/1.2 var(--serif);color:var(--brass-hi)}
+.ticks{display:flex;gap:6px;margin-top:4px}
+.ticks i{display:block;width:22px;height:22px;border:1px solid var(--brass-lo)}
+.ticks i.on{background:var(--brass);border-color:var(--brass)}
+
+/* ---------- style slides ---------- */
+.g-style{display:grid;gap:var(--gap);align-items:start}
+.pv{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg-3);border:1px solid var(--line)}
+.pv iframe{position:absolute;left:0;top:0;width:1280px;height:800px;border:0;transform-origin:0 0;transform:scale(var(--k,.28));pointer-events:none}
+.pv-cap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 16px;margin-top:8px}
+.open{display:inline-flex;align-items:center;min-height:44px;font-weight:500;font-size:var(--fs-s)}
+.sw{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:var(--gap-s)}
+.sw div{min-width:0}
+.sw i{display:block;aspect-ratio:3/2;box-shadow:inset 0 0 0 1px rgba(236,230,218,.14)}
+.sw b{display:block;margin-top:6px;font:500 var(--fs-xs)/1.3 var(--sans);font-variant-numeric:tabular-nums;color:var(--fg);letter-spacing:.02em}
+.sw span{display:block;font-size:var(--fs-xs);line-height:1.3;color:var(--fg-2)}
+.style-h{font-size:var(--h2)}
+.mood{font:italic 500 calc(var(--h3) * 1.02)/1.35 var(--serif);color:var(--fg)}
+.spec{display:grid;gap:6px;padding:var(--gap-s) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.spec .sh1{font-size:calc(var(--h2) * .82);line-height:1.12;color:var(--fg)}
+.spec .st{font-size:var(--fs);color:var(--fg-2)}
+.spec .fn{font:500 var(--fs-xs)/1.4 var(--sans);letter-spacing:.06em;color:var(--brass)}
+.f-a-h{font-family:"Cormorant Garamond",serif;font-weight:500}.f-a-t{font-family:"IBM Plex Sans",sans-serif}
+.f-b-h{font-family:"Literata",serif;font-weight:600}.f-b-t{font-family:"Golos Text",sans-serif}
+.f-c-h{font-family:"Forum",serif}.f-c-t{font-family:"Manrope",sans-serif}
+.f-d-h{font-family:"Noto Serif Display",serif;font-weight:300}.f-d-t{font-family:"Onest",sans-serif}
+.f-e-h{font-family:"Jost",sans-serif;font-weight:300}.f-e-t{font-family:"Commissioner",sans-serif}
+.idea{display:grid;gap:6px}
+.idea .t{font-size:var(--fs-s)}
+.idea .t b{font-weight:500;color:var(--fg)}
+.scores{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:var(--fs-xs);color:var(--fg-2);align-items:center}
+.meter{display:inline-flex;gap:3px;vertical-align:middle;margin-left:8px}
+.meter i{display:block;width:9px;height:14px;border:1px solid var(--brass-lo)}
+.meter i.on{background:var(--brass);border-color:var(--brass)}
+.pm{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:var(--fs-s)}
+.pm li{display:grid;grid-template-columns:22px minmax(0,1fr)}
+.pm li::before{font-weight:600;color:var(--brass-hi)}
+.pm .plus::before{content:"+"}
+.pm .risk::before{content:"!";color:#E3A08F}
+.imp{font-size:var(--fs-s);color:var(--fg-2)}
+.imp q{color:var(--fg);quotes:"«" "»"}
+
+/* ---------- table ---------- */
+.tbl-wrap{overflow-x:auto;border-top:1px solid var(--brass-lo);-webkit-overflow-scrolling:touch}
+.tbl-wrap:focus-visible{outline-offset:-2px}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:var(--fs-s)}
+th,td{text-align:left;vertical-align:top;padding:12px 14px 12px 0;border-bottom:1px solid var(--line)}
+thead th{font:500 var(--fs-xs)/1.35 var(--sans);letter-spacing:.06em;color:var(--fg);padding-top:14px}
+thead th i{display:block;width:100%;height:6px;margin-bottom:10px;box-shadow:inset 0 0 0 1px rgba(236,230,218,.14)}
+thead th em{display:block;font-style:normal;color:var(--brass);letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
+tbody th{font:500 var(--fs-xs)/1.4 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--brass);width:12%}
+tbody td{color:var(--fg-2);width:17.6%}
+tbody td b{color:var(--fg);font-weight:500}
+
+/* ---------- palettes ---------- */
+.bands{display:grid;gap:var(--gap-s)}
+.band{display:grid;gap:6px}
+.band .lb{display:flex;align-items:baseline;gap:12px}
+.band .lb b{font:500 var(--fs-xs)/1 var(--sans);letter-spacing:.14em;color:var(--brass)}
+.band .lb span{font:500 var(--h3)/1.1 var(--serif)}
+.band .lb small{font-size:var(--fs-xs);color:var(--fg-2)}
+.strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
+.strip div{min-width:0}
+.strip i{display:block;height:clamp(24px,2.6cqw,46px);box-shadow:inset 0 0 0 1px rgba(236,230,218,.14)}
+.strip b{display:block;margin-top:4px;font:500 var(--fs-xs)/1.25 var(--sans);font-variant-numeric:tabular-nums}
+.strip span{display:block;font-size:var(--fs-xs);line-height:1.25;color:var(--fg-2);overflow-wrap:anywhere}
+
+/* ---------- heroes ---------- */
+.heroes{display:grid;gap:0 var(--gap);grid-template-columns:repeat(2,minmax(0,1fr))}
+.hero-c{display:flex;flex-direction:column;gap:6px;padding:var(--gap-s) 0;border-top:1px solid var(--line);min-width:0;--surface:var(--sbg)}
+.hx{position:relative;display:flex;align-items:flex-end;justify-content:center;height:120px;color:var(--brass-hi);margin-bottom:4px}
+.hx svg{height:100%;width:auto;max-width:100%;overflow:visible}
+.hx svg *{vector-effect:non-scaling-stroke}
+.rec{position:absolute;left:0;top:0;font:500 11px/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--brass-hi)}
+.hero-c .k{font:500 var(--fs-xs)/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--brass)}
+.hero-c h3{font-size:var(--h3)}
+.hero-c p{font-size:var(--fs-xs);color:var(--fg-2);line-height:1.45}
+.hero-c p b{color:var(--fg);font-weight:500}
+.gen{margin:0}
+.gen .ph{aspect-ratio:1/1;background:var(--bg-3)}
+.gen figcaption{font-size:var(--fs-xs);color:var(--fg-2);margin-top:6px}
+
+/* ---------- attorney ---------- */
+.g-pov{display:grid;gap:var(--gap);align-items:center}
+.pov{color:#D7B97F;max-width:420px;width:100%;justify-self:center;--bg:var(--sbg)}
+.pov svg{display:block;width:100%;height:auto;stroke-width:1.5}
+.pov .win,.pov .sky{color:#7A6440}
+.pov .crease{opacity:.5}
+.poses{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:end;padding-top:var(--gap-s);border-top:1px solid var(--line);--bg:var(--sbg)}
+.poses figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.poses svg{display:block;height:110px;width:auto;max-width:100%;color:#D7B97F;stroke-width:1.5}
+.poses svg path{vector-effect:non-scaling-stroke}
+.poses .crease,.poses .thin{opacity:.55}
+.poses figcaption{font-size:var(--fs-xs);line-height:1.35;color:var(--fg-2);text-align:center}
+.keyline{font:italic 500 calc(var(--h3) * 1.15)/1.3 var(--serif);color:var(--brass-hi)}
+
+/* ---------- logos ---------- */
+.logos{display:grid;gap:var(--gap);grid-template-columns:minmax(0,1fr)}
+.logo-c{display:flex;flex-direction:column;gap:8px;min-width:0}
+.plates{display:grid;gap:4px;margin-bottom:6px}
+.plate{display:flex;align-items:center;gap:14px;min-height:96px;padding:12px 14px}
+.plate.lt{background:#F3EEE3;color:#1D2333;--pbg:#F3EEE3;--pac:#8A6A35;--psub:#4A4F5C}
+.plate.dk{background:#0E0F11;color:#ECE6DA;--pbg:#0E0F11;--pac:#C9A66B;--psub:#B9B2A4;border:1px solid var(--line)}
+.plate .mk{width:56px;height:56px;flex:none;overflow:visible}
+.plate .mk.big{width:64px;height:64px}
+.plate .mk.word{width:100%;max-width:230px;height:auto;flex:1 1 auto}
+.wm{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.wm b{font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:.01em}
+.wm small{white-space:nowrap;font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-top:5px;color:var(--psub);font-weight:500}
+.logo-c .k{font:500 var(--fs-xs)/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--brass)}
+.logo-c h3{font-size:var(--h3)}
+.logo-c .m{font-size:var(--fs-xs);color:var(--fg-2)}
+.logo-c .m b{color:var(--fg);font-weight:500}
+.logo-c .pm{font-size:var(--fs-xs)}
+
+/* ---------- recommendation ---------- */
+.recs{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--brass-lo)}
+.recs li{display:grid;gap:var(--gap-s);padding:var(--gap-s) 0;border-bottom:1px solid var(--line);align-items:center}
+.recs .k{font:500 var(--fs-xs)/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
+.recs h3{font-size:calc(var(--h3) * 1.1);line-height:1.2}
+.recs p{font-size:var(--fs-s);color:var(--fg-2)}
+.kit{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.kit .chips{display:grid;grid-template-columns:repeat(2,22px);gap:2px}
+.kit .chips i{display:block;width:22px;height:22px;border:1px solid var(--line)}
+.kit{--surface:var(--sbg)}
+.kit .hx{height:84px;width:84px;flex:none;margin:0;align-items:center}
+.kit .plate{min-height:84px;padding:10px 12px}
+.kit .plate .mk{width:56px;height:56px}
+.plate.ex{background:#0D1524;color:#D5DBE3;--pbg:#0D1524;--pac:#9AA5B5;border:1px solid #2A3950}
+.plate.bx{background:#F3EEE3;color:#1D2333;--pbg:#F3EEE3;--pac:#9B2D20}
+
+/* ---------- next steps ---------- */
+.steps{display:grid;gap:0;list-style:none;margin:0;padding:0;position:relative}
+.steps::before{content:"";position:absolute;left:11px;top:0;bottom:0;width:1px;background:var(--brass-lo)}
+.steps li{position:relative;padding:0 0 var(--gap) 48px}
+.steps li::before{content:"";position:absolute;top:8px;left:0;width:23px;height:1px;background:var(--brass)}
+.steps .k{font:500 var(--fs-xs)/1 var(--sans);color:var(--brass);letter-spacing:.12em}
+.steps h3{font-size:calc(var(--h3) * 1.1);margin:8px 0 6px}
+.steps p{font-size:var(--fs-s);color:var(--fg-2)}
+.steps .t{display:block;margin-top:8px;font-size:var(--fs-xs);color:var(--fg);letter-spacing:.04em}
+.ask{display:grid;gap:6px;padding-top:var(--gap-s);border-top:1px solid var(--line)}
+.ask p:not(.eyebrow){font:italic 500 var(--h3)/1.3 var(--serif)}
+
+/* ---------- phone / tablet feed ---------- */
+@media (min-width:640px){
+  .heroes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .logos{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .in{padding:32px 32px 40px}
+  .hx{height:140px}
+}
+@media (max-width:420px){
+  .in{--h1:38px;--h2:30px;--h3:21px}
+  .heroes{grid-template-columns:minmax(0,1fr)}
+  .hx{height:150px}
+  .sw{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .strip{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .nav .lbl{display:none}
+  .poses{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:20px}
+}
+
+/* ---------- desktop: 16:9 slides ---------- */
+@media (min-width:1024px) and (min-height:600px){
+  html{scroll-snap-type:y proximity}
+  .deck{padding-bottom:0}
+  .slide{min-height:100vh;min-height:100dvh;scroll-snap-align:start;padding:20px 0 72px}
+  .frame{width:min(100%,calc((100dvh - 92px) * 16 / 9));aspect-ratio:16/9;background:transparent}
+  .in{
+    --fs:clamp(14px,1.1cqw,20px);--fs-s:clamp(13px,.98cqw,18px);--fs-xs:clamp(12px,.86cqw,15.5px);
+    --h1:clamp(52px,6.4cqw,108px);--h2:clamp(30px,3.2cqw,56px);--h3:clamp(18px,1.6cqw,28px);
+    --gap:clamp(16px,2.1cqw,38px);--gap-s:clamp(10px,1.05cqw,18px);--sbg:var(--bg);
+    padding:clamp(14px,1.4cqw,24px) 0 0
+  }
+  .sh .r{display:inline}
+  .g-cover{grid-template-columns:1.25fr .75fr}
+  .cover-mark{max-width:none;width:84%}
+  .g-2{grid-template-columns:1fr 1.1fr;align-items:start}
+  .g-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g-style{grid-template-columns:1.12fr 1fr}
+  .heroes{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .hx{height:clamp(96px,9.4cqw,160px)}
+  .g-pov{grid-template-columns:.8fr 1.2fr}
+  .pov{max-width:none;width:100%}
+  .pov svg{max-height:calc(100dvh - 240px);width:auto;margin:0 auto}
+  .poses svg{height:clamp(90px,8.6cqw,150px)}
+  .logos{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .plate{min-height:clamp(84px,7cqw,112px)}
+  .recs li{grid-template-columns:clamp(250px,22cqw,340px) minmax(0,1fr) minmax(0,1.1fr);gap:var(--gap)}
+  .steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap)}
+  .steps::before{left:0;right:0;top:11px;bottom:auto;width:auto;height:1px}
+  .steps li{padding:calc(var(--gap) * 1.6) 0 0}
+  .steps li::before{top:0;left:0;width:1px;height:23px}
+  .ledger li{grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);align-items:baseline}
+  .nav{right:max(24px,env(safe-area-inset-right,0px));bottom:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .cover-mark .beam,.cover-mark .pan-l,.cover-mark .pan-r{animation:none}
+  .nav button{transition:none}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="wt" viewBox="0 0 14 17"><circle cx="7" cy="3" r="2.2" fill="none" stroke="#E2C48E" stroke-width="1.2"/><path d="M2.2 16.5 L3.6 6.2 H10.4 L11.8 16.5 Z" fill="#C9A66B"/><path d="M3.6 6.2 H10.4" stroke="#E2C48E" stroke-width="1.2"/><path d="M2.6 13.6 H11.4" stroke="#8C7244" stroke-width=".8"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="lg1" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <circle cx="32" cy="32" r="25.5" fill="none" stroke="currentColor" stroke-width=".7"/>
+    <text x="32" y="44.2" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="35" fill="currentColor">Э</text>
+  </symbol>
+  <symbol id="lg2" viewBox="0 0 64 64">
+    <text x="32" y="48" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="500" font-size="54" fill="currentColor">Æ</text>
+    <path d="M10 56 H54" stroke="var(--pac)" stroke-width="1"/>
+  </symbol>
+  <symbol id="lg3" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M32 10 V20"/>
+      <path d="M9 23 H55"/>
+      <circle cx="32" cy="23" r="3.2" fill="var(--pbg)"/>
+      <path d="M32 26.5 V51"/>
+      <path d="M24 51 H40 L42 56 H22 Z"/>
+      <path d="M13 23 L7 38 M13 23 L19 38 M5 38 H21 A8 5 0 0 1 5 38 Z"/>
+      <path d="M51 23 L45 38 M51 23 L57 38 M43 38 H59 A8 5 0 0 1 43 38 Z"/>
+    </g>
+    <path d="M28.5 10 H35.5" stroke="var(--pac)" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="lg4" viewBox="0 0 64 64">
+    <rect x="6" y="6" width="52" height="52" fill="currentColor"/>
+    <text x="32" y="47" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="44" fill="var(--pbg)">§</text>
+  </symbol>
+  <symbol id="lg5" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="32" r="29.5" stroke-width="1.6"/>
+      <path d="M32 47 V20" stroke-width="1.6"/>
+      <circle cx="32" cy="16.5" r="2.4" stroke-width="1.4"/>
+      <path d="M17 23.5 H47" stroke-width="1.6"/>
+      <path d="M19.5 24 L15 33.5 M19.5 24 L24 33.5 M12.5 33.5 H26.5 A7 4.2 0 0 1 12.5 33.5" stroke-width="1.3"/>
+      <path d="M44.5 24 L40 33.5 M44.5 24 L49 33.5 M37.5 33.5 H51.5 A7 4.2 0 0 1 37.5 33.5" stroke-width="1.3"/>
+      <path d="M13 53 C19 48.5 24.5 47 28.5 46.5 L32 51.5 L35.5 46.5 C39.5 47 45 48.5 51 53" stroke-width="1.5"/>
+      <path d="M32 51.5 L30.6 55 L32 58 L33.4 55 Z" stroke="var(--pac)" stroke-width="1.2"/>
+    </g>
+  </symbol>
+  <symbol id="lg6" viewBox="0 0 236 76">
+    <g fill="none" stroke="var(--pac)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M66 12 H100"/>
+      <path d="M83 12 L79 19.5 H87 Z"/>
+      <circle cx="66" cy="12" r="1.8" fill="var(--pac)"/>
+      <circle cx="100" cy="12" r="1.8" fill="var(--pac)"/>
+    </g>
+    <text y="46" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="31" fill="currentColor"><tspan x="20">Э</tspan><tspan x="52">К</tspan><tspan x="83">В</tspan><tspan x="114">И</tspan><tspan x="146">Т</tspan><tspan x="177">А</tspan><tspan x="208">С</tspan></text>
+    <path d="M8 56 H228" stroke="currentColor" stroke-width=".7" opacity=".55"/>
+    <text x="118" y="71" text-anchor="middle" font-family="IBM Plex Sans, system-ui, sans-serif" font-weight="500" font-size="9" letter-spacing="3.6" fill="currentColor">АДВОКАТСКОЕ БЮРО</text>
+  </symbol>
+  <symbol id="lg7" viewBox="0 0 64 64">
+    <circle cx="20" cy="33" r="12" fill="currentColor"/>
+    <rect x="45" y="20" width="9" height="25" fill="currentColor"/>
+    <path d="M5 46 H59" stroke="currentColor" stroke-width="2.4"/>
+    <path d="M32 47.5 L27 57 H37 Z" fill="var(--pac)"/>
+  </symbol>
+  <symbol id="lg8" viewBox="0 0 100 100">
+    <defs><path id="sealpath" d="M50 50 m-36.5 0 a36.5 36.5 0 1 1 73 0 a36.5 36.5 0 1 1 -73 0"/></defs>
+    <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="2"/>
+    <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width=".6"/>
+    <circle cx="50" cy="50" r="31" fill="none" stroke="currentColor" stroke-width="1"/>
+    <text font-family="IBM Plex Sans, system-ui, sans-serif" font-weight="600" font-size="7.6" letter-spacing="1.05" fill="currentColor"><textPath href="#sealpath" startOffset="0" textLength="224" lengthAdjust="spacing">АДВОКАТСКОЕ БЮРО · ЭКВИТАС · МОСКВА ·</textPath></text>
+    <text x="50" y="61" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="32" fill="currentColor">Э</text>
+    <path d="M38 67.5 H62" stroke="var(--pac)" stroke-width="1"/>
+  </symbol>
+  <symbol id="ck" viewBox="0 0 14 14"><path d="M2 7.5 L5.5 11 L12 3.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+
+<main class="deck" id="deck" aria-label="Презентация «Эквитас: вариативность дизайна»">
+
+<!-- 1 COVER -->
+<section class="slide cover" id="s1" tabindex="-1" aria-labelledby="t1">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>01</b> · Обложка</span><span class="r">Эквитас · Адвокатское бюро</span></header>
+  <div class="body g-cover">
+   <div>
+    <p class="eyebrow">Презентация для владельца</p>
+    <h1 id="t1" style="margin-top:var(--gap-s)">Эквитас ·<br>Адвокатское бюро<small>Aequitas</small></h1>
+    <p class="title">Вариативность дизайна</p>
+    <div class="meta">
+     <div><b>Стили, цвета</b>пять направлений главной</div>
+     <div><b>Герои</b>восемь персонажей и предметов</div>
+     <div><b>Логотипы</b>восемь эскизов знака</div>
+     <div><b class="num">27.10.2026</b>Москва</div>
+    </div>
+   </div>
+   <div class="cover-mark" aria-hidden="true">
+    <svg viewBox="0 0 480 520" fill="none" stroke-linecap="round">
+     <defs><linearGradient id="br" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E7CB96"/><stop offset=".55" stop-color="#C9A66B"/><stop offset="1" stop-color="#8C7244"/></linearGradient></defs>
+     <path d="M150 112 A 120 120 0 0 1 330 112" stroke="#5A5040" stroke-width="1"/>
+     <g stroke="#8C7244" stroke-width="1"><line x1="240" y1="30" x2="240" y2="44"/><line x1="209" y1="34" x2="211" y2="45"/><line x1="271" y1="34" x2="269" y2="45"/><line x1="180" y1="44" x2="185" y2="53"/><line x1="300" y1="44" x2="295" y2="53"/><line x1="156" y1="62" x2="163" y2="69"/><line x1="324" y1="62" x2="317" y2="69"/></g>
+     <rect x="234" y="140" width="12" height="300" fill="url(#br)"/>
+     <rect x="226" y="140" width="28" height="6" fill="#E2C48E"/>
+     <path d="M190 470 h100 l-14 -30 h-72 z" fill="url(#br)"/>
+     <rect x="160" y="470" width="160" height="10" fill="#8C7244"/>
+     <line x1="120" y1="500" x2="360" y2="500" stroke="#34373D"/>
+     <g class="beam">
+      <line x1="240" y1="150" x2="240" y2="64" stroke="url(#br)" stroke-width="3"/>
+      <path d="M236 66 L240 54 L244 66 z" fill="#E2C48E"/>
+      <rect x="100" y="146" width="280" height="8" rx="1" fill="url(#br)"/>
+      <circle cx="240" cy="150" r="11" fill="#141518" stroke="#E2C48E" stroke-width="2"/>
+      <circle cx="240" cy="150" r="3" fill="#E2C48E"/>
+      <circle cx="110" cy="150" r="5" fill="#E2C48E"/>
+      <circle cx="370" cy="150" r="5" fill="#E2C48E"/>
+      <g stroke="#141518" stroke-width="1"><line x1="150" y1="147" x2="150" y2="153"/><line x1="180" y1="147" x2="180" y2="153"/><line x1="210" y1="147" x2="210" y2="153"/><line x1="270" y1="147" x2="270" y2="153"/><line x1="300" y1="147" x2="300" y2="153"/><line x1="330" y1="147" x2="330" y2="153"/></g>
+     </g>
+     <g class="pan-l"><path d="M110 150 L70 300 M110 150 L150 300" stroke="#B49159" stroke-width="1.2"/><path d="M56 300 h108 a54 22 0 0 1 -108 0 z" fill="url(#br)"/><ellipse cx="110" cy="300" rx="54" ry="5" fill="#E2C48E"/></g>
+     <g class="pan-r"><path d="M370 150 L330 300 M370 150 L410 300" stroke="#B49159" stroke-width="1.2"/><path d="M316 300 h108 a54 22 0 0 1 -108 0 z" fill="url(#br)"/><ellipse cx="370" cy="300" rx="54" ry="5" fill="#E2C48E"/></g>
+    </svg>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 2 TASK -->
+<section class="slide" id="s2" tabindex="-1" aria-labelledby="t2">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>02</b> · Задача и правило</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-2">
+   <div class="stack">
+    <p class="eyebrow">Задача</p>
+    <h2 class="statement" id="t2">Солидность — <em>главное правило</em> для каждого варианта</h2>
+    <p class="lead">Сайт адвокатской практики по гражданским делам. Человек приходит из поиска, часто с телефона и в тревоге: за секунды понять, что здесь помогут, поверить — и оставить заявку.</p>
+   </div>
+   <div class="stack">
+    <ul class="ledger">
+     <li><span class="k">Клиенты</span><span class="v">Компании и собственники</span></li>
+     <li><span class="k">География</span><span class="v">Москва и Московская область</span></li>
+     <li><span class="k">Практика</span><span class="v">Только гражданские дела</span></li>
+     <li><span class="k">Тон</span><span class="v">Спокойная уверенность, без канцелярита</span></li>
+    </ul>
+    <p class="eyebrow" style="margin-top:var(--gap-s)">Этика адвоката: чего нет ни в одном варианте</p>
+    <ul class="no-list small">
+     <li>Слов «лучший», «гарантируем» и обещаний исхода дела</li>
+     <li>Фемиды с повязкой и судейского молотка</li>
+     <li>Мультяшности, рукопожатий, победных жестов и залов суда</li>
+    </ul>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 3 HOW TO READ -->
+<section class="slide" id="s3" tabindex="-1" aria-labelledby="t3">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>03</b> · Как читать</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">Три выбора</p>
+    <h2 class="h2" id="t3">Отметьте по три варианта в каждом блоке</h2>
+    <p class="lead">Так мы сузим поле до направлений, которые стоит довести. Порядок не важен; варианты можно сочетать между собой. Отметки удобно ставить на <a href="choice.html">доске выбора</a>.</p>
+   </div>
+   <div class="g-3">
+    <div class="pick3"><span class="n"><svg aria-hidden="true" focusable="false"><use href="#wt"/></svg>01</span><h3>Стиль</h3><p class="cnt3">5 вариантов · A–E</p><p class="muted small">Пять макетов главной с одинаковыми текстами — отличается только подача: цвет, шрифты, герой первого экрана.</p><div class="ticks" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+    <div class="pick3"><span class="n"><svg aria-hidden="true" focusable="false"><use href="#wt"/></svg>02</span><h3>Герой</h3><p class="cnt3">8 вариантов</p><p class="muted small">Предмет или фигура, которая живёт на всём сайте: первый экран, этапы работы, калькулятор, заявка.</p><div class="ticks" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="pick3"><span class="n"><svg aria-hidden="true" focusable="false"><use href="#wt"/></svg>03</span><h3>Логотип</h3><p class="cnt3">8 эскизов</p><p class="muted small">Направления знака на светлом и тёмном фоне. Эскизы показывают идею и пропорции, не финальную отрисовку.</p><div class="ticks" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div>
+   </div>
+   <p class="xs muted">С и Н в слайдах стилей — солидность и новизна для ниши юристов, оценки Гермеса по шкале 1–5.</p>
+  </div>
+ </div></div>
+</section>
+
+
+<!-- 4 STYLE A -->
+<section class="slide" id="s4" tabindex="-1" aria-labelledby="t4">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>04</b> · Стиль A</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-style">
+   <div>
+    <div class="pv"><iframe src="a.html" title="Превью стиля A «Вечерний кабинет»" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="pv-cap"><span class="xs muted">Первый экран макета, уменьшено</span><a class="open" href="a.html" target="_blank" rel="noopener">Открыть макет A →</a></div>
+    <div class="sw" role="list" aria-label="Палитра стиля A"><div role="listitem"><i style="background:#141518"></i><b>#141518</b><span>графит</span></div><div role="listitem"><i style="background:#22252A"></i><b>#22252A</b><span>сукно</span></div><div role="listitem"><i style="background:#C9A66B"></i><b>#C9A66B</b><span>латунь</span></div><div role="listitem"><i style="background:#E2C48E"></i><b>#E2C48E</b><span>светлая латунь</span></div><div role="listitem"><i style="background:#ECE6DA"></i><b>#ECE6DA</b><span>слоновая кость</span></div></div>
+   </div>
+   <div class="stack">
+    <p class="eyebrow">Стиль A · тёмный</p>
+    <h2 class="style-h" id="t4">«Вечерний кабинет»</h2>
+    <p class="mood">Кабинет после восьми вечера: тихо, лампа, латунный прибор на столе.</p>
+    <p class="small muted">Золото работает как инструмент — деления, шкала, гирька, — а не как позолота.</p>
+    <div class="spec">
+     <p class="sh1 f-a-h">Спор приходит в равновесие</p>
+     <p class="st f-a-t">Гражданские споры компаний. Москва и Московская область.</p>
+     <p class="fn">Cormorant Garamond — заголовки · IBM Plex Sans — текст</p>
+    </div>
+    <div class="idea"><p class="eyebrow">Идея Гермеса</p><p class="t"><b>«Тёмная материя»</b></p><div class="scores"><span>Солидность<span class="meter" role="img" aria-label="Солидность 5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span><span>Новизна<span class="meter" role="img" aria-label="Новизна 3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span><span class="num">С 5 · Н 3</span></div></div>
+    <ul class="pm"><li class="plus">Прямо попадает в бриф: тёмный, мужской, латунь как инструмент.</li><li class="risk">Без прибора-весов скатывается в «типовой тёмный люкс».</li></ul>
+    <p class="imp">Впечатление: <q>Здесь всё взвешено и посчитано, мне не будут продавать</q> · Герой: весы-прибор, «Поверенный»</p>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 5 STYLE B -->
+<section class="slide" id="s5" tabindex="-1" aria-labelledby="t5">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>05</b> · Стиль B</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-style">
+   <div>
+    <div class="pv"><iframe src="b.html" title="Превью стиля B «Бумага и чернила»" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="pv-cap"><span class="xs muted">Первый экран макета, уменьшено</span><a class="open" href="b.html" target="_blank" rel="noopener">Открыть макет B →</a></div>
+    <div class="sw" role="list" aria-label="Палитра стиля B"><div role="listitem"><i style="background:#F3EEE3"></i><b>#F3EEE3</b><span>бумага</span></div><div role="listitem"><i style="background:#FBF8F1"></i><b>#FBF8F1</b><span>лист</span></div><div role="listitem"><i style="background:#1D2333"></i><b>#1D2333</b><span>чернила</span></div><div role="listitem"><i style="background:#9B2D20"></i><b>#9B2D20</b><span>киноварь печати</span></div><div role="listitem"><i style="background:#CBC0AA"></i><b>#CBC0AA</b><span>линовка</span></div></div>
+   </div>
+   <div class="stack">
+    <p class="eyebrow">Стиль B · светлый</p>
+    <h2 class="style-h" id="t5">«Бумага и чернила»</h2>
+    <p class="mood">Правовая позиция на бумаге: параграфы, справка-расчёт, печать и подпись.</p>
+    <p class="small muted">Светлый, но не «лёгкий»: тёмно-синие чернила и киноварь печати держат строгость.</p>
+    <div class="spec">
+     <p class="sh1 f-b-h">Спор приходит в равновесие</p>
+     <p class="st f-b-t">Гражданские споры компаний. Москва и Московская область.</p>
+     <p class="fn">Literata — заголовки · Golos Text — текст</p>
+    </div>
+    <div class="idea"><p class="eyebrow">Идея Гермеса</p><p class="t"><b>«Документ как интерфейс»</b></p><div class="scores"><span>Солидность<span class="meter" role="img" aria-label="Солидность 4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></span><span>Новизна<span class="meter" role="img" aria-label="Новизна 5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span><span class="num">С 4 · Н 5</span></div></div>
+    <ul class="pm"><li class="plus">Самый новый ход для ниши, лучше всех продаёт калькуляторы.</li><li class="risk">Светлый вместо тёмного — владелец может счесть недостаточно «мужским».</li></ul>
+    <p class="imp">Впечатление: <q>Со мной говорят документами и цифрами, всё прозрачно</q> · Герой: печать и перо</p>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 6 STYLE C -->
+<section class="slide" id="s6" tabindex="-1" aria-labelledby="t6">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>06</b> · Стиль C</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-style">
+   <div>
+    <div class="pv"><iframe src="c.html" title="Превью стиля C «Камень и малахит»" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="pv-cap"><span class="xs muted">Первый экран макета, уменьшено</span><a class="open" href="c.html" target="_blank" rel="noopener">Открыть макет C →</a></div>
+    <div class="sw" role="list" aria-label="Палитра стиля C"><div role="listitem"><i style="background:#0F231C"></i><b>#0F231C</b><span>малахит</span></div><div role="listitem"><i style="background:#163027"></i><b>#163027</b><span>малахит светлее</span></div><div role="listitem"><i style="background:#E2D7C5"></i><b>#E2D7C5</b><span>травертин</span></div><div role="listitem"><i style="background:#D48C64"></i><b>#D48C64</b><span>терракота</span></div><div role="listitem"><i style="background:#14261F"></i><b>#14261F</b><span>базальт</span></div></div>
+   </div>
+   <div class="stack">
+    <p class="eyebrow">Стиль C · тёмный с камнем</p>
+    <h2 class="style-h" id="t6">«Камень и малахит»</h2>
+    <p class="mood">Римское право: колонна, высеченная надпись AEQVITAS, латинские максимы с переводом.</p>
+    <p class="small muted">Глубокий зелёный вместо привычного чёрного, травертин как материал, терракота — акцент.</p>
+    <div class="spec">
+     <p class="sh1 f-c-h">Спор приходит в равновесие</p>
+     <p class="st f-c-t">Гражданские споры компаний. Москва и Московская область.</p>
+     <p class="fn">Forum — заголовки · Manrope — текст</p>
+    </div>
+    <div class="idea"><p class="eyebrow">Идея Гермеса</p><p class="t"><b>«Типографика-монумент»</b></p><div class="scores"><span>Солидность<span class="meter" role="img" aria-label="Солидность 5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span><span>Новизна<span class="meter" role="img" aria-label="Новизна 4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></span><span class="num">С 5 · Н 4</span></div><p class="t"><b>«Архитектура»</b></p><div class="scores"><span>Солидность<span class="meter" role="img" aria-label="Солидность 5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span><span>Новизна<span class="meter" role="img" aria-label="Новизна 2 из 5"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></span><span class="num">С 5 · Н 2</span></div></div>
+    <ul class="pm"><li class="plus">Вес институции, минимум картинок — дёшево в производстве.</li><li class="risk">Латынь и колонна легко становятся пафосом «юрфирмы из 2005-го».</li></ul>
+    <p class="imp">Впечатление: <q>Традиция и вес, это не однодневка</q> · Герой: колонна AEQVITAS</p>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 7 STYLE D -->
+<section class="slide" id="s7" tabindex="-1" aria-labelledby="t7">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>07</b> · Стиль D</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-style">
+   <div>
+    <div class="pv"><iframe src="d.html" title="Превью стиля D «Монумент»" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="pv-cap"><span class="xs muted">Первый экран макета, уменьшено</span><a class="open" href="d.html" target="_blank" rel="noopener">Открыть макет D →</a></div>
+    <div class="sw" role="list" aria-label="Палитра стиля D"><div role="listitem"><i style="background:#EDEDEA"></i><b>#EDEDEA</b><span>холодный камень</span></div><div role="listitem"><i style="background:#F7F7F5"></i><b>#F7F7F5</b><span>бумага</span></div><div role="listitem"><i style="background:#15171A"></i><b>#15171A</b><span>графитовые чернила</span></div><div role="listitem"><i style="background:#6B1E25"></i><b>#6B1E25</b><span>оксблад</span></div><div role="listitem"><i style="background:#C4C4BE"></i><b>#C4C4BE</b><span>линейка сетки</span></div></div>
+   </div>
+   <div class="stack">
+    <p class="eyebrow">Стиль D · светлый, типографический</p>
+    <h2 class="style-h" id="t7">«Монумент»</h2>
+    <p class="mood">Холодный камень, линейка сетки и крупная антиква вместо картинок.</p>
+    <p class="small muted">Иллюстраций нет — героем работает гигантский знак параграфа с отвесом. Один акцент — оксблад.</p>
+    <div class="spec">
+     <p class="sh1 f-d-h">Спор приходит в равновесие</p>
+     <p class="st f-d-t">Гражданские споры компаний. Москва и Московская область.</p>
+     <p class="fn">Noto Serif Display — заголовки · Onest — текст</p>
+    </div>
+    <div class="idea"><p class="eyebrow">Идея Гермеса</p><p class="t"><b>«Типографика-монумент», крупный кегль</b></p><div class="scores"><span>Солидность<span class="meter" role="img" aria-label="Солидность 5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span><span>Новизна<span class="meter" role="img" aria-label="Новизна 4 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></span><span class="num">С 5 · Н 4</span></div></div>
+    <ul class="pm"><li class="plus">Держится на шрифте и сетке — самая простая вёрстка.</li><li class="risk">Холодность: может показаться отстранённым собственнику с личной бедой.</li></ul>
+    <p class="imp">Впечатление: <q>Здесь нечего прятать: всё выверено и стоит ровно</q> · Герой: знак §</p>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 8 STYLE E -->
+<section class="slide" id="s8" tabindex="-1" aria-labelledby="t8">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>08</b> · Стиль E</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-style">
+   <div>
+    <div class="pv"><iframe src="e.html" title="Превью стиля E «Равновесие»" loading="lazy" tabindex="-1"></iframe></div>
+    <div class="pv-cap"><span class="xs muted">Первый экран макета, уменьшено</span><a class="open" href="e.html" target="_blank" rel="noopener">Открыть макет E →</a></div>
+    <div class="sw" role="list" aria-label="Палитра стиля E"><div role="listitem"><i style="background:#0D1524"></i><b>#0D1524</b><span>чернильный синий</span></div><div role="listitem"><i style="background:#18243A"></i><b>#18243A</b><span>сине-серый</span></div><div role="listitem"><i style="background:#D5DBE3"></i><b>#D5DBE3</b><span>платина</span></div><div role="listitem"><i style="background:#9AA5B5"></i><b>#9AA5B5</b><span>серебро</span></div><div role="listitem"><i style="background:#5E6B7E"></i><b>#5E6B7E</b><span>тёмное серебро</span></div></div>
+   </div>
+   <div class="stack">
+    <p class="eyebrow">Стиль E · тёмный, геометрический</p>
+    <h2 class="style-h" id="t8">«Равновесие»</h2>
+    <p class="mood">Чернильный синий и платина: две неравные массы приходят в баланс.</p>
+    <p class="small muted">Язык частного банкинга: серебро, платина, несимметричная сетка 5 к 7.</p>
+    <div class="spec">
+     <p class="sh1 f-e-h">Спор приходит в равновесие</p>
+     <p class="st f-e-t">Гражданские споры компаний. Москва и Московская область.</p>
+     <p class="fn">Jost — заголовки · Commissioner — текст</p>
+    </div>
+    <div class="idea"><p class="eyebrow">Идея Гермеса</p><p class="t"><b>«Равновесие в движении»</b></p><div class="scores"><span>Солидность<span class="meter" role="img" aria-label="Солидность 3 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span><span>Новизна<span class="meter" role="img" aria-label="Новизна 5 из 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span><span class="num">С 3 · Н 5</span></div></div>
+    <ul class="pm"><li class="plus">Современно и сдержанно, язык частного банкинга.</li><li class="risk">Похож на банк или консалтинг больше, чем на адвоката.</li></ul>
+    <p class="imp">Впечатление: <q>Взвешенный советник по капиталу, а не контора по спорам</q> · Герой: две массы на оси, «Поверенный» платиной</p>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 9 COMPARISON -->
+<section class="slide" id="s9" tabindex="-1" aria-labelledby="t9">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>09</b> · Сравнение стилей</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">Пять стилей рядом</p>
+    <h2 class="h2" id="t9">Все пять солидны — по-разному</h2>
+   </div>
+   <div class="tbl-wrap" tabindex="0" role="region" aria-label="Таблица сравнения стилей, прокручивается по горизонтали">
+    <table>
+     <thead><tr><th scope="col"><span class="vh">Критерий</span></th>
+      <th scope="col"><i style="background:linear-gradient(90deg,#141518 0 40%,#C9A66B 40% 70%,#ECE6DA 70%)"></i><em>A</em>Вечерний кабинет</th>
+      <th scope="col"><i style="background:linear-gradient(90deg,#F3EEE3 0 40%,#1D2333 40% 70%,#9B2D20 70%)"></i><em>B</em>Бумага и чернила</th>
+      <th scope="col"><i style="background:linear-gradient(90deg,#0F231C 0 40%,#E2D7C5 40% 70%,#D48C64 70%)"></i><em>C</em>Камень и малахит</th>
+      <th scope="col"><i style="background:linear-gradient(90deg,#EDEDEA 0 40%,#15171A 40% 70%,#6B1E25 70%)"></i><em>D</em>Монумент</th>
+      <th scope="col"><i style="background:linear-gradient(90deg,#0D1524 0 40%,#D5DBE3 40% 70%,#9AA5B5 70%)"></i><em>E</em>Равновесие</th></tr></thead>
+     <tbody>
+      <tr><th scope="row">Солидность</th><td><b>Высокая</b>, «дорогой кабинет»</td><td><b>Высокая</b>, через порядок, а не через цвет</td><td><b>Высокая</b>, «вес институции»</td><td><b>Высокая</b>, через строгость и масштаб шрифта</td><td><b>Высокая</b>, «частный банк»</td></tr>
+      <tr><th scope="row">Характер</th><td>Спокойный, вечерний, точный</td><td>Деловой, прозрачный, документальный</td><td>Торжественный, исторический</td><td>Строгий, прямой, редакционный</td><td>Сдержанный, современный, аналитический</td></tr>
+      <tr><th scope="row">Попадание в бриф</th><td><b>Прямое:</b> тёмный, мужской, латунь</td><td><b>Частичное:</b> светлый вместо тёмного</td><td><b>Близкое:</b> тёмный, но зелень вместо золота</td><td><b>Слабое:</b> светлый и без «мужского» золота</td><td><b>Близкое:</b> тёмный, но серебро вместо золота</td></tr>
+      <tr><th scope="row">Сложность</th><td><b>Средняя</b></td><td><b>Средняя:</b> калькулятор-справка ложится естественно</td><td><b>Выше:</b> фактуры камня, две подложки</td><td><b>Низкая:</b> держится на шрифте и сетке</td><td><b>Средняя:</b> геометрия героя, асимметричная сетка</td></tr>
+      <tr><th scope="row">Риск</th><td>Скатиться в «типовой тёмный люкс», если ослабить прибор-весы</td><td>Владелец может счесть недостаточно «мужским»</td><td>Латынь и колонна легко становятся пафосом</td><td>Холодность для собственника с личной бедой</td><td>Похож на банк больше, чем на адвоката</td></tr>
+     </tbody>
+    </table>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 10 PALETTES -->
+<section class="slide" id="s10" tabindex="-1" aria-labelledby="t10">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>10</b> · Палитры</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-2" style="grid-template-columns:none">
+   <div class="stack">
+    <p class="eyebrow">Вариативность цвета</p>
+    <h2 class="h2" id="t10">Пять палитр — пять температур одного бюро</h2>
+   </div>
+   <div class="bands">
+    <div class="band"><p class="lb"><b>A</b><span>«Вечерний кабинет»</span><small>тёмный</small></p><div class="strip"><div><i style="background:#141518"></i><b>#141518</b><span>графит</span></div><div><i style="background:#22252A"></i><b>#22252A</b><span>сукно</span></div><div><i style="background:#C9A66B"></i><b>#C9A66B</b><span>латунь</span></div><div><i style="background:#E2C48E"></i><b>#E2C48E</b><span>светлая латунь</span></div><div><i style="background:#ECE6DA"></i><b>#ECE6DA</b><span>слоновая кость</span></div></div></div>
+    <div class="band"><p class="lb"><b>B</b><span>«Бумага и чернила»</span><small>светлый</small></p><div class="strip"><div><i style="background:#F3EEE3"></i><b>#F3EEE3</b><span>бумага</span></div><div><i style="background:#FBF8F1"></i><b>#FBF8F1</b><span>лист</span></div><div><i style="background:#1D2333"></i><b>#1D2333</b><span>чернила</span></div><div><i style="background:#9B2D20"></i><b>#9B2D20</b><span>киноварь печати</span></div><div><i style="background:#CBC0AA"></i><b>#CBC0AA</b><span>линовка</span></div></div></div>
+    <div class="band"><p class="lb"><b>C</b><span>«Камень и малахит»</span><small>тёмный с камнем</small></p><div class="strip"><div><i style="background:#0F231C"></i><b>#0F231C</b><span>малахит</span></div><div><i style="background:#163027"></i><b>#163027</b><span>малахит светлее</span></div><div><i style="background:#E2D7C5"></i><b>#E2D7C5</b><span>травертин</span></div><div><i style="background:#D48C64"></i><b>#D48C64</b><span>терракота</span></div><div><i style="background:#14261F"></i><b>#14261F</b><span>базальт</span></div></div></div>
+    <div class="band"><p class="lb"><b>D</b><span>«Монумент»</span><small>светлый, типографический</small></p><div class="strip"><div><i style="background:#EDEDEA"></i><b>#EDEDEA</b><span>холодный камень</span></div><div><i style="background:#F7F7F5"></i><b>#F7F7F5</b><span>бумага</span></div><div><i style="background:#15171A"></i><b>#15171A</b><span>графитовые чернила</span></div><div><i style="background:#6B1E25"></i><b>#6B1E25</b><span>оксблад</span></div><div><i style="background:#C4C4BE"></i><b>#C4C4BE</b><span>линейка сетки</span></div></div></div>
+    <div class="band"><p class="lb"><b>E</b><span>«Равновесие»</span><small>тёмный, геометрический</small></p><div class="strip"><div><i style="background:#0D1524"></i><b>#0D1524</b><span>чернильный синий</span></div><div><i style="background:#18243A"></i><b>#18243A</b><span>сине-серый</span></div><div><i style="background:#D5DBE3"></i><b>#D5DBE3</b><span>платина</span></div><div><i style="background:#9AA5B5"></i><b>#9AA5B5</b><span>серебро</span></div><div><i style="background:#5E6B7E"></i><b>#5E6B7E</b><span>тёмное серебро</span></div></div></div>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 11 HEROES -->
+<section class="slide" id="s11" tabindex="-1" aria-labelledby="t11">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>11</b> · Герои</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">Персонаж или предмет, который живёт на всём сайте</p>
+    <h2 class="h2" id="t11">Восемь героев: от прибора до фигуры</h2>
+   </div>
+   <div class="heroes">
+    <article class="hero-c"><div class="hx"><span class="rec">Рекомендован</span><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Весы-прибор: стойка, коромысло, две чаши и шкала">
+        <path d="M61.6 33.6 A26 26 0 0 1 98.4 33.6" stroke-width="1"/>
+        <path d="M80 26 V21 M89.9 28 L91.9 23.4 M70.1 28 L68.1 23.4 M98.4 33.6 L101.9 30.1 M61.6 33.6 L58.1 30.1" stroke-width="1"/>
+        <path d="M80 48 V24"/>
+        <path d="M30 52 H130"/>
+        <circle cx="80" cy="52" r="4"/>
+        <path d="M80 56 V128"/>
+        <path d="M66 128 H94 L100 140 H60 Z"/>
+        <path d="M44 146 H116" stroke-width="1"/>
+        <path d="M34 52 L22 92 M34 52 L46 92 M19 92 H49 A15 7 0 0 1 19 92 Z"/>
+        <path d="M126 52 L114 92 M126 52 L138 92 M111 92 H141 A15 7 0 0 1 111 92 Z"/>
+      </svg></div><p class="k">Вариант 1 · объект</p><h3>Весы-прибор</h3><p>Коромысло один раз приходит в равновесие, гирька отмечает направления, стрелка шкалы — итог расчёта.</p><p><b>Стили:</b> A, E (платиной), D</p><figure class="gen" data-slot="hero-1" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+    <article class="hero-c"><div class="hx"><span class="rec">Рекомендован Гермесом</span><svg viewBox="205 96 210 490" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Поверенный: фигура в костюме-тройке одной линией, вместо головы — весы"><g><path d="M242 352 Q262 356 282 356"/><path d="M358 352 Q338 356 318 356"/><path d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path d="M276 384 L277 556 M324 384 L323 556"/><path d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path d="M289 179 L300 232 L311 179"/><path d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path d="M300 300 L282 356 M300 300 L318 356"/><path d="M292 315 L300 321 L308 315"/><path d="M256 326 L280 327 M320 327 L344 326"/><path d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path d="M323 217 L342 215 M326 216.5 L330 208 L334 216"/><path d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path d="M224 360 H240 M223.5 365 H240.5"/><path d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path d="M363 196 C367 226 369 256 369 286 C369 312 373 336 376 360 M350 234 C351 262 352 290 354 312 C355 330 358 346 360 360"/><path d="M360 360 H376 M359.5 365 H376.5"/><path d="M340 379 L398 382 L394 466 L336 463 Z" fill="var(--surface)" stroke="none"/><path d="M340 379 L398 382 L394 466 L336 463 Z"/><path d="M339 391 L397 394"/><path d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365" fill="var(--surface)" stroke="none"/><path d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365"/><path d="M300 172 V124 M300 116 V110"/><path d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path d="M273 120 H296 M304 120 H327"/><path d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></svg></div><p class="k">Вариант 2 · фигура</p><h3>«Поверенный»</h3><p>Джентльмен одной линией, голова — весы. Стоит у окна с Москвой, позы над этапами, у заявки снимает шляпу.</p><p><b>Стили:</b> A, E</p><figure class="gen" data-slot="hero-2" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+    <article class="hero-c"><div class="hx"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Литера Æ: лигатура антиквой, вершина A — голова, перекладина — бабочка">
+        <circle cx="72" cy="18" r="6.5"/>
+        <path d="M30 138 L72 30"/>
+        <path d="M72 30 H128 V42" />
+        <path d="M84 30 V138"/>
+        <path d="M84 84 H118 M118 78 V90"/>
+        <path d="M84 138 H132 V124"/>
+        <path d="M20 138 H42 M76 138 H92" />
+        <path d="M49 100 H84" stroke-width="1"/>
+        <path d="M58 95 L66 100 L58 105 Z M74 95 L66 100 L74 105 Z"/>
+        <path d="M14 150 H146" stroke-width="1"/>
+      </svg></div><p class="k">Вариант 3 · фигура из знака</p><h3>«Литера Æ»</h3><p>Вершина «A» — голова, перекладина — бабочка; шаги работы выходят из горизонталей «E».</p><p><b>Стили:</b> A, C, D</p><figure class="gen" data-slot="hero-3" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+    <article class="hero-c"><div class="hx"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Печать и перо: латунная печать с оттиском и перьевая ручка с росчерком">
+        <circle cx="54" cy="34" r="10"/>
+        <path d="M49 43.5 C49 60 44 74 42 90 M59 43.5 C59 60 64 74 66 90"/>
+        <path d="M36 90 H72 V102 H36 Z"/>
+        <path d="M40 96 H68" stroke-width=".8"/>
+        <ellipse cx="54" cy="128" rx="28" ry="9"/>
+        <ellipse cx="54" cy="128" rx="20" ry="6" stroke-width=".8"/>
+        <path d="M144.5 28.1 L115.1 91.5 M135.5 23.9 L106.1 87.3 M135.5 23.9 L144.5 28.1"/>
+        <path d="M114.5 69.2 L123.5 73.4" stroke-width="1"/>
+        <path d="M115.1 91.5 L101.4 109.4 L106.1 87.3"/>
+        <path d="M110.6 89.4 L104.6 102.5" stroke-width=".8"/>
+        <path d="M101 112 C106 122 112 104 120 113 S134 121 148 108" stroke-width="1.2"/>
+        <path d="M14 146 H146" stroke-width="1"/>
+      </svg></div><p class="k">Вариант 4 · объект</p><h3>Печать и перо</h3><p>Перо выводит подпись под заголовком, оттиск отмечает завершённое дело и отправленную заявку.</p><p><b>Стили:</b> B, A</p><figure class="gen" data-slot="hero-4" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+    <article class="hero-c"><div class="hx"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Песочные часы в металлической рамке">
+        <path d="M46 22 H114 M50 28 H110 M46 138 H114 M50 132 H110"/>
+        <path d="M54 28 V132 M106 28 V132" stroke-width="1"/>
+        <path d="M62 30 C62 62 76 72 78 80 C76 88 62 98 62 130"/>
+        <path d="M98 30 C98 62 84 72 82 80 C84 88 98 98 98 130"/>
+        <path d="M66 52 Q80 58 94 52" stroke-width="1"/>
+        <path d="M80 82 V118" stroke-width="1" stroke-dasharray="2 3"/>
+        <path d="M65 128 Q80 106 95 128" stroke-width="1"/>
+        <path d="M30 148 H130" stroke-width="1"/>
+      </svg></div><p class="k">Вариант 5 · инструменты</p><h3>Песочные часы</h3><p>Только в калькуляторах: срок давности и длительность этапов. В первый экран не ставим.</p><p><b>Стили:</b> любой, как второй герой</p><figure class="gen" data-slot="hero-5" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+    <article class="hero-c"><div class="hx"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Знак параграфа во всю высоту, через него проходит отвес">
+        <text x="80" y="112" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="500" font-size="118" fill="currentColor" stroke="none">§</text>
+        <path d="M80 6 V138" stroke-width="1"/>
+        <path d="M80 138 L74.5 142 L80 156 L85.5 142 Z"/>
+        <path d="M58 6 H102" stroke-width="1"/>
+      </svg></div><p class="k">Вариант 6 · знак</p><h3>Знак § как герой</h3><p>Гигантский параграф; отвес один раз опускается и задаёт ось страницы, дальше § нумерует разделы.</p><p><b>Стили:</b> D, B</p><figure class="gen" data-slot="hero-6" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+    <article class="hero-c"><div class="hx"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Колонна с антаблементом и надписью AEQVITAS">
+        <path d="M14 14 H146 M20 20 H140"/>
+        <path d="M24 20 V46 H136 V20"/>
+        <text x="80" y="38.5" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="15" letter-spacing="3.2" fill="currentColor" stroke="none">AEQVITAS</text>
+        <path d="M30 46 V52 H130 V46"/>
+        <path d="M50 58 H110 M50 52 V58 M110 52 V58"/>
+        <path d="M54 58 Q58 68 64 68 H96 Q102 68 106 58"/>
+        <path d="M62 68 V136 M98 68 V136"/>
+        <path d="M71 72 V132 M80 72 V132 M89 72 V132" stroke-width=".8"/>
+        <path d="M56 136 H104 V142 H56 Z M50 142 H110 V148 H50 Z"/>
+      </svg></div><p class="k">Вариант 7 · архитектура</p><h3>Колонна AEQVITAS</h3><p>Одна колонна вместо колоннады-клише; надпись проявляется, как высеченная.</p><p><b>Стили:</b> C</p><figure class="gen" data-slot="hero-7" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+    <article class="hero-c"><div class="hx"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Две массы, диск и брусок, на рычаге со смещённой опорой">
+        <circle cx="53" cy="68" r="23.5"/>
+        <path d="M122 55 H137 V92 H122 Z"/>
+        <path d="M14 92 H146"/>
+        <circle cx="80" cy="92" r="3"/>
+        <path d="M80 95 V124"/>
+        <path d="M74 124 H86 L89 131 H71 Z"/>
+        <path d="M40 132 H120" stroke-width="1"/>
+        <path d="M53 100 H129.5 M53 97 V103 M80 97 V103 M129.5 97 V103" stroke-width=".8"/>
+      </svg></div><p class="k">Вариант 8 · геометрия</p><h3>Две массы на оси</h3><p>Диск и брусок на рычаге со смещённой опорой; рычаг один раз выходит в горизонталь.</p><p><b>Стили:</b> E, D</p><figure class="gen" data-slot="hero-8" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 12 ATTORNEY -->
+<section class="slide" id="s12" tabindex="-1" aria-labelledby="t12">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>12</b> · Персонаж «Поверенный»</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-pov">
+   <div class="pov" aria-hidden="true"><svg class="hero-svg" viewBox="0 0 480 600" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g class="win"><path class="d" pathLength="1" d="M40 520 V160 A120 120 0 0 1 280 160 V520"/><path class="d" pathLength="1" d="M52 508 V160 A108 108 0 0 1 268 160 V508 Z"/><path class="d" pathLength="1" d="M160 52 V508 M52 160 H268 M52 300 H268"/><path class="d" pathLength="1" d="M160 160 L83.6 83.6 M160 160 L236.4 83.6"/><path class="d" pathLength="1" d="M26 520 H294 M32 530 H288"/></g><g class="sky"><path class="d" pathLength="1" d="M52 500 H268"/><path class="d" pathLength="1" d="M60 500 V404 L72 398 V500 M76 500 V378 H90 V500 M94 500 V418 L106 410 V500 M110 500 V436 H120 V500"/><path class="d" pathLength="1" d="M120 470 H134 V500"/><path class="d" pathLength="1" d="M134 500 V464 H146 V452 H156 V500 M214 500 V452 H204 V464 H216 V500 M204 500 V500"/><path class="d" pathLength="1" d="M156 500 V444 H162 V422 H168 V398 H172 V384 H176 V372 H184 V384 H188 V398 H192 V422 H198 V444 H204 V500"/><path class="d" pathLength="1" d="M176 372 L180 352 L184 372 M180 352 V326"/><path class="d" pathLength="1" d="M166 470 V488 M174 470 V488 M180 470 V488 M186 470 V488 M194 470 V488 M170 430 V440 M180 430 V440 M190 430 V440"/><path class="d" pathLength="1" d="M216 484 H228 V476 H240 V500"/><path class="d" pathLength="1" d="M248 500 L252.5 412 M262 500 L257.5 412 M251 412 H259 V406 H251 Z M252.5 406 L254.5 360 M257.5 406 L255.5 360 M255 360 V336"/><path class="d" pathLength="1" d="M240 488 H248 M262 492 H268"/></g><g class="fig" transform="translate(60 0)"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L282 356 M300 300 L318 356"/><path class="d" pathLength="1" d="M292 315 L300 321 L308 315"/><path class="d" pathLength="1" d="M256 326 L280 327 M320 327 L344 326"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M323 217 L342 215 M326 216.5 L330 208 L334 216"/><path class="d" pathLength="1" d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path class="d" pathLength="1" d="M224 360 H240 M223.5 365 H240.5"/><path class="d" pathLength="1" d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path class="d" pathLength="1" d="M363 196 C367 226 369 256 369 286 C369 312 373 336 376 360 M350 234 C351 262 352 290 354 312 C355 330 358 346 360 360"/><path class="d" pathLength="1" d="M360 360 H376 M359.5 365 H376.5"/><path d="M340 379 L398 382 L394 466 L336 463 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M340 379 L398 382 L394 466 L336 463 Z"/><path class="d" pathLength="1" d="M339 391 L397 394"/><path d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365"/><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g class="beam"><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g class="pan-l"><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g class="pan-r"><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></g><path class="d floor" pathLength="1" d="M250 580 H470"/></svg></div>
+   <div class="stack" style="gap:var(--gap)">
+    <div class="stack">
+     <p class="eyebrow">Рекомендован Гермесом · стили A и E</p>
+     <h2 class="h2" id="t12">«Поверенный»</h2>
+     <p class="keyline">Голова — знак-весы. Лица и мимики нет.</p>
+     <p class="muted">Джентльмен в костюме-тройке одной латунной линией (в стиле E — платиновой). Стоит у высокого окна с силуэтом Москвы; при входе линия дорисовывается, голова-весы один раз приходит в равновесие. Персонаж и есть знак — как у pgplaw, но без мультяшности.</p>
+     <p class="small">Никаких побед, рукопожатий и залов суда — только работа с документами.</p>
+    </div>
+    <div class="poses" role="list" aria-label="Позы персонажа по разделам сайта">
+     <figure role="listitem"><svg class="pose" viewBox="214 92 172 492" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297 312 L282 356 M303 311 L318 356"/><path class="d" pathLength="1" d="M244 298 C244 320 244 340 242 352 M356 298 C356 320 356 340 358 352"/><path class="d" pathLength="1" d="M237 196 C230 222 228 256 236 292 C244 300 254 296 260 286 M248 234 C247 256 247 270 252 280 L258 276"/><path class="d" pathLength="1" d="M363 196 C370 222 372 256 364 292 C356 300 346 296 340 286 M352 234 C353 256 353 270 348 280 L342 276"/><path d="M258 236 L334 228 L340 304 L264 312 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M258 236 L334 228 L340 304 L264 312 Z"/><path class="d thin" pathLength="1" d="M272 252 L322 247 M273 266 L324 261 M274 280 L308 277"/><path d="M256 262 C249 268 251 283 259 285 C265 285 267 270 263 262 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M256 262 C249 268 251 283 259 285 C265 285 267 270 263 262 Z"/><path d="M344 255 C351 259 351 275 343 278 C337 278 335 264 338 256 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M344 255 C351 259 351 275 343 278 C337 278 335 264 338 256 Z"/><g transform="rotate(-7 300 172)"><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></g></svg><figcaption>Этап 1 · читает документы</figcaption></figure>
+     <figure role="listitem"><svg class="pose" viewBox="214 92 352 492" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L282 356 M300 300 L318 356"/><path class="d" pathLength="1" d="M292 315 L300 321 L308 315"/><path class="d" pathLength="1" d="M256 326 L280 327 M320 327 L344 326"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path class="d" pathLength="1" d="M224 360 H240 M223.5 365 H240.5"/><path class="d" pathLength="1" d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path class="d" pathLength="1" d="M350 234 C352 280 355 320 358 352"/><path class="d" pathLength="1" d="M363 196 C376 214 388 240 396 264 L424 318 M352 234 C358 252 368 270 380 284 L410 330"/><path d="M404 334 L452 326 L460 336 L412 344 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M404 334 L452 326 L460 336 L412 344 Z"/><path d="M410 330 C412 340 420 344 428 340 C434 334 430 322 424 318 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M410 330 C412 340 420 344 428 340 C434 334 430 322 424 318"/><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g><g><path class="d" pathLength="1" d="M490 330 V560 M462 577 H518 L508 560 H472 Z"/><path class="d" pathLength="1" d="M440 322 H486 M494 322 H540"/><path class="d" pathLength="1" d="M486 322 A4 4 0 1 0 494 322 A4 4 0 1 0 486 322"/><path class="d" pathLength="1" d="M487 313 A3 3 0 1 0 493 313 A3 3 0 1 0 487 313"/><path class="d" pathLength="1" d="M440 322 L424 372 M440 322 L456 372 M421 372 H459 M421 372 A19 9 0 0 0 459 372"/><path class="d" pathLength="1" d="M540 322 L524 372 M540 322 L556 372 M521 372 H559 M521 372 A19 9 0 0 0 559 372"/><path class="d" pathLength="1" d="M528 371 L552 368 M530 367 L550 364"/></g></svg><figcaption>Этап 2 · раскладывает по чашам</figcaption></figure>
+     <figure role="listitem"><svg class="pose" viewBox="180 92 240 492" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L292 318 M300 300 L308 318"/><path class="d" pathLength="1" d="M244 290 C244 300 244 310 244 318 M356 290 C356 300 356 310 356 318"/><path class="d" pathLength="1" d="M237 196 C232 222 230 254 236 284 C244 300 252 314 258 322 M248 234 C248 258 250 272 258 286 L270 318"/><path class="d" pathLength="1" d="M363 196 C368 222 370 254 364 284 C356 300 338 314 326 322 M352 234 C352 258 350 272 344 286 L330 310"/><path d="M200 318 H400 L414 340 V577 H186 V340 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M200 318 H400 M186 340 H414 M200 318 L186 340 M400 318 L414 340 M186 340 V577 M414 340 V577 M198 354 H402"/><path class="d" pathLength="1" d="M262 323 L326 321 L334 336 L256 338 Z"/><path class="d thin" pathLength="1" d="M276 329 L318 328"/><path d="M256 320 C254 330 262 334 272 332 C278 330 276 320 270 317 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M256 320 C254 330 262 334 272 332 C278 330 276 320 270 317 Z"/><path class="d thin" pathLength="1" d="M330 316 C338 292 350 272 368 250 C362 276 350 296 334 316"/><path class="d" pathLength="1" d="M322 330 L366 254"/><path d="M322 312 C314 316 314 328 322 330 C330 330 334 320 330 310 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M322 312 C314 316 314 328 322 330 C330 330 334 320 330 310 Z"/><g transform="rotate(6 300 172)"><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></g></svg><figcaption>Этап 3 · подписывает пером</figcaption></figure>
+     <figure role="listitem"><svg class="mini" viewBox="214 92 294 492" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L282 356 M300 300 L318 356"/><path class="d" pathLength="1" d="M292 315 L300 321 L308 315"/><path class="d" pathLength="1" d="M256 326 L280 327 M320 327 L344 326"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M323 217 L342 215 M326 216.5 L330 208 L334 216"/><path class="d" pathLength="1" d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path class="d" pathLength="1" d="M224 360 H240 M223.5 365 H240.5"/><path class="d" pathLength="1" d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path class="d" pathLength="1" d="M350 234 C352 280 355 320 358 352"/><path class="d" pathLength="1" d="M363 196 C376 214 386 240 392 266 C400 262 410 252 418 240 M352 234 C358 252 366 268 374 282 C388 280 402 266 410 252"/><path class="d" pathLength="1" d="M422 234 L500 140"/><path class="d" pathLength="1" d="M497.5 140 A2.5 2.5 0 1 0 502.5 140 A2.5 2.5 0 1 0 497.5 140"/><path d="M410 252 C404 240 410 230 420 230 C428 232 428 244 418 250 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M410 252 C404 240 410 230 420 230 C428 232 428 244 418 250 Z"/><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></svg><figcaption>Калькулятор · держит шкалу</figcaption></figure>
+     <figure role="listitem"><svg class="mini" viewBox="214 40 190 544" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path class="d" pathLength="1" d="M242 352 Q262 356 282 356"/><path class="d" pathLength="1" d="M358 352 Q338 356 318 356"/><path class="d" pathLength="1" d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path class="d crease" pathLength="1" d="M276 384 L277 556 M324 384 L323 556"/><path class="d" pathLength="1" d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path class="d" pathLength="1" d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path class="d" pathLength="1" d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path class="d" pathLength="1" d="M289 179 L300 232 L311 179"/><path class="d" pathLength="1" d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path class="d" pathLength="1" d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path class="d" pathLength="1" d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path class="d" pathLength="1" d="M300 300 L282 356 M300 300 L318 356"/><path class="d" pathLength="1" d="M292 315 L300 321 L308 315"/><path class="d" pathLength="1" d="M256 326 L280 327 M320 327 L344 326"/><path class="d" pathLength="1" d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path class="d" pathLength="1" d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path class="d" pathLength="1" d="M224 360 H240 M223.5 365 H240.5"/><path class="d" pathLength="1" d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path class="d" pathLength="1" d="M350 234 C352 280 355 320 358 352"/><path class="d" pathLength="1" d="M363 196 C378 176 394 144 398 112 L350 82 M356 226 C368 196 380 156 383 122 L344 98"/><g transform="rotate(-9 340 90)"><path class="d" pathLength="1" d="M260 92 Q298 101 336 92 M270 92 C268 72 276 54 298 54 C320 54 328 72 326 92 M271 83 Q298 89 325 83"/></g><path d="M344 98 C336 96 334 84 342 80 C350 78 354 86 352 92 Z" fill="var(--bg)" stroke="none"/><path class="d" pathLength="1" d="M344 98 C336 96 334 84 342 80 C350 78 354 86 352 92"/><path class="d" pathLength="1" d="M300 172 V124 M300 116 V110"/><path class="d" pathLength="1" d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path class="d" pathLength="1" d="M273 120 H296 M304 120 H327"/><path class="d" pathLength="1" d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path class="d" pathLength="1" d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path class="d" pathLength="1" d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></svg><figcaption>Заявка · снимает шляпу</figcaption></figure>
+    </div>
+    <p class="xs muted">Вопрос владельцу: знак — весы или литера «Æ»? От ответа зависит голова персонажа, поэтому знак утверждаем раньше финальных поз. Открыть макеты: <a href="a-char.html">стиль A</a> · <a href="e-char.html">стиль E</a>.</p>
+   </div>
+  </div>
+  <figure class="gen" data-slot="hero-2-pose" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure>
+ </div></div>
+</section>
+
+
+<!-- 13 LOGOS -->
+<section class="slide" id="s13" tabindex="-1" aria-labelledby="t13">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>13</b> · Логотипы 1–4</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">Эскизы знака на светлом и тёмном</p>
+    <h2 class="h2" id="t13">Классика: буква, лигатура, прибор, параграф</h2>
+    <p class="small muted">Финальную отрисовку и кернинг делает дизайнер после выбора.</p>
+   </div>
+   <div class="logos"><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 1 · эскиз</p><h3>Монограмма «Э» в медальоне</h3><p class="m"><b>Стиль:</b> A, B, C · <b>герой:</b> весы-прибор, печать</p><ul class="pm"><li class="plus">Читается по-русски сразу, классика без риска.</li><li class="risk">Медальон с буквой — частый ход, нужна своя прорисовка «Э».</li></ul><figure class="gen" data-slot="logo-1" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 2 · эскиз</p><h3>Лигатура «Æ»</h3><p class="m"><b>Стиль:</b> A, C, D · <b>герой:</b> «Литера Æ»</p><ul class="pm"><li class="plus">Уникальна и связывает с латинским именем Aequitas.</li><li class="risk">Латиница: русскому клиенту «Æ» нужно пояснять.</li></ul><figure class="gen" data-slot="logo-2" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 3 · эскиз</p><h3>Весы-прибор</h3><p class="m"><b>Стиль:</b> A, E · <b>герой:</b> весы-прибор, «Поверенный»</p><ul class="pm"><li class="plus">Смысл «мера» без Фемиды, прямо связан с героем.</li><li class="risk">Весы — частый знак юристов, отличаться придётся геометрией.</li></ul><figure class="gen" data-slot="logo-3" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 4 · эскиз</p><h3>Знак § в плашке</h3><p class="m"><b>Стиль:</b> D, B · <b>герой:</b> знак §</p><ul class="pm"><li class="plus">Мгновенно «право», держится в иконке сайта и аватарке.</li><li class="risk">Общий символ — слабо защищается как товарный знак.</li></ul><figure class="gen" data-slot="logo-4" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article></div>
+  </div>
+ </div></div>
+</section>
+<!-- 14 LOGOS -->
+<section class="slide" id="s14" tabindex="-1" aria-labelledby="t14">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>14</b> · Логотипы 5–8</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">Эскизы знака на светлом и тёмном</p>
+    <h2 class="h2" id="t14">Характер: персонаж, слово, геометрия, печать</h2>
+    <p class="small muted">Каждый знак проверен на светлом и тёмном фоне: так он будет жить на бланке и на сайте.</p>
+   </div>
+   <div class="logos"><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 5 · эскиз</p><h3>Голова «Поверенного»</h3><p class="m"><b>Стиль:</b> A, E · <b>герой:</b> «Поверенный»</p><ul class="pm"><li class="plus">Знак и есть персонаж — приём pgplaw без мультяшности.</li><li class="risk">В мелком размере детали сливаются, нужна упрощённая версия.</li></ul><figure class="gen" data-slot="logo-5" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div><div class="plate dk"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div></div><p class="k">Логотип 6 · эскиз</p><h3>Словесный знак «ЭКВИТАС»</h3><p class="m"><b>Стиль:</b> любой, сильнее всего C, D · <b>герой:</b> любой</p><ul class="pm"><li class="plus">Самый солидный и читаемый; коромысло над «В» — тихий намёк.</li><li class="risk">Без отдельного знака сложнее с иконкой сайта и аватаркой.</li></ul><figure class="gen" data-slot="logo-6" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 7 · эскиз</p><h3>Две массы на оси</h3><p class="m"><b>Стиль:</b> E · <b>герой:</b> две массы</p><ul class="pm"><li class="plus">Современно, абстрактно, хорошо запоминается.</li><li class="risk">Не сразу читается как право — ближе к банку и консалтингу.</li></ul><figure class="gen" data-slot="logo-7" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk big" aria-hidden="true" focusable="false"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk big" aria-hidden="true" focusable="false"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 8 · эскиз</p><h3>Печать-оттиск</h3><p class="m"><b>Стиль:</b> B, C · <b>герой:</b> печать и перо</p><ul class="pm"><li class="plus">«Скреплено» — документальность и порядок.</li><li class="risk">Круговая надпись не читается мелко, для иконки — только «Э».</li></ul><figure class="gen" data-slot="logo-8" hidden><div class="ph"></div><figcaption>ИИ-эскиз появится здесь</figcaption></figure></article></div>
+  </div>
+ </div></div>
+</section>
+
+<!-- 15 RECOMMENDATION -->
+<section class="slide" id="s15" tabindex="-1" aria-labelledby="t15">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>15</b> · Рекомендация</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">Стиль + герой + логотип</p>
+    <h2 class="h2" id="t15">Три связки, которые держатся на одной идее</h2>
+   </div>
+   <ol class="recs">
+    <li>
+     <div class="kit" aria-hidden="true">
+      <span class="chips"><i style="background:#141518"></i><i style="background:#22252A"></i><i style="background:#C9A66B"></i><i style="background:#ECE6DA"></i></span>
+      <span class="hx"><svg viewBox="205 96 210 490" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><g><path d="M242 352 Q262 356 282 356"/><path d="M358 352 Q338 356 318 356"/><path d="M252 356 L258 460 L264 562 M298 364 L294 460 L290 562 M298 364 Q300 361 302 364 M302 364 L306 460 L310 562 M348 356 L342 460 L336 562"/><path d="M276 384 L277 556 M324 384 L323 556"/><path d="M264 562 C258 568 256 576 264 577 H290 C295 576 294 567 290 562 M310 562 C306 567 305 576 310 577 H336 C344 576 342 568 336 562"/><path d="M288 165 Q300 170 312 165 M286 167 L300 186 L314 167"/><path d="M296 186 H304 L302 194 H298 Z M298 194 L295.5 222 M302 194 L304.5 222"/><path d="M289 179 L300 232 L311 179"/><path d="M286 167 L268 200 L278 206 L297 292 M314 167 L332 200 L322 206 L303 292"/><path d="M286 167 C272 170 254 172 246 177 C239 181 237 188 237 196 M314 167 C328 170 346 172 354 177 C361 181 363 188 363 196"/><path d="M297.4 297 A2.6 2.6 0 1 0 302.6 297 A2.6 2.6 0 1 0 297.4 297"/><path d="M300 300 L282 356 M300 300 L318 356"/><path d="M292 315 L300 321 L308 315"/><path d="M256 326 L280 327 M320 327 L344 326"/><path d="M298.4 246 A1.6 1.6 0 1 0 301.6 246 A1.6 1.6 0 1 0 298.4 246 M298.4 261 A1.6 1.6 0 1 0 301.6 261 A1.6 1.6 0 1 0 298.4 261 M298.4 276 A1.6 1.6 0 1 0 301.6 276 A1.6 1.6 0 1 0 298.4 276 "/><path d="M323 217 L342 215 M326 216.5 L330 208 L334 216"/><path d="M237 196 C233 226 231 256 231 286 C231 312 227 336 224 360 M250 234 C249 262 248 290 246 312 C245 330 242 346 240 360"/><path d="M224 360 H240 M223.5 365 H240.5"/><path d="M223.5 365 C221 383 226 395 233 395 C240 395 242 383 240.5 365"/><path d="M363 196 C367 226 369 256 369 286 C369 312 373 336 376 360 M350 234 C351 262 352 290 354 312 C355 330 358 346 360 360"/><path d="M360 360 H376 M359.5 365 H376.5"/><path d="M340 379 L398 382 L394 466 L336 463 Z" fill="var(--surface)" stroke="none"/><path d="M340 379 L398 382 L394 466 L336 463 Z"/><path d="M339 391 L397 394"/><path d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365" fill="var(--surface)" stroke="none"/><path d="M359.5 365 C358 383 362 395 369 395 C376 395 379 383 376.5 365"/><path d="M300 172 V124 M300 116 V110"/><path d="M296.5 106 A3.5 3.5 0 1 0 303.5 106 A3.5 3.5 0 1 0 296.5 106"/><g><path d="M273 120 H296 M304 120 H327"/><path d="M296 120 A4 4 0 1 0 304 120 A4 4 0 1 0 296 120"/><g><path d="M274 121 L263 146 M274 121 L285 146 M260 146 H288 M260 146 A14 8.5 0 0 0 288 146"/></g><g><path d="M326 121 L315 146 M326 121 L337 146 M312 146 H340 M312 146 A14 8.5 0 0 0 340 146"/></g></g></g></svg></span>
+      <span class="plate dk"><svg class="mk"><use href="#lg3"/></svg></span>
+      <span class="plate dk"><svg class="mk"><use href="#lg5"/></svg></span>
+     </div>
+     <div><p class="k">Связка 1 · основная</p><h3>A «Вечерний кабинет» + весы-прибор или «Поверенный» + знак-весы либо голова «Поверенного»</h3></div>
+     <p>Единственная связка, прямо попадающая в бриф «тёмный, солидный, с золотом»: герой и знак — один и тот же прибор, поэтому весь сайт держится на одной идее меры.</p>
+    </li>
+    <li>
+     <div class="kit" aria-hidden="true">
+      <span class="chips"><i style="background:#F3EEE3"></i><i style="background:#1D2333"></i><i style="background:#9B2D20"></i><i style="background:#CBC0AA"></i></span>
+      <span class="hx"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <circle cx="54" cy="34" r="10"/>
+        <path d="M49 43.5 C49 60 44 74 42 90 M59 43.5 C59 60 64 74 66 90"/>
+        <path d="M36 90 H72 V102 H36 Z"/>
+        <path d="M40 96 H68" stroke-width=".8"/>
+        <ellipse cx="54" cy="128" rx="28" ry="9"/>
+        <ellipse cx="54" cy="128" rx="20" ry="6" stroke-width=".8"/>
+        <path d="M144.5 28.1 L115.1 91.5 M135.5 23.9 L106.1 87.3 M135.5 23.9 L144.5 28.1"/>
+        <path d="M114.5 69.2 L123.5 73.4" stroke-width="1"/>
+        <path d="M115.1 91.5 L101.4 109.4 L106.1 87.3"/>
+        <path d="M110.6 89.4 L104.6 102.5" stroke-width=".8"/>
+        <path d="M101 112 C106 122 112 104 120 113 S134 121 148 108" stroke-width="1.2"/>
+        <path d="M14 146 H146" stroke-width="1"/>
+      </svg></span>
+      <span class="plate bx"><svg class="mk big"><use href="#lg8"/></svg></span>
+     </div>
+     <div><p class="k">Связка 2 · самая новая</p><h3>B «Бумага и чернила» + печать и перо + печать-оттиск</h3></div>
+     <p>Сайт говорит документами и расчётами, а печать скрепляет разборы дел и отправленную заявку; риск — светлый тон вместо ожидаемого тёмного.</p>
+    </li>
+    <li>
+     <div class="kit" aria-hidden="true">
+      <span class="chips"><i style="background:#0D1524"></i><i style="background:#18243A"></i><i style="background:#D5DBE3"></i><i style="background:#9AA5B5"></i></span>
+      <span class="hx" style="color:#D5DBE3"><svg viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <circle cx="53" cy="68" r="23.5"/>
+        <path d="M122 55 H137 V92 H122 Z"/>
+        <path d="M14 92 H146"/>
+        <circle cx="80" cy="92" r="3"/>
+        <path d="M80 95 V124"/>
+        <path d="M74 124 H86 L89 131 H71 Z"/>
+        <path d="M40 132 H120" stroke-width="1"/>
+        <path d="M53 100 H129.5 M53 97 V103 M80 97 V103 M129.5 97 V103" stroke-width=".8"/>
+      </svg></span>
+      <span class="plate ex"><svg class="mk"><use href="#lg7"/></svg></span>
+     </div>
+     <div><p class="k">Связка 3 · современная</p><h3>E «Равновесие» + две массы на оси + знак двух масс</h3></div>
+     <p>Геометрия равновесия без юридических клише, язык частного банкинга; риск — читается ближе к консалтингу, чем к адвокату.</p>
+    </li>
+   </ol>
+  </div>
+ </div></div>
+</section>
+
+<!-- 16 NEXT -->
+<section class="slide" id="s16" tabindex="-1" aria-labelledby="t16">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>16</b> · Что дальше</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body">
+   <div class="stack">
+    <p class="eyebrow">План</p>
+    <h2 class="h2" id="t16">Четыре шага от выбора до вёрстки</h2>
+   </div>
+   <ol class="steps">
+    <li><span class="k num">ШАГ 1</span><h3>Выбрать по три</h3><p>Стиль, герой и логотип — по три варианта в каждом блоке, можно с комментарием.</p><span class="t">Владелец</span></li>
+    <li><span class="k num">ШАГ 2</span><h3>Дизайн-система</h3><p>Палитра, шрифты, сетка и шкалы отступов под выбранный стиль; финальная отрисовка знака.</p><span class="t">Студия</span></li>
+    <li><span class="k num">ШАГ 3</span><h3>Иллюстратор для персонажа</h3><p>Финальные позы героя по утверждённому знаку: голова персонажа зависит от логотипа.</p><span class="t">Иллюстратор и студия</span></li>
+    <li><span class="k num">ШАГ 4</span><h3>Вёрстка</h3><p>Главная, калькулятор стоимости спора, страница «ИИ и цифровые споры», форма заявки.</p><span class="t">Студия</span></li>
+   </ol>
+   <div class="ask">
+    <p class="eyebrow">Ждём от владельца</p>
+    <p>Три стиля, три героя, три логотипа — и ответ, какой знак станет головой «Поверенного»: весы или литера «Æ».</p>
+   </div>
+  </div>
+ </div></div>
+</section>
+
+</main>
+
+<nav class="nav" aria-label="Навигация по слайдам">
+ <button type="button" id="prev" aria-label="Предыдущий слайд"><span aria-hidden="true">←</span><span class="lbl">Назад</span></button>
+ <span class="cnt num" id="cnt" aria-live="polite">1 <span>/ 16</span></span>
+ <button type="button" id="next" aria-label="Следующий слайд"><span class="lbl">Далее</span><span aria-hidden="true">→</span></button>
+</nav>
+
+<script>
+(function(){
+  document.documentElement.lang = 'ru';
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var cnt = document.getElementById('cnt');
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var cur = 0;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function render(){
+    cnt.innerHTML = (cur + 1) + ' <span>/ ' + slides.length + '</span>';
+    prev.setAttribute('aria-disabled', cur === 0 ? 'true' : 'false');
+    next.setAttribute('aria-disabled', cur === slides.length - 1 ? 'true' : 'false');
+  }
+  function go(i){
+    if (i < 0 || i >= slides.length) return;
+    cur = i;
+    render();
+    slides[i].scrollIntoView({behavior: reduce.matches ? 'auto' : 'smooth', block: 'start'});
+    slides[i].focus({preventScroll: true});
+  }
+  prev.addEventListener('click', function(){ go(cur - 1); });
+  next.addEventListener('click', function(){ go(cur + 1); });
+  document.addEventListener('keydown', function(e){
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var t = e.target;
+    if (t && (t.closest && t.closest('.tbl-wrap, input, textarea, select'))) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  });
+
+  if ('IntersectionObserver' in window) {
+    var vis = new Map();
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ vis.set(en.target, en.intersectionRatio); });
+      var best = -1, bi = cur;
+      slides.forEach(function(s, i){ var r = vis.get(s) || 0; if (r > best) { best = r; bi = i; } });
+      if (bi !== cur) { cur = bi; render(); }
+    }, {threshold: [0, .25, .5, .75, 1]});
+    slides.forEach(function(s){ io.observe(s); });
+  }
+  render();
+
+  var pvs = document.querySelectorAll('.pv');
+  function fit(el){ el.style.setProperty('--k', (el.clientWidth / 1280).toFixed(4)); }
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(function(list){ list.forEach(function(en){ fit(en.target); }); });
+    pvs.forEach(function(el){ ro.observe(el); });
+  } else {
+    pvs.forEach(fit);
+    window.addEventListener('resize', function(){ pvs.forEach(fit); });
+  }
+})();
+</script>
