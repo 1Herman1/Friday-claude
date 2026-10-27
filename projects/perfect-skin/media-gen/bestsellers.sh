@@ -44,6 +44,9 @@ gen_video() { # out_name aspect prompt first last
   cp "$(ls "$tmp"/* | head -1)" "$OUT/$name.mp4"
 }
 
+# Только проверка баланса: шаги Balance до и после в workflow, без генерации
+[ "$STAGE" = balance ] && exit 0
+
 # Товары в готовых иллюстрациях статей: первая картинка — утверждённая сцена,
 # дальше официальные фото товаров. FRAMES — только эти имена через пробел
 if [ "$STAGE" = blog-products ]; then
