@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import {
   parseProProductsFile,
   planNewProduct,
+  planProductImages,
   planVariantForExisting,
   type PlanContext,
   type ProProduct,
@@ -138,6 +139,7 @@ describe('planNewProduct()', () => {
     skinTypes: ['Для всех типов кожи'],
     volume: { value: 5, unit: 'pcs', label: '5 × 5 мл' },
     wholesaleKopecks: 1240000,
+    images: [],
   }
 
   it('создаёт план для нового товара', () => {
@@ -358,5 +360,53 @@ describe('planVariantForExisting()', () => {
       expect(plan.data.volumeValue).toBe('5')
       expect(plan.data.volumeLabel).toBe('5 × 5 мл')
     }
+  })
+})
+
+// ────────────────────────────── planProductImages ────────────────────────────
+
+describe('planProductImages()', () => {
+  const item: ProProduct = {
+    article: 2064,
+    name: 'Test',
+    slug: 'test',
+    brand: 'isseimi',
+    line: 'isseimi-base',
+    category: 'syvorotki',
+    description: 'Test',
+    shortDescription: 'Test',
+    skinTypes: ['Для всех типов кожи'],
+    volume: { value: 5, unit: 'pcs', label: '5 × 5 мл' },
+    wholesaleKopecks: 1240000,
+    images: ['/products/test.jpg'],
+  }
+
+  it('обновляет фото, если в БД их нет', () => {
+    expect(planProductImages(item, { id: 'p1', images: [] })).toEqual({
+      kind: 'update',
+      productId: 'p1',
+      images: ['/products/test.jpg'],
+    })
+  })
+
+  it('обновляет фото, если в БД другой путь из /products/', () => {
+    expect(planProductImages(item, { id: 'p1', images: ['/products/old.jpg'] }).kind).toBe('update')
+  })
+
+  it('не трогает фото, загруженные в админке', () => {
+    expect(planProductImages(item, { id: 'p1', images: ['/uploads/manual.jpg'] }).kind).toBe('none')
+  })
+
+  it('ничего не пишет, если фото совпадают', () => {
+    expect(planProductImages(item, { id: 'p1', images: ['/products/test.jpg'] }).kind).toBe('none')
+  })
+
+  it('ничего не пишет, если в файле фото нет', () => {
+    expect(planProductImages({ ...item, images: [] }, { id: 'p1', images: [] }).kind).toBe('none')
+  })
+
+  it('схема отклоняет фото вне /products/', () => {
+    const json = { _meta: { source: 'test', date: '2026-09-22' }, products: [{ ...item, images: ['/uploads/x.jpg'] }] }
+    expect(() => parseProProductsFile(json)).toThrow()
   })
 })

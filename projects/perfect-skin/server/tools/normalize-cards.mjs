@@ -27,9 +27,20 @@ async function normalize(base64, mime, target) {
     const ctx = c.getContext('2d', { willReadFrequently: true })
     ctx.drawImage(img, 0, 0)
     const d = ctx.getImageData(0, 0, W, H).data
+    // фон студийного кадра — серый градиент: яркость края каждой строки считаем фоном
+    const bgL = new Array(H)
+    for (let y = 0; y < H; y++) {
+      const edge = []
+      for (const x of [0, 1, 2, 3, W - 4, W - 3, W - 2, W - 1]) {
+        const i = (y * W + x) * 4
+        edge.push((d[i] + d[i + 1] + d[i + 2]) / 3)
+      }
+      bgL[y] = edge.sort((a, b) => a - b)[4]
+    }
     const isContent = (x, y) => {
       const i = (y * W + x) * 4
-      return d[i] < 245 || d[i + 1] < 245 || d[i + 2] < 245
+      const r = d[i], g = d[i + 1], b = d[i + 2]
+      return Math.abs((r + g + b) / 3 - bgL[y]) > 28 || Math.max(r, g, b) - Math.min(r, g, b) > 24
     }
     // построчная масса
     const rowMass = new Array(H).fill(0)
@@ -102,7 +113,15 @@ async function normalize(base64, mime, target) {
     const octx = out.getContext('2d')
     octx.fillStyle = '#ffffff'; octx.fillRect(0, 0, target, target)
     octx.imageSmoothingQuality = 'high'
-    octx.drawImage(img, x0, y0, cw, ch, (target - fw) / 2, (target - fh) / 2, fw, fh)
+    const clean = new Uint8ClampedArray(d)
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (isContent(x, y)) continue
+      const i = (y * W + x) * 4
+      clean[i] = clean[i + 1] = clean[i + 2] = 255
+    }
+    const cleanCanvas = document.createElement('canvas'); cleanCanvas.width = W; cleanCanvas.height = H
+    cleanCanvas.getContext('2d').putImageData(new ImageData(clean, W, H), 0, 0)
+    octx.drawImage(cleanCanvas, x0, y0, cw, ch, (target - fw) / 2, (target - fh) / 2, fw, fh)
     return { status: 'ok', b64: out.toDataURL('image/webp', 0.9).split(',')[1], clusters: clusters.length }
   }, { base64, mime, target })
 }

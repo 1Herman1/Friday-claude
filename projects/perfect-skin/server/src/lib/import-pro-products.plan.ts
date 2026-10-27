@@ -36,6 +36,7 @@ export const ProProductSchema = z.object({
   })),
   volume: VolumeSchema,
   wholesaleKopecks: z.number().int().positive(),
+  images: z.array(z.string().regex(/^\/products\//)).default([]),
 })
 
 export type ProProduct = z.infer<typeof ProProductSchema>
@@ -153,7 +154,7 @@ export function planNewProduct(item: ProProduct, ctx: PlanContext): ProductPlan 
     slug: item.slug,
     description: item.description,
     shortDescription: item.shortDescription,
-    images: [],
+    images: item.images,
     brandId,
     lineId,
     isProfessional: true,
@@ -164,6 +165,28 @@ export function planNewProduct(item: ProProduct, ctx: PlanContext): ProductPlan 
   }
 
   return { kind: 'create', slug: item.slug, data }
+}
+
+export type ImagesPlan =
+  | { kind: 'update'; productId: string; images: string[] }
+  | { kind: 'none'; reason: string }
+
+/**
+ * Планирует фото для уже существующего товара. Фото, загруженные в админке (не из /products/), не трогаем.
+ */
+export function planProductImages(item: ProProduct, product: { id: string; images: string[] }): ImagesPlan {
+  if (item.images.length === 0) {
+    return { kind: 'none', reason: 'Фото в файле нет' }
+  }
+  if (product.images.some((src) => !src.startsWith('/products/'))) {
+    return { kind: 'none', reason: 'Фото из админки' }
+  }
+  const unchanged =
+    product.images.length === item.images.length && product.images.every((src, i) => src === item.images[i])
+  if (unchanged) {
+    return { kind: 'none', reason: 'Фото без изменений' }
+  }
+  return { kind: 'update', productId: product.id, images: item.images }
 }
 
 /**

@@ -6,6 +6,7 @@ import { recalcProductPrices } from '../src/services/product-prices.js'
 import {
   parseProProductsFile,
   planNewProduct,
+  planProductImages,
   planVariantForExisting,
   type PlanContext,
   type ProProductsFile,
@@ -133,15 +134,23 @@ async function run() {
   const linesMap = new Map(lines.map((l) => [l.slug, l.id]))
 
   const productsDb = await prisma.product.findMany({
-    select: { id: true, slug: true, name: true, variants: { select: { id: true, volumeValue: true, volumeUnit: true, externalId: true } } },
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      images: true,
+      variants: { select: { id: true, volumeValue: true, volumeUnit: true, externalId: true } },
+    },
   })
   const productsMap = new Map(productsDb.map((p) => [p.slug, p.id]))
+  const productsBySlug = new Map(productsDb.map((p) => [p.slug, p]))
 
   const ctx: PlanContext = { categories: categoriesMap, brands: brandsMap, lines: linesMap, products: productsMap }
 
   // Планируем изменения
   console.log('\n🎯 Planning changes...')
   const report: ReportRecord[] = []
+  const imageUpdates: Array<{ productId: string; images: string[] }> = []
 
   // Процессируем новые товары
   for (const item of proProductsData.products) {
@@ -156,12 +165,14 @@ async function run() {
           action: 'created',
         })
       } else {
+        const imagesPlan = planProductImages(item, productsBySlug.get(item.slug)!)
+        if (imagesPlan.kind === 'update') imageUpdates.push(imagesPlan)
         report.push({
           type: 'product',
           article: item.article,
           name: item.name,
-          action: 'none',
-          reason: plan.reason,
+          action: imagesPlan.kind === 'update' ? 'updated' : 'none',
+          reason: imagesPlan.kind === 'update' ? undefined : imagesPlan.reason,
         })
       }
     } catch (e) {
@@ -291,6 +302,10 @@ async function run() {
           externalId: `bmg-${item.article}`,
         },
       })
+    }
+
+    for (const u of imageUpdates) {
+      await tx.product.update({ where: { id: u.productId }, data: { images: u.images } })
     }
 
     // Обновляем/создаём фасовки для существующих товаров
