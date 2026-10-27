@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchVideoReviews, type PublicVideoReview } from '@/lib/admin-api'
-import { isDemoSections } from '@/lib/demo-mode'
+import { isDemoSections, isDemoVideoReviewsBuild } from '@/lib/demo-mode'
 import { useHomeList } from '@/hooks/useHomeList'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { SectionHeader } from '@/components/home/SectionHeader'
@@ -17,7 +17,7 @@ type Slot = { x: number; depth: number; rot: number; scale: number; veil: number
 type Layout = { steps: Slot[]; far: Slot }
 type Pose = { transform: string; opacity: number; veil: number; layer: number; hidden: boolean }
 type Seam = { timers: number[]; frames: number[] }
-type VideoList = { items: PublicVideoReview[]; demo: boolean }
+type VideoList = { items: PublicVideoReview[]; demo: boolean; mockup: boolean }
 
 // Объёмное кольцо: x — % ширины слайда, depth — доля --vr-w, rot — градусы
 const RING: Layout = {
@@ -49,10 +49,18 @@ const CONTROL =
 const ARROW =
   'inline-flex size-12 shrink-0 items-center justify-center rounded-pill border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-transform duration-160 ease-out active:scale-97 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring'
 
+async function loadDemoVideos(): Promise<PublicVideoReview[]> {
+  return (await import('@/lib/home-demo')).DEMO_VIDEOS
+}
+
 async function loadVideoReviews(): Promise<VideoList> {
-  if (isDemoSections()) return { items: (await import('@/lib/home-demo')).DEMO_VIDEOS, demo: true }
+  if (isDemoSections()) return { items: await loadDemoVideos(), demo: true, mockup: false }
   const { items } = await fetchVideoReviews({ limit: MAX_REVIEWS })
-  return { items: items.filter((item) => item.mp4Url && item.posterUrl).slice(0, MAX_REVIEWS), demo: false }
+  const real = items.filter((item) => item.mp4Url && item.posterUrl).slice(0, MAX_REVIEWS)
+  if (isDemoVideoReviewsBuild() && real.length < MIN_REVIEWS) {
+    return { items: await loadDemoVideos(), demo: true, mockup: true }
+  }
+  return { items: real, demo: false, mockup: false }
 }
 
 /** Позиция слайда относительно активного по кругу: -n/2 < rel <= n/2 */
@@ -411,7 +419,7 @@ function VideoCoverflow({ items, demo }: { items: PublicVideoReview[]; demo: boo
 }
 
 export function VideoReviewsSection() {
-  const list = useHomeList<VideoList>(loadVideoReviews, { items: [], demo: false })
+  const list = useHomeList<VideoList>(loadVideoReviews, { items: [], demo: false, mockup: false })
   if (!list || list.items.length < MIN_REVIEWS) return null
 
   return (
@@ -423,6 +431,11 @@ export function VideoReviewsSection() {
           titleId="home-video-title"
           sub="Показывают средства, которыми пользуются, и рассказывают, как они подошли коже."
         />
+        {list.mockup && (
+          <p className="-mt-4 mb-8 text-body-sm text-muted-foreground">
+            Макет: примеры роликов, настоящие отзывы появятся позже
+          </p>
+        )}
       </div>
       <VideoCoverflow items={list.items} demo={list.demo} />
     </section>

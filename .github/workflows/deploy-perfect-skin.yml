@@ -141,7 +141,8 @@ jobs:
             npm run build --workspace=@ps/server
 
             echo "==> Building client with API URL"
-            npm run build --workspace=@ps/client
+            # Макет видеоотзывов на главной. Убрать до переключения на домен perfect-skin.shop
+            VITE_DEMO_VIDEO_REVIEWS=1 npm run build --workspace=@ps/client
 
             echo "==> Deploying static files (before reload: new API must not meet the old bundle)"
             mkdir -p /var/www/perfect-skin/client
