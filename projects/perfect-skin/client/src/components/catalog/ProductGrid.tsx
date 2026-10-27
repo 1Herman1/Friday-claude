@@ -41,7 +41,7 @@ export function ProductGrid({ products, onReset, loading, onAddToCart }: Product
       <div className="col-span-full py-16 text-center">
         <h3 className="text-xl font-heading font-bold text-foreground mb-3">Подберём под вашу кожу</h3>
         <p className="text-muted-foreground mb-6">
-          Под эти фильтры ничего не нашлось — ответьте на пять вопросов, и мы
+          Под эти фильтры ничего не нашлось — ответьте на шесть вопросов, и мы
           соберём программу ухода под ваш тип кожи.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">

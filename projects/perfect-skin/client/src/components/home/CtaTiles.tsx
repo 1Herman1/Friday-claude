@@ -14,7 +14,7 @@ export function CtaTiles() {
               Подобрать косметику
             </h2>
             <p className="text-body leading-body text-foreground mb-6 md:mb-10 opacity-90 max-w-[34ch] [text-wrap:pretty]">
-              Ответьте на 5 вопросов о типе кожи и задаче — соберём программу
+              Ответьте на 6 вопросов о типе кожи и задаче — соберём программу
               ухода из средств ISSEIMI и GLACÉE.
             </p>
             <button
