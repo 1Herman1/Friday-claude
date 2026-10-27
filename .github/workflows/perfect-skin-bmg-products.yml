@@ -1,0 +1,44 @@
+name: Perfect Skin — BMG product photos
+
+# beautymedgroup.ru закрыт для облачной среды разработки, у раннера интернет есть.
+# Выгружает публичный каталог (WooCommerce Store API, фолбэки: wp/v2, sitemap), скачивает
+# все фото товаров и сопоставляет их с товарами Perfect Skin. Результат коммитится в
+# docs/projects/perfect-skin/media/bmg-products/ и docs/projects/perfect-skin/content/.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: perfect-skin-bmg-products
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch BMG catalog and images
+        run: node projects/perfect-skin/media-gen/fetch-bmg-products.mjs
+      - name: Match with our products
+        run: node projects/perfect-skin/media-gen/match-bmg-photos.mjs
+      - name: Commit results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/projects/perfect-skin/media/bmg-products docs/projects/perfect-skin/content/product-photos-2026-10-27.md
+          git commit -m "Perfect Skin: BMG product catalog, photos and match report" || exit 0
+          # При конфликте бинарников побеждают файлы этого прогона (-X theirs в
+          # терминах rebase = наш переигрываемый коммит). Неудачный пуш — ошибка.
+          ok=0
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || { git rebase --abort || true; sleep 5; continue; }
+            git push origin "HEAD:$GITHUB_REF_NAME" && { ok=1; break; }
+            sleep 5
+          done
+          [ "$ok" = 1 ] || { echo "::error::push failed, BMG results not saved"; exit 1; }
