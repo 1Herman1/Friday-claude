@@ -42,7 +42,7 @@ function NewsRow({ item, withCover }: { item: PublicPostListItem; withCover: boo
           <time dateTime={item.publishedAt} className={`${LABEL} text-muted-foreground`}>
             {formatPostDate(item.publishedAt)}
           </time>
-          <h3 className="mt-1 font-heading text-body md:text-[1.125rem] font-semibold leading-[1.3] line-clamp-2 group-hover:underline underline-offset-4 decoration-1">
+          <h3 className="mt-1 font-heading text-body md:text-[1.125rem] font-semibold leading-[1.3] line-clamp-2 transition-colors duration-200 ease-out motion-reduce:transition-none group-hover:text-muted-foreground group-focus-visible:text-muted-foreground">
             {item.title}
           </h3>
           {item.excerpt && (

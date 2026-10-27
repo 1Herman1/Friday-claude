@@ -136,6 +136,8 @@ HeroSection → CtaTiles → BrandsSection → CategoryAccordion → BestsellerS
 
 ### 1. BlogSection
 
+> Дельта 26.10.2026: плашка `md:w-[min(24rem,44%)]`, заголовок целиком на md+ (`md:line-clamp-none`; заголовки длиннее 90 символов — кегль 1.125rem), ховер серет заголовок вместо подчёркивания (§1.4). Значения ниже обновлены.
+
 **Тексты.** Eyebrow «Журнал». H2 «Статьи об уходе». Подзаголовок «Разбираем
 составы, порядок нанесения и уход по типу кожи.» Ссылка «Все статьи» → `/blog`.
 `titleId = "home-blog-title"`. На `<section>` дополнительно `data-home="blog"`
@@ -152,7 +154,7 @@ HeroSection → CtaTiles → BrandsSection → CategoryAccordion → BestsellerS
 | 390 | 342 px | на всю ширину: фото `aspect-[3/2]` (342×228), текст ниже фото на `bg-card` | строки 342 px: миниатюра 112×75 слева (`w-28 aspect-[3/2]`) |
 | 768 | 672 px | `md:col-span-2`, `md:aspect-[3/2]` (672×448), плашка слева внизу | 2 колонки по 324 px, обложка `aspect-[3/2]` (324×216) |
 | 1024 | 928 px | `md:aspect-[3/2]` (928×619) | 2 колонки по 452 px, обложка 452×301 |
-| 1440 | 1248 px | `xl:col-span-2` (612 px), фото 612×408 (3:2), плашка 208×136 | по 294 px, обложка `aspect-[3/2]` (294×196) |
+| 1440 | 1248 px | `xl:col-span-2` (612 px), фото 612×408 (3:2), плашка 269×160 | по 294 px, обложка `aspect-[3/2]` (294×196) |
 | 1920 | 1248 px (контейнер упирается в 1440) | как 1440 | как 1440 |
 
 На `xl` сетка из 4 колонок: главная занимает 2, статьи 2 и 3 — по одной, все
@@ -164,8 +166,11 @@ HeroSection → CtaTiles → BrandsSection → CategoryAccordion → BestsellerS
 кадр целиком. Левая треть кадра пустая под плашку, товар — в правых двух третях.
 
 - **≥ 768:** рамка `aspect-[3/2]`, плашка абсолютная, слева внизу, шириной не
-  больше `min(22rem, 40%)`, только дата и заголовок. Площадь плашки ≈ 11% площади
-  фото (замер: 1440 — 208×136 из 612×408; 768 — 228×136 из 672×448).
+  больше `min(24rem, 44%)`, только дата и заголовок. Заголовок виден целиком
+  (замер: 1440 — 269×160 из 612×408, 4 строки; 768 — 296×136 из 672×448).
+  Длинный заголовок (> 90 символов) — кегль 1.125rem, на md+ без clamp: на 1440
+  плашка 269×215 (≈ половина высоты кадра), текст не обрезан; яблоко у плашки
+  не перекрыто, бутылка открыта. Решение по снимкам 390/768/1024/1440.
 - **< 768:** фото 3:2 сверху целиком, текст (дата, заголовок, анонс в 2 строки)
   ниже фото на `bg-card`, без наложения.
 
@@ -175,9 +180,9 @@ article.group.relative.overflow-hidden.rounded-block.bg-muted
         transition-transform duration-200 ease-out hover:-translate-y-1 active:scale-97
         motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100
   img  block aspect-[3/2] w-full object-cover md:absolute md:inset-0 md:aspect-auto md:h-full   alt=""  loading="lazy" decoding="async"
-  div (плашка) bg-card p-5 md:absolute md:left-4 md:bottom-4 md:w-[min(22rem, 40%)] md:rounded-media md:p-4
+  div (плашка) bg-card p-5 md:absolute md:left-4 md:bottom-4 md:w-[min(24rem, 44%)] md:rounded-media md:p-4
     time  (LABEL, text-muted-foreground)
-    h3    mt-2 font-heading text-[1.125rem] md:text-[1.25rem] font-bold leading-[1.2] text-foreground line-clamp-3
+    h3    mt-2 font-heading text-[1.125rem] md:text-[1.25rem] font-bold leading-[1.2] text-foreground line-clamp-3 md:line-clamp-none
       Link (растянутая ссылка, см. 1.4)
     p     mt-2 text-body-sm leading-body text-muted-foreground line-clamp-2 md:hidden   (анонс только < 768)
     PostAdNote  mt-2
@@ -252,8 +257,14 @@ article.group.relative.flex.flex-col.overflow-hidden.rounded-block.bg-card  (+ h
   только её. Поэтому рядом с плашкой стоит второй оверлей на всю карточку:
   `<Link tabIndex={-1} aria-hidden="true" className="absolute inset-0">` (без фокуса,
   клик по фото ведёт на статью).
-- Hover: подъём `-translate-y-1` 200 мс (как у карточки товара) + у заголовка
-  `group-hover:underline underline-offset-4 decoration-1`. Цвет не анимируется.
+- Hover: подъём `-translate-y-1` 200 мс (как у карточки товара) + заголовок серет
+  без подчёркивания, `transition-colors duration-200 ease-out motion-reduce:transition-none`:
+  светлая карточка — `group-hover:text-muted-foreground` (6.4:1 на `bg-card`),
+  плитка без обложки — `text-accent-foreground/70` (5.1:1 на `accent`),
+  синяя плитка — `text-primary-foreground/70` (5.9:1 на `primary`).
+- Фокус с клавиатуры: тот же цвет через `focus-visible:text-*` на самой ссылке
+  (ссылка и есть фокусируемый элемент) + кольцо `after:outline` на всю карточку.
+  У плитки без обложки контейнер без `overflow-hidden`, иначе кольцо обрезается.
 - Active: `active:scale-97`, тот же transition 200 мс.
 - Обложки `alt=""`: смысл несёт заголовок рядом, иначе скринридер читает
   его дважды. `width`/`height` на `<img>` проставлять (1200×800 по умолчанию),
@@ -300,7 +311,7 @@ li
     div
       time  (LABEL, text-muted-foreground)
       h3    mt-1 font-heading text-body md:text-[1.125rem] font-semibold leading-[1.3] line-clamp-2
-            group-hover:underline underline-offset-4 decoration-1
+            group-hover:text-muted-foreground (без подчёркивания) underline-offset-4 decoration-1
       p     hidden md:mt-1 md:line-clamp-1 text-body-sm leading-body text-muted-foreground
     IconArrowRight size={20}  hidden md:block text-primary
             transition-transform duration-200 ease-out group-hover:translate-x-1

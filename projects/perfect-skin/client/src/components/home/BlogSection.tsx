@@ -14,11 +14,19 @@ async function loadArticles(): Promise<PublicPostListItem[]> {
   return (await fetchPublicPosts({ kind: 'article', limit: POSTS_COUNT })).items
 }
 
-function PostTitleLink({ post }: { post: PublicPostListItem }) {
+type TitleTone = 'light' | 'accent' | 'dark'
+
+const TITLE_TONE: Record<TitleTone, string> = {
+  light: 'group-hover:text-muted-foreground focus-visible:text-muted-foreground',
+  accent: 'group-hover:text-accent-foreground/70 focus-visible:text-accent-foreground/70',
+  dark: 'group-hover:text-primary-foreground/70 focus-visible:text-primary-foreground/70',
+}
+
+function PostTitleLink({ post, tone }: { post: PublicPostListItem; tone: TitleTone }) {
   return (
     <Link
       to={`/blog/${post.slug}`}
-      className="after:absolute after:inset-0 after:rounded-block after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-ring group-hover:underline underline-offset-4 decoration-1"
+      className={`after:absolute after:inset-0 after:rounded-block after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-ring transition-colors duration-200 ease-out motion-reduce:transition-none ${TITLE_TONE[tone]}`}
     >
       {post.title}
     </Link>
@@ -28,8 +36,10 @@ function PostTitleLink({ post }: { post: PublicPostListItem }) {
 const CARD_MOTION =
   'transition-transform duration-200 ease-out hover:-translate-y-1 active:scale-97 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100'
 
+const LONG_TITLE_LENGTH = 90
+
 function FeaturedPost({ post }: { post: PublicPostListItem }) {
-  const frame = `group relative overflow-hidden rounded-block aspect-[4/5] md:col-span-2 md:aspect-[2/1] xl:col-span-2 xl:aspect-auto xl:min-h-[26rem] ${CARD_MOTION}`
+  const frame = `group relative rounded-block aspect-[4/5] md:col-span-2 md:aspect-[2/1] xl:col-span-2 xl:aspect-auto xl:min-h-[26rem] ${CARD_MOTION}`
   if (!post.coverImage) {
     return (
       <article className={`${frame} flex flex-col justify-between bg-accent p-6 text-accent-foreground md:p-8`}>
@@ -38,7 +48,7 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
         </time>
         <div>
           <h3 className="font-heading text-h3 font-bold leading-[1.12] [text-wrap:balance]">
-            <PostTitleLink post={post} />
+            <PostTitleLink post={post} tone="accent" />
           </h3>
           {post.excerpt && <p className="mt-3 max-w-[46ch] text-body leading-body line-clamp-3">{post.excerpt}</p>}
           <PostAdNote
@@ -64,12 +74,16 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
         className="block aspect-[3/2] w-full object-cover md:absolute md:inset-0 md:aspect-auto md:h-full"
       />
       <Link to={`/blog/${post.slug}`} tabIndex={-1} aria-hidden="true" className="absolute inset-0" />
-      <div className="bg-card p-5 md:absolute md:left-4 md:bottom-4 md:w-[min(22rem,40%)] md:rounded-media md:p-4">
+      <div className="bg-card p-5 md:absolute md:left-4 md:bottom-4 md:w-[min(24rem,44%)] md:rounded-media md:p-4">
         <time dateTime={post.publishedAt} className={`${LABEL} text-muted-foreground`}>
           {formatPostDate(post.publishedAt)}
         </time>
-        <h3 className="mt-2 font-heading text-[1.125rem] md:text-[1.25rem] font-bold leading-[1.2] text-foreground line-clamp-3 md:line-clamp-4">
-          <PostTitleLink post={post} />
+        <h3
+          className={`mt-2 font-heading text-[1.125rem] font-bold leading-[1.2] text-foreground line-clamp-3 md:line-clamp-none ${
+            post.title.length > LONG_TITLE_LENGTH ? 'md:text-[1.125rem]' : 'md:text-[1.25rem]'
+          }`}
+        >
+          <PostTitleLink post={post} tone="light" />
         </h3>
         {post.excerpt && (
           <p className="mt-2 text-body-sm leading-body text-muted-foreground line-clamp-2 md:hidden">{post.excerpt}</p>
@@ -115,7 +129,7 @@ export function PostCard({ post, headingLevel = 3, showKind = false }: PostCardP
           {formatPostDate(post.publishedAt)}
         </time>
         <Heading className={`${headingClass}${headingLevelClass}`}>
-          <PostTitleLink post={post} />
+          <PostTitleLink post={post} tone={hasCover ? 'light' : 'dark'} />
         </Heading>
         {post.excerpt && (
           <p
