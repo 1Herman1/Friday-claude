@@ -1,0 +1,72 @@
+name: Aequitas — design sketches (kie)
+
+# ИИ-эскизы героев и знаков Aequitas через Nullume/kie.ai (nano-banana-2, 1K, ~$0.04 за картинку).
+# Результат коммитится в docs/projects/aequitas/media/sketches/r<ROUND>/.
+on:
+  workflow_dispatch:
+    inputs:
+      items:
+        description: 'Имена эскизов через пробел (hero-scales logo-ae …). Пусто — все 13'
+        type: string
+        default: ''
+      variants:
+        description: 'Вариантов на эскиз'
+        type: string
+        default: '1'
+      round:
+        description: 'Номер круга правок (папка r<N>)'
+        type: string
+        default: '1'
+      extra:
+        description: 'Дополнительная фраза к каждому промпту (правка по ревью)'
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aequitas-sketches
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
+      NULLUME_HOME: ${{ github.workspace }}/.nullume-run
+      ITEMS: ${{ inputs.items }}
+      VARIANTS: ${{ inputs.variants }}
+      ROUND: ${{ inputs.round }}
+      EXTRA: ${{ inputs.extra }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: tools/nullume/package-lock.json
+      - name: Build nullume
+        working-directory: tools/nullume
+        run: npm ci && npm run build
+      - name: Balance
+        run: node tools/nullume/bin/nullume.js balance
+      - name: Generate
+        run: bash projects/aequitas/media-gen/sketches.sh
+      - name: Balance after
+        if: always()
+        run: node tools/nullume/bin/nullume.js balance
+      - name: Commit results
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/projects/aequitas/media/sketches || true
+          git commit -m "Aequitas sketches: round $ROUND" || exit 0
+          ok=0
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || { git rebase --abort || true; sleep 5; continue; }
+            git push origin "HEAD:$GITHUB_REF_NAME" && { ok=1; break; }
+            sleep 5
+          done
+          [ "$ok" = 1 ] || { echo "::error::push failed, sketches not saved"; exit 1; }
