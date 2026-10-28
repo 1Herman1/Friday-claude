@@ -28,9 +28,6 @@ export function HomePage() {
       {/* Hero */}
       <HeroSection />
 
-      {/* CTA Tiles: Подбор и Консультация */}
-      <CtaTiles />
-
       {/* Brands */}
       <BrandsSection />
 
@@ -42,6 +39,9 @@ export function HomePage() {
 
       {/* Popular: сетка, которой управляет клиент */}
       <PopularSection />
+
+      {/* CTA: подбор ухода и консультация */}
+      <CtaTiles />
 
       {/* Video reviews */}
       <VideoReviewsSection />

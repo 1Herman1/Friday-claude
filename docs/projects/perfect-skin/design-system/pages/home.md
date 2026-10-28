@@ -71,14 +71,16 @@ P2 из MASTER (≥ 44×44) — осознанное исключение.
 **Порядок на главной** (`client/src/components/pages/HomePage.tsx`):
 
 ```
-HeroSection → CtaTiles → BrandsSection → CategoryAccordion → BestsellerScene
-→ PopularSection → VideoReviewsSection → ProSection → AboutHome
+HeroSection → BrandsSection → CategoryAccordion → BestsellerScene
+→ PopularSection → CtaTiles → VideoReviewsSection → ProSection → AboutHome
 → BlogSection → NewsSection → FaqSection
 ```
 
 Почему так: сетка товаров → сразу соцдоказательство (профиль E-commerce,
 `docs/core/design-profiles.md`) → вход для специалистов. Журнал стоит перед FAQ:
-статьи закрывают те же вопросы «как подобрать», что и FAQ.
+статьи закрывают те же вопросы «как подобрать», что и FAQ. Подбор и консультация
+стоят после сетки товаров: сначала покупатель видит товар, затем помощь с выбором,
+если не определился (28.10.2026; на первом экране уже есть кнопка подбора).
 
 **Ритм секции** — как у соседей (`PopularSection`, `FaqSection`, `ProSection`):
 `<section className="bg-background py-10 md:py-14">`, внутри `container-app`.
@@ -668,6 +670,12 @@ CSS сам перенацеливает переход с текущей точ�
 - `rkn-compliance`: лица и имена покупателей в роликах — нужно письменное
   согласие на публикацию изображения (ст. 152.1 ГК РФ) и на обработку ПД.
   Зона `[клиент]`.
+
+## Подбор ухода и консультация (`CtaTiles`, 28.10.2026)
+
+Вариант C, утверждён владельцем (`references/cta-variant-c.png`), с правкой правой зоны.
+- Одна плитка `press-tile grid overflow-hidden rounded-block bg-accent lg:grid-cols-12`: слева 5/12 — метка «Подбор ухода · 6 вопросов», h2, абзац, «Начать подбор» (растяжка на всю плитку); справа 7/12 — цельная сгенерированная картинка «ритуал из трёх шагов» `/photos/cta/quiz-ritual.webp` (1600×900, `-800.webp`; исходник `docs/projects/perfect-skin/media/cta/quiz-products-v2.png`), `pointer-events-none`, плашка `figcaption` «Программа ухода / Очищение · Сыворотка · Крем». На <lg картинка 16:9 под текстом.
+- Консультация — строка-кнопка под плиткой, открывает `ConsultationPopup`: окно `max-w-md` по центру на md+, нижний лист на телефоне; телефон и часы — из `ContactsPopover`; кнопка `tel:`, вторичная ссылка на `/consultation`. Логика диалога — общий хук `hooks/useDialog.ts` (тот же, что у `SideDrawer`).
 
 ## FAQ «Вопросы и ответы» (`#faq`)
 

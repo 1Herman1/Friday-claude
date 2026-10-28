@@ -1,9 +1,7 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { lockBodyScroll, unlockBodyScroll } from '@/lib/scroll-lock'
+import { useDialog } from '@/hooks/useDialog'
 import { IconClose } from '../icons'
-
-const EXIT_MS = 200
 
 type Props = {
   open: boolean
@@ -17,75 +15,8 @@ type Props = {
 
 export default function SideDrawer({ open, onClose, title, titleSuffix, children, footer, closeLabel }: Props) {
   const titleId = useId()
-  const [mounted, setMounted] = useState(open)
-  const [shown, setShown] = useState(false)
-  const dialogRef = useRef<HTMLDivElement>(null)
   const closeBtnRef = useRef<HTMLButtonElement>(null)
-  const returnFocusRef = useRef<HTMLElement | null>(null)
-
-  // Mount/exit логика: когда открывается, смонтируем и покажем; когда закрывается,
-  // скроем на EXIT_MS, потом размонтируем
-  useEffect(() => {
-    if (open) {
-      returnFocusRef.current = document.activeElement as HTMLElement
-      setMounted(true)
-      const raf = requestAnimationFrame(() => setShown(true))
-      return () => cancelAnimationFrame(raf)
-    }
-
-    setShown(false)
-    const timer = setTimeout(() => {
-      setMounted(false)
-      returnFocusRef.current?.focus()
-    }, EXIT_MS)
-    return () => clearTimeout(timer)
-  }, [open])
-
-  // Фокус на закрытие — после монтирования: в rAF кнопки ещё нет в DOM
-  useEffect(() => {
-    if (mounted && open) closeBtnRef.current?.focus({ preventScroll: true })
-  }, [mounted, open])
-
-  // Фокус-трап и обработчик Escape
-  useEffect(() => {
-    if (!mounted) return
-
-    lockBodyScroll()
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose()
-        return
-      }
-
-      if (event.key !== 'Tab') return
-
-      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )
-      if (!focusable || focusable.length === 0) return
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-
-      if (!dialogRef.current?.contains(document.activeElement)) {
-        event.preventDefault()
-        first.focus()
-      } else if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
-    }
-
-    document.addEventListener('keydown', onKeyDown)
-    return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      unlockBodyScroll()
-    }
-  }, [mounted, onClose])
+  const { mounted, shown, dialogRef } = useDialog(open, onClose, closeBtnRef)
 
   if (!mounted) return null
 
