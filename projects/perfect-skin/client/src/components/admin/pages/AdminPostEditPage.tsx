@@ -270,7 +270,7 @@ export function AdminPostEditPage() {
               className="w-full px-4 py-3 border border-border rounded-block bg-card text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-body-sm font-mono"
             />
             <p className="text-body-sm text-muted-foreground mt-1">
-              Латиница, цифры и дефисы. URL будет /blog/{form.slug}
+              Латиница, цифры и дефисы. URL будет /{form.kind === 'news' ? 'news' : 'blog'}/{form.slug}
             </p>
           </div>
 

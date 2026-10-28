@@ -10,7 +10,6 @@ import { VideoReviewsSection } from '@/components/home/VideoReviewsSection'
 import { ProSection } from '@/components/home/ProSection'
 import { AboutHome } from '@/components/home/AboutHome'
 import { BlogSection } from '@/components/home/BlogSection'
-import { NewsSection } from '@/components/home/NewsSection'
 import { FaqSection } from '@/components/home/FaqSection'
 
 export function HomePage() {
@@ -54,7 +53,6 @@ export function HomePage() {
 
       {/* Journal: статьи и новости */}
       <BlogSection />
-      <NewsSection />
 
       {/* FAQ */}
       <FaqSection />

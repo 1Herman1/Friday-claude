@@ -66,6 +66,14 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
+                      to="/news"
+                      className="text-body-sm font-sans hover:text-accent-on-dark transition-colors duration-200 focus-visible:outline-ring"
+                    >
+                      Новости
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       to="/#faq"
                       className="text-body-sm font-sans hover:text-accent-on-dark transition-colors duration-200 focus-visible:outline-ring"
                     >

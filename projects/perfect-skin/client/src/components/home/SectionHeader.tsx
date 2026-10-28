@@ -22,9 +22,11 @@ interface SectionHeaderProps {
   titleId: string
   sub: string
   link?: { to: string; text: string }
+  links?: Array<{ to: string; text: string }>
 }
 
-export function SectionHeader({ eyebrow, title, titleId, sub, link }: SectionHeaderProps) {
+export function SectionHeader({ eyebrow, title, titleId, sub, link, links }: SectionHeaderProps) {
+  const moreLinks = links ?? (link ? [link] : [])
   return (
     <div className="mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
       <div className="max-w-[46ch]">
@@ -34,7 +36,15 @@ export function SectionHeader({ eyebrow, title, titleId, sub, link }: SectionHea
         </h2>
         <p className="mt-3 text-body text-muted-foreground [text-wrap:pretty]">{sub}</p>
       </div>
-      {link && <MoreLink to={link.to}>{link.text}</MoreLink>}
+      {moreLinks.length > 0 && (
+        <div className="flex flex-wrap gap-x-8 gap-y-2">
+          {moreLinks.map((item) => (
+            <MoreLink key={item.to} to={item.to}>
+              {item.text}
+            </MoreLink>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -73,7 +73,7 @@ P2 из MASTER (≥ 44×44) — осознанное исключение.
 ```
 HeroSection → BrandsSection → CategoryAccordion → BestsellerScene
 → PopularSection → CtaTiles → VideoReviewsSection → ProSection → AboutHome
-→ BlogSection → NewsSection → FaqSection
+→ BlogSection → FaqSection
 ```
 
 Почему так: сетка товаров → сразу соцдоказательство (профиль E-commerce,
@@ -121,8 +121,7 @@ HeroSection → BrandsSection → CategoryAccordion → BestsellerScene
 | Секция | Минимум, чтобы показать | Максимум |
 |---|---|---|
 | VideoReviewsSection | 3 ролика (после фильтра битых) | 12 |
-| BlogSection | 3 статьи | 3 |
-| NewsSection | 2 новости | 4 |
+| BlogSection | 3 поста (статьи и новости вместе) | 3 |
 
 Блог при 1–2 статьях скрыт: сетка «большая + две» с дыркой читается как
 недостроенная, а ссылка на `/blog` остаётся в навигации.
@@ -275,7 +274,10 @@ article.group.relative.flex.flex-col.overflow-hidden.rounded-block.bg-card  (+ h
 
 ---
 
-### 2. NewsSection
+### 2. NewsSection — убрана 28.10.2026
+
+С 28.10.2026 статьи и новости на главной в одной секции «Журнал» (`BlogSection`: метка «Статья / Новость» у даты, ссылки «Все статьи» → `/blog`, «Все новости» → `/news`; адреса постов — `postPath`, `/blog/<slug>` или `/news/<slug>`). Ниже — прежний спек для истории.
+
 
 **Тексты.** H2 «Новости». Подзаголовок «Поступления, акции и изменения в работе
 магазина.» Ссылка «Все новости» → `/blog?kind=news`. Eyebrow нет — секция

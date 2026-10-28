@@ -73,8 +73,10 @@ function App() {
             <Route path="/pro" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><ProPage /></Suspense>} />
             <Route path="/staff-login" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><StaffLoginPage /></Suspense>} />
             <Route path="/consultation" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><ConsultationPage /></Suspense>} />
-            <Route path="/blog" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BlogPage /></Suspense>} />
-            <Route path="/blog/:slug" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BlogPostPage /></Suspense>} />
+            <Route path="/blog" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BlogPage kind="article" /></Suspense>} />
+            <Route path="/blog/:slug" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BlogPostPage section="article" /></Suspense>} />
+            <Route path="/news" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BlogPage kind="news" /></Suspense>} />
+            <Route path="/news/:slug" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BlogPostPage section="news" /></Suspense>} />
             <Route path="*" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><NotFoundPage /></Suspense>} />
           </Route>
         </Routes>

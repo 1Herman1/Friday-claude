@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { fetchPublicPostBySlug, type PublicPost } from '@/lib/admin-api'
+import { Link, Navigate, useParams } from 'react-router-dom'
+import { fetchPublicPostBySlug, type PostKind, type PublicPost } from '@/lib/admin-api'
 import { renderMarkdown } from '@/lib/markdown'
 import { formatPostDate } from '@/lib/format'
 import { PostAdNote } from '@/components/blog/PostAdNote'
+import { usePageMeta } from '@/hooks/usePageMeta'
+import { SECTION_PATH, postPath } from '@/lib/post-path'
 
-export function BlogPostPage() {
+const BACK_LABEL: Record<PostKind, string> = { article: '← Все статьи', news: '← Все новости' }
+const BACK_CLASS = 'text-primary hover:underline font-sans text-body-sm'
+
+export function BlogPostPage({ section }: { section: PostKind }) {
   const { slug } = useParams()
-  const navigate = useNavigate()
   const [post, setPost] = useState<PublicPost | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -32,6 +36,12 @@ export function BlogPostPage() {
     load()
   }, [slug])
 
+  usePageMeta({
+    title: post ? `${post.title} — Perfect Skin` : 'Perfect Skin',
+    description: post?.excerpt ?? '',
+    path: post ? postPath(post) : SECTION_PATH[section],
+  })
+
   if (loading) {
     return (
       <div className="container-app py-24">
@@ -45,15 +55,12 @@ export function BlogPostPage() {
       <div className="bg-background">
         <div className="container-app py-12 md:py-24">
           <div className="max-w-prose">
-            <button
-              onClick={() => navigate('/blog')}
-              className="text-primary hover:underline mb-8"
-            >
-              ← Вернуться к статьям
-            </button>
+            <Link to={SECTION_PATH[section]} className={`${BACK_CLASS} mb-8 inline-block`}>
+              {BACK_LABEL[section]}
+            </Link>
             <div className="bg-card border border-border rounded-block p-12 text-center">
               <p className="text-destructive">
-                {error || 'Статья не найдена'}
+                {error || (section === 'news' ? 'Новость не найдена' : 'Статья не найдена')}
               </p>
             </div>
           </div>
@@ -62,18 +69,18 @@ export function BlogPostPage() {
     )
   }
 
+  // Пост открыт не в своём разделе (/blog/<новость> или /news/<статья>) — единый адрес
+  if (post.kind !== section) return <Navigate to={postPath(post)} replace />
+
   const dateStr = formatPostDate(post.publishedAt || post.createdAt)
 
   return (
     <div className="bg-background">
       <div className="container-app py-12 md:py-16">
         {/* Navigation */}
-        <button
-          onClick={() => navigate('/blog')}
-          className="text-primary hover:underline mb-8 font-sans text-body-sm"
-        >
-          ← Все статьи
-        </button>
+        <Link to={SECTION_PATH[post.kind]} className={`${BACK_CLASS} mb-8 inline-block`}>
+          {BACK_LABEL[post.kind]}
+        </Link>
 
         {/* Header */}
         <div className="max-w-prose mb-12">
@@ -117,12 +124,9 @@ export function BlogPostPage() {
 
         {/* Footer divider */}
         <div className="border-t border-border pt-12 mt-16">
-          <button
-            onClick={() => navigate('/blog')}
-            className="text-primary hover:underline font-sans text-body-sm"
-          >
-            ← Все статьи
-          </button>
+          <Link to={SECTION_PATH[post.kind]} className={BACK_CLASS}>
+            {BACK_LABEL[post.kind]}
+          </Link>
         </div>
       </div>
     </div>

@@ -6,12 +6,17 @@ import { useHomeList } from '@/hooks/useHomeList'
 import { LABEL } from '@/components/about/classes'
 import { PostAdNote } from '@/components/blog/PostAdNote'
 import { SectionHeader } from '@/components/home/SectionHeader'
+import { KIND_LABEL, SECTION_PATH, postPath } from '@/lib/post-path'
 
 const POSTS_COUNT = 3
 
-async function loadArticles(): Promise<PublicPostListItem[]> {
-  if (import.meta.env.DEV && isDemoSections()) return (await import('@/lib/home-demo')).DEMO_ARTICLES
-  return (await fetchPublicPosts({ kind: 'article', limit: POSTS_COUNT })).items
+// Журнал на главной общий: статьи и новости вперемешку, свежие первыми
+async function loadPosts(): Promise<PublicPostListItem[]> {
+  if (import.meta.env.DEV && isDemoSections()) {
+    const { DEMO_ARTICLES, DEMO_NEWS } = await import('@/lib/home-demo')
+    return [...DEMO_ARTICLES, ...DEMO_NEWS].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+  }
+  return (await fetchPublicPosts({ limit: POSTS_COUNT })).items
 }
 
 type TitleTone = 'light' | 'accent' | 'dark'
@@ -25,7 +30,7 @@ const TITLE_TONE: Record<TitleTone, string> = {
 function PostTitleLink({ post, tone }: { post: PublicPostListItem; tone: TitleTone }) {
   return (
     <Link
-      to={`/blog/${post.slug}`}
+      to={postPath(post)}
       className={`after:absolute after:inset-0 after:rounded-block after:content-[''] focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-ring transition-colors duration-200 ease-out motion-reduce:transition-none ${TITLE_TONE[tone]}`}
     >
       {post.title}
@@ -44,7 +49,7 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
     return (
       <article className={`${frame} flex flex-col justify-between bg-accent p-6 text-accent-foreground md:p-8`}>
         <time dateTime={post.publishedAt} className={`${LABEL} text-accent-foreground`}>
-          {formatPostDate(post.publishedAt)}
+          {KIND_LABEL[post.kind]} · {formatPostDate(post.publishedAt)}
         </time>
         <div>
           <h3 className="font-heading text-h3 font-bold leading-[1.12] [text-wrap:balance]">
@@ -73,10 +78,10 @@ function FeaturedPost({ post }: { post: PublicPostListItem }) {
         decoding="async"
         className="block aspect-[3/2] w-full object-cover md:absolute md:inset-0 md:aspect-auto md:h-full"
       />
-      <Link to={`/blog/${post.slug}`} tabIndex={-1} aria-hidden="true" className="absolute inset-0" />
+      <Link to={postPath(post)} tabIndex={-1} aria-hidden="true" className="absolute inset-0" />
       <div className="bg-card p-5 md:absolute md:left-4 md:bottom-4 md:w-[min(24rem,44%)] md:rounded-media md:p-4">
         <time dateTime={post.publishedAt} className={`${LABEL} text-muted-foreground`}>
-          {formatPostDate(post.publishedAt)}
+          {KIND_LABEL[post.kind]} · {formatPostDate(post.publishedAt)}
         </time>
         <h3
           className={`mt-2 font-heading text-[1.125rem] font-bold leading-[1.2] text-foreground line-clamp-3 md:line-clamp-none ${
@@ -125,7 +130,7 @@ export function PostCard({ post, headingLevel = 3, showKind = false }: PostCardP
       )}
       <div className={hasCover ? 'md:flex md:flex-1 md:flex-col md:p-5' : 'flex flex-1 flex-col'}>
         <time dateTime={post.publishedAt} className={`${LABEL} ${hasCover ? 'text-muted-foreground' : 'text-primary-foreground/80'}`}>
-          {showKind && `${post.kind === 'news' ? 'Новость' : 'Статья'} · `}
+          {showKind && `${KIND_LABEL[post.kind]} · `}
           {formatPostDate(post.publishedAt)}
         </time>
         <Heading className={`${headingClass}${headingLevelClass}`}>
@@ -154,7 +159,7 @@ export function PostCard({ post, headingLevel = 3, showKind = false }: PostCardP
             aria-hidden="true"
             className="mt-auto hidden items-center gap-2 pt-6 font-heading text-body-sm font-semibold md:inline-flex"
           >
-            Читать статью{' '}
+            {post.kind === 'news' ? 'Читать новость' : 'Читать статью'}{' '}
             <span className="transition-transform duration-200 ease-out group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0">
               →
             </span>
@@ -166,25 +171,29 @@ export function PostCard({ post, headingLevel = 3, showKind = false }: PostCardP
 }
 
 export function BlogSection() {
-  const items = useHomeList(loadArticles, [])
+  const items = useHomeList(loadPosts, [])
   if (!items || items.length < POSTS_COUNT) return null
 
   const [lead, ...rest] = items.slice(0, POSTS_COUNT)
+  const hasNews = items.some((post) => post.kind === 'news')
 
   return (
     <section aria-labelledby="home-blog-title" data-home="blog" className="bg-background py-10 md:py-14">
       <div className="container-app">
         <SectionHeader
           eyebrow="Журнал"
-          title="Статьи об уходе"
+          title="Статьи и новости"
           titleId="home-blog-title"
-          sub="Разбираем составы, порядок нанесения и уход по типу кожи."
-          link={{ to: '/blog', text: 'Все статьи' }}
+          sub="Разбираем составы и уход по типу кожи, рассказываем о новинках магазина."
+          links={[
+            { to: SECTION_PATH.article, text: 'Все статьи' },
+            ...(hasNews ? [{ to: SECTION_PATH.news, text: 'Все новости' }] : []),
+          ]}
         />
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
           <FeaturedPost post={lead} />
           {rest.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard key={post.id} post={post} showKind />
           ))}
         </div>
       </div>
