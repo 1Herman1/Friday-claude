@@ -25,10 +25,15 @@ declare -A P=(
   [logo-section]="The section sign § in a classical serif, inside a solid brass square plaque, the sign cut out in graphite. $MARK"
   [logo-poverenny-head]="A circle containing a minimal balance scale used as a head: a short neck rising from a suggested jacket collar and tie at the bottom of the circle, the scale beam and two pans form the head, no face. $MARK"
   [logo-masses]="Geometric mark: a solid circle and a solid tall rectangle standing on a thin horizontal line, balanced over a small brass triangle pivot placed off-centre. Ivory shapes, brass pivot. $MARK"
+  [hero-keystone]="Photorealistic night architecture photograph: a monumental granite arch of a Moscow Stalinist building seen from below, the single central keystone at the top of the arch lit by a warm brass light, every other stone of the arch falling into shadow, the keystone visibly locks and carries the whole arch. Austere, heavy, masculine. $DARK"
+  [hero-lion]="Photograph of a classical bronze guardian lion sculpture with a dark patina and polished brass highlights, lying calmly on a granite plinth, head raised and watchful, mouth closed, one front paw resting on a closed leather-bound folio. Low side light at night against a dark graphite wall. Noble and protective, never aggressive. $DARK"
+  [hero-gauntlet]="Photorealistic still life: a polished dark steel knight's gauntlet with brass rivets lying on a walnut desk, its armoured fingers gently holding a black lacquer fountain pen with a gold nib just above a sheet of heavy ivory paper. Warm desk-lamp light. Protection meets paperwork, calm, no weapons. $DARK"
+  [hero-compass]="Top-down technical still life: a heavy brass drafting compass standing open on a large dark navy blueprint drawn in thin ivory construction lines, arcs, circles and measured axes forming an abstract precise geometric construction, a brass straight ruler alongside. Engineering precision, single warm light. No text, no numbers on the blueprint. $DARK"
+  [hero-atlas]="Art Deco bronze relief sculpture in a dark stone niche: a powerful muscular Atlas figure seen from behind, kneeling on one knee and holding a heavy plain rectangular stone block on his shoulders, stylised 1930s Moscow metro sculpture style, strong side light carving the bronze. Monumental, calm strength. $DARK"
   [logo-seal]="A round seal impression: two concentric thin rings with a ring of tiny evenly spaced dots between them instead of lettering, and a small elegant balance-scale symbol in the centre. $MARK"
 )
 
-ORDER=(hero-scales hero-poverenny hero-seal-pen hero-hourglass hero-column hero-masses logo-e-medallion logo-ae logo-scales logo-section logo-poverenny-head logo-masses logo-seal)
+ORDER=(hero-keystone hero-lion hero-gauntlet hero-compass hero-atlas hero-scales hero-poverenny hero-seal-pen hero-hourglass hero-column hero-masses logo-e-medallion logo-ae logo-scales logo-section logo-poverenny-head logo-masses logo-seal)
 [ -n "${ITEMS:-}" ] && read -r -a ORDER <<< "$ITEMS"
 
 for name in "${ORDER[@]}"; do
