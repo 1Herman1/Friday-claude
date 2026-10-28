@@ -84,7 +84,7 @@ p{margin:0}
 .pick:has(input:checked) .off{display:none}
 
 .pv{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--line);margin:-20px -20px 18px;border-bottom:1px solid var(--line)}
-.pv iframe{position:absolute;left:0;top:0;width:1280px;height:800px;border:0;transform-origin:0 0;transform:scale(var(--k,.28));pointer-events:none;background:#fff}
+.pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
 .sw{display:flex;flex-wrap:wrap;gap:6px}
 .sw i{display:inline-block;width:26px;height:26px;border:1px solid var(--line-2)}
 
@@ -269,7 +269,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
   <div class="grid wide">
 
     <article class="card">
-      <div class="pv"><iframe src="a.html" title="Превью стиля A «Вечерний кабинет»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <div class="pv"><img src="previews/style-a-top.webp" alt="Первый экран стиля A «Вечерний кабинет»"></div>
       <p class="no">Стиль A <em>тёмный</em></p>
       <h3>«Вечерний кабинет»</h3>
       <p class="mood">Кабинет после восьми вечера: тихо, лампа, латунный прибор на столе.</p>
@@ -289,7 +289,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
     </article>
 
     <article class="card">
-      <div class="pv"><iframe src="b.html" title="Превью стиля B «Бумага и чернила»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <div class="pv"><img src="previews/style-b-top.webp" alt="Первый экран стиля B «Бумага и чернила»"></div>
       <p class="no">Стиль B <em>светлый</em></p>
       <h3>«Бумага и чернила»</h3>
       <p class="mood">Правовая позиция на бумаге: параграфы, справка-расчёт, печать и подпись.</p>
@@ -309,7 +309,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
     </article>
 
     <article class="card">
-      <div class="pv"><iframe src="c.html" title="Превью стиля C «Камень и малахит»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <div class="pv"><img src="previews/style-c-top.webp" alt="Первый экран стиля C «Камень и малахит»"></div>
       <p class="no">Стиль C <em>тёмный с камнем</em></p>
       <h3>«Камень и малахит»</h3>
       <p class="mood">Римское право: колонна, высеченная надпись, латинские максимы.</p>
@@ -329,7 +329,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
     </article>
 
     <article class="card">
-      <div class="pv"><iframe src="d.html" title="Превью стиля D «Монумент»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <div class="pv"><img src="previews/style-d-top.webp" alt="Первый экран стиля D «Монумент»"></div>
       <p class="no">Стиль D <em>светлый, типографический</em></p>
       <h3>«Монумент»</h3>
       <p class="mood">Холодный камень, линейка сетки и крупная антиква вместо картинок.</p>
@@ -349,7 +349,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
     </article>
 
     <article class="card">
-      <div class="pv"><iframe src="e.html" title="Превью стиля E «Равновесие»" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+      <div class="pv"><img src="previews/style-e-top.webp" alt="Первый экран стиля E «Равновесие»"></div>
       <p class="no">Стиль E <em>тёмный, геометрический</em></p>
       <h3>«Равновесие»</h3>
       <p class="mood">Чернильный синий и платина: две неравные массы приходят в баланс.</p>
@@ -435,7 +435,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
 </g>
 </g>
 </svg></div>
-      <a class="ai" href="sketches/hero-scales.webp" target="_blank" rel="noopener"><img src="sketches/hero-scales.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/hero-scales.webp" target="_blank" rel="noopener"><img src="sketches/hero-scales.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Вариант 1 <em>объект</em></p>
       <h3>Весы-прибор</h3>
       <p class="txt">Не Фемида, а точный инструмент. Коромысло один раз приходит в равновесие в первом экране, гирька отмечает направления, стрелка на шкале показывает итог расчёта.</p>
@@ -513,7 +513,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
 <rect x="4.5" y="4.5" width="291" height="251" fill="none" stroke="#22302C" stroke-width="1.1"/>
 <rect x="7.5" y="7.5" width="285" height="245" fill="none" stroke="#22302C" stroke-width=".4"/>
 </svg></div>
-      <a class="ai" href="sketches/hero-poverenny.webp" target="_blank" rel="noopener"><img src="sketches/hero-poverenny.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/hero-poverenny.webp" target="_blank" rel="noopener"><img src="sketches/hero-poverenny.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Вариант 2 <em>фигура</em></p>
       <h3>«Поверенный»</h3>
       <p class="txt">Джентльмен в технике гравюры, лица нет — голова-весы. Стоит у окна с силуэтом Москвы, весы едва покачиваются; ниже — три позы над этапами, у заявки снимает шляпу.</p>
@@ -553,7 +553,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
 <path d="M18 226.5 H282" stroke="#F3DDA8" stroke-width=".8"/>
 <path d="M18 240 H282 M18 244 H282" stroke="#C9A66B" stroke-width=".6" opacity=".6"/>
 </svg></div>
-      <a class="ai" href="sketches/logo-ae.webp" target="_blank" rel="noopener"><img src="sketches/logo-ae.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-ae.webp" target="_blank" rel="noopener"><img src="sketches/logo-ae.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Вариант 3 <em>фигура из знака</em></p>
       <h3>«Литера Æ»</h3>
       <p class="txt">Фигура из лигатуры: перекладина «A» — бабочка, «E» — кабинет за спиной; по золотым граням проходит блик. В первом экране перекладина коротко кивает, в «Как мы работаем» три шага выходят из горизонталей «E».</p>
@@ -608,7 +608,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
 <text x="206" y="213.5" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="22" fill="#7A1C17">Э</text>
 <ellipse cx="195" cy="190" rx="7" ry="3.4" fill="#FFFFFF" opacity=".22" transform="rotate(-30 195 190)"/>
 </svg></div>
-      <a class="ai" href="sketches/hero-seal-pen.webp" target="_blank" rel="noopener"><img src="sketches/hero-seal-pen.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/hero-seal-pen.webp" target="_blank" rel="noopener"><img src="sketches/hero-seal-pen.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Вариант 4 <em>объект</em></p>
       <h3>Печать и перо</h3>
       <p class="txt">Появляются там, где что-то скрепляется: перо выводит подпись под заголовком, оттиск печати отмечает завершённое дело и отправленную заявку.</p>
@@ -647,7 +647,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
 <path d="M90 34 V43 A60 7.5 0 0 0 210 43 V34 Z" fill="url(#c5_cyl)"/><ellipse cx="150" cy="34" rx="60" ry="7.5" fill="url(#c5_pt)"/><ellipse cx="150" cy="34" rx="60" ry="7.5" fill="none" stroke="#F6E3B4" stroke-width=".6" opacity=".8"/>
 <circle cx="104" cy="230" r="4" fill="url(#c5_cyl)"/><circle cx="196" cy="230" r="4" fill="url(#c5_cyl)"/><circle cx="150" cy="232.5" r="4" fill="url(#c5_cyl)"/>
 </svg></div>
-      <a class="ai" href="sketches/hero-hourglass.webp" target="_blank" rel="noopener"><img src="sketches/hero-hourglass.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/hero-hourglass.webp" target="_blank" rel="noopener"><img src="sketches/hero-hourglass.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Вариант 5 <em>только инструменты</em></p>
       <h3>Песочные часы</h3>
       <p class="txt">Персонаж калькуляторов: песок досыпается до даты срока давности, показывает длительность этапов. В первый экран не ставим — «время уходит» читается как запугивание.</p>
@@ -686,7 +686,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
  <path d="M144.5 208 L150 223" stroke="#FFF1CC" stroke-width=".6" opacity=".8"/>
 </g>
 </svg></div>
-      <a class="ai" href="sketches/logo-section.webp" target="_blank" rel="noopener"><img src="sketches/logo-section.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-section.webp" target="_blank" rel="noopener"><img src="sketches/logo-section.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Вариант 6 <em>знак, из стиля D</em></p>
       <h3>Знак § как герой</h3>
       <p class="txt">Иллюстраций нет — героем работает гигантский параграф. Отвес один раз опускается сверху вниз и задаёт ось страницы; дальше § нумерует разделы.</p>
@@ -750,7 +750,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
  <g class="hv7-light"><rect x="-40" y="0" width="90" height="260" fill="url(#c7_lb)" transform="skewX(-18)"/></g>
 </g>
 </svg></div>
-      <a class="ai" href="sketches/hero-column.webp" target="_blank" rel="noopener"><img src="sketches/hero-column.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/hero-column.webp" target="_blank" rel="noopener"><img src="sketches/hero-column.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Вариант 7 <em>архитектура, из стиля C</em></p>
       <h3>Колонна AEQVITAS</h3>
       <p class="txt">Одна колонна с антаблементом вместо колоннады-клише. Надпись проявляется, как высеченная; над разделами — латинские максимы с переводом.</p>
@@ -802,7 +802,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
 </g>
 <circle cx="136" cy="145.2" r="2.4" fill="#F3DDA8"/>
 </svg></div>
-      <a class="ai" href="sketches/hero-masses.webp" target="_blank" rel="noopener"><img src="sketches/hero-masses.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/hero-masses.webp" target="_blank" rel="noopener"><img src="sketches/hero-masses.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Вариант 8 <em>геометрия, из стиля E</em></p>
       <h3>Две массы на оси</h3>
       <p class="txt">Диск и брусок на тонком рычаге: рычаг один раз плавно выходит в горизонталь. Разделы держат ту же идею — несимметричная сетка 5 к 7.</p>
@@ -830,7 +830,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
         <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
         <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
       </div>
-      <a class="ai" href="sketches/logo-e.webp" target="_blank" rel="noopener"><img src="sketches/logo-e.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-e.webp" target="_blank" rel="noopener"><img src="sketches/logo-e.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Логотип 1 <span class="sketch">эскиз</span></p>
       <h3>Монограмма «Э» в медальоне</h3>
       <p class="meta"><b>Стиль:</b> A, B, C · <b>персонаж:</b> весы-прибор, печать</p>
@@ -848,7 +848,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
         <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
         <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
       </div>
-      <a class="ai" href="sketches/logo-ae.webp" target="_blank" rel="noopener"><img src="sketches/logo-ae.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-ae.webp" target="_blank" rel="noopener"><img src="sketches/logo-ae.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Логотип 2 <span class="sketch">эскиз</span></p>
       <h3>Лигатура «Æ»</h3>
       <p class="meta"><b>Стиль:</b> A, C, D · <b>персонаж:</b> «Литера Æ»</p>
@@ -866,7 +866,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
         <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
         <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
       </div>
-      <a class="ai" href="sketches/logo-scales.webp" target="_blank" rel="noopener"><img src="sketches/logo-scales.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-scales.webp" target="_blank" rel="noopener"><img src="sketches/logo-scales.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Логотип 3 <span class="sketch">эскиз</span></p>
       <h3>Весы-прибор</h3>
       <p class="meta"><b>Стиль:</b> A, E · <b>персонаж:</b> весы-прибор, «Поверенный»</p>
@@ -884,7 +884,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
         <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
         <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
       </div>
-      <a class="ai" href="sketches/logo-section.webp" target="_blank" rel="noopener"><img src="sketches/logo-section.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-section.webp" target="_blank" rel="noopener"><img src="sketches/logo-section.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Логотип 4 <span class="sketch">эскиз</span></p>
       <h3>Знак § в плашке</h3>
       <p class="meta"><b>Стиль:</b> D, B · <b>персонаж:</b> знак §</p>
@@ -902,7 +902,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
         <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
         <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
       </div>
-      <a class="ai" href="sketches/logo-poverenny.webp" target="_blank" rel="noopener"><img src="sketches/logo-poverenny.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-poverenny.webp" target="_blank" rel="noopener"><img src="sketches/logo-poverenny.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Логотип 5 <span class="sketch">эскиз</span></p>
       <h3>Голова «Поверенного»</h3>
       <p class="meta"><b>Стиль:</b> A, E · <b>персонаж:</b> «Поверенный»</p>
@@ -937,7 +937,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
         <div class="plate lt"><svg class="mk" aria-hidden="true"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
         <div class="plate dk"><svg class="mk" aria-hidden="true"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
       </div>
-      <a class="ai" href="sketches/logo-masses.webp" target="_blank" rel="noopener"><img src="sketches/logo-masses.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-masses.webp" target="_blank" rel="noopener"><img src="sketches/logo-masses.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Логотип 7 <span class="sketch">эскиз</span></p>
       <h3>Две массы на оси</h3>
       <p class="meta"><b>Стиль:</b> E · <b>персонаж:</b> две массы</p>
@@ -955,7 +955,7 @@ label.ta{display:block;font-size:14px;color:var(--fg-2);margin-bottom:6px}
         <div class="plate lt"><svg class="mk big" aria-hidden="true"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
         <div class="plate dk"><svg class="mk big" aria-hidden="true"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div>
       </div>
-      <a class="ai" href="sketches/logo-seal.webp" target="_blank" rel="noopener"><img src="sketches/logo-seal.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>ИИ-эскиз<small>открыть крупно</small></span></a>
+      <a class="ai" href="sketches/logo-seal.webp" target="_blank" rel="noopener"><img src="sketches/logo-seal.webp" alt="" loading="lazy" decoding="async" width="76" height="76"><span>В металле<small>открыть крупно</small></span></a>
       <p class="no">Логотип 8 <span class="sketch">эскиз</span></p>
       <h3>Печать-оттиск</h3>
       <p class="meta"><b>Стиль:</b> B, C · <b>персонаж:</b> печать и перо</p>
