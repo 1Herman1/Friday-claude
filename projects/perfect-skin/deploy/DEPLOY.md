@@ -199,21 +199,54 @@ curl -I https://new.perfect-skin.shop
    ```
 3. Поменять `PS_CORS_ORIGIN` в переменных окружения сервера (или через GitHub Secrets).
 
-### 4.4. Снять защиту от индексации
+### 4.4. Открыть индексацию
 
-По SSH:
+Индексация закрыта по умолчанию. Открывается она двумя переключателями, оба в один заход:
+
+1. **Nginx** — один файл, одна строка. На сервере:
+
+   ```bash
+   sudo nano /etc/nginx/snippets/perfect-skin-indexing.conf
+   # было:  default "noindex, nofollow, noarchive";
+   # стало: default "";
+   sudo nginx -t && sudo systemctl reload nginx
+   ```
+
+   Пустое значение означает «заголовок X-Robots-Tag не отдавать». Все HTML, статика и API
+   берут его из этого же переключателя.
+
+2. **Приложение** — `projects/perfect-skin/server/.env` на сервере:
+
+   ```bash
+   PS_INDEXING="on"
+   PS_PUBLIC_URL="https://perfect-skin.shop"   # без слэша в конце: canonical, sitemap, robots
+   ```
+
+   Потом перезапуск: `pm2 restart ps-server --update-env`.
+
+Что меняется: `robots.txt` перестаёт запрещать всё и начинает закрывать только служебные
+пути и фильтры; страницы получают `<meta name="robots" content="index,follow">`.
+
+Закрыть обратно — тот же порядок: `default "noindex, nofollow, noarchive";` и `PS_INDEXING="off"`.
+
+Проверка после открытия:
 
 ```bash
-ssh root@<IP_СЕРВЕРА>
-
-sudo nano /etc/nginx/sites-available/perfect-skin
-# Найти строку: add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
-# Удалить её или заменить на: add_header X-Robots-Tag "noindex";  # временно, пока готовим
-
-sudo nginx -t && sudo systemctl reload nginx
+curl -sI https://perfect-skin.shop/ | grep -i x-robots        # ничего не выведет
+curl -s https://perfect-skin.shop/robots.txt | head -3        # нет строки «Disallow: /»
+curl -s https://perfect-skin.shop/ | grep -o 'name="robots"[^>]*'   # index,follow
 ```
 
-После индексации основного сайта можно снять и эту строку вообще.
+Старый способ «удалить строку add_header» больше не нужен: строка осталась в одном месте, а не в пяти.
+
+### 4.5. SEO-выдача для роботов
+
+Сервер подставляет в собранный `index.html` клиента title, description, canonical, Open Graph,
+JSON-LD и текст страницы. Шаблон берётся из `PS_CLIENT_INDEX`, по умолчанию
+`/var/www/perfect-skin/client/index.html`. Выкатка кладёт туда сборку клиента, поэтому отдельных
+действий не нужно. Служебные адреса (`/admin`, `/auth`, `/checkout` и другие) отдаются с noindex.
+
+Снятые с продажи товары из `server/assets/discontinued.json` отдают 410, неизвестные адреса — 404.
 
 ---
 

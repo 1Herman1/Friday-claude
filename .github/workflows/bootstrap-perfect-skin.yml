@@ -223,6 +223,8 @@ jobs:
             mkdir -p /etc/nginx/snippets
             cp "$SRC/projects/perfect-skin/deploy/nginx-perfect-skin-media.conf" \
                /etc/nginx/snippets/perfect-skin-media.conf
+            cp "$SRC/projects/perfect-skin/deploy/nginx-perfect-skin-indexing.conf" \
+               /etc/nginx/snippets/perfect-skin-indexing.conf
             cp "$SRC/projects/perfect-skin/deploy/nginx-perfect-skin.conf" \
                /etc/nginx/sites-available/perfect-skin
             ln -sf /etc/nginx/sites-available/perfect-skin \

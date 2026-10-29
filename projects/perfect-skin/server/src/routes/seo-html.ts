@@ -406,7 +406,7 @@ export default fp(
   async function seoHtmlRoutes(app: FastifyInstance) {
     app.setNotFoundHandler(async (request, reply) => {
       const { pathname, search } = new URL(request.url, 'http://localhost')
-      if (pathname === '/index.html' && request.method === 'GET') {
+      if (pathname === '/index.html' && (request.method === 'GET' || request.method === 'HEAD')) {
         return reply.redirect(301, `/${search}`)
       }
       if (!isPageRequest(request.method, pathname)) {
