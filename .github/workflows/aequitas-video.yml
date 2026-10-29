@@ -1,0 +1,84 @@
+name: Aequitas — hero motion (kie)
+
+# Короткий ролик из картинки героя через Nullume/kie.ai (Kling 2.5 Turbo Pro, 5 с ≈ $0.21).
+# Результат коммитится в docs/projects/aequitas/media/motion/.
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Путь к картинке в репозитории (png/jpg)'
+        type: string
+        required: true
+      prompt:
+        description: 'Описание движения'
+        type: string
+        required: true
+      name:
+        description: 'Имя файла результата без расширения'
+        type: string
+        required: true
+      model:
+        description: 'Модель Nullume'
+        type: string
+        default: 'kling/v2-5-turbo-image-to-video-pro'
+      duration:
+        description: 'Длительность, с'
+        type: string
+        default: '5'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aequitas-video
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
+      NULLUME_HOME: ${{ github.workspace }}/.nullume-run
+      IMAGE: ${{ inputs.image }}
+      PROMPT: ${{ inputs.prompt }}
+      NAME: ${{ inputs.name }}
+      MODEL: ${{ inputs.model }}
+      DURATION: ${{ inputs.duration }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: tools/nullume/package-lock.json
+      - name: Build nullume
+        working-directory: tools/nullume
+        run: npm ci && npm run build
+      - name: Balance
+        run: node tools/nullume/bin/nullume.js balance
+      - name: Generate
+        run: |
+          case "$NAME" in *[!a-z0-9-]*|'') echo "::error::bad name"; exit 1;; esac
+          [ -f "$IMAGE" ] || { echo "::error::no image $IMAGE"; exit 1; }
+          out="docs/projects/aequitas/media/motion"; tmp=$(mktemp -d); mkdir -p "$out"
+          node tools/nullume/bin/nullume.js generate create "$MODEL" --image "$IMAGE" --prompt "$PROMPT" \
+            --set duration="$DURATION" --wait --yes --out "$tmp"
+          f=$(find "$tmp" -type f -name '*.mp4' | head -1)
+          [ -n "$f" ] || { echo "::error::no video"; ls -la "$tmp"; exit 1; }
+          cp "$f" "$out/$NAME.mp4"; ls -la "$out"
+      - name: Balance after
+        if: always()
+        run: node tools/nullume/bin/nullume.js balance
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/projects/aequitas/media/motion
+          git commit -m "Aequitas motion: $NAME" || exit 0
+          ok=0
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || { git rebase --abort || true; sleep 5; continue; }
+            git push origin "HEAD:$GITHUB_REF_NAME" && { ok=1; break; }
+            sleep 5
+          done
+          [ "$ok" = 1 ] || { echo "::error::push failed"; exit 1; }
