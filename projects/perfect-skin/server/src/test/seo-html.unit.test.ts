@@ -1,8 +1,13 @@
 import { readFileSync } from 'node:fs'
-import { describe, it, expect } from 'vitest'
+import http from 'node:http'
+import type { AddressInfo } from 'node:net'
+import { describe, it, expect, vi } from 'vitest'
+import Fastify from 'fastify'
+import rateLimit from '@fastify/rate-limit'
 import { metaForProduct, metaForHome } from '@ps/shared'
 import {
   escapeHtml,
+  isSafeLocalPath,
   jsonLdScript,
   markdownToHtml,
   postBody,
@@ -13,8 +18,17 @@ import {
   type SeoPage,
 } from '../lib/seo-html.js'
 import { organizationJsonLd, postJsonLd, productJsonLd, breadcrumbJsonLd } from '../lib/seo-jsonld.js'
+import { TtlCache } from '../lib/ttl-cache.js'
+import seoHtmlRoutes from '../routes/seo-html.js'
+import type { PrismaClient } from '../lib/db.js'
 
-const template = readFileSync(new URL('../../../client/index.html', import.meta.url), 'utf8')
+const clientTemplatePath = new URL('../../../client/index.html', import.meta.url).pathname
+
+vi.hoisted(() => {
+  process.env.PS_CLIENT_INDEX = new URL('../../../client/index.html', import.meta.url).pathname
+})
+
+const template = readFileSync(clientTemplatePath, 'utf8')
 
 function pageWith(overrides: Partial<SeoPage> = {}): SeoPage {
   return {
@@ -243,5 +257,111 @@ describe('JSON-LD', () => {
         { position: 2, item: 'https://perfect-skin.shop/catalog' },
       ],
     })
+  })
+})
+
+describe('isSafeLocalPath', () => {
+  it('пропускает только адреса с одним ведущим слэшем', () => {
+    expect(isSafeLocalPath('/')).toBe(true)
+    expect(isSafeLocalPath('/catalog/rf')).toBe(true)
+    expect(isSafeLocalPath('//evil.com/')).toBe(false)
+    expect(isSafeLocalPath('/\\evil.com/')).toBe(false)
+    expect(isSafeLocalPath('/a\\b')).toBe(false)
+    expect(isSafeLocalPath('evil.com')).toBe(false)
+  })
+})
+
+describe('TtlCache', () => {
+  it('отдаёт значение в пределах TTL и забывает его после', () => {
+    const cache = new TtlCache<string>(1000, 10)
+    cache.set('a', 'x', 0)
+    expect(cache.get('a', 999)).toBe('x')
+    expect(cache.get('a', 1000)).toBeUndefined()
+  })
+
+  it('при переполнении вытесняет давно не читанную запись', () => {
+    const cache = new TtlCache<number>(60_000, 2)
+    cache.set('a', 1, 0)
+    cache.set('b', 2, 0)
+    cache.get('a', 0)
+    cache.set('c', 3, 0)
+    expect(cache.get('b', 0)).toBeUndefined()
+    expect(cache.get('a', 0)).toBe(1)
+    expect(cache.get('c', 0)).toBe(3)
+  })
+})
+
+async function buildSeoApp(prisma: unknown) {
+  const app = Fastify()
+  await app.register(rateLimit, { max: 120, timeWindow: '1 minute' })
+  app.decorate('prisma', prisma as PrismaClient)
+  await app.register(seoHtmlRoutes)
+  await app.listen({ port: 0, host: '127.0.0.1' })
+  return app
+}
+
+// Сырой путь по сети: inject нормализует URL и подменил бы `/.//host/` на `//host/` до обработчика.
+function rawGet(app: Awaited<ReturnType<typeof buildSeoApp>>, path: string): Promise<{ status: number; location?: string }> {
+  const { port } = app.server.address() as AddressInfo
+  return new Promise((resolve, reject) => {
+    const req = http.request({ host: '127.0.0.1', port, path, method: 'GET' }, (res) => {
+      res.resume()
+      resolve({ status: res.statusCode ?? 0, location: res.headers.location })
+    })
+    req.on('error', reject)
+    req.end()
+  })
+}
+
+describe('SEO HTML route', () => {
+  it.each(['/.//evil.com/', '/a/..//evil.com/', '/%2e//evil.com/'])(
+    'путь %s не редиректит наружу: 404 без Location',
+    async (path) => {
+      const app = await buildSeoApp({})
+      const res = await rawGet(app, path)
+      expect(res.status).toBe(404)
+      expect(res.location).toBeUndefined()
+      await app.close()
+    },
+  )
+
+  it('обычный слэш в конце снимается внутренним 301', async () => {
+    const app = await buildSeoApp({})
+    const res = await rawGet(app, '/about/?x=1')
+    expect(res.status).toBe(301)
+    expect(res.location).toBe('/about?x=1')
+    await app.close()
+  })
+
+  it('отказ БД: 503 с оболочкой клиента, noindex и без кэширования', async () => {
+    const failingPrisma = {
+      category: { findMany: async () => { throw new Error('db down') } },
+      productCategory: { findMany: async () => [] },
+    }
+    const app = await buildSeoApp(failingPrisma)
+    const res = await app.inject({ method: 'GET', url: '/' })
+    expect(res.statusCode).toBe(503)
+    expect(res.headers['cache-control']).toBe('no-store')
+    expect(res.headers['retry-after']).toBe('30')
+    expect(res.body).toContain('<meta name="robots" content="noindex,nofollow">')
+    expect(res.body).toContain('<div id="root"></div>')
+    expect(res.body).not.toContain('<main>')
+    await app.close()
+  })
+
+  it('повторный запрос страницы из кэша не ходит в базу', async () => {
+    const findMany = vi.fn(async () => [])
+    const prisma = {
+      category: { findMany },
+      productCategory: { findMany: async () => [] },
+    }
+    const app = await buildSeoApp(prisma)
+    const first = await app.inject({ method: 'GET', url: '/catalog' })
+    const callsAfterFirst = findMany.mock.calls.length
+    const second = await app.inject({ method: 'GET', url: '/catalog' })
+    expect(first.statusCode).toBe(200)
+    expect(second.body).toBe(first.body)
+    expect(findMany.mock.calls.length).toBe(callsAfterFirst)
+    await app.close()
   })
 })

@@ -56,9 +56,16 @@ export const dadataApiKey = process.env.PS_DADATA_API_KEY || ''
 // Без него кнопки не строятся, бот шлёт уведомления без URL-кнопок (warn).
 export const publicUrl = process.env.PS_PUBLIC_URL || ''
 
-// Индексация поисковиками открывается только явным PS_INDEXING=on. Пока не задано — всё закрыто:
-// robots.txt, meta robots и X-Robots-Tag (nginx) должны переключаться вместе с этой переменной.
-export const indexingOpen = process.env.PS_INDEXING === 'on'
+// Индексация открывается только при PS_INDEXING=on И заданном PS_PUBLIC_URL: иначе база адресов берётся из Host,
+// а Host может подменить любой. Пока не задано — всё закрыто: robots.txt, meta robots и X-Robots-Tag (nginx) переключаются вместе.
+export function indexingEnabled(flag: string | undefined, url: string): boolean {
+  return flag === 'on' && url.trim() !== ''
+}
+
+export const indexingOpen = indexingEnabled(process.env.PS_INDEXING, publicUrl)
+if (process.env.PS_INDEXING === 'on' && !indexingOpen) {
+  console.warn('PS_INDEXING=on без PS_PUBLIC_URL: индексация закрыта, пока не задан PS_PUBLIC_URL')
+}
 
 // Собранный index.html клиента: шаблон, в который сервер подставляет мета и разметку для роботов.
 export const clientIndexPath = process.env.PS_CLIENT_INDEX || '/var/www/perfect-skin/client/index.html'

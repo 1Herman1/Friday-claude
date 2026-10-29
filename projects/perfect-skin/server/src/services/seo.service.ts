@@ -1,5 +1,10 @@
 import type { PrismaClient } from '../lib/db.js'
 import { ACTIVE, productVisibleFor } from '../lib/prisma-filters.js'
+import { TtlCache } from '../lib/ttl-cache.js'
+
+const NAV_CACHE_TTL_MS = 60_000
+const navCache = new TtlCache<CategoryNode[]>(NAV_CACHE_TTL_MS, 1)
+const NAV_KEY = 'nav'
 
 export interface CategoryNode {
   id: string
@@ -44,6 +49,9 @@ export function countCategoryProducts(
 }
 
 export async function loadNavCategories(prisma: PrismaClient): Promise<CategoryNode[]> {
+  const cached = navCache.get(NAV_KEY)
+  if (cached) return cached
+
   const [categories, links] = await Promise.all([
     prisma.category.findMany({ where: ACTIVE, orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }] }),
     prisma.productCategory.findMany({
@@ -52,7 +60,7 @@ export async function loadNavCategories(prisma: PrismaClient): Promise<CategoryN
     }),
   ])
   const counts = countCategoryProducts(categories, links)
-  return categories.map((category) => ({
+  const nav = categories.map((category) => ({
     id: category.id,
     name: category.name,
     slug: category.slug,
@@ -63,6 +71,8 @@ export async function loadNavCategories(prisma: PrismaClient): Promise<CategoryN
     productCount: counts.get(category.id) ?? 0,
     updatedAt: category.updatedAt,
   }))
+  navCache.set(NAV_KEY, nav)
+  return nav
 }
 
 export async function loadVisibleProductsForSitemap(prisma: PrismaClient) {

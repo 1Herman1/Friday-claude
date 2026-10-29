@@ -44,6 +44,16 @@ export function siteBaseUrl(publicUrl: string, origin: string): string {
   return (publicUrl || origin).replace(/\/+$/, '')
 }
 
+// Редирект и любой путь из запроса — только «/путь»: `//host` браузер читает как адрес другого сайта.
+export function isSafeLocalPath(target: string): boolean {
+  return /^\/(?![/\\])[^\\\u0000-\u001f]*$/.test(target)
+}
+
+export function withNoindex(template: string): string {
+  if (!template.includes('</head>')) throw new Error('index.html клиента не содержит </head>')
+  return template.replace('</head>', () => '    <meta name="robots" content="noindex,nofollow">\n  </head>')
+}
+
 export function absoluteUrl(base: string, path: string): string {
   return /^https?:\/\//.test(path) ? path : `${base}${path}`
 }

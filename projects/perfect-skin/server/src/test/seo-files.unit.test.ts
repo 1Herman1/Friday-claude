@@ -1,6 +1,9 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import { buildRobotsTxt, buildSitemapXml } from '../lib/seo-files.js'
-import { countCategoryProducts } from '../services/seo.service.js'
+import { siteBaseUrl } from '../lib/seo-html.js'
+import { indexingEnabled } from '../lib/env.js'
+import type { PrismaClient } from '../lib/db.js'
+import { countCategoryProducts, loadNavCategories } from '../services/seo.service.js'
 
 describe('buildRobotsTxt', () => {
   it('при закрытой индексации — полный запрет и без sitemap', () => {
@@ -78,5 +81,47 @@ describe('countCategoryProducts', () => {
     )
     expect(counts.get('a')).toBe(1)
     expect(counts.get('b')).toBe(1)
+  })
+})
+
+describe('indexingEnabled', () => {
+  it('открыта только при PS_INDEXING=on и заданном PS_PUBLIC_URL', () => {
+    expect(indexingEnabled('on', 'https://perfect-skin.shop')).toBe(true)
+  })
+
+  it('без PS_PUBLIC_URL или с другим значением флага — закрыта', () => {
+    expect(indexingEnabled('on', '')).toBe(false)
+    expect(indexingEnabled('on', '   ')).toBe(false)
+    expect(indexingEnabled('off', 'https://perfect-skin.shop')).toBe(false)
+    expect(indexingEnabled(undefined, 'https://perfect-skin.shop')).toBe(false)
+  })
+
+  it('при открытой индексации база адресов — PS_PUBLIC_URL, подменённый Host не влияет', () => {
+    expect(siteBaseUrl('https://perfect-skin.shop', 'https://evil.example')).toBe('https://perfect-skin.shop')
+  })
+
+  it('PS_INDEXING=on без PS_PUBLIC_URL: robots остаётся полным запретом даже при подменённом Host', () => {
+    expect(buildRobotsTxt(indexingEnabled('on', ''), 'https://evil.example')).toBe('User-agent: *\nDisallow: /\n')
+  })
+})
+
+describe('loadNavCategories cache', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('повторный вызов в пределах 60 с не идёт в базу, после TTL — снова', async () => {
+    vi.useFakeTimers()
+    const category = { findMany: vi.fn(async () => []) }
+    const productCategory = { findMany: vi.fn(async () => []) }
+    const prisma = { category, productCategory } as unknown as PrismaClient
+
+    await loadNavCategories(prisma)
+    await loadNavCategories(prisma)
+    expect(category.findMany).toHaveBeenCalledTimes(1)
+
+    vi.setSystemTime(Date.now() + 60_001)
+    await loadNavCategories(prisma)
+    expect(category.findMany).toHaveBeenCalledTimes(2)
   })
 })

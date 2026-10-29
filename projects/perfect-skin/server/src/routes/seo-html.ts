@@ -1,5 +1,5 @@
 import { readFile, stat } from 'node:fs/promises'
-import type { FastifyInstance, FastifyRequest } from 'fastify'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import fp from 'fastify-plugin'
 import {
   isServicePath,
@@ -27,16 +27,19 @@ import {
   categoryBody,
   contactsHtml,
   homeBody,
+  isSafeLocalPath,
   postBody,
   productBody,
   productImagePath,
   renderPageHtml,
   siteBaseUrl,
   staticBody,
+  withNoindex,
   type LinkItem,
   type ProductLinkView,
   type SeoPage,
 } from '../lib/seo-html.js'
+import { TtlCache } from '../lib/ttl-cache.js'
 import {
   breadcrumbJsonLd,
   organizationJsonLd,
@@ -68,15 +71,30 @@ interface ProductDetailView {
 
 const STATIC_PATHS = new Set(['/brands', '/pro', '/consultation', '/about', '/contacts', '/offer', '/privacy'])
 
-let templateCache: { mtimeMs: number; html: string } | null = null
+interface Template {
+  mtimeMs: number
+  html: string
+}
 
-async function readTemplate(): Promise<string> {
+interface RenderedHtml {
+  status: number
+  html: string
+}
+
+const HTML_CACHE_TTL_MS = 60_000
+const HTML_CACHE_MAX_ENTRIES = 500
+const CACHEABLE_STATUSES: ReadonlySet<number> = new Set([200, 404, 410])
+
+let templateCache: Template | null = null
+const htmlCache = new TtlCache<RenderedHtml>(HTML_CACHE_TTL_MS, HTML_CACHE_MAX_ENTRIES)
+let htmlCacheMtimeMs: number | null = null
+
+async function readTemplate(): Promise<Template> {
   const { mtimeMs } = await stat(clientIndexPath)
-  const cached = templateCache
-  if (cached && cached.mtimeMs === mtimeMs) return cached.html
+  if (templateCache && templateCache.mtimeMs === mtimeMs) return templateCache
   const html = await readFile(clientIndexPath, 'utf8')
   templateCache = { mtimeMs, html }
-  return html
+  return templateCache
 }
 
 function isPageRequest(method: string, pathname: string): boolean {
@@ -382,6 +400,7 @@ function serviceOutcome(path: string): Outcome {
 }
 
 async function resolve(app: FastifyInstance, path: string, base: string): Promise<Outcome> {
+  if (!isSafeLocalPath(path)) return NOT_FOUND
   if (path === '/') return homeOutcome(app, base)
   if (path === '/catalog') return catalogOutcome(app, base)
 
@@ -402,9 +421,58 @@ async function resolve(app: FastifyInstance, path: string, base: string): Promis
   return NOT_FOUND
 }
 
+function sendHtml(reply: FastifyReply, status: number, html: string): FastifyReply {
+  return reply.header('Cache-Control', 'no-cache').code(status).type('text/html; charset=utf-8').send(html)
+}
+
+// БД или рендер упали: сайт должен открыться, поэтому отдаём SPA-оболочку без разметки, но с noindex и 503.
+async function sendShell(request: FastifyRequest, reply: FastifyReply, error: unknown): Promise<FastifyReply> {
+  request.log.error({ err: error }, 'SEO HTML: разметка не собрана, отдаём оболочку клиента')
+  reply.header('Cache-Control', 'no-store').header('Retry-After', '30')
+  try {
+    const { html } = await readTemplate()
+    return reply.code(503).type('text/html; charset=utf-8').send(withNoindex(html))
+  } catch (templateError) {
+    request.log.error({ err: templateError }, 'SEO HTML: шаблон клиента не читается')
+    return reply.code(503).type('text/plain; charset=utf-8').send('Service Unavailable')
+  }
+}
+
+async function respond(
+  app: FastifyInstance,
+  request: FastifyRequest,
+  reply: FastifyReply,
+  pathname: string,
+  search: string,
+): Promise<FastifyReply> {
+  const base = siteBaseUrl(publicUrl, requestOrigin(request))
+  const key = `${base}|${pathname}${search}`
+  try {
+    const template = await readTemplate()
+    if (template.mtimeMs !== htmlCacheMtimeMs) {
+      htmlCache.clear()
+      htmlCacheMtimeMs = template.mtimeMs
+    }
+    const cached = htmlCache.get(key)
+    if (cached) return sendHtml(reply, cached.status, cached.html)
+
+    const outcome = await resolve(app, pathname, base)
+    if ('redirect' in outcome) return reply.redirect(301, `${outcome.redirect}${search}`)
+
+    const rendered: RenderedHtml = {
+      status: outcome.status,
+      html: renderPageHtml(template.html, outcome.page, indexingOpen),
+    }
+    if (CACHEABLE_STATUSES.has(rendered.status)) htmlCache.set(key, rendered)
+    return sendHtml(reply, rendered.status, rendered.html)
+  } catch (error) {
+    return sendShell(request, reply, error)
+  }
+}
+
 export default fp(
   async function seoHtmlRoutes(app: FastifyInstance) {
-    app.setNotFoundHandler(async (request, reply) => {
+    app.setNotFoundHandler({ preHandler: app.rateLimit({ max: 300, timeWindow: '1 minute' }) }, async (request, reply) => {
       const { pathname, search } = new URL(request.url, 'http://localhost')
       if (pathname === '/index.html' && (request.method === 'GET' || request.method === 'HEAD')) {
         return reply.redirect(301, `/${search}`)
@@ -412,19 +480,10 @@ export default fp(
       if (!isPageRequest(request.method, pathname)) {
         return reply.code(404).send({ message: `Route ${request.method}:${request.url} not found`, error: 'Not Found', statusCode: 404 })
       }
-      if (pathname.length > 1 && pathname.endsWith('/')) {
+      if (pathname.length > 1 && pathname.endsWith('/') && isSafeLocalPath(pathname)) {
         return reply.redirect(301, `${pathname.slice(0, -1)}${search}`)
       }
-
-      const base = siteBaseUrl(publicUrl, requestOrigin(request))
-      const outcome = await resolve(app, pathname, base)
-      if ('redirect' in outcome) {
-        return reply.redirect(301, `${outcome.redirect}${search}`)
-      }
-
-      const html = renderPageHtml(await readTemplate(), outcome.page, indexingOpen)
-      reply.header('Cache-Control', 'no-cache')
-      return reply.code(outcome.status).type('text/html; charset=utf-8').send(html)
+      return respond(app, request, reply, pathname, search)
     })
   },
   { name: 'seo-html' },
