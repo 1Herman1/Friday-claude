@@ -183,22 +183,22 @@ button.pv{display:block;width:100%;padding:0;cursor:zoom-in;font:inherit;color:i
 button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-hi);font-family:inherit;text-decoration:underline;text-underline-offset:3px}
 .try{display:inline-flex;align-items:center;min-height:44px;margin-top:2px;padding:0;background:none;border:0;cursor:pointer;color:var(--brass-hi);font:500 var(--fs-xs)/1.2 var(--sans);letter-spacing:.02em;text-decoration:underline;text-underline-offset:3px}
 .skb{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}
-.pv:focus-visible,.try:focus-visible,.skb:focus-visible,button.open:focus-visible,.lb button:focus-visible{outline:2px solid var(--brass-hi);outline-offset:2px}
-.lb{width:min(1240px,100vw);max-width:100vw;max-height:100dvh;height:100dvh;margin:0 auto;padding:0;border:0;background:var(--bg);color:var(--fg)}
-.lb::backdrop{background:rgba(8,9,10,.86)}
-.lb[open]{display:flex;flex-direction:column}
-.lb-bar{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 20px;border-bottom:1px solid var(--line);flex:none}
-.lb-bar h2{flex:1;margin:0;font:500 var(--fs-s,15px)/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--brass-hi)}
-.lb-x{width:44px;height:44px;flex:none;border:1px solid var(--line);background:var(--bg-2);color:var(--fg);font-size:22px;line-height:1;cursor:pointer}
-.lb-body{flex:1;overflow:auto;overscroll-behavior:contain;padding:20px}
-.lb-body img{display:block;width:100%;height:auto;margin:0 auto}
+.pv:focus-visible,.try:focus-visible,.skb:focus-visible,button.open:focus-visible,.pvx button:focus-visible{outline:2px solid var(--brass-hi);outline-offset:2px}
+.pvx{width:min(1240px,100vw);max-width:100vw;max-height:100dvh;height:100dvh;margin:0 auto;padding:0;border:0;background:var(--bg);color:var(--fg)}
+.pvx::backdrop{background:rgba(8,9,10,.86)}
+.pvx[open]{display:flex;flex-direction:column}
+.pvx-bar{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 20px;border-bottom:1px solid var(--line);flex:none}
+.pvx-bar h2{flex:1;margin:0;font:500 var(--fs-s,15px)/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--brass-hi)}
+.pvx-x{width:44px;height:44px;flex:none;border:1px solid var(--line);background:var(--bg-2);color:var(--fg);font-size:22px;line-height:1;cursor:pointer}
+.pvx-body{flex:1;overflow:auto;overscroll-behavior:contain;padding:20px}
+.pvx-body img{display:block;width:100%;height:auto;margin:0 auto}
 .tabs{display:flex;gap:4px;margin-bottom:16px}
 .tabs button{min-height:44px;padding:0 16px;border:1px solid var(--line);background:var(--bg-2);color:var(--fg-2);font:500 14px/1 var(--sans);cursor:pointer}
 .tabs button[aria-selected="true"]{border-color:var(--brass);color:var(--fg);background:var(--bg-3)}
 .pane[hidden]{display:none}
 .pane.phone img{max-width:390px;border:1px solid var(--line)}
 .pane.big img{max-width:720px}
-.lb .cap{max-width:720px;margin:12px auto 0;font-size:14px;color:var(--fg-2)}
+.pvx .cap{max-width:720px;margin:12px auto 0;font-size:14px;color:var(--fg-2)}
 .mock{display:grid;gap:20px;max-width:1000px;margin:0 auto}
 .m-hdr{display:flex;align-items:center;gap:20px;padding:16px 24px;flex-wrap:wrap}
 .m-hdr.dk{background:#141518;color:#ECE6DA;--pbg:#141518;--pac:#C9A66B;--psub:#B9B2A4;border:1px solid var(--line)}
@@ -1304,9 +1304,9 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
 
 </main>
 
-<dialog class="lb" id="lb" aria-labelledby="lb-t">
- <div class="lb-bar"><h2 id="lb-t"></h2><button class="lb-x" type="button" data-close aria-label="Закрыть">×</button></div>
- <div class="lb-body" id="lb-b"></div>
+<dialog class="pvx" id="lb" aria-labelledby="lb-t">
+ <div class="pvx-bar"><h2 id="lb-t"></h2><button class="pvx-x" type="button" data-close aria-label="Закрыть">×</button></div>
+ <div class="pvx-body" id="lb-b"></div>
 </dialog>
 <template id="pv-style-a" data-title="Стиль A · «Вечерний кабинет»"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="0" aria-selected="true">Компьютер</button><button type="button" role="tab" data-tab="1" aria-selected="false">Телефон</button></div><div class="pane" data-pane="0"><img src="previews/page-a.webp" alt="Главная страница в стиле A, компьютер"></div><div class="pane phone" data-pane="1" hidden><img src="previews/style-a-mobile.webp" alt="Главная страница в стиле A, телефон"></div></template>
 <template id="pv-style-b" data-title="Стиль B · «Бумага и чернила»"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="0" aria-selected="true">Компьютер</button><button type="button" role="tab" data-tab="1" aria-selected="false">Телефон</button></div><div class="pane" data-pane="0"><img src="previews/page-b.webp" alt="Главная страница в стиле B, компьютер"></div><div class="pane phone" data-pane="1" hidden><img src="previews/style-b-mobile.webp" alt="Главная страница в стиле B, телефон"></div></template>
