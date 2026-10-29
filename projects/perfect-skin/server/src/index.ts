@@ -27,6 +27,8 @@ import careRequestsRoutes from './routes/care-requests.js'
 import { reviewRoutes } from './routes/review.js'
 import adminRoutes from './routes/admin/index.js'
 import exchange1cRoutes from './routes/exchange-1c.js'
+import seoHtmlRoutes from './routes/seo-html.js'
+import seoFilesRoutes from './routes/seo-files.js'
 import { createTelegramNotifier, TelegramNotifier } from './services/telegram/notifier.js'
 import { createProTelegramBot, createOrdersTelegramBot } from './services/telegram/bot.js'
 
@@ -182,6 +184,10 @@ await app.register(async (instance) => reviewRoutes(instance), { prefix: '/api/v
 
 // Register admin routes
 await app.register(adminRoutes)
+
+// SEO после всех API-роутов: HTML для роботов и robots/sitemap не должны перехватывать /api/*
+await app.register(seoFilesRoutes)
+await app.register(seoHtmlRoutes)
 
 // Инициализируем Telegram-боты и запускаем поллеры
 const proBot = createProTelegramBot(app.prisma, app, notifier)
