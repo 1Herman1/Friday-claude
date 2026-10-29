@@ -77,3 +77,10 @@
 - Почему MEXC не отдаёт свечи: 9 контрактов делистнуты (contract/detail → code 1001: BOBA, TANSSI, NB, NOBODY, STG, ROAM, VANRY, TOAD, JIMOTHY), а kline API отдаёт историю только живых контрактов. Исполнения по этим сделкам в БД есть (из history_positions/order_deals) — пропадает только рынок. MON — алиас MONAD_USDT, ок.
 - `server/trade.ts candles()`: MEXC → Binance Futures → Bybit linear; если нигде нет (NB, NOBODY, TOAD, JIMOTHY) — `reconstruct(fills)`: часовые бары из собственных исполнений с явной плашкой «это не рынок».
 - `/trades`: вся строка кликабельна (`components/RowLink.tsx`, ⌘-клик — новая вкладка, Enter), KPI-плитки, 📓 у сделок с записью дневника, пилюли LONG/SHORT. Карточка: шапка-герой, блок «Из рукописного дневника» с раскрывающимися полками и скринами, источник свечей над графиком.
+
+## 2026-10-29 — блокировка MEXC для РФ/РБ → бэкап и переход на BingX
+- `importers/mexc_backup.py`: полный read-only бэкап API MEXC Futures → `data/backup/mexc_20261029_1009/` (11 JSON: позиции, order_deals за 365 дн окнами по 7 дн, ордера, фандинг, активы, стопы, переводы).
+- Там же: `tradeperf.dump` (pg_dump -Fc), `trades.csv`, `executions.csv`, скрины списка + 121 карточки (`tools/shot/all_cards.mjs`), копия вложений (скрины дневника); архив `mexc_20261029_1009.zip` (67 МБ). Всё вне git.
+- `importers/bingx_api_sync.py`: BingX Perpetual (USDT-M), только чтение — allOrders окнами по 7 дн → executions `order:<id>`, фандинг из user/income → ledger, снимок user/positions; venue `bingx` + счёт «BingX Futures» создаются сами; rebuild → открытая позиция = сделка OPEN. one-way (positionSide BOTH) сводится к long/short по нетто-позиции. Тикер BTC-USDT → BTCUSDT, свечи берутся существующей цепочкой.
+- `run_mexc_sync.sh`: при наличии `BINGX_API_KEY` в .env гоняет BingX; если MEXC отрезан — его ошибки не шумят.
+- Ждём от Германа ключ BingX в `.env` (BINGX_API_KEY / BINGX_SECRET_KEY).

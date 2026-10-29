@@ -9,6 +9,18 @@ FAILS="$TP/journal/data/logs/mexc_sync.fails"
 OUT=$("$PY" "$TP/journal/importers/mexc_api_sync.py" 2>&1)
 RC=$?
 echo "$(date '+%F %T') rc=$RC $OUT" | tail -c 4000 >> "$LOG"
+# BingX (основная биржа с 2026-10-29): отдельно, своим счётчиком сбоев; работает, если ключ лежит в .env
+if grep -q '^BINGX_API_KEY=.' "$TP/.env"; then
+  BOUT=$("$PY" "$TP/journal/importers/bingx_api_sync.py" 2>&1); BRC=$?
+  echo "$(date '+%F %T') bingx rc=$BRC $BOUT" | tail -c 4000 >> "$LOG"
+  BF="$TP/journal/data/logs/bingx_sync.fails"
+  if [ $BRC -eq 0 ]; then rm -f "$BF"
+    echo "$BOUT" | tail -1 | "$PY" -c 'import sys,json; print(json.loads(sys.stdin.read()).get("closed_new") or "", end="")' 2>/dev/null
+  else BN=$(( $(cat "$BF" 2>/dev/null || echo 0) + 1 )); echo $BN > "$BF"
+    [ $BN -eq 3 ] && { echo "⚠️ Дневник: синхронизация BingX падает 3 запуска подряд"; echo "$BOUT" | tail -3; }
+  fi
+fi
+if [ $RC -ne 0 ] && grep -q '^BINGX_API_KEY=.' "$TP/.env"; then RC=0; OUT='{}'; fi  # MEXC отрезан — не шумим, работаем по BingX
 if [ $RC -eq 0 ]; then
   rm -f "$FAILS"
   echo "$OUT" | tail -1 | "$PY" -c 'import sys,json; print(json.loads(sys.stdin.read()).get("closed_new") or "", end="")' 2>/dev/null
