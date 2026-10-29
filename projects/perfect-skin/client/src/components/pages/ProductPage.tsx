@@ -4,6 +4,8 @@ import { NotFoundPage } from './NotFoundPage'
 import { ProductDetail } from '@/components/product/ProductDetail'
 import { useProductDetail } from '@/hooks/useProductDetail'
 import { useFavorites } from '@/context/FavoritesContext'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, metaForProduct } from '@ps/shared'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export function ProductPage() {
   const { slug } = useParams()
@@ -11,6 +13,23 @@ export function ProductPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const { rename } = useFavorites()
+  const seo = product
+    ? metaForProduct(
+        {
+          name: product.name,
+          slug: product.slug,
+          brandName: product.brand?.name ?? null,
+          seoTitle: product.seo.title,
+          seoDescription: product.seo.description,
+        },
+        product.priceHidden ? null : product.minPrice,
+      )
+    : null
+  usePageMeta({
+    title: seo?.title ?? DEFAULT_TITLE,
+    description: seo?.description ?? DEFAULT_DESCRIPTION,
+    path: seo?.canonicalPath ?? location.pathname,
+  })
 
   // Открыт старый адрес товара: сервер отдал карточку с новым slug — меняем адрес и запись в избранном
   useEffect(() => {

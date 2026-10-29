@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useCatalogFacets } from '@/hooks/useCatalogFacets'
 import { pluralize } from '@/lib/format'
+import { metaForStatic } from '@ps/shared'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 interface BrandConfig {
   id: string
@@ -44,6 +46,8 @@ const brandsData: BrandConfig[] = [
 const EMPTY_FILTERS = {}
 
 export function BrandsPage() {
+  const seo = metaForStatic('/brands')
+  usePageMeta({ title: seo.title, description: seo.description, path: '/brands' })
   const facets = useCatalogFacets(EMPTY_FILTERS)
   const facetLines = facets.data?.lines || []
 

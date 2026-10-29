@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useAuth, isApprovedPro } from '@/context/AuthContext'
 import { ProApplicationForm } from '@/components/pro/ProApplicationForm'
+import { metaForStatic } from '@ps/shared'
+import { usePageMeta } from '@/hooks/usePageMeta'
 
 export function ProPage() {
   const { user, isLoading } = useAuth()
+  const seo = metaForStatic('/pro')
+  usePageMeta({ title: seo.title, description: seo.description, path: '/pro' })
 
   if (isLoading) {
     return (

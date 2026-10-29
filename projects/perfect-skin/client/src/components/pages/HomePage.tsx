@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
+import { metaForHome } from '@ps/shared'
 import { hasDemoParam } from '@/lib/demo-mode'
+import { usePageMeta } from '@/hooks/usePageMeta'
 import { HeroSection } from '@/components/home/HeroSection'
 import { CtaTiles } from '@/components/home/CtaTiles'
 import { BrandsSection } from '@/components/home/BrandsSection'
@@ -13,6 +15,9 @@ import { BlogSection } from '@/components/home/BlogSection'
 import { FaqSection } from '@/components/home/FaqSection'
 
 export function HomePage() {
+  const seo = metaForHome()
+  usePageMeta({ title: seo.title, description: seo.description, path: seo.canonicalPath ?? '/' })
+
   useEffect(() => {
     if (!hasDemoParam()) return
     const robots = document.createElement('meta')
