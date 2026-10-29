@@ -16,7 +16,7 @@ TRYON = {
     'hero-scales': 'a', 'hero-poverenny': 'a', 'logo-ae': 'a', 'hero-seal-pen': 'b',
     'hero-hourglass': 'a', 'logo-section': 'd', 'hero-column': 'c', 'hero-masses': 'e',
     'hero-keystone': 'c', 'hero-lion': 'a', 'hero-gauntlet': 'a', 'hero-compass': 'e',
-    'hero-atlas': 'c',
+    'hero-atlas': 'c', 'hero-atlas-balance': 'c', 'hero-atlas-power': 'c',
 }
 
 SHOT_JS = r"""

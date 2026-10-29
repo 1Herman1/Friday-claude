@@ -219,6 +219,11 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
 .m-tab .mk{width:16px;height:16px;overflow:visible}
 .m-ai{max-width:360px}
 .m-ai img{border:1px solid var(--line)}
+.atl{margin:0}
+.atl img,.atl video{display:block;width:100%;height:auto;border:1px solid var(--line);background:#141518}
+.atl-roles .v{font:400 var(--fs-xs)/1.45 var(--sans);color:var(--fg-2)}
+.atl-steps{margin:0;padding-left:1.3em;display:grid;gap:4px;font-size:var(--fs-xs);line-height:1.45;color:var(--fg-2)}
+.atl-steps li::marker{color:var(--brass);font-weight:500}
 .sk .d{margin:4px 0 0;font-size:var(--fs-xs);line-height:1.4;color:var(--fg-2)}
 .sk .d b{color:var(--fg);font-weight:500}
 .sk{display:grid;gap:var(--gap-s);grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -376,6 +381,10 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
   .heroes{grid-template-columns:repeat(4,minmax(0,1fr))}
   .hx{height:clamp(110px,10.2cqw,172px)}
   .g-pov{grid-template-columns:.8fr 1.2fr}
+  .g-atl{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr)}
+  .atl img,.atl video{height:46cqw;width:auto;max-width:100%;margin:0 auto}
+  .g-atl .stack{gap:10px}
+  .g-atl .atl-roles li{grid-template-columns:7.5em minmax(0,1fr)}
   .pov{max-width:none;width:100%}
   .pov svg{max-height:calc(100dvh - 240px);width:auto;margin:0 auto}
   .pov-eng .hv{width:100%;height:auto;max-height:none}
@@ -385,6 +394,8 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
   .sk{grid-template-columns:repeat(8,minmax(0,1fr));margin-top:var(--gap)}
   .sk.sk4{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:0}
   .sk4 img{aspect-ratio:auto;height:19cqw}
+  .sk.sk5{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .sk5 img{height:16cqw}
   .recs li{grid-template-columns:clamp(250px,22cqw,340px) minmax(0,1fr) minmax(0,1.1fr);gap:var(--gap)}
   .steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap)}
   .steps::before{left:0;right:0;top:11px;bottom:auto;width:auto;height:1px}
@@ -482,7 +493,7 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
     <p class="title">Вариативность дизайна</p>
     <div class="meta">
      <div><b>Стили, цвета</b>пять направлений главной</div>
-     <div><b>Герои</b>двенадцать персонажей и предметов</div>
+     <div><b>Герои</b>четырнадцать персонажей и предметов</div>
      <div><b>Логотипы</b>восемь знаков</div>
      <div><b class="num">28.10.2026</b>Москва</div>
     </div>
@@ -555,7 +566,7 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
    </div>
    <div class="g-3">
     <div class="pick3"><span class="n"><svg aria-hidden="true" focusable="false"><use href="#wt"/></svg>01</span><h3>Стиль</h3><p class="cnt3">5 вариантов · A–E</p><p class="muted small">Пять макетов главной с одинаковыми текстами — отличается только подача: цвет, шрифты, герой первого экрана.</p></div>
-    <div class="pick3"><span class="n"><svg aria-hidden="true" focusable="false"><use href="#wt"/></svg>02</span><h3>Герой</h3><p class="cnt3">12 вариантов</p><p class="muted small">Предмет или фигура, которая живёт на всём сайте: первый экран, этапы работы, калькулятор, заявка.</p></div>
+    <div class="pick3"><span class="n"><svg aria-hidden="true" focusable="false"><use href="#wt"/></svg>02</span><h3>Герой</h3><p class="cnt3">14 вариантов</p><p class="muted small">Предмет или фигура, которая живёт на всём сайте: первый экран, этапы работы, калькулятор, заявка.</p></div>
     <div class="pick3"><span class="n"><svg aria-hidden="true" focusable="false"><use href="#wt"/></svg>03</span><h3>Логотип</h3><p class="cnt3">8 вариантов</p><p class="muted small">Знак на светлом и тёмном фоне, в шапке сайта и на визитке. Финальную отрисовку делаю после выбора.</p></div>
    </div>
   </div>
@@ -720,7 +731,7 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
   <div class="body">
    <div class="stack">
     <p class="eyebrow">Персонаж или предмет, который живёт на всём сайте · у каждого своё исполнение</p>
-    <h2 class="h2" id="t10">Двенадцать героев: от прибора до фигуры</h2>
+    <h2 class="h2" id="t10">Четырнадцать героев: от прибора до фигуры</h2>
    </div>
    <div class="heroes">
     <article class="hero-c"><div class="art-h"><svg class="hv hv1" viewBox="0 0 300 260" role="img" aria-label="Латунные весы-прибор в свете настольной лампы: коромысло, шкала с делениями, на одной чаше гирька, на другой документ">
@@ -1077,22 +1088,50 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
 <!-- HEROES 9-12 -->
 <section class="slide" id="s12" tabindex="-1" aria-labelledby="t12">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>12</b> · Герои 9–12</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>12</b> · Герои 9–13</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body">
    <div class="stack">
     <p class="eyebrow">Смелее и характернее</p>
-    <h2 class="h2" id="t12">Ещё четыре героя: сила без агрессии</h2>
+    <h2 class="h2" id="t12">Ещё пять героев: сила без агрессии</h2>
     <p class="small muted">Не привычные весы и Фемида, а образы защиты и точности. Каждый можно примерить на сайт.</p>
    </div>
-   <div class="sk sk4"><figure><button class="skb" type="button" data-pv="tryon-hero-lion"><img src="sketches/hero-lion.webp" alt="Лев-страж" decoding="async"></button><figcaption><b>9 · Лев-страж</b>Бронза и гранит</figcaption><p class="d">Спокойная защита: лев лежит, лапа на папке с делом. Не нападает — охраняет. Как львы у старых московских особняков.</p><p class="d"><b>Стили: A, C</b></p><button class="try" type="button" data-pv="tryon-hero-lion">Примерка на сайте →</button></figure><figure><button class="skb" type="button" data-pv="tryon-hero-gauntlet"><img src="sketches/hero-gauntlet.webp" alt="Перчатка и перо" decoding="async"></button><figcaption><b>10 · Перчатка и перо</b>Сталь и чернила</figcaption><p class="d">Латная перчатка держит перьевую ручку: защита, которая работает документами. Сильный образ без агрессии.</p><p class="d"><b>Стили: A, D</b></p><button class="try" type="button" data-pv="tryon-hero-gauntlet">Примерка на сайте →</button></figure><figure><button class="skb" type="button" data-pv="tryon-hero-compass"><img src="sketches/hero-compass.webp" alt="Циркуль на чертеже" decoding="async"></button><figcaption><b>11 · Циркуль на чертеже</b>Латунь на синем</figcaption><p class="d">Дело выстроено как инженерный расчёт: точные построения, всё измерено. Язык стиля E.</p><p class="d"><b>Стили: E, B</b></p><button class="try" type="button" data-pv="tryon-hero-compass">Примерка на сайте →</button></figure><figure><button class="skb" type="button" data-pv="tryon-hero-atlas"><img src="sketches/hero-atlas.webp" alt="Атлант" decoding="async"></button><figcaption><b>12 · Атлант</b>Рельеф в духе метро 1930-х</figcaption><p class="d">Атлант держит каменный блок: спокойная сила, которая принимает груз клиента на себя.</p><p class="d"><b>Стили: C, A</b></p><button class="try" type="button" data-pv="tryon-hero-atlas">Примерка на сайте →</button></figure></div>
+   <div class="sk sk4 sk5"><figure><button class="skb" type="button" data-pv="tryon-hero-lion"><img src="sketches/hero-lion.webp" alt="Лев-страж" decoding="async"></button><figcaption><b>9 · Лев-страж</b>Бронза и гранит</figcaption><p class="d">Спокойная защита: лев лежит, лапа на папке с делом. Не нападает — охраняет. Как львы у старых московских особняков.</p><p class="d"><b>Стили: A, C</b></p><button class="try" type="button" data-pv="tryon-hero-lion">Примерка на сайте →</button></figure><figure><button class="skb" type="button" data-pv="tryon-hero-gauntlet"><img src="sketches/hero-gauntlet.webp" alt="Перчатка и перо" decoding="async"></button><figcaption><b>10 · Перчатка и перо</b>Сталь и чернила</figcaption><p class="d">Латная перчатка держит перьевую ручку: защита, которая работает документами. Сильный образ без агрессии.</p><p class="d"><b>Стили: A, D</b></p><button class="try" type="button" data-pv="tryon-hero-gauntlet">Примерка на сайте →</button></figure><figure><button class="skb" type="button" data-pv="tryon-hero-compass"><img src="sketches/hero-compass.webp" alt="Циркуль на чертеже" decoding="async"></button><figcaption><b>11 · Циркуль на чертеже</b>Латунь на синем</figcaption><p class="d">Дело выстроено как инженерный расчёт: точные построения, всё измерено. Язык стиля E.</p><p class="d"><b>Стили: E, B</b></p><button class="try" type="button" data-pv="tryon-hero-compass">Примерка на сайте →</button></figure><figure><button class="skb" type="button" data-pv="tryon-hero-atlas"><img src="sketches/hero-atlas.webp" alt="Атлант" decoding="async"></button><figcaption><b>12 · Атлант</b>Рельеф в духе метро 1930-х</figcaption><p class="d">Атлант держит каменный блок: спокойная сила, которая принимает груз клиента на себя.</p><p class="d"><b>Стили: C, A</b></p><button class="try" type="button" data-pv="tryon-hero-atlas">Примерка на сайте →</button></figure><figure><button class="skb" type="button" data-pv="tryon-hero-keystone"><img src="sketches/hero-keystone.webp" alt="Замковый камень" decoding="async"></button><figcaption><b>13 · Замковый камень</b>Гранит и свет</figcaption><p class="d">Один камень в вершине держит всю арку. Так и адвокат в деле: на нём сходится вся нагрузка.</p><p class="d"><b>Стили: C, A</b></p><button class="try" type="button" data-pv="tryon-hero-keystone">Примерка на сайте →</button></figure></div>
+  </div>
+ </div></div>
+</section>
+
+<!-- ATLAS BALANCE -->
+<section class="slide" id="s13" tabindex="-1" aria-labelledby="t13">
+ <div class="frame"><div class="in">
+  <header class="sh"><span class="no"><b>13</b> · Герой 14 · Атлант</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <div class="body g-pov g-atl">
+   <figure class="atl"><button class="skb" type="button" data-pv="tryon-hero-atlas-balance"><video class="loop" poster="sketches/hero-atlas-balance.webp" autoplay muted loop playsinline aria-label="Бронзовая скульптура: Атлант держит плиту, на одном конце чиновник, на другом семья; плита покачивается, Атлант ловит баланс"><source src="sketches/atlas-balance-loop.webm" type="video/webm"><source src="sketches/atlas-balance-loop.mp4" type="video/mp4"></video></button></figure>
+   <div class="stack">
+    <p class="eyebrow">Идея бренда · стили C и A</p>
+    <h2 class="h2" id="t13">Атлант держит равновесие</h2>
+    <p class="keyline">Между властью и человеком — тот, кто держит баланс.</p>
+    <ul class="ledger atl-roles">
+     <li><span class="k">Атлант</span><span class="v">Это мы. Принимает вес на свои плечи и возвращает плиту в горизонталь. Не побеждает и не наказывает — держит равновесие.</span></li>
+     <li><span class="k">Чиновник</span><span class="v">Дорогая тройка, шляпа, портфель у ног, подбородок вверх, большие пальцы в жилете. Откинулся назад: уверен, что весы на его стороне.</span></li>
+     <li><span class="k">Семья</span><span class="v">Отец, мать и сын держатся за руки. Простая одежда, спокойные лица. Мальчик смотрит на Атланта.</span></li>
+    </ul>
+    <p class="eyebrow">Как оживает · петля 5 секунд</p>
+    <ol class="atl-steps">
+     <li>Чиновник покачивается на каблуках, поправляет жилет — плита кренится к нему.</li>
+     <li>Атлант напрягает плечи, ладонь скользит по плите к центру — ловит баланс.</li>
+     <li>Семья не сходит с места: отец крепче сжимает руку сына, мать кладёт ладонь ему на плечо.</li>
+     <li>Плита возвращается в горизонталь, блик проходит по бронзе.</li>
+    </ol>
+    <p class="xs muted">Тихая версия без карикатуры — вместо чиновника стопка дел с печатью: <button class="open" type="button" data-pv="tryon-hero-atlas-power">посмотреть →</button> · <button class="open" type="button" data-pv="tryon-hero-atlas-balance">примерка на сайте →</button></p>
+   </div>
   </div>
  </div></div>
 </section>
 
 <!-- ATTORNEY -->
-<section class="slide" id="s13" tabindex="-1" aria-labelledby="t13">
+<section class="slide" id="s14" tabindex="-1" aria-labelledby="t14">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>13</b> · Персонаж «Поверенный»</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>14</b> · Персонаж «Поверенный»</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body g-pov">
    <div class="pov pov-eng" aria-hidden="true"><svg class="hv hv2" viewBox="0 0 300 260" aria-hidden="true" focusable="false">
 <defs>
@@ -1162,7 +1201,7 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
    <div class="stack" style="gap:var(--gap)">
     <div class="stack">
      <p class="eyebrow">Стили A и E</p>
-     <h2 class="h2" id="t13">«Поверенный»</h2>
+     <h2 class="h2" id="t14">«Поверенный»</h2>
      <p class="keyline">Голова — знак-весы. Лица и мимики нет.</p>
      <p class="muted">Джентльмен в костюме-тройке в технике гравюры, как на банкноте: тени — штрихом, единственная цветная деталь — латунные весы вместо головы (в стиле E — платиновые). Стоит у высокого окна с силуэтом Москвы; весы едва покачиваются, свет в окне чуть дышит. Позы ниже — тот же язык: линия и штрих на тенях. Персонаж и есть знак — как у «Пепеляев Групп», но без мультяшности.</p>
      <p class="small">Никаких побед, рукопожатий и залов суда — только работа с документами.</p>
@@ -1182,13 +1221,13 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
 
 
 <!-- LOGOS -->
-<section class="slide" id="s14" tabindex="-1" aria-labelledby="t14">
+<section class="slide" id="s15" tabindex="-1" aria-labelledby="t15">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>14</b> · Логотипы 1–4</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>15</b> · Логотипы 1–4</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body">
    <div class="stack">
     <p class="eyebrow">Знак на светлом и тёмном</p>
-    <h2 class="h2" id="t14">Классика: буква, лигатура, прибор, параграф</h2>
+    <h2 class="h2" id="t15">Классика: буква, лигатура, прибор, параграф</h2>
     <p class="small muted">Финальную отрисовку и кернинг делаю после выбора.</p>
    </div>
    <div class="logos"><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg1"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 1</p><h3>Монограмма «Э» в медальоне</h3><p class="m"><b>Стиль:</b> A, B, C · <b>герой:</b> весы-прибор, печать</p><ul class="pm"><li class="plus">Читается по-русски сразу, классика без риска.</li><li class="risk">Медальон с буквой — частый ход, нужна своя прорисовка «Э».</li></ul><button class="try" type="button" data-pv="logo-1">Примерка на сайте и визитке →</button></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg2"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 2</p><h3>Лигатура «Æ»</h3><p class="m"><b>Стиль:</b> A, C, D · <b>герой:</b> «Литера Æ»</p><ul class="pm"><li class="plus">Уникальна и связывает с латинским именем Aequitas.</li><li class="risk">Латиница: русскому клиенту «Æ» нужно пояснять.</li></ul><button class="try" type="button" data-pv="logo-2">Примерка на сайте и визитке →</button></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg3"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 3</p><h3>Весы-прибор</h3><p class="m"><b>Стиль:</b> A, E · <b>герой:</b> весы-прибор, «Поверенный»</p><ul class="pm"><li class="plus">Смысл «мера» без Фемиды, прямо связан с героем.</li><li class="risk">Весы — частый знак юристов, отличаться придётся геометрией.</li></ul><button class="try" type="button" data-pv="logo-3">Примерка на сайте и визитке →</button></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg4"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 4</p><h3>Знак § в плашке</h3><p class="m"><b>Стиль:</b> D, B · <b>герой:</b> знак §</p><ul class="pm"><li class="plus">Мгновенно «право», держится в иконке сайта и аватарке.</li><li class="risk">Общий символ — слабо защищается как товарный знак.</li></ul><button class="try" type="button" data-pv="logo-4">Примерка на сайте и визитке →</button></article></div>
@@ -1196,13 +1235,13 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
  </div></div>
 </section>
 <!-- LOGOS -->
-<section class="slide" id="s15" tabindex="-1" aria-labelledby="t15">
+<section class="slide" id="s16" tabindex="-1" aria-labelledby="t16">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>15</b> · Логотипы 5–8</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>16</b> · Логотипы 5–8</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body">
    <div class="stack">
     <p class="eyebrow">Знак на светлом и тёмном</p>
-    <h2 class="h2" id="t15">Характер: персонаж, слово, геометрия, печать</h2>
+    <h2 class="h2" id="t16">Характер: персонаж, слово, геометрия, печать</h2>
     <p class="small muted">Каждый знак проверен на светлом и тёмном фоне: так он будет жить на бланке и на сайте.</p>
    </div>
    <div class="logos"><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg5"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 5</p><h3>Голова «Поверенного»</h3><p class="m"><b>Стиль:</b> A, E · <b>герой:</b> «Поверенный»</p><ul class="pm"><li class="plus">Знак и есть персонаж — приём «Пепеляев Групп» без мультяшности.</li><li class="risk">В мелком размере детали сливаются, нужна упрощённая версия.</li></ul><button class="try" type="button" data-pv="logo-5">Примерка на сайте и визитке →</button></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div><div class="plate dk"><svg class="mk word" viewBox="0 0 236 76" role="img" aria-label="Эквитас, адвокатское бюро"><use href="#lg6"/></svg></div></div><p class="k">Логотип 6</p><h3>Словесный знак «ЭКВИТАС»</h3><p class="m"><b>Стиль:</b> любой, сильнее всего C, D · <b>герой:</b> любой</p><ul class="pm"><li class="plus">Самый солидный и читаемый; коромысло над «В» — тихий намёк.</li><li class="risk">Без отдельного знака сложнее с иконкой сайта и аватаркой.</li></ul><button class="try" type="button" data-pv="logo-6">Примерка на сайте и визитке →</button></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk" aria-hidden="true" focusable="false"><use href="#lg7"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 7</p><h3>Две массы на оси</h3><p class="m"><b>Стиль:</b> E · <b>герой:</b> две массы</p><ul class="pm"><li class="plus">Современно, абстрактно, хорошо запоминается.</li><li class="risk">Не сразу читается как право — ближе к банку и консалтингу.</li></ul><button class="try" type="button" data-pv="logo-7">Примерка на сайте и визитке →</button></article><article class="logo-c"><div class="plates"><div class="plate lt"><svg class="mk big" aria-hidden="true" focusable="false"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div><div class="plate dk"><svg class="mk big" aria-hidden="true" focusable="false"><use href="#lg8"/></svg><span class="wm"><b>Эквитас</b><small>Адвокатское бюро</small></span></div></div><p class="k">Логотип 8</p><h3>Печать-оттиск</h3><p class="m"><b>Стиль:</b> B, C · <b>герой:</b> печать и перо</p><ul class="pm"><li class="plus">«Скреплено» — документальность и порядок.</li><li class="risk">Круговая надпись не читается мелко, для иконки — только «Э».</li></ul><button class="try" type="button" data-pv="logo-8">Примерка на сайте и визитке →</button></article></div>
@@ -1211,13 +1250,13 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
 </section>
 
 <!-- SKETCHES -->
-<section class="slide" id="s16" tabindex="-1" aria-labelledby="t16">
+<section class="slide" id="s17" tabindex="-1" aria-labelledby="t17">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>16</b> · Герои вживую</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>17</b> · Герои вживую</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body">
    <div class="stack">
     <p class="eyebrow">Материал и свет</p>
-    <h2 class="h2" id="t16">Герои вживую: материал, свет, настроение</h2>
+    <h2 class="h2" id="t17">Герои вживую: материал, свет, настроение</h2>
     <p class="small muted">Так герой может выглядеть на сайте. Нажми на карточку — откроется примерка в первом экране. Финальную иллюстрацию рисует художник по выбранному варианту.</p>
    </div>
    <div class="sk"><figure><button class="skb" type="button" data-pv="tryon-hero-scales"><img src="sketches/hero-scales.webp" alt="Латунные весы на письменном столе под лампой" decoding="async"></button><figcaption><b>1 · Весы-прибор</b>Латунь в свете лампы</figcaption></figure><figure><button class="skb" type="button" data-pv="tryon-hero-poverenny"><img src="sketches/hero-poverenny.webp" alt="Линейный рисунок: джентльмен с весами вместо головы у окна с видом на Москву" decoding="async"></button><figcaption><b>2 · «Поверенный»</b>Линия по графиту, голова-весы</figcaption></figure><figure><button class="skb" type="button" data-pv="tryon-logo-ae"><img src="sketches/logo-ae.webp" alt="Лигатура Æ латунной линией на графите" decoding="async"></button><figcaption><b>3 · «Литера Æ»</b>Лигатура как знак</figcaption></figure><figure><button class="skb" type="button" data-pv="tryon-hero-seal-pen"><img src="sketches/hero-seal-pen.webp" alt="Латунная печать, перьевая ручка и росчерк на бумаге" decoding="async"></button><figcaption><b>4 · Печать и перо</b>Натюрморт с чернилами</figcaption></figure><figure><button class="skb" type="button" data-pv="tryon-hero-hourglass"><img src="sketches/hero-hourglass.webp" alt="Песочные часы в латунной оправе на столе" decoding="async"></button><figcaption><b>5 · Песочные часы</b>Стекло и латунь</figcaption></figure><figure><button class="skb" type="button" data-pv="tryon-logo-section"><img src="sketches/logo-section.webp" alt="Знак параграфа в латунной квадратной плашке" decoding="async"></button><figcaption><b>6 · Знак §</b>Плашка с параграфом</figcaption></figure><figure><button class="skb" type="button" data-pv="tryon-hero-column"><img src="sketches/hero-column.webp" alt="Дорическая гранитная колонна в боковом свете" decoding="async"></button><figcaption><b>7 · Колонна</b>Камень и свет</figcaption></figure><figure><button class="skb" type="button" data-pv="tryon-hero-masses"><img src="sketches/hero-masses.webp" alt="Сфера и брусок в равновесии на рычаге, чернильно-синий фон" decoding="async"></button><figcaption><b>8 · Две массы</b>3D-рендер, платина</figcaption></figure></div>
@@ -1226,13 +1265,13 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
 </section>
 
 <!-- SKETCHES -->
-<section class="slide" id="s17" tabindex="-1" aria-labelledby="t17">
+<section class="slide" id="s18" tabindex="-1" aria-labelledby="t18">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>17</b> · Знаки в металле</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>18</b> · Знаки в металле</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body">
    <div class="stack">
     <p class="eyebrow">Символ без надписи</p>
-    <h2 class="h2" id="t17">Знаки в латуни на графите</h2>
+    <h2 class="h2" id="t18">Знаки в латуни на графите</h2>
     <p class="small muted">Здесь только символ. Слово «Эквитас» набирается шрифтом, как на предыдущих слайдах. Нажми на знак — откроется примерка.</p>
    </div>
    <div class="sk sq"><figure><button class="skb" type="button" data-pv="logo-1"><img src="sketches/logo-e.webp" alt="Буква Э в двойном круге" decoding="async"></button><figcaption><b>1 · Монограмма «Э»</b>Медальон</figcaption></figure><figure><button class="skb" type="button" data-pv="logo-2"><img src="sketches/logo-ae.webp" alt="Лигатура Æ с линией снизу" decoding="async"></button><figcaption><b>2 · Лигатура «Æ»</b>Финал — в векторе</figcaption></figure><figure><button class="skb" type="button" data-pv="logo-3"><img src="sketches/logo-scales.webp" alt="Линейные весы на ступенчатом основании" decoding="async"></button><figcaption><b>3 · Весы-прибор</b>Линия, ступенчатое основание</figcaption></figure><figure><button class="skb" type="button" data-pv="logo-4"><img src="sketches/logo-section.webp" alt="Знак параграфа в квадрате" decoding="async"></button><figcaption><b>4 · Знак § в плашке</b>Плашка</figcaption></figure><figure><button class="skb" type="button" data-pv="logo-5"><img src="sketches/logo-poverenny.webp" alt="Весы вместо головы над воротником и галстуком в круге" decoding="async"></button><figcaption><b>5 · Голова «Поверенного»</b>Весы над воротником</figcaption></figure><figure><button class="skb" type="button" data-pv="logo-7"><img src="sketches/logo-masses.webp" alt="Круг и прямоугольник на рычаге с латунной опорой" decoding="async"></button><figcaption><b>7 · Две массы на оси</b>Абстракция</figcaption></figure><figure><button class="skb" type="button" data-pv="logo-8"><img src="sketches/logo-seal.webp" alt="Круглая печать с весами в центре" decoding="async"></button><figcaption><b>8 · Печать-оттиск</b>Без надписи</figcaption></figure><p class="note"><b>6 · Словесный знак</b><br>Держится только на шрифте, поэтому показан на предыдущем слайде.</p></div>
@@ -1241,13 +1280,13 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
 </section>
 
 <!-- NEXT -->
-<section class="slide" id="s18" tabindex="-1" aria-labelledby="t18">
+<section class="slide" id="s19" tabindex="-1" aria-labelledby="t19">
  <div class="frame"><div class="in">
-  <header class="sh"><span class="no"><b>18</b> · Что дальше</span><span class="r">Эквитас · Вариативность дизайна</span></header>
+  <header class="sh"><span class="no"><b>19</b> · Что дальше</span><span class="r">Эквитас · Вариативность дизайна</span></header>
   <div class="body">
    <div class="stack">
     <p class="eyebrow">План</p>
-    <h2 class="h2" id="t18">Четыре шага от выбора до вёрстки</h2>
+    <h2 class="h2" id="t19">Четыре шага от выбора до вёрстки</h2>
    </div>
    <ol class="steps">
     <li><span class="k num">ШАГ 1</span><h3>Выбираем направление</h3><p>Стиль, герой и знак — скорее всего по одному. С комментариями: что нравится, что нет.</p><span class="t">Вместе</span></li>
@@ -1296,9 +1335,12 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
 <template id="pv-tryon-hero-gauntlet" data-title="Примерка · Перчатка и перо"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="0" aria-selected="true">На сайте</button><button type="button" role="tab" data-tab="1" aria-selected="false">Крупно</button></div><div class="pane" data-pane="0"><img src="previews/tryon-hero-gauntlet.webp" alt="Первый экран сайта с героем «Перчатка и перо»"></div><div class="pane big" data-pane="1" hidden><img src="sketches/hero-gauntlet.webp" alt="Герой «Перчатка и перо» крупно"></div></template>
 <template id="pv-tryon-hero-compass" data-title="Примерка · Циркуль на чертеже"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="0" aria-selected="true">На сайте</button><button type="button" role="tab" data-tab="1" aria-selected="false">Крупно</button></div><div class="pane" data-pane="0"><img src="previews/tryon-hero-compass.webp" alt="Первый экран сайта с героем «Циркуль на чертеже»"></div><div class="pane big" data-pane="1" hidden><img src="sketches/hero-compass.webp" alt="Герой «Циркуль на чертеже» крупно"></div></template>
 <template id="pv-tryon-hero-atlas" data-title="Примерка · Атлант"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="0" aria-selected="true">На сайте</button><button type="button" role="tab" data-tab="1" aria-selected="false">Крупно</button></div><div class="pane" data-pane="0"><img src="previews/tryon-hero-atlas.webp" alt="Первый экран сайта с героем «Атлант»"></div><div class="pane big" data-pane="1" hidden><img src="sketches/hero-atlas.webp" alt="Герой «Атлант» крупно"></div></template>
+<template id="pv-tryon-hero-keystone" data-title="Примерка · Замковый камень"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="0" aria-selected="true">На сайте</button><button type="button" role="tab" data-tab="1" aria-selected="false">Крупно</button></div><div class="pane" data-pane="0"><img src="previews/tryon-hero-keystone.webp" alt="Первый экран сайта с героем «Замковый камень»"></div><div class="pane big" data-pane="1" hidden><img src="sketches/hero-keystone.webp" alt="Герой «Замковый камень» крупно"></div></template>
+<template id="pv-tryon-hero-atlas-balance" data-title="Примерка · Атлант держит равновесие"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="0" aria-selected="true">На сайте</button><button type="button" role="tab" data-tab="1" aria-selected="false">Крупно</button></div><div class="pane" data-pane="0"><img src="previews/tryon-hero-atlas-balance.webp" alt="Первый экран сайта с героем «Атлант держит равновесие»"></div><div class="pane big" data-pane="1" hidden><video class="loop" poster="sketches/hero-atlas-balance.webp" autoplay muted loop playsinline style="display:block;width:100%;max-width:720px;margin:0 auto" aria-label="Атлант держит равновесие, движение"><source src="sketches/atlas-balance-loop.webm" type="video/webm"><source src="sketches/atlas-balance-loop.mp4" type="video/mp4"></video></div></template>
+<template id="pv-tryon-hero-atlas-power" data-title="Примерка · Атлант · тихая версия"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="0" aria-selected="true">На сайте</button><button type="button" role="tab" data-tab="1" aria-selected="false">Крупно</button></div><div class="pane" data-pane="0"><img src="previews/tryon-hero-atlas-power.webp" alt="Первый экран сайта с героем «Атлант · тихая версия»"></div><div class="pane big" data-pane="1" hidden><img src="sketches/hero-atlas-power.webp" alt="Герой «Атлант · тихая версия» крупно"></div></template>
 <nav class="nav" aria-label="Навигация по слайдам">
  <button type="button" id="prev" aria-label="Предыдущий слайд"><span aria-hidden="true">←</span><span class="lbl">Назад</span></button>
- <span class="cnt num" id="cnt" aria-live="polite">1 <span>/ 18</span></span>
+ <span class="cnt num" id="cnt" aria-live="polite">1 <span>/ 19</span></span>
  <button type="button" id="next" aria-label="Следующий слайд"><span class="lbl">Далее</span><span aria-hidden="true">→</span></button>
 </nav>
 
@@ -1346,6 +1388,9 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
     slides.forEach(function(s){ io.observe(s); });
   }
   render();
+  function motionPref(){ document.querySelectorAll('video.loop').forEach(function(v){ if (reduce.matches) { v.removeAttribute('autoplay'); v.pause(); } else if (v.play) { v.play().catch(function(){}); } }); }
+  motionPref();
+  if (reduce.addEventListener) reduce.addEventListener('change', motionPref);
 
   var lb = document.getElementById('lb'), lbB = document.getElementById('lb-b'), lbT = document.getElementById('lb-t');
   document.addEventListener('click', function(e){
@@ -1357,6 +1402,7 @@ button.open{padding:0;background:none;border:0;cursor:pointer;color:var(--brass-
       lbB.replaceChildren(t.content.cloneNode(true));
       lbB.scrollTop = 0;
       lb.showModal();
+      if (reduce.matches) lbB.querySelectorAll('video').forEach(function(v){ v.removeAttribute('autoplay'); v.pause(); });
       return;
     }
     var tab = e.target.closest('[data-tab]');
