@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs'
 import { readFile, stat } from 'node:fs/promises'
 import type { FastifyInstance, FastifyRequest } from 'fastify'
 import fp from 'fastify-plugin'
@@ -20,7 +19,7 @@ import { loadNavCategories, type CategoryNode } from '../services/seo.service.js
 import { postService } from '../services/post.service.js'
 import { ApiError } from '../lib/errors.js'
 import { clientIndexPath, indexingOpen, publicUrl } from '../lib/env.js'
-import { parseDiscontinuedFile } from '../lib/discontinue.plan.js'
+import { DISCONTINUED_SLUGS } from '../lib/discontinued.js'
 import {
   absoluteUrl,
   blogListBody,
@@ -69,12 +68,6 @@ interface ProductDetailView {
 
 const STATIC_PATHS = new Set(['/brands', '/pro', '/consultation', '/about', '/contacts', '/offer', '/privacy'])
 
-const DISCONTINUED_SLUGS = new Set(
-  parseDiscontinuedFile(
-    JSON.parse(readFileSync(new URL('../../assets/discontinued.json', import.meta.url), 'utf8')),
-  ).products,
-)
-
 let templateCache: { mtimeMs: number; html: string } | null = null
 
 async function readTemplate(): Promise<string> {
@@ -108,7 +101,7 @@ function notFoundPage(): SeoPage {
     ogType: 'website',
     ogImage: null,
     jsonLd: [],
-    bodyHtml: staticBody(meta.h1, meta.description, '<p><a href="/">На главную</a> · <a href="/catalog">Каталог</a></p>'),
+    bodyHtml: staticBody(meta.h1, null, '<p><a href="/">На главную</a> · <a href="/catalog">Каталог</a></p>'),
   }
 }
 
@@ -125,7 +118,7 @@ function goneOutcome(): Outcome {
     ogType: 'website',
     ogImage: null,
     jsonLd: [],
-    bodyHtml: staticBody(meta.h1, meta.description, '<p><a href="/catalog">Смотреть каталог</a></p>'),
+    bodyHtml: staticBody(meta.h1, null, '<p><a href="/catalog">Смотреть каталог</a></p>'),
   }
   return { status: 410, page }
 }
@@ -229,8 +222,9 @@ async function categoryOutcome(app: FastifyInstance, base: string, slug: string)
 }
 
 async function productOutcome(app: FastifyInstance, base: string, slug: string): Promise<Outcome> {
+  if (DISCONTINUED_SLUGS.has(slug)) return goneOutcome()
   const product: ProductDetailView | null = await getProductBySlug(app.prisma, slug, null)
-  if (!product) return DISCONTINUED_SLUGS.has(slug) ? goneOutcome() : NOT_FOUND
+  if (!product) return NOT_FOUND
   if (product.slug !== slug) return { redirect: `/product/${product.slug}` }
 
   const lowPriceKop = product.priceHidden ? null : product.minPrice
@@ -278,7 +272,7 @@ async function productOutcome(app: FastifyInstance, base: string, slug: string):
     ],
     bodyHtml: productBody({
       name: product.name,
-      brand: product.brand ? { href: `${base}/catalog?brand=${product.brand.slug}`, label: product.brand.name } : null,
+      brand: product.brand ? { href: `/catalog?brand=${product.brand.slug}`, label: product.brand.name } : null,
       priceKop: lowPriceKop,
       inStock: product.inStock,
       volumes: product.variants.filter((v) => !v.priceHidden).map((v) => v.volumeLabel),
@@ -368,14 +362,17 @@ async function blogListOutcome(base: string, kind: PostKind): Promise<Outcome> {
 
 function staticOutcome(path: string, base: string): Outcome {
   const meta = metaForStatic(path)
-  const extra = path === '/contacts' ? contactsHtml() : '<p><a href="/catalog">Перейти в каталог</a></p>'
+  const bodyHtml =
+    path === '/contacts'
+      ? staticBody(meta.h1, null, contactsHtml())
+      : staticBody(meta.h1, meta.description, '<p><a href="/catalog">Перейти в каталог</a></p>')
   return ok({
     meta,
     canonicalUrl: canonicalFor(base, meta),
     ogType: 'website',
     ogImage: null,
     jsonLd: [],
-    bodyHtml: staticBody(meta.h1, meta.description, extra),
+    bodyHtml,
   })
 }
 
@@ -385,7 +382,6 @@ function serviceOutcome(path: string): Outcome {
 }
 
 async function resolve(app: FastifyInstance, path: string, base: string): Promise<Outcome> {
-  if (path === '/index.html') return { redirect: '/' }
   if (path === '/') return homeOutcome(app, base)
   if (path === '/catalog') return catalogOutcome(app, base)
 
@@ -410,6 +406,9 @@ export default fp(
   async function seoHtmlRoutes(app: FastifyInstance) {
     app.setNotFoundHandler(async (request, reply) => {
       const { pathname, search } = new URL(request.url, 'http://localhost')
+      if (pathname === '/index.html' && request.method === 'GET') {
+        return reply.redirect(301, `/${search}`)
+      }
       if (!isPageRequest(request.method, pathname)) {
         return reply.code(404).send({ message: `Route ${request.method}:${request.url} not found`, error: 'Not Found', statusCode: 404 })
       }

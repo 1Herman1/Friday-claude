@@ -4,6 +4,7 @@ import { postPath } from '@ps/shared'
 import { indexingOpen, publicUrl } from '../lib/env.js'
 import { buildRobotsTxt, buildSitemapXml, type SitemapUrl } from '../lib/seo-files.js'
 import { siteBaseUrl } from '../lib/seo-html.js'
+import { DISCONTINUED_SLUGS } from '../lib/discontinued.js'
 import { loadNavCategories, loadPublicPostsForSitemap, loadVisibleProductsForSitemap } from '../services/seo.service.js'
 
 const STATIC_SITEMAP_PATHS = ['/', '/catalog', '/blog', '/news', '/brands', '/about', '/contacts', '/pro', '/consultation']
@@ -29,7 +30,9 @@ export default fp(
         ...categories
           .filter((category) => category.productCount > 0)
           .map((category) => ({ path: `/catalog/${category.slug}`, lastmod: category.updatedAt })),
-        ...products.map((product) => ({ path: `/product/${product.slug}`, lastmod: product.updatedAt })),
+        ...products
+          .filter((product) => !DISCONTINUED_SLUGS.has(product.slug))
+          .map((product) => ({ path: `/product/${product.slug}`, lastmod: product.updatedAt })),
         ...posts.map((post) => ({ path: postPath(post.kind, post.slug), lastmod: post.updatedAt })),
       ]
 

@@ -109,6 +109,10 @@ describe('markdownToHtml', () => {
     )
   })
 
+  it('картинки из md не оставляют висящего восклицательного знака', () => {
+    expect(markdownToHtml('![Подпись](/photos/a.webp)\n\nТекст')).toBe('<p>Текст</p>')
+  })
+
   it('ссылки только на относительные и https-адреса, остальное — текст', () => {
     expect(markdownToHtml('[ок](/catalog)')).toBe('<p><a href="/catalog">ок</a></p>')
     expect(markdownToHtml('[плохо](javascript:alert(1))')).toBe('<p>[плохо](javascript:alert(1))</p>')

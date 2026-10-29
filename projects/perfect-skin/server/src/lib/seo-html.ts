@@ -244,7 +244,7 @@ export function postBody(input: {
     `<h1>${escapeHtml(input.title)}</h1>`,
     ad,
     `<p><time datetime="${input.publishedAt.toISOString()}">${formatDateRu(input.publishedAt)}</time></p>`,
-    paragraph(input.excerpt),
+    input.excerpt && !input.body.includes(input.excerpt) ? paragraph(input.excerpt) : '',
     markdownToHtml(input.body),
     products,
   ].join('')
@@ -256,7 +256,7 @@ function inlineMarkdown(text: string): string {
     .replace(/\[([^\]]+)\]\((\/[^)\s]*|https?:\/\/[^)\s]*)\)/g, '<a href="$2">$1</a>')
 }
 
-// Минимальный разбор тела статьи: заголовки, списки, абзацы, жирный и ссылки. Ссылки на товары убираем — они выводятся отдельным списком.
+// Минимальный разбор тела статьи: заголовки, списки, абзацы, жирный и ссылки. Ссылки на товары и картинки убираем: товары выводятся отдельным списком.
 export function markdownToHtml(markdown: string): string {
   const out: string[] = []
   let list: 'ul' | 'ol' | null = null
@@ -265,7 +265,7 @@ export function markdownToHtml(markdown: string): string {
     list = null
   }
 
-  for (const raw of markdown.replace(/\[\[product:[a-z0-9-]+\]\]/g, '').split('\n')) {
+  for (const raw of markdown.replace(/\[\[product:[a-z0-9-]+\]\]/g, '').replace(/!\[[^\]]*\]\([^)]*\)/g, '').split('\n')) {
     const line = raw.trim()
     const heading = /^(#{1,3})\s+(.*)$/.exec(line)
     const bullet = /^[-*]\s+(.*)$/.exec(line)
