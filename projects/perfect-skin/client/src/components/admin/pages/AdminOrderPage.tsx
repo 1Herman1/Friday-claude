@@ -167,6 +167,8 @@ export function AdminOrderPage() {
     )
   }
 
+  const isCancelled = adminOrder.status === 'cancelled'
+
   // Преобразуем AdminOrderDetail в OrderDetail для OrderView
   const orderForView: OrderDetail = {
     number: adminOrder.number,
@@ -274,17 +276,23 @@ export function AdminOrderPage() {
                 <select
                   id="status"
                   value={formData.status}
+                  disabled={isCancelled}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, status: e.target.value }))
                   }
-                  className="w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring"
+                  className="w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring disabled:opacity-60"
                 >
-                  {STATUS_OPTIONS.map((opt) => (
+                  {(isCancelled ? STATUS_OPTIONS.filter((opt) => opt.value === 'cancelled') : STATUS_OPTIONS).map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
                     </option>
                   ))}
                 </select>
+                {isCancelled && (
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Заказ отменён. Вернуть его в работу нельзя.
+                  </p>
+                )}
               </div>
 
               {/* Payment Status */}

@@ -12,6 +12,9 @@ export async function changeOrderStatus(
   input: { orderId: string; from: OrderStatus; to: OrderStatus; now: Date }
 ): Promise<void> {
   if (input.from === input.to) return
+  if (input.from === 'cancelled') {
+    throw new ApiError(409, 'ORDER_CANCELLED_FINAL', 'Отменённый заказ нельзя вернуть в работу')
+  }
   const result = await tx.order.updateMany({
     where: { id: input.orderId, status: input.from },
     data: { status: input.to, ...(input.to === 'delivered' ? { deliveredAt: input.now } : {}) },

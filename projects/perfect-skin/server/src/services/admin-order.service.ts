@@ -183,10 +183,13 @@ export class AdminOrderService {
     if (payload.status && payload.status !== order.status) {
       const allowed = ALLOWED_TRANSITIONS[order.status]
 
-      // super_admin может делать любой переход, кроме из терминальных статусов
+      if (order.status === 'cancelled') {
+        throw new ApiError(409, 'ORDER_CANCELLED_FINAL', 'Отменённый заказ нельзя вернуть в работу')
+      }
+
+      // super_admin может делать любой переход из доставленного, кроме возврата в работу
       if (actorRole === 'super_admin') {
-        if ((order.status === 'delivered' || order.status === 'cancelled') &&
-            (payload.status !== 'delivered' && payload.status !== 'cancelled')) {
+        if (order.status === 'delivered' && payload.status !== 'cancelled') {
           throw new ApiError(409, 'INVALID_STATUS_TRANSITION', 'Недопустимый переход статуса')
         }
       } else {

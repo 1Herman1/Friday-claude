@@ -218,6 +218,37 @@ describe('Жизненный цикл заказа и бонусы', () => {
     expect(reversal.reason).toBe('не списано 40: бонусы уже потрачены')
   })
 
+  it('из cancelled не выходит никто, даже super_admin: 409, баланс и журнал без изменений', async () => {
+    const user = await makeUser('cancelled-final')
+    await bonusService.join(user.id, VIEWER, new Date())
+    const account = await accountOf(user.id)
+    await seedLot(account.id, 100, null)
+    const orderId = await makeOrder(user.id, { status: 'new', subtotal: 10_000, bonusSpent: 40, bonusDiscount: 4_000 })
+    await db.$transaction((tx) =>
+      bonusService.spendForOrder(tx, { accountId: account.id, orderId, points: 40, now: new Date() })
+    )
+    await setStatus(orderId, 'cancelled')
+    expect(await balanceOf(user.id)).toBe(100)
+
+    const journalOf = () =>
+      db.bonusTransaction.findMany({ where: { accountId: account.id }, orderBy: { id: 'asc' }, select: { id: true, type: true, amount: true } })
+    const journalBefore = await journalOf()
+
+    const adminAttempt = await setStatus(orderId, 'delivered').catch((err: unknown) => err)
+    expect(codeOf(adminAttempt)).toBe('ORDER_CANCELLED_FINAL')
+
+    const lifecycleAttempt = await db
+      .$transaction((tx) => changeOrderStatus(tx, { orderId, from: 'cancelled', to: 'delivered', now: new Date() }))
+      .catch((err: unknown) => err)
+    expect(codeOf(lifecycleAttempt)).toBe('ORDER_CANCELLED_FINAL')
+
+    const order = await db.order.findUniqueOrThrow({ where: { id: orderId } })
+    expect(order.status).toBe('cancelled')
+    expect(order.bonusAccrualDueAt).toBeNull()
+    expect(await balanceOf(user.id)).toBe(100)
+    expect(await journalOf()).toEqual(journalBefore)
+  })
+
   it('начисление по оплате: при доставке без оплаты ничего, после оплаты — начислено', async () => {
     await setProgram('paid')
     try {

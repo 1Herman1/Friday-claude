@@ -229,6 +229,24 @@ describe('CDEK order sync (с базой)', () => {
     expect(await db.cdekStatusEvent.count({ where: { orderId: order.id } })).toBe(1)
   })
 
+  it('отменённый заказ: DELIVERED из вебхука не выводит его из cancelled', async () => {
+    const order = await makeOrder()
+    await db.order.update({ where: { id: order.id }, data: { status: 'cancelled' } })
+    const sync = makeSync()
+    const uuid = randomUUID()
+    await db.order.update({ where: { id: order.id }, data: { cdekUuid: uuid, cdekState: 'accepted' } })
+    const info: CdekOrderInfo = {
+      uuid, number: null, cdekNumber: 'CDK-CXL', requestState: 'SUCCESSFUL', requestErrors: [],
+      statuses: [{ code: 'DELIVERED', name: 'Вручен', city: 'Москва', at: new Date('2026-10-29T09:15:00Z') }],
+    }
+
+    await sync.applyOrderInfo(order.id, info, 'webhook')
+
+    const row = await db.order.findUniqueOrThrow({ where: { id: order.id } })
+    expect(row.status).toBe('cancelled')
+    expect(row.deliveredAt).toBeNull()
+  })
+
   it('NOT_DELIVERED: статус не меняем, уведомление менеджеру ровно один раз', async () => {
     const order = await makeOrder()
     const sync = makeSync()
