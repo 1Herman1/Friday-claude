@@ -287,3 +287,56 @@ describe('CDEK печать и ручной трек (с базой)', () => {
     ).rejects.toMatchObject({ status: 409, code: 'TRACK_MANAGED_BY_CDEK' })
   })
 })
+
+describe('CDEK: зависшая передача и вебхук', () => {
+  it('сброс creating не трогает свежую передачу, а зависшую сбрасывает', async () => {
+    const fresh = await makeOrder({ state: 'creating', stateCreatedAt: new Date() })
+    const stale = await makeOrder({ state: 'creating', stateCreatedAt: new Date(Date.now() - 20 * 60_000) })
+    const sync = makeSync() as unknown as { resolveStaleCreating(orderId: string, number: string): Promise<void> }
+
+    await sync.resolveStaleCreating(fresh.id, fresh.number)
+    expect((await db.order.findUniqueOrThrow({ where: { id: fresh.id } })).cdekState).toBe('creating')
+    expect(notifier.onCdekProblem).not.toHaveBeenCalled()
+
+    await sync.resolveStaleCreating(stale.id, stale.number)
+    expect((await db.order.findUniqueOrThrow({ where: { id: stale.id } })).cdekState).toBeNull()
+    expect(notifier.onCdekProblem).toHaveBeenCalledTimes(1)
+  })
+
+  describe('регистрация вебхука', () => {
+    const secret = 'w'.repeat(40)
+    const hooks = () => {
+      const listWebhooks = vi.fn(async () => [])
+      const createWebhook = vi.fn(async (_url: string) => {})
+      const deleteWebhook = vi.fn(async (_uuid: string) => {})
+      return { listWebhooks, createWebhook, deleteWebhook }
+    }
+    const syncWith = (flag: string | undefined, client: ReturnType<typeof hooks>) =>
+      new CdekOrderSync({
+        cdek: {
+          config: parseCdekConfig(
+            { PS_CDEK_CLIENT_ID: 'id', PS_CDEK_CLIENT_SECRET: 'secret', PS_CDEK_WEBHOOK_SECRET: secret, ...(flag ? { PS_CDEK_WEBHOOK: flag } : {}) },
+            'host'
+          ) as CdekConfig,
+          client: client as unknown as CdekClient,
+        },
+        notifier,
+        mail,
+        log,
+        publicUrl: 'https://perfect-skin.example',
+      })
+
+    it('без PS_CDEK_WEBHOOK=on вебхук у СДЭК не трогаем', async () => {
+      const client = hooks()
+      await syncWith(undefined, client).ensureWebhook()
+      expect(client.listWebhooks).not.toHaveBeenCalled()
+      expect(client.createWebhook).not.toHaveBeenCalled()
+    })
+
+    it('PS_CDEK_WEBHOOK=on регистрирует вебхук с секретом в пути', async () => {
+      const client = hooks()
+      await syncWith('on', client).ensureWebhook()
+      expect(client.createWebhook).toHaveBeenCalledWith(`https://perfect-skin.example/api/v1/delivery/cdek/webhook/${secret}`)
+    })
+  })
+})

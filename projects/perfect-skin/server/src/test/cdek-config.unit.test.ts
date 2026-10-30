@@ -74,3 +74,18 @@ describe('CDEK: конфигурация', () => {
     expect(parseCdekConfig({ ...prod, PS_CDEK_ORDER_PREFIX: 'PS-' }, 'host-a')?.orderNumberPrefix).toBe('PS-')
   })
 })
+
+describe('CDEK: регистрация вебхука', () => {
+  it('по умолчанию выключена', () => {
+    expect(parseCdekConfig({ ...base })?.webhookRegistration).toBe(false)
+  })
+
+  it('PS_CDEK_WEBHOOK=on включает регистрацию, off выключает', () => {
+    expect(parseCdekConfig({ ...base, PS_CDEK_WEBHOOK: 'on' })?.webhookRegistration).toBe(true)
+    expect(parseCdekConfig({ ...base, PS_CDEK_WEBHOOK: 'off' })?.webhookRegistration).toBe(false)
+  })
+
+  it('неизвестное значение — отказ старта', () => {
+    expect(() => parseCdekConfig({ ...base, PS_CDEK_WEBHOOK: 'yes' })).toThrow(CdekConfigError)
+  })
+})

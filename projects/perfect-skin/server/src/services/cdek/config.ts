@@ -17,6 +17,7 @@ export interface CdekConfig {
   clientId: string
   clientSecret: string
   webhookSecret: string | null
+  webhookRegistration: boolean
   fromCityCode: number
   fromPostalCode: string | null
   fromAddress: string | null
@@ -64,6 +65,11 @@ export function parseCdekConfig(
     throw new CdekConfigError('PS_CDEK_PAID_DELIVERY: tariff или fixed')
   }
 
+  const webhookFlag = env.PS_CDEK_WEBHOOK || 'off'
+  if (webhookFlag !== 'on' && webhookFlag !== 'off') {
+    throw new CdekConfigError('PS_CDEK_WEBHOOK: on или off')
+  }
+
   const autoCreate = env.PS_CDEK_AUTO_CREATE || 'off'
   if (autoCreate !== 'off' && autoCreate !== 'on_paid') {
     throw new CdekConfigError('PS_CDEK_AUTO_CREATE: off или on_paid')
@@ -79,6 +85,7 @@ export function parseCdekConfig(
     clientId,
     clientSecret,
     webhookSecret,
+    webhookRegistration: webhookFlag === 'on',
     fromCityCode: positiveInt(env, 'PS_CDEK_FROM_CITY_CODE', 44),
     fromPostalCode: env.PS_CDEK_FROM_POSTAL_CODE || null,
     fromAddress: env.PS_CDEK_FROM_ADDRESS || DEFAULT_FROM_ADDRESS,

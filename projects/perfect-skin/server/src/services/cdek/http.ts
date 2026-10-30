@@ -28,12 +28,15 @@ export class CdekRejectedError extends Error {
 type Method = 'GET' | 'POST' | 'DELETE'
 type Query = Record<string, string | number | boolean | undefined>
 
+export type CdekBreaker = 'public' | 'ops'
+
 export interface CdekRequestOptions<T> {
   query?: Query
   body?: unknown
   schema: z.ZodType<T, z.ZodTypeDef, unknown>
   timeoutMs?: number
   maxBytes?: number
+  breaker?: CdekBreaker
 }
 
 interface Exchange {
@@ -61,8 +64,10 @@ const PDF_MAGIC = Buffer.from('%PDF')
 export class CdekHttp {
   private token: { value: string; expiresAt: number } | null = null
   private tokenLoad: Promise<string> | null = null
-  private consecutiveFailures = 0
-  private circuitOpenUntil = 0
+  private readonly breakers: Record<CdekBreaker, { failures: number; openUntil: number }> = {
+    public: { failures: 0, openUntil: 0 },
+    ops: { failures: 0, openUntil: 0 },
+  }
   private readonly host: string
 
   constructor(
@@ -75,7 +80,7 @@ export class CdekHttp {
   }
 
   async request<T>(method: Method, path: string, opts: CdekRequestOptions<T>): Promise<T> {
-    return this.guarded(async () => {
+    return this.guarded(opts.breaker ?? 'ops', async () => {
       const reply = await this.exchange({
         url: `${this.cfg.baseUrl}${path}${toQueryString(opts.query)}`,
         method,
@@ -98,7 +103,7 @@ export class CdekHttp {
 
   async downloadPdf(url: string, maxBytes: number = PDF_MAX_BYTES): Promise<Buffer> {
     if (!this.isSameHostHttps(url)) throw new CdekUnavailableError('bad_response')
-    return this.guarded(async () => {
+    return this.guarded('ops', async () => {
       const reply = await this.exchange({ url, method: 'GET', timeoutMs: DEFAULT_TIMEOUT_MS, maxBytes })
       if (reply.status !== 200 || !reply.bytes.subarray(0, PDF_MAGIC.length).equals(PDF_MAGIC)) {
         throw new CdekUnavailableError('bad_response', reply.status)
@@ -116,21 +121,22 @@ export class CdekHttp {
     }
   }
 
-  private async guarded<T>(run: () => Promise<T>): Promise<T> {
-    if (this.now() < this.circuitOpenUntil) throw new CdekUnavailableError('circuit_open')
+  private async guarded<T>(breaker: CdekBreaker, run: () => Promise<T>): Promise<T> {
+    const state = this.breakers[breaker]
+    if (this.now() < state.openUntil) throw new CdekUnavailableError('circuit_open')
     try {
       const result = await run()
-      this.consecutiveFailures = 0
+      state.failures = 0
       return result
     } catch (error) {
       if (error instanceof CdekUnavailableError) {
-        this.consecutiveFailures += 1
-        if (this.consecutiveFailures >= BREAKER_THRESHOLD) {
-          this.circuitOpenUntil = this.now() + BREAKER_COOLDOWN_MS
-          this.consecutiveFailures = 0
+        state.failures += 1
+        if (state.failures >= BREAKER_THRESHOLD) {
+          state.openUntil = this.now() + BREAKER_COOLDOWN_MS
+          state.failures = 0
         }
       } else {
-        this.consecutiveFailures = 0
+        state.failures = 0
       }
       throw error
     }

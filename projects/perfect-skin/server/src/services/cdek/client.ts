@@ -99,6 +99,7 @@ export class CdekClient {
     const raw = await this.http.request('GET', '/location/suggest/cities', {
       query: { name: q, country_code: 'RU' },
       schema: listResponseSchema,
+      breaker: 'public',
     })
     return toCities(raw)
   }
@@ -109,6 +110,7 @@ export class CdekClient {
       schema: listResponseSchema,
       timeoutMs: POINTS_TIMEOUT_MS,
       maxBytes: POINTS_MAX_BYTES,
+      breaker: 'public',
     })
     return toPoints(raw).points
   }
@@ -127,6 +129,7 @@ export class CdekClient {
         packages: [pkg],
       },
       schema: tariffListSchema,
+      breaker: 'public',
     })
     return toTariffs(raw)
   }

@@ -328,7 +328,7 @@ export class CdekOrderSync {
 
   async ensureWebhook(): Promise<void> {
     const secret = this.cfg.webhookSecret
-    if (secret === null || this.deps.publicUrl === '') return
+    if (!this.cfg.webhookRegistration || secret === null || this.deps.publicUrl === '') return
     const prefix = `${this.deps.publicUrl}${CDEK_WEBHOOK_PATH}`
     const url = `${prefix}${secret}`
     try {
@@ -482,7 +482,11 @@ export class CdekOrderSync {
       return
     }
     const reset = await db.order.updateMany({
-      where: { id: orderId, cdekState: 'creating' },
+      where: {
+        id: orderId,
+        cdekState: 'creating',
+        cdekRequestedAt: { lt: new Date(this.now() - ADOPT_STALE_MS) },
+      },
       data: { cdekState: null },
     })
     if (reset.count === 1) {

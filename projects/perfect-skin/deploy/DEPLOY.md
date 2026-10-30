@@ -313,13 +313,13 @@ JSON-LD и текст страницы. Шаблон берётся из `PS_CLI
 
 **Секреты GitHub** (Settings → Secrets → Actions): `PS_CDEK_CLIENT_ID`, `PS_CDEK_CLIENT_SECRET`, `PS_CDEK_WEBHOOK_SECRET` (`openssl rand -hex 32`, не короче 32 символов). Для edu и для боя секрет вебхука разный.
 
-**Переменные GitHub** (Variables): `PS_CDEK` (`on`/`off`), `PS_CDEK_BASE_URL`, `PS_CDEK_FROM_CITY_CODE`, `PS_CDEK_FROM_POSTAL_CODE`, `PS_CDEK_FROM_ADDRESS`, `PS_CDEK_SHIPMENT_POINT`, `PS_CDEK_TARIFF_PVZ`, `PS_CDEK_TARIFF_POSTAMAT`, `PS_CDEK_TARIFF_COURIER`, `PS_CDEK_BOX`, `PS_CDEK_BOX_WEIGHT_G`, `PS_CDEK_ITEM_WEIGHT_G`, `PS_CDEK_PAID_DELIVERY`, `PS_CDEK_AUTO_CREATE`, `PS_CDEK_ORDER_PREFIX`. Пустая переменная ничего не меняет на сервере: работает значение по умолчанию из `services/cdek/config.ts`.
+**Переменные GitHub** (Variables): `PS_CDEK` (`on`/`off`), `PS_CDEK_BASE_URL`, `PS_CDEK_FROM_CITY_CODE`, `PS_CDEK_FROM_POSTAL_CODE`, `PS_CDEK_FROM_ADDRESS`, `PS_CDEK_SHIPMENT_POINT`, `PS_CDEK_TARIFF_PVZ`, `PS_CDEK_TARIFF_POSTAMAT`, `PS_CDEK_TARIFF_COURIER`, `PS_CDEK_BOX`, `PS_CDEK_BOX_WEIGHT_G`, `PS_CDEK_ITEM_WEIGHT_G`, `PS_CDEK_PAID_DELIVERY`, `PS_CDEK_AUTO_CREATE`, `PS_CDEK_WEBHOOK`, `PS_CDEK_ORDER_PREFIX`. Пустая переменная ничего не меняет на сервере: работает значение по умолчанию из `services/cdek/config.ts`, поэтому выключать значением `off`, а не пустотой.
 
 **Nginx** (один раз, вручную, деплой его не перезаписывает): добавить в `/etc/nginx/sites-available/perfect-skin` блок `location /api/v1/delivery/cdek/webhook/` из `deploy/nginx-perfect-skin.conf`, затем проверить и перезагрузить:
 ```bash
 nginx -t && systemctl reload nginx
 ```
-Выполнить можно через `run-command-perfect-skin.yml`. Вебхук регистрируется у СДЭК только при заданном `PS_PUBLIC_URL`; без него работает фоновая сверка раз в 20 минут.
+Выполнить можно через `run-command-perfect-skin.yml`. Вебхук регистрируется у СДЭК только при `PS_CDEK_WEBHOOK=on` и заданном `PS_PUBLIC_URL` (по умолчанию `off`); иначе работает фоновая сверка раз в 20 минут. Включать `PS_CDEK_WEBHOOK=on` только после того, как location вебхука установлен в nginx (блок выше).
 
 **Переключение на бой:** одновременно сменить `PS_CDEK_BASE_URL=https://api.cdek.ru/v2`, боевые `PS_CDEK_CLIENT_ID` и `PS_CDEK_CLIENT_SECRET`, новый `PS_CDEK_WEBHOOK_SECRET` и `PS_CDEK_ORDER_PREFIX` пустым. Переключать только после ответов клиента по договору СДЭК (вопросы А1–А3 в `docs/projects/perfect-skin/client/06-cdek.md`).
 

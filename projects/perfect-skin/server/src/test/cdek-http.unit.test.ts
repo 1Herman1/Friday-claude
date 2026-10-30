@@ -8,6 +8,8 @@ import {
   readBodyLimited,
 } from '../services/cdek/http.js'
 import { listResponseSchema } from '../services/cdek/schemas.js'
+import { CdekClient, type CdekCreateOrderPayload } from '../services/cdek/client.js'
+import { parseCdekConfig, type CdekConfig } from '../services/cdek/config.js'
 
 const cfg = {
   baseUrl: 'https://api.edu.cdek.ru/v2',
@@ -185,6 +187,32 @@ describe('CDEK HTTP: ошибки', () => {
     now += 30_000
     await expect(http.request('GET', '/x', { schema: listResponseSchema })).rejects.toMatchObject({ reason: 'http_5xx' })
     expect(apiCalls).toBe(4)
+  })
+})
+
+describe('CDEK HTTP: раздельные предохранители', () => {
+  const ORDER_UUID = 'order-uuid-1'
+  const clientCfg = parseCdekConfig({ PS_CDEK_CLIENT_ID: 'id', PS_CDEK_CLIENT_SECRET: 'secret' }, 'host') as CdekConfig
+
+  function suggestCalls(stub: { mock: { calls: unknown[][] } }): number {
+    return stub.mock.calls.filter(([input]) => String(input).includes('/location/suggest/cities')).length
+  }
+
+  it.each([500, 429])('публичный предохранитель открыт (ответ %i) — передача заказа проходит', async (status) => {
+    const stub = fetchStub((url) => {
+      if (url.endsWith(TOKEN_PATH)) return json({ access_token: 'tok', expires_in: 3600 })
+      if (url.includes('/location/suggest/cities')) return json({}, status)
+      return json({ entity: { uuid: ORDER_UUID } })
+    })
+    const client = new CdekClient(new CdekHttp(cfg, stub), clientCfg)
+
+    for (let i = 0; i < 3; i += 1) {
+      await expect(client.suggestCities('Москва')).rejects.toMatchObject({ reason: 'http_5xx' })
+    }
+    await expect(client.suggestCities('Москва')).rejects.toMatchObject({ reason: 'circuit_open' })
+    expect(suggestCalls(stub)).toBe(3)
+
+    await expect(client.createOrder({} as CdekCreateOrderPayload)).resolves.toEqual({ uuid: ORDER_UUID })
   })
 })
 
