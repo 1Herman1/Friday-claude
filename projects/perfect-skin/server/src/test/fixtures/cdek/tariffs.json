@@ -1,0 +1,7 @@
+{
+  "tariff_codes": [
+    { "tariff_code": 136, "tariff_name": "Посылка склад-склад", "delivery_sum": 310.4, "period_min": 2, "period_max": 4 },
+    { "tariff_code": 368, "tariff_name": "Посылка склад-постамат", "delivery_sum": 290, "period_min": 2, "period_max": 5 },
+    { "tariff_code": "broken", "delivery_sum": 1, "period_min": 1, "period_max": 2 }
+  ]
+}

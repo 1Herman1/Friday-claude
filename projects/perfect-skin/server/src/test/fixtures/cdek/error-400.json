@@ -1,0 +1,4 @@
+{
+  "errors": [{ "code": "v2_invalid_request", "message": "Неверные данные" }],
+  "requests": [{ "state": "INVALID", "errors": [{ "code": "v2_bad_city", "message": "Город не найден" }] }]
+}

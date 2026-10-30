@@ -1,0 +1,19 @@
+{
+  "entity": {
+    "uuid": "0f6f3b8e-2d7a-4c1e-9a55-3c1f2b7d9e10",
+    "number": "TABC12-PS-000123",
+    "cdek_number": 1234567890,
+    "statuses": [
+      { "code": "ACCEPTED", "name": "Принят в обработку", "city": "Москва", "date_time": "2026-10-30T12:00:00+0700" }
+    ],
+    "requests": [
+      {
+        "request_uuid": "5b9d2a1c-0000-4000-8000-000000000001",
+        "type": "CREATE",
+        "state": "INVALID",
+        "date_time": "2026-10-30T12:00:00+0700",
+        "errors": [{ "code": "v2_invalid_tariff", "message": "Неверный тариф" }]
+      }
+    ]
+  }
+}

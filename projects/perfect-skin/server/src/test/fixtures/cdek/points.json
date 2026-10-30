@@ -1,0 +1,46 @@
+[
+  {
+    "code": "MSK123",
+    "type": "PVZ",
+    "name": "ПВЗ Тверская",
+    "work_time": "Пн-Вс 10:00-22:00",
+    "location": {
+      "address_full": "Москва, ул. Тверская, 1",
+      "city": "Москва",
+      "city_code": 44,
+      "latitude": 55.7649,
+      "longitude": 37.6063
+    },
+    "nearest_stations": [{ "name": "Охотный Ряд" }]
+  },
+  {
+    "code": "MSK456",
+    "type": "POSTAMAT",
+    "name": "Постамат Арбат",
+    "location": {
+      "address_full": "Москва, Арбат, 10",
+      "city": "Москва",
+      "city_code": 44,
+      "latitude": 55.7520,
+      "longitude": 37.5920
+    }
+  },
+  {
+    "code": "MSK999",
+    "type": "UNKNOWN",
+    "name": "Неизвестный тип",
+    "location": {
+      "address_full": "Москва, Лубянка, 2",
+      "city": "Москва",
+      "city_code": 44,
+      "latitude": 55.7600,
+      "longitude": 37.6280
+    }
+  },
+  {
+    "code": "MSK777",
+    "type": "PVZ",
+    "name": "Битая точка без координат",
+    "location": { "address_full": "Москва, Пушкина, 5", "city": "Москва", "city_code": 44 }
+  }
+]
