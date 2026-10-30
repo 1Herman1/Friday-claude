@@ -69,13 +69,16 @@ export function BonusSpendSection({ promoCode, value, onChange, onQuote }: Bonus
   }
 
   const overLimit = quote.canSpend && value > quote.maxSpend
+  const promoConflict = quote.reason === 'PROMO_CONFLICT'
 
   return (
     <div className="bg-card border border-border rounded-block p-6">
       <h2 className="text-base font-sans font-semibold text-foreground mb-4 uppercase tracking-wide">Бонусы</h2>
 
-      {quote.reason === 'PROMO_CONFLICT' && (
-        <p className="text-sm text-muted-foreground">Бонусы не суммируются с промокодом</p>
+      {promoConflict && (
+        <p id="bonus-promo-conflict" className="text-sm text-muted-foreground mb-4">
+          Бонусы не суммируются с промокодом. Чтобы списать бонусы, уберите промокод.
+        </p>
       )}
 
       {quote.reason === 'MIN_ORDER' && (
@@ -88,7 +91,7 @@ export function BonusSpendSection({ promoCode, value, onChange, onQuote }: Bonus
         <p className="text-sm text-muted-foreground">Бонусов на балансе пока нет</p>
       )}
 
-      {quote.canSpend && (
+      {(quote.canSpend || promoConflict) && (
         <>
           <label htmlFor="bonus-spend" className="block text-sm text-foreground mb-2">
             Списать бонусы
@@ -102,23 +105,28 @@ export function BonusSpendSection({ promoCode, value, onChange, onQuote }: Bonus
               value={value > 0 ? String(value) : ''}
               onChange={(e) => handleInput(e.target.value)}
               placeholder="0"
+              disabled={promoConflict}
               aria-invalid={overLimit}
-              className="flex-1 min-w-0 px-4 py-3 text-base rounded-pill border bg-background text-foreground tabular-nums placeholder-muted-foreground focus:outline-none min-h-11"
+              aria-describedby={promoConflict ? 'bonus-promo-conflict' : undefined}
+              className="flex-1 min-w-0 px-4 py-3 text-base rounded-pill border bg-background text-foreground tabular-nums placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 disabled:opacity-60 disabled:cursor-not-allowed min-h-11"
             />
             <button
               type="button"
               onClick={() => callbacks.current.onChange(quote.maxSpend)}
+              disabled={promoConflict}
               aria-label={`Списать все доступные бонусы: ${quote.maxSpend}`}
-              className="shrink-0 px-5 py-3 border border-border-strong text-foreground font-bold rounded-pill hover:bg-muted transition-colors min-h-11"
+              className="shrink-0 px-5 py-3 border border-border-strong text-foreground font-bold rounded-pill hover:bg-muted transition-colors disabled:opacity-60 disabled:cursor-not-allowed min-h-11"
             >
               Все
             </button>
           </div>
-          <p className={`text-xs mt-2 tabular-nums ${overLimit ? 'text-destructive' : 'text-muted-foreground'}`}>
-            {overLimit
-              ? `Больше лимита. Можно списать до ${quote.maxSpend} ${bonusWord(quote.maxSpend)}`
-              : `Доступно ${quote.available} ${bonusWord(quote.available)}, можно списать до ${quote.maxSpend}`}
-          </p>
+          {quote.canSpend && (
+            <p className={`text-xs mt-2 tabular-nums ${overLimit ? 'text-destructive' : 'text-muted-foreground'}`}>
+              {overLimit
+                ? `Больше лимита. Можно списать до ${quote.maxSpend} ${bonusWord(quote.maxSpend)}`
+                : `Доступно ${quote.available} ${bonusWord(quote.available)}, можно списать до ${quote.maxSpend}`}
+            </p>
+          )}
         </>
       )}
 
