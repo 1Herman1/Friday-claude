@@ -222,7 +222,13 @@ export function AdminBonusSettingsPage() {
               ))}
             </select>
           </div>
-          {number('accrualDelayDays', 0, 60, 'Задержка начисления, дней')}
+          {number(
+            'accrualDelayDays',
+            0,
+            60,
+            'Задержка начисления, дней',
+            form.accrualTrigger === 'paid' ? 'При начислении по оплате — не меньше 14 дней: раньше бонусы успеют потратиться до срока возврата' : undefined,
+          )}
           <div className="sm:col-span-2 grid gap-3">
             {check('excludeProfessionalProducts', 'Кабинетные товары не начисляют бонусы')}
             {check('accrueWithPromo', 'Начислять бонусы по заказу с промокодом')}

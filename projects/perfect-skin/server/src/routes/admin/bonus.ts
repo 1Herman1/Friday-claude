@@ -31,6 +31,9 @@ const settingsBodySchema = z
   })
   .strict()
 
+// Начисление по оплате раньше срока возврата даёт схему «получил бонусы → потратил → отменил первый заказ»
+const PAID_TRIGGER_MIN_DELAY_DAYS = 14
+
 const accountsQuerySchema = z.object({
   search: z
     .string()
@@ -104,6 +107,7 @@ export async function bonusRoutes(app: FastifyInstance, viewPreHandlers: Preset,
           401: { $ref: 'ps.error#' },
           403: { $ref: 'ps.error#' },
           409: { $ref: 'ps.error#' },
+          422: { $ref: 'ps.error#' },
         },
       },
     },
@@ -113,6 +117,14 @@ export async function bonusRoutes(app: FastifyInstance, viewPreHandlers: Preset,
       if (!parsed.success) throw invalid(String(parsed.error.issues[0]?.path[0] ?? ''))
 
       const { expectedUpdatedAt, ...data } = parsed.data
+      if (data.accrualTrigger === 'paid' && data.accrualDelayDays < PAID_TRIGGER_MIN_DELAY_DAYS) {
+        throw new ApiError(
+          422,
+          'ACCRUAL_PAID_DELAY_TOO_SHORT',
+          `Начисление по оплате возможно с задержкой не менее ${PAID_TRIGGER_MIN_DELAY_DAYS} дней: раньше бонусы успеют потратиться до срока возврата`,
+          { field: 'accrualDelayDays' },
+        )
+      }
       // Программу нельзя включить, пока правила Бьюти-клуба не утверждены (версия помечена draft)
       if (data.enabled && CONSENT_TEXT_VERSION.loyalty.endsWith('-draft')) {
         throw new ApiError(409, 'RULES_NOT_PUBLISHED', 'Правила Бьюти-клуба ещё не утверждены: программу нельзя включить')

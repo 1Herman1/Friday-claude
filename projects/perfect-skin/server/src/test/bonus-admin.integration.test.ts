@@ -169,6 +169,34 @@ describe('Бонусы: админка — настройки, права, ко�
     expect(res.statusCode).toBe(400)
   })
 
+  it('начисление по оплате с задержкой меньше 14 дней → 422, настройки не меняются', async () => {
+    const before = await db.loyaltySettings.findUniqueOrThrow({ where: { id: 1 } })
+    const body = { ...(await settingsBody()), accrualTrigger: 'paid', accrualDelayDays: 13 }
+
+    const res = await app.inject({ method: 'PUT', url: '/api/v1/admin/bonus/settings', payload: body, headers: bearer(superToken) })
+
+    expect(res.statusCode).toBe(422)
+    expect(JSON.parse(res.body).error.code).toBe('ACCRUAL_PAID_DELAY_TOO_SHORT')
+    const after = await db.loyaltySettings.findUniqueOrThrow({ where: { id: 1 } })
+    expect(after.accrualTrigger).toBe(before.accrualTrigger)
+    expect(after.accrualDelayDays).toBe(before.accrualDelayDays)
+    expect(after.updatedAt).toEqual(before.updatedAt)
+  })
+
+  it('начисление по оплате с задержкой 14 дней проходит; правило не мешает начислению по доставке', async () => {
+    try {
+      const paid = { ...(await settingsBody()), accrualTrigger: 'paid', accrualDelayDays: 14 }
+      const ok = await app.inject({ method: 'PUT', url: '/api/v1/admin/bonus/settings', payload: paid, headers: bearer(superToken) })
+      expect(ok.statusCode).toBe(200)
+
+      const delivered = { ...(await settingsBody()), accrualTrigger: 'delivered', accrualDelayDays: 0 }
+      const back = await app.inject({ method: 'PUT', url: '/api/v1/admin/bonus/settings', payload: delivered, headers: bearer(superToken) })
+      expect(back.statusCode).toBe(200)
+    } finally {
+      await db.loyaltySettings.update({ where: { id: 1 }, data: { accrualTrigger: original.accrualTrigger as $Enums.BonusAccrualTrigger, accrualDelayDays: original.accrualDelayDays as number } })
+    }
+  })
+
   it('программу нельзя включить, пока версия правил помечена draft', async () => {
     const body = { ...(await settingsBody()), enabled: true }
     const res = await app.inject({ method: 'PUT', url: '/api/v1/admin/bonus/settings', payload: body, headers: bearer(superToken) })
