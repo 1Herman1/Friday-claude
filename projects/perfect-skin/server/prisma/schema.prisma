@@ -161,6 +161,40 @@ enum ConsentPurpose {
   health_data // обработка данных о состоянии кожи для консультации
   care // обработка ПДн, чтобы связаться по заявке Отдела заботы
   account // обработка ПДн при входе в кабинет
+  loyalty // принятие Правил Бьюти-клуба (участие в программе лояльности)
+}
+
+/// Тип операции бонусного счёта. review и birthday заложены на будущее:
+/// код их не создаёт (отзывов нет, дату рождения не собираем — новая цель ПДн).
+enum BonusTxType {
+  welcome                // приветственные при вступлении (+)
+  order_accrual          // начисление за заказ (+)
+  order_spend            // списание в заказе (−)
+  order_spend_refund     // возврат списанного при отмене/возврате (+)
+  order_accrual_reversal // отмена начисления при возврате (−)
+  expiration             // сгорание остатка партии (−)
+  manual_adjustment      // ручная корректировка сотрудником (±), причина и автор обязательны
+  review                 // задел: бонус за отзыв (+)
+  birthday               // задел: бонус ко дню рождения (+)
+}
+
+/// От чего считается начисление.
+enum BonusAccrualBase {
+  paid_goods  // товары − промокод − бонусы (по умолчанию)
+  after_promo // товары − промокод
+  gross       // товары без скидок
+}
+
+/// Когда начисление становится доступным (+ accrualDelayDays).
+enum BonusAccrualTrigger {
+  delivered
+  paid
+}
+
+/// Тип исходящего письма: для advertising согласие marketing проверяется в момент отправки.
+enum MessageKind {
+  service
+  advertising
 }
 
 /// Источник решения по заявке: автоматическая или ручная обработка.
@@ -225,6 +259,10 @@ model User {
   videoReviewsConsentConfirmed VideoReview[] @relation("VideoReviewConsentBy")
   videoReviewsConsentRevoked   VideoReview[] @relation("VideoReviewConsentRevokedBy")
   videoReviewsContentReviewed  VideoReview[] @relation("VideoReviewContentReviewedBy")
+  bonusAccount           BonusAccount?
+  bonusTxCreated         BonusTransaction[]      @relation("BonusTxCreatedBy")
+  loyaltySettingsUpdated LoyaltySettings[]       @relation("LoyaltySettingsUpdatedBy")
+  loyaltySettingsChanges LoyaltySettingsChange[]
 
   @@index([email])
   @@index([phone])
@@ -625,13 +663,23 @@ model Order {
 
   comment   String?
   adminNote String?
+
+  // ── Бонусы ──
+  bonusSpent          Int       @default(0) // списано бонусов (штуки)
+  bonusDiscount       Int       @default(0) // те же бонусы в копейках по курсу на момент заказа
+  bonusAccrualPlanned Int       @default(0) // обещано к начислению (штуки), заморожено при создании
+  bonusAccrualDueAt   DateTime? // когда начислить; ставится при «доставлен»/«оплачен»
+  bonusAccruedAt      DateTime? // когда фактически начислено
+  deliveredAt         DateTime? // ставит ТОЛЬКО changeOrderStatus (и для СДЭК тоже)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user       User                 @relation(fields: [userId], references: [id], onDelete: Restrict)
-  items      OrderItem[]
-  promoCode  PromoCode?           @relation(fields: [promoCodeId], references: [id], onDelete: SetNull)
-  redemption PromoCodeRedemption?
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Restrict)
+  items              OrderItem[]
+  promoCode          PromoCode?           @relation(fields: [promoCodeId], references: [id], onDelete: SetNull)
+  redemption         PromoCodeRedemption?
+  bonusTransactions  BonusTransaction[]
 
   @@index([userId, createdAt])
   @@index([status])
@@ -639,6 +687,7 @@ model Order {
   @@index([createdAt])
   @@index([promoCodeId])
   @@index([cdekState, status]) // выборка фоновой сверки
+  @@index([bonusAccrualDueAt])
   @@map("orders")
 }
 
@@ -777,6 +826,111 @@ model PromoCodeRedemption {
   @@index([promoCodeId, createdAt])
   @@index([userId])
   @@map("promo_code_redemptions")
+}
+
+// ─────────────────────────────── Бьюти-клуб ───────────────────────────────
+
+/// Настройки Бьюти-клуба. Ровно одна строка (id = 1, CHECK в миграции).
+/// Программа ВЫКЛЮЧЕНА по умолчанию: включает super_admin после ответов
+/// клиента (docs/projects/perfect-skin/client/05-loyalty.md) и утверждения правил.
+/// Деньги — копейки, бонусы — штуки, проценты — целые 0..100.
+model LoyaltySettings {
+  id                          Int                 @id @default(1)
+  enabled                     Boolean             @default(false)
+  accrualPercent              Int                 @default(5)
+  accrualBase                 BonusAccrualBase    @default(paid_goods)
+  accrualTrigger              BonusAccrualTrigger @default(delivered)
+  accrualDelayDays            Int                 @default(0)
+  excludeProfessionalProducts Boolean             @default(true)
+  accrueWithPromo             Boolean             @default(false) // начислять ли по заказу с промокодом косметолога
+  kopecksPerBonus             Int                 @default(100)   // курс: 100 = 1 бонус = 1 ₽
+  maxSpendPercent             Int                 @default(30)    // доля товаров после промокода
+  minOrderForSpend            Int                 @default(0)     // копейки, товары после промокода
+  allowSpendWithPromo         Boolean             @default(false)
+  bonusTtlDays                Int                 @default(365)   // срок жизни начислений; 0 = не сгорают
+  refundMinTtlDays            Int                 @default(30)    // мин. срок жизни возвращённых при отмене
+  welcomeBonus                Int                 @default(0)
+  welcomeTtlDays              Int                 @default(60)
+  reviewBonus                 Int                 @default(0)     // задел, не используется
+  reviewTtlDays               Int                 @default(90)    // задел
+  expiryNoticeKind            MessageKind         @default(advertising) // задел: писем о сгорании пока нет
+  expiryNoticeDaysBefore      Int                 @default(7)            // задел
+  createdAt                   DateTime            @default(now())
+  updatedAt                   DateTime            @updatedAt
+  updatedById                 String?
+
+  updatedBy User? @relation("LoyaltySettingsUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([updatedById])
+  @@map("loyalty_settings")
+}
+
+/// Журнал изменений настроек: кто, когда, что было и что стало. Только вставка.
+model LoyaltySettingsChange {
+  id          String   @id @default(uuid())
+  changedById String
+  before      Json
+  after       Json
+  createdAt   DateTime @default(now())
+
+  changedBy User @relation(fields: [changedById], references: [id], onDelete: Restrict)
+
+  @@index([createdAt])
+  @@index([changedById])
+  @@map("loyalty_settings_changes")
+}
+
+/// Бонусный счёт участника клуба. Создаётся при вступлении (принятии правил).
+/// balance = сумма amount по журналу = сумма remaining у партий-начислений.
+/// Меняется ТОЛЬКО в services/bonus.service.ts под блокировкой строки счёта.
+/// При удалении пользователя userId обнуляется (SetNull), история остаётся обезличенной.
+/// Мягкое удаление (users.deletedAt) обезличивает счёт ночная задача.
+model BonusAccount {
+  id           String    @id @default(uuid())
+  userId       String?   @unique
+  balance      Int       @default(0)
+  joinedAt     DateTime  @default(now())
+  leftAt       DateTime? // вышел из клуба: не копит и не тратит, остаток заморожен до правил программы
+  anonymizedAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user         User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  transactions BonusTransaction[]
+
+  @@index([leftAt])
+  @@map("bonus_accounts")
+}
+
+/// Журнал бонусного счёта. Строки не удаляются и не правятся, кроме remaining у партий.
+/// amount со знаком: + начисление, − списание/сгорание/отмена начисления.
+/// Партия = строка с amount > 0: remaining — непотраченный остаток, expiresAt — когда он сгорит (null = бессрочно).
+/// У списаний remaining и expiresAt пустые (CHECK).
+model BonusTransaction {
+  id                 String      @id @default(uuid())
+  accountId          String
+  type               BonusTxType
+  amount             Int
+  remaining          Int?
+  expiresAt          DateTime?
+  orderId            String?
+  idempotencyKey     String?     @unique // welcome:<userId> | manual:<uuid> | expire:<lotId>
+  reason             String?     // обязательна у manual_adjustment (CHECK); покупателю не показывается
+  createdById        String?     // автор ручной корректировки
+  sourceMaxExpiresAt DateTime?   // у order_spend: самый поздний срок потраченных партий (null = среди них была бессрочная)
+  createdAt          DateTime    @default(now())
+
+  account   BonusAccount @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  order     Order?       @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  createdBy User?        @relation("BonusTxCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@unique([orderId, type])
+  @@index([accountId, createdAt])
+  @@index([accountId, expiresAt])
+  @@index([orderId])
+  @@index([createdById])
+  @@index([createdAt])
+  @@map("bonus_transactions")
 }
 
 // ─────────────────────────────── Контент ───────────────────────────────
@@ -993,13 +1147,13 @@ model SyncLog {
 
 model ConsentRecord {
   id          String         @id @default(uuid())
-  userId      String
+  userId      String? // null после удаления пользователя: запись остаётся доказательством согласия
   purpose     ConsentPurpose
   textVersion String // версия текста согласия, который видел человек
   grantedAt   DateTime       @default(now())
   revokedAt   DateTime?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([userId, purpose])
   @@map("consent_records")

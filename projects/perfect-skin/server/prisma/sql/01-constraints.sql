@@ -94,3 +94,48 @@ ALTER TABLE video_reviews
 
 ALTER TABLE product_variants
   ADD CONSTRAINT product_variants_weight_positive CHECK ("weightGrams" IS NULL OR "weightGrams" > 0);
+
+-- ──────────────────────────── Бьюти-клуб ────────────────────────────
+
+-- Журнал бонусов: баланс и партии не уйдут в минус, даже если сервис ошибётся.
+-- Частичный индекс для ночного сгорания — Prisma такой не объявляет.
+
+ALTER TABLE "loyalty_settings"
+  ADD CONSTRAINT loyalty_settings_singleton CHECK ("id" = 1),
+  ADD CONSTRAINT loyalty_settings_ranges CHECK (
+    "accrualPercent" BETWEEN 0 AND 100 AND "accrualDelayDays" BETWEEN 0 AND 60
+    AND "kopecksPerBonus" BETWEEN 1 AND 10000 AND "maxSpendPercent" BETWEEN 0 AND 100
+    AND "minOrderForSpend" >= 0 AND "bonusTtlDays" BETWEEN 0 AND 1825
+    AND "refundMinTtlDays" BETWEEN 1 AND 365
+    AND "welcomeBonus" >= 0 AND "welcomeTtlDays" BETWEEN 1 AND 365
+    AND "reviewBonus" >= 0 AND "reviewTtlDays" BETWEEN 1 AND 365
+    AND "expiryNoticeDaysBefore" BETWEEN 1 AND 30
+  );
+
+ALTER TABLE "bonus_accounts"
+  ADD CONSTRAINT bonus_account_balance_nonneg CHECK ("balance" >= 0);
+
+ALTER TABLE "bonus_transactions"
+  ADD CONSTRAINT bonus_tx_amount_nonzero CHECK ("amount" <> 0),
+  ADD CONSTRAINT bonus_tx_shape CHECK (
+    ("amount" > 0
+      AND "type" IN ('welcome','order_accrual','order_spend_refund','manual_adjustment','review','birthday')
+      AND "remaining" IS NOT NULL AND "remaining" BETWEEN 0 AND "amount")
+    OR
+    ("amount" < 0
+      AND "type" IN ('order_spend','order_accrual_reversal','expiration','manual_adjustment')
+      AND "remaining" IS NULL AND "expiresAt" IS NULL)
+  ),
+  ADD CONSTRAINT bonus_tx_order_link CHECK (
+    "type" NOT IN ('order_accrual','order_spend','order_spend_refund','order_accrual_reversal') OR "orderId" IS NOT NULL
+  ),
+  ADD CONSTRAINT bonus_tx_manual_audit CHECK (
+    "type" <> 'manual_adjustment' OR ("createdById" IS NOT NULL AND "reason" IS NOT NULL AND char_length(btrim("reason")) BETWEEN 3 AND 300)
+  );
+
+ALTER TABLE "orders"
+  ADD CONSTRAINT order_bonus_nonneg CHECK ("bonusSpent" >= 0 AND "bonusDiscount" >= 0 AND "bonusAccrualPlanned" >= 0),
+  ADD CONSTRAINT order_bonus_pair CHECK (("bonusSpent" = 0) = ("bonusDiscount" = 0)),
+  ADD CONSTRAINT order_bonus_within_goods CHECK ("bonusDiscount" <= "subtotal" - "promoDiscount");
+
+CREATE INDEX IF NOT EXISTS bonus_tx_live_lots_idx ON bonus_transactions ("expiresAt") WHERE "remaining" > 0 AND "expiresAt" IS NOT NULL;
