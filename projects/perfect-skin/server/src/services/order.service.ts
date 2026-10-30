@@ -4,9 +4,24 @@ import * as psSharedNs from '@ps/shared'
 const { calcOrderTotals } = ((psSharedNs as any).default ?? psSharedNs) as any
 import { toCalcMethod } from '../lib/delivery.js'
 import { isWholesaleViewer, resolvePrice, type PriceViewer } from '../lib/pricing.js'
+import { deliveryQuote, type ResolvedDelivery } from './cdek/quote.service.js'
+import type { CdekPoint } from './cdek/client.js'
+import type { FastifyBaseLogger } from 'fastify'
 import crypto from 'crypto'
 
 type PrismaDeliveryMethod = $Enums.DeliveryMethod
+
+function toPointSnapshot(point: CdekPoint): Prisma.InputJsonObject {
+  return {
+    code: point.code,
+    type: point.type,
+    name: point.name,
+    address: point.address,
+    city: point.city,
+    cityCode: point.cityCode,
+    workTime: point.workTime,
+  }
+}
 
 // Заказ привязывается к пользователю (Order.userId обязателен).
 // Для вошедшего пользователя: customerId = user.id, cart найти по user.id
@@ -42,13 +57,15 @@ export class OrderService {
     payload: {
       deliveryMethod: PrismaDeliveryMethod
       cdekPvzCode?: string | null
+      cdekCityCode?: number | null
       address?: any | null
       recipient: { name: string; phone: string; email?: string | null }
       promoCode?: string | null
       comment?: string | null
       expectedTotal: number
     },
-    viewer: PriceViewer = null
+    viewer: PriceViewer = null,
+    log: Pick<FastifyBaseLogger, 'warn'>
   ) {
     // Find cart by owner (either user or session)
     const cart = await db.cart.findUnique({
@@ -166,6 +183,26 @@ export class OrderService {
       }
     }
 
+    // Сеть СДЭК — только здесь, до транзакции: блокировки остатков на сетевом запросе не держим.
+    const calcItems = availableItems.map((item) => ({
+      price: resolvePrice({ retailPrice: item.productVariant.retailPrice, wholesalePrice: item.productVariant.wholesalePrice }, viewer),
+      quantity: item.quantity,
+    }))
+    const priceList = isWholesaleViewer(viewer) ? 'professional' : 'retail'
+    const promo = promoData ? { code: promoData.code, percent: promoData.percent } : null
+    const deliveryMethod = toCalcMethod(payload.deliveryMethod)
+    const preview = calcOrderTotals({ items: calcItems, priceList, promo, deliveryMethod })
+    const delivery: ResolvedDelivery = await deliveryQuote(log).resolveForOrder({
+      method: payload.deliveryMethod,
+      cityCode: payload.cdekCityCode ?? null,
+      pvzCode: payload.cdekPvzCode ?? null,
+      items: availableItems.map((item) => ({
+        weightGrams: item.productVariant.weightGrams,
+        quantity: item.quantity,
+      })),
+      goodsAfterDiscount: preview.subtotal - preview.promoDiscount,
+    })
+
     // Execute order creation in transaction
     const order = await db.$transaction(async (tx) => {
       // Step 1.5: Mark consent when order is placed (if not already marked)
@@ -238,19 +275,12 @@ export class OrderService {
       }
 
       // Step 5: Calculate totals using calcOrderTotals
-      const calcItems = availableItems.map((item) => {
-        const resolvedPrice = resolvePrice({ retailPrice: item.productVariant.retailPrice, wholesalePrice: item.productVariant.wholesalePrice }, viewer)
-        return {
-          price: resolvedPrice,
-          quantity: item.quantity,
-        }
-      })
-
       const totals = calcOrderTotals({
         items: calcItems,
-        priceList: isWholesaleViewer(viewer) ? 'professional' : 'retail',
-        promo: promoData ? { code: promoData.code, percent: promoData.percent } : null,
-        deliveryMethod: toCalcMethod(payload.deliveryMethod),
+        priceList,
+        promo,
+        deliveryMethod,
+        deliveryPaidCost: delivery.paidCost,
       })
 
       // Step 6: Verify expectedTotal
@@ -276,6 +306,10 @@ export class OrderService {
           status: 'new',
           deliveryMethod: payload.deliveryMethod as PrismaDeliveryMethod,
           cdekPvzCode: payload.cdekPvzCode || null,
+          cdekCityCode: delivery.cityCode,
+          cdekTariffCode: delivery.tariffCode,
+          deliveryPoint: delivery.point ? toPointSnapshot(delivery.point) : undefined,
+          deliveryQuote: delivery.quote ?? undefined,
           deliveryAddress: payload.address || null,
           recipientName: payload.recipient.name,
           recipientPhone: payload.recipient.phone,

@@ -16,11 +16,12 @@ const createOrderSchema = z.object({
       city: z.string().min(2).max(80),
       street: z.string().min(2).max(120),
       house: z.string().min(1).max(20),
-      apartment: z.string().max(20).optional(),
+      apartment: z.string().max(20).nullish(),
       postalCode: z.string().regex(/^\d{6}$/).optional(),
     })
     .nullable()
     .optional(),
+  cdekCityCode: z.number().int().min(1).max(9999999).optional(),
   recipient: z.object({
     name: z.string().min(2).max(80),
     phone: z.string().regex(/^\+7\d{10}$/),
@@ -62,7 +63,7 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
                 city: { type: 'string' },
                 street: { type: 'string' },
                 house: { type: 'string' },
-                apartment: { type: 'string' },
+                apartment: { type: ['string', 'null'] },
                 postalCode: { type: 'string' },
               },
             },
@@ -74,6 +75,7 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
                 email: { type: 'string' },
               },
             },
+            cdekCityCode: { type: 'integer', minimum: 1, maximum: 9999999 },
             promoCode: { type: 'string' },
             comment: { type: 'string' },
             expectedTotal: { type: 'integer' },
@@ -137,7 +139,7 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
 
       const owner = { customerId, cart: cartOwner }
       const viewer = request.user ? { role: request.user.role, proStatus: request.user.proStatus } : null
-      const order = await orderService.createOrder(owner, result.data, viewer)
+      const order = await orderService.createOrder(owner, result.data, viewer, app.log)
 
       // Отправляем уведомление в Telegram (не блокирует ответ)
       app.telegram.onNewOrder(order.id).catch((err) => {
