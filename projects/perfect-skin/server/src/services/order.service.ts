@@ -286,9 +286,10 @@ export class OrderService {
       if (promoData) {
         const promoCheck = await tx.promoCode.findUnique({
           where: { id: promoData.id },
+          select: { perUserLimit: true, maxRedemptions: true },
         })
 
-        if (!promoCheck || (promoCheck.maxRedemptions !== null && promoCheck.usedCount >= promoCheck.maxRedemptions)) {
+        if (!promoCheck) {
           throw new ApiError(409, 'PROMO_EXHAUSTED', 'Лимит применений промокода исчерпан')
         }
 
@@ -307,10 +308,17 @@ export class OrderService {
           }
         }
 
-        await tx.promoCode.update({
-          where: { id: promoData.id },
+        // Условный UPDATE: проверка лимита и увеличение счётчика — одна атомарная операция, гонки нет
+        const claimed = await tx.promoCode.updateMany({
+          where: {
+            id: promoData.id,
+            OR: [{ maxRedemptions: null }, { usedCount: { lt: promoCheck.maxRedemptions ?? 0 } }],
+          },
           data: { usedCount: { increment: 1 } },
         })
+        if (claimed.count === 0) {
+          throw new ApiError(409, 'PROMO_EXHAUSTED', 'Лимит применений промокода исчерпан')
+        }
       }
 
       // Step 5: Calculate totals using calcOrderTotals
