@@ -4,6 +4,15 @@ import { adminGetOrder, adminUpdateOrder, type AdminOrderDetail } from '@/lib/ad
 import { ApiError } from '@/lib/api'
 import { OrderView, type OrderDetail } from '@/components/orders/OrderView'
 import { CdekPanel } from '@/components/admin/orders/CdekPanel'
+import { bonusWord, formatBonusDate } from '@/lib/bonus-labels'
+import { formatPrice } from '@/lib/format'
+
+const ACCRUAL_STATUS_LABELS: Record<NonNullable<AdminOrderDetail['bonus']>['accrualStatus'], string> = {
+  none: 'не начисляется',
+  pending: 'ожидает начисления',
+  accrued: 'начислено',
+  cancelled: 'отменено',
+}
 
 const STATUS_OPTIONS = [
   { value: 'new', label: 'Новый' },
@@ -173,6 +182,7 @@ export function AdminOrderPage() {
     deliveryCost: adminOrder.deliveryCost,
     total: adminOrder.total,
     comment: adminOrder.comment,
+    bonus: adminOrder.bonus,
   }
 
   return (
@@ -199,6 +209,42 @@ export function AdminOrderPage() {
               setFormData((prev) => ({ ...prev, deliveryTrackNumber: updated.deliveryTrackNumber || '' }))
             }}
           />
+          <section aria-labelledby="admin-bonus-heading" className="bg-card border border-border rounded-block p-6">
+            <h2 id="admin-bonus-heading" className="text-lg font-heading font-semibold text-foreground mb-4">
+              Бонусы
+            </h2>
+            {adminOrder.bonus ? (
+              <dl className="grid gap-2 text-sm">
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Списано</dt>
+                  <dd className="tabular-nums text-foreground">
+                    {adminOrder.bonus.spent} {bonusWord(adminOrder.bonus.spent)} ({formatPrice(adminOrder.bonus.discount)})
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">К начислению</dt>
+                  <dd className="tabular-nums text-foreground">
+                    {adminOrder.bonus.accrualPlanned} {bonusWord(adminOrder.bonus.accrualPlanned)}, {ACCRUAL_STATUS_LABELS[adminOrder.bonus.accrualStatus]}
+                  </dd>
+                </div>
+                {adminOrder.deliveredAt && (
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">Доставлен</dt>
+                    <dd className="tabular-nums text-foreground">{formatBonusDate(adminOrder.deliveredAt)}</dd>
+                  </div>
+                )}
+                {adminOrder.bonus.accrualStatus === 'pending' && adminOrder.bonusAccrualDueAt && (
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">Срок начисления</dt>
+                    <dd className="tabular-nums text-foreground">{formatBonusDate(adminOrder.bonusAccrualDueAt)}</dd>
+                  </div>
+                )}
+              </dl>
+            ) : (
+              <p className="text-sm text-muted-foreground">Бонусы по заказу не списывались и не начисляются</p>
+            )}
+          </section>
+
           <div className="bg-card border border-border rounded-block p-6 sticky top-24">
             <h2 className="text-lg font-heading font-semibold text-foreground mb-6">
               Управление

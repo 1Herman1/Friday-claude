@@ -50,6 +50,9 @@ export interface AdminCdek {
 
 export interface AdminOrderDetail extends AdminOrder {
   cdek: AdminCdek
+  deliveredAt: string | null
+  bonusAccrualDueAt: string | null
+  bonus: AdminOrderBonus | null
   items: {
     productName: string
     brandName?: string | null
@@ -1235,5 +1238,133 @@ export async function adminCdekPrint(id: string, kind: 'waybill' | 'barcode'): P
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ kind }),
+  })
+}
+
+export interface AdminOrderBonus {
+  spent: number
+  discount: number
+  accrualPlanned: number
+  accrualStatus: 'none' | 'pending' | 'accrued' | 'cancelled'
+}
+
+export interface AdminBonusSettings {
+  enabled: boolean
+  accrualPercent: number
+  accrualBase: 'paid_goods' | 'after_promo' | 'gross'
+  accrualTrigger: 'delivered' | 'paid'
+  accrualDelayDays: number
+  excludeProfessionalProducts: boolean
+  accrueWithPromo: boolean
+  kopecksPerBonus: number
+  maxSpendPercent: number
+  minOrderForSpend: number
+  allowSpendWithPromo: boolean
+  bonusTtlDays: number
+  refundMinTtlDays: number
+  welcomeBonus: number
+  welcomeTtlDays: number
+  reviewBonus: number
+  reviewTtlDays: number
+  expiryNoticeKind: 'service' | 'advertising'
+  expiryNoticeDaysBefore: number
+  updatedAt: string
+  updatedBy: { id: string; name: string } | null
+}
+
+export type AdminBonusSettingsBody = Omit<AdminBonusSettings, 'updatedAt' | 'updatedBy'> & {
+  expectedUpdatedAt: string
+}
+
+export interface AdminBonusSettingsResponse {
+  settings: AdminBonusSettings
+  changes: {
+    id: string
+    createdAt: string
+    changedBy: { id: string; name: string }
+    before: Partial<AdminBonusSettings>
+    after: Partial<AdminBonusSettings>
+  }[]
+}
+
+export interface AdminBonusTx {
+  id: string
+  type:
+    | 'welcome'
+    | 'order_accrual'
+    | 'order_spend'
+    | 'order_spend_refund'
+    | 'order_accrual_reversal'
+    | 'expiration'
+    | 'manual_adjustment'
+    | 'review'
+    | 'birthday'
+  amount: number
+  remaining: number | null
+  expiresAt: string | null
+  createdAt: string
+  orderNumber: string | null
+  reason: string | null
+  createdBy: { id: string; name: string } | null
+}
+
+export interface AdminBonusAccount {
+  userId: string
+  name: string
+  email: string | null
+  phone: string | null
+  balance: number
+  member: boolean
+  joinedAt: string
+  leftAt: string | null
+}
+
+export interface AdminBonusAccountList {
+  items: AdminBonusAccount[]
+  total: number
+}
+
+export interface AdminBonusAccountDetail {
+  account: AdminBonusAccount
+  nextExpiration: { amount: number; expiresAt: string } | null
+  transactions: AdminBonusTx[]
+  total: number
+}
+
+export interface AdminBonusAdjustment {
+  transaction: AdminBonusTx
+  balance: number
+}
+
+export async function adminGetBonusSettings(): Promise<AdminBonusSettingsResponse> {
+  return fetchApi<AdminBonusSettingsResponse>('/api/v1/admin/bonus/settings')
+}
+
+export async function adminUpdateBonusSettings(body: AdminBonusSettingsBody): Promise<AdminBonusSettingsResponse> {
+  return fetchApi<AdminBonusSettingsResponse>('/api/v1/admin/bonus/settings', {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  })
+}
+
+export async function adminListBonusAccounts(search: string, limit: number, offset: number): Promise<AdminBonusAccountList> {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) })
+  if (search) params.set('search', search)
+  return fetchApi<AdminBonusAccountList>(`/api/v1/admin/bonus/accounts?${params.toString()}`)
+}
+
+export async function adminGetBonusAccount(userId: string, limit: number, offset: number): Promise<AdminBonusAccountDetail> {
+  return fetchApi<AdminBonusAccountDetail>(
+    `/api/v1/admin/bonus/accounts/${encodeURIComponent(userId)}?limit=${limit}&offset=${offset}`
+  )
+}
+
+export async function adminAdjustBonus(
+  userId: string,
+  body: { amount: number; reason: string; expiresInDays?: number; idempotencyKey: string }
+): Promise<AdminBonusAdjustment> {
+  return fetchApi<AdminBonusAdjustment>(`/api/v1/admin/bonus/accounts/${encodeURIComponent(userId)}/adjustments`, {
+    method: 'POST',
+    body: JSON.stringify(body),
   })
 }

@@ -17,6 +17,9 @@ const AdminVideoReviewEditPage = lazy(() => import('@/components/admin/pages/Adm
 const AdminSyncPage = lazy(() => import('@/components/admin/pages/AdminSyncPage').then((m) => ({ default: m.AdminSyncPage })))
 const AdminProRequestsPage = lazy(() => import('@/components/admin/pages/AdminProRequestsPage').then((m) => ({ default: m.AdminProRequestsPage })))
 const AdminConsultationsPage = lazy(() => import('@/components/admin/pages/AdminConsultationsPage').then((m) => ({ default: m.AdminConsultationsPage })))
+const AdminBonusAccountsPage = lazy(() => import('@/components/admin/pages/AdminBonusAccountsPage').then((m) => ({ default: m.AdminBonusAccountsPage })))
+const AdminBonusAccountPage = lazy(() => import('@/components/admin/pages/AdminBonusAccountPage').then((m) => ({ default: m.AdminBonusAccountPage })))
+const AdminBonusSettingsPage = lazy(() => import('@/components/admin/pages/AdminBonusSettingsPage').then((m) => ({ default: m.AdminBonusSettingsPage })))
 
 import { STAFF_ROLES } from '@/context/AuthContext'
 
@@ -35,6 +38,9 @@ const AdminLayoutWrapper = () => (
       <Route path="products/new" element={<Suspense fallback={fallback}><AdminProductEditPage /></Suspense>} />
       <Route path="products/:id" element={<Suspense fallback={fallback}><AdminProductEditPage /></Suspense>} />
       <Route path="promo" element={<Suspense fallback={fallback}><AdminPromoPage /></Suspense>} />
+      <Route path="bonus" element={<Suspense fallback={fallback}><AdminBonusAccountsPage /></Suspense>} />
+      <Route path="bonus/settings" element={<Suspense fallback={fallback}><AdminBonusSettingsPage /></Suspense>} />
+      <Route path="bonus/:userId" element={<Suspense fallback={fallback}><AdminBonusAccountPage /></Suspense>} />
       <Route path="pro-requests" element={<Suspense fallback={fallback}><AdminProRequestsPage /></Suspense>} />
       <Route path="consultations" element={<Suspense fallback={fallback}><AdminConsultationsPage /></Suspense>} />
       <Route path="posts" element={<Suspense fallback={fallback}><AdminPostsPage /></Suspense>} />

@@ -14,6 +14,7 @@ const navItems: NavItem[] = [
   { label: 'Заказы', href: '/admin/orders' },
   { label: 'Товары', href: '/admin/products' },
   { label: 'Промокоды', href: '/admin/promo' },
+  { label: 'Бонусы', href: '/admin/bonus' },
   { label: 'Заявки специалистов', href: '/admin/pro-requests' },
   { label: 'Консультации', href: '/admin/consultations' },
   { label: 'Статьи', href: '/admin/posts' },
