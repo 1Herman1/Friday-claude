@@ -3,6 +3,7 @@ import {
   buildApplicationText,
   buildConsultationText,
   buildOrderText,
+  buildCdekProblemText,
 } from '../services/telegram/notifier.js'
 
 const PII = ['Иванова Мария', '+79991234567', 'maria@example.com', '771234567890', 'ул. Ленина 1']
@@ -39,6 +40,13 @@ describe('Telegram notifications contain no PII', () => {
     const text = buildConsultationText({ channel: 'whatsapp', source: 'care', queueCount: 2 })
     expectNoPii(text)
     expect(text).toContain('Новая заявка в Отдел заботы')
+  })
+
+  it('CDEK delivery problem', () => {
+    const text = buildCdekProblemText({ number: 'PS-000123', reason: 'код статуса СДЭК: NOT_DELIVERED' })
+    expectNoPii(text)
+    expect(text).toContain('PS-000123')
+    expect(text).toContain('NOT_DELIVERED')
   })
 
   it('order', () => {

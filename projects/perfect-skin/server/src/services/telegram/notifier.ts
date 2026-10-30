@@ -58,6 +58,10 @@ export function buildOrderText(order: {
   return `Новый заказ №${order.number}\nСумма: ${totalRubles} ₽\nПозиций: ${itemCount}\nДоставка: ${deliveryLabel}\nОплата: ${paymentLabel}`
 }
 
+export function buildCdekProblemText(input: { number: string; reason: string }): string {
+  return `Проблема доставки СДЭК, заказ №${input.number}\n${input.reason}`
+}
+
 export class TelegramNotifier {
   constructor(
     private prisma: PrismaClient,

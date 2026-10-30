@@ -8,6 +8,7 @@ import prismaPlugin from './plugins/prisma.js'
 import authenticatePlugin from './plugins/authenticate.js'
 import { ApiError, errorResponse } from './lib/errors.js'
 import { isDevelopment, isProduction } from './lib/env.js'
+import { maskSensitiveUrl } from './lib/log-mask.js'
 import { registerCommonSchemas } from './schemas/common.js'
 import productsRoutes from './routes/products/index.js'
 import categoriesRoutes from './routes/categories/index.js'
@@ -49,9 +50,7 @@ const app = Fastify({
     // Маскируем токены просмотра заявок в логах
     serializers: {
       req: (request: any) => {
-        // Скрываем токен в URL /api/v1/review/<что угодно до / или ?>
-        let url = request.url || ''
-        url = url.replace(/\/api\/v1\/review\/[^/?]+/g, '/api/v1/review/[скрыто]')
+        const url = maskSensitiveUrl(request.url || '')
         return {
           id: request.id,
           method: request.method,
