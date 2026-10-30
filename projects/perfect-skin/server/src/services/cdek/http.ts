@@ -1,5 +1,9 @@
 import type { z } from 'zod'
 import type { CdekConfig } from './config.js'
+
+export interface CdekLog {
+  info(entry: Record<string, unknown>, message: string): void
+}
 import { collectErrors } from './parse.js'
 import { tokenResponseSchema } from './schemas.js'
 
@@ -64,7 +68,8 @@ export class CdekHttp {
   constructor(
     private readonly cfg: Pick<CdekConfig, 'baseUrl' | 'clientId' | 'clientSecret'>,
     private readonly fetchImpl: typeof fetch = fetch,
-    private readonly now: () => number = Date.now
+    private readonly now: () => number = Date.now,
+    private readonly log?: CdekLog
   ) {
     this.host = new URL(cfg.baseUrl).host
   }
@@ -183,6 +188,7 @@ export class CdekHttp {
   private async attempt(req: Exchange, token: string | null): Promise<Reply> {
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), req.timeoutMs)
+    const startedAt = this.now()
     try {
       const headers: Record<string, string> = {}
       if (req.contentType !== undefined) headers['Content-Type'] = req.contentType
@@ -194,14 +200,28 @@ export class CdekHttp {
         signal: controller.signal,
         redirect: 'error',
       })
-      return { status: res.status, bytes: await readBytesLimited(res, req.maxBytes) }
+      const bytes = await readBytesLimited(res, req.maxBytes)
+      this.logExchange(req, res.status, startedAt)
+      return { status: res.status, bytes }
     } catch (error) {
-      if (error instanceof CdekUnavailableError) throw error
-      if (error instanceof Error && error.name === 'AbortError') throw new CdekUnavailableError('timeout')
-      throw new CdekUnavailableError('network')
+      const failure =
+        error instanceof CdekUnavailableError
+          ? error
+          : error instanceof Error && error.name === 'AbortError'
+            ? new CdekUnavailableError('timeout')
+            : new CdekUnavailableError('network')
+      this.logExchange(req, failure.httpStatus ?? failure.reason, startedAt)
+      throw failure
     } finally {
       clearTimeout(timer)
     }
+  }
+
+  private logExchange(req: Exchange, status: number | string, startedAt: number): void {
+    this.log?.info(
+      { method: req.method, path: new URL(req.url).pathname, status, durationMs: this.now() - startedAt },
+      'СДЭК запрос'
+    )
   }
 }
 

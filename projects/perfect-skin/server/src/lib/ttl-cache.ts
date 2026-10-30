@@ -15,9 +15,9 @@ export class TtlCache<V> {
     return entry.value
   }
 
-  set(key: string, value: V, now: number = Date.now()): void {
+  set(key: string, value: V, now: number = Date.now(), ttlMs: number = this.ttlMs): void {
     this.entries.delete(key)
-    this.entries.set(key, { value, expiresAt: now + this.ttlMs })
+    this.entries.set(key, { value, expiresAt: now + ttlMs })
     if (this.entries.size > this.maxEntries) {
       const oldest = this.entries.keys().next().value
       if (oldest !== undefined) this.entries.delete(oldest)

@@ -598,17 +598,61 @@ export function registerCommonSchemas(app: FastifyInstance) {
     $id: 'ps.deliveryMethod',
     type: 'object',
     additionalProperties: false,
-    required: ['code', 'title', 'cost', 'isFree', 'freeFrom', 'amountToFree', 'requiresAddress', 'requiresPvzCode'],
+    required: [
+      'code', 'title', 'cost', 'isFree', 'freeFrom', 'amountToFree', 'requiresAddress', 'requiresPvzCode',
+      'requiresCity', 'available', 'quoteSource', 'periodMin', 'periodMax', 'costByPointType',
+    ],
     properties: {
       code: { type: 'string', enum: ['pickup', 'cdek_pvz', 'cdek_courier'] },
       title: { type: 'string' },
       hint: { type: 'string' },
-      cost: { type: 'integer' },
+      cost: { type: ['integer', 'null'] },
       isFree: { type: 'boolean' },
       freeFrom: { type: ['integer', 'null'] },
       amountToFree: { type: 'integer' },
       requiresAddress: { type: 'boolean' },
       requiresPvzCode: { type: 'boolean' },
+      requiresCity: { type: 'boolean' },
+      available: { type: 'boolean' },
+      quoteSource: { type: 'string', enum: ['fixed', 'cdek', 'fallback', 'free', 'needs_city', 'unavailable'] },
+      periodMin: { type: ['integer', 'null'] },
+      periodMax: { type: ['integer', 'null'] },
+      costByPointType: {
+        anyOf: [
+          {
+            type: 'object',
+            additionalProperties: false,
+            required: ['PVZ', 'POSTAMAT'],
+            properties: { PVZ: { type: ['integer', 'null'] }, POSTAMAT: { type: ['integer', 'null'] } },
+          },
+          { type: 'null' },
+        ],
+      },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.cdekCity',
+    type: 'object',
+    additionalProperties: false,
+    required: ['code', 'name'],
+    properties: { code: { type: 'integer' }, name: { type: 'string' } },
+  })
+
+  app.addSchema({
+    $id: 'ps.cdekPoint',
+    type: 'object',
+    additionalProperties: false,
+    required: ['code', 'type', 'name', 'address', 'workTime', 'metro', 'lat', 'lon'],
+    properties: {
+      code: { type: 'string' },
+      type: { type: 'string', enum: ['PVZ', 'POSTAMAT'] },
+      name: { type: 'string' },
+      address: { type: 'string' },
+      workTime: { type: ['string', 'null'] },
+      metro: { type: ['string', 'null'] },
+      lat: { type: 'number' },
+      lon: { type: 'number' },
     },
   })
 
@@ -616,11 +660,12 @@ export function registerCommonSchemas(app: FastifyInstance) {
     $id: 'ps.deliveryMethods',
     type: 'object',
     additionalProperties: false,
-    required: ['subtotal', 'goodsAfterDiscount', 'methods'],
+    required: ['subtotal', 'goodsAfterDiscount', 'cdekEnabled', 'methods'],
     properties: {
       subtotal: { type: 'integer' },
       promo: { anyOf: [{ $ref: 'ps.promoResponse#' }, { type: 'null' }] },
       goodsAfterDiscount: { type: 'integer' },
+      cdekEnabled: { type: 'boolean' },
       methods: {
         type: 'array',
         items: { $ref: 'ps.deliveryMethod#' },

@@ -115,5 +115,3 @@ function parseBox(raw: string, weightG: number): CdekBox {
   }
   return { lengthCm, widthCm, heightCm, weightG }
 }
-
-export const cdekConfig = parseCdekConfig(process.env)

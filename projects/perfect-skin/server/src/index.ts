@@ -31,6 +31,9 @@ import seoHtmlRoutes from './routes/seo-html.js'
 import seoFilesRoutes from './routes/seo-files.js'
 import { createTelegramNotifier, TelegramNotifier } from './services/telegram/notifier.js'
 import { createProTelegramBot, createOrdersTelegramBot } from './services/telegram/bot.js'
+import { CdekConfigError, parseCdekConfig } from './services/cdek/config.js'
+import { initCdek } from './services/cdek/registry.js'
+import { CdekUnavailableError } from './services/cdek/http.js'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -131,6 +134,13 @@ app.setErrorHandler((error, request, reply) => {
       .send(errorResponse(new ApiError(429, 'RATE_LIMITED', 'Слишком много запросов. Попробуйте позже')))
   }
 
+  // СДЭК недоступен: это не сбой нашего кода, а повтор через минуту.
+  if (error instanceof CdekUnavailableError) {
+    return reply
+      .status(503)
+      .send(errorResponse(new ApiError(503, 'CDEK_UNAVAILABLE', 'СДЭК временно недоступен, повторите позже')))
+  }
+
   // Файл больше лимита multipart: это 413 от клиента, а не сбой сервера.
   if ((error as { code?: string }).code === 'FST_REQ_FILE_TOO_LARGE') {
     return reply
@@ -154,6 +164,15 @@ app.get('/api/v1/health', async (request, reply) => {
 // Инициализируем Telegram-нотификатор ДО регистрации маршрутов
 const notifier = createTelegramNotifier(app.prisma, app)
 app.decorate('telegram', notifier)
+
+// Кривая конфигурация СДЭК при включённой интеграции — понятная причина в логе, а не падение на импорте
+try {
+  initCdek(parseCdekConfig(process.env), app.log)
+} catch (error) {
+  if (!(error instanceof CdekConfigError)) throw error
+  app.log.fatal({ reason: error.message }, 'СДЭК: неверная конфигурация, сервер не запущен')
+  process.exit(1)
+}
 
 // Register exchange routes
 await app.register(exchange1cRoutes)

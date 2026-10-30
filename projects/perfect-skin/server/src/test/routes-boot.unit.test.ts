@@ -18,3 +18,16 @@ describe('admin routes', () => {
     await app.close()
   })
 })
+
+import deliveryRoutes from '../routes/delivery/index.js'
+
+describe('delivery routes', () => {
+  it('register cities, points and methods without duplicate or schema errors', async () => {
+    const app = Fastify()
+    registerCommonSchemas(app)
+    app.decorate('authenticateOptional', async () => {})
+    await app.register(deliveryRoutes)
+    await expect(app.ready()).resolves.toBeDefined()
+    await app.close()
+  })
+})
