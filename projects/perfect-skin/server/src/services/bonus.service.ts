@@ -261,9 +261,14 @@ async function accrueForOrder(tx: Tx, orderId: string, now: Date): Promise<'accr
   await tx.$queryRaw`SELECT id FROM orders WHERE id = ${orderId} FOR UPDATE`
   const order = await tx.order.findUniqueOrThrow({
     where: { id: orderId },
-    select: { status: true, userId: true, bonusAccruedAt: true, bonusAccrualPlanned: true },
+    select: { status: true, paymentStatus: true, userId: true, bonusAccruedAt: true, bonusAccrualPlanned: true },
   })
-  if (order.status === 'cancelled' || order.bonusAccruedAt !== null || order.bonusAccrualPlanned === 0) {
+  if (
+    order.status === 'cancelled' ||
+    order.paymentStatus !== 'paid' ||
+    order.bonusAccruedAt !== null ||
+    order.bonusAccrualPlanned === 0
+  ) {
     return 'skipped'
   }
 
@@ -361,9 +366,12 @@ async function onOrderStatusChanged(
   }
 }
 
+// Начисление без оплаты пропускается, поэтому уже доставленный заказ, оплаченный позже, начисляем здесь.
 async function onOrderPaid(tx: Tx, input: { orderId: string; now: Date }): Promise<void> {
   const settings = await loyaltySettingsService.get(tx)
-  if (settings.accrualTrigger === 'paid') {
+  const order = await tx.order.findUniqueOrThrow({ where: { id: input.orderId }, select: { status: true } })
+  const deliveredEarlier = settings.accrualTrigger === 'delivered' && order.status === 'delivered'
+  if (settings.accrualTrigger === 'paid' || deliveredEarlier) {
     await scheduleAccrual(tx, input.orderId, input.now, settings.accrualDelayDays)
   }
 }

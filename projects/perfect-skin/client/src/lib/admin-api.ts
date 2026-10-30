@@ -44,6 +44,7 @@ export interface AdminCdek {
     calculatedAt: string
   } | null
   canSubmit: boolean
+  awaitingPayment: boolean
   history: { code: string; name: string | null; city: string | null; occurredAt: string }[]
 }
 
@@ -1211,8 +1212,12 @@ export async function downloadConsentDoc(id: string): Promise<Blob> {
 /**
  * Передать заказ в СДЭК (ручной путь)
  */
-export async function adminCdekSubmit(id: string): Promise<AdminOrderDetail> {
-  return fetchApi<AdminOrderDetail>(`/api/v1/admin/orders/${encodeURIComponent(id)}/cdek`, { method: 'POST' })
+export async function adminCdekSubmit(id: string, force = false): Promise<AdminOrderDetail> {
+  return fetchApi<AdminOrderDetail>(`/api/v1/admin/orders/${encodeURIComponent(id)}/cdek`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ force }),
+  })
 }
 
 /**

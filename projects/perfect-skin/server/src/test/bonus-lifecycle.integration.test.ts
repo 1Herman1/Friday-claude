@@ -183,7 +183,7 @@ describe('Жизненный цикл заказа и бонусы', () => {
   it('отмена после начисления без трат: начисление отменяется целиком', async () => {
     const user = await makeUser('reverse-full')
     await bonusService.join(user.id, VIEWER, new Date())
-    const orderId = await makeOrder(user.id, { status: 'in_transit', bonusAccrualPlanned: 50 })
+    const orderId = await makeOrder(user.id, { status: 'in_transit', bonusAccrualPlanned: 50, paymentStatus: 'paid' })
 
     await setStatus(orderId, 'delivered')
     expect(await balanceOf(user.id)).toBe(50)
@@ -199,7 +199,7 @@ describe('Жизненный цикл заказа и бонусы', () => {
     const user = await makeUser('reverse-partial')
     await bonusService.join(user.id, VIEWER, new Date())
     const account = await accountOf(user.id)
-    const accrualOrder = await makeOrder(user.id, { status: 'in_transit', bonusAccrualPlanned: 50 })
+    const accrualOrder = await makeOrder(user.id, { status: 'in_transit', bonusAccrualPlanned: 50, paymentStatus: 'paid' })
     await setStatus(accrualOrder, 'delivered')
     expect(await balanceOf(user.id)).toBe(50)
 
@@ -242,7 +242,7 @@ describe('Жизненный цикл заказа и бонусы', () => {
     const user = await makeUser('left-member')
     const now = new Date()
     await bonusService.join(user.id, VIEWER, now)
-    const orderId = await makeOrder(user.id, { status: 'in_transit', bonusAccrualPlanned: 50 })
+    const orderId = await makeOrder(user.id, { status: 'in_transit', bonusAccrualPlanned: 50, paymentStatus: 'paid' })
     await bonusService.leave(user.id, now)
 
     await setStatus(orderId, 'delivered')
@@ -254,6 +254,18 @@ describe('Жизненный цикл заказа и бонусы', () => {
     await bonusService.join(user.id, VIEWER, now)
     const outcome = await db.$transaction((tx) => bonusService.accrueForOrder(tx, orderId, new Date()))
     expect(outcome).toBe('accrued')
+    expect(await balanceOf(user.id)).toBe(50)
+  })
+
+  it('доставлен без оплаты: начисления нет; оплата позже начисляет бонусы', async () => {
+    const user = await makeUser('unpaid-delivered')
+    await bonusService.join(user.id, VIEWER, new Date())
+    const orderId = await makeOrder(user.id, { status: 'in_transit', bonusAccrualPlanned: 50, paymentStatus: 'pending' })
+
+    await setStatus(orderId, 'delivered')
+    expect(await balanceOf(user.id)).toBe(0)
+
+    await adminOrderService.updateOrder(orderId, { markPaid: true }, 'super_admin')
     expect(await balanceOf(user.id)).toBe(50)
   })
 })

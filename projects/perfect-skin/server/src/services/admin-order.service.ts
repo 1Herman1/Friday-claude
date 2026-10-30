@@ -11,10 +11,15 @@ type CdekSyncState = $Enums.CdekSyncState
 const CDEK_CLAIM_STALE_MS = 5 * 60_000
 const CDEK_HISTORY_LIMIT = 50
 
-export function cdekCanSubmit(
-  input: { deliveryMethod: string; status: OrderStatus; cdekState: CdekSyncState | null; cdekRequestedAt: Date | null },
-  now: Date
-): boolean {
+interface CdekSubmitInput {
+  deliveryMethod: string
+  status: OrderStatus
+  paymentStatus: PaymentStatus
+  cdekState: CdekSyncState | null
+  cdekRequestedAt: Date | null
+}
+
+function cdekSubmittable(input: Omit<CdekSubmitInput, 'paymentStatus'>, now: Date): boolean {
   if (getCdek() === null || input.deliveryMethod === 'pickup') return false
   if (input.status === 'cancelled' || input.status === 'delivered') return false
   if (input.cdekState === null || input.cdekState === 'invalid') return true
@@ -23,6 +28,15 @@ export function cdekCanSubmit(
     input.cdekRequestedAt !== null &&
     input.cdekRequestedAt.getTime() < now.getTime() - CDEK_CLAIM_STALE_MS
   )
+}
+
+export function cdekCanSubmit(input: CdekSubmitInput, now: Date): boolean {
+  return input.paymentStatus === 'paid' && cdekSubmittable(input, now)
+}
+
+// Единственное, что мешает передаче, — неоплата: кнопку показываем неактивной с подсказкой.
+export function cdekAwaitingPayment(input: CdekSubmitInput, now: Date): boolean {
+  return input.paymentStatus !== 'paid' && cdekSubmittable(input, now)
 }
 
 // Машина переходов статусов заказов
@@ -286,6 +300,7 @@ export class AdminOrderService {
         point: order.deliveryPoint ?? null,
         quote: order.deliveryQuote ?? null,
         canSubmit: cdekCanSubmit(order, new Date()),
+        awaitingPayment: cdekAwaitingPayment(order, new Date()),
         history: history.map((event) => ({
           code: event.code,
           name: event.name,

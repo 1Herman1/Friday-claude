@@ -34,15 +34,30 @@ function requireSync() {
 }
 
 export async function cdekAdminRoutes(app: FastifyInstance, preHandlers: any[]) {
-  app.post<{ Params: { id: string } }>(
+  app.post<{ Params: { id: string }; Body: { force?: boolean } }>(
     '/orders/:id/cdek',
     {
       preHandler: preHandlers,
       config: { rateLimit: RATE_LIMIT },
-      schema: { params: ID_PARAMS, response: { 200: { $ref: 'ps.adminOrder#' }, ...ERROR_RESPONSES } },
+      schema: {
+        params: ID_PARAMS,
+        body: {
+          type: 'object',
+          additionalProperties: false,
+          properties: { force: { type: 'boolean' } },
+        },
+        response: { 200: { $ref: 'ps.adminOrder#' }, ...ERROR_RESPONSES },
+      },
     },
-    async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
-      await requireSync().submit(request.params.id, 'manager')
+    async (request: FastifyRequest<{ Params: { id: string }; Body: { force?: boolean } }>, reply: FastifyReply) => {
+      const force = request.body?.force === true
+      if (force && request.user?.role !== 'super_admin') {
+        throw new ApiError(403, 'FORBIDDEN', 'Передача без оплаты доступна только главному администратору')
+      }
+      await requireSync().submit(request.params.id, 'manager', { allowUnpaid: force })
+      if (force) {
+        request.log.warn({ orderId: request.params.id, actorId: request.user?.id }, 'СДЭК: заказ передан без оплаты')
+      }
       reply.code(200)
       return adminOrderService.getOrder(request.params.id)
     }

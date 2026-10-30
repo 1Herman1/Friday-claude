@@ -45,7 +45,9 @@ function makeSync(): CdekOrderSync {
   })
 }
 
-async function makeOrder(options: { stateCreatedAt?: Date; state?: 'creating' | null } = {}): Promise<{ id: string; number: string }> {
+async function makeOrder(
+  options: { stateCreatedAt?: Date; state?: 'creating' | null; paymentStatus?: 'pending' | 'paid' } = {}
+): Promise<{ id: string; number: string }> {
   const suffix = randomUUID().slice(0, 8)
   const user = await db.user.create({ data: { name: 'Тест', email: `cdek-${suffix}${EMAIL_DOMAIN}` } })
   const order = await db.order.create({
@@ -61,6 +63,7 @@ async function makeOrder(options: { stateCreatedAt?: Date; state?: 'creating' | 
       recipientPhone: '+79990000001',
       subtotal: 100000,
       total: 100000,
+      paymentStatus: options.paymentStatus ?? 'paid',
       cdekState: options.state ?? null,
       cdekRequestedAt: options.stateCreatedAt ?? null,
     },
@@ -103,6 +106,25 @@ describe('CDEK order sync (с базой)', () => {
     const rejected = results.filter((r): r is PromiseRejectedResult => r.status === 'rejected')
     expect(rejected).toHaveLength(1)
     expect((rejected[0].reason as ApiError).code).toBe('CDEK_ALREADY_SUBMITTED')
+  })
+
+  it('неоплаченный заказ: submit → ORDER_NOT_PAID, в СДЭК ничего не уходит, состояние не меняется', async () => {
+    const order = await makeOrder({ paymentStatus: 'pending' })
+    const sync = makeSync()
+
+    await expect(sync.submit(order.id, 'manager')).rejects.toMatchObject({ status: 409, code: 'ORDER_NOT_PAID' })
+    expect(createOrder).not.toHaveBeenCalled()
+    expect((await db.order.findUniqueOrThrow({ where: { id: order.id } })).cdekState).toBeNull()
+  })
+
+  it('allowUnpaid (force супер-админа) передаёт неоплаченный заказ', async () => {
+    const order = await makeOrder({ paymentStatus: 'pending' })
+    const sync = makeSync()
+
+    await sync.submit(order.id, 'manager', { allowUnpaid: true })
+
+    expect(createOrder).toHaveBeenCalledTimes(1)
+    expect((await db.order.findUniqueOrThrow({ where: { id: order.id } })).cdekState).toBe('accepted')
   })
 
   it('state accepted и created без uuid/номера в базе не записываются', async () => {

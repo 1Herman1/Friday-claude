@@ -58,6 +58,10 @@ const PRINT_PAUSE_MS = 2_000
 type CdekSyncState = $Enums.CdekSyncState
 export type CdekSource = 'webhook' | 'poll' | 'manual' | 'submit'
 
+export interface CdekSubmitOptions {
+  allowUnpaid?: boolean
+}
+
 export interface CdekProblemNotifier {
   onCdekProblem(orderId: string, reason: string): Promise<void>
 }
@@ -167,7 +171,7 @@ export class CdekOrderSync {
     return this.deps.cdek.client
   }
 
-  async submit(orderId: string, actor: 'manager' | 'auto'): Promise<void> {
+  async submit(orderId: string, actor: 'manager' | 'auto', options: CdekSubmitOptions = {}): Promise<void> {
     const before = await db.order.findUnique({ where: { id: orderId }, select: { cdekState: true } })
     if (before === null) throw new ApiError(404, 'ORDER_NOT_FOUND', 'Заказ не найден')
 
@@ -176,6 +180,7 @@ export class CdekOrderSync {
         id: orderId,
         deliveryMethod: { not: 'pickup' },
         status: { notIn: ['cancelled', 'delivered'] },
+        ...(options.allowUnpaid ? {} : { paymentStatus: 'paid' }),
         OR: [
           { cdekState: null },
           { cdekState: 'invalid' },
@@ -184,7 +189,7 @@ export class CdekOrderSync {
       },
       data: { cdekState: 'creating', cdekRequestedAt: new Date(this.now()), cdekError: null },
     })
-    if (claim.count === 0) throw await this.refusalFor(orderId)
+    if (claim.count === 0) throw await this.refusalFor(orderId, options)
 
     const order = await this.loadForCdek(orderId)
     const prefixed = this.cfg.orderNumberPrefix + order.number
@@ -387,14 +392,18 @@ export class CdekOrderSync {
     return printUuid
   }
 
-  private async refusalFor(orderId: string): Promise<ApiError> {
+  private async refusalFor(orderId: string, options: CdekSubmitOptions): Promise<ApiError> {
     const order = await db.order.findUnique({
       where: { id: orderId },
-      select: { status: true, deliveryMethod: true },
+      select: { status: true, deliveryMethod: true, paymentStatus: true, cdekState: true },
     })
     if (order === null) return new ApiError(404, 'ORDER_NOT_FOUND', 'Заказ не найден')
     if (order.deliveryMethod === 'pickup' || order.status === 'cancelled' || order.status === 'delivered') {
       return new ApiError(409, 'CDEK_NOT_APPLICABLE', 'Передача в СДЭК для этого заказа не нужна')
+    }
+    const claimable = order.cdekState === null || order.cdekState === 'invalid' || order.cdekState === 'creating'
+    if (!options.allowUnpaid && order.paymentStatus !== 'paid' && claimable) {
+      return new ApiError(409, 'ORDER_NOT_PAID', 'Сначала отметьте оплату заказа')
     }
     return new ApiError(409, 'CDEK_ALREADY_SUBMITTED', 'Заказ уже передан в СДЭК')
   }

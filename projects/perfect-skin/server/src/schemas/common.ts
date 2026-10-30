@@ -963,6 +963,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
         ],
       },
       canSubmit: { type: 'boolean' },
+      awaitingPayment: { type: 'boolean' },
       history: {
         type: 'array',
         items: {

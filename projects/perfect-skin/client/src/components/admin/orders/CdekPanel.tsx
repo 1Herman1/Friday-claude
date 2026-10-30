@@ -8,13 +8,14 @@ import {
   type AdminOrderDetail,
 } from '@/lib/admin-api'
 import { ApiError } from '@/lib/api'
+import { useAuth } from '@/context/AuthContext'
 
 interface CdekPanelProps {
   order: AdminOrderDetail
   onUpdated: (order: AdminOrderDetail) => void
 }
 
-type Busy = 'submit' | 'refresh' | 'waybill' | 'barcode' | null
+type Busy = 'submit' | 'force' | 'refresh' | 'waybill' | 'barcode' | null
 
 const STATE_LABELS: Record<NonNullable<AdminCdek['state']> | 'none', string> = {
   none: 'Не передан',
@@ -37,6 +38,8 @@ export function CdekPanel({ order, onUpdated }: CdekPanelProps) {
   const [busy, setBusy] = useState<Busy>(null)
   const [error, setError] = useState('')
   const [errorLines, setErrorLines] = useState<string[]>([])
+  const { user } = useAuth()
+  const isSuperAdmin = user?.role === 'super_admin'
 
   if (order.deliveryMethod === 'pickup') return null
 
@@ -64,6 +67,11 @@ export function CdekPanel({ order, onUpdated }: CdekPanelProps) {
     } finally {
       setBusy(null)
     }
+  }
+
+  const submitWithoutPayment = () => {
+    if (!window.confirm('Заказ не оплачен. Всё равно передать в СДЭК? Действие фиксируется.')) return
+    void perform('force', () => adminCdekSubmit(order.id, true))
   }
 
   const downloadPrint = async (kind: 'waybill' | 'barcode') => {
@@ -162,6 +170,31 @@ export function CdekPanel({ order, onUpdated }: CdekPanelProps) {
                 className={`${BUTTON} bg-primary text-primary-foreground hover:bg-primary/90`}
               >
                 {busy === 'submit' ? 'Передаём…' : 'Передать в СДЭК'}
+              </button>
+            )}
+            {cdek.awaitingPayment && (
+              <div className="w-full space-y-2">
+                <button
+                  type="button"
+                  disabled
+                  aria-describedby="cdek-payment-hint"
+                  className={`${BUTTON} bg-primary text-primary-foreground`}
+                >
+                  Передать в СДЭК
+                </button>
+                <p id="cdek-payment-hint" className="text-sm text-muted-foreground">
+                  Сначала отметьте оплату заказа.
+                </p>
+              </div>
+            )}
+            {cdek.awaitingPayment && isSuperAdmin && (
+              <button
+                type="button"
+                onClick={submitWithoutPayment}
+                disabled={busy !== null}
+                className={`${BUTTON} border border-destructive text-destructive hover:bg-destructive/10`}
+              >
+                {busy === 'force' ? 'Передаём…' : 'Передать без оплаты'}
               </button>
             )}
             {canRefresh && (
