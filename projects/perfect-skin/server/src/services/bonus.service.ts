@@ -258,6 +258,7 @@ async function scheduleAccrual(tx: Tx, orderId: string, now: Date, delayDays: nu
 }
 
 async function accrueForOrder(tx: Tx, orderId: string, now: Date): Promise<'accrued' | 'skipped'> {
+  await tx.$queryRaw`SELECT id FROM orders WHERE id = ${orderId} FOR UPDATE`
   const order = await tx.order.findUniqueOrThrow({
     where: { id: orderId },
     select: { status: true, userId: true, bonusAccruedAt: true, bonusAccrualPlanned: true },

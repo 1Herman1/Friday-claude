@@ -927,7 +927,6 @@ model BonusTransaction {
   @@unique([orderId, type])
   @@index([accountId, createdAt])
   @@index([accountId, expiresAt])
-  @@index([orderId])
   @@index([createdById])
   @@index([createdAt])
   @@map("bonus_transactions")

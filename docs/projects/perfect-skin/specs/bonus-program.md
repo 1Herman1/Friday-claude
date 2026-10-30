@@ -736,8 +736,9 @@ export async function reconcileBonusBalances(prisma): Promise<{ mismatched: numb
 `GET /api/v1/bonus/checkout` (`ps.bonusCheckout`):
 
 ```json
-{ "canSpend": true, "reason": null, "available": 312, "maxSpend": 140, "kopecksPerBonus": 100,
+{ "canSpend": true, "reason": null, "available": 312, "maxSpend": 1402, "kopecksPerBonus": 100,
   "goodsAfterDiscount": 467500, "minOrderForSpend": 0, "accrualPreview": 23 }
+// maxSpend — лимит по доле заказа: floor(467500 × 30 / (100 × 100)) = 1402 при maxSpendPercent=30; списать можно min(available, maxSpend).
 ```
 
 - `reason`: `PROGRAM_DISABLED | AUTH_REQUIRED | NOT_ELIGIBLE | NOT_MEMBER | PROMO_CONFLICT | MIN_ORDER | EMPTY_BALANCE | null`;

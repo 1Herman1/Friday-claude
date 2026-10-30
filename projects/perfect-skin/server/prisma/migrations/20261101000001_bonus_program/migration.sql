@@ -91,7 +91,6 @@ CREATE UNIQUE INDEX "bonus_transactions_idempotencyKey_key" ON "bonus_transactio
 CREATE UNIQUE INDEX "bonus_transactions_orderId_type_key" ON "bonus_transactions"("orderId","type");
 CREATE INDEX "bonus_transactions_accountId_createdAt_idx" ON "bonus_transactions"("accountId","createdAt");
 CREATE INDEX "bonus_transactions_accountId_expiresAt_idx" ON "bonus_transactions"("accountId","expiresAt");
-CREATE INDEX "bonus_transactions_orderId_idx" ON "bonus_transactions"("orderId");
 CREATE INDEX "bonus_transactions_createdById_idx" ON "bonus_transactions"("createdById");
 CREATE INDEX "bonus_transactions_createdAt_idx" ON "bonus_transactions"("createdAt");
 -- Живые партии для ночного сгорания (Prisma частичные индексы не выражает)
