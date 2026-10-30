@@ -10,6 +10,7 @@ import prismaPlugin from '../plugins/prisma.js'
 import authenticatePlugin from '../plugins/authenticate.js'
 import { ApiError, errorResponse } from '../lib/errors.js'
 import { registerCommonSchemas } from '../schemas/common.js'
+import type { TelegramNotifier } from '../services/telegram/notifier.js'
 import cartRoutes from '../routes/cart/index.js'
 import ordersRoutes from '../routes/orders/index.js'
 import publicPostsRoutes from '../routes/posts/index.js'
@@ -43,6 +44,12 @@ async function build() {
   await app.register(cors, { origin: 'http://localhost:3000', credentials: true })
   await app.register(rateLimit, { max: 10000, timeWindow: '1 minute' })
   await app.register(authenticatePlugin)
+  // Роуты шлют уведомление после записи; в тесте достаточно заглушки
+  app.decorate('telegram', {
+    onNewOrder: async () => undefined,
+    onNewApplication: async () => undefined,
+    onNewConsultation: async () => undefined,
+  } as unknown as TelegramNotifier)
 
   app.setErrorHandler((error, request, reply) => {
     if (error instanceof ApiError) {
