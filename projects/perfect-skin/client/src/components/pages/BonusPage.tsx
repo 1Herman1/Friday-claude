@@ -17,8 +17,10 @@ const SECTION = 'p-6 rounded-block border border-border bg-card'
 const SECTION_HEADING = 'text-h3 font-heading font-semibold normal-case tracking-[-0.015em] text-foreground mb-4'
 const SECONDARY_BUTTON =
   'inline-flex items-center px-6 py-3 border border-border-strong text-foreground font-bold rounded-pill hover:bg-muted transition-colors min-h-11'
-const PRIMARY_BUTTON =
-  'inline-flex items-center px-6 py-3 bg-primary text-primary-foreground font-bold rounded-pill hover:opacity-90 transition-opacity min-h-11 disabled:opacity-50'
+const DESTRUCTIVE_BUTTON =
+  'inline-flex items-center px-6 py-3 bg-destructive text-destructive-foreground font-bold rounded-pill hover:opacity-90 transition-opacity min-h-11 disabled:opacity-50'
+const LEAVE_LINK =
+  'text-sm text-muted-foreground underline underline-offset-2 min-h-11 inline-flex items-center'
 
 function rulesLines(summary: BonusSummary): string[] {
   const { rules } = summary
@@ -135,46 +137,74 @@ export function BonusPage() {
         Мои бонусы
       </h1>
 
-      <div className="grid gap-6 max-w-2xl">
-        <section aria-labelledby="bonus-balance-heading" className={SECTION}>
-          <h2 id="bonus-balance-heading" className="text-label uppercase tracking-[0.08em] text-muted-foreground mb-2">
-            Баланс
-          </h2>
-          <p className="text-h2 font-heading font-bold text-primary tabular-nums leading-none">
-            {balance} {bonusWord(balance)}
-          </p>
-          <p className="text-sm text-muted-foreground tabular-nums mt-2">≈ {formatPrice(balanceValue)}</p>
-          {nextExpiration && (
-            <p className="text-sm text-foreground mt-4">
-              {nextExpiration.amount} {bonusWord(nextExpiration.amount)} сгорят{' '}
-              {formatBonusDate(nextExpiration.expiresAt)}
+      <div className="grid gap-6 max-w-2xl lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-6 lg:items-start">
+        <div className="grid gap-6">
+          <section aria-labelledby="bonus-balance-heading" className={SECTION}>
+            <h2 id="bonus-balance-heading" className="text-label uppercase tracking-[0.08em] text-muted-foreground mb-2">
+              Баланс
+            </h2>
+            <p className="text-h2 font-heading font-bold text-primary tabular-nums leading-none">
+              {balance} {bonusWord(balance)}
             </p>
-          )}
-          {!member && (
-            <p className="text-sm text-muted-foreground mt-4">
-              Вы не участник клуба: остаток сохранён, копить и тратить бонусы сейчас нельзя.{' '}
-              <Link to="/orders" className="underline font-semibold text-primary">
-                Вступить в кабинете
-              </Link>
-            </p>
-          )}
-          {member && !programEnabled && (
-            <p className="text-sm text-muted-foreground mt-4">Программа пока приостановлена, баланс сохранён.</p>
-          )}
-        </section>
-
-        <section aria-labelledby="bonus-rules-heading" className={SECTION}>
-          <h2 id="bonus-rules-heading" className={SECTION_HEADING}>Как это работает</h2>
-          <ul className="space-y-2 text-sm text-foreground list-disc pl-5">
-            {rulesLines(summary).map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-          <Link to="/club/rules" className="inline-flex items-center min-h-11 mt-2 text-sm font-semibold text-primary underline underline-offset-2">
-            Правила Бьюти-клуба
-          </Link>
-        </section>
-
+            <p className="text-sm text-muted-foreground tabular-nums mt-2">≈ {formatPrice(balanceValue)}</p>
+            {nextExpiration && (
+              <p className="text-sm text-foreground mt-4">
+                {nextExpiration.amount} {bonusWord(nextExpiration.amount)} сгорят{' '}
+                {formatBonusDate(nextExpiration.expiresAt)}
+              </p>
+            )}
+            {!member && (
+              <p className="text-sm text-muted-foreground mt-4">
+                Вы не участник клуба: остаток сохранён, копить и тратить бонусы сейчас нельзя.{' '}
+                <Link to="/orders" className="underline font-semibold text-primary">
+                  Вступить в кабинете
+                </Link>
+              </p>
+            )}
+            {member && !programEnabled && (
+              <p className="text-sm text-muted-foreground mt-4">Программа пока приостановлена, баланс сохранён.</p>
+            )}
+          </section>
+          <section aria-labelledby="bonus-rules-heading" className={SECTION}>
+            <h2 id="bonus-rules-heading" className={SECTION_HEADING}>Как это работает</h2>
+            <ul className="space-y-2 text-sm text-foreground list-disc pl-5">
+              {rulesLines(summary).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+            <Link to="/club/rules" className="inline-flex items-center min-h-11 mt-2 text-sm font-semibold text-primary underline underline-offset-2">
+              Правила Бьюти-клуба
+            </Link>
+            {member && (
+              <div className="mt-2">
+                {!confirmLeave ? (
+                  <button type="button" onClick={() => setConfirmLeave(true)} className={LEAVE_LINK}>
+                    Выйти из клуба
+                  </button>
+                ) : (
+                  <div>
+                    <p className="text-sm text-foreground mb-4">
+                      Остаток {balance} {bonusWord(balance)} будет заморожен до утверждения правил программы. Выйти из клуба?
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button type="button" onClick={leave} disabled={leaving} className={DESTRUCTIVE_BUTTON}>
+                        {leaving ? 'Выходим…' : 'Да, выйти'}
+                      </button>
+                      <button type="button" onClick={() => setConfirmLeave(false)} disabled={leaving} className={SECONDARY_BUTTON}>
+                        Отмена
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            {leaveError && (
+              <p role="alert" className="mt-3 text-sm text-destructive">
+                {leaveError}
+              </p>
+            )}
+          </section>
+        </div>
         <section aria-labelledby="bonus-history-heading" className={SECTION}>
           <h2 id="bonus-history-heading" className={SECTION_HEADING}>История</h2>
           {items.length === 0 ? (
@@ -190,7 +220,7 @@ export function BonusPage() {
                       {tx.orderNumber && (
                         <>
                           {' · '}
-                          <Link to={`/orders/${tx.orderNumber}`} className="underline inline-flex items-center min-h-11">
+                          <Link to={`/orders/${tx.orderNumber}`} className="relative underline after:absolute after:-inset-y-3 after:inset-x-0">
                             Заказ {tx.orderNumber}
                           </Link>
                         </>
@@ -225,36 +255,6 @@ export function BonusPage() {
             </div>
           )}
         </section>
-
-        {member && (
-          <section aria-labelledby="bonus-leave-heading" className={SECTION}>
-            <h2 id="bonus-leave-heading" className={SECTION_HEADING}>Бьюти-клуб</h2>
-            {!confirmLeave ? (
-              <button type="button" onClick={() => setConfirmLeave(true)} className={SECONDARY_BUTTON}>
-                Выйти из клуба
-              </button>
-            ) : (
-              <div>
-                <p className="text-sm text-foreground mb-4">
-                  Остаток {balance} {bonusWord(balance)} будет заморожен до утверждения правил программы. Выйти из клуба?
-                </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  <button type="button" onClick={leave} disabled={leaving} className={PRIMARY_BUTTON}>
-                    {leaving ? 'Выходим…' : 'Да, выйти'}
-                  </button>
-                  <button type="button" onClick={() => setConfirmLeave(false)} disabled={leaving} className={SECONDARY_BUTTON}>
-                    Отмена
-                  </button>
-                </div>
-              </div>
-            )}
-            {leaveError && (
-              <p role="alert" className="mt-3 text-sm text-destructive">
-                {leaveError}
-              </p>
-            )}
-          </section>
-        )}
       </div>
     </div>
   )

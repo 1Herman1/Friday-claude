@@ -51,7 +51,7 @@ const NOTICE_LABELS: Record<AdminBonusSettings['expiryNoticeKind'], string> = {
 }
 
 const INPUT = 'w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring disabled:opacity-60 min-h-11'
-const LABEL = 'block text-label font-sans text-muted-foreground mb-2'
+const LABEL = 'block text-sm font-sans text-muted-foreground mb-2'
 const CHECK_ROW = 'flex items-start gap-3 min-h-11 cursor-pointer'
 const CHECKBOX = 'w-5 h-5 mt-0.5 flex-shrink-0 rounded border border-border-strong checked:bg-primary checked:border-primary disabled:cursor-not-allowed'
 
@@ -205,7 +205,7 @@ export function AdminBonusSettingsPage() {
         </section>
 
         <fieldset className="p-6 rounded-block border border-border bg-card grid gap-6 sm:grid-cols-2">
-          <legend className="text-h3 font-heading font-semibold text-foreground mb-2">Начисление</legend>
+          <legend className="float-left w-full sm:col-span-2 text-h3 font-heading font-semibold normal-case text-foreground mb-2">Начисление</legend>
           {number('accrualPercent', 0, 100, 'Процент начисления')}
           <div>
             <label htmlFor="bs-accrualTrigger" className={LABEL}>Начисление</label>
@@ -236,7 +236,7 @@ export function AdminBonusSettingsPage() {
         </fieldset>
 
         <fieldset className="p-6 rounded-block border border-border bg-card grid gap-6 sm:grid-cols-2">
-          <legend className="text-h3 font-heading font-semibold text-foreground mb-2">Списание</legend>
+          <legend className="float-left w-full sm:col-span-2 text-h3 font-heading font-semibold normal-case text-foreground mb-2">Списание</legend>
           {number('kopecksPerBonus', 1, 10000, 'Курс, копеек за бонус', '100 = 1 бонус равен 1 ₽')}
           {number('maxSpendPercent', 0, 100, 'Лимит списания, % товаров')}
           <div>
@@ -249,7 +249,7 @@ export function AdminBonusSettingsPage() {
         </fieldset>
 
         <fieldset className="p-6 rounded-block border border-border bg-card grid gap-6 sm:grid-cols-2">
-          <legend className="text-h3 font-heading font-semibold text-foreground mb-2">Сроки и приветственные</legend>
+          <legend className="float-left w-full sm:col-span-2 text-h3 font-heading font-semibold normal-case text-foreground mb-2">Сроки и приветственные</legend>
           {number('bonusTtlDays', 0, 1825, 'Срок жизни начислений, дней', '0 — бонусы не сгорают')}
           {number('refundMinTtlDays', 1, 365, 'Минимальный срок возвращённых бонусов, дней')}
           {number('welcomeBonus', 0, 5000, 'Приветственные бонусы')}
@@ -281,7 +281,7 @@ export function AdminBonusSettingsPage() {
       </form>
 
       <section aria-labelledby="bonus-changes-heading" className="max-w-3xl mt-12">
-        <h2 id="bonus-changes-heading" className="text-h3 font-heading font-semibold text-foreground mb-4">История изменений</h2>
+        <h2 id="bonus-changes-heading" className="text-h3 font-heading font-semibold normal-case text-foreground mb-4">История изменений</h2>
         {data.changes.length === 0 ? (
           <p className="text-sm text-muted-foreground">Изменений пока не было</p>
         ) : (

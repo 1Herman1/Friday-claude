@@ -13,7 +13,7 @@ import { BONUS_TYPE_LABELS, bonusWord, formatBonusDate } from '@/lib/bonus-label
 const PAGE_SIZE = 20
 const MAX_AMOUNT = 100_000
 const INPUT = 'w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring min-h-11'
-const LABEL = 'block text-label font-sans text-muted-foreground mb-2'
+const LABEL = 'block text-sm font-sans text-muted-foreground mb-2'
 
 export function AdminBonusAccountPage() {
   const { userId = '' } = useParams()
@@ -155,7 +155,7 @@ export function AdminBonusAccountPage() {
 
           {canAdjust && (
             <section aria-labelledby="bonus-adjust-heading" className="p-6 rounded-block border border-border bg-card">
-              <h2 id="bonus-adjust-heading" className="text-h3 font-heading font-semibold text-foreground mb-4">Корректировка</h2>
+              <h2 id="bonus-adjust-heading" className="text-h3 font-heading font-semibold normal-case text-foreground mb-4">Корректировка</h2>
               {!confirming ? (
                 <form onSubmit={review} className="grid gap-4">
                   <div>
@@ -198,8 +198,8 @@ export function AdminBonusAccountPage() {
           )}
         </div>
 
-        <section aria-labelledby="bonus-acc-history" className="rounded-block border border-border bg-card overflow-x-auto">
-          <h2 id="bonus-acc-history" className="text-h3 font-heading font-semibold text-foreground p-6 pb-4">История</h2>
+        <section aria-labelledby="bonus-acc-history" className="self-start rounded-block border border-border bg-card overflow-x-auto">
+          <h2 id="bonus-acc-history" className="text-h3 font-heading font-semibold normal-case text-foreground p-6 pb-4">История</h2>
           {transactions.length === 0 ? (
             <p className="px-6 pb-6 text-sm text-muted-foreground">Операций пока нет</p>
           ) : (

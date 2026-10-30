@@ -55,7 +55,7 @@ export function AdminBonusAccountsPage() {
 
       <form onSubmit={submit} role="search" className="flex flex-wrap gap-3 mb-6 max-w-xl">
         <div className="flex-1 min-w-[12rem]">
-          <label htmlFor="bonus-search" className="block text-label font-sans text-muted-foreground mb-2">Email или телефон</label>
+          <label htmlFor="bonus-search" className="block text-sm font-sans text-muted-foreground mb-2">Email или телефон</label>
           <input id="bonus-search" type="search" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="от 3 символов" className={INPUT} />
         </div>
         <button type="submit" className="self-end px-6 py-3 bg-primary text-primary-foreground font-bold rounded-pill min-h-11">
@@ -77,23 +77,23 @@ export function AdminBonusAccountsPage() {
                 <th scope="col" className="px-4 py-3 text-left text-muted-foreground font-semibold">Участник</th>
                 <th scope="col" className="px-4 py-3 text-right text-muted-foreground font-semibold">Баланс</th>
                 <th scope="col" className="px-4 py-3 text-left text-muted-foreground font-semibold">Статус</th>
-                <th scope="col" className="px-4 py-3 text-left text-muted-foreground font-semibold">Вступил</th>
-                <th scope="col" className="px-4 py-3"><span className="sr-only">Действия</span></th>
+                <th scope="col" className="hidden md:table-cell px-4 py-3 text-left text-muted-foreground font-semibold">Вступил</th>
+                <th scope="col" className="hidden md:table-cell px-4 py-3"><span className="sr-only">Действия</span></th>
               </tr>
             </thead>
             <tbody>
               {data.items.map((row) => (
                 <tr key={row.userId} className="border-b border-border last:border-b-0">
                   <td className="px-4 py-3">
-                    <p className="font-semibold text-foreground">{row.name || 'Без имени'}</p>
-                    <p className="text-muted-foreground">{row.email ?? row.phone ?? '—'}</p>
+                    <Link to={`/admin/bonus/${row.userId}`} className="font-semibold text-foreground underline-offset-2 hover:underline">{row.name || 'Без имени'}</Link>
+                    <p className="text-muted-foreground break-all">{row.email ?? row.phone ?? '—'}</p>
                   </td>
-                  <td className="px-4 py-3 text-right tabular-nums text-foreground">
+                  <td className="px-4 py-3 text-right tabular-nums whitespace-nowrap text-foreground">
                     {row.balance} {bonusWord(row.balance)}
                   </td>
-                  <td className="px-4 py-3 text-foreground">{row.member ? 'В клубе' : 'Вышел'}</td>
-                  <td className="px-4 py-3 tabular-nums text-muted-foreground">{formatBonusDate(row.joinedAt)}</td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 whitespace-nowrap text-foreground">{row.member ? 'В клубе' : 'Вышел'}</td>
+                  <td className="hidden md:table-cell px-4 py-3 tabular-nums text-muted-foreground">{formatBonusDate(row.joinedAt)}</td>
+                  <td className="hidden md:table-cell px-4 py-3 text-right">
                     <Link to={`/admin/bonus/${row.userId}`} className="inline-flex items-center min-h-11 text-primary font-semibold underline underline-offset-2">
                       Открыть
                     </Link>
