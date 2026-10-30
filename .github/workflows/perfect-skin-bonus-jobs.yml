@@ -1,0 +1,36 @@
+name: Perfect Skin — nightly bonus jobs
+
+# Бонусы: сгорание просроченных партий, отложенные начисления, обезличивание
+# счетов удалённых пользователей и сверка баланса с журналом.
+# Журнал бонусов только дописывается и отменяется обратными записями, поэтому
+# снимок БД здесь не нужен (его делает purge в 02:30).
+# Пока программа выключена, задачи ничего не меняют, кроме сверки.
+
+on:
+  schedule:
+    - cron: '5 21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-perfect-skin
+  cancel-in-progress: false
+
+jobs:
+  bonus-jobs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bonus jobs over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PS_DEPLOY_HOST }}
+          username: ${{ secrets.PS_DEPLOY_USER }}
+          key: ${{ secrets.PS_DEPLOY_SSH_KEY }}
+          command_timeout: 10m
+          script: |
+            set -euo pipefail
+            cd /var/www/ps-src/projects/perfect-skin/server
+            set -a; . ./.env; set +a
+            npm run bonus:jobs -- --apply

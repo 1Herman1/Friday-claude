@@ -376,6 +376,11 @@ async function onOrderPaid(tx: Tx, input: { orderId: string; now: Date }): Promi
   }
 }
 
+async function expireAccount(tx: Tx, accountId: string, now: Date): Promise<number> {
+  await lockAccountById(tx, accountId)
+  return expireDueLots(tx, accountId, now)
+}
+
 function latestOf(a: Date, b: Date): Date {
   return a.getTime() >= b.getTime() ? a : b
 }
@@ -385,6 +390,7 @@ export const bonusService = {
   join,
   leave,
   spendForOrder,
+  expireAccount,
   expireDueLots,
   onOrderStatusChanged,
   onOrderPaid,

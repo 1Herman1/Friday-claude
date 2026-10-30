@@ -5,6 +5,7 @@ import { ApiError } from '../lib/errors.js'
 import { bonusService } from '../services/bonus.service.js'
 import { changeOrderStatus } from '../services/order-lifecycle.service.js'
 import { adminOrderService } from '../services/admin-order.service.js'
+import { runBonusAccruals } from '../lib/bonus-jobs.js'
 
 const MAIL_DOMAIN = '@ps-bonus-test.local'
 const VIEWER = { role: 'customer', proStatus: 'none' }
@@ -267,5 +268,33 @@ describe('Жизненный цикл заказа и бонусы', () => {
 
     await adminOrderService.updateOrder(orderId, { markPaid: true }, 'super_admin')
     expect(await balanceOf(user.id)).toBe(50)
+  })
+
+  it('задержка 14 дней: до срока ничего не начисляется, после срока — один раз, повторный прогон без дублей', async () => {
+    await db.loyaltySettings.update({ where: { id: 1 }, data: { accrualDelayDays: 14 } })
+    try {
+      const user = await makeUser('delayed-accrual')
+      const now = new Date()
+      await bonusService.join(user.id, VIEWER, now)
+      const orderId = await makeOrder(user.id, { status: 'in_transit', bonusAccrualPlanned: 50, paymentStatus: 'paid' })
+
+      await setStatus(orderId, 'delivered')
+      const planned = await db.order.findUniqueOrThrow({ where: { id: orderId } })
+      expect(planned.bonusAccrualDueAt).not.toBeNull()
+      expect(planned.bonusAccruedAt).toBeNull()
+      expect(await balanceOf(user.id)).toBe(0)
+
+      await runBonusAccruals(db, new Date(now.getTime() + 13 * DAY_MS), { apply: true })
+      expect(await balanceOf(user.id)).toBe(0)
+
+      await runBonusAccruals(db, new Date(now.getTime() + 15 * DAY_MS), { apply: true })
+      expect(await balanceOf(user.id)).toBe(50)
+
+      await runBonusAccruals(db, new Date(now.getTime() + 15 * DAY_MS), { apply: true })
+      expect(await balanceOf(user.id)).toBe(50)
+      expect(await db.bonusTransaction.count({ where: { orderId, type: 'order_accrual' } })).toBe(1)
+    } finally {
+      await db.loyaltySettings.update({ where: { id: 1 }, data: { accrualDelayDays: 0 } })
+    }
   })
 })

@@ -30,7 +30,8 @@
     "test:watch": "vitest",
     "cdek:smoke": "tsx tools/cdek-smoke.ts",
     "cleanup:carts": "node --env-file=.env tools/cleanup-guest-carts.mjs",
-    "purge:pro-docs": "tsx prisma/purge-pro-docs.ts"
+    "purge:pro-docs": "tsx prisma/purge-pro-docs.ts",
+    "bonus:jobs": "tsx prisma/bonus-jobs.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^9.4.0",
