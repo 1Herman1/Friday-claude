@@ -2,22 +2,32 @@ import { DemoCartApi } from './cart-demo'
 import { fetchApi } from './api'
 import type { Cart } from '@/types/api'
 
+export type QuoteSource = 'fixed' | 'cdek' | 'fallback' | 'free' | 'needs_city' | 'unavailable'
+
 export interface DeliveryMethod {
   code: string
   title: string
   hint?: string
-  cost: number
+  /** null — цену пока нельзя назвать (не выбран город или нет тарифа). */
+  cost: number | null
   isFree: boolean
   freeFrom?: number
   amountToFree?: number
   requiresAddress: boolean
   requiresPvzCode?: boolean
+  requiresCity?: boolean
+  available?: boolean
+  quoteSource?: QuoteSource
+  periodMin?: number | null
+  periodMax?: number | null
+  costByPointType?: { PVZ: number | null; POSTAMAT: number | null } | null
 }
 
 export interface DeliveryQuote {
   subtotal: number
   promo: { code: string; percent: number; discount: number; subtotal: number } | null
   goodsAfterDiscount: number
+  cdekEnabled?: boolean
   methods: DeliveryMethod[]
 }
 
@@ -34,7 +44,7 @@ export interface CartApi {
   updateItem(itemId: string, quantity: number): Promise<Cart>
   removeItem(itemId: string): Promise<Cart>
   clear(): Promise<void>
-  getDeliveryMethods(promoCode?: string): Promise<DeliveryQuote>
+  getDeliveryMethods(promoCode?: string, cityCode?: number): Promise<DeliveryQuote>
   validatePromo(code: string): Promise<PromoResult>
 }
 
@@ -70,9 +80,10 @@ class LiveCartApi implements CartApi {
     })
   }
 
-  async getDeliveryMethods(promoCode?: string): Promise<DeliveryQuote> {
+  async getDeliveryMethods(promoCode?: string, cityCode?: number): Promise<DeliveryQuote> {
     const params = new URLSearchParams()
     if (promoCode) params.append('promo', promoCode)
+    if (cityCode !== undefined) params.append('cityCode', String(cityCode))
     return fetchApi<DeliveryQuote>(`/api/v1/delivery/methods?${params}`)
   }
 

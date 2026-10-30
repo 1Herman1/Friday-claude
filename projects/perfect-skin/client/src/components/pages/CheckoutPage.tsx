@@ -6,6 +6,9 @@ import { useCart } from '@/context/CartContext'
 import { fetchApi, ApiError } from '@/lib/api'
 import { cartApi } from '@/lib/cart-api'
 import type { DeliveryMethod, DeliveryQuote } from '@/lib/cart-api'
+import type { CityOption, PickupPoint } from '@/lib/delivery-api'
+import { CityPicker, readStoredCity } from '@/components/checkout/CityPicker'
+import { PvzPicker } from '@/components/checkout/PvzPicker'
 import { IconTruck, IconStore, IconPackage, IconCheck, IconClose } from '@/components/icons'
 
 interface DeliveryMethodResponse extends DeliveryMethod {
@@ -44,6 +47,8 @@ export function CheckoutPage() {
 
   // Адрес
   const [pvzCode, setPvzCode] = useState('')
+  const [city, setCity] = useState<CityOption | null>(() => readStoredCity())
+  const [point, setPoint] = useState<PickupPoint | null>(null)
   const [address, setAddress] = useState({
     city: '',
     street: '',
@@ -71,7 +76,7 @@ export function CheckoutPage() {
       }
 
       try {
-        const result = await api.getDeliveryMethods(appliedPromo?.code)
+        const result = await api.getDeliveryMethods(appliedPromo?.code, city?.code)
         if (cancelled) return
         setQuote(result)
         setMethods(result.methods as DeliveryMethodResponse[])
@@ -92,7 +97,7 @@ export function CheckoutPage() {
     return () => {
       cancelled = true
     }
-  }, [appliedPromo?.code, cart?.items.length])
+  }, [appliedPromo?.code, cart?.items.length, city?.code])
 
   const currentMethod = methods.find((m) => m.code === selectedMethod)
   const isDemoMode = import.meta.env.VITE_API_MODE === 'snapshot'
@@ -101,8 +106,20 @@ export function CheckoutPage() {
   const subtotal = quote?.subtotal ?? cart?.subtotal ?? 0
   const discount = quote?.promo?.discount ?? appliedPromo?.discount ?? 0
   const goodsAfterDiscount = quote?.goodsAfterDiscount ?? subtotal - discount
-  const deliveryCost = currentMethod?.isFree ? 0 : (currentMethod?.cost ?? 0)
+  const cdekOn = quote?.cdekEnabled === true
+  // Цена ПВЗ зависит от типа точки (ПВЗ или постамат); без точки показываем цену «от».
+  const methodCost =
+    currentMethod?.code === 'cdek_pvz' && point
+      ? (currentMethod.costByPointType?.[point.type] ?? currentMethod.cost)
+      : currentMethod?.cost
+  const deliveryCost = currentMethod?.isFree ? 0 : (methodCost ?? 0)
   const total = goodsAfterDiscount + deliveryCost
+  const needsPoint = cdekOn && currentMethod?.requiresPvzCode === true
+  const deliveryReady =
+    !currentMethod ||
+    (currentMethod.cost !== null &&
+      (!currentMethod.requiresCity || !cdekOn || city !== null) &&
+      (!needsPoint || point !== null))
 
   // Обработка промокода
   const handleApplyPromo = async () => {
@@ -185,11 +202,18 @@ export function CheckoutPage() {
           ...(address.apartment && { apartment: address.apartment }),
           ...(/^\d{6}$/.test(address.index) && { postalCode: address.index }),
         }
+        if (cdekOn && city) {
+          body.address = { ...(body.address as object), city: city.name }
+        }
+      }
+
+      if (cdekOn && currentMethod?.requiresCity && city) {
+        body.cdekCityCode = city.code
       }
 
       // Добавляем код ПВЗ если требуется
       if (currentMethod?.requiresPvzCode) {
-        body.cdekPvzCode = pvzCode
+        body.cdekPvzCode = cdekOn ? point?.code : pvzCode
       }
 
       if (appliedPromo) {
@@ -216,7 +240,7 @@ export function CheckoutPage() {
             'Суммы изменились. Пожалуйста, проверьте и попробуйте ещё раз'
           )
           // Перезагружаем методы доставки для актуальных цен
-          const updated = await api.getDeliveryMethods(appliedPromo?.code)
+          const updated = await api.getDeliveryMethods(appliedPromo?.code, city?.code)
           setQuote(updated)
           setMethods(updated.methods as DeliveryMethodResponse[])
         } else if (err.code === 'OUT_OF_STOCK' || err.code === 'ITEM_UNAVAILABLE') {
@@ -226,6 +250,9 @@ export function CheckoutPage() {
           setSubmitError('Укажите код ПВЗ')
         } else if (err.code === 'ADDRESS_REQUIRED') {
           setSubmitError('Укажите адрес доставки')
+        } else if (err.code === 'PVZ_NOT_FOUND' || err.code === 'DELIVERY_UNAVAILABLE') {
+          setSubmitError('Этот пункт выдачи сейчас недоступен. Выберите другой')
+          setPoint(null)
         } else if (err.code === 'RATE_LIMITED') {
           setSubmitError('Слишком много заказов. Попробуйте позже')
         } else {
@@ -364,17 +391,29 @@ export function CheckoutPage() {
                 <h2 className="text-base font-sans font-semibold text-foreground mb-4 uppercase tracking-wide">
                   Способ доставки
                 </h2>
+                {cdekOn && (
+                  <div className="mb-4">
+                    <CityPicker
+                      value={city}
+                      onChange={(next) => {
+                        setCity(next)
+                        setPoint(null)
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="grid gap-3">
                   {methods.map((method) => (
                     <label
                       key={method.code}
-                      className="flex items-start gap-3 p-4 border border-border rounded-block cursor-pointer hover:bg-muted/50 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5"
+                      className={`flex items-start gap-3 p-4 border border-border rounded-block transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 ${method.cost === null ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:bg-muted/50'}`}
                     >
                       <input
                         type="radio"
                         name="delivery"
                         value={method.code}
                         checked={selectedMethod === method.code}
+                        disabled={method.cost === null}
                         onChange={(e) => setSelectedMethod(e.target.value)}
                         className="mt-1 w-5 h-5 accent-primary"
                       />
@@ -398,14 +437,23 @@ export function CheckoutPage() {
                             {method.hint}
                           </p>
                         )}
-                        <div className="flex items-baseline gap-2">
-                          {method.isFree ? (
+                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                          {method.cost === null ? (
+                            <span className="text-sm text-muted-foreground">
+                              {city === null ? 'Выберите город' : 'Недоступно для этого города'}
+                            </span>
+                          ) : method.isFree ? (
                             <span className="text-sm font-semibold text-primary">
                               Бесплатно
                             </span>
                           ) : (
-                            <span className="text-sm font-semibold text-foreground">
+                            <span className="text-sm font-semibold text-foreground whitespace-nowrap tabular-nums">
                               {formatPrice(method.cost)}
+                            </span>
+                          )}
+                          {method.periodMin != null && method.periodMax != null && (
+                            <span className="text-xs text-muted-foreground">
+                              Срок: {method.periodMin}–{method.periodMax} {daysWord(method.periodMax)}
                             </span>
                           )}
                           {method.amountToFree != null && method.amountToFree > 0 && (
@@ -420,8 +468,18 @@ export function CheckoutPage() {
                   ))}
                 </div>
 
-                {/* Поле для кода ПВЗ */}
-                {currentMethod?.requiresPvzCode && (
+                {/* Пункт выдачи: при включённом СДЭК — поиск, иначе старое поле кода */}
+                {currentMethod?.requiresPvzCode && cdekOn && city && (
+                  <div className="mt-4">
+                    <PvzPicker cityCode={city.code} value={point} onChange={setPoint} />
+                  </div>
+                )}
+                {currentMethod?.requiresPvzCode && cdekOn && !city && (
+                  <p className="mt-4 text-body-sm text-muted-foreground">
+                    Выберите город, чтобы увидеть пункты выдачи
+                  </p>
+                )}
+                {currentMethod?.requiresPvzCode && !cdekOn && (
                   <div className="mt-4">
                     <label
                       htmlFor="pvz-code"
@@ -454,7 +512,8 @@ export function CheckoutPage() {
                         <input
                           id="city"
                           type="text"
-                          value={address.city}
+                          value={cdekOn ? (city?.name ?? '') : address.city}
+                          readOnly={cdekOn}
                           onChange={(e) =>
                             setAddress({ ...address, city: e.target.value })
                           }
@@ -773,6 +832,7 @@ export function CheckoutPage() {
               onClick={handleSubmit}
               disabled={
                 submitting ||
+                !deliveryReady ||
                 !recipient.name ||
                 !recipient.phone ||
                 (!isAuthed && !recipient.email.trim()) ||
@@ -818,4 +878,12 @@ export function CheckoutPage() {
       )}
     </div>
   )
+}
+
+function daysWord(days: number): string {
+  const mod10 = days % 10
+  const mod100 = days % 100
+  if (mod10 === 1 && mod100 !== 11) return 'день'
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'дня'
+  return 'дней'
 }

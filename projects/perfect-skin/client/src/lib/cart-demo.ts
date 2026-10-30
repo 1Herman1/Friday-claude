@@ -184,6 +184,7 @@ export class DemoCartApi implements CartApi {
       subtotal,
       promo: null,
       goodsAfterDiscount: subtotal,
+      cdekEnabled: false,
       methods: [
         {
           code: 'pickup',
