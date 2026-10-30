@@ -279,37 +279,57 @@ export class TelegramNotifier {
 
       const text = buildOrderText(order)
 
-      // Получаем активных менеджеров заказов, привязанных к боту orders
-      const links = await this.prisma.telegramLink.findMany({
-        where: { botKind: TelegramBotKind.orders },
-        select: { userId: true, chatId: true },
-      })
-
-      // Проверяем каждого на активность и роль
-      for (const link of links) {
-        const user = await this.prisma.user.findUnique({
-          where: { id: link.userId },
-          select: { role: true, isActive: true },
-        })
-
-        // Роли: super_admin или orders_manager
-        if (!user || !user.isActive || !['super_admin', 'orders_manager'].includes(user.role)) {
-          continue
-        }
-
-        // Строим кнопку если есть publicUrl
-        const buttons = publicUrl
-          ? [[{ text: 'Открыть заказ', url: `${publicUrl}/admin/orders/${orderId}` } as any]]
-          : []
-
-        try {
-          await this.sendMessage(link.chatId, text, buttons, tgOrdersBotToken)
-        } catch (err) {
-          this.app.log.warn({ chatId: link.chatId, orderId, error: err }, 'Failed to send order notification')
-        }
-      }
+      await this.notifyOrderManagers(orderId, text)
     } catch (err) {
       this.app.log.warn({ orderId, error: err }, 'Failed to send new order notifications')
+    }
+  }
+
+  private async notifyOrderManagers(orderId: string, text: string): Promise<void> {
+    // Получаем активных менеджеров заказов, привязанных к боту orders
+    const links = await this.prisma.telegramLink.findMany({
+      where: { botKind: TelegramBotKind.orders },
+      select: { userId: true, chatId: true },
+    })
+
+    // Проверяем каждого на активность и роль
+    for (const link of links) {
+      const user = await this.prisma.user.findUnique({
+        where: { id: link.userId },
+        select: { role: true, isActive: true },
+      })
+
+      // Роли: super_admin или orders_manager
+      if (!user || !user.isActive || !['super_admin', 'orders_manager'].includes(user.role)) {
+        continue
+      }
+
+      // Строим кнопку если есть publicUrl
+      const buttons = publicUrl
+        ? [[{ text: 'Открыть заказ', url: `${publicUrl}/admin/orders/${orderId}` } as any]]
+        : []
+
+      try {
+        await this.sendMessage(link.chatId, text, buttons, tgOrdersBotToken)
+      } catch (err) {
+        this.app.log.warn({ chatId: link.chatId, orderId, error: err }, 'Failed to send order notification')
+      }
+    }
+  }
+
+  async onCdekProblem(orderId: string, reason: string): Promise<void> {
+    if (!tgOrdersBotToken) {
+      return
+    }
+
+    try {
+      const order = await this.prisma.order.findUnique({ where: { id: orderId }, select: { number: true } })
+      if (!order) {
+        return
+      }
+      await this.notifyOrderManagers(orderId, buildCdekProblemText({ number: order.number, reason }))
+    } catch (err) {
+      this.app.log.warn({ orderId, error: err }, 'Failed to send CDEK problem notification')
     }
   }
 

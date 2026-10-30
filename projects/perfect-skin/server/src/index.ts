@@ -7,7 +7,7 @@ import multipart from '@fastify/multipart'
 import prismaPlugin from './plugins/prisma.js'
 import authenticatePlugin from './plugins/authenticate.js'
 import { ApiError, errorResponse } from './lib/errors.js'
-import { isDevelopment, isProduction } from './lib/env.js'
+import { isDevelopment, isProduction, publicUrl } from './lib/env.js'
 import { maskSensitiveUrl } from './lib/log-mask.js'
 import { registerCommonSchemas } from './schemas/common.js'
 import productsRoutes from './routes/products/index.js'
@@ -33,7 +33,9 @@ import seoFilesRoutes from './routes/seo-files.js'
 import { createTelegramNotifier, TelegramNotifier } from './services/telegram/notifier.js'
 import { createProTelegramBot, createOrdersTelegramBot } from './services/telegram/bot.js'
 import { CdekConfigError, parseCdekConfig } from './services/cdek/config.js'
-import { initCdek } from './services/cdek/registry.js'
+import { getCdek, initCdek, setCdekSync } from './services/cdek/registry.js'
+import { CdekOrderSync } from './services/cdek/order-sync.js'
+import { createMailSender } from './services/mail/index.js'
 import { CdekUnavailableError } from './services/cdek/http.js'
 
 declare module 'fastify' {
@@ -172,6 +174,11 @@ try {
   app.log.fatal({ reason: error.message }, 'СДЭК: неверная конфигурация, сервер не запущен')
   process.exit(1)
 }
+const cdekServices = getCdek()
+const cdekSync = cdekServices === null
+  ? null
+  : new CdekOrderSync({ cdek: cdekServices, notifier, mail: createMailSender(), log: app.log, publicUrl })
+setCdekSync(cdekSync)
 
 // Register exchange routes
 await app.register(exchange1cRoutes)
@@ -225,10 +232,14 @@ if (ordersBot) {
   app.log.warn('PS_TG_ORDERS_BOT_TOKEN not set, Telegram orders bot disabled')
 }
 
+const stopCdekSweep = cdekSync?.start()
+if (cdekSync) void cdekSync.ensureWebhook()
+
 // Останавливаем боты при закрытии сервера
 app.addHook('onClose', async () => {
   if (proBot) proBot.stop()
   if (ordersBot) ordersBot.stop()
+  stopCdekSweep?.()
   app.log.info('Telegram bots stopped')
 })
 

@@ -1,10 +1,22 @@
+import { createHash, timingSafeEqual } from 'node:crypto'
 import type { FastifyInstance } from 'fastify'
 import fastifyPlugin from 'fastify-plugin'
+import { ApiError } from '../../lib/errors.js'
 import { deliveryQuote, filterPoints } from '../../services/cdek/quote.service.js'
 import type { CdekPoint } from '../../services/cdek/client.js'
+import { getCdek, getCdekSync } from '../../services/cdek/registry.js'
+import { cdekWebhookBodySchema } from '../../services/cdek/schemas.js'
 
 const RATE_LIMIT = { max: 60, timeWindow: '1 minute' }
+const WEBHOOK_RATE_LIMIT = { max: 120, timeWindow: '1 minute' }
+const WEBHOOK_BODY_LIMIT = 65_536
 const CACHE_CONTROL = 'public, max-age=300'
+
+function tokenMatches(token: string, secret: string | null): boolean {
+  if (secret === null) return false
+  const digest = (value: string): Buffer => createHash('sha256').update(value).digest()
+  return timingSafeEqual(digest(token), digest(secret))
+}
 
 interface CitiesQuery {
   q: string
@@ -96,6 +108,29 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
         items: matched.slice(offset, offset + limit).map(toPointView),
         total: matched.length,
       }
+    }
+  )
+  app.post<{ Params: { token: string } }>(
+    '/api/v1/delivery/cdek/webhook/:token',
+    {
+      bodyLimit: WEBHOOK_BODY_LIMIT,
+      config: { rateLimit: WEBHOOK_RATE_LIMIT },
+    },
+    async (request) => {
+      const services = getCdek()
+      const sync = getCdekSync()
+      if (services === null || sync === null || !tokenMatches(request.params.token, services.config.webhookSecret)) {
+        throw new ApiError(404, 'NOT_FOUND', 'Не найдено')
+      }
+      const body = cdekWebhookBodySchema.safeParse(request.body)
+      if (!body.success) throw new ApiError(400, 'VALIDATION_ERROR', 'Ошибка валидации')
+
+      try {
+        await sync.handleWebhook(body.data)
+      } catch (error) {
+        app.log.warn({ reason: error instanceof Error ? error.name : 'unknown' }, 'СДЭК вебхук: обновление не прошло, подберёт сверка')
+      }
+      return { ok: true }
     }
   )
 })

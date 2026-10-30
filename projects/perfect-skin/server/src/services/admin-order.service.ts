@@ -1,6 +1,7 @@
 import { db, type Prisma, $Enums } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
 import { changeOrderStatus, markOrderPaid } from './order-lifecycle.service.js'
+import { getCdekSync } from './cdek/registry.js'
 
 type OrderStatus = $Enums.OrderStatus
 type PaymentStatus = $Enums.PaymentStatus
@@ -147,13 +148,14 @@ export class AdminOrderService {
       }
     }
 
+    let becamePaid = false
     const updated = await db.$transaction(async (tx) => {
       const now = new Date()
       if (payload.status && payload.status !== order.status) {
         await changeOrderStatus(tx, { orderId: id, from: order.status, to: payload.status, now })
       }
       if (payload.markPaid) {
-        await markOrderPaid(tx, { orderId: id, now })
+        becamePaid = await markOrderPaid(tx, { orderId: id, now })
       }
 
       const rest: Prisma.OrderUpdateInput = {}
@@ -182,6 +184,8 @@ export class AdminOrderService {
         },
       })
     })
+
+    if (becamePaid) void getCdekSync()?.onOrderPaid(id)
 
     return this.formatAdminOrder(updated)
   }

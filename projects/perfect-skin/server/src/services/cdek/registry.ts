@@ -1,6 +1,7 @@
 import type { CdekConfig } from './config.js'
 import { CdekClient } from './client.js'
 import { CdekHttp, type CdekLog } from './http.js'
+import type { CdekOrderSync } from './order-sync.js'
 
 export interface CdekServices {
   config: CdekConfig
@@ -20,4 +21,14 @@ export function getCdek(): CdekServices | null {
 
 export function setCdekForTests(next: CdekServices | null): void {
   services = next
+}
+
+let sync: CdekOrderSync | null = null
+
+export function setCdekSync(next: CdekOrderSync | null): void {
+  sync = next
+}
+
+export function getCdekSync(): CdekOrderSync | null {
+  return sync
 }

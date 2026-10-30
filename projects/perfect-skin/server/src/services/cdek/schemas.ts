@@ -67,3 +67,16 @@ export const orderStatusItemSchema = z.object({
 })
 
 export const errorMessageSchema = z.object({ message: z.string() })
+
+export const cdekWebhookBodySchema = z.object({
+  type: z.string().min(1).max(64),
+  uuid: z.string().uuid().optional(),
+  attributes: z
+    .object({
+      cdek_number: z.union([z.string().min(1).max(64), z.number().int()]).optional(),
+      code: z.string().max(64).optional(),
+    })
+    .optional(),
+})
+
+export type CdekWebhookBody = z.infer<typeof cdekWebhookBodySchema>
