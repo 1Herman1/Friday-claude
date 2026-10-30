@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   calcOrderTotals,
   calcDeliveryCost,
+  freeThreshold,
   DELIVERY_COST,
   FREE_PVZ_THRESHOLD,
   FREE_COURIER_THRESHOLD,
@@ -405,6 +406,70 @@ describe('Мусор в позициях корзины не ломает ито
     expect(t.deliveryCost).toBe(DELIVERY_COST)
     expect(t.total).toBe(DELIVERY_COST)
     expect(t.total).toBeGreaterThanOrEqual(0)
+  })
+})
+
+describe('Платная доставка из котировки (paidCost)', () => {
+  it('пункт выдачи берёт переданную платную стоимость ниже порога', () => {
+    expect(calcDeliveryCost('pvz', 0, 31_000)).toBe(31_000)
+  })
+
+  it('курьер берёт переданную платную стоимость ниже порога', () => {
+    expect(calcDeliveryCost('courier', 500_000, 45_500)).toBe(45_500)
+  })
+
+  it('без paidCost по-прежнему 200 ₽', () => {
+    expect(calcDeliveryCost('pvz', 0)).toBe(DELIVERY_COST)
+  })
+
+  it('на пороге paidCost игнорируется и доставка бесплатна', () => {
+    expect(calcDeliveryCost('pvz', FREE_PVZ_THRESHOLD, 31_000)).toBe(0)
+    expect(calcDeliveryCost('courier', FREE_COURIER_THRESHOLD, 45_500)).toBe(0)
+  })
+
+  it('самовывоз не зависит от paidCost', () => {
+    expect(calcDeliveryCost('pickup', 0, 31_000)).toBe(0)
+  })
+
+  it('нулевая платная стоимость допустима', () => {
+    expect(calcDeliveryCost('pvz', 0, 0)).toBe(0)
+  })
+
+  it('NaN, Infinity, отрицательное и дробное дают 200 ₽, а не 0', () => {
+    for (const paidCost of [Number.NaN, Number.POSITIVE_INFINITY, -1, 31_000.5]) {
+      expect(calcDeliveryCost('pvz', 0, paidCost)).toBe(DELIVERY_COST)
+    }
+  })
+
+  it('calcOrderTotals передаёт deliveryPaidCost в доставку', () => {
+    const t = calcOrderTotals(
+      order({
+        items: [{ price: 300_000, quantity: 1 }],
+        deliveryMethod: 'pvz',
+        deliveryPaidCost: 31_000,
+      })
+    )
+    expect(t.deliveryCost).toBe(31_000)
+    expect(t.total).toBe(331_000)
+  })
+
+  it('calcOrderTotals без deliveryPaidCost считает как раньше', () => {
+    const t = calcOrderTotals(order({ items: [{ price: 300_000, quantity: 1 }], deliveryMethod: 'courier' }))
+    expect(t.deliveryCost).toBe(DELIVERY_COST)
+  })
+})
+
+describe('Порог бесплатной доставки (freeThreshold)', () => {
+  it('пункт выдачи — 6 000 ₽', () => {
+    expect(freeThreshold('pvz')).toBe(FREE_PVZ_THRESHOLD)
+  })
+
+  it('курьер — 10 000 ₽', () => {
+    expect(freeThreshold('courier')).toBe(FREE_COURIER_THRESHOLD)
+  })
+
+  it('самовывоз порога не имеет', () => {
+    expect(freeThreshold('pickup')).toBeNull()
   })
 })
 

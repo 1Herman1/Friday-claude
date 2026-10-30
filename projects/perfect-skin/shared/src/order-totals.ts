@@ -20,6 +20,8 @@ export type OrderCalcInput = {
   priceList: PriceList
   promo?: AppliedPromo | null
   deliveryMethod: DeliveryMethod
+  /** Платная доставка, копейки. Не передана — фиксированные 200 ₽. */
+  deliveryPaidCost?: number
 }
 
 export type OrderTotals = {
@@ -36,16 +38,27 @@ export const FREE_COURIER_THRESHOLD = 1_000_000
 /** Платная доставка — 200 ₽. */
 export const DELIVERY_COST = 20_000
 
+export function freeThreshold(method: DeliveryMethod): number | null {
+  if (method === 'pickup') return null
+  return method === 'pvz' ? FREE_PVZ_THRESHOLD : FREE_COURIER_THRESHOLD
+}
+
+/**
+ * paidCost — сколько стоит платная доставка. Битое значение (не целое или
+ * отрицательное) даёт фиксированные 200 ₽, а не 0: иначе битая котировка
+ * сделала бы доставку бесплатной.
+ */
 export function calcDeliveryCost(
   method: DeliveryMethod,
-  goodsAfterDiscount: number
+  goodsAfterDiscount: number,
+  paidCost: number = DELIVERY_COST
 ): number {
   if (method === 'pickup') return 0
 
-  const threshold =
-    method === 'pvz' ? FREE_PVZ_THRESHOLD : FREE_COURIER_THRESHOLD
+  const threshold = freeThreshold(method)
+  if (threshold !== null && goodsAfterDiscount >= threshold) return 0
 
-  return goodsAfterDiscount >= threshold ? 0 : DELIVERY_COST
+  return Number.isInteger(paidCost) && paidCost >= 0 ? paidCost : DELIVERY_COST
 }
 
 export function calcOrderTotals(input: OrderCalcInput): OrderTotals {
@@ -65,7 +78,11 @@ export function calcOrderTotals(input: OrderCalcInput): OrderTotals {
     : 0
 
   const goodsAfterDiscount = Math.max(0, subtotal - promoDiscount)
-  const deliveryCost = calcDeliveryCost(input.deliveryMethod, goodsAfterDiscount)
+  const deliveryCost = calcDeliveryCost(
+    input.deliveryMethod,
+    goodsAfterDiscount,
+    input.deliveryPaidCost
+  )
 
   return {
     subtotal,
