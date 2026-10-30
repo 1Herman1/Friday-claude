@@ -50,3 +50,6 @@ CREATE UNIQUE INDEX "cdek_status_events_orderId_code_occurredAt_key" ON "cdek_st
 
 -- AddForeignKey
 ALTER TABLE "cdek_status_events" ADD CONSTRAINT "cdek_status_events_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "orders"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- Check (mirrors prisma/sql/01-constraints.sql)
+ALTER TABLE "product_variants" ADD CONSTRAINT "product_variants_weight_positive" CHECK ("weightGrams" IS NULL OR "weightGrams" > 0);

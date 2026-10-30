@@ -157,7 +157,7 @@ model ProductVariant {
 }
 ```
 
-**Миграция** `server/prisma/migrations/20261030000001_cdek_integration/migration.sql`. Генерировать через `prisma migrate dev --create-only`, затем сверить, что внутри только:
+**Миграция** `server/prisma/migrations/20261031000001_cdek_integration/migration.sql`. Написана вручную (у `migrate dev` есть чужой дрейф схемы), сверено `migrate diff`, что внутри только:
 - `CREATE TYPE "CdekSyncState"`;
 - `ALTER TABLE "orders" ADD COLUMN ...` — все колонки nullable без DEFAULT, это мгновенно и без перезаписи таблицы;
 - два `CREATE UNIQUE INDEX` (`cdekUuid`, `cdekNumber`) и `CREATE INDEX (cdekState, status)`;

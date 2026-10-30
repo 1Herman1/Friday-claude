@@ -15,6 +15,14 @@ on:
         description: 'Печатать структуру ответов СДЭК (типы полей, без значений)'
         type: boolean
         default: false
+      client_id:
+        description: 'Публичный тестовый client_id edu СДЭК (пусто — из секрета PS_CDEK_TEST_CLIENT_ID)'
+        type: string
+        required: false
+      client_secret:
+        description: 'Публичный тестовый client_secret edu СДЭК (пусто — из секрета PS_CDEK_TEST_CLIENT_SECRET)'
+        type: string
+        required: false
 
 permissions:
   contents: read
@@ -25,8 +33,8 @@ jobs:
     timeout-minutes: 10
     env:
       PS_CDEK_BASE_URL: https://api.edu.cdek.ru/v2
-      PS_CDEK_CLIENT_ID: ${{ secrets.PS_CDEK_TEST_CLIENT_ID }}
-      PS_CDEK_CLIENT_SECRET: ${{ secrets.PS_CDEK_TEST_CLIENT_SECRET }}
+      PS_CDEK_CLIENT_ID: ${{ inputs.client_id || secrets.PS_CDEK_TEST_CLIENT_ID }}
+      PS_CDEK_CLIENT_SECRET: ${{ inputs.client_secret || secrets.PS_CDEK_TEST_CLIENT_SECRET }}
     steps:
       - uses: actions/checkout@v4
 

@@ -237,9 +237,9 @@ model BonusTransaction {
 
 ## 2. Миграции
 
-Две миграции, обе в коммите шага 2. Время в имени — `20261030…`; СДЭК берёт `20261031…` и позже (раздел 9).
+Две миграции, обе в коммите шага 2. Время в имени — `20261101…`: после уже написанной миграции СДЭК `20261031000001` (раздел 9).
 
-### 2.1 `server/prisma/migrations/20261030000001_bonus_program/migration.sql`
+### 2.1 `server/prisma/migrations/20261101000001_bonus_program/migration.sql`
 
 ```sql
 -- AlterEnum (значение не используется в этой же миграции)
@@ -392,7 +392,7 @@ ALTER TABLE "orders"
 INSERT INTO "loyalty_settings" ("id", "updatedAt") VALUES (1, CURRENT_TIMESTAMP) ON CONFLICT ("id") DO NOTHING;
 ```
 
-### 2.2 `server/prisma/migrations/20261030000002_consent_records_set_null/migration.sql`
+### 2.2 `server/prisma/migrations/20261101000002_consent_records_set_null/migration.sql`
 
 ```sql
 -- Согласие переживает удаление пользователя как доказательство (как ConsultationConsent).
@@ -932,7 +932,7 @@ HTTP, сборка как в `checkout.integration.test.ts`.
 | Общий файл | Что меняют бонусы | Что, вероятно, меняет СДЭК | Правило |
 |---|---|---|---|
 | `shared/src/order-totals.ts` | необязательный `bonusDiscount` во входе и выходе | стоимость доставки из котировки СДЭК вместо формулы | Бонусы заходят первыми (шаг 1, маленький). СДЭК добавляет своё поле рядом, например `deliveryCostOverride`, и не трогает строку `total` |
-| `schema.prisma`, модель `Order` | блок `// ── Бонусы ──` в конце скалярных полей, включая **`deliveredAt`** | `cdekOrderUuid`, тариф, статус СДЭК и т. п. | СДЭК пишет свой блок `// ── СДЭК ──` сразу после `deliveryTrackNumber` и **не добавляет `deliveredAt`**: он уже есть. Миграции СДЭК — с отметкой `20261031…` и позже |
+| `schema.prisma`, модель `Order` | блок `// ── Бонусы ──` в конце скалярных полей, включая **`deliveredAt`** | `cdekOrderUuid`, тариф, статус СДЭК и т. п. | СДЭК пишет свой блок `// ── СДЭК ──` сразу после `deliveryTrackNumber` и **не добавляет `deliveredAt`**: он уже есть. Миграция СДЭК уже есть — `20261031000001_cdek_integration`; бонусные идут после неё, `20261101…` |
 | `order.service.ts → createOrder` | ~20 строк в точках из 4.5 | расчёт доставки через API СДЭК **до** транзакции, новые поля ПВЗ | Внешний HTTP-вызов СДЭК — только до `$transaction`: держать блокировку счёта и остатков на сетевом запросе нельзя. Перед шагом 6 — `git fetch` и сверка этого файла |
 | Смена статуса заказа | `changeOrderStatus` / `markOrderPaid` (шаг 4) | вебхук СДЭК: «в пути», «вручён», «возврат» | **Вебхук СДЭК меняет статус только через `changeOrderStatus(tx, …)`**, никогда `db.order.update({status})`. Иначе возврат и начисление бонусов молча не сработают. Внести в `security-profile.md` |
 | `schemas/common.ts` (`ps.order`, `ps.adminOrder`) | поле `bonus` | поля доставки | соседние строки, конфликт решается при rebase |
