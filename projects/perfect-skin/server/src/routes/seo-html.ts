@@ -69,7 +69,7 @@ interface ProductDetailView {
   seo: { title: string | null; description: string | null }
 }
 
-const STATIC_PATHS = new Set(['/brands', '/pro', '/consultation', '/about', '/contacts', '/offer', '/privacy'])
+const STATIC_PATHS = new Set(['/brands', '/pro', '/consultation', '/about', '/contacts', '/offer', '/privacy', '/club/rules'])
 
 interface Template {
   mtimeMs: number

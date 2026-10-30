@@ -240,6 +240,14 @@ export function metaForStatic(path: string): SeoMeta {
         h1: 'Политика обработки персональных данных',
         canonicalPath: '/privacy',
       }
+    case '/club/rules':
+      return {
+        title: 'Правила Бьюти-клуба — Perfect Skin',
+        description: DEFAULT_DESCRIPTION,
+        h1: 'Правила Бьюти-клуба',
+        canonicalPath: '/club/rules',
+        noindex: true,
+      }
     default:
       return metaForNotFound()
   }
