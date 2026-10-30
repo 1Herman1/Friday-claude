@@ -16,6 +16,8 @@ const AuthPage = lazy(() => import('@/components/pages/AuthPage').then((m) => ({
 const CheckoutPage = lazy(() => import('@/components/pages/CheckoutPage').then((m) => ({ default: m.CheckoutPage })))
 const OrdersPage = lazy(() => import('@/components/pages/OrdersPage').then((m) => ({ default: m.OrdersPage })))
 const OrderPage = lazy(() => import('@/components/pages/OrderPage').then((m) => ({ default: m.OrderPage })))
+const BonusPage = lazy(() => import('@/components/pages/BonusPage').then((m) => ({ default: m.BonusPage })))
+const ClubRulesPage = lazy(() => import('@/components/pages/ClubRulesPage').then((m) => ({ default: m.ClubRulesPage })))
 const TrackOrderPage = lazy(() => import('@/components/pages/TrackOrderPage').then((m) => ({ default: m.TrackOrderPage })))
 const BrandsPage = lazy(() => import('@/components/pages/BrandsPage').then((m) => ({ default: m.BrandsPage })))
 const AboutPage = lazy(() => import('@/components/pages/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -64,6 +66,8 @@ function App() {
             <Route path="/checkout" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><CheckoutPage /></Suspense>} />
             <Route path="/orders" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><OrdersPage /></Suspense>} />
             <Route path="/orders/:number" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><OrderPage /></Suspense>} />
+            <Route path="/bonus" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BonusPage /></Suspense>} />
+            <Route path="/club/rules" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><ClubRulesPage /></Suspense>} />
             <Route path="/track" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><TrackOrderPage /></Suspense>} />
             <Route path="/brands" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><BrandsPage /></Suspense>} />
             <Route path="/about" element={<Suspense fallback={<div className="container-app py-24 text-muted-foreground">Загрузка…</div>}><AboutPage /></Suspense>} />

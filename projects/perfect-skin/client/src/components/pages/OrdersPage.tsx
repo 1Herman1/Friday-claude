@@ -5,6 +5,7 @@ import { fetchApi } from '@/lib/api'
 import { formatPrice, pluralize } from '@/lib/format'
 import { IconPackage } from '@/components/icons'
 import { MarketingConsentSection } from '@/components/account/MarketingConsentSection'
+import { BonusSection } from '@/components/account/BonusSection'
 
 interface OrderPreview {
   number: string
@@ -69,8 +70,9 @@ export function OrdersPage() {
             В каталог
           </a>
         </div>
-        <div className="max-w-xl mx-auto mt-12">
+        <div className="max-w-xl mx-auto mt-12 grid gap-6">
           <MarketingConsentSection />
+          <BonusSection />
         </div>
       </div>
     )
@@ -184,8 +186,9 @@ export function OrdersPage() {
         </div>
       )}
 
-      <div className="max-w-xl mb-8">
+      <div className="max-w-xl mb-8 grid gap-6">
         <MarketingConsentSection />
+        <BonusSection />
       </div>
 
       <div className="grid gap-4">

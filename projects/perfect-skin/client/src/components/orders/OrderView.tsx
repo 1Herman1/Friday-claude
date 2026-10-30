@@ -1,4 +1,5 @@
 import { formatPrice } from '@/lib/format'
+import { bonusWord } from '@/lib/bonus-labels'
 
 // Форма позиции заказа с сервера (снапшот на момент покупки),
 // это НЕ CartItem: поля плоские.
@@ -48,10 +49,29 @@ interface OrderDetail {
   deliveryCost: number
   total: number
   comment?: string
+  bonus?: OrderBonus | null
+}
+
+interface OrderBonus {
+  spent: number
+  discount: number
+  accrualPlanned: number
+  accrualStatus: 'none' | 'pending' | 'accrued' | 'cancelled'
 }
 
 interface OrderViewProps {
   order: OrderDetail
+}
+
+function BonusAccrualLine({ bonus }: { bonus: OrderBonus }) {
+  if (bonus.accrualStatus === 'none') return null
+  const text =
+    bonus.accrualStatus === 'pending'
+      ? `Начислим ${bonus.accrualPlanned} ${bonusWord(bonus.accrualPlanned)} после получения`
+      : bonus.accrualStatus === 'accrued'
+        ? `Начислено ${bonus.accrualPlanned} ${bonusWord(bonus.accrualPlanned)}`
+        : 'Начисление отменено'
+  return <p className="mt-3 text-body-sm text-muted-foreground">{text}</p>
 }
 
 export function OrderView({ order }: OrderViewProps) {
@@ -342,6 +362,15 @@ export function OrderView({ order }: OrderViewProps) {
                   {order.deliveryCost === 0 ? "Бесплатно" : formatPrice(order.deliveryCost)}
                 </span>
               </div>
+
+              {order.bonus && order.bonus.spent > 0 && (
+                <div className="flex justify-between text-body-sm">
+                  <span className="text-muted-foreground">Оплачено бонусами: {order.bonus.spent} {bonusWord(order.bonus.spent)}</span>
+                  <span className="font-semibold text-primary tabular-nums">
+                    −{formatPrice(order.bonus.discount)}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-between text-lg mt-4 pt-4">
@@ -352,6 +381,8 @@ export function OrderView({ order }: OrderViewProps) {
                 {formatPrice(order.total)}
               </span>
             </div>
+
+            {order.bonus && <BonusAccrualLine bonus={order.bonus} />}
           </div>
         </div>
       </div>
