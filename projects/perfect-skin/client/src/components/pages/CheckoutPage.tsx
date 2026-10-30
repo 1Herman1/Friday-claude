@@ -9,6 +9,8 @@ import type { DeliveryMethod, DeliveryQuote } from '@/lib/cart-api'
 import type { CityOption, PickupPoint } from '@/lib/delivery-api'
 import { CityPicker, readStoredCity } from '@/components/checkout/CityPicker'
 import { PvzPicker } from '@/components/checkout/PvzPicker'
+import { BonusSpendSection } from '@/components/checkout/BonusSpendSection'
+import type { BonusCheckoutQuote } from '@/lib/bonus-api'
 import { IconTruck, IconStore, IconPackage, IconCheck, IconClose } from '@/components/icons'
 
 interface DeliveryMethodResponse extends DeliveryMethod {
@@ -18,6 +20,17 @@ interface DeliveryMethodResponse extends DeliveryMethod {
 interface Order {
   number: string
   createdAt: string
+}
+
+const BONUS_ERROR_TEXT: Record<string, string> = {
+  BONUS_PROMO_CONFLICT: 'Бонусы не суммируются с промокодом. Уберите что-то одно и оформите заказ ещё раз',
+  BONUS_LIMIT_EXCEEDED: 'Бонусов для списания стало меньше. Сумма пересчитана, проверьте заказ',
+  BONUS_INSUFFICIENT: 'Бонусов на балансе стало меньше. Сумма пересчитана, проверьте заказ',
+  BONUS_MIN_ORDER: 'Для списания бонусов нужна большая сумма товаров',
+  BONUS_AUTH_REQUIRED: 'Списать бонусы можно после входа в аккаунт',
+  BONUS_PROGRAM_DISABLED: 'Бьюти-клуб сейчас не работает. Оформите заказ без бонусов',
+  BONUS_NOT_ELIGIBLE: 'Бонусы недоступны для этого аккаунта. Оформите заказ без бонусов',
+  BONUS_NOT_MEMBER: 'Вступите в Бьюти-клуб в кабинете, чтобы списать бонусы',
 }
 
 export function CheckoutPage() {
@@ -58,6 +71,8 @@ export function CheckoutPage() {
   })
 
   const [comment, setComment] = useState('')
+  const [bonusSpend, setBonusSpend] = useState(0)
+  const [bonusQuote, setBonusQuote] = useState<BonusCheckoutQuote | null>(null)
   const [quote, setQuote] = useState<DeliveryQuote | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
@@ -113,7 +128,10 @@ export function CheckoutPage() {
       ? (currentMethod.costByPointType?.[point.type] ?? currentMethod.cost)
       : currentMethod?.cost
   const deliveryCost = currentMethod?.isFree ? 0 : (methodCost ?? 0)
-  const total = goodsAfterDiscount + deliveryCost
+  const bonusDiscount = bonusSpend > 0 && bonusQuote
+    ? Math.min(bonusSpend * bonusQuote.kopecksPerBonus, goodsAfterDiscount)
+    : 0
+  const total = goodsAfterDiscount - bonusDiscount + deliveryCost
   const needsPoint = cdekOn && currentMethod?.requiresPvzCode === true
   const deliveryReady =
     !currentMethod ||
@@ -220,6 +238,10 @@ export function CheckoutPage() {
         body.promoCode = appliedPromo.code
       }
 
+      if (bonusSpend > 0) {
+        body.bonusSpend = bonusSpend
+      }
+
       if (comment) {
         body.comment = comment
       }
@@ -255,6 +277,9 @@ export function CheckoutPage() {
           setPoint(null)
         } else if (err.code === 'RATE_LIMITED') {
           setSubmitError('Слишком много заказов. Попробуйте позже')
+        } else if (err.code.startsWith('BONUS_')) {
+          setSubmitError(BONUS_ERROR_TEXT[err.code] ?? 'Списание бонусов сейчас недоступно. Оформите заказ ещё раз')
+          setBonusSpend(0)
         } else {
           setSubmitError(err.message || 'Ошибка при оформлении заказа')
         }
@@ -720,6 +745,13 @@ export function CheckoutPage() {
                 )}
               </div>
 
+              <BonusSpendSection
+                promoCode={appliedPromo?.code ?? null}
+                value={bonusSpend}
+                onChange={setBonusSpend}
+                onQuote={setBonusQuote}
+              />
+
               {/* Комментарий */}
               <div className="bg-card border border-border rounded-block p-6">
                 <h2 id="comment-title" className="text-base font-sans font-semibold text-foreground mb-4 uppercase tracking-wide">
@@ -770,6 +802,15 @@ export function CheckoutPage() {
                   <span className="text-muted-foreground">Скидка</span>
                   <span className="font-semibold text-primary tabular-nums">
                     −{formatPrice(discount)}
+                  </span>
+                </div>
+              )}
+
+              {bonusDiscount > 0 && (
+                <div className="flex justify-between text-body-sm">
+                  <span className="text-muted-foreground">Бонусами</span>
+                  <span className="font-semibold text-primary tabular-nums">
+                    −{formatPrice(bonusDiscount)}
                   </span>
                 </div>
               )}
