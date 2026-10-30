@@ -704,6 +704,81 @@ export function registerCommonSchemas(app: FastifyInstance) {
   })
 
   app.addSchema({
+    $id: 'ps.bonusSummary',
+    type: 'object',
+    additionalProperties: false,
+    required: ['programEnabled', 'eligible', 'member', 'joinedAt', 'balance', 'balanceValue', 'nextExpiration', 'rules', 'rulesVersion'],
+    properties: {
+      programEnabled: { type: 'boolean' },
+      eligible: { type: 'boolean' },
+      member: { type: 'boolean' },
+      joinedAt: { type: ['string', 'null'], format: 'date-time' },
+      balance: { type: 'integer' },
+      balanceValue: { type: 'integer' },
+      nextExpiration: {
+        anyOf: [
+          {
+            type: 'object',
+            additionalProperties: false,
+            required: ['amount', 'expiresAt'],
+            properties: {
+              amount: { type: 'integer' },
+              expiresAt: { type: 'string', format: 'date-time' },
+            },
+          },
+          { type: 'null' },
+        ],
+      },
+      rules: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['accrualPercent', 'accrualTrigger', 'accrualDelayDays', 'maxSpendPercent', 'minOrderForSpend', 'allowSpendWithPromo', 'kopecksPerBonus', 'bonusTtlDays'],
+        properties: {
+          accrualPercent: { type: 'integer' },
+          accrualTrigger: { type: 'string', enum: ['delivered', 'paid'] },
+          accrualDelayDays: { type: 'integer' },
+          maxSpendPercent: { type: 'integer' },
+          minOrderForSpend: { type: 'integer' },
+          allowSpendWithPromo: { type: 'boolean' },
+          kopecksPerBonus: { type: 'integer' },
+          bonusTtlDays: { type: 'integer' },
+        },
+      },
+      rulesVersion: { type: 'string' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.bonusTx',
+    type: 'object',
+    additionalProperties: false,
+    required: ['id', 'type', 'amount', 'remaining', 'expiresAt', 'createdAt', 'orderNumber'],
+    properties: {
+      id: { type: 'string' },
+      type: {
+        type: 'string',
+        enum: ['welcome', 'order_accrual', 'order_spend', 'order_spend_refund', 'order_accrual_reversal', 'expiration', 'manual_adjustment', 'review', 'birthday'],
+      },
+      amount: { type: 'integer' },
+      remaining: { type: ['integer', 'null'] },
+      expiresAt: { type: ['string', 'null'], format: 'date-time' },
+      createdAt: { type: 'string', format: 'date-time' },
+      orderNumber: { type: ['string', 'null'] },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.bonusTxList',
+    type: 'object',
+    additionalProperties: false,
+    required: ['items', 'total'],
+    properties: {
+      items: { type: 'array', items: { $ref: 'ps.bonusTx#' } },
+      total: { type: 'integer' },
+    },
+  })
+
+  app.addSchema({
     $id: 'ps.orderBonus',
     type: 'object',
     additionalProperties: false,

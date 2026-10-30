@@ -449,6 +449,115 @@ async function liveBalance(client: Pick<Tx, 'bonusTransaction'>, accountId: stri
   return agg._sum.remaining ?? 0
 }
 
+export type BonusSummary = {
+  programEnabled: boolean
+  eligible: boolean
+  member: boolean
+  joinedAt: Date | null
+  balance: number
+  balanceValue: number
+  nextExpiration: { amount: number; expiresAt: Date } | null
+  rules: {
+    accrualPercent: number
+    accrualTrigger: LoyaltySettings['accrualTrigger']
+    accrualDelayDays: number
+    maxSpendPercent: number
+    minOrderForSpend: number
+    allowSpendWithPromo: boolean
+    kopecksPerBonus: number
+    bonusTtlDays: number
+  }
+  rulesVersion: string
+}
+
+export type CustomerBonusTx = {
+  id: string
+  type: BonusTxType
+  amount: number
+  remaining: number | null
+  expiresAt: Date | null
+  createdAt: Date
+  orderNumber: string | null
+}
+
+async function getSummary(userId: string, viewer: PriceViewer, now: Date): Promise<BonusSummary> {
+  const settings = await loyaltySettingsService.get()
+  const account = await db.bonusAccount.findUnique({
+    where: { userId },
+    select: { id: true, joinedAt: true, leftAt: true },
+  })
+  const balance = account ? await liveBalance(db, account.id, now) : 0
+  const nextLot = account
+    ? await db.bonusTransaction.findFirst({
+        where: { accountId: account.id, amount: { gt: 0 }, remaining: { gt: 0 }, expiresAt: { gt: now } },
+        orderBy: { expiresAt: 'asc' },
+        select: { remaining: true, expiresAt: true },
+      })
+    : null
+  const member = Boolean(account && !account.leftAt)
+
+  return {
+    programEnabled: settings.enabled,
+    eligible: isEligible(viewer),
+    member,
+    joinedAt: member && account ? account.joinedAt : null,
+    balance,
+    balanceValue: shared.bonusValue(balance, settings.kopecksPerBonus),
+    nextExpiration: nextLot?.expiresAt ? { amount: nextLot.remaining ?? 0, expiresAt: nextLot.expiresAt } : null,
+    rules: {
+      accrualPercent: settings.accrualPercent,
+      accrualTrigger: settings.accrualTrigger,
+      accrualDelayDays: settings.accrualDelayDays,
+      maxSpendPercent: settings.maxSpendPercent,
+      minOrderForSpend: settings.minOrderForSpend,
+      allowSpendWithPromo: settings.allowSpendWithPromo,
+      kopecksPerBonus: settings.kopecksPerBonus,
+      bonusTtlDays: settings.bonusTtlDays,
+    },
+    rulesVersion: CONSENT_TEXT_VERSION.loyalty,
+  }
+}
+
+// reason и createdBy не отдаём: в них внутренняя заметка сотрудника
+async function listTransactions(
+  userId: string,
+  page: { limit: number; offset: number }
+): Promise<{ items: CustomerBonusTx[]; total: number }> {
+  const account = await db.bonusAccount.findUnique({ where: { userId }, select: { id: true } })
+  if (!account) return { items: [], total: 0 }
+
+  const [rows, total] = await Promise.all([
+    db.bonusTransaction.findMany({
+      where: { accountId: account.id },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      skip: page.offset,
+      take: page.limit,
+      select: {
+        id: true,
+        type: true,
+        amount: true,
+        remaining: true,
+        expiresAt: true,
+        createdAt: true,
+        order: { select: { number: true } },
+      },
+    }),
+    db.bonusTransaction.count({ where: { accountId: account.id } }),
+  ])
+  return {
+    items: rows.map((row) => ({
+      id: row.id,
+      type: row.type,
+      amount: row.amount,
+      remaining: row.remaining,
+      expiresAt: row.expiresAt,
+      createdAt: row.createdAt,
+      orderNumber: row.order?.number ?? null,
+    })),
+    total,
+  }
+}
+
 const BLOCK_REASON: Record<PsShared.BonusSpendBlock, BonusReason> = {
   PROMO_CONFLICT: 'PROMO_CONFLICT',
   MIN_ORDER: 'MIN_ORDER',
@@ -605,6 +714,8 @@ function latestOf(a: Date, b: Date): Date {
 
 export const bonusService = {
   isEligible,
+  getSummary,
+  listTransactions,
   join,
   leave,
   spendForOrder,
