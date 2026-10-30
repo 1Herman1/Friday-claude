@@ -14,8 +14,9 @@ const STATUS_OPTIONS = [
 ]
 
 const PAYMENT_STATUS_OPTIONS = [
-  { value: 'unpaid', label: 'Не оплачен' },
+  { value: 'pending', label: 'Не оплачен' },
   { value: 'paid', label: 'Оплачен' },
+  { value: 'failed', label: 'Ошибка оплаты' },
   { value: 'refunded', label: 'Возвращён' },
 ]
 
@@ -43,7 +44,7 @@ export function AdminOrderPage() {
         setAdminOrder(data)
         setFormData({
           status: data.status || '',
-          paymentStatus: data.paymentStatus || 'unpaid',
+          paymentStatus: data.paymentStatus || 'pending',
           deliveryTrackNumber: data.deliveryTrackNumber || '',
           adminNote: data.adminNote || '',
         })

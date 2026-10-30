@@ -183,7 +183,7 @@ export function CheckoutPage() {
           street: address.street,
           house: address.house,
           ...(address.apartment && { apartment: address.apartment }),
-          ...(address.index && { postalCode: address.index }),
+          ...(/^\d{6}$/.test(address.index) && { postalCode: address.index }),
         }
       }
 
@@ -472,10 +472,12 @@ export function CheckoutPage() {
                         <input
                           id="index"
                           type="text"
+                          inputMode="numeric"
+                          autoComplete="postal-code"
                           maxLength={6}
                           value={address.index}
                           onChange={(e) =>
-                            setAddress({ ...address, index: e.target.value })
+                            setAddress({ ...address, index: e.target.value.replace(/\D/g, '') })
                           }
                           placeholder="123456"
                           className="w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
