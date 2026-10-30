@@ -135,6 +135,31 @@ describe('Ночные задачи бонусов на реальной баз�
     expect((await db.order.findUniqueOrThrow({ where: { id: orderId } })).bonusAccruedAt).toBeNull()
   })
 
+  it('начисление берёт только оплаченные заказы: неоплаченный не попадает в выборку и не начисляется', async () => {
+    const account = await makeAccount('unpaid-due')
+    const dueBefore = (await runBonusAccruals(db, NOW, { apply: false })).due
+    const orderId = await makeDueOrder(account.userId as string, 10)
+    await db.order.update({ where: { id: orderId }, data: { paymentStatus: 'pending' } })
+
+    expect((await runBonusAccruals(db, NOW, { apply: false })).due).toBe(dueBefore)
+    await runBonusAccruals(db, NOW, { apply: true })
+
+    expect((await db.order.findUniqueOrThrow({ where: { id: orderId } })).bonusAccruedAt).toBeNull()
+    expect(await balanceOf(account.id)).toBe(0)
+  })
+
+  it('заказ участника, который вышел из клуба, считается в skipped и не начисляется', async () => {
+    const account = await makeAccount('left-skipped')
+    const orderId = await makeDueOrder(account.userId as string, 10)
+    await bonusService.leave(account.userId as string, NOW)
+
+    const result = await runBonusAccruals(db, NOW, { apply: true })
+
+    expect(result.skipped).toBeGreaterThanOrEqual(1)
+    expect((await db.order.findUniqueOrThrow({ where: { id: orderId } })).bonusAccruedAt).toBeNull()
+    expect(await balanceOf(account.id)).toBe(0)
+  })
+
   it('обезличивание: счёт удалённого пользователя отвязан, журнал на месте', async () => {
     const account = await makeAccount('anonymize')
     await seedLot(account.id, 40, null)
@@ -180,7 +205,7 @@ describe('Ночные задачи бонусов на реальной баз�
     expect((await reconcileBonusBalances(db)).mismatched).toBe(baseline)
   })
 
-  it('выключенная программа: сгорание, начисления и обезличивание ничего не делают, сверка работает', async () => {
+  it('выключенная программа: сгорание и начисления ничего не делают, сверка работает', async () => {
     const account = await makeAccount('disabled')
     await seedLot(account.id, 15, daysFromNow(-1))
     const orderId = await makeDueOrder(account.userId as string, 10)
@@ -188,10 +213,31 @@ describe('Ночные задачи бонусов на реальной баз�
     try {
       expect(await runBonusExpirations(db, NOW, { apply: true })).toMatchObject({ accounts: 0, expiredPoints: 0 })
       expect(await runBonusAccruals(db, NOW, { apply: true })).toMatchObject({ due: 0, accrued: 0 })
-      expect(await runBonusAnonymize(db, NOW, { apply: true })).toEqual({ anonymized: 0 })
       expect(await balanceOf(account.id)).toBe(15)
       expect((await db.order.findUniqueOrThrow({ where: { id: orderId } })).bonusAccruedAt).toBeNull()
       expect(await reconcileBonusBalances(db)).toEqual({ mismatched: expect.any(Number) })
+    } finally {
+      await setProgram(true)
+    }
+  })
+
+  it('выключенная программа: обезличивание всё равно выполняется (152-ФЗ), баланс и журнал не меняются', async () => {
+    const account = await makeAccount('disabled-anonymize')
+    await seedLot(account.id, 15, null)
+    const rowsBefore = await db.bonusTransaction.count({ where: { accountId: account.id } })
+    strayAccountIds.push(account.id)
+    await db.user.update({ where: { id: account.userId as string }, data: { deletedAt: NOW } })
+    await setProgram(false)
+    try {
+      const result = await runBonusAnonymize(db, NOW, { apply: true })
+
+      expect(result.anonymized).toBeGreaterThanOrEqual(1)
+      expect(await db.bonusAccount.findUniqueOrThrow({ where: { id: account.id } })).toMatchObject({
+        userId: null,
+        anonymizedAt: expect.any(Date),
+        balance: 15,
+      })
+      expect(await db.bonusTransaction.count({ where: { accountId: account.id } })).toBe(rowsBefore)
     } finally {
       await setProgram(true)
     }

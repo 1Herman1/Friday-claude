@@ -3,14 +3,14 @@ import { bonusService } from '../services/bonus.service.js'
 import { loyaltySettingsService } from '../services/loyalty-settings.service.js'
 
 // Пакет на один прогон: остаток догонит следующая ночь
-const BATCH = 500
+export const BONUS_BATCH = 500
 
 export type AccrualResult = { due: number; accrued: number; skipped: number; failed: number }
 export type ExpirationResult = { accounts: number; expiredPoints: number; failed: number }
 export type AnonymizeResult = { anonymized: number }
 export type ReconcileResult = { mismatched: number }
 
-function errorCode(err: unknown): string {
+export function errorCode(err: unknown): string {
   return typeof err === 'object' && err !== null && 'code' in err ? String(err.code) : 'unknown'
 }
 
@@ -31,10 +31,12 @@ export async function runBonusAccruals(
       bonusAccrualDueAt: { lte: now },
       bonusAccruedAt: null,
       bonusAccrualPlanned: { gt: 0 },
+      paymentStatus: 'paid',
       status: { not: 'cancelled' },
     },
     select: { id: true },
-    take: BATCH,
+    orderBy: { bonusAccrualDueAt: 'asc' },
+    take: BONUS_BATCH,
   })
   const result: AccrualResult = { due: due.length, accrued: 0, skipped: 0, failed: 0 }
   if (!apply) return result
@@ -68,11 +70,14 @@ export async function runBonusExpirations(
     where: expiredLots,
     select: { accountId: true },
     distinct: ['accountId'],
-    take: BATCH,
+    take: BONUS_BATCH,
   })
 
   if (!apply) {
-    const sum = await prisma.bonusTransaction.aggregate({ where: expiredLots, _sum: { remaining: true } })
+    const sum = await prisma.bonusTransaction.aggregate({
+      where: { ...expiredLots, accountId: { in: accounts.map((a) => a.accountId) } },
+      _sum: { remaining: true },
+    })
     return { accounts: accounts.length, expiredPoints: sum._sum.remaining ?? 0, failed: 0 }
   }
 
@@ -88,14 +93,13 @@ export async function runBonusExpirations(
   return result
 }
 
-// Счёт удалённого пользователя отвязывается от него; журнал остаётся без персональных данных
+// Счёт удалённого пользователя отвязывается от него, журнал остаётся без персональных данных.
+// Не зависит от выключателя программы: обязанность 152-ФЗ, а не функция программы
 export async function runBonusAnonymize(
   prisma: PrismaClient,
   now: Date,
   { apply }: { apply: boolean },
 ): Promise<AnonymizeResult> {
-  if (!(await isProgramEnabled(prisma))) return { anonymized: 0 }
-
   const where: Prisma.BonusAccountWhereInput = {
     userId: { not: null },
     user: { deletedAt: { not: null } },
