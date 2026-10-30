@@ -139,3 +139,11 @@ ALTER TABLE "orders"
   ADD CONSTRAINT order_bonus_within_goods CHECK ("bonusDiscount" <= "subtotal" - "promoDiscount");
 
 CREATE INDEX IF NOT EXISTS bonus_tx_live_lots_idx ON bonus_transactions ("expiresAt") WHERE "remaining" > 0 AND "expiresAt" IS NOT NULL;
+
+ALTER TABLE orders
+  ADD CONSTRAINT orders_cdek_state_has_uuid CHECK (
+    "cdekState" IS NULL OR "cdekState" IN ('creating', 'invalid') OR "cdekUuid" IS NOT NULL
+  ),
+  ADD CONSTRAINT orders_cdek_created_has_number CHECK (
+    "cdekState" IS DISTINCT FROM 'created' OR "cdekNumber" IS NOT NULL
+  );
