@@ -633,6 +633,40 @@ app.addSchema({
 - Ответ заказа (`ps.order`) содержит `delivery`: трек-номер, ссылку на трекинг СДЭК, статус перевозчика с датой, пункт выдачи, срок доставки.
 - Автосоздание в СДЭК после оплаты включается `PS_CDEK_AUTO_CREATE=on_paid`; по умолчанию выключено. Основной путь — ручная кнопка «Передать в СДЭК» в админке.
 
+### 3.19 Бьюти-клуб: бонусы
+
+Программа выключена по умолчанию (`LoyaltySettings.enabled = false`). Пока она выключена, витрина не показывает бонусный UI, вступление и списание отвечают `BONUS_PROGRAM_DISABLED`. Корректировка сотрудником работает и при выключенной программе.
+
+**Покупатель** (`server/src/routes/bonus/index.ts`):
+
+| Метод | Путь | Что делает | Авторизация | Лимит |
+|---|---|---|---|---|
+| GET | `/api/v1/bonus` | Сводка: программа, участие, баланс, ближайшее сгорание, правила, `rulesVersion` | вход | глобальный |
+| GET | `/api/v1/bonus/transactions?limit&offset` | История счёта (limit 1..50, по умолчанию 20). Поля `reason` и `createdBy` не отдаются | вход | глобальный |
+| POST | `/api/v1/bonus/membership` | Вступить: тело `{ "acceptRules": true }`, пишет согласие `loyalty` | вход | 10/час на пользователя |
+| DELETE | `/api/v1/bonus/membership` | Выйти: остаток замораживается, согласие отзывается | вход | 10/час |
+| GET | `/api/v1/bonus/checkout?promo&spend` | Лимит списания и прогноз начисления по корзине. Гость получает `reason: AUTH_REQUIRED` | опционально | 60/мин |
+
+Сводка и ответ вступления/выхода — схема `ps.bonusSummary`. Котировка — `ps.bonusCheckout`: `canSpend`, `reason`, `available`, `maxSpend`, `kopecksPerBonus`, `goodsAfterDiscount`, `minOrderForSpend`, `accrualPreview`. `maxSpend` — `floor(товары после промокода × maxSpendPercent / (100 × kopecksPerBonus))`, но не больше баланса.
+
+**Заказ.** `POST /api/v1/orders` принимает `bonusSpend` (целое 0..1 000 000). Лимит пересчитывает сервер внутри транзакции заказа, после блокировки остатков и промокода; клиентской сумме не верит. Порог бесплатной доставки считается до бонусов. `GET /api/v1/orders/:number` и ответ создания заказа содержат блок `bonus`: `{ spent, discount, accrualPlanned, accrualStatus: none|pending|accrued|cancelled }` или `null`.
+
+**Админка** (`server/src/routes/admin/bonus.ts`):
+
+| Метод | Путь | Роли |
+|---|---|---|
+| GET | `/api/v1/admin/bonus/settings` | super_admin, orders_manager |
+| PUT | `/api/v1/admin/bonus/settings` (все поля + `expectedUpdatedAt`, `.strict()`) | только super_admin |
+| GET | `/api/v1/admin/bonus/accounts?search&limit&offset` (поиск по email/телефону, от 3 символов) | super_admin, orders_manager |
+| GET | `/api/v1/admin/bonus/accounts/:userId?limit&offset` (счёт и история с причиной и автором) | super_admin, orders_manager |
+| POST | `/api/v1/admin/bonus/accounts/:userId/adjustments` (`amount`, `reason` 3..300, `expiresInDays` только для начисления, `idempotencyKey` uuid) | super_admin, orders_manager, 30/мин |
+
+PUT не даёт включить `enabled`, пока `CONSENT_TEXT_VERSION.loyalty` помечен `-draft` (код `RULES_NOT_PUBLISHED`). Каждое изменение настроек пишется в `loyalty_settings_changes` с before/after и автором.
+
+**Ночные задачи** (`npm run bonus:jobs -- --apply`, workflow `perfect-skin-bonus-jobs.yml`, 00:05 МСК): сгорание партий, отложенные начисления, отвязка счетов удалённых пользователей, сверка баланса с журналом. Пока программа выключена, кроме сверки ничего не меняют. Расхождение или сбой записи — код 1 и красный workflow.
+
+---
+
 ## 4. Коды ошибок
 
 | HTTP | `code` | Когда | `details` |
@@ -660,6 +694,19 @@ app.addSchema({
 | 429 | `RATE_LIMITED` | Общий лимит запросов | `{ retryAfter }` |
 | 429 | `OTP_RATE_LIMITED` | Слишком частый запрос кода | `{ retryAfter }` |
 | 429 | `OTP_BLOCKED` | Перебор кода | `{ blockedUntil }` |
+| 409 | `ORDER_STATUS_CONFLICT` | Статус заказа уже изменён параллельно | — |
+| 409 | `BONUS_PROGRAM_DISABLED` | Программа выключена: вступление и списание | — |
+| 409 | `BONUS_AUTH_REQUIRED` | Списание бонусов гостем | — |
+| 409 | `BONUS_NOT_ELIGIBLE` | Оптовый специалист или сотрудник | — |
+| 409 | `BONUS_NOT_MEMBER` | Не участник клуба (или вышел) | — |
+| 409 | `BONUS_PROMO_CONFLICT` | Бонусы с промокодом при `allowSpendWithPromo = false` | — |
+| 409 | `BONUS_MIN_ORDER` | Товаров меньше минимальной суммы для списания | `{ minOrderForSpend }` |
+| 409 | `BONUS_LIMIT_EXCEEDED` | Списание выше лимита доли товаров | `{ maxSpend }` |
+| 409 | `BONUS_INSUFFICIENT` | Бонусов не хватает (заказ или корректировка) | `{ available }` |
+| 409 | `RULES_NOT_PUBLISHED` | Включение программы, пока правила в статусе draft | — |
+| 409 | `SETTINGS_CONFLICT` | Настройки изменил другой сотрудник (`expectedUpdatedAt` устарел) | — |
+| 409 | `IDEMPOTENCY_KEY_REUSED` | Ключ корректировки уже использован для другого счёта | — |
+| 404 | `BONUS_ACCOUNT_NOT_FOUND` | У пользователя нет счёта | — |
 | 500 | `INTERNAL_ERROR` | Необработанное исключение | — |
 
 `500` наружу не выносит ни текст исключения, ни стек — только `"Внутренняя ошибка сервера"`; подробности уходят в `app.log.error` вместе с `request.id`.
