@@ -22,11 +22,14 @@ export type OrderCalcInput = {
   deliveryMethod: DeliveryMethod
   /** Платная доставка, копейки. Не передана — фиксированные 200 ₽. */
   deliveryPaidCost?: number
+  /** Бонусы в копейках; лимит уже проверен сервером. */
+  bonusDiscount?: number
 }
 
 export type OrderTotals = {
   subtotal: number
   promoDiscount: number
+  bonusDiscount: number
   deliveryCost: number
   total: number
 }
@@ -78,17 +81,23 @@ export function calcOrderTotals(input: OrderCalcInput): OrderTotals {
     : 0
 
   const goodsAfterDiscount = Math.max(0, subtotal - promoDiscount)
+  // Порог бесплатной доставки считается ДО бонусов: бонусы — способ оплаты, а не скидка.
   const deliveryCost = calcDeliveryCost(
     input.deliveryMethod,
     goodsAfterDiscount,
     input.deliveryPaidCost
   )
+  const bonusDiscount = Math.min(
+    Math.floor(positiveAmount(input.bonusDiscount ?? 0)),
+    goodsAfterDiscount
+  )
 
   return {
     subtotal,
     promoDiscount,
+    bonusDiscount,
     deliveryCost,
-    total: goodsAfterDiscount + deliveryCost,
+    total: goodsAfterDiscount - bonusDiscount + deliveryCost,
   }
 }
 

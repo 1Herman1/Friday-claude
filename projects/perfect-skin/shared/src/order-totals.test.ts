@@ -26,6 +26,7 @@ describe('Сумма товаров', () => {
     expect(calcOrderTotals(order({ items: [] }))).toEqual({
       subtotal: 0,
       promoDiscount: 0,
+      bonusDiscount: 0,
       deliveryCost: 0,
       total: 0,
     })
@@ -493,5 +494,54 @@ describe('Инвариант итога', () => {
         }
       }
     }
+  })
+})
+
+describe('Бонусы: bonusDiscount', () => {
+  it('уменьшает итог, но не стоимость доставки: 6 000 ₽ в ПВЗ с бонусами на 1 000 ₽ — доставка 0', () => {
+    const t = calcOrderTotals(
+      order({
+        items: [{ price: 600_000, quantity: 1 }],
+        deliveryMethod: 'pvz',
+        bonusDiscount: 100_000,
+      })
+    )
+    expect(t.deliveryCost).toBe(0)
+    expect(t.bonusDiscount).toBe(100_000)
+    expect(t.total).toBe(500_000)
+  })
+
+  it('порог доставки считается до бонусов: скидка бонусами не делает доставку платной обратно', () => {
+    const t = calcOrderTotals(
+      order({
+        items: [{ price: 700_000, quantity: 1 }],
+        deliveryMethod: 'pvz',
+        bonusDiscount: 200_000,
+      })
+    )
+    expect(t.deliveryCost).toBe(0)
+    expect(t.total).toBe(500_000)
+  })
+
+  it('обрезает bonusDiscount до суммы товаров после промокода', () => {
+    const t = calcOrderTotals(
+      order({
+        items: [{ price: 100_000, quantity: 1 }],
+        deliveryMethod: 'pickup',
+        promo: { code: 'DOC15', percent: 15 },
+        bonusDiscount: 1_000_000_000,
+      })
+    )
+    expect(t.bonusDiscount).toBe(85_000)
+    expect(t.total).toBe(0)
+  })
+
+  it('отрицательное и NaN значения bonusDiscount дают 0', () => {
+    expect(calcOrderTotals(order({ bonusDiscount: -500 })).bonusDiscount).toBe(0)
+    expect(calcOrderTotals(order({ bonusDiscount: Number.NaN })).bonusDiscount).toBe(0)
+  })
+
+  it('без bonusDiscount итог не меняется', () => {
+    expect(calcOrderTotals(order({ items: [{ price: 800_000, quantity: 1 }] })).total).toBe(800_000)
   })
 })
