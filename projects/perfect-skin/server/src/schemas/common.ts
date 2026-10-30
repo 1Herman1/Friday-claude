@@ -703,6 +703,152 @@ export function registerCommonSchemas(app: FastifyInstance) {
     },
   })
 
+  const bonusSettingsFields = {
+    enabled: { type: 'boolean' },
+    accrualPercent: { type: 'integer' },
+    accrualBase: { type: 'string', enum: ['paid_goods', 'after_promo', 'gross'] },
+    accrualTrigger: { type: 'string', enum: ['delivered', 'paid'] },
+    accrualDelayDays: { type: 'integer' },
+    excludeProfessionalProducts: { type: 'boolean' },
+    accrueWithPromo: { type: 'boolean' },
+    kopecksPerBonus: { type: 'integer' },
+    maxSpendPercent: { type: 'integer' },
+    minOrderForSpend: { type: 'integer' },
+    allowSpendWithPromo: { type: 'boolean' },
+    bonusTtlDays: { type: 'integer' },
+    refundMinTtlDays: { type: 'integer' },
+    welcomeBonus: { type: 'integer' },
+    welcomeTtlDays: { type: 'integer' },
+    reviewBonus: { type: 'integer' },
+    reviewTtlDays: { type: 'integer' },
+    expiryNoticeKind: { type: 'string', enum: ['service', 'advertising'] },
+    expiryNoticeDaysBefore: { type: 'integer' },
+  }
+  const actorSchema = {
+    anyOf: [
+      {
+        type: 'object',
+        additionalProperties: false,
+        required: ['id', 'name'],
+        properties: { id: { type: 'string' }, name: { type: 'string' } },
+      },
+      { type: 'null' },
+    ],
+  }
+
+  app.addSchema({
+    $id: 'ps.adminBonusSettings',
+    type: 'object',
+    additionalProperties: false,
+    required: ['settings', 'changes'],
+    properties: {
+      settings: {
+        type: 'object',
+        additionalProperties: false,
+        required: [...Object.keys(bonusSettingsFields), 'updatedAt'],
+        properties: { ...bonusSettingsFields, updatedAt: { type: 'string', format: 'date-time' }, updatedBy: actorSchema },
+      },
+      changes: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['id', 'createdAt', 'changedBy', 'before', 'after'],
+          properties: {
+            id: { type: 'string' },
+            createdAt: { type: 'string', format: 'date-time' },
+            changedBy: { type: 'object', additionalProperties: false, required: ['id', 'name'], properties: { id: { type: 'string' }, name: { type: 'string' } } },
+            before: { type: 'object', additionalProperties: false, properties: bonusSettingsFields },
+            after: { type: 'object', additionalProperties: false, properties: bonusSettingsFields },
+          },
+        },
+      },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminBonusTx',
+    type: 'object',
+    additionalProperties: false,
+    required: ['id', 'type', 'amount', 'remaining', 'expiresAt', 'createdAt', 'orderNumber', 'reason', 'createdBy'],
+    properties: {
+      id: { type: 'string' },
+      type: {
+        type: 'string',
+        enum: ['welcome', 'order_accrual', 'order_spend', 'order_spend_refund', 'order_accrual_reversal', 'expiration', 'manual_adjustment', 'review', 'birthday'],
+      },
+      amount: { type: 'integer' },
+      remaining: { type: ['integer', 'null'] },
+      expiresAt: { type: ['string', 'null'], format: 'date-time' },
+      createdAt: { type: 'string', format: 'date-time' },
+      orderNumber: { type: ['string', 'null'] },
+      reason: { type: ['string', 'null'] },
+      createdBy: actorSchema,
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminBonusAccount',
+    type: 'object',
+    additionalProperties: false,
+    required: ['userId', 'name', 'email', 'phone', 'balance', 'member', 'joinedAt', 'leftAt'],
+    properties: {
+      userId: { type: 'string' },
+      name: { type: 'string' },
+      email: { type: ['string', 'null'] },
+      phone: { type: ['string', 'null'] },
+      balance: { type: 'integer' },
+      member: { type: 'boolean' },
+      joinedAt: { type: 'string', format: 'date-time' },
+      leftAt: { type: ['string', 'null'], format: 'date-time' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminBonusAccountList',
+    type: 'object',
+    additionalProperties: false,
+    required: ['items', 'total'],
+    properties: {
+      items: { type: 'array', items: { $ref: 'ps.adminBonusAccount#' } },
+      total: { type: 'integer' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminBonusAccountDetail',
+    type: 'object',
+    additionalProperties: false,
+    required: ['account', 'nextExpiration', 'transactions', 'total'],
+    properties: {
+      account: { $ref: 'ps.adminBonusAccount#' },
+      nextExpiration: {
+        anyOf: [
+          {
+            type: 'object',
+            additionalProperties: false,
+            required: ['amount', 'expiresAt'],
+            properties: { amount: { type: 'integer' }, expiresAt: { type: 'string', format: 'date-time' } },
+          },
+          { type: 'null' },
+        ],
+      },
+      transactions: { type: 'array', items: { $ref: 'ps.adminBonusTx#' } },
+      total: { type: 'integer' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminBonusAdjustment',
+    type: 'object',
+    additionalProperties: false,
+    required: ['transaction', 'balance'],
+    properties: {
+      transaction: { $ref: 'ps.adminBonusTx#' },
+      balance: { type: 'integer' },
+    },
+  })
+
   app.addSchema({
     $id: 'ps.bonusSummary',
     type: 'object',

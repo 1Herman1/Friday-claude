@@ -12,6 +12,7 @@ import { proRequestsRoutes } from './pro-requests.js'
 import { consultationsRoutes } from './consultations.js'
 import { telegramRoutes } from './telegram.js'
 import { cdekAdminRoutes } from './cdek.js'
+import { bonusRoutes } from './bonus.js'
 
 export default fastifyPlugin(async (app: FastifyInstance) => {
   // Dashboard routes: all staff roles
@@ -34,6 +35,16 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
 
   await app.register(
     async (instance) => cdekAdminRoutes(instance, ordersPreHandlers),
+    {
+      prefix: '/api/v1/admin',
+    }
+  )
+
+  // Bonus routes: settings — super_admin (запись), orders_manager (чтение); счета и корректировки — оба
+  const bonusViewPreHandlers = [app.authenticate, checkRole(['super_admin', 'orders_manager'])]
+  const bonusOwnerPreHandlers = [app.authenticate, checkRole(['super_admin'])]
+  await app.register(
+    async (instance) => bonusRoutes(instance, bonusViewPreHandlers, bonusOwnerPreHandlers),
     {
       prefix: '/api/v1/admin',
     }

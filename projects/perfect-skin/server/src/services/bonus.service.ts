@@ -96,12 +96,12 @@ async function lockAccountById(tx: Tx, id: string): Promise<LockedAccount> {
 }
 
 // Вызывающий держит блокировку счёта.
-async function credit(tx: Tx, input: CreditInput): Promise<void> {
+async function credit(tx: Tx, input: CreditInput): Promise<string> {
   await tx.bonusAccount.update({
     where: { id: input.accountId },
     data: { balance: { increment: input.amount } },
   })
-  await tx.bonusTransaction.create({
+  const row = await tx.bonusTransaction.create({
     data: {
       accountId: input.accountId,
       type: input.type,
@@ -113,7 +113,9 @@ async function credit(tx: Tx, input: CreditInput): Promise<void> {
       reason: input.reason,
       createdById: input.createdById,
     },
+    select: { id: true },
   })
+  return row.id
 }
 
 // Вызывающий держит блокировку счёта. Сначала сгорает просроченное, потом списание
@@ -470,6 +472,46 @@ export type BonusSummary = {
   rulesVersion: string
 }
 
+export const ADMIN_TX_SELECT = {
+  id: true,
+  type: true,
+  amount: true,
+  remaining: true,
+  expiresAt: true,
+  createdAt: true,
+  reason: true,
+  createdBy: { select: { id: true, name: true } },
+  order: { select: { number: true } },
+} as const
+
+type AdminTxRow = Prisma.BonusTransactionGetPayload<{ select: typeof ADMIN_TX_SELECT }>
+
+export type AdminBonusTx = {
+  id: string
+  type: BonusTxType
+  amount: number
+  remaining: number | null
+  expiresAt: Date | null
+  createdAt: Date
+  orderNumber: string | null
+  reason: string | null
+  createdBy: { id: string; name: string } | null
+}
+
+export function toAdminTx(row: AdminTxRow): AdminBonusTx {
+  return {
+    id: row.id,
+    type: row.type,
+    amount: row.amount,
+    remaining: row.remaining,
+    expiresAt: row.expiresAt,
+    createdAt: row.createdAt,
+    orderNumber: row.order?.number ?? null,
+    reason: row.reason,
+    createdBy: row.createdBy,
+  }
+}
+
 export type CustomerBonusTx = {
   id: string
   type: BonusTxType
@@ -708,6 +750,71 @@ async function quoteForCart(
   }
 }
 
+export type AdjustInput = {
+  userId: string
+  amount: number
+  reason: string
+  expiresInDays: number | null
+  idempotencyKey: string
+  actorId: string
+  now: Date
+}
+
+export type AdjustResult = { accountId: string; transaction: AdminBonusTx; balance: number; replay: boolean }
+
+function adjustExpiry(input: AdjustInput, ttlDays: number): Date | null {
+  if (input.expiresInDays) return addDays(input.now, input.expiresInDays)
+  return ttlDays > 0 ? addDays(input.now, ttlDays) : null
+}
+
+// Корректировка работает и при выключенной программе: это ручная операция сотрудника.
+async function adjust(input: AdjustInput): Promise<AdjustResult> {
+  const account = await db.bonusAccount.findUnique({ where: { userId: input.userId }, select: { id: true } })
+  if (!account) throw new ApiError(404, 'BONUS_ACCOUNT_NOT_FOUND', 'Счёт не найден')
+  const settings = await loyaltySettingsService.get()
+  const idempotencyKey = `manual:${input.idempotencyKey}`
+
+  return db.$transaction(async (tx) => {
+    await lockAccountById(tx, account.id)
+    const balanceOf = async () =>
+      (await tx.bonusAccount.findUniqueOrThrow({ where: { id: account.id }, select: { balance: true } })).balance
+
+    const existing = await tx.bonusTransaction.findUnique({
+      where: { idempotencyKey },
+      select: { ...ADMIN_TX_SELECT, accountId: true },
+    })
+    if (existing) {
+      if (existing.accountId !== account.id) {
+        throw new ApiError(409, 'IDEMPOTENCY_KEY_REUSED', 'Ключ уже использован для другой операции')
+      }
+      return { accountId: account.id, transaction: toAdminTx(existing), balance: await balanceOf(), replay: true }
+    }
+
+    const transactionId = input.amount > 0
+      ? await credit(tx, {
+          accountId: account.id,
+          type: 'manual_adjustment',
+          amount: input.amount,
+          expiresAt: adjustExpiry(input, settings.bonusTtlDays),
+          idempotencyKey,
+          reason: input.reason,
+          createdById: input.actorId,
+        })
+      : await debit(tx, {
+          accountId: account.id,
+          type: 'manual_adjustment',
+          amount: -input.amount,
+          now: input.now,
+          idempotencyKey,
+          reason: input.reason,
+          createdById: input.actorId,
+        })
+
+    const row = await tx.bonusTransaction.findUniqueOrThrow({ where: { id: transactionId }, select: ADMIN_TX_SELECT })
+    return { accountId: account.id, transaction: toAdminTx(row), balance: await balanceOf(), replay: false }
+  })
+}
+
 function latestOf(a: Date, b: Date): Date {
   return a.getTime() >= b.getTime() ? a : b
 }
@@ -723,6 +830,7 @@ export const bonusService = {
   expireDueLots,
   planOrderBonus,
   quoteForCart,
+  adjust,
   onOrderStatusChanged,
   onOrderPaid,
   accrueForOrder,
