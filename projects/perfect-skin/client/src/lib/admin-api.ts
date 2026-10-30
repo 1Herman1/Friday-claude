@@ -23,7 +23,32 @@ export interface AdminOrder {
 /**
  * Детальный заказ администратора
  */
+export interface AdminCdek {
+  enabled: boolean
+  state: 'creating' | 'accepted' | 'created' | 'invalid' | null
+  uuid: string | null
+  number: string | null
+  statusCode: string | null
+  statusName: string | null
+  statusAt: string | null
+  error: string | null
+  tariffCode: number | null
+  cityCode: number | null
+  point: { code: string; type: string; name: string; address: string; workTime: string | null } | null
+  quote: {
+    source: string
+    cdekSum: number | null
+    periodMin: number | null
+    periodMax: number | null
+    weightGrams: number | null
+    calculatedAt: string
+  } | null
+  canSubmit: boolean
+  history: { code: string; name: string | null; city: string | null; occurredAt: string }[]
+}
+
 export interface AdminOrderDetail extends AdminOrder {
+  cdek: AdminCdek
   items: {
     productName: string
     brandName?: string | null
@@ -1181,4 +1206,29 @@ export function uploadConsentDoc(
  */
 export async function downloadConsentDoc(id: string): Promise<Blob> {
   return fetchBlob(`/api/v1/admin/video-reviews/${encodeURIComponent(id)}/consent-doc`)
+}
+
+/**
+ * Передать заказ в СДЭК (ручной путь)
+ */
+export async function adminCdekSubmit(id: string): Promise<AdminOrderDetail> {
+  return fetchApi<AdminOrderDetail>(`/api/v1/admin/orders/${encodeURIComponent(id)}/cdek`, { method: 'POST' })
+}
+
+/**
+ * Обновить статус доставки из СДЭК сейчас
+ */
+export async function adminCdekRefresh(id: string): Promise<AdminOrderDetail> {
+  return fetchApi<AdminOrderDetail>(`/api/v1/admin/orders/${encodeURIComponent(id)}/cdek/refresh`, { method: 'POST' })
+}
+
+/**
+ * Скачать накладную или штрихкод (PDF)
+ */
+export async function adminCdekPrint(id: string, kind: 'waybill' | 'barcode'): Promise<Blob> {
+  return fetchBlob(`/api/v1/admin/orders/${encodeURIComponent(id)}/cdek/print`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ kind }),
+  })
 }

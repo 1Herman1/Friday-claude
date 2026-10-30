@@ -11,6 +11,7 @@ import { syncRoutes } from './sync.js'
 import { proRequestsRoutes } from './pro-requests.js'
 import { consultationsRoutes } from './consultations.js'
 import { telegramRoutes } from './telegram.js'
+import { cdekAdminRoutes } from './cdek.js'
 
 export default fastifyPlugin(async (app: FastifyInstance) => {
   // Dashboard routes: all staff roles
@@ -26,6 +27,13 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
   const ordersPreHandlers = [app.authenticate, checkRole(['super_admin', 'orders_manager'])]
   await app.register(
     async (instance) => ordersRoutes(instance, ordersPreHandlers),
+    {
+      prefix: '/api/v1/admin',
+    }
+  )
+
+  await app.register(
+    async (instance) => cdekAdminRoutes(instance, ordersPreHandlers),
     {
       prefix: '/api/v1/admin',
     }

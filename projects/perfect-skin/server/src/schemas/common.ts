@@ -837,7 +837,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
     $id: 'ps.adminOrder',
     type: 'object',
     additionalProperties: false,
-    required: ['id', 'number', 'status', 'paymentStatus', 'createdAt', 'updatedAt', 'recipient', 'user', 'items', 'subtotal', 'deliveryCost', 'total'],
+    required: ['id', 'number', 'status', 'paymentStatus', 'createdAt', 'updatedAt', 'recipient', 'user', 'items', 'subtotal', 'deliveryCost', 'total', 'cdek'],
     properties: {
       id: { type: 'string', format: 'uuid' },
       number: { type: 'string' },
@@ -880,6 +880,74 @@ export function registerCommonSchemas(app: FastifyInstance) {
       total: { type: 'integer' },
       comment: { type: ['string', 'null'] },
       paidAt: { type: ['string', 'null'], format: 'date-time' },
+      cdek: { $ref: 'ps.adminCdek#' },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.adminCdek',
+    type: 'object',
+    additionalProperties: false,
+    required: ['enabled', 'canSubmit', 'history'],
+    properties: {
+      enabled: { type: 'boolean' },
+      state: { type: ['string', 'null'], enum: ['creating', 'accepted', 'created', 'invalid', null] },
+      uuid: { type: ['string', 'null'] },
+      number: { type: ['string', 'null'] },
+      statusCode: { type: ['string', 'null'] },
+      statusName: { type: ['string', 'null'] },
+      statusAt: { type: ['string', 'null'], format: 'date-time' },
+      error: { type: ['string', 'null'] },
+      tariffCode: { type: ['integer', 'null'] },
+      cityCode: { type: ['integer', 'null'] },
+      point: {
+        anyOf: [
+          {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              code: { type: 'string' },
+              type: { type: 'string' },
+              name: { type: 'string' },
+              address: { type: 'string' },
+              workTime: { type: ['string', 'null'] },
+            },
+          },
+          { type: 'null' },
+        ],
+      },
+      quote: {
+        anyOf: [
+          {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              source: { type: 'string' },
+              cdekSum: { type: ['integer', 'null'] },
+              periodMin: { type: ['integer', 'null'] },
+              periodMax: { type: ['integer', 'null'] },
+              weightGrams: { type: ['integer', 'null'] },
+              calculatedAt: { type: 'string' },
+            },
+          },
+          { type: 'null' },
+        ],
+      },
+      canSubmit: { type: 'boolean' },
+      history: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['code', 'occurredAt'],
+          properties: {
+            code: { type: 'string' },
+            name: { type: ['string', 'null'] },
+            city: { type: ['string', 'null'] },
+            occurredAt: { type: 'string', format: 'date-time' },
+          },
+        },
+      },
     },
   })
 

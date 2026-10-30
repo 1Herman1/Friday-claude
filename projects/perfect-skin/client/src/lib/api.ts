@@ -92,7 +92,7 @@ export async function fetchApi<T>(
   return data as T
 }
 
-export async function fetchBlob(path: string): Promise<Blob> {
+export async function fetchBlob(path: string, init?: RequestInit): Promise<Blob> {
   const baseUrl = getApiUrl()
   const url = new URL(path, baseUrl)
 
@@ -100,6 +100,7 @@ export async function fetchBlob(path: string): Promise<Blob> {
   try {
     response = await fetch(url.toString(), {
       credentials: 'include',
+      ...init,
     })
   } catch {
     throw new ApiError(0, 'NETWORK_ERROR', 'Нет соединения с сервером')

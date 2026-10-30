@@ -51,6 +51,9 @@ const SWEEP_INTERVAL_MS = 20 * 60_000
 const WEBHOOK_DEBOUNCE_MS = 30_000
 const ERROR_TEXT_MAX = 1000
 const SYNC_BATCH = 50
+const PRINT_CACHE_MS = 60 * 60_000
+const PRINT_POLLS = 5
+const PRINT_PAUSE_MS = 2_000
 
 type CdekSyncState = $Enums.CdekSyncState
 export type CdekSource = 'webhook' | 'poll' | 'manual' | 'submit'
@@ -147,6 +150,7 @@ const defaultSleep = (ms: number): Promise<void> => new Promise((resolve) => set
 
 export class CdekOrderSync {
   private readonly debounce = new TtlCache<true>(WEBHOOK_DEBOUNCE_MS, 5000)
+  private readonly printUuids = new TtlCache<string>(PRINT_CACHE_MS, 1000)
   private readonly now: () => number
   private readonly sleep: (ms: number) => Promise<void>
 
@@ -354,6 +358,33 @@ export class CdekOrderSync {
     }, SWEEP_INTERVAL_MS)
     timer.unref()
     return () => clearInterval(timer)
+  }
+
+  async print(orderId: string, kind: 'waybill' | 'barcode'): Promise<Buffer> {
+    const order = await db.order.findUnique({ where: { id: orderId }, select: { cdekUuid: true, cdekNumber: true } })
+    if (order === null) throw new ApiError(404, 'ORDER_NOT_FOUND', 'Заказ не найден')
+    if (order.cdekUuid === null || order.cdekNumber === null) {
+      throw new ApiError(409, 'CDEK_NOT_APPLICABLE', 'Заказ ещё не создан в СДЭК')
+    }
+
+    const cacheKey = `${orderId}|${kind}`
+    const printUuid = this.printUuids.get(cacheKey) ?? (await this.createPrint(kind, order.cdekUuid, cacheKey))
+    for (let attempt = 1; attempt <= PRINT_POLLS; attempt += 1) {
+      if (attempt > 1) await this.sleep(PRINT_PAUSE_MS)
+      const status = await this.client.getPrint(kind, printUuid)
+      if (status.lastStatus === 'INVALID') {
+        this.printUuids.set(cacheKey, printUuid, Date.now(), 0)
+        throw new ApiError(409, 'PRINT_FAILED', 'СДЭК не сформировал печатную форму')
+      }
+      if (status.url !== null) return this.client.downloadPdf(status.url)
+    }
+    throw new ApiError(409, 'WAYBILL_NOT_READY', 'Печатная форма ещё формируется, попробуйте через минуту')
+  }
+
+  private async createPrint(kind: 'waybill' | 'barcode', cdekUuid: string, cacheKey: string): Promise<string> {
+    const printUuid = await this.client.createPrint(kind, cdekUuid)
+    this.printUuids.set(cacheKey, printUuid)
+    return printUuid
   }
 
   private async refusalFor(orderId: string): Promise<ApiError> {

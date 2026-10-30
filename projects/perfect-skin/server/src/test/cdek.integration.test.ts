@@ -7,6 +7,7 @@ import type { CdekClient, CdekCreateOrderPayload, CdekOrderInfo } from '../servi
 import { CdekRejectedError } from '../services/cdek/http.js'
 import { CdekOrderSync } from '../services/cdek/order-sync.js'
 import type { CdekServices } from '../services/cdek/registry.js'
+import { adminOrderService } from '../services/admin-order.service.js'
 
 const EMAIL_DOMAIN = '@cdek-sync.ps-test.local'
 const NUMBER_PREFIX = 'CDEKT-'
@@ -20,7 +21,11 @@ const createOrder = vi.fn(async (_payload: CdekCreateOrderPayload) => ({ uuid: r
 const getOrder = vi.fn(async (uuid: string): Promise<CdekOrderInfo> => infoFor(uuid))
 const findOrderByNumber = vi.fn(async (_number: string): Promise<CdekOrderInfo | null> => null)
 
-const client = { createOrder, getOrder, findOrderByNumber } as unknown as CdekClient
+const createPrint = vi.fn(async (_kind: 'waybill' | 'barcode', _uuid: string) => 'print-1')
+const getPrint = vi.fn(async (_kind: 'waybill' | 'barcode', _printUuid: string) => ({ url: null as string | null, lastStatus: null as string | null }))
+const downloadPdf = vi.fn(async (_url: string) => Buffer.from('%PDF-1.4 test'))
+
+const client = { createOrder, getOrder, findOrderByNumber, createPrint, getPrint, downloadPdf } as unknown as CdekClient
 const services: CdekServices = { config: cfg, client }
 
 const scripted = new Map<string, CdekOrderInfo>()
@@ -70,6 +75,9 @@ beforeEach(() => {
   notifier.onCdekProblem.mockClear()
   mail.sendPlain.mockClear()
   scripted.clear()
+  getPrint.mockReset()
+  getPrint.mockResolvedValue({ url: null, lastStatus: null })
+  createPrint.mockClear()
   findOrderByNumber.mockImplementation(async () => null)
   createOrder.mockImplementation(async () => ({ uuid: randomUUID() }))
   getOrder.mockImplementation(async (uuid: string) => infoFor(uuid))
@@ -216,5 +224,44 @@ describe('CDEK order sync (с базой)', () => {
     expect(row.status).toBe('new')
     expect(notifier.onCdekProblem).toHaveBeenCalledTimes(1)
     expect(notifier.onCdekProblem.mock.calls[0][1]).not.toMatch(/Тест|\+7|Тверская/)
+  })
+})
+
+describe('CDEK печать и ручной трек (с базой)', () => {
+  it('накладная: опрос до готовности, затем PDF', async () => {
+    const order = await makeOrder()
+    const uuid = randomUUID()
+    await db.order.update({ where: { id: order.id }, data: { cdekUuid: uuid, cdekNumber: 'CDK-PRN', cdekState: 'created' } })
+    getPrint
+      .mockResolvedValueOnce({ url: null, lastStatus: null })
+      .mockResolvedValueOnce({ url: 'https://api.edu.cdek.ru/v2/print/x.pdf', lastStatus: 'READY' })
+
+    const pdf = await makeSync().print(order.id, 'waybill')
+
+    expect(pdf.subarray(0, 4).toString()).toBe('%PDF')
+    expect(createPrint).toHaveBeenCalledWith('waybill', uuid)
+    expect(getPrint).toHaveBeenCalledTimes(2)
+  })
+
+  it('печать после INVALID от СДЭК → PRINT_FAILED', async () => {
+    const order = await makeOrder()
+    await db.order.update({ where: { id: order.id }, data: { cdekUuid: randomUUID(), cdekNumber: 'CDK-PRF', cdekState: 'created' } })
+    getPrint.mockResolvedValueOnce({ url: null, lastStatus: 'INVALID' })
+
+    await expect(makeSync().print(order.id, 'barcode')).rejects.toMatchObject({ status: 409, code: 'PRINT_FAILED' })
+  })
+
+  it('печать до создания в СДЭК → 409', async () => {
+    const order = await makeOrder()
+    await expect(makeSync().print(order.id, 'waybill')).rejects.toMatchObject({ status: 409, code: 'CDEK_NOT_APPLICABLE' })
+  })
+
+  it('ручной трек при номере СДЭК → 409 TRACK_MANAGED_BY_CDEK', async () => {
+    const order = await makeOrder()
+    await db.order.update({ where: { id: order.id }, data: { cdekNumber: 'CDK-TRK', deliveryTrackNumber: 'CDK-TRK' } })
+
+    await expect(
+      adminOrderService.updateOrder(order.id, { deliveryTrackNumber: 'MANUAL-1' }, 'super_admin')
+    ).rejects.toMatchObject({ status: 409, code: 'TRACK_MANAGED_BY_CDEK' })
   })
 })

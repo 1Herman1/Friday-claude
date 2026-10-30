@@ -1,11 +1,29 @@
 import { db, type Prisma, $Enums } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
 import { changeOrderStatus, markOrderPaid } from './order-lifecycle.service.js'
-import { getCdekSync } from './cdek/registry.js'
+import { getCdek, getCdekSync } from './cdek/registry.js'
 
 type OrderStatus = $Enums.OrderStatus
 type PaymentStatus = $Enums.PaymentStatus
 type UserRole = $Enums.UserRole
+type CdekSyncState = $Enums.CdekSyncState
+
+const CDEK_CLAIM_STALE_MS = 5 * 60_000
+const CDEK_HISTORY_LIMIT = 50
+
+export function cdekCanSubmit(
+  input: { deliveryMethod: string; status: OrderStatus; cdekState: CdekSyncState | null; cdekRequestedAt: Date | null },
+  now: Date
+): boolean {
+  if (getCdek() === null || input.deliveryMethod === 'pickup') return false
+  if (input.status === 'cancelled' || input.status === 'delivered') return false
+  if (input.cdekState === null || input.cdekState === 'invalid') return true
+  return (
+    input.cdekState === 'creating' &&
+    input.cdekRequestedAt !== null &&
+    input.cdekRequestedAt.getTime() < now.getTime() - CDEK_CLAIM_STALE_MS
+  )
+}
 
 // Машина переходов статусов заказов
 const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
@@ -32,6 +50,13 @@ interface UpdateOrderPayload {
   deliveryTrackNumber?: string
   adminNote?: string
   markPaid?: boolean
+}
+
+interface CdekEventRow {
+  code: string
+  name: string | null
+  city: string | null
+  occurredAt: Date
 }
 
 export class AdminOrderService {
@@ -100,6 +125,7 @@ export class AdminOrderService {
         redemption: {
           include: { promoCode: { select: { code: true, percent: true } } },
         },
+        cdekEvents: { orderBy: { occurredAt: 'desc' }, take: CDEK_HISTORY_LIMIT },
       },
     })
 
@@ -107,7 +133,7 @@ export class AdminOrderService {
       throw new ApiError(404, 'ORDER_NOT_FOUND', 'Заказ не найден')
     }
 
-    return this.formatAdminOrder(order)
+    return this.formatAdminOrder(order, order.cdekEvents)
   }
 
   async updateOrder(id: string, payload: UpdateOrderPayload, actorRole: UserRole) {
@@ -128,6 +154,14 @@ export class AdminOrderService {
 
     if (!order) {
       throw new ApiError(404, 'ORDER_NOT_FOUND', 'Заказ не найден')
+    }
+
+    if (
+      order.cdekNumber !== null &&
+      payload.deliveryTrackNumber !== undefined &&
+      (payload.deliveryTrackNumber || null) !== order.deliveryTrackNumber
+    ) {
+      throw new ApiError(409, 'TRACK_MANAGED_BY_CDEK', 'Трек-номер ведётся СДЭК, поменять его вручную нельзя')
     }
 
     // Validate status transition
@@ -190,7 +224,7 @@ export class AdminOrderService {
     return this.formatAdminOrder(updated)
   }
 
-  private formatAdminOrder(order: any) {
+  private formatAdminOrder(order: any, history: CdekEventRow[] = []) {
     const items = order.items.map((item: any) => ({
       productName: item.productName,
       brandName: item.brandName,
@@ -238,6 +272,27 @@ export class AdminOrderService {
       total: Number(order.total),
       comment: order.comment,
       paidAt: order.paidAt,
+      cdek: {
+        enabled: getCdek() !== null,
+        state: order.cdekState ?? null,
+        uuid: order.cdekUuid ?? null,
+        number: order.cdekNumber ?? null,
+        statusCode: order.cdekStatusCode ?? null,
+        statusName: order.cdekStatusName ?? null,
+        statusAt: order.cdekStatusAt ?? null,
+        error: order.cdekError ?? null,
+        tariffCode: order.cdekTariffCode ?? null,
+        cityCode: order.cdekCityCode ?? null,
+        point: order.deliveryPoint ?? null,
+        quote: order.deliveryQuote ?? null,
+        canSubmit: cdekCanSubmit(order, new Date()),
+        history: history.map((event) => ({
+          code: event.code,
+          name: event.name,
+          city: event.city,
+          occurredAt: event.occurredAt,
+        })),
+      },
     }
   }
 }

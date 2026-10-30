@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { adminGetOrder, adminUpdateOrder, type AdminOrderDetail } from '@/lib/admin-api'
 import { ApiError } from '@/lib/api'
 import { OrderView, type OrderDetail } from '@/components/orders/OrderView'
+import { CdekPanel } from '@/components/admin/orders/CdekPanel'
 
 const STATUS_OPTIONS = [
   { value: 'new', label: 'Новый' },
@@ -190,7 +191,14 @@ export function AdminOrderPage() {
         </div>
 
         {/* Admin Panel */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-6">
+          <CdekPanel
+            order={adminOrder}
+            onUpdated={(updated) => {
+              setAdminOrder(updated)
+              setFormData((prev) => ({ ...prev, deliveryTrackNumber: updated.deliveryTrackNumber || '' }))
+            }}
+          />
           <div className="bg-card border border-border rounded-block p-6 sticky top-24">
             <h2 className="text-lg font-heading font-semibold text-foreground mb-6">
               Управление
@@ -269,6 +277,7 @@ export function AdminOrderPage() {
                   id="trackNumber"
                   type="text"
                   value={formData.deliveryTrackNumber}
+                  readOnly={Boolean(adminOrder.cdek?.number)}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -276,8 +285,11 @@ export function AdminOrderPage() {
                     }))
                   }
                   placeholder="Номер отслеживания…"
-                  className="w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground placeholder:text-muted-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring"
+                  className="w-full px-4 py-2 border border-border-strong rounded-block font-sans text-foreground placeholder:text-muted-foreground bg-background focus:outline-ring focus:ring-2 focus:ring-ring read-only:bg-muted"
                 />
+                {adminOrder.cdek?.number && (
+                  <p className="mt-2 text-sm text-muted-foreground">Трек ведёт СДЭК, вручную не меняется.</p>
+                )}
               </div>
 
               {/* Admin Note */}
