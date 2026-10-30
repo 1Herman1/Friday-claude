@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { formatPrice } from '@/lib/format'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
@@ -404,76 +404,77 @@ export function CheckoutPage() {
                 )}
                 <div className="grid gap-3">
                   {methods.map((method) => (
-                    <label
-                      key={method.code}
-                      className={`flex items-start gap-3 p-4 border border-border rounded-block transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 ${method.cost === null ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:bg-muted/50'}`}
-                    >
-                      <input
-                        type="radio"
-                        name="delivery"
-                        value={method.code}
-                        checked={selectedMethod === method.code}
-                        disabled={method.cost === null}
-                        onChange={(e) => setSelectedMethod(e.target.value)}
-                        className="mt-1 w-5 h-5 accent-primary"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          {method.code === 'pickup' && (
-                            <IconStore className="w-5 h-5 text-primary" />
+                    <Fragment key={method.code}>
+                      <label
+                        className={`flex items-start gap-3 p-4 border border-border rounded-block transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 ${method.cost === null ? 'cursor-not-allowed bg-muted/40 [&_input]:opacity-50 [&_svg]:opacity-50' : 'cursor-pointer hover:bg-muted/50'}`}
+                      >
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value={method.code}
+                          checked={selectedMethod === method.code}
+                          disabled={method.cost === null}
+                          onChange={(e) => setSelectedMethod(e.target.value)}
+                          className="mt-1 w-5 h-5 accent-primary"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            {method.code === 'pickup' && (
+                              <IconStore className="w-5 h-5 text-primary" />
+                            )}
+                            {method.code === 'cdek_pvz' && (
+                              <IconPackage className="w-5 h-5 text-primary" />
+                            )}
+                            {method.code === 'cdek_courier' && (
+                              <IconTruck className="w-5 h-5 text-primary" />
+                            )}
+                            <span className="font-semibold text-foreground">
+                              {method.title}
+                            </span>
+                          </div>
+                          {method.hint && (
+                            <p className="text-body-sm text-muted-foreground mb-2">
+                              {method.hint}
+                            </p>
                           )}
-                          {method.code === 'cdek_pvz' && (
-                            <IconPackage className="w-5 h-5 text-primary" />
-                          )}
-                          {method.code === 'cdek_courier' && (
-                            <IconTruck className="w-5 h-5 text-primary" />
-                          )}
-                          <span className="font-semibold text-foreground">
-                            {method.title}
-                          </span>
+                          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                            {method.cost === null ? (
+                              <span className="text-sm text-muted-foreground">
+                                {city === null ? 'Выберите город' : 'Недоступно для этого города'}
+                              </span>
+                            ) : method.isFree ? (
+                              <span className="text-sm font-semibold text-primary">
+                                Бесплатно
+                              </span>
+                            ) : (
+                              <span className="text-sm font-semibold text-foreground whitespace-nowrap tabular-nums">
+                                {formatPrice(method.cost)}
+                              </span>
+                            )}
+                            {method.periodMin != null && method.periodMax != null && (
+                              <span className="text-xs text-muted-foreground">
+                                Срок: {method.periodMin}–{method.periodMax} {daysWord(method.periodMax)}
+                              </span>
+                            )}
+                            {method.amountToFree != null && method.amountToFree > 0 && (
+                              <span className="text-xs text-muted-foreground">
+                                До бесплатной доставки ещё{' '}
+                                {formatPrice(method.amountToFree)}
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        {method.hint && (
-                          <p className="text-body-sm text-muted-foreground mb-2">
-                            {method.hint}
-                          </p>
-                        )}
-                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                          {method.cost === null ? (
-                            <span className="text-sm text-muted-foreground">
-                              {city === null ? 'Выберите город' : 'Недоступно для этого города'}
-                            </span>
-                          ) : method.isFree ? (
-                            <span className="text-sm font-semibold text-primary">
-                              Бесплатно
-                            </span>
-                          ) : (
-                            <span className="text-sm font-semibold text-foreground whitespace-nowrap tabular-nums">
-                              {formatPrice(method.cost)}
-                            </span>
-                          )}
-                          {method.periodMin != null && method.periodMax != null && (
-                            <span className="text-xs text-muted-foreground">
-                              Срок: {method.periodMin}–{method.periodMax} {daysWord(method.periodMax)}
-                            </span>
-                          )}
-                          {method.amountToFree != null && method.amountToFree > 0 && (
-                            <span className="text-xs text-muted-foreground">
-                              До бесплатной доставки ещё{' '}
-                              {formatPrice(method.amountToFree)}
-                            </span>
-                          )}
+                      </label>
+                      {/* Пункт выдачи: сразу под выбранным способом СДЭК */}
+                      {method.code === selectedMethod && method.requiresPvzCode && cdekOn && city && (
+                        <div className="mt-2 mb-1 pl-4">
+                          <PvzPicker cityCode={city.code} value={point} onChange={setPoint} />
                         </div>
-                      </div>
-                    </label>
+                      )}
+                    </Fragment>
                   ))}
                 </div>
 
-                {/* Пункт выдачи: при включённом СДЭК — поиск, иначе старое поле кода */}
-                {currentMethod?.requiresPvzCode && cdekOn && city && (
-                  <div className="mt-4">
-                    <PvzPicker cityCode={city.code} value={point} onChange={setPoint} />
-                  </div>
-                )}
                 {currentMethod?.requiresPvzCode && cdekOn && !city && (
                   <p className="mt-4 text-body-sm text-muted-foreground">
                     Выберите город, чтобы увидеть пункты выдачи
@@ -693,7 +694,9 @@ export function CheckoutPage() {
                   </div>
                 ) : (
                   <div className="flex gap-2">
+                    <label htmlFor="promo" className="sr-only">Промокод</label>
                     <input
+                      id="promo"
                       type="text"
                       value={promoCode}
                       onChange={(e) => {
@@ -701,12 +704,12 @@ export function CheckoutPage() {
                         setPromoError('')
                       }}
                       placeholder="Введите код"
-                      className="flex-1 px-4 py-3 text-base rounded-pill border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
+                      className="flex-1 min-w-0 px-4 py-3 text-base rounded-pill border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11"
                     />
                     <button
                       onClick={handleApplyPromo}
                       disabled={!promoCode.trim() || validatingPromo}
-                      className="px-6 py-3 bg-primary text-primary-foreground font-bold rounded-pill disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors min-h-11"
+                      className="shrink-0 px-5 py-3 bg-primary text-primary-foreground font-bold rounded-pill disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors min-h-11"
                     >
                       Применить
                     </button>
@@ -719,10 +722,11 @@ export function CheckoutPage() {
 
               {/* Комментарий */}
               <div className="bg-card border border-border rounded-block p-6">
-                <h2 className="text-base font-sans font-semibold text-foreground mb-4 uppercase tracking-wide">
+                <h2 id="comment-title" className="text-base font-sans font-semibold text-foreground mb-4 uppercase tracking-wide">
                   Комментарий к заказу
                 </h2>
                 <textarea
+                  aria-labelledby="comment-title"
                   value={comment}
                   onChange={(e) =>
                     setComment(e.target.value.slice(0, 500))

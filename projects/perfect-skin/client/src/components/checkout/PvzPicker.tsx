@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { getPoints, type PickupPoint } from '@/lib/delivery-api'
 
 interface PvzPickerProps {
@@ -9,6 +9,12 @@ interface PvzPickerProps {
 
 type Status = 'loading' | 'ready' | 'error'
 
+interface PointsList {
+  cityCode: number
+  items: PickupPoint[]
+  total: number
+}
+
 const INPUT_CLASS =
   'w-full px-4 py-3 text-base rounded-block border bg-background text-foreground placeholder-muted-foreground focus:outline-none transition-[border-color,box-shadow] duration-150 border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/25 min-h-11'
 
@@ -16,11 +22,17 @@ export function PvzPicker({ cityCode, value, onChange }: PvzPickerProps) {
   const id = useId()
   const [query, setQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
-  const [items, setItems] = useState<PickupPoint[]>([])
-  const [total, setTotal] = useState(0)
+  const [list, setList] = useState<PointsList | null>(null)
   const [status, setStatus] = useState<Status>('loading')
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [moreFailed, setMoreFailed] = useState(false)
   const [editing, setEditing] = useState(value === null)
   const [retryKey, setRetryKey] = useState(0)
+  const latest = useRef({ cityCode, query: debouncedQuery })
+
+  useEffect(() => {
+    latest.current = { cityCode, query: debouncedQuery }
+  }, [cityCode, debouncedQuery])
 
   useEffect(() => {
     const timer = window.setTimeout(() => setDebouncedQuery(query), 300)
@@ -30,11 +42,11 @@ export function PvzPicker({ cityCode, value, onChange }: PvzPickerProps) {
   useEffect(() => {
     let cancelled = false
     setStatus('loading')
+    setMoreFailed(false)
     getPoints(cityCode, debouncedQuery, 0)
       .then((page) => {
         if (cancelled) return
-        setItems(page.items)
-        setTotal(page.total)
+        setList({ cityCode, items: page.items, total: page.total })
         setStatus('ready')
       })
       .catch(() => {
@@ -45,13 +57,27 @@ export function PvzPicker({ cityCode, value, onChange }: PvzPickerProps) {
     }
   }, [cityCode, debouncedQuery, retryKey])
 
+  const isCurrent = (request: { cityCode: number; query: string }) =>
+    latest.current.cityCode === request.cityCode && latest.current.query === request.query
+
   const showMore = async () => {
+    if (!list || loadingMore) return
+    const request = { cityCode, query: debouncedQuery }
+    setLoadingMore(true)
+    setMoreFailed(false)
     try {
-      const page = await getPoints(cityCode, debouncedQuery, items.length)
-      setItems((prev) => [...prev, ...page.items])
-      setTotal(page.total)
+      const page = await getPoints(request.cityCode, request.query, list.items.length)
+      if (!isCurrent(request)) return
+      setList((prev) => {
+        if (!prev || prev.cityCode !== request.cityCode) return prev
+        const known = new Set(prev.items.map((point) => point.code))
+        const fresh = page.items.filter((point) => !known.has(point.code))
+        return { cityCode: prev.cityCode, items: [...prev.items, ...fresh], total: page.total }
+      })
     } catch {
-      setStatus('error')
+      if (isCurrent(request)) setMoreFailed(true)
+    } finally {
+      setLoadingMore(false)
     }
   }
 
@@ -77,6 +103,9 @@ export function PvzPicker({ cityCode, value, onChange }: PvzPickerProps) {
     )
   }
 
+  const items = list?.cityCode === cityCode ? list.items : []
+  const total = list?.cityCode === cityCode ? list.total : 0
+
   return (
     <div className="space-y-3">
       <div>
@@ -94,7 +123,9 @@ export function PvzPicker({ cityCode, value, onChange }: PvzPickerProps) {
         />
       </div>
 
-      {status === 'loading' && <p className="text-body-sm text-muted-foreground">Загружаем пункты…</p>}
+      {status === 'loading' && items.length === 0 && (
+        <p aria-live="polite" className="text-body-sm text-muted-foreground">Загружаем пункты…</p>
+      )}
 
       {status === 'error' && (
         <div className="flex items-center justify-between gap-4 p-4 rounded-block border border-border-strong">
@@ -110,11 +141,16 @@ export function PvzPicker({ cityCode, value, onChange }: PvzPickerProps) {
       )}
 
       {status === 'ready' && items.length === 0 && (
-        <p className="text-body-sm text-muted-foreground">Ничего не найдено. Измените запрос</p>
+        <p aria-live="polite" className="text-body-sm text-muted-foreground">Ничего не найдено. Измените запрос</p>
       )}
 
-      {status === 'ready' && items.length > 0 && (
-        <div role="radiogroup" aria-label="Пункты выдачи" className="grid gap-2 max-h-96 overflow-auto">
+      {status !== 'error' && items.length > 0 && (
+        <div
+          role="radiogroup"
+          aria-label="Пункты выдачи"
+          aria-busy={status === 'loading'}
+          className={`grid gap-2 transition-opacity ${status === 'loading' ? 'opacity-60' : ''}`}
+        >
           {items.map((point) => (
             <label
               key={point.code}
@@ -129,6 +165,9 @@ export function PvzPicker({ cityCode, value, onChange }: PvzPickerProps) {
                   onChange(point)
                   setEditing(false)
                 }}
+                onClick={() => {
+                  if (value?.code === point.code) setEditing(false)
+                }}
                 className="mt-1 w-5 h-5 accent-primary"
               />
               <span className="min-w-0">
@@ -141,14 +180,23 @@ export function PvzPicker({ cityCode, value, onChange }: PvzPickerProps) {
               </span>
             </label>
           ))}
-          {items.length < total && (
-            <button
-              type="button"
-              onClick={showMore}
-              className="justify-self-start px-4 py-2 text-sm font-semibold text-primary underline underline-offset-4 min-h-11"
-            >
-              Показать ещё
-            </button>
+        </div>
+      )}
+
+      {status === 'ready' && items.length < total && (
+        <div>
+          <button
+            type="button"
+            onClick={showMore}
+            disabled={loadingMore}
+            className="px-4 py-2 text-sm font-semibold text-primary underline underline-offset-4 min-h-11 disabled:opacity-60"
+          >
+            {loadingMore ? 'Загружаем…' : 'Показать ещё'}
+          </button>
+          {moreFailed && (
+            <p aria-live="polite" className="text-body-sm text-destructive">
+              Не удалось загрузить пункты. Попробуйте ещё раз
+            </p>
           )}
         </div>
       )}

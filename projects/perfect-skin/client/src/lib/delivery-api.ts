@@ -21,7 +21,7 @@ export interface PointsPage {
   total: number
 }
 
-export const POINTS_PAGE_SIZE = 30
+export const POINTS_PAGE_SIZE = 10
 
 export async function getCities(q: string): Promise<CityOption[]> {
   const params = new URLSearchParams({ q })
