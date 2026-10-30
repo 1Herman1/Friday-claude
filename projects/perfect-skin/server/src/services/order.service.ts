@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { db, type Prisma, $Enums } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
 import * as psSharedNs from '@ps/shared'
@@ -10,6 +11,44 @@ import type { FastifyBaseLogger } from 'fastify'
 import crypto from 'crypto'
 
 type PrismaDeliveryMethod = $Enums.DeliveryMethod
+
+const pointSnapshotSchema = z.object({
+  code: z.string(),
+  type: z.string(),
+  name: z.string(),
+  address: z.string(),
+  workTime: z.string().nullable(),
+})
+const quoteSnapshotSchema = z.object({
+  periodMin: z.number().int().nullable().optional(),
+  periodMax: z.number().int().nullable().optional(),
+})
+
+interface DeliveryView {
+  trackNumber: string | null
+  trackUrl: string | null
+  carrierStatus: string | null
+  carrierStatusAt: Date | null
+  point: { code: string; type: string; name: string; address: string; workTime: string | null } | null
+  periodMin: number | null
+  periodMax: number | null
+}
+
+function toDeliveryView(order: OrderWithRelations): DeliveryView {
+  const point = pointSnapshotSchema.safeParse(order.deliveryPoint)
+  const quote = quoteSnapshotSchema.safeParse(order.deliveryQuote)
+  return {
+    trackNumber: order.deliveryTrackNumber,
+    trackUrl: order.cdekNumber
+      ? `https://www.cdek.ru/ru/tracking?order_id=${encodeURIComponent(order.cdekNumber)}`
+      : null,
+    carrierStatus: order.cdekStatusName,
+    carrierStatusAt: order.cdekStatusAt,
+    point: point.success ? point.data : null,
+    periodMin: quote.success ? (quote.data.periodMin ?? null) : null,
+    periodMax: quote.success ? (quote.data.periodMax ?? null) : null,
+  }
+}
 
 function toPointSnapshot(point: CdekPoint): Prisma.InputJsonObject {
   return {
@@ -412,6 +451,7 @@ export class OrderService {
     deliveryCost: number
     total: number
     comment: string | null
+    delivery: DeliveryView
     payment: {
       status: string
       provider: string
@@ -456,6 +496,7 @@ export class OrderService {
       deliveryCost: Number(order.deliveryCost),
       total: Number(order.total),
       comment: order.comment,
+      delivery: toDeliveryView(order),
       payment: {
         status: 'not_implemented',
         provider: 'yookassa',

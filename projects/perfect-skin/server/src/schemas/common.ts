@@ -707,7 +707,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
     $id: 'ps.order',
     type: 'object',
     additionalProperties: false,
-    required: ['id', 'number', 'status', 'createdAt', 'deliveryMethod', 'recipient', 'items', 'subtotal', 'deliveryCost', 'total', 'payment'],
+    required: ['id', 'number', 'status', 'createdAt', 'deliveryMethod', 'recipient', 'items', 'subtotal', 'deliveryCost', 'total', 'delivery', 'payment'],
     properties: {
       id: { type: 'string', format: 'uuid' },
       number: { type: 'string' },
@@ -735,6 +735,35 @@ export function registerCommonSchemas(app: FastifyInstance) {
       deliveryCost: { type: 'integer' },
       total: { type: 'integer' },
       comment: { type: ['string', 'null'] },
+      delivery: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['trackNumber', 'trackUrl', 'carrierStatus', 'carrierStatusAt', 'point', 'periodMin', 'periodMax'],
+        properties: {
+          trackNumber: { type: ['string', 'null'] },
+          trackUrl: { type: ['string', 'null'] },
+          carrierStatus: { type: ['string', 'null'] },
+          carrierStatusAt: { type: ['string', 'null'], format: 'date-time' },
+          point: {
+            anyOf: [
+              {
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                  code: { type: 'string' },
+                  type: { type: 'string' },
+                  name: { type: 'string' },
+                  address: { type: 'string' },
+                  workTime: { type: ['string', 'null'] },
+                },
+              },
+              { type: 'null' },
+            ],
+          },
+          periodMin: { type: ['integer', 'null'] },
+          periodMax: { type: ['integer', 'null'] },
+        },
+      },
       payment: { $ref: 'ps.orderPayment#' },
     },
   })

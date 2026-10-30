@@ -13,6 +13,16 @@ interface OrderItem {
   image?: string | null
 }
 
+interface OrderDelivery {
+  trackNumber: string | null
+  trackUrl: string | null
+  carrierStatus: string | null
+  carrierStatusAt: string | null
+  point: { code: string; type: string; name: string; address: string; workTime: string | null } | null
+  periodMin: number | null
+  periodMax: number | null
+}
+
 interface OrderDetail {
   number: string
   createdAt: string
@@ -25,13 +35,14 @@ interface OrderDetail {
   }
   deliveryMethod: string
   deliveryAddress?: {
-    city: string
+    city?: string
     street: string
     house: string
     apartment?: string | null
     postalCode?: string | null
   } | null
   cdekPvzCode?: string | null
+  delivery?: OrderDelivery
   subtotal: number
   discount?: number
   deliveryCost: number
@@ -164,12 +175,14 @@ export function OrderView({ order }: OrderViewProps) {
 
               {order.deliveryAddress && (
                 <>
-                  <p>
-                    <span className="text-muted-foreground">Город: </span>
-                    <span className="font-semibold text-foreground">
-                      {order.deliveryAddress.city}
-                    </span>
-                  </p>
+                  {order.deliveryAddress.city && (
+                    <p>
+                      <span className="text-muted-foreground">Город: </span>
+                      <span className="font-semibold text-foreground">
+                        {order.deliveryAddress.city}
+                      </span>
+                    </p>
+                  )}
                   <p>
                     <span className="text-muted-foreground">Адрес: </span>
                     <span className="font-semibold text-foreground">
@@ -188,11 +201,63 @@ export function OrderView({ order }: OrderViewProps) {
                 </>
               )}
 
-              {order.cdekPvzCode && (
+              {order.delivery?.point && (
+                <div>
+                  <p className="font-semibold text-foreground">{order.delivery.point.name}</p>
+                  <p className="text-muted-foreground">{order.delivery.point.address}</p>
+                  {order.delivery.point.workTime && (
+                    <p className="text-muted-foreground">Часы работы: {order.delivery.point.workTime}</p>
+                  )}
+                </div>
+              )}
+
+              {!order.delivery?.point && order.cdekPvzCode && (
                 <p>
                   <span className="text-muted-foreground">ПВЗ код: </span>
                   <span className="font-semibold text-foreground">
                     {order.cdekPvzCode}
+                  </span>
+                </p>
+              )}
+
+              {order.delivery?.periodMin != null && order.delivery.periodMax != null && (
+                <p>
+                  <span className="text-muted-foreground">Срок доставки: </span>
+                  <span className="font-semibold text-foreground">
+                    {order.delivery.periodMin === order.delivery.periodMax
+                      ? `${order.delivery.periodMin} дн.`
+                      : `${order.delivery.periodMin}–${order.delivery.periodMax} дн.`}
+                  </span>
+                </p>
+              )}
+
+              {order.delivery?.trackNumber && (
+                <p>
+                  <span className="text-muted-foreground">Трек-номер: </span>
+                  <span className="font-semibold text-foreground">{order.delivery.trackNumber}</span>
+                  {order.delivery.trackUrl && (
+                    <>
+                      {' '}
+                      <a
+                        href={order.delivery.trackUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        Отследить на сайте СДЭК
+                      </a>
+                    </>
+                  )}
+                </p>
+              )}
+
+              {order.delivery?.carrierStatus && (
+                <p>
+                  <span className="text-muted-foreground">Статус перевозчика: </span>
+                  <span className="font-semibold text-foreground">
+                    {order.delivery.carrierStatus}
+                    {order.delivery.carrierStatusAt &&
+                      ` (${new Date(order.delivery.carrierStatusAt).toLocaleString('ru-RU')})`}
                   </span>
                 </p>
               )}
