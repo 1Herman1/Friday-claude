@@ -744,3 +744,19 @@ Workflow `.github/workflows/perfect-skin-cdek-smoke.yml`:
 - `/home/user/project_simba/.github/workflows/deploy-perfect-skin.yml`
 - `/home/user/project_simba/projects/perfect-skin/deploy/nginx-perfect-skin.conf`
 - `/home/user/project_simba/docs/projects/perfect-skin/client/06-cdek.md`
+---
+
+## 13. Проверено вживую 30.10.2026 (smoke на edu через GitHub Actions)
+
+Workflow `perfect-skin-cdek-smoke.yml`, публичные тестовые ключи edu передаются inputs `client_id` / `client_secret` (в репозитории не хранятся).
+
+| Проверка | Результат |
+|---|---|
+| Токен, `GET /location/suggest/cities` | ok, Москва = 44; поля `city_uuid`, `code` (number), `full_name`, `country_code` |
+| `GET /deliverypoints` Москва | ok, 142 точки на edu; `location.city_code` — number, `phones`, `work_time_list` — массивы объектов |
+| `POST /calculator/tarifflist` Москва → СПб | ok, 17 тарифов, все настроенные присутствуют; поля `tariff_code`, `delivery_sum`, `period_min/max`, `calendar_min/max` |
+| `POST /orders` → `GET /orders/{uuid}` | ok, заказ принят, `cdek_number` (string) получен; `statuses` — массив объектов |
+| Накладная `POST /print/orders` → PDF | ok, PDF 92 704 байт |
+| Удаление тестового заказа | ok |
+
+Не проверено вживую: вебхук (нужен публичный домен) и коды статусов `status-map.ts` — сверить по первым настоящим событиям.
