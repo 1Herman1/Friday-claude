@@ -125,7 +125,7 @@ export function HeroSection() {
           <h1 className="mb-3 md:mb-6 text-4xl sm:text-5xl md:text-6xl font-heading font-bold leading-[1.02] landscape:lg:text-hero landscape:2xl:mb-8">
             <span className="block landscape:lg:whitespace-nowrap">
               ПРО-<br className="hidden landscape:lg:inline" />КОСМЕТИКА
-            </span>
+            </span>{' '}
             <span className="block landscape:lg:whitespace-nowrap">ИЗ ИСПАНИИ</span>
           </h1>
 
