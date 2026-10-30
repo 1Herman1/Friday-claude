@@ -1,0 +1,43 @@
+name: Perfect Skin — CDEK smoke (edu)
+
+# Живая проверка API СДЭК на тестовом контуре edu. Только вручную.
+# Без create ничего не создаёт в СДЭК. С create — тестовый заказ, накладная и удаление заказа.
+# Сеть до api.edu.cdek.ru из среды разработки закрыта, поэтому прогон идёт здесь.
+
+on:
+  workflow_dispatch:
+    inputs:
+      create:
+        description: 'Создать тестовый заказ, скачать накладную и удалить заказ'
+        type: boolean
+        default: false
+      shapes:
+        description: 'Печатать структуру ответов СДЭК (типы полей, без значений)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PS_CDEK_BASE_URL: https://api.edu.cdek.ru/v2
+      PS_CDEK_CLIENT_ID: ${{ secrets.PS_CDEK_TEST_CLIENT_ID }}
+      PS_CDEK_CLIENT_SECRET: ${{ secrets.PS_CDEK_TEST_CLIENT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: CDEK smoke
+        run: npm run cdek:smoke --workspace=@ps/server -- ${{ inputs.create && '--create' || '' }} ${{ inputs.shapes && '--shapes' || '' }}

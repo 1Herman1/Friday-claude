@@ -28,6 +28,7 @@
     "studio": "prisma studio",
     "test": "vitest run",
     "test:watch": "vitest",
+    "cdek:smoke": "tsx tools/cdek-smoke.ts",
     "cleanup:carts": "node --env-file=.env tools/cleanup-guest-carts.mjs",
     "purge:pro-docs": "tsx prisma/purge-pro-docs.ts"
   },
