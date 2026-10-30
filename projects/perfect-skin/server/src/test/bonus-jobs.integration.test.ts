@@ -148,14 +148,15 @@ describe('Ночные задачи бонусов на реальной баз�
     expect(await balanceOf(account.id)).toBe(0)
   })
 
-  it('заказ участника, который вышел из клуба, считается в skipped и не начисляется', async () => {
+  it('заказ участника, который вышел из клуба, не попадает в выборку и не начисляется', async () => {
+    const dueBefore = (await runBonusAccruals(db, NOW, { apply: false })).due
     const account = await makeAccount('left-skipped')
     const orderId = await makeDueOrder(account.userId as string, 10)
     await bonusService.leave(account.userId as string, NOW)
 
-    const result = await runBonusAccruals(db, NOW, { apply: true })
+    expect((await runBonusAccruals(db, NOW, { apply: false })).due).toBe(dueBefore)
+    await runBonusAccruals(db, NOW, { apply: true })
 
-    expect(result.skipped).toBeGreaterThanOrEqual(1)
     expect((await db.order.findUniqueOrThrow({ where: { id: orderId } })).bonusAccruedAt).toBeNull()
     expect(await balanceOf(account.id)).toBe(0)
   })

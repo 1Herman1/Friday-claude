@@ -33,6 +33,8 @@ export async function runBonusAccruals(
       bonusAccrualPlanned: { gt: 0 },
       paymentStatus: 'paid',
       status: { not: 'cancelled' },
+      // вышедшие из клуба и без счёта не начисляются: без фильтра занимали бы пакет каждую ночь
+      user: { bonusAccount: { leftAt: null } },
     },
     select: { id: true },
     orderBy: { bonusAccrualDueAt: 'asc' },
