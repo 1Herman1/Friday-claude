@@ -1,5 +1,6 @@
 import { db, type Prisma, $Enums } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
+import { changeOrderStatus, markOrderPaid } from './order-lifecycle.service.js'
 
 type OrderStatus = $Enums.OrderStatus
 type PaymentStatus = $Enums.PaymentStatus
@@ -146,39 +147,40 @@ export class AdminOrderService {
       }
     }
 
-    const updateData: Prisma.OrderUpdateInput = {}
+    const updated = await db.$transaction(async (tx) => {
+      const now = new Date()
+      if (payload.status && payload.status !== order.status) {
+        await changeOrderStatus(tx, { orderId: id, from: order.status, to: payload.status, now })
+      }
+      if (payload.markPaid) {
+        await markOrderPaid(tx, { orderId: id, now })
+      }
 
-    if (payload.status) {
-      updateData.status = payload.status
-    }
+      const rest: Prisma.OrderUpdateInput = {}
+      if (payload.deliveryTrackNumber !== undefined) {
+        rest.deliveryTrackNumber = payload.deliveryTrackNumber || null
+      }
+      if (payload.adminNote !== undefined) {
+        rest.adminNote = payload.adminNote || null
+      }
+      if (Object.keys(rest).length > 0) {
+        await tx.order.update({ where: { id }, data: rest })
+      }
 
-    if (payload.deliveryTrackNumber !== undefined) {
-      updateData.deliveryTrackNumber = payload.deliveryTrackNumber || null
-    }
-
-    if (payload.adminNote !== undefined) {
-      updateData.adminNote = payload.adminNote || null
-    }
-
-    if (payload.markPaid) {
-      updateData.paymentStatus = 'paid'
-      updateData.paidAt = new Date()
-    }
-
-    const updated = await db.order.update({
-      where: { id },
-      data: updateData,
-      include: {
-        user: { select: { name: true, phone: true, email: true } },
-        items: {
-          include: {
-            product: { select: { slug: true, images: true } },
+      return tx.order.findUniqueOrThrow({
+        where: { id },
+        include: {
+          user: { select: { name: true, phone: true, email: true } },
+          items: {
+            include: {
+              product: { select: { slug: true, images: true } },
+            },
+          },
+          redemption: {
+            include: { promoCode: { select: { code: true, percent: true } } },
           },
         },
-        redemption: {
-          include: { promoCode: { select: { code: true, percent: true } } },
-        },
-      },
+      })
     })
 
     return this.formatAdminOrder(updated)

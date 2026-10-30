@@ -6,6 +6,7 @@ import { loyaltySettingsService } from './loyalty-settings.service.js'
 
 type Tx = Prisma.TransactionClient
 type BonusTxType = $Enums.BonusTxType
+type OrderStatus = $Enums.OrderStatus
 
 type LockedAccount = { id: string; balance: number; leftAt: Date | null }
 
@@ -248,10 +249,135 @@ async function spendForOrder(
   })
 }
 
+async function scheduleAccrual(tx: Tx, orderId: string, now: Date, delayDays: number): Promise<void> {
+  await tx.order.updateMany({
+    where: { id: orderId, bonusAccrualDueAt: null, bonusAccrualPlanned: { gt: 0 } },
+    data: { bonusAccrualDueAt: addDays(now, delayDays) },
+  })
+  if (delayDays === 0) await accrueForOrder(tx, orderId, now)
+}
+
+async function accrueForOrder(tx: Tx, orderId: string, now: Date): Promise<'accrued' | 'skipped'> {
+  const order = await tx.order.findUniqueOrThrow({
+    where: { id: orderId },
+    select: { status: true, userId: true, bonusAccruedAt: true, bonusAccrualPlanned: true },
+  })
+  if (order.status === 'cancelled' || order.bonusAccruedAt !== null || order.bonusAccrualPlanned === 0) {
+    return 'skipped'
+  }
+
+  const account = await lockAccountByUser(tx, order.userId)
+  if (!account || account.leftAt) return 'skipped'
+
+  const existing = await tx.bonusTransaction.findFirst({
+    where: { orderId, type: 'order_accrual' },
+    select: { id: true },
+  })
+  if (!existing) {
+    const settings = await loyaltySettingsService.get(tx)
+    await credit(tx, {
+      accountId: account.id,
+      type: 'order_accrual',
+      amount: order.bonusAccrualPlanned,
+      expiresAt: settings.bonusTtlDays === 0 ? null : addDays(now, settings.bonusTtlDays),
+      orderId,
+    })
+  }
+  await tx.order.updateMany({ where: { id: orderId, bonusAccruedAt: null }, data: { bonusAccruedAt: now } })
+  return 'accrued'
+}
+
+async function refundSpend(tx: Tx, orderId: string, now: Date, refundMinTtlDays: number): Promise<void> {
+  const spend = await tx.bonusTransaction.findFirst({
+    where: { orderId, type: 'order_spend' },
+    select: { accountId: true, amount: true, sourceMaxExpiresAt: true },
+  })
+  if (!spend) return
+
+  await lockAccountById(tx, spend.accountId)
+  const refunded = await tx.bonusTransaction.findFirst({
+    where: { orderId, type: 'order_spend_refund' },
+    select: { id: true },
+  })
+  if (refunded) return
+
+  const expiresAt = spend.sourceMaxExpiresAt === null
+    ? null
+    : latestOf(spend.sourceMaxExpiresAt, addDays(now, refundMinTtlDays))
+  await credit(tx, {
+    accountId: spend.accountId,
+    type: 'order_spend_refund',
+    amount: -spend.amount,
+    expiresAt,
+    orderId,
+  })
+}
+
+async function reverseAccrual(tx: Tx, orderId: string, now: Date): Promise<void> {
+  const accrual = await tx.bonusTransaction.findFirst({
+    where: { orderId, type: 'order_accrual' },
+    select: { id: true, accountId: true, amount: true },
+  })
+  if (!accrual) return
+
+  await lockAccountById(tx, accrual.accountId)
+  const reversed = await tx.bonusTransaction.findFirst({
+    where: { orderId, type: 'order_accrual_reversal' },
+    select: { id: true },
+  })
+  if (reversed) return
+
+  await expireDueLots(tx, accrual.accountId, now)
+  const account = await tx.bonusAccount.findUniqueOrThrow({
+    where: { id: accrual.accountId },
+    select: { balance: true },
+  })
+  const amount = Math.min(accrual.amount, account.balance)
+  if (amount <= 0) return
+
+  await debit(tx, {
+    accountId: accrual.accountId,
+    type: 'order_accrual_reversal',
+    amount,
+    now,
+    orderId,
+    preferLotId: accrual.id,
+    reason: amount < accrual.amount ? `не списано ${accrual.amount - amount}: бонусы уже потрачены` : undefined,
+  })
+}
+
+async function onOrderStatusChanged(
+  tx: Tx,
+  input: { orderId: string; from: OrderStatus; to: OrderStatus; now: Date }
+): Promise<void> {
+  const settings = await loyaltySettingsService.get(tx)
+  if (input.to === 'delivered' && settings.accrualTrigger === 'delivered') {
+    await scheduleAccrual(tx, input.orderId, input.now, settings.accrualDelayDays)
+  }
+  if (input.to === 'cancelled') {
+    await refundSpend(tx, input.orderId, input.now, settings.refundMinTtlDays)
+    await reverseAccrual(tx, input.orderId, input.now)
+  }
+}
+
+async function onOrderPaid(tx: Tx, input: { orderId: string; now: Date }): Promise<void> {
+  const settings = await loyaltySettingsService.get(tx)
+  if (settings.accrualTrigger === 'paid') {
+    await scheduleAccrual(tx, input.orderId, input.now, settings.accrualDelayDays)
+  }
+}
+
+function latestOf(a: Date, b: Date): Date {
+  return a.getTime() >= b.getTime() ? a : b
+}
+
 export const bonusService = {
   isEligible,
   join,
   leave,
   spendForOrder,
   expireDueLots,
+  onOrderStatusChanged,
+  onOrderPaid,
+  accrueForOrder,
 }
