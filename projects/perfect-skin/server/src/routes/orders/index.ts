@@ -35,6 +35,7 @@ const createOrderSchema = z.object({
     .optional(),
   comment: z.string().max(500).optional(),
   expectedTotal: z.number().int().min(0),
+  bonusSpend: z.number().int().min(0).max(1_000_000).optional(),
 })
 
 export default fastifyPlugin(async (app: FastifyInstance) => {
@@ -79,6 +80,7 @@ export default fastifyPlugin(async (app: FastifyInstance) => {
             promoCode: { type: 'string' },
             comment: { type: 'string' },
             expectedTotal: { type: 'integer' },
+            bonusSpend: { type: 'integer', minimum: 0, maximum: 1000000 },
           },
         },
         response: {

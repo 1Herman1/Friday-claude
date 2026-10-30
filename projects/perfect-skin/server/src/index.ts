@@ -18,6 +18,7 @@ import cartRoutes from './routes/cart/index.js'
 import promoRoutes from './routes/promo/index.js'
 import deliveryRoutes from './routes/delivery/index.js'
 import ordersRoutes from './routes/orders/index.js'
+import bonusRoutes from './routes/bonus/index.js'
 import authRoutes from './routes/auth/index.js'
 import postsRoutes from './routes/posts/index.js'
 import videoReviewsRoutes from './routes/video-reviews.js'
@@ -194,6 +195,7 @@ await app.register(cartRoutes)
 await app.register(deliveryRoutes)
 await app.register(promoRoutes)
 await app.register(ordersRoutes)
+await app.register(bonusRoutes)
 await app.register(authRoutes)
 await app.register(proRoutes)
 await app.register(consultationsRoutes)

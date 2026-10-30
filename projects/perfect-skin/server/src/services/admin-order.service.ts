@@ -1,6 +1,7 @@
 import { db, type Prisma, $Enums } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
 import { changeOrderStatus, markOrderPaid } from './order-lifecycle.service.js'
+import { toBonusView } from './order.service.js'
 import { getCdek, getCdekSync } from './cdek/registry.js'
 
 type OrderStatus = $Enums.OrderStatus
@@ -286,6 +287,9 @@ export class AdminOrderService {
       total: Number(order.total),
       comment: order.comment,
       paidAt: order.paidAt,
+      deliveredAt: order.deliveredAt,
+      bonus: toBonusView(order),
+      bonusAccrualDueAt: order.bonusAccrualDueAt,
       cdek: {
         enabled: getCdek() !== null,
         state: order.cdekState ?? null,

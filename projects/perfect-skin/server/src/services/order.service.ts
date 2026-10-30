@@ -1,16 +1,53 @@
 import { z } from 'zod'
 import { db, type Prisma, $Enums } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
+import type * as PsShared from '@ps/shared'
 import * as psSharedNs from '@ps/shared'
-const { calcOrderTotals } = ((psSharedNs as any).default ?? psSharedNs) as any
 import { toCalcMethod } from '../lib/delivery.js'
 import { isWholesaleViewer, resolvePrice, type PriceViewer } from '../lib/pricing.js'
 import { deliveryQuote, type ResolvedDelivery } from './cdek/quote.service.js'
+import { bonusService } from './bonus.service.js'
+import { loyaltySettingsService } from './loyalty-settings.service.js'
 import type { CdekPoint } from './cdek/client.js'
 import type { FastifyBaseLogger } from 'fastify'
 import crypto from 'crypto'
 
+// CJS-пакет: vitest кладёт экспорты в namespace, tsx — в default. Берём оба.
+const shared = ((psSharedNs as { default?: typeof PsShared }).default ?? psSharedNs) as typeof PsShared
+const { calcOrderTotals } = shared
+
 type PrismaDeliveryMethod = $Enums.DeliveryMethod
+
+export type OrderBonusView = {
+  spent: number
+  discount: number
+  accrualPlanned: number
+  accrualStatus: 'none' | 'pending' | 'accrued' | 'cancelled'
+} | null
+
+export function toBonusView(order: {
+  status: $Enums.OrderStatus
+  bonusSpent: number
+  bonusDiscount: number
+  bonusAccrualPlanned: number
+  bonusAccruedAt: Date | null
+}): OrderBonusView {
+  if (order.bonusSpent === 0 && order.bonusAccrualPlanned === 0) return null
+  const accrualStatus =
+    order.bonusAccrualPlanned === 0
+      ? 'none'
+      : order.status === 'cancelled'
+        ? 'cancelled'
+        : order.bonusAccruedAt
+          ? 'accrued'
+          : 'pending'
+  return {
+    spent: order.bonusSpent,
+    discount: order.bonusDiscount,
+    accrualPlanned: order.bonusAccrualPlanned,
+    accrualStatus,
+  }
+}
 
 const pointSnapshotSchema = z.object({
   code: z.string(),
@@ -102,6 +139,7 @@ export class OrderService {
       promoCode?: string | null
       comment?: string | null
       expectedTotal: number
+      bonusSpend?: number
     },
     viewer: PriceViewer = null,
     log: Pick<FastifyBaseLogger, 'warn'>
@@ -226,11 +264,13 @@ export class OrderService {
     const calcItems = availableItems.map((item) => ({
       price: resolvePrice({ retailPrice: item.productVariant.retailPrice, wholesalePrice: item.productVariant.wholesalePrice }, viewer),
       quantity: item.quantity,
+      isProfessional: item.productVariant.product.isProfessional || item.productVariant.isProfessional,
     }))
     const priceList = isWholesaleViewer(viewer) ? 'professional' : 'retail'
     const promo = promoData ? { code: promoData.code, percent: promoData.percent } : null
     const deliveryMethod = toCalcMethod(payload.deliveryMethod)
     const preview = calcOrderTotals({ items: calcItems, priceList, promo, deliveryMethod })
+    const settings = await loyaltySettingsService.get()
     const delivery: ResolvedDelivery = await deliveryQuote(log).resolveForOrder({
       method: payload.deliveryMethod,
       cityCode: payload.cdekCityCode ?? null,
@@ -321,31 +361,47 @@ export class OrderService {
         }
       }
 
-      // Step 5: Calculate totals using calcOrderTotals
+      // Step 5: Plan bonuses under the account lock (after stock and promo locks)
+      const now = new Date()
+      const bonusPlan = await bonusService.planOrderBonus(tx, {
+        userId: owner.customerId,
+        viewer,
+        requestedPoints: payload.bonusSpend ?? 0,
+        hasPromo: promoData !== null,
+        subtotal: preview.subtotal,
+        promoDiscount: preview.promoDiscount,
+        items: calcItems,
+        settings,
+        now,
+      })
+
+      // Step 6: Calculate totals using calcOrderTotals (порог доставки считается до бонусов)
       const totals = calcOrderTotals({
         items: calcItems,
         priceList,
         promo,
         deliveryMethod,
         deliveryPaidCost: delivery.paidCost,
+        bonusDiscount: bonusPlan.spendDiscount,
       })
 
-      // Step 6: Verify expectedTotal
+      // Step 7: Verify expectedTotal
       if (payload.expectedTotal !== totals.total) {
         throw new ApiError(409, 'TOTAL_MISMATCH', 'Сумма заказа изменилась', {
           subtotal: totals.subtotal,
           promoDiscount: totals.promoDiscount,
           deliveryCost: totals.deliveryCost,
+          bonusDiscount: totals.bonusDiscount,
           total: totals.total,
         })
       }
 
-      // Step 7: Generate order number from sequence
+      // Step 8: Generate order number from sequence
       const seqResult = await tx.$queryRaw`SELECT nextval('order_number_seq') as next_val`
       const nextNum = (seqResult as any[])[0].next_val
       const orderNumber = `PS-${String(nextNum).padStart(6, '0')}`
 
-      // Step 8: Create Order and OrderItems
+      // Step 9: Create Order and OrderItems
       const newOrder = await tx.order.create({
         data: {
           number: orderNumber,
@@ -363,6 +419,9 @@ export class OrderService {
           recipientEmail: payload.recipient.email || null,
           subtotal: totals.subtotal,
           promoDiscount: totals.promoDiscount,
+          bonusSpent: bonusPlan.spendPoints,
+          bonusDiscount: totals.bonusDiscount,
+          bonusAccrualPlanned: bonusPlan.accrualPlanned,
           deliveryCost: totals.deliveryCost,
           total: totals.total,
           comment: payload.comment || null,
@@ -391,7 +450,7 @@ export class OrderService {
         })
       }
 
-      // Step 9: Create PromoCodeRedemption if promo applied
+      // Step 10: Create PromoCodeRedemption if promo applied
       if (promoData) {
         const perUserKey = promoData.perUserLimit
           ? crypto
@@ -412,7 +471,18 @@ export class OrderService {
         })
       }
 
-      // Step 10: Clear cart
+      // Step 11: Spend bonuses (счёт уже заблокирован planOrderBonus), затем очистка корзины
+      if (bonusPlan.spendPoints > 0) {
+        if (!bonusPlan.accountId) throw new ApiError(409, 'BONUS_NOT_MEMBER', 'Вступите в Бьюти-клуб, чтобы списать бонусы')
+        await bonusService.spendForOrder(tx, {
+          accountId: bonusPlan.accountId,
+          orderId: newOrder.id,
+          points: bonusPlan.spendPoints,
+          now,
+        })
+      }
+
+      // Step 12: Clear cart
       await tx.cartItem.deleteMany({
         where: { cartId: cart!.id },
       })
@@ -460,6 +530,7 @@ export class OrderService {
     total: number
     comment: string | null
     delivery: DeliveryView
+    bonus: OrderBonusView
     payment: {
       status: string
       provider: string
@@ -505,6 +576,7 @@ export class OrderService {
       total: Number(order.total),
       comment: order.comment,
       delivery: toDeliveryView(order),
+      bonus: toBonusView(order),
       payment: {
         status: 'not_implemented',
         provider: 'yookassa',

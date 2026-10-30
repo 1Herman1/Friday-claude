@@ -1,12 +1,47 @@
-import { db, type Prisma, $Enums } from '../lib/db.js'
+import type * as PsShared from '@ps/shared'
+import * as psSharedNs from '@ps/shared'
+import { db, type Prisma, $Enums, type LoyaltySettings } from '../lib/db.js'
 import { ApiError } from '../lib/errors.js'
 import { CONSENT_TEXT_VERSION } from '../lib/consents.js'
-import { isWholesaleViewer, STAFF_ROLES, type PriceViewer } from '../lib/pricing.js'
+import { isWholesaleViewer, resolvePrice, STAFF_ROLES, type PriceViewer } from '../lib/pricing.js'
 import { loyaltySettingsService } from './loyalty-settings.service.js'
+import { promoService } from './promo.service.js'
+
+// CJS-пакет: vitest кладёт экспорты в namespace, tsx — в default. Берём оба.
+const shared = ((psSharedNs as { default?: typeof PsShared }).default ?? psSharedNs) as typeof PsShared
 
 type Tx = Prisma.TransactionClient
 type BonusTxType = $Enums.BonusTxType
 type OrderStatus = $Enums.OrderStatus
+
+export type CartOwner = { userId: string } | { sessionId: string }
+
+export type BonusPlan = { accountId: string | null; spendPoints: number; spendDiscount: number; accrualPlanned: number }
+
+export type BonusReason = 'PROGRAM_DISABLED' | 'AUTH_REQUIRED' | 'NOT_ELIGIBLE' | 'NOT_MEMBER' | 'PROMO_CONFLICT' | 'MIN_ORDER' | 'EMPTY_BALANCE'
+
+export type BonusCheckoutQuote = {
+  canSpend: boolean
+  reason: BonusReason | null
+  available: number
+  maxSpend: number
+  kopecksPerBonus: number
+  goodsAfterDiscount: number
+  minOrderForSpend: number
+  accrualPreview: number
+}
+
+type PlanOrderBonusInput = {
+  userId: string
+  viewer: PriceViewer
+  requestedPoints: number
+  hasPromo: boolean
+  subtotal: number
+  promoDiscount: number
+  items: { price: number; quantity: number; isProfessional: boolean }[]
+  settings: LoyaltySettings
+  now: Date
+}
 
 type LockedAccount = { id: string; balance: number; leftAt: Date | null }
 
@@ -381,6 +416,189 @@ async function expireAccount(tx: Tx, accountId: string, now: Date): Promise<numb
   return expireDueLots(tx, accountId, now)
 }
 
+function spendRules(settings: LoyaltySettings): PsShared.BonusSpendRules {
+  return {
+    kopecksPerBonus: settings.kopecksPerBonus,
+    maxSpendPercent: settings.maxSpendPercent,
+    minOrderForSpend: settings.minOrderForSpend,
+    allowSpendWithPromo: settings.allowSpendWithPromo,
+  }
+}
+
+function accrualRules(settings: LoyaltySettings): PsShared.BonusAccrualRules {
+  return {
+    accrualPercent: settings.accrualPercent,
+    accrualBase: settings.accrualBase,
+    kopecksPerBonus: settings.kopecksPerBonus,
+    excludeProfessionalProducts: settings.excludeProfessionalProducts,
+    accrueWithPromo: settings.accrueWithPromo,
+  }
+}
+
+// Баланс, который можно тратить сейчас: сумма живых партий, без чтения и блокировки счёта
+async function liveBalance(client: Pick<Tx, 'bonusTransaction'>, accountId: string, now: Date): Promise<number> {
+  const agg = await client.bonusTransaction.aggregate({
+    where: {
+      accountId,
+      amount: { gt: 0 },
+      remaining: { gt: 0 },
+      OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+    },
+    _sum: { remaining: true },
+  })
+  return agg._sum.remaining ?? 0
+}
+
+const BLOCK_REASON: Record<PsShared.BonusSpendBlock, BonusReason> = {
+  PROMO_CONFLICT: 'PROMO_CONFLICT',
+  MIN_ORDER: 'MIN_ORDER',
+  EMPTY_BALANCE: 'EMPTY_BALANCE',
+}
+
+// Вызывается внутри транзакции заказа, после списания остатков (порядок блокировок: товары → счёт).
+async function planOrderBonus(tx: Tx, input: PlanOrderBonusInput): Promise<BonusPlan> {
+  const { settings, viewer, requestedPoints, now } = input
+  const hasSpend = requestedPoints > 0
+  const none: BonusPlan = { accountId: null, spendPoints: 0, spendDiscount: 0, accrualPlanned: 0 }
+
+  if (!settings.enabled) {
+    if (hasSpend) throw new ApiError(409, 'BONUS_PROGRAM_DISABLED', 'Бьюти-клуб пока не запущен')
+    return none
+  }
+  if (hasSpend && !viewer) throw new ApiError(409, 'BONUS_AUTH_REQUIRED', 'Списание бонусов доступно после входа')
+  if (viewer && !isEligible(viewer)) {
+    if (hasSpend) throw new ApiError(409, 'BONUS_NOT_ELIGIBLE', 'Бьюти-клуб недоступен для этого аккаунта')
+    return none
+  }
+
+  const account = hasSpend
+    ? await lockAccountByUser(tx, input.userId)
+    : await tx.bonusAccount.findUnique({
+        where: { userId: input.userId },
+        select: { id: true, balance: true, leftAt: true },
+      })
+  if (!account || account.leftAt) {
+    if (hasSpend) throw new ApiError(409, 'BONUS_NOT_MEMBER', 'Вступите в Бьюти-клуб, чтобы списать бонусы')
+    return none
+  }
+
+  const goodsAfterDiscount = input.subtotal - input.promoDiscount
+  let spendDiscount = 0
+  if (hasSpend) {
+    await expireDueLots(tx, account.id, now)
+    const available = (await tx.bonusAccount.findUniqueOrThrow({ where: { id: account.id }, select: { balance: true } })).balance
+    const { maxSpend, block } = shared.calcMaxBonusSpend({
+      goodsAfterDiscount,
+      hasPromo: input.hasPromo,
+      available,
+      rules: spendRules(settings),
+    })
+    if (block === 'MIN_ORDER') {
+      throw new ApiError(409, 'BONUS_MIN_ORDER', 'Для списания бонусов нужна большая сумма товаров', {
+        minOrderForSpend: settings.minOrderForSpend,
+      })
+    }
+    if (block === 'PROMO_CONFLICT') throw new ApiError(409, 'BONUS_PROMO_CONFLICT', 'Бонусы не суммируются с промокодом')
+    if (block === 'EMPTY_BALANCE') throw new ApiError(409, 'BONUS_INSUFFICIENT', 'Недостаточно бонусов', { available })
+    if (requestedPoints > maxSpend) {
+      throw new ApiError(409, 'BONUS_LIMIT_EXCEEDED', 'Столько бонусов списать нельзя', { maxSpend })
+    }
+    spendDiscount = shared.bonusValue(requestedPoints, settings.kopecksPerBonus)
+  }
+
+  const accrualPlanned = shared.calcBonusAccrual({
+    items: input.items,
+    subtotal: input.subtotal,
+    promoDiscount: input.promoDiscount,
+    bonusDiscount: spendDiscount,
+    hasPromo: input.hasPromo,
+    rules: accrualRules(settings),
+  })
+  return { accountId: account.id, spendPoints: requestedPoints, spendDiscount, accrualPlanned }
+}
+
+// Чтение без блокировок: подсказка для чекаута, окончательную проверку делает заказ под блокировкой.
+async function quoteForCart(
+  owner: CartOwner,
+  viewer: PriceViewer,
+  promo: string | undefined,
+  spend: number,
+  now: Date
+): Promise<BonusCheckoutQuote> {
+  const settings = await loyaltySettingsService.get()
+  const cart = await db.cart.findUnique({
+    where: 'userId' in owner ? { userId: owner.userId } : { sessionId: owner.sessionId },
+    include: { items: { include: { productVariant: { include: { product: true } } } } },
+  })
+  if (!cart || cart.items.length === 0) throw new ApiError(409, 'CART_EMPTY', 'Корзина пуста')
+
+  const items = cart.items
+    .map((item) => {
+      const v = item.productVariant
+      const price = resolvePrice({ retailPrice: v.retailPrice, wholesalePrice: v.wholesalePrice }, viewer)
+      const available = v.isActive && !v.deletedAt && v.product.isActive && !v.product.deletedAt && price > 0
+      return {
+        price,
+        quantity: item.quantity,
+        isProfessional: v.product.isProfessional || v.isProfessional,
+        available,
+      }
+    })
+    .filter((item) => item.available)
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const promoDiscount = promo ? (await promoService.validateCode(promo, subtotal)).discount : 0
+  const goodsAfterDiscount = subtotal - promoDiscount
+  const base = {
+    goodsAfterDiscount,
+    minOrderForSpend: settings.minOrderForSpend,
+    kopecksPerBonus: settings.kopecksPerBonus,
+  }
+  const rejected = (reason: BonusReason): BonusCheckoutQuote => ({
+    ...base,
+    canSpend: false,
+    reason,
+    available: 0,
+    maxSpend: 0,
+    accrualPreview: 0,
+  })
+
+  if (!settings.enabled) return rejected('PROGRAM_DISABLED')
+  if (!viewer || !('userId' in owner)) return rejected('AUTH_REQUIRED')
+  if (!isEligible(viewer)) return rejected('NOT_ELIGIBLE')
+
+  const account = await db.bonusAccount.findUnique({
+    where: { userId: owner.userId },
+    select: { id: true, leftAt: true },
+  })
+  if (!account || account.leftAt) return rejected('NOT_MEMBER')
+
+  const available = await liveBalance(db, account.id, now)
+  const hasPromo = Boolean(promo)
+  const { maxSpend, block } = shared.calcMaxBonusSpend({
+    goodsAfterDiscount,
+    hasPromo,
+    available,
+    rules: spendRules(settings),
+  })
+  const spendPoints = Math.min(Math.max(0, spend), maxSpend)
+  const accrualPreview = shared.calcBonusAccrual({
+    items: items.map(({ price, quantity, isProfessional }) => ({ price, quantity, isProfessional })),
+    subtotal,
+    promoDiscount,
+    bonusDiscount: shared.bonusValue(spendPoints, settings.kopecksPerBonus),
+    hasPromo,
+    rules: accrualRules(settings),
+  })
+  return {
+    ...base,
+    canSpend: block === null && maxSpend > 0,
+    reason: block ? BLOCK_REASON[block] : null,
+    available,
+    maxSpend,
+    accrualPreview,
+  }
+}
+
 function latestOf(a: Date, b: Date): Date {
   return a.getTime() >= b.getTime() ? a : b
 }
@@ -392,6 +610,8 @@ export const bonusService = {
   spendForOrder,
   expireAccount,
   expireDueLots,
+  planOrderBonus,
+  quoteForCart,
   onOrderStatusChanged,
   onOrderPaid,
   accrueForOrder,

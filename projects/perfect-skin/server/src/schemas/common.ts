@@ -704,6 +704,39 @@ export function registerCommonSchemas(app: FastifyInstance) {
   })
 
   app.addSchema({
+    $id: 'ps.orderBonus',
+    type: 'object',
+    additionalProperties: false,
+    required: ['spent', 'discount', 'accrualPlanned', 'accrualStatus'],
+    properties: {
+      spent: { type: 'integer' },
+      discount: { type: 'integer' },
+      accrualPlanned: { type: 'integer' },
+      accrualStatus: { type: 'string', enum: ['none', 'pending', 'accrued', 'cancelled'] },
+    },
+  })
+
+  app.addSchema({
+    $id: 'ps.bonusCheckout',
+    type: 'object',
+    additionalProperties: false,
+    required: ['canSpend', 'reason', 'available', 'maxSpend', 'kopecksPerBonus', 'goodsAfterDiscount', 'minOrderForSpend', 'accrualPreview'],
+    properties: {
+      canSpend: { type: 'boolean' },
+      reason: {
+        type: ['string', 'null'],
+        enum: ['PROGRAM_DISABLED', 'AUTH_REQUIRED', 'NOT_ELIGIBLE', 'NOT_MEMBER', 'PROMO_CONFLICT', 'MIN_ORDER', 'EMPTY_BALANCE', null],
+      },
+      available: { type: 'integer' },
+      maxSpend: { type: 'integer' },
+      kopecksPerBonus: { type: 'integer' },
+      goodsAfterDiscount: { type: 'integer' },
+      minOrderForSpend: { type: 'integer' },
+      accrualPreview: { type: 'integer' },
+    },
+  })
+
+  app.addSchema({
     $id: 'ps.order',
     type: 'object',
     additionalProperties: false,
@@ -764,6 +797,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
           periodMax: { type: ['integer', 'null'] },
         },
       },
+      bonus: { anyOf: [{ $ref: 'ps.orderBonus#' }, { type: 'null' }] },
       payment: { $ref: 'ps.orderPayment#' },
     },
   })
@@ -909,6 +943,9 @@ export function registerCommonSchemas(app: FastifyInstance) {
       total: { type: 'integer' },
       comment: { type: ['string', 'null'] },
       paidAt: { type: ['string', 'null'], format: 'date-time' },
+      deliveredAt: { type: ['string', 'null'], format: 'date-time' },
+      bonus: { anyOf: [{ $ref: 'ps.orderBonus#' }, { type: 'null' }] },
+      bonusAccrualDueAt: { type: ['string', 'null'], format: 'date-time' },
       cdek: { $ref: 'ps.adminCdek#' },
     },
   })
