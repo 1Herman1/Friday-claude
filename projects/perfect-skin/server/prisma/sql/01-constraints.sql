@@ -89,3 +89,8 @@ ALTER TABLE video_reviews
     )
   ),
   ADD CONSTRAINT video_review_sort_nonneg CHECK ("sortOrder" >= 0);
+
+-- ──────────────────────────────── СДЭК ────────────────────────────────
+
+ALTER TABLE product_variants
+  ADD CONSTRAINT product_variants_weight_positive CHECK ("weightGrams" IS NULL OR "weightGrams" > 0);

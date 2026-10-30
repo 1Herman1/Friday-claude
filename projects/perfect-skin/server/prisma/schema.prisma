@@ -112,6 +112,14 @@ enum PaymentStatus {
   refunded
 }
 
+/// Состояние ПЕРЕДАЧИ заказа в СДЭК (наша сторона), не статус доставки.
+enum CdekSyncState {
+  creating // передача захвачена (защита от двойного нажатия), запрос в полёте
+  accepted // СДЭК принял запрос, cdek_number ещё нет
+  created // есть cdek_number = трек
+  invalid // СДЭК отклонил, текст в cdekError; можно передать повторно
+}
+
 /// Кому виден материал Бьюти-клуба.
 enum Audience {
   public
@@ -429,6 +437,7 @@ model ProductVariant {
   stock          Int        @default(0)
   sku            String?    @unique
   barcode        String?
+  weightGrams    Int? // вес в упаковке, г; null = PS_CDEK_ITEM_WEIGHT_G
   externalId     String?    @unique // id в старом WooCommerce для импорта
   isActive       Boolean    @default(true)
   createdAt      DateTime   @default(now())
@@ -582,6 +591,22 @@ model Order {
   deliveryCost        Int            @default(0)
   deliveryTrackNumber String?
 
+  // ── СДЭК ──
+  cdekCityCode     Int? // код города назначения в справочнике СДЭК
+  cdekTariffCode   Int? // тариф, по которому считали (136/137/368…)
+  deliveryPoint    Json? // снимок ПВЗ на момент заказа
+  deliveryQuote    Json? // снимок расчёта: источник, сумма, сроки, вес
+  cdekUuid         String?           @unique // uuid заказа в СДЭК
+  cdekNumber       String?           @unique // номер СДЭК = трек-номер; дублируется в deliveryTrackNumber
+  cdekState        CdekSyncState?
+  cdekRequestedAt  DateTime? // момент захвата передачи — для восстановления зависших
+  cdekError        String? // последняя ошибка СДЭК, ≤ 1000 символов
+  cdekStatusCode   String? // последний код статуса доставки СДЭК
+  cdekStatusName   String? // его русское название из ответа СДЭК
+  cdekStatusAt     DateTime?
+  trackEmailSentAt DateTime? // письмо с треком отправлено — идемпотентность
+  cdekEvents       CdekStatusEvent[]
+
   recipientName  String
   recipientPhone String
   recipientEmail String?
@@ -613,7 +638,27 @@ model Order {
   @@index([paymentStatus])
   @@index([createdAt])
   @@index([promoCodeId])
+  @@index([cdekState, status]) // выборка фоновой сверки
   @@map("orders")
+}
+
+/// История статусов доставки СДЭК. Только добавление (журнал, soft delete не нужен),
+/// повторы вебхука и опроса отсекаются уникальным ключом.
+model CdekStatusEvent {
+  id         String   @id @default(uuid())
+  orderId    String
+  code       String
+  name       String?
+  city       String?
+  occurredAt DateTime
+  source     String // webhook | poll | manual | submit
+  createdAt  DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@unique([orderId, code, occurredAt])
+  @@index([orderId, occurredAt])
+  @@map("cdek_status_events")
 }
 
 /// Снапшот позиции: цена и прайс фиксируются на строке, чтобы возврат считался
