@@ -36,14 +36,14 @@ export interface AdminOrderDetail extends AdminOrder {
   discount?: number
   deliveryCost: number
   deliveryMethod: string
-  address?: {
+  deliveryAddress?: {
     city: string
     street: string
     house: string
     apartment?: string | null
-    index: string
-  }
-  pvzCode?: string
+    postalCode?: string | null
+  } | null
+  cdekPvzCode?: string | null
   comment?: string
 }
 

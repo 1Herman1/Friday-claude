@@ -654,7 +654,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
       status: { type: 'string', const: 'not_implemented' },
       provider: { type: 'string' },
       confirmationUrl: { type: ['string', 'null'] },
-      paymentStatus: { type: 'string', enum: ['pending', 'paid', 'failed', 'cancelled'] },
+      paymentStatus: { type: 'string', enum: ['pending', 'paid', 'failed', 'refunded'] },
     },
   })
 
@@ -666,7 +666,7 @@ export function registerCommonSchemas(app: FastifyInstance) {
     properties: {
       id: { type: 'string', format: 'uuid' },
       number: { type: 'string' },
-      status: { type: 'string', enum: ['new', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'] },
+      status: { type: 'string', enum: ['new', 'confirmed', 'packed', 'in_transit', 'delivered', 'cancelled'] },
       createdAt: { type: 'string', format: 'date-time' },
       deliveryMethod: { type: 'string', enum: ['pickup', 'cdek_pvz', 'cdek_courier'] },
       cdekPvzCode: { type: ['string', 'null'] },

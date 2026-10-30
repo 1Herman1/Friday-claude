@@ -24,14 +24,14 @@ interface OrderDetail {
     email?: string
   }
   deliveryMethod: string
-  address?: {
+  deliveryAddress?: {
     city: string
     street: string
     house: string
     apartment?: string | null
-    index: string
-  }
-  pvzCode?: string
+    postalCode?: string | null
+  } | null
+  cdekPvzCode?: string | null
   subtotal: number
   discount?: number
   deliveryCost: number
@@ -162,35 +162,37 @@ export function OrderView({ order }: OrderViewProps) {
                 </span>
               </p>
 
-              {order.address && (
+              {order.deliveryAddress && (
                 <>
                   <p>
                     <span className="text-muted-foreground">Город: </span>
                     <span className="font-semibold text-foreground">
-                      {order.address.city}
+                      {order.deliveryAddress.city}
                     </span>
                   </p>
                   <p>
                     <span className="text-muted-foreground">Адрес: </span>
                     <span className="font-semibold text-foreground">
-                      {order.address.street}, {order.address.house}
-                      {order.address.apartment && `, кв. ${order.address.apartment}`}
+                      {order.deliveryAddress.street}, {order.deliveryAddress.house}
+                      {order.deliveryAddress.apartment && `, кв. ${order.deliveryAddress.apartment}`}
                     </span>
                   </p>
-                  <p>
-                    <span className="text-muted-foreground">Индекс: </span>
-                    <span className="font-semibold text-foreground">
-                      {order.address.index}
-                    </span>
-                  </p>
+                  {order.deliveryAddress.postalCode && (
+                    <p>
+                      <span className="text-muted-foreground">Индекс: </span>
+                      <span className="font-semibold text-foreground">
+                        {order.deliveryAddress.postalCode}
+                      </span>
+                    </p>
+                  )}
                 </>
               )}
 
-              {order.pvzCode && (
+              {order.cdekPvzCode && (
                 <p>
                   <span className="text-muted-foreground">ПВЗ код: </span>
                   <span className="font-semibold text-foreground">
-                    {order.pvzCode}
+                    {order.cdekPvzCode}
                   </span>
                 </p>
               )}

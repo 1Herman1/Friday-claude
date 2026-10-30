@@ -17,7 +17,7 @@ const createOrderSchema = z.object({
       street: z.string().min(2).max(120),
       house: z.string().min(1).max(20),
       apartment: z.string().max(20).optional(),
-      postalCode: z.string().regex(/^\d{6}$/),
+      postalCode: z.string().regex(/^\d{6}$/).optional(),
     })
     .nullable()
     .optional(),

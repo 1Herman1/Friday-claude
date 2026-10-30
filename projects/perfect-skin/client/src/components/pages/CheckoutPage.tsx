@@ -182,8 +182,8 @@ export function CheckoutPage() {
           city: address.city,
           street: address.street,
           house: address.house,
-          apartment: address.apartment || null,
-          index: address.index,
+          ...(address.apartment && { apartment: address.apartment }),
+          ...(address.index && { postalCode: address.index }),
         }
       }
 
