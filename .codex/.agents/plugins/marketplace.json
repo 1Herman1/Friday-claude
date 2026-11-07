@@ -1,0 +1,12 @@
+{
+  "name": "friday-local",
+  "interface": { "displayName": "Friday Codex" },
+  "plugins": [
+    {
+      "name": "friday-workflows",
+      "source": { "source": "local", "path": "./" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "friday-workflows",
+  "version": "1.0.0",
+  "description": "Friday: 22 adapted development, review, design and security skills for Codex.",
+  "skills": "./skills/"
+}

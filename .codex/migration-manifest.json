@@ -1,0 +1,548 @@
+{
+  "version": 1,
+  "source_commit": "6b8a845a4d33f6039cbb9ad538f5fa53b862e2b4",
+  "roles": 46,
+  "skills": 22,
+  "files": [
+    {
+      "source": ".claude/agents/README.md",
+      "target": "agents/README.md",
+      "kind": "agent-catalog",
+      "source_sha256": "6a562a2a7be1435148f06a6a8e8495bf8a9683dd9b05fe9998e03d72a9c618c4"
+    },
+    {
+      "source": ".claude/agents/core/architect.md",
+      "target": "agents/architect.toml",
+      "kind": "native-agent",
+      "source_sha256": "ef432b4b2b47b7c79fc7f5ba8498183c750c8279213557c36c8e28cbe371191e"
+    },
+    {
+      "source": ".claude/agents/core/coder.md",
+      "target": "agents/coder.toml",
+      "kind": "native-agent",
+      "source_sha256": "bbad234363f6b71799aefb5c5184490a817a7c2236b5ede6baf6a0e5a442ac8d"
+    },
+    {
+      "source": ".claude/agents/core/debugger.md",
+      "target": "agents/debugger.toml",
+      "kind": "native-agent",
+      "source_sha256": "c85ad49b1478275939d2ee68a001fe841e1e75baab180a60eebb512274452422"
+    },
+    {
+      "source": ".claude/agents/core/orchestrator.md",
+      "target": "agents/orchestrator.toml",
+      "kind": "native-agent",
+      "source_sha256": "da5eaac3fbe4355ef30c448166480aacbc3f4b221e2b6871229563e5700e24c9"
+    },
+    {
+      "source": ".claude/agents/core/planner.md",
+      "target": "agents/planner.toml",
+      "kind": "native-agent",
+      "source_sha256": "64d9790b40f8f2abd3e65d05055770735856ad48693641b5ab2d980ed32bbd23"
+    },
+    {
+      "source": ".claude/agents/core/researcher.md",
+      "target": "agents/researcher.toml",
+      "kind": "native-agent",
+      "source_sha256": "e4407e87c9707049933ae51f678901038f5374545cbcdc7ee3c9717135ccfa77"
+    },
+    {
+      "source": ".claude/agents/design/brand-guard.md",
+      "target": "agents/brand-guard.toml",
+      "kind": "native-agent",
+      "source_sha256": "e699e7be78b9772a6115e122c41c33d724d24fc9eec9e1a1d223bf88dd6bf103"
+    },
+    {
+      "source": ".claude/agents/design/component-curator.md",
+      "target": "agents/component-curator.toml",
+      "kind": "native-agent",
+      "source_sha256": "580451289b89e8d5c32cf0bb535abb494ce83105480e79df9afcbd315649a07d"
+    },
+    {
+      "source": ".claude/agents/design/design-department.md",
+      "target": "agents/design-department.toml",
+      "kind": "native-agent",
+      "source_sha256": "c5d2e41c705214ecf75463d3e06f12854b960bd527a1849d8404a14be9d7430b"
+    },
+    {
+      "source": ".claude/agents/design/design-reviewer.md",
+      "target": "agents/design-reviewer.toml",
+      "kind": "native-agent",
+      "source_sha256": "4c60621155ff943ea010ff2d0b6b3a3efd2126b57f0ee8ffb2fdb01dca4a61b0"
+    },
+    {
+      "source": ".claude/agents/design/icon-curator.md",
+      "target": "agents/icon-curator.toml",
+      "kind": "native-agent",
+      "source_sha256": "81b1f6e9897cf7021baa13a2174578755b2a0c67f14d121cfd038cfa13a201c6"
+    },
+    {
+      "source": ".claude/agents/design/media-generator.md",
+      "target": "agents/media-generator.toml",
+      "kind": "native-agent",
+      "source_sha256": "d18ef4e8086cd96c53ad9d2e2b8158bdbf92c65add8fb8aeb226b2b341bea541"
+    },
+    {
+      "source": ".claude/agents/design/motion-curator.md",
+      "target": "agents/motion-curator.toml",
+      "kind": "native-agent",
+      "source_sha256": "6589c19bc752fffff2af4c54b0084fa89b00dcf38981a308c2b460f18512d404"
+    },
+    {
+      "source": ".claude/agents/design/taste-curator.md",
+      "target": "agents/taste-curator.toml",
+      "kind": "native-agent",
+      "source_sha256": "b0d0ae14758963d884ae49b61bda380aa9a302ea661388cd595fa0fbb9bd23ca"
+    },
+    {
+      "source": ".claude/agents/legal/rkn-compliance.md",
+      "target": "agents/rkn-compliance.toml",
+      "kind": "native-agent",
+      "source_sha256": "2ccc5711c7b734f323476b03dd6bbf57614fbadc59ff3728b304f4d4e63b4345"
+    },
+    {
+      "source": ".claude/agents/marketing/marketing-agent.md",
+      "target": "agents/marketing-agent.toml",
+      "kind": "native-agent",
+      "source_sha256": "87a0c1522cd60cc7066534e325596ee1c9003d2e45f418e9ef756f2f48713fc4"
+    },
+    {
+      "source": ".claude/agents/marketing/seo-department.md",
+      "target": "agents/seo-department.toml",
+      "kind": "native-agent",
+      "source_sha256": "7a9100cfc7cc47daacd9e6210b36c2b924a977693faaeb4b027b5ca3a4c1a816"
+    },
+    {
+      "source": ".claude/agents/marketing/seo-specialist.md",
+      "target": "agents/seo-specialist.toml",
+      "kind": "native-agent",
+      "source_sha256": "bd99ee3ccacb0b7ab2487664fb1bf62db2d9fa306693411d1f00a6664defddee"
+    },
+    {
+      "source": ".claude/agents/meta/agent-auditor.md",
+      "target": "agents/agent-auditor.toml",
+      "kind": "native-agent",
+      "source_sha256": "a9baa1e1b0ae5550adfb86eb3c314342294255dc39effb8fa7284aec55c11c72"
+    },
+    {
+      "source": ".claude/agents/meta/agent-evaluator.md",
+      "target": "agents/agent-evaluator.toml",
+      "kind": "native-agent",
+      "source_sha256": "fe5611808eb49f006265ca19b4e7e0e95608580644d3bb9a1030719c910d144a"
+    },
+    {
+      "source": ".claude/agents/meta/archivarius.md",
+      "target": "agents/archivarius.toml",
+      "kind": "native-agent",
+      "source_sha256": "e311a9d4de6dd14003b87367eb98a6c2841dee7d76f9437d8ed91d1c85c071e3"
+    },
+    {
+      "source": ".claude/agents/meta/challenger.md",
+      "target": "agents/challenger.toml",
+      "kind": "native-agent",
+      "source_sha256": "7196634a238ee826d96da91604af9a8ea51af99457837c2169e406e8b431fc7d"
+    },
+    {
+      "source": ".claude/agents/meta/strategist.md",
+      "target": "agents/strategist.toml",
+      "kind": "native-agent",
+      "source_sha256": "6d24a00102c26e002c54d02346bf09b0f1011de72f2d901dfe7d8130bb813d61"
+    },
+    {
+      "source": ".claude/agents/ops/anthropic-docs.md",
+      "target": "agents/anthropic-docs.toml",
+      "kind": "native-agent",
+      "source_sha256": "3526b6a9f05e9c987112c15b8ebf9e9a6129e1c11b3e8cf1f0b0cc9d3b54bd38"
+    },
+    {
+      "source": ".claude/agents/ops/automator.md",
+      "target": "agents/automator.toml",
+      "kind": "native-agent",
+      "source_sha256": "862f2fc9dbd01c0b8a57d506abedf70f6d75ed2c805cc8732d08c26e46579366"
+    },
+    {
+      "source": ".claude/agents/ops/devops.md",
+      "target": "agents/devops.toml",
+      "kind": "native-agent",
+      "source_sha256": "f92ebc5f588a68dccaffe49a80a95025ecbfa44368e8ebe534dbea7265c0d101"
+    },
+    {
+      "source": ".claude/agents/ops/documenter.md",
+      "target": "agents/documenter.toml",
+      "kind": "native-agent",
+      "source_sha256": "dcae97601c3e5629fa85ba2868cbc3e0b9499d4b702775f9205a9cfc9db2a715"
+    },
+    {
+      "source": ".claude/agents/quality/performance-optimizer.md",
+      "target": "agents/performance-optimizer.toml",
+      "kind": "native-agent",
+      "source_sha256": "0ba9c8ff3c3aa94079120b6900fb7f276ed8c51ccacf9a8eb6a90d088393ab46"
+    },
+    {
+      "source": ".claude/agents/quality/qa-engineer.md",
+      "target": "agents/qa-engineer.toml",
+      "kind": "native-agent",
+      "source_sha256": "ccabe813ef6afc503a214985b6c5cab2613be54d6b953fef17f104177f427b49"
+    },
+    {
+      "source": ".claude/agents/quality/refactor-cleaner.md",
+      "target": "agents/refactor-cleaner.toml",
+      "kind": "native-agent",
+      "source_sha256": "4216d4efad2b515f9329a3f280ce054a3a0766594a93e10f36fb91f6da851055"
+    },
+    {
+      "source": ".claude/agents/quality/silent-failure-hunter.md",
+      "target": "agents/silent-failure-hunter.toml",
+      "kind": "native-agent",
+      "source_sha256": "e69d005678a4f539bc3fd8dee7df356dca97aa0f4d4a2bb501e10d086be01d07"
+    },
+    {
+      "source": ".claude/agents/review/code-reviewer.md",
+      "target": "agents/code-reviewer.toml",
+      "kind": "native-agent",
+      "source_sha256": "d2e251e9abddb1dccfba9112040f613573267f308d636d602f2be04f3f82dd0f"
+    },
+    {
+      "source": ".claude/agents/review/database-reviewer.md",
+      "target": "agents/database-reviewer.toml",
+      "kind": "native-agent",
+      "source_sha256": "7004b52ca2316607c31b955a5fb9f9d130f46d7219f4dfd92f3a053e520922de"
+    },
+    {
+      "source": ".claude/agents/review/migration-guard.md",
+      "target": "agents/migration-guard.toml",
+      "kind": "native-agent",
+      "source_sha256": "c503a1bb5987d0485256baff4c0edf6072587a2d39cd551f6ee0976465779a95"
+    },
+    {
+      "source": ".claude/agents/review/react-reviewer.md",
+      "target": "agents/react-reviewer.toml",
+      "kind": "native-agent",
+      "source_sha256": "cd1ca3d2753a80ed4c01fb0bddc57f11da24334f96d453c1c69c94f87d4aeeea"
+    },
+    {
+      "source": ".claude/agents/review/typescript-reviewer.md",
+      "target": "agents/typescript-reviewer.toml",
+      "kind": "native-agent",
+      "source_sha256": "55049b8fb4a9d95826e823a601354447eea52a7c660e7eeae1512dcb04fb38ba"
+    },
+    {
+      "source": ".claude/agents/security/security-api-surface.md",
+      "target": "agents/security-api-surface.toml",
+      "kind": "native-agent",
+      "source_sha256": "cbb637be25c44a2a9c47699b188f5bb1a1e2cb439de2b9a6b7c9b3ffcdffda20"
+    },
+    {
+      "source": ".claude/agents/security/security-auth-access.md",
+      "target": "agents/security-auth-access.toml",
+      "kind": "native-agent",
+      "source_sha256": "d23488942f56fa3f74fff881c66c620674317f1f0ac161329581cdf8341ba155"
+    },
+    {
+      "source": ".claude/agents/security/security-business-logic.md",
+      "target": "agents/security-business-logic.toml",
+      "kind": "native-agent",
+      "source_sha256": "62c9c1734de6c988926cab300b99c5a260b73a930183892b3dbd433257efe7c9"
+    },
+    {
+      "source": ".claude/agents/security/security-department.md",
+      "target": "agents/security-department.toml",
+      "kind": "native-agent",
+      "source_sha256": "a1fe118146006eb4297be05b278b2576d0d0183b7e1660ffc220777a7b5da1aa"
+    },
+    {
+      "source": ".claude/agents/security/security-dependency-audit.md",
+      "target": "agents/security-dependency-audit.toml",
+      "kind": "native-agent",
+      "source_sha256": "c99f87c5f2eb17384f62e9ab6bbe0556e65a20906eead491597694c25bddc983"
+    },
+    {
+      "source": ".claude/agents/security/security-incident-response.md",
+      "target": "agents/security-incident-response.toml",
+      "kind": "native-agent",
+      "source_sha256": "0a82b029893ac848ba979a3c251d5be86a6b3fae737e560beb2a5fbe16d22f0f"
+    },
+    {
+      "source": ".claude/agents/security/security-infra-cloud.md",
+      "target": "agents/security-infra-cloud.toml",
+      "kind": "native-agent",
+      "source_sha256": "01f85d94f9c4e9fc0030c7dbdf736a6dcbe97b3ecf7307930cb1a6347c592b81"
+    },
+    {
+      "source": ".claude/agents/security/security-observability.md",
+      "target": "agents/security-observability.toml",
+      "kind": "native-agent",
+      "source_sha256": "b4707d5ad587d0d004d8db01f78174499e99246477d97b38abfbf2b373f24e00"
+    },
+    {
+      "source": ".claude/agents/security/security-secrets-scanner.md",
+      "target": "agents/security-secrets-scanner.toml",
+      "kind": "native-agent",
+      "source_sha256": "0b5fa4e7f352572bedee1bbc93af8ce91067dfabac3271a7021d7fa5c865df0d"
+    },
+    {
+      "source": ".claude/skills/api-first/SKILL.md",
+      "target": "skills/api-first/SKILL.md",
+      "kind": "skill",
+      "source_sha256": "df5194d2afde9e642556b23cbe1195c5b01a35be04bd80d9aecbb1fa32ff57d7"
+    },
+    {
+      "source": ".claude/skills/ecommerce/SKILL.md",
+      "target": "skills/ecommerce/SKILL.md",
+      "kind": "skill",
+      "source_sha256": "75c6ceba22da06920b81c1dc6f3a765355b2266ae5892a7d952e0da404d15ed3"
+    },
+    {
+      "source": ".claude/skills/landing/SKILL.md",
+      "target": "skills/landing/SKILL.md",
+      "kind": "skill",
+      "source_sha256": "c4d66341983cd97bced314eab6fad3769084ac4f3989a87671ea8b84ea640c85"
+    },
+    {
+      "source": ".claude/skills/multi-plan/SKILL.md",
+      "target": "skills/multi-plan/SKILL.md",
+      "kind": "skill",
+      "source_sha256": "d0c9b1cd3f05bed26c60e486390ceb2856b66148c14dc278e54e47655bc9fd33"
+    },
+    {
+      "source": ".claude/skills/nullume/SKILL.md",
+      "target": "skills/nullume/SKILL.md",
+      "kind": "skill",
+      "source_sha256": "575eafc0f2a9e66072312bbb20d4210dfd16579601a5893124f9ae2fef6afedb"
+    },
+    {
+      "source": ".claude/skills/react-native/SKILL.md",
+      "target": "skills/react-native/SKILL.md",
+      "kind": "skill",
+      "source_sha256": "b9cab7b461e0d85f0a0010b55682e42b6f8d9665b8f75c93582b7a7ca59314bf"
+    },
+    {
+      "source": ".claude/skills/saas-architecture/SKILL.md",
+      "target": "skills/saas-architecture/SKILL.md",
+      "kind": "skill",
+      "source_sha256": "08b33d5b319f191c3f662296b5745d3193483cc9a0374de3597d62e3a1bbee45"
+    },
+    {
+      "source": ".claude/commands/archive.md",
+      "target": "skills/archive/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "e785d6c048c24d36e41ff9787c64a3cabffbff467633f8116d2cb5a600737d1a"
+    },
+    {
+      "source": ".claude/commands/audit-design.md",
+      "target": "skills/audit-design/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "88f8e80e65f1deaba438c6dc2223a06c02418b0a11e6a5c86d5e0f0f3f1f68c8"
+    },
+    {
+      "source": ".claude/commands/bugfix.md",
+      "target": "skills/bugfix/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "bfe222f01978e667c3c671593f5618dabb1388ce6400697e77340cf480f33c9c"
+    },
+    {
+      "source": ".claude/commands/council.md",
+      "target": "skills/council/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "00030a9aad5239dc5f22921706cf7b6f85970d50c2436c247ca187801d682f77"
+    },
+    {
+      "source": ".claude/commands/deploy.md",
+      "target": "skills/deploy/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "4ba10d28f7e0b35f223e9e3fb2fc2d5e09a6442268edeadf85a600fccb61863f"
+    },
+    {
+      "source": ".claude/commands/design-system.md",
+      "target": "skills/design-system/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "6843aac6f5c307f1247799d497b52aec53dad27853d88cc188b0499087b434ee"
+    },
+    {
+      "source": ".claude/commands/feature.md",
+      "target": "skills/feature/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": ".claude/commands/polish.md",
+      "target": "skills/polish/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "165940a4d5ccdd131cf2c9214cdf1f5d50752040d87d4e0a74067385f1ff7ab6"
+    },
+    {
+      "source": ".claude/commands/preflight.md",
+      "target": "skills/preflight/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "4840551fa04b46db8e1cdc02e4ff61d75575bf07c60517512bde8ea8f7797e14"
+    },
+    {
+      "source": ".claude/commands/review.md",
+      "target": "skills/review/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "19469e3f445a3a4fdd0177c222116c1ac1b879dec06b1f08ab77a51b13ef1dc8"
+    },
+    {
+      "source": ".claude/commands/rkn.md",
+      "target": "skills/rkn/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "513d5f6e7c189a9ee5c461e00d237126d364f0a3e93d08096611830621cec7b6"
+    },
+    {
+      "source": ".claude/commands/secure.md",
+      "target": "skills/secure/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "7b070b626751fcb240c9433aed67686ad5f31fdeb5260571af100a7dcf77214f"
+    },
+    {
+      "source": ".claude/commands/security-profile.md",
+      "target": "skills/security-profile/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "f2db7cb00b198c118db062daa1c8998ac7030da1ce1d07b19759106736f428a1"
+    },
+    {
+      "source": ".claude/commands/selftest.md",
+      "target": "skills/selftest/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "675e2305afed9bad2d58a7efe2b50f725f6fdc4e8bbec4a505c0503a7e0d1569"
+    },
+    {
+      "source": ".claude/commands/summary.md",
+      "target": "skills/summary/SKILL.md",
+      "kind": "command-as-skill",
+      "source_sha256": "5cb36d64d714de15fb04be9595e451c2329dd4a57cc8675b752e4c54e0738fee"
+    },
+    {
+      "source": ".claude/workflows/automation.md",
+      "target": "workflows/automation.md",
+      "kind": "workflows",
+      "source_sha256": "cac5d2ad1db5fd13920178c7c81045d4be82831dfdad2a1430b2eec6197b2e02"
+    },
+    {
+      "source": ".claude/workflows/bug-fix.md",
+      "target": "workflows/bug-fix.md",
+      "kind": "workflows",
+      "source_sha256": "e59fe0c273f53c40087524199f8a5fa0e6bda0567938ffcd44197e7ec1d65798"
+    },
+    {
+      "source": ".claude/workflows/deploy.md",
+      "target": "workflows/deploy.md",
+      "kind": "workflows",
+      "source_sha256": "46666085837350a2929b075d9618da9efefa38d5be453763081682e17c4fb2d6"
+    },
+    {
+      "source": ".claude/workflows/hooks.md",
+      "target": "workflows/hooks.md",
+      "kind": "workflows",
+      "source_sha256": "accf9109771bc4a8f06e6fe1da950e82474f151989cb6ed5d10929c50d9b178c"
+    },
+    {
+      "source": ".claude/workflows/new-feature.md",
+      "target": "workflows/new-feature.md",
+      "kind": "workflows",
+      "source_sha256": "60f83f7faff80a1d7ecb711c48b17a3f50cd5b3b40ea628202a2018ca4b4427a"
+    },
+    {
+      "source": ".claude/workflows/new-saas.md",
+      "target": "workflows/new-saas.md",
+      "kind": "workflows",
+      "source_sha256": "2ff4507f3208d7c545665fb3546e5f81ce8e17bc211fdd2d2e190f171258201f"
+    },
+    {
+      "source": ".claude/scripts/archive-read.sh",
+      "target": "scripts/archive-read.sh",
+      "kind": "scripts",
+      "source_sha256": "da64b4eb6e63133306828e3a2920513177a16a808997de2f4ea8ba5f8c3152d8"
+    },
+    {
+      "source": ".claude/scripts/archive-session.sh",
+      "target": "scripts/archive-session.sh",
+      "kind": "scripts",
+      "source_sha256": "910da6ebd6da58c1569ff1644f5e2128ae93d917f1671a0ec7287a809f6d2635"
+    },
+    {
+      "source": ".claude/scripts/design-lint.mjs",
+      "target": "scripts/design-lint.mjs",
+      "kind": "scripts",
+      "source_sha256": "f13c0e61b06a1e2cca7c26ec3756a0373dc85e93a4a03ca2392153f6c4688966"
+    },
+    {
+      "source": ".claude/scripts/hermes-archive.py",
+      "target": "scripts/hermes-archive.py",
+      "kind": "scripts",
+      "source_sha256": "401c44a9887aeb20a716692a08856cc3e601764242f46325bd475c22ac8cc9a5"
+    },
+    {
+      "source": ".claude/scripts/lib/projects.mjs",
+      "target": "scripts/lib/projects.mjs",
+      "kind": "scripts",
+      "source_sha256": "92b5056f70ddac2c141a04c31e580de1c33753da0f31f4891aeef32ef86726d9"
+    },
+    {
+      "source": ".claude/scripts/portability-check.sh",
+      "target": "scripts/portability-check.sh",
+      "kind": "scripts",
+      "source_sha256": "6f816ec9775f9410b43e7f4daf9af9b97de80049fb5d2a7f7911a0c01ffa4f3e"
+    },
+    {
+      "source": ".claude/scripts/rkn-lint.mjs",
+      "target": "scripts/rkn-lint.mjs",
+      "kind": "scripts",
+      "source_sha256": "438610854ead085a2285eb1934e203c4814bfa778adaa588e244e72d15fb938c"
+    },
+    {
+      "source": ".claude/scripts/screenshot.mjs",
+      "target": "scripts/screenshot.mjs",
+      "kind": "scripts",
+      "source_sha256": "984e547c1800b79a00329ee4506ea87a6ed7526152c0990a09aaee12dd194865"
+    },
+    {
+      "source": ".claude/scripts/security-external-check.sh",
+      "target": "scripts/security-external-check.sh",
+      "kind": "scripts",
+      "source_sha256": "1bc5a095f806efd5fb50b473ef80718c0d5cd2af8e11bf96d3bf318407f46a0b"
+    },
+    {
+      "source": ".claude/scripts/selftest.mjs",
+      "target": "scripts/selftest.mjs",
+      "kind": "scripts",
+      "source_sha256": "525a60630037941211b77a418708f3cc8a969b9457839722552aed9ab6138e9a"
+    },
+    {
+      "source": ".claude/scripts/sync-agent-blocks.mjs",
+      "target": "scripts/sync-agent-blocks.mjs",
+      "kind": "scripts",
+      "source_sha256": "0562a361de0ed1b7ad9c3bcce05fd482a0dda1d7da493de6af6bf5c29bc7536f"
+    },
+    {
+      "source": "CLAUDE.md",
+      "target": "CODEX.md",
+      "kind": "repository-instructions",
+      "source_sha256": "0883ce8105c72a8d9e451b4eb5f2bb14aedfe8f33b0a143d1c378bc9afee5746"
+    },
+    {
+      "source": ".claude/hooks/post-edit-design-lint.sh",
+      "target": "hooks.json",
+      "kind": "native-hook-adapter",
+      "source_sha256": "196385e20111ae191b292663c719046cf2b608fbace09151cc57fede880095ce"
+    },
+    {
+      "source": ".claude/hooks/session-start.sh",
+      "target": "hooks.json",
+      "kind": "native-hook-adapter",
+      "source_sha256": "9008fc838fb93dd919eeb7a35c9fe9c0954a7d462490826b0a26ab2e1e2a3838"
+    },
+    {
+      "source": ".claude/settings.json",
+      "target": "config.toml",
+      "kind": "native-settings",
+      "source_sha256": "608f707c5c0597fe6f176e396dac8a969151f8c53eb3431cf61df992a5ae81f7"
+    },
+    {
+      "source": ".mcp.json",
+      "target": "config.toml",
+      "kind": "native-mcp",
+      "source_sha256": "413e8f6bbf0c89a76d240d42cca328a60c1f54692dfb9b996fb3fe278d9a640e"
+    }
+  ]
+}

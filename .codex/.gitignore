@@ -1,0 +1,4 @@
+.runtime/
+screenshots/
+__pycache__/
+*.pyc
