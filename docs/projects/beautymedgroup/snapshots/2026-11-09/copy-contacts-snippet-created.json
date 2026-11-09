@@ -1,0 +1,32 @@
+{
+  "id": 6,
+  "name": "BMG: cooperation contacts copy on click",
+  "desc": "Copy plain-text contacts on page 963 only. No external navigation.",
+  "code": "add_action('wp_footer', function () {\n    if (!is_page(963)) {\n        return;\n    }\n    ?>\n<script id=\"bmg-copy-contacts-script\">\n(function () {\n    'use strict';\n    var block = document.getElementById('bmg-cooperation-contacts');\n    if (!block) return;\n    var status = block.querySelector('[role=\"status\"]');\n    function fallback(value) {\n        var input = document.createElement('textarea');\n        input.value = value;\n        input.style.position = 'fixed';\n        input.style.opacity = '0';\n        document.body.appendChild(input);\n        input.select();\n        var copied = document.execCommand('copy');\n        input.remove();\n        if (!copied) throw new Error('Clipboard unavailable');\n    }\n    async function copy(target) {\n        var value = target.getAttribute('data-bmg-copy');\n        try {\n            try {\n                if (!navigator.clipboard || !window.isSecureContext) throw new Error('Use fallback');\n                await navigator.clipboard.writeText(value);\n            } catch (error) {\n                fallback(value);\n            }\n            status.textContent = 'Скопировано: ' + value;\n        } catch (error) {\n            status.textContent = 'Выделите контакт и скопируйте его вручную.';\n        }\n    }\n    block.addEventListener('click', function (event) {\n        var target = event.target.closest('[data-bmg-copy]');\n        if (target && block.contains(target)) copy(target);\n    });\n    block.addEventListener('keydown', function (event) {\n        var target = event.target.closest('[data-bmg-copy]');\n        if (target && (event.key === 'Enter' || event.key === ' ')) {\n            event.preventDefault();\n            copy(target);\n        }\n    });\n}());\n</script>\n<?php\n}, 30);\n",
+  "tags": [
+    "BeautyMedGroup",
+    "contacts"
+  ],
+  "scope": "front-end",
+  "condition_id": 0,
+  "active": false,
+  "trashed": false,
+  "locked": false,
+  "priority": 10,
+  "network": false,
+  "shared_network": false,
+  "modified": "2026-11-09T20:40:02+00:00",
+  "last_active": "0",
+  "code_error": null,
+  "code_error_trace": null,
+  "created_by": {
+    "id": 21,
+    "display_name": "BeautyMedGroup",
+    "avatar_url": "https://secure.gravatar.com/avatar/cce8b18fa2692c494a68d160c4723692589aff6317491cf2a6c4cb113ce84bdd?s=32&d=mm&r=g"
+  },
+  "updated_by": {
+    "id": 21,
+    "display_name": "BeautyMedGroup",
+    "avatar_url": "https://secure.gravatar.com/avatar/cce8b18fa2692c494a68d160c4723692589aff6317491cf2a6c4cb113ce84bdd?s=32&d=mm&r=g"
+  }
+}
