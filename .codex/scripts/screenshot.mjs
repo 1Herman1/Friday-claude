@@ -19,7 +19,13 @@
 //
 // Доступность адреса зависит от сети текущей среды. CHROME_PATH может задать браузер.
 
-import { chromium } from "playwright-core";
+let chromium;
+try {
+  ({ chromium } = await import("playwright-core"));
+} catch (error) {
+  console.error("Не установлены инструменты скриншотов. Выполни npm ci --prefix .codex (или bash .codex/setup.sh).");
+  process.exit(1);
+}
 import { mkdirSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
@@ -81,7 +87,7 @@ const opts = parseArgs(process.argv);
 
 if (!existsSync(CHROME)) {
   console.error(
-    `Chromium не найден по пути ${CHROME}. Проверь PLAYWRIGHT_BROWSERS_PATH и что браузер установлен в образе.`,
+    `Chromium не найден по пути ${CHROME}. Укажи CHROME_PATH на установленный Chromium/Chrome либо установи браузер Playwright и проверь PLAYWRIGHT_BROWSERS_PATH.`,
   );
   process.exit(1);
 }

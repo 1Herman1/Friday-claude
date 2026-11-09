@@ -13,6 +13,7 @@ for TOOL in tools/icon-mcp-server tools/nullume; do
     npm ci --no-audit --no-fund --prefix "$TOOL"
   fi
 done
+npm ci --no-audit --no-fund --prefix "$ROOT/.codex"
 codex plugin marketplace add "$ROOT/.codex"
 codex plugin add friday-workflows@friday-local
 python3 .codex/scripts/selftest.py

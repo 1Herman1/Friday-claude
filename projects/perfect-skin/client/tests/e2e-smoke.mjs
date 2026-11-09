@@ -1,13 +1,24 @@
 // Постоянный UI-смоук пути покупателя (Playwright, headless chromium).
 // 1) API:      cd server && npm run dev                      # http://localhost:3000
 // 2) Фронт:    cd client && VITE_API_MODE=live npm run build && npx vite preview --port 5173
-// 3) Тест:     cd client && npm run test:e2e
+// 3) Браузер:  npx playwright-core install chromium (или CHROME_PATH=/путь/к/chromium)
+// 4) Тест:     cd client && npm run test:e2e
+// Настройки: PS_E2E_BASE_URL, PS_E2E_API_URL, CHROME_PATH.
+// Без HTTP и запуска браузера: npm run test:e2e -- --check-config
 
-import pkg from '/opt/node22/lib/node_modules/playwright/index.js'
-const { chromium } = pkg
+import { existsSync } from 'node:fs'
+import { chromium } from 'playwright-core'
 
-const BASE = 'http://localhost:5173'
-const API = 'http://localhost:3000'
+function serviceUrl(name, fallback) {
+  const value = process.env[name] || fallback
+  const url = new URL(value)
+  if (!['http:', 'https:'].includes(url.protocol)) throw new Error(`${name}: требуется http:// или https://`)
+  return url.href.replace(/\/$/, '')
+}
+
+const BASE = serviceUrl('PS_E2E_BASE_URL', 'http://localhost:5173')
+const API = serviceUrl('PS_E2E_API_URL', 'http://localhost:3000')
+const BROWSER_PATH = process.env.CHROME_PATH || chromium.executablePath()
 const PRODUCT_SLUG = 'dinamizante-vosstanavlivayushhij-krem'
 const PROMO = 'WAVE2PROMO'
 const EMAIL = `e2e${Date.now()}@example.com`
@@ -48,10 +59,13 @@ async function checkService(url, hint) {
 }
 
 async function main() {
+  if (!existsSync(BROWSER_PATH)) {
+    throw new Error('Chromium не найден. Выполни npx playwright-core install chromium или задай CHROME_PATH.')
+  }
   await checkService(`${API}/api/v1/products?limit=1`, 'cd server && npm run dev')
   await checkService(`${BASE}/`, 'cd client && VITE_API_MODE=live npm run build && npx vite preview --port 5173')
 
-  const browser = await chromium.launch()
+  const browser = await chromium.launch({ executablePath: BROWSER_PATH })
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   const page = await context.newPage()
 
@@ -282,7 +296,11 @@ async function main() {
   process.exit(failed ? 1 : 0)
 }
 
-main().catch((err) => {
-  console.error(`✗ неожиданная ошибка прогона: ${err.stack || err.message}`)
-  process.exit(1)
-})
+if (process.argv.includes('--check-config')) {
+  console.log(JSON.stringify({ baseUrl: BASE, apiUrl: API, browserPath: BROWSER_PATH, browserAvailable: existsSync(BROWSER_PATH) }))
+} else {
+  main().catch((err) => {
+    console.error(`✗ неожиданная ошибка прогона: ${err.stack || err.message}`)
+    process.exit(1)
+  })
+}

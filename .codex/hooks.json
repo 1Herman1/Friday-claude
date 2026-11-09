@@ -11,6 +11,15 @@
           }
         ],
         "matcher": "startup|resume|clear|compact|fork"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/scripts/task_gate.py\" session",
+            "timeout": 15
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -41,6 +50,15 @@
           {
             "type": "command",
             "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/scripts/lifecycle.py\" stop",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/scripts/task_gate.py\" stop",
             "timeout": 15
           }
         ]

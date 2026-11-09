@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """Codex lifecycle adapter. No network, package installation, transcript copy or Git writes."""
+import fcntl
+import os
+import tempfile
+import time
+from contextlib import contextmanager
 import hashlib
 import json
 import re
@@ -14,10 +19,10 @@ ROOT = Path(__file__).resolve().parents[2]
 def git(*args):
     result = subprocess.run(['git', '-C', str(ROOT), *args], capture_output=True,
                             text=True, timeout=5)
-    return result.stdout.strip() if result.returncode == 0 else ''
+    return (result.stdout if '-z' in args else result.stdout.strip()) if result.returncode == 0 else ''
 
 
-def read(relative, limit=8000):
+def read(relative, limit=None):
     path = ROOT / relative
     return path.read_text()[:limit] if path.is_file() else ''
 
@@ -31,18 +36,60 @@ def session_key(payload):
     return hashlib.sha256(str(payload.get('session_id', 'local')).encode()).hexdigest()[:20]
 
 
+def changed_files():
+    # Include tracked deletions and shell-created files, wherever they live in the repo.
+    paths = set(git('diff', '--cached', '--name-only', '-z').split('\0'))
+    paths.update(git('diff', '--name-only', '-z').split('\0'))
+    paths.update(git('ls-files', '--others', '--exclude-standard', '-z').split('\0'))
+    return sorted(p for p in paths if p and not p.startswith('.codex/.runtime/'))
+
+
 def snapshot(payload):
     return {'head': git('rev-parse', 'HEAD'), 'branch': git('branch', '--show-current'),
-            'files': [p for p in git('diff', '--name-only', '--diff-filter=ACMRT', 'HEAD').splitlines()
-                      if p and not p.startswith('.codex/.runtime/')],
-            'updated_at': datetime.now(timezone.utc).isoformat()}
+            'files': changed_files(), 'updated_at': datetime.now(timezone.utc).isoformat()}
+
+
+def atomic_write(path, text):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(dir=path.parent, prefix='.' + path.name)
+    try:
+        with os.fdopen(fd, 'w') as stream:
+            stream.write(text)
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+@contextmanager
+def session_lock(payload):
+    folder = ROOT / '.codex/.runtime'
+    folder.mkdir(parents=True, exist_ok=True)
+    with (folder / (session_key(payload) + '.lock')).open('a') as stream:
+        fcntl.flock(stream, fcntl.LOCK_EX)
+        yield
+
+
+def _save_state(payload):
+    path = ROOT / '.codex/.runtime' / (session_key(payload) + '.json')
+    previous = json.loads(path.read_text()) if path.exists() else {}
+    current = snapshot(payload)
+    baseline = previous['start_head'] if 'start_head' in previous else current.get('head', '')
+    files = set(previous.get('files', [])) | set(current.get('files', []))
+    # Recover committed work even when the intermediate edit hook was not called.
+    if current.get('head') and current.get('head') != baseline:
+        compare = baseline or git('hash-object', '-t', 'tree', '/dev/null')
+        files.update(git('diff', '--name-only', '-z', compare, 'HEAD').split('\0'))
+    current['start_head'] = baseline
+    current['files'] = sorted(p for p in files if p and not p.startswith('.codex/.runtime/'))
+    current['commits'] = git('log', '--format=%H %s', baseline + '..HEAD' if baseline else 'HEAD').splitlines() if current.get('head') else []
+    atomic_write(path, json.dumps(current, ensure_ascii=False, indent=2) + '\n')
+    return path
 
 
 def save_state(payload):
-    path = ROOT / '.codex/.runtime' / (session_key(payload) + '.json')
-    path.parent.mkdir(exist_ok=True)
-    path.write_text(json.dumps(snapshot(payload), ensure_ascii=False, indent=2) + '\n')
-    return path
+    with session_lock(payload):
+        return _save_state(payload)
 
 
 def startup(payload):
@@ -60,7 +107,7 @@ def startup(payload):
         text += 'Перед правками проверь ветку и незавершённую работу; хук ничего не переключал.\n'
     for label, path in [('Память Codex', '.codex/context.md'),
                         ('История Friday (только чтение)', 'docs/archive/CONTEXT.md')]:
-        content = read(path, 6000)
+        content = read(path)
         if content:
             text += '\n' + label + ':\n' + content + '\n'
     state = save_state(payload)
@@ -78,7 +125,7 @@ def changed_ui(payload):
     else:
         patch = tool_input if isinstance(tool_input, str) else ''
     paths.update(re.findall(r'^\*\*\* (?:Add|Update) File: (.+)$', patch, re.M))
-    paths.update(git('diff', '--name-only', '--diff-filter=ACMRT', 'HEAD').splitlines())
+    paths.update(changed_files())
     result = []
     for value in paths:
         path = Path(value)
@@ -87,50 +134,76 @@ def changed_ui(payload):
             relative = path.relative_to(ROOT)
         except ValueError:
             continue
-        if path.is_file() and relative.parts[0] == 'projects' and path.suffix in {'.tsx', '.jsx', '.css', '.html', '.astro'}:
+        if path.is_file() and not any(part in {'node_modules', '.git', '.runtime'} for part in relative.parts) and path.suffix in {'.tsx', '.jsx', '.css', '.html', '.astro'}:
             result.append((str(relative), hashlib.sha256(path.read_bytes()).hexdigest()))
     return sorted(result)
 
 
 def post_edit(payload):
-    cache_path = ROOT / '.codex/.runtime' / (session_key(payload) + '-lint.json')
-    cache_path.parent.mkdir(exist_ok=True)
-    cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
-    reports = []
-    for path, digest in changed_ui(payload):
-        if cache.get(path) == digest:
-            continue
-        result = subprocess.run(['node', str(ROOT / '.codex/scripts/design-lint.mjs'), path],
-                                cwd=ROOT, capture_output=True, text=True, timeout=8)
-        cache[path] = digest
-        report = result.stdout + result.stderr
-        if result.returncode != 0 or 'Проблем не обнаружено' not in report:
-            reports.append(path + ':\n' + report[:3000])
-    cache_path.write_text(json.dumps(cache, ensure_ascii=False) + '\n')
-    if reports:
-        return output_context('PostToolUse', 'Результат design-lint; исправь применимые находки:\n' + '\n'.join(reports)[:7000])
-    return {}
+    with session_lock(payload):
+        _save_state(payload)
+        cache_path = ROOT / '.codex/.runtime' / (session_key(payload) + '-lint.json')
+        cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
+        reports = []
+        deadline = time.monotonic() + 9
+        for path, digest in changed_ui(payload):
+            if cache.get(path) == digest:
+                continue
+            remaining = deadline - time.monotonic()
+            if remaining < 0.2:
+                reports.append('Часть файлов ожидает design-lint на следующем вызове инструмента.')
+                break
+            try:
+                result = subprocess.run(['node', str(ROOT / '.codex/scripts/design-lint.mjs'), path],
+                                        cwd=ROOT, capture_output=True, text=True, timeout=min(3, remaining))
+            except subprocess.TimeoutExpired:
+                reports.append(path + ': design-lint timeout; проверка будет повторена.')
+                continue
+            report = result.stdout + result.stderr
+            if result.returncode == 0:
+                cache[path] = digest
+            if result.returncode != 0 or 'Проблем не обнаружено' not in report:
+                reports.append(path + ':\n' + report[:3000])
+        atomic_write(cache_path, json.dumps(cache, ensure_ascii=False) + '\n')
+        if reports:
+            return output_context('PostToolUse', 'Результат design-lint; исправь применимые находки:\n' + '\n'.join(reports)[:7000])
+        return {}
 
 
 def archive(payload, flush=False):
-    state = save_state(payload)
-    if not flush:
+    with session_lock(payload):
+        state = _save_state(payload)
+        if not flush:
+            return {}
+        data = json.loads(state.read_text())
+        if not data['files'] and not data.get('commits'):
+            return {}
+        folder = ROOT / '.codex/sessions'
+        target = folder / (data['updated_at'][:10] + '--' + session_key(payload) + '.md')
+        begin, end = '<!-- codex-git-facts:start -->', '<!-- codex-git-facts:end -->'
+        lines = [begin, '## Проверенные Git-факты', '',
+                 'Обновлено (UTC): ' + data['updated_at'], 'Ветка: `' + data['branch'] + '`',
+                 'HEAD: `' + data['head'] + '`', '', 'Файлы, замеченные за сессию (включая удаления):']
+        lines.extend('- `' + p.replace('`', '').replace('\n', '\\n').replace('\r', '\\r') + '`' for p in data['files'])
+        lines += ['', 'Коммиты после начала наблюдения:']
+        lines.extend('- ' + commit for commit in data.get('commits', []))
+        lines += ['', 'Этот хук не запускал тесты и не создавал коммит.', end]
+        block = '\n'.join(lines)
+        if target.exists():
+            text = target.read_text()
+            if begin in text and end in text:
+                before, tail = text.split(begin, 1)
+                _, after = tail.split(end, 1)
+                text = before + block + after
+            else:
+                text += '\n' + block + '\n'
+            # New facts should be digested again; preserve all agent-authored explanations.
+            text = text.replace('status: digested', 'status: raw', 1)
+        else:
+            text = ('---\nstatus: raw\n---\n# Факты сессии Codex\n\n' + block +
+                    '\n\nРезультат, проверки, блокеры и следующий шаг дополняет агент по фактам задачи.\n')
+        atomic_write(target, text)
         return {}
-    data = json.loads(state.read_text())
-    # Store only verified Git metadata, never assistant/user messages or tool arguments.
-    if not data['files']:
-        return {}
-    folder = ROOT / '.codex/sessions'
-    folder.mkdir(exist_ok=True)
-    target = folder / (data['updated_at'][:10] + '--' + session_key(payload) + '.md')
-    lines = ['---', 'status: raw', '---', '# Факты сессии Codex', '',
-             'Обновлено (UTC): ' + data['updated_at'], 'Ветка: `' + data['branch'] + '`',
-             'HEAD: `' + data['head'] + '`', '', 'Файлы с изменениями относительно HEAD:']
-    lines.extend('- `' + p.replace('`', '') + '`' for p in data['files'])
-    lines += ['', 'Результат, проверки, блокеры и следующий шаг дополняет агент по фактам задачи.',
-              'Этот хук не запускал тесты и не создавал коммит.']
-    target.write_text('\n'.join(lines) + '\n')
-    return {}
 
 
 def main():
