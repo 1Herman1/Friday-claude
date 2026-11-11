@@ -1,0 +1,2916 @@
+{
+  "version": "smc-v0.3-preview-1",
+  "mode": "READ_ONLY_PREVIEW",
+  "symbol": "BTCUSDT",
+  "venue": "MEXC_SPOT",
+  "variant": "crypto",
+  "parameter_status": "PROPOSED_V02_INHERITANCE",
+  "deployment_blockers": [
+    "UNAPPROVED_CONTEXT",
+    "UNAPPROVED_WINDOW",
+    "STOP_TICK_ROUNDING_UNAPPROVED",
+    "SPOT_NOT_BINGX_FUTURES",
+    "PREVIEW_NOT_POSITION_ENGINE"
+  ],
+  "candles": {
+    "count": 1920,
+    "first_open": "2026-10-22T17:15:00+00:00",
+    "latest_open": "2026-11-11T17:00:00+00:00",
+    "latest_close": "2026-11-11T17:15:00+00:00",
+    "latest_close_price": 74349.38,
+    "as_of": "2026-11-11T17:26:02.007480+00:00",
+    "complete_1h": 479,
+    "complete_4h": 119
+  },
+  "counts": {
+    "total": 71,
+    "preview_eligible": 12,
+    "pending": 0,
+    "rejected": 59,
+    "production_eligible": 0,
+    "by_reason": {
+      "OUTSIDE_PROPOSED_WINDOW": 38,
+      "NOT_SWEEP": 13,
+      "IFVG_CLOSE": 12,
+      "BODY_BACK_BEYOND_LEVEL": 8
+    }
+  },
+  "candidates": [
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-10-30T18:00:00+00:00",
+      "sweep_close": "2026-10-30T19:00:00+00:00",
+      "level": {
+        "price": 76527.02,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-10-30T07:00:00+00:00",
+        "expire": "2026-10-31T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76280.0,
+      "decision_time": "2026-10-30T19:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-10-30T07:00:00+00:00|76527.020000000004|2026-10-30T18:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-10-30T18:00:00+00:00",
+      "sweep_close": "2026-10-30T19:00:00+00:00",
+      "level": {
+        "price": 76527.02,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-10-30T08:00:00+00:00",
+        "expire": "2026-11-19T08:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76280.0,
+      "decision_time": "2026-10-30T19:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-10-30T08:00:00+00:00|76527.020000000004|2026-10-30T18:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-10-31T11:00:00+00:00",
+      "sweep_close": "2026-10-31T12:00:00+00:00",
+      "level": {
+        "price": 77609.26,
+        "side": "hi",
+        "kind": "asia",
+        "known": "2026-10-31T07:00:00+00:00",
+        "expire": "2026-11-01T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77641.5,
+      "decision_time": "2026-10-31T12:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|hi|2026-10-31T07:00:00+00:00|77609.259999999995|2026-10-31T11:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-10-31T11:00:00+00:00",
+      "sweep_close": "2026-10-31T12:00:00+00:00",
+      "level": {
+        "price": 77609.26,
+        "side": "hi",
+        "kind": "swing",
+        "known": "2026-10-31T08:00:00+00:00",
+        "expire": "2026-11-20T08:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77641.5,
+      "decision_time": "2026-10-31T12:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|hi|2026-10-31T08:00:00+00:00|77609.259999999995|2026-10-31T11:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-10-31T12:00:00+00:00",
+      "sweep_close": "2026-10-31T13:00:00+00:00",
+      "level": {
+        "price": 77641.5,
+        "side": "hi",
+        "kind": "london",
+        "known": "2026-10-31T12:00:00+00:00",
+        "expire": "2026-11-01T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77683.67,
+      "decision_time": "2026-10-31T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|hi|2026-10-31T12:00:00+00:00|77641.5|2026-10-31T12:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-01T02:00:00+00:00",
+      "sweep_close": "2026-11-01T03:00:00+00:00",
+      "level": {
+        "price": 77737.01,
+        "side": "hi",
+        "kind": "pd",
+        "known": "2026-11-01T00:00:00+00:00",
+        "expire": "2026-11-02T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77843.64,
+      "decision_time": "2026-11-01T03:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|hi|2026-11-01T00:00:00+00:00|77737.009999999995|2026-11-01T02:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-01T08:00:00+00:00",
+      "sweep_close": "2026-11-01T09:00:00+00:00",
+      "level": {
+        "price": 77994.27,
+        "side": "hi",
+        "kind": "asia",
+        "known": "2026-11-01T07:00:00+00:00",
+        "expire": "2026-11-02T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 78223.25,
+      "decision_time": "2026-11-01T09:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|hi|2026-11-01T07:00:00+00:00|77994.270000000004|2026-11-01T08:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-01T12:00:00+00:00",
+      "sweep_close": "2026-11-01T13:00:00+00:00",
+      "level": {
+        "price": 77790.74,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-01T12:00:00+00:00",
+        "expire": "2026-11-02T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77724.51,
+      "decision_time": "2026-11-01T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-01T12:00:00+00:00|77790.740000000005|2026-11-01T12:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-01T23:00:00+00:00",
+      "sweep_close": "2026-11-02T00:00:00+00:00",
+      "level": {
+        "price": 78223.25,
+        "side": "hi",
+        "kind": "london",
+        "known": "2026-11-01T12:00:00+00:00",
+        "expire": "2026-11-02T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 78415.71,
+      "decision_time": "2026-11-02T00:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|hi|2026-11-01T12:00:00+00:00|78223.25|2026-11-01T23:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-01T23:00:00+00:00",
+      "sweep_close": "2026-11-02T00:00:00+00:00",
+      "level": {
+        "price": 78223.25,
+        "side": "hi",
+        "kind": "swing",
+        "known": "2026-11-01T16:00:00+00:00",
+        "expire": "2026-11-21T16:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 78415.71,
+      "decision_time": "2026-11-02T00:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|hi|2026-11-01T16:00:00+00:00|78223.25|2026-11-01T23:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-02T00:00:00+00:00",
+      "sweep_close": "2026-11-02T01:00:00+00:00",
+      "level": {
+        "price": 78415.71,
+        "side": "hi",
+        "kind": "pd",
+        "known": "2026-11-02T00:00:00+00:00",
+        "expire": "2026-11-03T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 78507.0,
+      "decision_time": "2026-11-02T01:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|hi|2026-11-02T00:00:00+00:00|78415.710000000006|2026-11-02T00:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-02T03:00:00+00:00",
+      "sweep_close": "2026-11-02T04:00:00+00:00",
+      "level": {
+        "price": 78803.82,
+        "side": "hi",
+        "kind": "swing",
+        "known": "2026-10-30T12:00:00+00:00",
+        "expire": "2026-11-19T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 78874.93,
+      "decision_time": "2026-11-02T04:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|hi|2026-10-30T12:00:00+00:00|78803.820000000007|2026-11-02T03:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-02T07:00:00+00:00",
+      "sweep_close": "2026-11-02T08:00:00+00:00",
+      "level": {
+        "price": 78041.92,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-11-02T07:00:00+00:00",
+        "expire": "2026-11-03T07:00:00+00:00"
+      },
+      "entry": 78157.23,
+      "entry_time": "2026-11-02T08:30:00+00:00",
+      "sl": 77942.67999999998,
+      "tp1": 78586.33000000003,
+      "tp2": 78874.93,
+      "sweep_extreme": 77942.68,
+      "decision_time": "2026-11-02T08:30:00+00:00",
+      "fvg_boundary": 78150.0,
+      "fvg_bottom": 78130.76,
+      "fvg_top": 78150.0,
+      "fvg_formed_close": "2026-11-02T07:45:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 78157.23,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-11-02T07:00:00+00:00|78041.919999999998|2026-11-02T07:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-02T12:00:00+00:00",
+      "sweep_close": "2026-11-02T13:00:00+00:00",
+      "level": {
+        "price": 77819.94,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-02T12:00:00+00:00",
+        "expire": "2026-11-03T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77728.61,
+      "decision_time": "2026-11-02T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-02T12:00:00+00:00|77819.940000000002|2026-11-02T12:00:00+00:00"
+    },
+    {
+      "reason": "BODY_BACK_BEYOND_LEVEL",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-02T15:00:00+00:00",
+      "sweep_close": "2026-11-02T16:00:00+00:00",
+      "level": {
+        "price": 77474.65,
+        "side": "lo",
+        "kind": "pd",
+        "known": "2026-11-02T00:00:00+00:00",
+        "expire": "2026-11-03T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77287.99,
+      "decision_time": "2026-11-02T16:15:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|lo|2026-11-02T00:00:00+00:00|77474.649999999994|2026-11-02T15:00:00+00:00"
+    },
+    {
+      "reason": "BODY_BACK_BEYOND_LEVEL",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-02T15:00:00+00:00",
+      "sweep_close": "2026-11-02T16:00:00+00:00",
+      "level": {
+        "price": 77388.17,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-01T04:00:00+00:00",
+        "expire": "2026-11-21T04:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77283.57,
+      "decision_time": "2026-11-02T16:30:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-01T04:00:00+00:00|77388.169999999998|2026-11-02T15:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-02T15:00:00+00:00",
+      "sweep_close": "2026-11-02T16:00:00+00:00",
+      "level": {
+        "price": 77620.61,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-02T04:00:00+00:00",
+        "expire": "2026-11-22T04:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77323.38,
+      "decision_time": "2026-11-02T16:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-02T04:00:00+00:00|77620.610000000001|2026-11-02T15:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-02T17:00:00+00:00",
+      "sweep_close": "2026-11-02T18:00:00+00:00",
+      "level": {
+        "price": 77064.88,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-10-31T12:00:00+00:00",
+        "expire": "2026-11-20T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76864.5,
+      "decision_time": "2026-11-02T18:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-10-31T12:00:00+00:00|77064.880000000005|2026-11-02T17:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-03T00:00:00+00:00",
+      "sweep_close": "2026-11-03T01:00:00+00:00",
+      "level": {
+        "price": 76720.95,
+        "side": "lo",
+        "kind": "pd",
+        "known": "2026-11-03T00:00:00+00:00",
+        "expire": "2026-11-04T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76690.18,
+      "decision_time": "2026-11-03T01:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|lo|2026-11-03T00:00:00+00:00|76720.949999999997|2026-11-03T00:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-03T00:00:00+00:00",
+      "sweep_close": "2026-11-03T01:00:00+00:00",
+      "level": {
+        "price": 76720.95,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-03T00:00:00+00:00",
+        "expire": "2026-11-23T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76690.18,
+      "decision_time": "2026-11-03T01:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-03T00:00:00+00:00|76720.949999999997|2026-11-03T00:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-03T12:00:00+00:00",
+      "sweep_close": "2026-11-03T13:00:00+00:00",
+      "level": {
+        "price": 77317.44,
+        "side": "hi",
+        "kind": "asia",
+        "known": "2026-11-03T07:00:00+00:00",
+        "expire": "2026-11-04T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77486.22,
+      "decision_time": "2026-11-03T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|hi|2026-11-03T07:00:00+00:00|77317.440000000002|2026-11-03T12:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-03T12:00:00+00:00",
+      "sweep_close": "2026-11-03T13:00:00+00:00",
+      "level": {
+        "price": 77264.94,
+        "side": "hi",
+        "kind": "london",
+        "known": "2026-11-03T12:00:00+00:00",
+        "expire": "2026-11-04T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77486.22,
+      "decision_time": "2026-11-03T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|hi|2026-11-03T12:00:00+00:00|77264.940000000002|2026-11-03T12:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-03T12:00:00+00:00",
+      "sweep_close": "2026-11-03T13:00:00+00:00",
+      "level": {
+        "price": 77317.44,
+        "side": "hi",
+        "kind": "swing",
+        "known": "2026-11-03T08:00:00+00:00",
+        "expire": "2026-11-23T08:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 77486.22,
+      "decision_time": "2026-11-03T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|hi|2026-11-03T08:00:00+00:00|77317.440000000002|2026-11-03T12:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-04T02:00:00+00:00",
+      "sweep_close": "2026-11-04T03:00:00+00:00",
+      "level": {
+        "price": 76399.78,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-11-03T07:00:00+00:00",
+        "expire": "2026-11-04T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76185.67,
+      "decision_time": "2026-11-04T03:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-11-03T07:00:00+00:00|76399.779999999999|2026-11-04T02:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-04T02:00:00+00:00",
+      "sweep_close": "2026-11-04T03:00:00+00:00",
+      "level": {
+        "price": 76511.34,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-03T12:00:00+00:00",
+        "expire": "2026-11-04T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76185.67,
+      "decision_time": "2026-11-04T03:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-03T12:00:00+00:00|76511.339999999997|2026-11-04T02:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-04T02:00:00+00:00",
+      "sweep_close": "2026-11-04T03:00:00+00:00",
+      "level": {
+        "price": 76399.78,
+        "side": "lo",
+        "kind": "pd",
+        "known": "2026-11-04T00:00:00+00:00",
+        "expire": "2026-11-05T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76185.67,
+      "decision_time": "2026-11-04T03:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|lo|2026-11-04T00:00:00+00:00|76399.779999999999|2026-11-04T02:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-04T02:00:00+00:00",
+      "sweep_close": "2026-11-04T03:00:00+00:00",
+      "level": {
+        "price": 76280.0,
+        "side": "lo",
+        "kind": "pw",
+        "known": "2026-11-02T00:00:00+00:00",
+        "expire": "2026-11-09T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76185.67,
+      "decision_time": "2026-11-04T03:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pw|lo|2026-11-02T00:00:00+00:00|76280|2026-11-04T02:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-04T02:00:00+00:00",
+      "sweep_close": "2026-11-04T03:00:00+00:00",
+      "level": {
+        "price": 76280.0,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-10-31T00:00:00+00:00",
+        "expire": "2026-11-20T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76185.67,
+      "decision_time": "2026-11-04T03:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-10-31T00:00:00+00:00|76280|2026-11-04T02:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-04T02:00:00+00:00",
+      "sweep_close": "2026-11-04T03:00:00+00:00",
+      "level": {
+        "price": 76399.78,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-03T12:00:00+00:00",
+        "expire": "2026-11-23T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76185.67,
+      "decision_time": "2026-11-04T03:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-03T12:00:00+00:00|76399.779999999999|2026-11-04T02:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-04T05:00:00+00:00",
+      "sweep_close": "2026-11-04T06:00:00+00:00",
+      "level": {
+        "price": 78055.0,
+        "side": "hi",
+        "kind": "pd",
+        "known": "2026-11-04T00:00:00+00:00",
+        "expire": "2026-11-05T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 78150.0,
+      "decision_time": "2026-11-04T06:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|hi|2026-11-04T00:00:00+00:00|78055|2026-11-04T05:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-04T05:00:00+00:00",
+      "sweep_close": "2026-11-04T06:00:00+00:00",
+      "level": {
+        "price": 78055.0,
+        "side": "hi",
+        "kind": "swing",
+        "known": "2026-11-04T04:00:00+00:00",
+        "expire": "2026-11-24T04:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 78150.0,
+      "decision_time": "2026-11-04T06:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|hi|2026-11-04T04:00:00+00:00|78055|2026-11-04T05:00:00+00:00"
+    },
+    {
+      "reason": "BODY_BACK_BEYOND_LEVEL",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-04T07:00:00+00:00",
+      "sweep_close": "2026-11-04T08:00:00+00:00",
+      "level": {
+        "price": 78150.0,
+        "side": "hi",
+        "kind": "asia",
+        "known": "2026-11-04T07:00:00+00:00",
+        "expire": "2026-11-05T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 78452.16,
+      "decision_time": "2026-11-04T08:15:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|hi|2026-11-04T07:00:00+00:00|78150|2026-11-04T07:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-04T14:00:00+00:00",
+      "sweep_close": "2026-11-04T15:00:00+00:00",
+      "level": {
+        "price": 78711.3,
+        "side": "hi",
+        "kind": "london",
+        "known": "2026-11-04T12:00:00+00:00",
+        "expire": "2026-11-05T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 79632.87,
+      "decision_time": "2026-11-04T15:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|hi|2026-11-04T12:00:00+00:00|78711.300000000003|2026-11-04T14:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-04T14:00:00+00:00",
+      "sweep_close": "2026-11-04T15:00:00+00:00",
+      "level": {
+        "price": 78874.93,
+        "side": "hi",
+        "kind": "swing",
+        "known": "2026-11-02T08:00:00+00:00",
+        "expire": "2026-11-22T08:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 79632.87,
+      "decision_time": "2026-11-04T15:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|hi|2026-11-02T08:00:00+00:00|78874.929999999993|2026-11-04T14:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-05T10:00:00+00:00",
+      "sweep_close": "2026-11-05T11:00:00+00:00",
+      "level": {
+        "price": 80250.0,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-11-05T07:00:00+00:00",
+        "expire": "2026-11-06T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 80222.3,
+      "decision_time": "2026-11-05T11:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-11-05T07:00:00+00:00|80250|2026-11-05T10:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-05T12:00:00+00:00",
+      "sweep_close": "2026-11-05T13:00:00+00:00",
+      "level": {
+        "price": 80222.3,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-05T12:00:00+00:00",
+        "expire": "2026-11-06T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 79535.46,
+      "decision_time": "2026-11-05T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-05T12:00:00+00:00|80222.300000000003|2026-11-05T12:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-05T15:00:00+00:00",
+      "sweep_close": "2026-11-05T16:00:00+00:00",
+      "level": {
+        "price": 75766.17,
+        "side": "lo",
+        "kind": "pd",
+        "known": "2026-11-05T00:00:00+00:00",
+        "expire": "2026-11-06T00:00:00+00:00"
+      },
+      "entry": 76429.43,
+      "entry_time": "2026-11-05T19:45:00+00:00",
+      "sl": 75584.22999999998,
+      "tp1": 78119.83000000002,
+      "tp2": 80784.5,
+      "sweep_extreme": 75584.23,
+      "decision_time": "2026-11-05T19:45:00+00:00",
+      "fvg_boundary": 76394.28,
+      "fvg_bottom": 76232.81,
+      "fvg_top": 76394.28,
+      "fvg_formed_close": "2026-11-05T17:30:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 76429.43,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|lo|2026-11-05T00:00:00+00:00|75766.169999999998|2026-11-05T15:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-05T15:00:00+00:00",
+      "sweep_close": "2026-11-05T16:00:00+00:00",
+      "level": {
+        "price": 75766.17,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-04T08:00:00+00:00",
+        "expire": "2026-11-24T08:00:00+00:00"
+      },
+      "entry": 76429.43,
+      "entry_time": "2026-11-05T19:45:00+00:00",
+      "sl": 75584.22999999998,
+      "tp1": 78119.83000000002,
+      "tp2": 80784.5,
+      "sweep_extreme": 75584.23,
+      "decision_time": "2026-11-05T19:45:00+00:00",
+      "fvg_boundary": 76394.28,
+      "fvg_bottom": 76232.81,
+      "fvg_top": 76394.28,
+      "fvg_formed_close": "2026-11-05T17:30:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 76429.43,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-04T08:00:00+00:00|75766.169999999998|2026-11-05T15:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-05T15:00:00+00:00",
+      "sweep_close": "2026-11-05T16:00:00+00:00",
+      "level": {
+        "price": 78008.49,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-04T20:00:00+00:00",
+        "expire": "2026-11-24T20:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75584.23,
+      "decision_time": "2026-11-05T16:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-04T20:00:00+00:00|78008.490000000005|2026-11-05T15:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-05T23:00:00+00:00",
+      "sweep_close": "2026-11-06T00:00:00+00:00",
+      "level": {
+        "price": 75584.23,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-05T20:00:00+00:00",
+        "expire": "2026-11-25T20:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75222.0,
+      "decision_time": "2026-11-06T00:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-05T20:00:00+00:00|75584.229999999996|2026-11-05T23:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-06T07:00:00+00:00",
+      "sweep_close": "2026-11-06T08:00:00+00:00",
+      "level": {
+        "price": 75374.96,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-11-06T07:00:00+00:00",
+        "expire": "2026-11-07T07:00:00+00:00"
+      },
+      "entry": 75679.84,
+      "entry_time": "2026-11-06T08:15:00+00:00",
+      "sl": 75319.67999999998,
+      "tp1": 76400.16000000003,
+      "tp2": 76421.45,
+      "sweep_extreme": 75319.68,
+      "decision_time": "2026-11-06T08:15:00+00:00",
+      "fvg_boundary": 75677.21,
+      "fvg_bottom": 75492.58,
+      "fvg_top": 75677.21,
+      "fvg_formed_close": "2026-11-06T07:30:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 75679.84,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-11-06T07:00:00+00:00|75374.960000000006|2026-11-06T07:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-06T12:00:00+00:00",
+      "sweep_close": "2026-11-06T13:00:00+00:00",
+      "level": {
+        "price": 76300.0,
+        "side": "hi",
+        "kind": "london",
+        "known": "2026-11-06T12:00:00+00:00",
+        "expire": "2026-11-07T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76373.34,
+      "decision_time": "2026-11-06T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|hi|2026-11-06T12:00:00+00:00|76300|2026-11-06T12:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-06T15:00:00+00:00",
+      "sweep_close": "2026-11-06T16:00:00+00:00",
+      "level": {
+        "price": 75319.68,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-06T12:00:00+00:00",
+        "expire": "2026-11-07T12:00:00+00:00"
+      },
+      "entry": 76017.34,
+      "entry_time": "2026-11-06T17:00:00+00:00",
+      "sl": 74999.99999999999,
+      "tp1": 78052.02000000002,
+      "tp2": 80900.0,
+      "sweep_extreme": 75000.0,
+      "decision_time": "2026-11-06T17:00:00+00:00",
+      "fvg_boundary": 75802.07,
+      "fvg_bottom": 75759.31,
+      "fvg_top": 75802.07,
+      "fvg_formed_close": "2026-11-06T14:30:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 76017.34,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-06T12:00:00+00:00|75319.679999999993|2026-11-06T15:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-06T15:00:00+00:00",
+      "sweep_close": "2026-11-06T16:00:00+00:00",
+      "level": {
+        "price": 75222.0,
+        "side": "lo",
+        "kind": "pd",
+        "known": "2026-11-06T00:00:00+00:00",
+        "expire": "2026-11-07T00:00:00+00:00"
+      },
+      "entry": 76017.34,
+      "entry_time": "2026-11-06T17:00:00+00:00",
+      "sl": 74999.99999999999,
+      "tp1": 78052.02000000002,
+      "tp2": 80900.0,
+      "sweep_extreme": 75000.0,
+      "decision_time": "2026-11-06T17:00:00+00:00",
+      "fvg_boundary": 75802.07,
+      "fvg_bottom": 75759.31,
+      "fvg_top": 75802.07,
+      "fvg_formed_close": "2026-11-06T14:30:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 76017.34,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|lo|2026-11-06T00:00:00+00:00|75222|2026-11-06T15:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-06T15:00:00+00:00",
+      "sweep_close": "2026-11-06T16:00:00+00:00",
+      "level": {
+        "price": 75222.0,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-06T04:00:00+00:00",
+        "expire": "2026-11-26T04:00:00+00:00"
+      },
+      "entry": 76017.34,
+      "entry_time": "2026-11-06T17:00:00+00:00",
+      "sl": 74999.99999999999,
+      "tp1": 78052.02000000002,
+      "tp2": 80900.0,
+      "sweep_extreme": 75000.0,
+      "decision_time": "2026-11-06T17:00:00+00:00",
+      "fvg_boundary": 75802.07,
+      "fvg_bottom": 75759.31,
+      "fvg_top": 75802.07,
+      "fvg_formed_close": "2026-11-06T14:30:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 76017.34,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-06T04:00:00+00:00|75222|2026-11-06T15:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-06T15:00:00+00:00",
+      "sweep_close": "2026-11-06T16:00:00+00:00",
+      "level": {
+        "price": 75319.68,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-06T12:00:00+00:00",
+        "expire": "2026-11-26T12:00:00+00:00"
+      },
+      "entry": 76017.34,
+      "entry_time": "2026-11-06T17:00:00+00:00",
+      "sl": 74999.99999999999,
+      "tp1": 78052.02000000002,
+      "tp2": 80900.0,
+      "sweep_extreme": 75000.0,
+      "decision_time": "2026-11-06T17:00:00+00:00",
+      "fvg_boundary": 75802.07,
+      "fvg_bottom": 75759.31,
+      "fvg_top": 75802.07,
+      "fvg_formed_close": "2026-11-06T14:30:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 76017.34,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-06T12:00:00+00:00|75319.679999999993|2026-11-06T15:00:00+00:00"
+    },
+    {
+      "reason": "BODY_BACK_BEYOND_LEVEL",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-07T07:00:00+00:00",
+      "sweep_close": "2026-11-07T08:00:00+00:00",
+      "level": {
+        "price": 76091.05,
+        "side": "hi",
+        "kind": "asia",
+        "known": "2026-11-07T07:00:00+00:00",
+        "expire": "2026-11-08T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76127.41,
+      "decision_time": "2026-11-07T08:15:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|hi|2026-11-07T07:00:00+00:00|76091.050000000003|2026-11-07T07:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-07T09:00:00+00:00",
+      "sweep_close": "2026-11-07T10:00:00+00:00",
+      "level": {
+        "price": 76190.37,
+        "side": "hi",
+        "kind": "swing",
+        "known": "2026-11-07T04:00:00+00:00",
+        "expire": "2026-11-27T04:00:00+00:00"
+      },
+      "entry": 75848.03,
+      "entry_time": "2026-11-07T12:45:00+00:00",
+      "sl": 76225.38000000002,
+      "tp1": 75093.32999999996,
+      "tp2": 75000.0,
+      "sweep_extreme": 76225.38,
+      "decision_time": "2026-11-07T12:45:00+00:00",
+      "fvg_boundary": 75985.98,
+      "fvg_bottom": 75985.98,
+      "fvg_top": 75988.12,
+      "fvg_formed_close": "2026-11-07T12:00:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 75848.03,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|hi|2026-11-07T04:00:00+00:00|76190.369999999995|2026-11-07T09:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-07T12:00:00+00:00",
+      "sweep_close": "2026-11-07T13:00:00+00:00",
+      "level": {
+        "price": 75929.46,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-07T12:00:00+00:00",
+        "expire": "2026-11-08T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75837.25,
+      "decision_time": "2026-11-07T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-07T12:00:00+00:00|75929.460000000006|2026-11-07T12:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-07T15:00:00+00:00",
+      "sweep_close": "2026-11-07T16:00:00+00:00",
+      "level": {
+        "price": 75773.84,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-11-07T07:00:00+00:00",
+        "expire": "2026-11-08T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75600.0,
+      "decision_time": "2026-11-07T16:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-11-07T07:00:00+00:00|75773.839999999997|2026-11-07T15:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-07T21:00:00+00:00",
+      "sweep_close": "2026-11-07T22:00:00+00:00",
+      "level": {
+        "price": 75600.0,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-07T20:00:00+00:00",
+        "expire": "2026-11-27T20:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75587.59,
+      "decision_time": "2026-11-07T22:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-07T20:00:00+00:00|75600|2026-11-07T21:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-08T07:00:00+00:00",
+      "sweep_close": "2026-11-08T08:00:00+00:00",
+      "level": {
+        "price": 75960.9,
+        "side": "hi",
+        "kind": "asia",
+        "known": "2026-11-08T07:00:00+00:00",
+        "expire": "2026-11-09T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75970.61,
+      "decision_time": "2026-11-08T08:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|hi|2026-11-08T07:00:00+00:00|75960.899999999994|2026-11-08T07:00:00+00:00"
+    },
+    {
+      "reason": "BODY_BACK_BEYOND_LEVEL",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-08T13:00:00+00:00",
+      "sweep_close": "2026-11-08T14:00:00+00:00",
+      "level": {
+        "price": 76020.4,
+        "side": "hi",
+        "kind": "london",
+        "known": "2026-11-08T12:00:00+00:00",
+        "expire": "2026-11-09T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 76178.78,
+      "decision_time": "2026-11-08T15:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|hi|2026-11-08T12:00:00+00:00|76020.399999999994|2026-11-08T13:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-08T16:00:00+00:00",
+      "sweep_close": "2026-11-08T17:00:00+00:00",
+      "level": {
+        "price": 75805.69,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-08T12:00:00+00:00",
+        "expire": "2026-11-09T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75730.5,
+      "decision_time": "2026-11-08T17:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-08T12:00:00+00:00|75805.690000000002|2026-11-08T16:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-08T17:00:00+00:00",
+      "sweep_close": "2026-11-08T18:00:00+00:00",
+      "level": {
+        "price": 75662.79,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-11-08T07:00:00+00:00",
+        "expire": "2026-11-09T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75654.82,
+      "decision_time": "2026-11-08T18:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-11-08T07:00:00+00:00|75662.789999999994|2026-11-08T17:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-08T21:00:00+00:00",
+      "sweep_close": "2026-11-08T22:00:00+00:00",
+      "level": {
+        "price": 75587.59,
+        "side": "lo",
+        "kind": "pd",
+        "known": "2026-11-08T00:00:00+00:00",
+        "expire": "2026-11-09T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 73628.8,
+      "decision_time": "2026-11-08T22:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|lo|2026-11-08T00:00:00+00:00|75587.589999999997|2026-11-08T21:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-08T21:00:00+00:00",
+      "sweep_close": "2026-11-08T22:00:00+00:00",
+      "level": {
+        "price": 75000.0,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-06T20:00:00+00:00",
+        "expire": "2026-11-26T20:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 73628.8,
+      "decision_time": "2026-11-08T22:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-06T20:00:00+00:00|75000|2026-11-08T21:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-08T21:00:00+00:00",
+      "sweep_close": "2026-11-08T22:00:00+00:00",
+      "level": {
+        "price": 75587.59,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-08T04:00:00+00:00",
+        "expire": "2026-11-28T04:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 73628.8,
+      "decision_time": "2026-11-08T22:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-08T04:00:00+00:00|75587.589999999997|2026-11-08T21:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-09T07:00:00+00:00",
+      "sweep_close": "2026-11-09T08:00:00+00:00",
+      "level": {
+        "price": 74008.0,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-11-09T07:00:00+00:00",
+        "expire": "2026-11-10T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 73788.0,
+      "decision_time": "2026-11-09T08:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-11-09T07:00:00+00:00|74008|2026-11-09T07:00:00+00:00"
+    },
+    {
+      "reason": "OUTSIDE_PROPOSED_WINDOW",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-09T12:00:00+00:00",
+      "sweep_close": "2026-11-09T13:00:00+00:00",
+      "level": {
+        "price": 74800.0,
+        "side": "hi",
+        "kind": "london",
+        "known": "2026-11-09T12:00:00+00:00",
+        "expire": "2026-11-10T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 75090.0,
+      "decision_time": "2026-11-09T13:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|hi|2026-11-09T12:00:00+00:00|74800|2026-11-09T12:00:00+00:00"
+    },
+    {
+      "reason": "BODY_BACK_BEYOND_LEVEL",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-10T09:00:00+00:00",
+      "sweep_close": "2026-11-10T10:00:00+00:00",
+      "level": {
+        "price": 74370.83,
+        "side": "lo",
+        "kind": "asia",
+        "known": "2026-11-10T07:00:00+00:00",
+        "expire": "2026-11-11T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 74159.74,
+      "decision_time": "2026-11-10T10:30:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|lo|2026-11-10T07:00:00+00:00|74370.830000000002|2026-11-10T09:00:00+00:00"
+    },
+    {
+      "reason": "BODY_BACK_BEYOND_LEVEL",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-10T09:00:00+00:00",
+      "sweep_close": "2026-11-10T10:00:00+00:00",
+      "level": {
+        "price": 74370.83,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-10T08:00:00+00:00",
+        "expire": "2026-11-30T08:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 74159.74,
+      "decision_time": "2026-11-10T10:30:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-10T08:00:00+00:00|74370.830000000002|2026-11-10T09:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-10T13:00:00+00:00",
+      "sweep_close": "2026-11-10T14:00:00+00:00",
+      "level": {
+        "price": 74108.57,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-10T12:00:00+00:00",
+        "expire": "2026-11-11T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 73650.0,
+      "decision_time": "2026-11-10T14:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-10T12:00:00+00:00|74108.570000000007|2026-11-10T13:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-10T13:00:00+00:00",
+      "sweep_close": "2026-11-10T14:00:00+00:00",
+      "level": {
+        "price": 73753.0,
+        "side": "lo",
+        "kind": "pd",
+        "known": "2026-11-10T00:00:00+00:00",
+        "expire": "2026-11-11T00:00:00+00:00"
+      },
+      "entry": 74319.87,
+      "entry_time": "2026-11-10T14:45:00+00:00",
+      "sl": 73645.44999999998,
+      "tp1": 75668.71000000002,
+      "tp2": 76178.78,
+      "sweep_extreme": 73645.45,
+      "decision_time": "2026-11-10T14:45:00+00:00",
+      "fvg_boundary": 74222.27,
+      "fvg_bottom": 74114.2,
+      "fvg_top": 74222.27,
+      "fvg_formed_close": "2026-11-10T14:00:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 74319.87,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pd|lo|2026-11-10T00:00:00+00:00|73753|2026-11-10T13:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-10T13:00:00+00:00",
+      "sweep_close": "2026-11-10T14:00:00+00:00",
+      "level": {
+        "price": 73753.0,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-09T16:00:00+00:00",
+        "expire": "2026-11-29T16:00:00+00:00"
+      },
+      "entry": 74319.87,
+      "entry_time": "2026-11-10T14:45:00+00:00",
+      "sl": 73645.44999999998,
+      "tp1": 75668.71000000002,
+      "tp2": 76178.78,
+      "sweep_extreme": 73645.45,
+      "decision_time": "2026-11-10T14:45:00+00:00",
+      "fvg_boundary": 74222.27,
+      "fvg_bottom": 74114.2,
+      "fvg_top": 74222.27,
+      "fvg_formed_close": "2026-11-10T14:00:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 74319.87,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-09T16:00:00+00:00|73753|2026-11-10T13:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-10T15:00:00+00:00",
+      "sweep_close": "2026-11-10T16:00:00+00:00",
+      "level": {
+        "price": 73628.8,
+        "side": "lo",
+        "kind": "pw",
+        "known": "2026-11-09T00:00:00+00:00",
+        "expire": "2026-11-16T00:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 72900.0,
+      "decision_time": "2026-11-10T16:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|pw|lo|2026-11-09T00:00:00+00:00|73628.800000000003|2026-11-10T15:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-10T15:00:00+00:00",
+      "sweep_close": "2026-11-10T16:00:00+00:00",
+      "level": {
+        "price": 73628.8,
+        "side": "lo",
+        "kind": "swing",
+        "known": "2026-11-09T04:00:00+00:00",
+        "expire": "2026-11-29T04:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 72900.0,
+      "decision_time": "2026-11-10T16:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|lo|2026-11-09T04:00:00+00:00|73628.800000000003|2026-11-10T15:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-11T07:00:00+00:00",
+      "sweep_close": "2026-11-11T08:00:00+00:00",
+      "level": {
+        "price": 73999.0,
+        "side": "hi",
+        "kind": "asia",
+        "known": "2026-11-11T07:00:00+00:00",
+        "expire": "2026-11-12T07:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 74105.22,
+      "decision_time": "2026-11-11T08:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|asia|hi|2026-11-11T07:00:00+00:00|73999|2026-11-11T07:00:00+00:00"
+    },
+    {
+      "reason": "NOT_SWEEP",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-11T07:00:00+00:00",
+      "sweep_close": "2026-11-11T08:00:00+00:00",
+      "level": {
+        "price": 74043.25,
+        "side": "hi",
+        "kind": "swing",
+        "known": "2026-11-11T04:00:00+00:00",
+        "expire": "2026-12-01T04:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 74105.22,
+      "decision_time": "2026-11-11T08:00:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|swing|hi|2026-11-11T04:00:00+00:00|74043.25|2026-11-11T07:00:00+00:00"
+    },
+    {
+      "reason": "IFVG_CLOSE",
+      "preview_eligible": true,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "long",
+      "sweep_open": "2026-11-11T14:00:00+00:00",
+      "sweep_close": "2026-11-11T15:00:00+00:00",
+      "level": {
+        "price": 73528.59,
+        "side": "lo",
+        "kind": "london",
+        "known": "2026-11-11T12:00:00+00:00",
+        "expire": "2026-11-12T12:00:00+00:00"
+      },
+      "entry": 73903.05,
+      "entry_time": "2026-11-11T15:45:00+00:00",
+      "sl": 73379.71999999999,
+      "tp1": 74949.71000000004,
+      "tp2": 75425.82,
+      "sweep_extreme": 73379.72,
+      "decision_time": "2026-11-11T15:45:00+00:00",
+      "fvg_boundary": 73738.97,
+      "fvg_bottom": 73732.86,
+      "fvg_top": 73738.97,
+      "fvg_formed_close": "2026-11-11T14:30:00+00:00",
+      "tp1_fraction": 0.5,
+      "remaining_sl_after_tp1": 73903.05,
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|lo|2026-11-11T12:00:00+00:00|73528.589999999997|2026-11-11T14:00:00+00:00"
+    },
+    {
+      "reason": "BODY_BACK_BEYOND_LEVEL",
+      "preview_eligible": false,
+      "production_eligible": false,
+      "warnings": [
+        "UNAPPROVED_CONTEXT",
+        "UNAPPROVED_WINDOW",
+        "STOP_TICK_ROUNDING_UNAPPROVED",
+        "SPOT_NOT_BINGX_FUTURES",
+        "PREVIEW_NOT_POSITION_ENGINE"
+      ],
+      "side": "short",
+      "sweep_open": "2026-11-11T15:00:00+00:00",
+      "sweep_close": "2026-11-11T16:00:00+00:00",
+      "level": {
+        "price": 74160.0,
+        "side": "hi",
+        "kind": "london",
+        "known": "2026-11-11T12:00:00+00:00",
+        "expire": "2026-11-12T12:00:00+00:00"
+      },
+      "entry": null,
+      "entry_time": null,
+      "sl": null,
+      "tp1": null,
+      "tp2": null,
+      "sweep_extreme": 74442.81,
+      "decision_time": "2026-11-11T16:15:00+00:00",
+      "symbol": "BTCUSDT",
+      "version": "smc-v0.3-preview-1",
+      "variant": "crypto",
+      "venue": "MEXC_SPOT",
+      "context_status": "UNAPPROVED_CONTEXT",
+      "key": "smc-v0.3-preview-1|MEXC_SPOT|BTCUSDT|crypto|london|hi|2026-11-11T12:00:00+00:00|74160|2026-11-11T15:00:00+00:00"
+    }
+  ],
+  "prefix_verification": {
+    "passed": true,
+    "checks": [
+      {
+        "cut": "2026-10-30T17:30:00+00:00",
+        "terminal_candidates": 0
+      },
+      {
+        "cut": "2026-10-30T19:00:00+00:00",
+        "terminal_candidates": 2
+      },
+      {
+        "cut": "2026-10-31T12:00:00+00:00",
+        "terminal_candidates": 4
+      },
+      {
+        "cut": "2026-10-31T13:00:00+00:00",
+        "terminal_candidates": 5
+      },
+      {
+        "cut": "2026-11-01T03:00:00+00:00",
+        "terminal_candidates": 6
+      },
+      {
+        "cut": "2026-11-01T09:00:00+00:00",
+        "terminal_candidates": 7
+      },
+      {
+        "cut": "2026-11-01T13:00:00+00:00",
+        "terminal_candidates": 8
+      },
+      {
+        "cut": "2026-11-02T00:00:00+00:00",
+        "terminal_candidates": 10
+      },
+      {
+        "cut": "2026-11-02T01:00:00+00:00",
+        "terminal_candidates": 11
+      },
+      {
+        "cut": "2026-11-02T04:00:00+00:00",
+        "terminal_candidates": 12
+      },
+      {
+        "cut": "2026-11-02T08:00:00+00:00",
+        "terminal_candidates": 12
+      },
+      {
+        "cut": "2026-11-02T08:30:00+00:00",
+        "terminal_candidates": 13
+      },
+      {
+        "cut": "2026-11-02T13:00:00+00:00",
+        "terminal_candidates": 14
+      },
+      {
+        "cut": "2026-11-02T16:00:00+00:00",
+        "terminal_candidates": 15
+      },
+      {
+        "cut": "2026-11-02T16:15:00+00:00",
+        "terminal_candidates": 16
+      },
+      {
+        "cut": "2026-11-02T16:30:00+00:00",
+        "terminal_candidates": 17
+      },
+      {
+        "cut": "2026-11-02T18:00:00+00:00",
+        "terminal_candidates": 18
+      },
+      {
+        "cut": "2026-11-03T01:00:00+00:00",
+        "terminal_candidates": 20
+      },
+      {
+        "cut": "2026-11-03T13:00:00+00:00",
+        "terminal_candidates": 23
+      },
+      {
+        "cut": "2026-11-04T03:00:00+00:00",
+        "terminal_candidates": 29
+      },
+      {
+        "cut": "2026-11-04T06:00:00+00:00",
+        "terminal_candidates": 31
+      },
+      {
+        "cut": "2026-11-04T08:00:00+00:00",
+        "terminal_candidates": 31
+      },
+      {
+        "cut": "2026-11-04T08:15:00+00:00",
+        "terminal_candidates": 32
+      },
+      {
+        "cut": "2026-11-04T15:00:00+00:00",
+        "terminal_candidates": 34
+      },
+      {
+        "cut": "2026-11-05T11:00:00+00:00",
+        "terminal_candidates": 35
+      },
+      {
+        "cut": "2026-11-05T13:00:00+00:00",
+        "terminal_candidates": 36
+      },
+      {
+        "cut": "2026-11-05T16:00:00+00:00",
+        "terminal_candidates": 37
+      },
+      {
+        "cut": "2026-11-05T19:45:00+00:00",
+        "terminal_candidates": 39
+      },
+      {
+        "cut": "2026-11-06T00:00:00+00:00",
+        "terminal_candidates": 40
+      },
+      {
+        "cut": "2026-11-06T08:00:00+00:00",
+        "terminal_candidates": 40
+      },
+      {
+        "cut": "2026-11-06T08:15:00+00:00",
+        "terminal_candidates": 41
+      },
+      {
+        "cut": "2026-11-06T13:00:00+00:00",
+        "terminal_candidates": 42
+      },
+      {
+        "cut": "2026-11-06T16:00:00+00:00",
+        "terminal_candidates": 42
+      },
+      {
+        "cut": "2026-11-06T17:00:00+00:00",
+        "terminal_candidates": 46
+      },
+      {
+        "cut": "2026-11-06T17:30:00+00:00",
+        "terminal_candidates": 46
+      },
+      {
+        "cut": "2026-11-07T08:00:00+00:00",
+        "terminal_candidates": 46
+      },
+      {
+        "cut": "2026-11-07T08:15:00+00:00",
+        "terminal_candidates": 47
+      },
+      {
+        "cut": "2026-11-07T10:00:00+00:00",
+        "terminal_candidates": 47
+      },
+      {
+        "cut": "2026-11-07T12:45:00+00:00",
+        "terminal_candidates": 48
+      },
+      {
+        "cut": "2026-11-07T13:00:00+00:00",
+        "terminal_candidates": 49
+      },
+      {
+        "cut": "2026-11-07T16:00:00+00:00",
+        "terminal_candidates": 50
+      },
+      {
+        "cut": "2026-11-07T22:00:00+00:00",
+        "terminal_candidates": 51
+      },
+      {
+        "cut": "2026-11-08T08:00:00+00:00",
+        "terminal_candidates": 52
+      },
+      {
+        "cut": "2026-11-08T14:00:00+00:00",
+        "terminal_candidates": 52
+      },
+      {
+        "cut": "2026-11-08T15:00:00+00:00",
+        "terminal_candidates": 53
+      },
+      {
+        "cut": "2026-11-08T17:00:00+00:00",
+        "terminal_candidates": 54
+      },
+      {
+        "cut": "2026-11-08T18:00:00+00:00",
+        "terminal_candidates": 55
+      },
+      {
+        "cut": "2026-11-08T22:00:00+00:00",
+        "terminal_candidates": 58
+      },
+      {
+        "cut": "2026-11-09T08:00:00+00:00",
+        "terminal_candidates": 59
+      },
+      {
+        "cut": "2026-11-09T13:00:00+00:00",
+        "terminal_candidates": 60
+      },
+      {
+        "cut": "2026-11-10T10:00:00+00:00",
+        "terminal_candidates": 60
+      },
+      {
+        "cut": "2026-11-10T10:30:00+00:00",
+        "terminal_candidates": 62
+      },
+      {
+        "cut": "2026-11-10T14:00:00+00:00",
+        "terminal_candidates": 63
+      },
+      {
+        "cut": "2026-11-10T14:45:00+00:00",
+        "terminal_candidates": 65
+      },
+      {
+        "cut": "2026-11-10T16:00:00+00:00",
+        "terminal_candidates": 67
+      },
+      {
+        "cut": "2026-11-11T08:00:00+00:00",
+        "terminal_candidates": 69
+      },
+      {
+        "cut": "2026-11-11T15:00:00+00:00",
+        "terminal_candidates": 69
+      },
+      {
+        "cut": "2026-11-11T15:45:00+00:00",
+        "terminal_candidates": 70
+      },
+      {
+        "cut": "2026-11-11T16:00:00+00:00",
+        "terminal_candidates": 70
+      },
+      {
+        "cut": "2026-11-11T16:15:00+00:00",
+        "terminal_candidates": 71
+      },
+      {
+        "cut": "2026-11-11T17:00:00+00:00",
+        "terminal_candidates": 71
+      }
+    ]
+  },
+  "parameters": {
+    "mode": "READ_ONLY_PREVIEW",
+    "role": "FIXED_IMPLEMENTATION_SNAPSHOT_NOT_TUNING_CONFIG",
+    "production_enabled": false,
+    "ladder": {
+      "status": "APPROVED",
+      "sweep": "1h",
+      "entry": "15m"
+    },
+    "htf_context": {
+      "status": "UNAPPROVED_CONTEXT",
+      "implemented": false,
+      "proposal": "4h/D premium-discount + unmitigated FVG OR OB",
+      "missing": [
+        "dealing-range anchors",
+        "premium-discount threshold and direction",
+        "FVG mitigation rules",
+        "OB numerical definition",
+        "combination and freshness rules"
+      ]
+    },
+    "inherited_v02": {
+      "status": "PROPOSED_NOT_V03_APPROVED",
+      "htf_swings_and_targets": "4h",
+      "swing_confirmation_left_right": [
+        1,
+        1
+      ],
+      "swing_lifetime_days": 20,
+      "fvg_lookback_hours_before_sweep_open": 12,
+      "entry_deadline_hours_after_sweep_close": 8,
+      "target_fvg_lifetime_days": 30,
+      "session_level_lifetime_hours": 24,
+      "previous_week_lifetime_hours": 168,
+      "window_selection": "REQUIRED_CLI_ARGUMENT: ny | crypto | all",
+      "ny": "Asia 20:00-00:00, London 02:00-05:00, PD local day; sweep-open windows 02:00-05:00 / 08:00-11:00 America/New_York; no PW",
+      "crypto": "Asia 00:00-07:00, London 07:00-12:00, PD UTC, PW Monday UTC; sweep-open windows 07:00-10:00 / 13:00-16:00 UTC",
+      "all": "UTC levels as crypto; no time filter; experimental control, NOT an approved production window"
+    },
+    "preview_semantics": {
+      "minimum_warmup_15m_bars": 768,
+      "liquidity_consumed": "first strict wick breach, even without reclaim or outside window",
+      "ifvg": "latest directional 3-candle gap, formed strictly before entry candle; previous close at/beyond the crossed boundary, new close strictly through that far boundary toward reversal",
+      "stop": "math.nextafter(maximum sweep excursion through entry, outward); NOT a tradeable tick-rounded stop",
+      "tp1_R": 2,
+      "tp1_fraction_with_tp2": 0.5,
+      "remaining_stop_after_tp1": "entry (planned only)",
+      "tp2": "nearest opposite untouched liquidity or 4h FVG near edge strictly beyond 2R, known by entry close; otherwise all at 2R",
+      "position_constraints": "NOT IMPLEMENTED: candidates are independent, no one-position or one-per-window execution simulation",
+      "costs_and_time_stop": "NOT SIMULATED; v0.2 reference only: taker+slippage 0.0007, maker 0.0002, time stop 120h"
+    }
+  },
+  "source": {
+    "venue": "MEXC_SPOT",
+    "symbol": "BTCUSDT",
+    "provenance": "REAL_PUBLIC_EXCHANGE_CANDLES",
+    "fetched_at_utc": "2026-11-11T17:26:29.706724+00:00",
+    "requests": [
+      "https://api.mexc.com/api/v3/klines?symbol=BTCUSDT&interval=15m&limit=500&startTime=1792689300000&endTime=1793139299999",
+      "https://api.mexc.com/api/v3/klines?symbol=BTCUSDT&interval=15m&limit=500&startTime=1793139300000&endTime=1793589299999",
+      "https://api.mexc.com/api/v3/klines?symbol=BTCUSDT&interval=15m&limit=500&startTime=1793589300000&endTime=1794039299999",
+      "https://api.mexc.com/api/v3/klines?symbol=BTCUSDT&interval=15m&limit=500&startTime=1794039300000&endTime=1794417299999"
+    ]
+  },
+  "generated_at_utc": "2026-11-11T17:35:15.997064+00:00",
+  "limitations": [
+    "Не бэктест доходности; нет позиций, fills, комиссий и отправки.",
+    "Один кандидат на уровень: совпадающие уровни не объединяются.",
+    "Нет HTF context gate: все кандидаты заблокированы для production."
+  ]
+}

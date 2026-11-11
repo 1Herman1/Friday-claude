@@ -1,0 +1,39 @@
+{
+  "mode": "READ_ONLY_PREVIEW",
+  "role": "FIXED_IMPLEMENTATION_SNAPSHOT_NOT_TUNING_CONFIG",
+  "production_enabled": false,
+  "ladder": {"status": "APPROVED", "sweep": "1h", "entry": "15m"},
+  "htf_context": {
+    "status": "UNAPPROVED_CONTEXT",
+    "implemented": false,
+    "proposal": "4h/D premium-discount + unmitigated FVG OR OB",
+    "missing": ["dealing-range anchors", "premium-discount threshold and direction", "FVG mitigation rules", "OB numerical definition", "combination and freshness rules"]
+  },
+  "inherited_v02": {
+    "status": "PROPOSED_NOT_V03_APPROVED",
+    "htf_swings_and_targets": "4h",
+    "swing_confirmation_left_right": [1, 1],
+    "swing_lifetime_days": 20,
+    "fvg_lookback_hours_before_sweep_open": 12,
+    "entry_deadline_hours_after_sweep_close": 8,
+    "target_fvg_lifetime_days": 30,
+    "session_level_lifetime_hours": 24,
+    "previous_week_lifetime_hours": 168,
+    "window_selection": "REQUIRED_CLI_ARGUMENT: ny | crypto | all",
+    "ny": "Asia 20:00-00:00, London 02:00-05:00, PD local day; sweep-open windows 02:00-05:00 / 08:00-11:00 America/New_York; no PW",
+    "crypto": "Asia 00:00-07:00, London 07:00-12:00, PD UTC, PW Monday UTC; sweep-open windows 07:00-10:00 / 13:00-16:00 UTC",
+    "all": "UTC levels as crypto; no time filter; experimental control, NOT an approved production window"
+  },
+  "preview_semantics": {
+    "minimum_warmup_15m_bars": 768,
+    "liquidity_consumed": "first strict wick breach, even without reclaim or outside window",
+    "ifvg": "latest directional 3-candle gap, formed strictly before entry candle; previous close at/beyond the crossed boundary, new close strictly through that far boundary toward reversal",
+    "stop": "math.nextafter(maximum sweep excursion through entry, outward); NOT a tradeable tick-rounded stop",
+    "tp1_R": 2,
+    "tp1_fraction_with_tp2": 0.5,
+    "remaining_stop_after_tp1": "entry (planned only)",
+    "tp2": "nearest opposite untouched liquidity or 4h FVG near edge strictly beyond 2R, known by entry close; otherwise all at 2R",
+    "position_constraints": "NOT IMPLEMENTED: candidates are independent, no one-position or one-per-window execution simulation",
+    "costs_and_time_stop": "NOT SIMULATED; v0.2 reference only: taker+slippage 0.0007, maker 0.0002, time stop 120h"
+  }
+}
