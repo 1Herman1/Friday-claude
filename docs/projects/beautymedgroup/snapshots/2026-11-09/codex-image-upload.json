@@ -1,0 +1,216 @@
+{
+  "id": 1760,
+  "date": "2026-11-11T21:44:10",
+  "date_gmt": "2026-11-11T18:44:10",
+  "guid": {
+    "rendered": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex.jpg",
+    "raw": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex.jpg"
+  },
+  "modified": "2026-11-11T21:44:10",
+  "modified_gmt": "2026-11-11T18:44:10",
+  "slug": "beautymedgroup-cooperation-isseimi-codex",
+  "status": "inherit",
+  "type": "attachment",
+  "link": "https://beautymedgroup.ru/beautymedgroup-cooperation-isseimi-codex/",
+  "title": {
+    "raw": "beautymedgroup-cooperation-isseimi-codex",
+    "rendered": "beautymedgroup-cooperation-isseimi-codex"
+  },
+  "author": 21,
+  "featured_media": 0,
+  "comment_status": "open",
+  "ping_status": "closed",
+  "template": "",
+  "meta": [],
+  "permalink_template": "https://beautymedgroup.ru/?attachment_id=1760",
+  "generated_slug": "beautymedgroup-cooperation-isseimi-codex",
+  "class_list": [
+    "post-1760",
+    "attachment",
+    "type-attachment",
+    "status-inherit",
+    "hentry"
+  ],
+  "acf": [],
+  "description": {
+    "raw": "",
+    "rendered": "<p class=\"attachment\"><a href='https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex.jpg'><img loading=\"lazy\" decoding=\"async\" width=\"300\" height=\"169\" src=\"https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-300x169.jpg\" class=\"attachment-medium size-medium\" alt=\"\" srcset=\"https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-300x169.jpg 300w, https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-1024x576.jpg 1024w, https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-768x432.jpg 768w, https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-1536x864.jpg 1536w, https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-600x338.jpg 600w, https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex.jpg 1672w\" sizes=\"auto, (max-width: 300px) 100vw, 300px\" /></a></p>\n"
+  },
+  "caption": {
+    "raw": "",
+    "rendered": ""
+  },
+  "alt_text": "",
+  "media_type": "image",
+  "mime_type": "image/jpeg",
+  "media_details": {
+    "width": 1672,
+    "height": 941,
+    "file": "2026/11/beautymedgroup-cooperation-isseimi-codex.jpg",
+    "filesize": 515511,
+    "sizes": {
+      "medium": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-300x169.jpg",
+        "width": 300,
+        "height": 169,
+        "filesize": 12497,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-300x169.jpg"
+      },
+      "large": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-1024x576.jpg",
+        "width": 1024,
+        "height": 576,
+        "filesize": 98734,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-1024x576.jpg"
+      },
+      "thumbnail": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-150x150.jpg",
+        "width": 150,
+        "height": 150,
+        "filesize": 5987,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-150x150.jpg"
+      },
+      "medium_large": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-768x432.jpg",
+        "width": 768,
+        "height": 432,
+        "filesize": 60084,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-768x432.jpg"
+      },
+      "1536x1536": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-1536x864.jpg",
+        "width": 1536,
+        "height": 864,
+        "filesize": 196739,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-1536x864.jpg"
+      },
+      "thumb-320x177": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-320x177.jpg",
+        "width": 320,
+        "height": 177,
+        "filesize": 13697,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-320x177.jpg"
+      },
+      "woocommerce_thumbnail": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-300x300.jpg",
+        "width": 300,
+        "height": 300,
+        "filesize": 17537,
+        "uncropped": false,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-300x300.jpg"
+      },
+      "woocommerce_single": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-600x338.jpg",
+        "width": 600,
+        "height": 338,
+        "filesize": 39919,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-600x338.jpg"
+      },
+      "woocommerce_gallery_thumbnail": {
+        "file": "beautymedgroup-cooperation-isseimi-codex-100x100.jpg",
+        "width": 100,
+        "height": 100,
+        "filesize": 3400,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex-100x100.jpg"
+      },
+      "full": {
+        "file": "beautymedgroup-cooperation-isseimi-codex.jpg",
+        "width": 1672,
+        "height": 941,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex.jpg"
+      }
+    },
+    "image_meta": {
+      "aperture": "0",
+      "credit": "",
+      "camera": "",
+      "caption": "",
+      "created_timestamp": "0",
+      "copyright": "",
+      "focal_length": "0",
+      "iso": "0",
+      "shutter_speed": "0",
+      "title": "",
+      "orientation": "0",
+      "keywords": [],
+      "alt": ""
+    }
+  },
+  "post": null,
+  "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/beautymedgroup-cooperation-isseimi-codex.jpg",
+  "missing_image_sizes": [],
+  "filename": "beautymedgroup-cooperation-isseimi-codex.jpg",
+  "filesize": 515511,
+  "exif_orientation": 1,
+  "image_output_format": null,
+  "image_save_progressive": false,
+  "image_quality": {
+    "default": 82,
+    "sizes": []
+  },
+  "_links": {
+    "self": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media/1760",
+        "targetHints": {
+          "allow": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/types/attachment"
+      }
+    ],
+    "author": [
+      {
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/users/21"
+      }
+    ],
+    "replies": [
+      {
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/comments?post=1760"
+      }
+    ],
+    "wp:action-unfiltered-html": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media/1760"
+      }
+    ],
+    "wp:action-assign-author": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media/1760"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}
