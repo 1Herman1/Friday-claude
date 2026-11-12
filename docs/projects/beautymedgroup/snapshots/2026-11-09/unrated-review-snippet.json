@@ -1,0 +1,32 @@
+{
+  "id": 8,
+  "name": "BMG: unrated anonymous review support",
+  "desc": "Allow unspecified review rating; hide grade only for marked unrated cards. Existing ratings unchanged.",
+  "code": "add_filter('acf/load_field/key=field_63ca52036f995', function ($field) {\n    $field['allow_null'] = 1;\n    $field['placeholder'] = 'Не указан';\n    $field['default_value'] = '';\n    return $field;\n});\nadd_action('wp_head', function () {\n    echo '<style id=\"bmg-unrated-reviews\">.main-reviews__item:has(.bmg-review-no-rating) .reviews-clients__grade,.main-reviews__item:has(.bmg-review-no-rating) .main-reviews__grade{display:none!important}</style>';\n}, 21);\nadd_filter('paginate_links', function ($link) {\n    return preg_replace('~(/reviews)/+(\\d+)/?(?=\\?|$)~', '$1/page/$2/', $link);\n});\n",
+  "tags": [
+    "BeautyMedGroup",
+    "reviews"
+  ],
+  "scope": "global",
+  "condition_id": 0,
+  "active": true,
+  "trashed": false,
+  "locked": false,
+  "priority": 10,
+  "network": false,
+  "shared_network": false,
+  "modified": "2026-11-12T20:51:39+00:00",
+  "last_active": "0",
+  "code_error": null,
+  "code_error_trace": null,
+  "created_by": {
+    "id": 21,
+    "display_name": "BeautyMedGroup",
+    "avatar_url": "https://secure.gravatar.com/avatar/cce8b18fa2692c494a68d160c4723692589aff6317491cf2a6c4cb113ce84bdd?s=32&d=mm&r=g"
+  },
+  "updated_by": {
+    "id": 21,
+    "display_name": "BeautyMedGroup",
+    "avatar_url": "https://secure.gravatar.com/avatar/cce8b18fa2692c494a68d160c4723692589aff6317491cf2a6c4cb113ce84bdd?s=32&d=mm&r=g"
+  }
+}
