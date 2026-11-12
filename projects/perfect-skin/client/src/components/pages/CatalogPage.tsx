@@ -12,7 +12,7 @@ import type { CatalogFilters } from '@/hooks/useCatalogList'
 
 export function CatalogPage() {
   const { slug } = useParams()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { user, isLoading } = useAuth()
 
@@ -32,6 +32,55 @@ export function CatalogPage() {
       navigate('/pro', { replace: true })
     }
   }, [isPro, user, isLoading, navigate])
+
+  return !slug ? <CatalogIndex /> : <CatalogListing slug={slug} isPro={isPro} />
+}
+
+function CatalogIndex() {
+  const { data: categories, loading, error } = useCatalogTree()
+
+  if (loading) {
+    return (
+      <div className="container-app py-12 md:py-24">
+        <div className="animate-pulse space-y-8">
+          <div className="h-32 bg-gray-200 rounded-lg" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-48 bg-gray-200 rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container-app py-12 md:py-24">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <h2 className="font-heading font-bold text-red-900 mb-2">Ошибка загрузки</h2>
+          <p className="text-red-800 mb-4">{error.message}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-1 py-0.5 bg-red-900 text-white rounded-full hover:bg-red-800 transition-colors"
+          >
+            Повторить
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="container-app py-12 md:py-24">
+      <h1 className="text-display font-heading font-bold mb-2 md:mb-3">Каталог</h1>
+      {categories && <CatalogGrid categories={categories} />}
+    </div>
+  )
+}
+
+function CatalogListing({ slug, isPro }: { slug: string; isPro: boolean }) {
+  const [searchParams, setSearchParams] = useSearchParams()
 
   // Parse filters from URL
   const filters = useMemo<CatalogFilters>(() => {
@@ -55,50 +104,6 @@ export function CatalogPage() {
     const { sort, limit, offset, ...rest } = filters
     return rest
   }, [filters])
-
-  // If no slug, show categories grid
-  if (!slug) {
-    const { data: categories, loading, error } = useCatalogTree()
-
-    if (loading) {
-      return (
-        <div className="container-app py-12 md:py-24">
-          <div className="animate-pulse space-y-8">
-            <div className="h-32 bg-gray-200 rounded-lg" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-48 bg-gray-200 rounded-lg" />
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    }
-
-    if (error) {
-      return (
-        <div className="container-app py-12 md:py-24">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <h2 className="font-heading font-bold text-red-900 mb-2">Ошибка загрузки</h2>
-            <p className="text-red-800 mb-4">{error.message}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-1 py-0.5 bg-red-900 text-white rounded-full hover:bg-red-800 transition-colors"
-            >
-              Повторить
-            </button>
-          </div>
-        </div>
-      )
-    }
-
-    return (
-      <div className="container-app py-12 md:py-24">
-        <h1 className="text-display font-heading font-bold mb-2 md:mb-3">Каталог</h1>
-        {categories && <CatalogGrid categories={categories} />}
-      </div>
-    )
-  }
 
   // Show listing with filters
   const { data: products, loading: productsLoading, error: productsError } = useCatalogList(filters)
