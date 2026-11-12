@@ -98,6 +98,20 @@
   "name": "Friday - AI Agents sytem (старый id)",
   "slug": "friday"
  },
+ "-1004383896078": {
+  "name": "Агенство H&B team",
+  "slug": "агенство-h-b-team",
+  "role": "Рабочие обсуждения студии H&B"
+ },
+ "-1004383896078:150": {
+  "name": "Обучение сотрудника — H&B Learning Department",
+  "role": "Программа обучения, практика, ИИ-наставник и требования к учебной оболочке",
+  "files": [
+   "docs/training/hb-learning-department/README.md",
+   "docs/training/hb-learning-department/course.md",
+   "docs/training/hb-learning-department/mentor-and-interface.md"
+  ]
+ },
  "7098788894": {
   "name": "Личка Германа",
   "slug": "dm"
