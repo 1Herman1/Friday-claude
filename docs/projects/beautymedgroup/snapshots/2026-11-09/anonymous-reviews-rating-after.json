@@ -1,0 +1,41 @@
+{
+  "confirmation": "Клиент подтвердил оценки 5/5 для всех четырёх отзывов (сообщение Германа).",
+  "checks": [
+    {
+      "id": 1764,
+      "status": "publish",
+      "rating": "5",
+      "title": "Автор не указан",
+      "avatar": "1765",
+      "contentUnchangedExceptMarker": true,
+      "date": ""
+    },
+    {
+      "id": 1766,
+      "status": "publish",
+      "rating": "5",
+      "title": "Автор не указан",
+      "avatar": "1765",
+      "contentUnchangedExceptMarker": true,
+      "date": ""
+    },
+    {
+      "id": 1767,
+      "status": "publish",
+      "rating": "5",
+      "title": "Автор не указан",
+      "avatar": "1765",
+      "contentUnchangedExceptMarker": true,
+      "date": ""
+    },
+    {
+      "id": 1768,
+      "status": "publish",
+      "rating": "5",
+      "title": "Автор не указан",
+      "avatar": "1765",
+      "contentUnchangedExceptMarker": true,
+      "date": ""
+    }
+  ]
+}
