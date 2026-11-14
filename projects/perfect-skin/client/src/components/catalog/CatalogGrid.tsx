@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { CatalogEditorial } from './CatalogEditorial'
 import { pluralize } from '@/lib/format'
 import type { CategoriesTreeResponse } from '@/types/api'
 
@@ -7,14 +9,22 @@ interface CatalogGridProps {
 }
 
 export function CatalogGrid({ categories }: CatalogGridProps) {
-  // First category is "all" (largest)
-  const firstCategory = categories[0]
-  const restCategories = categories.slice(1)
+  const [desktop, setDesktop] = useState(() => window.matchMedia('(min-width: 1024px)').matches)
+  useEffect(() => {
+    const query = window.matchMedia('(min-width: 1024px)')
+    const change = () => setDesktop(query.matches)
+    query.addEventListener('change', change)
+    return () => query.removeEventListener('change', change)
+  }, [])
+  return desktop ? <CatalogEditorial categories={categories} /> : <MobileCatalogGrid categories={categories} />
+}
+
+function MobileCatalogGrid({ categories }: CatalogGridProps) {
 
   return (
     <div className="space-y-8">
-      {/* "All" category - largest */}
-      {firstCategory && (
+      {/* Preserve mobile geometry; All is not a real API category. */}
+      {categories.length > 0 && (
         <Link
           to={`/catalog/all`}
           className="block bg-card rounded-block overflow-hidden transition-transform duration-200 hover:-translate-y-1"
@@ -24,7 +34,7 @@ export function CatalogGrid({ categories }: CatalogGridProps) {
               <h2 className="text-heading font-heading font-bold text-foreground text-4xl mb-2 group-hover:-translate-y-1 transition-transform duration-200">
                 Все средства
               </h2>
-              <p className="text-foreground/70 text-lg">{firstCategory.productCount} {pluralize(firstCategory.productCount, ['товар', 'товара', 'товаров'])}</p>
+
             </div>
           </div>
         </Link>
@@ -32,7 +42,7 @@ export function CatalogGrid({ categories }: CatalogGridProps) {
 
       {/* Rest categories - grid 2x3 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {restCategories.map(category => (
+        {categories.map(category => (
           <Link
             key={category.slug}
             to={`/catalog/${category.slug}`}

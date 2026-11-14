@@ -42,15 +42,15 @@ try {
   }
   const index = async () => {
     await page.waitForURL(`${base.origin}/catalog`)
-    await page.getByRole('heading', { name: 'Каталог', exact: true, level: 1 }).waitFor()
+    await page.getByRole('heading', { name: 'Каталог Perfect Skin', exact: true, level: 1 }).waitFor()
     await page.locator('main a[href="/catalog/all"]').waitFor()
     await healthy()
   }
   const listing = async tile => {
     await page.waitForURL(`${base.origin}${tile.href}`)
-    await page.getByRole('heading', { name: tile.title, exact: true, level: 1 }).waitFor()
+    await page.getByRole('heading', { name: tile.href.startsWith('/catalog/all') ? 'Каталог Perfect Skin' : tile.title, exact: true, level: 1 }).waitFor()
     await page.waitForFunction(() => /Показано\s+\d+\s+из\s+\d+/.test(document.querySelector('main')?.textContent || ''))
-    if (tile.href === '/catalog/all' || tile.count > 0) {
+    if (tile.href.startsWith('/catalog/all') || tile.count > 0) {
       await page.locator('main a[href^="/product/"]').first().waitFor()
     } else {
       await page.getByRole('heading', { name: 'Подберём под вашу кожу', exact: true }).waitFor()
@@ -69,7 +69,7 @@ try {
   assert.equal(new Set(tiles.map(tile => tile.href)).size, tiles.length, 'Duplicate tile URLs')
   assert(tiles.some(tile => tile.href === '/catalog/all'), 'Missing all-products tile')
   for (const tile of tiles) {
-    assert(tile.title && Number.isFinite(tile.count), 'Tile must have a title and product count')
+    assert(tile.title && (tile.href.startsWith('/catalog/all') || Number.isFinite(tile.count)), 'Category tiles need real product counts; editorial tiles must not invent totals')
     await page.locator(`main a[href="${tile.href}"]`).click()
     await listing(tile)
     await page.goBack()

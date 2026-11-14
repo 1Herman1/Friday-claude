@@ -2,6 +2,7 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { useMemo, useEffect } from 'react'
 import { useAuth, STAFF_ROLES } from '@/context/AuthContext'
 import { CatalogGrid } from '@/components/catalog/CatalogGrid'
+import { CatalogHeading } from '@/components/catalog/CatalogHeading'
 import { ProductGrid } from '@/components/catalog/ProductGrid'
 import { Filters } from '@/components/catalog/Filters'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
@@ -72,8 +73,8 @@ function CatalogIndex() {
   }
 
   return (
-    <div className="container-app py-12 md:py-24">
-      <h1 className="text-display font-heading font-bold mb-2 md:mb-3">Каталог</h1>
+    <div className="container-app py-12 md:py-24 catalog-index">
+      <CatalogHeading mobileTitle="Каталог" />
       {categories && <CatalogGrid categories={categories} />}
     </div>
   )
@@ -187,7 +188,7 @@ function CatalogListing({ slug, isPro }: { slug: string; isPro: boolean }) {
   }
 
   return (
-    <div className="container-app py-12 md:py-24">
+    <div className="container-app py-12 md:py-24 catalog-listing">
       {/* Header */}
       <div className="mb-6">
         {slug && slug !== 'all' && (
@@ -199,15 +200,10 @@ function CatalogListing({ slug, isPro }: { slug: string; isPro: boolean }) {
             ]}
           />
         )}
-        <h1 className="text-display font-heading font-bold mb-2 md:mb-3">
-          {filters.pro
-            ? 'Для кабинета'
-            : filters.q
-              ? `Результаты поиска: „${filters.q}"`
-              : slug === 'all'
-                ? 'Все средства'
-                : selectedCategoryName || 'Каталог'}
-        </h1>
+        <CatalogHeading
+          mobileTitle={filters.pro ? 'Для кабинета' : filters.q ? `Результаты поиска: „${filters.q}“` : slug === 'all' ? 'Все средства' : selectedCategoryName || 'Каталог'}
+          title={filters.pro ? 'Для кабинета' : filters.q ? `Результаты поиска: „${filters.q}“` : slug === 'all' ? undefined : selectedCategoryName || 'Каталог'}
+        />
         {filters.q && (
           <button
             onClick={handleClearSearch}
