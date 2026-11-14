@@ -1,0 +1,6 @@
+test_lesson_fixed_day_detail_fallback_without_path_input (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.518s
+
+OK

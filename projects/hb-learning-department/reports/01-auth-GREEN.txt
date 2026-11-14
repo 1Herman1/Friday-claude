@@ -1,0 +1,6 @@
+test_bootstrap_auth_roles (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.517s
+
+OK

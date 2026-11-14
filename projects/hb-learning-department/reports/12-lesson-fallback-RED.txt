@@ -1,0 +1,14 @@
+test_lesson_fixed_day_detail_fallback_without_path_input (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_lesson_fixed_day_detail_fallback_without_path_input (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 194, in test_lesson_fixed_day_detail_fallback_without_path_input
+    self.assertEqual(self.req('/api/lesson?day=1')[0], 200)
+AssertionError: 404 != 200
+
+----------------------------------------------------------------------
+Ran 1 test in 0.517s
+
+FAILED (failures=1)

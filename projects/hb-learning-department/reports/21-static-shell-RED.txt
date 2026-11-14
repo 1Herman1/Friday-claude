@@ -1,0 +1,14 @@
+test_public_ui_has_no_secrets_and_preview_sandbox (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_public_ui_has_no_secrets_and_preview_sandbox (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 324, in test_public_ui_has_no_secrets_and_preview_sandbox
+    self.assertEqual(status, 200)
+AssertionError: 401 != 200
+
+----------------------------------------------------------------------
+Ran 1 test in 0.517s
+
+FAILED (failures=1)

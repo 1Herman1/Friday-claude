@@ -1,0 +1,6 @@
+test_production_requires_24_acceptances_and_explicit_owner_attestation (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.567s
+
+OK

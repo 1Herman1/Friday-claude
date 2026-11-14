@@ -1,0 +1,15 @@
+test_bootstrap_auth_roles (test_app.APITest) ... ok
+test_course_extracts_exactly_24_days (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_course_extracts_exactly_24_days (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 54, in test_course_extracts_exactly_24_days
+    self.assertEqual(status, 200)
+AssertionError: 404 != 200
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.026s
+
+FAILED (failures=1)

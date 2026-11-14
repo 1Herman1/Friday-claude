@@ -1,0 +1,14 @@
+test_request_body_limit (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_request_body_limit (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 314, in test_request_body_limit
+    self.assertEqual(self.req('/api/messages', {'text': 'a' * (256 * 1024)})[0], 413)
+AssertionError: 400 != 413
+
+----------------------------------------------------------------------
+Ran 1 test in 0.513s
+
+FAILED (failures=1)

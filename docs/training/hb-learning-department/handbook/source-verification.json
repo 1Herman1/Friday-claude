@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "title": "MDN: files and paths",
+    "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Dealing_with_files",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Dealing_with_files",
+    "status": 200,
+    "chars": 17923
+  },
+  {
+    "id": 2,
+    "title": "Git: git diff",
+    "url": "https://git-scm.com/docs/git-diff",
+    "status": 200,
+    "final_url": "https://git-scm.com/docs/git-diff",
+    "chars": 61274,
+    "initial_error": "The read operation timed out"
+  },
+  {
+    "id": 3,
+    "title": "npm: package.json",
+    "url": "https://docs.npmjs.com/cli/v11/configuring-npm/package-json",
+    "final_url": "https://docs.npmjs.com/cli/v11/configuring-npm/package-json/",
+    "status": 200,
+    "chars": 34475
+  },
+  {
+    "id": 4,
+    "title": "MDN: HTTP overview",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
+    "status": 200,
+    "chars": 14044
+  },
+  {
+    "id": 5,
+    "title": "MDN: Internet and DNS",
+    "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/How_does_the_Internet_work",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/How_does_the_Internet_work",
+    "status": 200,
+    "chars": 9245
+  },
+  {
+    "id": 6,
+    "title": "MDN: HTML basics",
+    "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Creating_the_content",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Creating_the_content",
+    "status": 200,
+    "chars": 11856
+  },
+  {
+    "id": 7,
+    "title": "MDN: CSS box model",
+    "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model",
+    "status": 200,
+    "chars": 20865
+  },
+  {
+    "id": 8,
+    "title": "MDN: responsive design",
+    "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design",
+    "status": 200,
+    "chars": 22006
+  },
+  {
+    "id": 9,
+    "title": "MDN: DOM introduction",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model",
+    "status": 200,
+    "chars": 21222
+  },
+  {
+    "id": 10,
+    "title": "MDN: JavaScript grammar and types",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types",
+    "status": 200,
+    "chars": 27402
+  },
+  {
+    "id": 11,
+    "title": "MDN: functions",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
+    "status": 200,
+    "chars": 22902
+  },
+  {
+    "id": 12,
+    "title": "MDN: indexed collections",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections",
+    "status": 200,
+    "chars": 23150
+  },
+  {
+    "id": 13,
+    "title": "MDN: promises",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises",
+    "status": 200,
+    "chars": 21812
+  },
+  {
+    "id": 14,
+    "title": "MDN: Fetch API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch",
+    "status": 200,
+    "chars": 22747
+  },
+  {
+    "id": 15,
+    "title": "TypeScript: everyday types",
+    "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+    "final_url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+    "status": 200,
+    "chars": 26716
+  },
+  {
+    "id": 16,
+    "title": "React: Quick Start",
+    "url": "https://react.dev/learn",
+    "final_url": "https://react.dev/learn",
+    "status": 200,
+    "chars": 12440
+  },
+  {
+    "id": 17,
+    "title": "OWASP: input validation",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+    "final_url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+    "status": 200,
+    "chars": 6648
+  },
+  {
+    "id": 18,
+    "title": "PostgreSQL: tables",
+    "url": "https://www.postgresql.org/docs/current/ddl-basics.html",
+    "final_url": "https://www.postgresql.org/docs/current/ddl-basics.html",
+    "status": 200,
+    "chars": 5208
+  },
+  {
+    "id": 19,
+    "title": "PostgreSQL: constraints",
+    "url": "https://www.postgresql.org/docs/current/ddl-constraints.html",
+    "status": 200,
+    "final_url": "https://www.postgresql.org/docs/current/ddl-constraints.html",
+    "chars": 23927,
+    "initial_error": "<urlopen error _ssl.c:1112: The handshake operation timed out>"
+  },
+  {
+    "id": 20,
+    "title": "PostgreSQL: transactions",
+    "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
+    "final_url": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
+    "status": 200,
+    "chars": 7090
+  },
+  {
+    "id": 21,
+    "title": "Stripe: webhooks",
+    "url": "https://docs.stripe.com/webhooks",
+    "final_url": "https://docs.stripe.com/webhooks",
+    "status": 200,
+    "chars": 23010
+  },
+  {
+    "id": 22,
+    "title": "W3C WAI: page structure",
+    "url": "https://www.w3.org/WAI/tutorials/page-structure/",
+    "final_url": "https://www.w3.org/WAI/tutorials/page-structure/",
+    "status": 200,
+    "chars": 2400
+  },
+  {
+    "id": 23,
+    "title": "W3C WAI: forms",
+    "url": "https://www.w3.org/WAI/tutorials/forms/",
+    "final_url": "https://www.w3.org/WAI/tutorials/forms/",
+    "status": 200,
+    "chars": 3271
+  },
+  {
+    "id": 24,
+    "title": "MDN: reduced motion",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion",
+    "final_url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion",
+    "status": 200,
+    "chars": 5014
+  },
+  {
+    "id": 25,
+    "title": "Playwright: best practices",
+    "url": "https://playwright.dev/docs/best-practices",
+    "final_url": "https://playwright.dev/docs/best-practices",
+    "status": 200,
+    "chars": 15113
+  },
+  {
+    "id": 26,
+    "title": "Vite: production build",
+    "url": "https://vite.dev/guide/build",
+    "final_url": "https://vite.dev/guide/build",
+    "status": 200,
+    "chars": 11960
+  }
+]

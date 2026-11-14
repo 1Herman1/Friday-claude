@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "browser": "Chromium headless",
+  "fixture": "Disposable generated local credentials, demonstration project only",
+  "checks": [
+    "Student login; 24 lessons; production disabled; real course text",
+    "Message persists as text, no HTML injection",
+    "Create own project; save HTML; sandboxed preview; script cannot escape",
+    "Submit snapshot/evidence; owner accepts; 1/24 progress; early production blocked",
+    "Authenticated PDF download matches built handbook byte-for-byte",
+    "Provider-off error is explicit; durable queue; no fabricated AI response",
+    "Reload restores dialogue, project and accepted progress",
+    "390px responsive layout has no horizontal overflow; no uncaught page errors"
+  ],
+  "screenshots": [
+    "desktop-learning.png",
+    "desktop-workspace.png",
+    "mobile-learning.png"
+  ],
+  "live_model_tested": false,
+  "telegram_tested": false
+}

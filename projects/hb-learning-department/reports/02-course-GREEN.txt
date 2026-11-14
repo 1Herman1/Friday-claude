@@ -1,0 +1,7 @@
+test_bootstrap_auth_roles (test_app.APITest) ... ok
+test_course_extracts_exactly_24_days (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.031s
+
+OK

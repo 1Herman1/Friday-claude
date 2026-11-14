@@ -1,0 +1,10 @@
+test_bootstrap_auth_roles (test_app.APITest) ... ok
+test_course_extracts_exactly_24_days (test_app.APITest) ... ok
+test_dialogue_persists_and_cannot_spoof_author (test_app.APITest) ... ok
+test_message_empty_is_rejected (test_app.APITest) ... ok
+test_message_length_limit (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 2.568s
+
+OK

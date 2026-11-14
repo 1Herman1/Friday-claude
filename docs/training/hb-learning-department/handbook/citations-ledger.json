@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Dealing_with_files",
+      "title": "MDN: files and paths",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 2,
+      "url": "https://docs.npmjs.com/cli/v11/configuring-npm/package-json",
+      "title": "npm: package.json",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 3,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
+      "title": "MDN: HTTP overview",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 4,
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/How_does_the_Internet_work",
+      "title": "MDN: Internet and DNS",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 5,
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website/Creating_the_content",
+      "title": "MDN: HTML basics",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 6,
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model",
+      "title": "MDN: CSS box model",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 7,
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design",
+      "title": "MDN: responsive design",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 8,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction",
+      "title": "MDN: DOM introduction",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 9,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types",
+      "title": "MDN: JavaScript grammar and types",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 10,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
+      "title": "MDN: functions",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 11,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections",
+      "title": "MDN: indexed collections",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 12,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises",
+      "title": "MDN: promises",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 13,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch",
+      "title": "MDN: Fetch API",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 14,
+      "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+      "title": "TypeScript: everyday types",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 15,
+      "url": "https://react.dev/learn",
+      "title": "React: Quick Start",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 16,
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+      "title": "OWASP: input validation",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 17,
+      "url": "https://www.postgresql.org/docs/current/ddl-basics.html",
+      "title": "PostgreSQL: tables",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 18,
+      "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
+      "title": "PostgreSQL: transactions",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 19,
+      "url": "https://docs.stripe.com/webhooks",
+      "title": "Stripe: webhooks",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 20,
+      "url": "https://www.w3.org/WAI/tutorials/page-structure",
+      "title": "W3C WAI: page structure",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 21,
+      "url": "https://www.w3.org/WAI/tutorials/forms",
+      "title": "W3C WAI: forms",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 22,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion",
+      "title": "MDN: reduced motion",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 23,
+      "url": "https://playwright.dev/docs/best-practices",
+      "title": "Playwright: best practices",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 24,
+      "url": "https://vite.dev/guide/build",
+      "title": "Vite: production build",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 25,
+      "url": "https://git-scm.com/docs/git-diff",
+      "title": "Git: git diff",
+      "accessed": "2026-11-13"
+    },
+    {
+      "id": 26,
+      "url": "https://www.postgresql.org/docs/current/ddl-constraints.html",
+      "title": "PostgreSQL: constraints",
+      "accessed": "2026-11-13"
+    }
+  ]
+}

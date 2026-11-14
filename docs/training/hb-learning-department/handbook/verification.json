@@ -1,0 +1,28 @@
+[
+  {
+    "file": "HB-Web-Development-Handbook.pdf",
+    "pages": 39,
+    "bytes": 295853,
+    "all_pages_have_text": true,
+    "chapters": 18,
+    "terms": 100,
+    "clickable_external_sources": 26,
+    "rendered_review_pages": [
+      1,
+      2,
+      25,
+      39
+    ]
+  },
+  {
+    "file": "HB-Student-Workbook-24-Days.pdf",
+    "pages": 26,
+    "bytes": 154276,
+    "all_pages_have_text": true,
+    "days": 24,
+    "rendered_review_pages": [
+      1,
+      3
+    ]
+  }
+]

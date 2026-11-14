@@ -1,0 +1,6 @@
+test_student_cannot_decide_even_with_owner_role_in_body (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.517s
+
+OK

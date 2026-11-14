@@ -1,0 +1,14 @@
+test_owner_decision_validated_and_immutable (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_owner_decision_validated_and_immutable (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 182, in test_owner_decision_validated_and_immutable
+    self.assertEqual(self.req('/api/decision', {'id': sid, 'decision': 'whatever', 'note': 'x'}, role='owner')[0], 400)
+AssertionError: 200 != 400
+
+----------------------------------------------------------------------
+Ran 1 test in 0.518s
+
+FAILED (failures=1)

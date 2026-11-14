@@ -1,0 +1,6 @@
+test_submission_retry_is_idempotent (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.518s
+
+OK

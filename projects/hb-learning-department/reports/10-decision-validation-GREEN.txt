@@ -1,0 +1,6 @@
+test_owner_decision_validated_and_immutable (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.520s
+
+OK

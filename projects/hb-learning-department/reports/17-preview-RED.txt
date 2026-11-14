@@ -1,0 +1,14 @@
+test_preview_is_html_css_only_and_cannot_navigate_or_script (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_preview_is_html_css_only_and_cannot_navigate_or_script (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 297, in test_preview_is_html_css_only_and_cannot_navigate_or_script
+    self.assertEqual(status, 200)
+AssertionError: 404 != 200
+
+----------------------------------------------------------------------
+Ran 1 test in 0.519s
+
+FAILED (failures=1)

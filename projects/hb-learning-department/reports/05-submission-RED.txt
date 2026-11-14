@@ -1,0 +1,25 @@
+test_bootstrap_auth_roles (test_app.APITest) ... ok
+test_course_extracts_exactly_24_days (test_app.APITest) ... ok
+test_dialogue_persists_and_cannot_spoof_author (test_app.APITest) ... ok
+test_duplicate_project_does_not_replace_files (test_app.APITest) ... ok
+test_file_before_project_rejected (test_app.APITest) ... ok
+test_file_size_and_count_limits (test_app.APITest) ... ok
+test_message_empty_is_rejected (test_app.APITest) ... ok
+test_message_length_limit (test_app.APITest) ... ok
+test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) ... ok
+test_project_create_and_file_roundtrip (test_app.APITest) ... ok
+test_submission_snapshot_and_owner_decision (test_app.APITest) ... FAIL
+test_symlink_file_and_directory_rejected (test_app.APITest) ... ok
+
+======================================================================
+FAIL: test_submission_snapshot_and_owner_decision (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 130, in test_submission_snapshot_and_owner_decision
+    self.assertEqual(status, 200)
+AssertionError: 404 != 200
+
+----------------------------------------------------------------------
+Ran 12 tests in 6.293s
+
+FAILED (failures=1)

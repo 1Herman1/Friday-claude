@@ -1,0 +1,6 @@
+test_submission_requires_evidence_and_explanation (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.518s
+
+OK

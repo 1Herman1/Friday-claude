@@ -1,0 +1,34 @@
+test_bootstrap_auth_roles (test_app.APITest) ... ok
+test_course_extracts_exactly_24_days (test_app.APITest) ... ok
+test_dialogue_persists_and_cannot_spoof_author (test_app.APITest) ... FAIL
+test_message_empty_is_rejected (test_app.APITest) ... FAIL
+test_message_length_limit (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_dialogue_persists_and_cannot_spoof_author (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 62, in test_dialogue_persists_and_cannot_spoof_author
+    self.assertEqual(self.req('/api/messages', {'text': '<script>bad()</script>', 'role': 'owner'})[0], 200)
+AssertionError: 404 != 200
+
+======================================================================
+FAIL: test_message_empty_is_rejected (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 69, in test_message_empty_is_rejected
+    self.assertEqual(self.req('/api/messages', {'text': ' '})[0], 400)
+AssertionError: 404 != 400
+
+======================================================================
+FAIL: test_message_length_limit (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 72, in test_message_length_limit
+    self.assertEqual(self.req('/api/messages', {'text': 'a' * 8001})[0], 400)
+AssertionError: 404 != 400
+
+----------------------------------------------------------------------
+Ran 5 tests in 2.554s
+
+FAILED (failures=3)

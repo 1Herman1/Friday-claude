@@ -1,0 +1,6 @@
+test_foreign_origin_and_dns_rebinding_rejected (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.518s
+
+OK

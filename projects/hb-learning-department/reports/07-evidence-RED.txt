@@ -1,0 +1,14 @@
+test_submission_requires_evidence_and_explanation (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_submission_requires_evidence_and_explanation (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 154, in test_submission_requires_evidence_and_explanation
+    self.assertEqual(self.req('/api/submissions', data)[0], 400)
+AssertionError: 200 != 400
+
+----------------------------------------------------------------------
+Ran 1 test in 0.517s
+
+FAILED (failures=1)

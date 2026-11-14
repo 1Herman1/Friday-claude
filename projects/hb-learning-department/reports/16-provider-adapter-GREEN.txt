@@ -1,0 +1,6 @@
+test_configured_provider_http_failure_is_redacted_and_retryable (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.030s
+
+OK

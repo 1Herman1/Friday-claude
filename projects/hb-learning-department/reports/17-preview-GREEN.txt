@@ -1,0 +1,6 @@
+test_preview_is_html_css_only_and_cannot_navigate_or_script (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.524s
+
+OK

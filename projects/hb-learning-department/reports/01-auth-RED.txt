@@ -1,0 +1,14 @@
+test_bootstrap_auth_roles (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_bootstrap_auth_roles (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 19, in setUp
+    self.assertTrue((ROOT / 'app.py').exists(), 'Importable app.py is not implemented')
+AssertionError: False is not true : Importable app.py is not implemented
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

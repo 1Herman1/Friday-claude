@@ -1,0 +1,14 @@
+test_production_requires_24_acceptances_and_explicit_owner_attestation (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_production_requires_24_acceptances_and_explicit_owner_attestation (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 210, in test_production_requires_24_acceptances_and_explicit_owner_attestation
+    self.assertEqual(self.req('/api/production', data)[0], 403)
+AssertionError: 404 != 403
+
+----------------------------------------------------------------------
+Ran 1 test in 0.517s
+
+FAILED (failures=1)

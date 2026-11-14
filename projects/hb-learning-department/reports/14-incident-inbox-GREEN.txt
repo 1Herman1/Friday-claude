@@ -1,0 +1,6 @@
+test_incident_dedup_redaction_and_owner_inbox (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.521s
+
+OK

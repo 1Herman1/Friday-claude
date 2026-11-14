@@ -1,0 +1,127 @@
+test_bootstrap_auth_roles (test_app.APITest) ... ok
+test_course_extracts_exactly_24_days (test_app.APITest) ... ok
+test_dialogue_persists_and_cannot_spoof_author (test_app.APITest) ... ok
+test_duplicate_project_does_not_replace_files (test_app.APITest) ... FAIL
+test_file_before_project_rejected (test_app.APITest) ... FAIL
+test_file_size_and_count_limits (test_app.APITest) ... FAIL
+test_message_empty_is_rejected (test_app.APITest) ... ok
+test_message_length_limit (test_app.APITest) ... ok
+test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) ... test_project_create_and_file_roundtrip (test_app.APITest) ... FAIL
+test_symlink_file_and_directory_rejected (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_duplicate_project_does_not_replace_files (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 95, in test_duplicate_project_does_not_replace_files
+    self.assertEqual(self.project()[0], 409)
+AssertionError: 404 != 409
+
+======================================================================
+FAIL: test_file_before_project_rejected (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 90, in test_file_before_project_rejected
+    self.assertEqual(self.put()[0], 409)
+AssertionError: 404 != 409
+
+======================================================================
+FAIL: test_file_size_and_count_limits (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 117, in test_file_size_and_count_limits
+    self.assertEqual(self.put(content='a' * (128 * 1024 + 1))[0], 413)
+AssertionError: 404 != 413
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='../escape.html')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='/etc/passwd')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='a/../../x.html')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='a//b.html')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='./index.html')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='.env')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='a\\b.html')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='%2e%2e/x.html')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_paths_reject_traversal_absolute_and_special_files (test_app.APITest) (path='bad<script>.html')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 102, in test_paths_reject_traversal_absolute_and_special_files
+    self.assertEqual(self.put(path)[0], 403)
+AssertionError: 404 != 403
+
+======================================================================
+FAIL: test_project_create_and_file_roundtrip (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 81, in test_project_create_and_file_roundtrip
+    self.assertEqual(self.project()[0], 200)
+AssertionError: 404 != 200
+
+======================================================================
+FAIL: test_symlink_file_and_directory_rejected (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 105, in test_symlink_file_and_directory_rejected
+    self.assertEqual(self.project()[0], 200)
+AssertionError: 404 != 200
+
+----------------------------------------------------------------------
+Ran 11 tests in 5.635s
+
+FAILED (failures=14)

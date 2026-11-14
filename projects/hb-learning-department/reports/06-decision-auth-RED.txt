@@ -1,0 +1,14 @@
+test_student_cannot_decide_even_with_owner_role_in_body (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_student_cannot_decide_even_with_owner_role_in_body (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 146, in test_student_cannot_decide_even_with_owner_role_in_body
+    self.assertEqual(self.req('/api/decision', {'id': sid, 'decision': 'accepted', 'note': 'fake', 'role': 'owner'})[0], 403)
+AssertionError: 200 != 403
+
+----------------------------------------------------------------------
+Ran 1 test in 0.516s
+
+FAILED (failures=1)

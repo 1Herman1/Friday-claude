@@ -1,0 +1,6 @@
+test_provider_absence_has_durable_queue_and_no_fake_answer (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.522s
+
+OK

@@ -1,0 +1,14 @@
+test_configured_provider_http_failure_is_redacted_and_retryable (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_configured_provider_http_failure_is_redacted_and_retryable (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 279, in test_configured_provider_http_failure_is_redacted_and_retryable
+    self.assertEqual(self.req('/api/mentor', {'message_id': mid, 'operation_id': 'bad-upstream'})[0], 502)
+AssertionError: 503 != 502
+
+----------------------------------------------------------------------
+Ran 1 test in 0.519s
+
+FAILED (failures=1)

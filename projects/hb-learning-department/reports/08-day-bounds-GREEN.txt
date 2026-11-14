@@ -1,0 +1,6 @@
+test_submission_rejects_invalid_days (test_app.APITest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.519s
+
+OK

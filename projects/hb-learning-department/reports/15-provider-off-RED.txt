@@ -1,0 +1,14 @@
+test_provider_absence_has_durable_queue_and_no_fake_answer (test_app.APITest) ... FAIL
+
+======================================================================
+FAIL: test_provider_absence_has_durable_queue_and_no_fake_answer (test_app.APITest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/germanbryzgalov/Friday-claude/projects/hb-learning-department/tests/test_app.py", line 249, in test_provider_absence_has_durable_queue_and_no_fake_answer
+    self.assertEqual(status, 503)
+AssertionError: 404 != 503
+
+----------------------------------------------------------------------
+Ran 1 test in 0.520s
+
+FAILED (failures=1)
