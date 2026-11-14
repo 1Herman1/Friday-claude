@@ -1,0 +1,27 @@
+{
+  "verification_date_utc": "2026-11-14",
+  "sources": [
+    {
+      "url": "https://github.com/BingX-API/api-ai-skills/blob/12d03531602f6b7d63b14e2cb73b11a737ce74c5/skills/swap-market/api-reference.md",
+      "retrieval": "Official organization raw GitHub content and GitHub tree API",
+      "verified": ["Public swap market endpoints need no key/signature", "contracts describes perpetual swaps and base asset / settlement currency", "depth endpoint uses hyphenated symbol, T milliseconds, price/quantity arrays", "depth limit 1 request/sec/IP", "premiumIndex lastFundingRate, fundingIntervalHours, nextFundingTime and updateTime", "fundingIntervalHours is explicitly hours"]
+    },
+    {
+      "url": "https://www.bitget.com/docs/catalog/market/market-data",
+      "retrieval": "Live browser document.body.textContent including embedded OpenAPI schema after direct fetch HTTP 403",
+      "verified": ["GET /api/v3/market/orderbook", "category USDT-FUTURES and symbol BTCUSDT", "a ascending sell depth, b descending buy depth, ts Unix milliseconds", "GET /api/v3/market/instruments", "perpetual type vs delivery; quantityMultiplier; fundInterval; online status"]
+    },
+    {
+      "url": "https://www.bitget.com/docs/catalog/market/derivatives",
+      "retrieval": "Live browser rendered body text",
+      "verified": ["GET /api/v3/market/current-fund-rate", "fundingRate decimal fraction", "fundingRateInterval unit hours", "nextUpdate means next funding rate update time, not guaranteed settlement", "lastFundingRate and nextFundingRate are separate published fields"]
+    }
+  ],
+  "limitations": [
+    "BingX asksCoin/bidsCoin additional arrays were observed in actual API responses but not enumerated in the short official markdown. Parser requires these explicitly coin-named fields and does not silently fall back to contracts/unspecified units. Full unit certification is still needed before any execution.",
+    "Bitget orderbook schema itself describes quantity, not a separate lot-unit field. Base-coin interpretation is for these linear USDT futures only, with baseCoin/quoteCoin/type identity checks, and is not generalized to COIN-FUTURES.",
+    "BingX source updateTime was materially older than receive time. No published funding rate is treated as locked or as a realized cash payment.",
+    "REST books are not atomic; local clock offset not automatically corrected; all outputs remain HOLD.",
+    "Account fee tiers and trading permission, balances, margin mode, min notionals/max positions are not verified by public APIs and are not invented."
+  ]
+}

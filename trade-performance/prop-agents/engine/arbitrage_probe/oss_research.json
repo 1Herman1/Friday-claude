@@ -1,0 +1,70 @@
+{
+  "checked_at_utc": "2026-11-14T21:54:10.947134+00:00",
+  "metadata_api_url": "https://api.github.com/repos/hummingbot/hummingbot",
+  "metadata": {
+    "full_name": "hummingbot/hummingbot",
+    "html_url": "https://github.com/hummingbot/hummingbot",
+    "license": {
+      "key": "apache-2.0",
+      "name": "Apache License 2.0",
+      "spdx_id": "Apache-2.0",
+      "url": "https://api.github.com/licenses/apache-2.0",
+      "node_id": "MDc6TGljZW5zZTI="
+    },
+    "archived": false,
+    "pushed_at": "2026-11-13T16:17:13Z",
+    "default_branch": "master",
+    "stargazers_count": 21216,
+    "disabled": false
+  },
+  "metadata_error": null,
+  "tree_api_url": "https://api.github.com/repos/hummingbot/hummingbot/git/trees/master?recursive=1",
+  "tree_sha": "9af100d6822da7d2d0291a906c730ef172284ee2",
+  "tree_truncated": false,
+  "tree_error": null,
+  "relevant_paths": [
+    "hummingbot/connector/derivative/bitget_perpetual/__init__.py",
+    "hummingbot/connector/derivative/bitget_perpetual/bitget_perpetual_api_order_book_data_source.py",
+    "hummingbot/connector/derivative/bitget_perpetual/bitget_perpetual_api_user_stream_data_source.py",
+    "hummingbot/connector/derivative/bitget_perpetual/bitget_perpetual_auth.py",
+    "hummingbot/connector/derivative/bitget_perpetual/bitget_perpetual_constants.py",
+    "hummingbot/connector/derivative/bitget_perpetual/bitget_perpetual_derivative.py",
+    "hummingbot/connector/derivative/bitget_perpetual/bitget_perpetual_utils.py",
+    "hummingbot/connector/derivative/bitget_perpetual/bitget_perpetual_web_utils.py",
+    "hummingbot/connector/exchange/bing_x/__init__.py",
+    "hummingbot/connector/exchange/bing_x/bing_x_api_order_book_data_source.py",
+    "hummingbot/connector/exchange/bing_x/bing_x_api_user_stream_data_source.py",
+    "hummingbot/connector/exchange/bing_x/bing_x_auth.py",
+    "hummingbot/connector/exchange/bing_x/bing_x_constants.py",
+    "hummingbot/connector/exchange/bing_x/bing_x_exchange.py",
+    "hummingbot/connector/exchange/bing_x/bing_x_order_book.py",
+    "hummingbot/connector/exchange/bing_x/bing_x_utils.py",
+    "hummingbot/connector/exchange/bing_x/bing_x_web_utils.py",
+    "scripts/v2_funding_rate_arb.py",
+    "test/hummingbot/connector/derivative/bitget_perpetual/__init__.py",
+    "test/hummingbot/connector/derivative/bitget_perpetual/test_bitget_perpetual_auth.py",
+    "test/hummingbot/connector/derivative/bitget_perpetual/test_bitget_perpetual_derivative.py",
+    "test/hummingbot/connector/derivative/bitget_perpetual/test_bitget_perpetual_order_book_data_source.py",
+    "test/hummingbot/connector/derivative/bitget_perpetual/test_bitget_perpetual_user_stream_data_source.py",
+    "test/hummingbot/connector/derivative/bitget_perpetual/test_bitget_perpetual_web_utils.py",
+    "test/hummingbot/connector/exchange/bing_x/__init__.py",
+    "test/hummingbot/connector/exchange/bing_x/test_bing_x_api_order_book_data_source.py",
+    "test/hummingbot/connector/exchange/bing_x/test_bing_x_api_user_stream_data_source.py",
+    "test/hummingbot/connector/exchange/bing_x/test_bing_x_auth.py",
+    "test/hummingbot/connector/exchange/bing_x/test_bing_x_exchange.py",
+    "test/hummingbot/connector/exchange/bing_x/test_bing_x_web_utils.py"
+  ],
+  "inspection": {
+    "commit_inspected": "9af100d6822da7d2d0291a906c730ef172284ee2",
+    "recommendation": "REFERENCE_ONLY; do not install or run. BingX futures integration absent from inspected tree; bing_x uses spot REST paths.",
+    "funding_script": "https://github.com/hummingbot/hummingbot/blob/9af100d6822da7d2d0291a906c730ef172284ee2/scripts/v2_funding_rate_arb.py",
+    "bingx_constants": "https://github.com/hummingbot/hummingbot/blob/9af100d6822da7d2d0291a906c730ef172284ee2/hummingbot/connector/exchange/bing_x/bing_x_constants.py",
+    "script_findings": [
+      "Normalizes funding using an explicit interval map but silently assumes eight hours for unmapped connectors; must not reuse that fallback.",
+      "Default connectors are hyperliquid_perpetual and binance_perpetual; not BingX.",
+      "trade_profitability_condition_to_enter defaults to False; positive funding differential is not proof of net profitability.",
+      "Creates two independent position executors and configures leverage/position mode: not a read-only sample.",
+      "Useful reference for funding-payment event tracking and two-leg lifecycle; requires adapters, tested fee policy and interval validation."
+    ]
+  }
+}
