@@ -23,6 +23,7 @@ class App:
         self.data.mkdir(mode=0o700, parents=True, exist_ok=True)
         self.lock = threading.RLock()
         self.request_limit = 240
+        self.student_identity = {}
         self.request_buckets = {}
         self.course_dir = Path(course_dir)
         token_file = self.data / 'tokens.json'
@@ -145,14 +146,22 @@ class App:
                 item[key] = json.loads(item[key])
         return result
 
+    def accepted_days(self):
+        return sorted({x['day'] for x in self.submissions() if x['status'] == 'accepted'})
+
+    def current_day(self):
+        accepted = set(self.accepted_days())
+        return next((day for day in range(1, 25) if day not in accepted), 24)
+
     def state(self, role):
-        accepted = sorted({x['day'] for x in self.submissions() if x['status'] == 'accepted'})
+        accepted = self.accepted_days()
         with self.db() as db:
             gate = db.execute("SELECT value FROM meta WHERE key='production'").fetchone()
         production = json.loads(gate[0]) if gate else {'enabled': False, 'scope': ''}
         production['enabled'] = production['enabled'] and accepted == list(range(1, 25))
         return {'role': role, 'project': self.project(), 'accepted_days': accepted,
-                'production': production}
+                'production': production, 'student': self.student_identity,
+                'current_day': self.current_day()}
 
     def incident(self, code):
         # Codes come from server constants, never raw user paths or provider exceptions.
@@ -273,7 +282,7 @@ class App:
         parser.feed(source)
         csp = "default-src 'none'; script-src 'none'; connect-src 'none'; style-src 'unsafe-inline'; img-src 'none'; font-src 'none'; media-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
         document = '<!doctype html><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="' + csp + '"><style>' + css.replace('<', '\\3c ') + '</style>' + ''.join(parser.out)
-        return {'html': document, 'notice': 'Только HTML/CSS. JS preview недоступен в v0.1. Сеть, ссылки, формы и внешние ресурсы отключены.'}
+        return {'html': document, 'notice': 'Только HTML/CSS. JS preview недоступен. Сеть, ссылки, формы и внешние ресурсы отключены.'}
 
     def material(self, name):
         if name not in ('course.md', 'mentor-and-interface.md'):
@@ -354,6 +363,8 @@ class App:
                 previous = next((x for x in self.submissions() if x['operation_id'] == op), None)
                 if previous:
                     return {'submission': previous}
+                if body['day'] != self.current_day():
+                    raise Fault(403, 'lesson_locked')
                 snapshot = {f: self.file(f)['content'] for f in self.files()}
                 if not snapshot:
                     raise Fault(400, 'artifact_required')
@@ -405,6 +416,8 @@ class App:
             day = query.get('day', [''])[0]
             if day not in [str(i) for i in range(1, 25)]:
                 raise Fault(400, 'invalid_day')
+            if role == 'student' and int(day) > self.current_day():
+                raise Fault(403, 'lesson_locked')
             lesson = self.course()['lessons'][int(day) - 1].copy()
             directory = self.course_dir / 'lessons'
             detail = directory / ('day-%02d.md' % int(day))
@@ -419,12 +432,83 @@ class App:
                 lesson['source'] = 'course'
             return lesson
         if method == 'GET' and path == '/api/course':
-            return self.course()
+            # Public reference syllabus, like course.md and the workbook, not a
+            # secret-content gate. /api/lesson and submissions enforce practical
+            # progression; reading the overview never grants acceptance or access.
+            course = self.course()
+            current = self.current_day()
+            for lesson in course['lessons']:
+                lesson['unlocked'] = role == 'owner' or lesson['day'] <= current
+            return course
         if method == 'GET' and path == '/api/material':
             return {'text': self.material(query.get('name', [''])[0])}
         if method == 'GET' and path == '/api/state':
             return self.state(role)
         raise Fault(404, 'not_found')
+
+
+class LearningHub:
+    """An owner and two isolated learning workspaces; legacy data remains Test's."""
+    NAMES = {'test': 'Тест', 'matvey': 'Матвей'}
+
+    def __init__(self, data_dir, course_dir=DEFAULT_COURSE):
+        self.data = Path(data_dir).resolve()
+        self.workspaces = {'test': App(self.data, course_dir),
+                           'matvey': App(self.data / 'learners' / 'matvey', course_dir)}
+        self.tokens = self.workspaces['test'].tokens
+        self.lock = threading.RLock()
+        self.request_buckets = {}
+        self.request_limit = self.workspaces['test'].request_limit
+        for sid, workspace in self.workspaces.items():
+            workspace.student_identity = {'id': sid, 'name': self.NAMES[sid]}
+        access = self.data / 'access'
+        if access.is_symlink():
+            raise Fault(403, 'unsafe_access_directory')
+        access.mkdir(mode=0o700, exist_ok=True)
+        os.chmod(access, 0o700)
+        credentials = {sid: {'id': sid, 'name': self.NAMES[sid], 'role': 'student',
+                              'token': workspace.tokens['student']}
+                       for sid, workspace in self.workspaces.items()}
+        credentials['owner'] = {'id': 'owner', 'name': 'Куратор', 'role': 'owner', 'token': self.tokens['owner']}
+        for sid, credential in credentials.items():
+            fd = os.open(access / (sid + '.json'), os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)
+            with os.fdopen(fd, 'w') as file:
+                os.fchmod(file.fileno(), 0o600)
+                json.dump(credential, file, ensure_ascii=False)
+
+    def identity(self, authorization):
+        if hmac.compare_digest(authorization, 'Bearer ' + self.tokens['owner']):
+            return 'owner', None
+        for sid, workspace in self.workspaces.items():
+            if hmac.compare_digest(authorization, 'Bearer ' + workspace.tokens['student']):
+                return 'student', sid
+        raise Fault(401, 'authentication_required')
+
+    def bucket(self, authorization):
+        try:
+            role, sid = self.identity(authorization)
+            return role + (':' + sid if sid else '')
+        except Fault:
+            return 'anonymous'
+
+    def resolve(self, authorization, selected):
+        role, sid = self.identity(authorization)
+        if role == 'owner':
+            sid = selected or 'test'
+        elif selected and selected != sid:
+            raise Fault(403, 'student_scope_forbidden')
+        if sid not in self.workspaces:
+            raise Fault(404, 'student_not_found')
+        return role, sid, self.workspaces[sid]
+
+    def roster(self, role, sid):
+        ids = self.NAMES if role == 'owner' else [sid]
+        return [{'id': key, 'name': self.NAMES[key],
+                 'accepted_days': self.workspaces[key].accepted_days()}
+                for key in ids]
+
+    def incident(self, code):
+        self.workspaces['test'].incident(code)
 
 
 def make_server(app, host='127.0.0.1', port=8765):
@@ -439,6 +523,7 @@ def make_server(app, host='127.0.0.1', port=8765):
             self.handle_request()
 
         def handle_request(self):
+            workspace = app
             try:
                 port = self.server.server_port
                 hosts = {'127.0.0.1:' + str(port), 'localhost:' + str(port)}
@@ -449,7 +534,7 @@ def make_server(app, host='127.0.0.1', port=8765):
                     raise Fault(403, 'invalid_origin')
                 import time
                 authorization = self.headers.get('Authorization', '')
-                bucket = 'owner' if hmac.compare_digest(authorization, 'Bearer ' + app.tokens['owner']) else 'student' if hmac.compare_digest(authorization, 'Bearer ' + app.tokens['student']) else 'anonymous'
+                bucket = app.bucket(authorization) if isinstance(app, LearningHub) else 'owner' if hmac.compare_digest(authorization, 'Bearer ' + app.tokens['owner']) else 'student' if hmac.compare_digest(authorization, 'Bearer ' + app.tokens['student']) else 'anonymous'
                 with app.lock:
                     minute = int(time.monotonic() // 60)
                     previous_minute, count = app.request_buckets.get(bucket, (minute, 0))
@@ -462,9 +547,16 @@ def make_server(app, host='127.0.0.1', port=8765):
                 if self.command == 'GET' and url.path in public:
                     name, mime = public[url.path]
                     return self.respond(200, (BASE / 'static' / name).read_text(encoding='utf-8'), mime)
-                role = app.role(authorization)
+                if isinstance(app, LearningHub):
+                    _, actor_sid = app.identity(authorization)
+                    workspace = app.workspaces[actor_sid or 'test']
+                    role, sid, workspace = app.resolve(authorization, self.headers.get('X-Student-ID', ''))
+                    if self.command == 'GET' and url.path == '/api/students':
+                        return self.respond(200, {'students': app.roster(role, sid), 'selected_student': sid})
+                else:
+                    role, workspace = app.role(authorization), app
                 if self.command == 'GET' and url.path == '/api/handbook':
-                    directory = app.course_dir / 'handbook'
+                    directory = workspace.course_dir / 'handbook'
                     file = directory / 'HB-Web-Development-Handbook.pdf'
                     if directory.is_symlink() or file.is_symlink():
                         raise Fault(403, 'unsafe_material')
@@ -488,11 +580,11 @@ def make_server(app, host='127.0.0.1', port=8765):
                     if not isinstance(body, dict):
                         raise Fault(400, 'json_object_required')
                 with app.lock:
-                    result = app.dispatch(role, self.command, url.path, body, parse_qs(url.query))
+                    result = workspace.dispatch(role, self.command, url.path, body, parse_qs(url.query))
                 self.respond(200, result)
             except Fault as e:
                 if e.status in (401, 403, 413, 429, 502, 503):
-                    app.incident(e.code)
+                    workspace.incident(e.code)
                 self.respond(e.status, {'error': e.code})
             except (ValueError, TypeError, KeyError):
                 self.respond(400, {'error': 'invalid_request'})
@@ -523,8 +615,8 @@ def main():
     args = parser.parse_args()
     if not 0 <= args.port <= 65535:
         parser.error('port must be in range 0..65535')
-    app = App(args.data_dir, args.course_dir)
-    print('Private access file:', app.data.resolve() / 'tokens.json', flush=True)
+    app = LearningHub(args.data_dir, args.course_dir)
+    print('Private access folder (owner/test/matvey):', app.data / 'access', flush=True)
     if args.bootstrap:
         print('Local state initialized. No model or Telegram connection was made.', flush=True)
         return

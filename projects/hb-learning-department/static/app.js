@@ -5,7 +5,11 @@ let token = sessionStorage.getItem('hb-learning-token') || '';
 let currentDay = 1;
 let state = null;
 let course = [];
-const labels = {owner: 'Герман / владелец', student: 'Студент', mentor: 'ИИ-наставник'};
+let students = [];
+let selectedStudent = sessionStorage.getItem('hb-learning-student') || '';
+let workspaceEpoch = 0;
+const requests = new Set();
+const labels = {owner: 'Куратор', student: 'Студент', mentor: 'ИИ-наставник'};
 function node(tag, text, className) {
   const el = document.createElement(tag);
   if (text !== undefined) el.textContent = text;
@@ -17,21 +21,28 @@ function notice(text, error = false) {
   $('notice').classList.toggle('error', error);
 }
 async function api(path, body) {
-  const response = await fetch(path, {
-    method: body === undefined ? 'GET' : 'POST',
-    headers: {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'},
-    ...(body === undefined ? {} : {body: JSON.stringify(body)})
-  });
-  const result = await response.json();
-  if (!response.ok) throw new Error(result.error || 'Ошибка запроса');
-  return result;
+  const epoch = workspaceEpoch, controller = new AbortController();
+  requests.add(controller);
+  try {
+    const response = await fetch(path, {
+      method: body === undefined ? 'GET' : 'POST', signal: controller.signal,
+      headers: {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json',
+        ...(selectedStudent ? {'X-Student-ID':selectedStudent} : {})},
+      ...(body === undefined ? {} : {body: JSON.stringify(body)})
+    });
+    const result = await response.json();
+    if (epoch !== workspaceEpoch) throw new Error('workspace_changed');
+    if (!response.ok) throw new Error(result.error || 'Ошибка запроса');
+    return result;
+  } finally { requests.delete(controller); }
 }
 function operationId() {
   return window.crypto.randomUUID ? window.crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2);
 }
 async function action(fn, success) {
-  try {await fn(); if (success) notice(success);}
-  catch (err) {notice(err.message, true);}
+  const epoch = workspaceEpoch;
+  try {await fn(); if (success && epoch === workspaceEpoch) notice(success);}
+  catch (err) {if (epoch === workspaceEpoch) notice(err.message, true);}
 }
 function formatLesson(text) {
   // Build only text nodes; source Markdown cannot inject HTML or execute JS.
@@ -64,6 +75,14 @@ async function selectLesson(day) {
 function paintState() {
   $('project-title').textContent = state.project ? state.project.name : 'Новый учебный проект';
   $('role-label').textContent = labels[state.role];
+  $('student-name').textContent = state.student.name || 'Учебный профиль';
+  $('student-picker').hidden = state.role !== 'owner';
+  $('student-select').replaceChildren();
+  for (const student of students) {
+    const option = node('option', student.name); option.value = student.id;
+    $('student-select').append(option);
+  }
+  $('student-select').value = selectedStudent;
   $('progress-label').textContent = state.accepted_days.length + ' / 24 принято';
   $('progress').value = state.accepted_days.length;
   $('production').textContent = state.production.enabled ? 'Production: допуск выдан' : 'Production locked';
@@ -77,6 +96,8 @@ function paintState() {
     button.append(node('span', String(lesson.day).padStart(2, '0'), 'number'), node('span', lesson.title));
     if (state.accepted_days.includes(lesson.day)) button.append(node('span', '✓', 'accepted'));
     button.setAttribute('aria-current', String(lesson.day === currentDay));
+    button.disabled = state.role === 'student' && lesson.day > state.current_day;
+    if (button.disabled) button.title = 'Откроется после приёмки предыдущего урока куратором';
     button.addEventListener('click', () => action(async () => {await selectLesson(lesson.day); selectTab('lesson');}));
     $('lessons').append(button);
   }
@@ -111,7 +132,11 @@ async function refreshFiles() {
     const option = node('option', path); option.value = path; $('file-list').append(option);
   }
 }
-async function refreshState() {state = await api('/api/state'); paintState();}
+async function refreshState() {
+  const previousDay = state && state.current_day;
+  state = await api('/api/state'); paintState();
+  if (state.role === 'student' && previousDay !== state.current_day) await selectLesson(state.current_day);
+}
 async function refreshReviews() {
   $('submissions').replaceChildren();
   const submissions = (await api('/api/submissions')).submissions;
@@ -121,7 +146,7 @@ async function refreshReviews() {
     const names = {submitted:'На проверке',accepted:'Принято',returned:'Нужна доработка'};
     card.append(node('h3', 'День ' + item.day + ' / ' + (names[item.status] || item.status)), node('p', item.explanation));
     for (const e of item.evidence) card.append(node('p', e.criterion + ' · ' + e.result + '\nПроверка: ' + e.method + '\nОжидание: ' + e.expected + '\nФакт: ' + e.actual));
-    if (item.note) card.append(node('p', 'Решение владельца: ' + item.note));
+    if (item.note) card.append(node('p', 'Решение куратора: ' + item.note));
     const details = node('details'); details.append(node('summary', 'Снимок файлов на момент подачи'));
     for (const [path, content] of Object.entries(item.snapshot)) details.append(node('h4', path), node('pre', content));
     card.append(details);
@@ -159,16 +184,50 @@ function selectTab(name) {
   if (name === 'review') action(refreshReviews);
   if (name === 'incidents') action(refreshIncidents);
 }
+function clearWorkspace() {
+  workspaceEpoch++;
+  for (const request of requests) request.abort();
+  requests.clear(); state = null; course = []; students = []; currentDay = 1;
+  for (const id of ['messages','jobs','submissions','incidents','lesson-text','lessons','file-list']) $(id).replaceChildren();
+  for (const id of ['chat-form','project-form','file-form','submission-form']) $(id).reset();
+  $('preview').srcdoc = ''; $('preview-path').value = 'index.html'; $('preview-css').value = '';
+  $('shell').hidden = true; $('provider').textContent = 'Live: off';
+  notice('Учебный режим. Публикация и Telegram не подключены.');
+}
+function recoverLogin(error) {
+  token = ''; selectedStudent = ''; clearWorkspace();
+  sessionStorage.removeItem('hb-learning-token');
+  sessionStorage.removeItem('hb-learning-student');
+  $('login').hidden = false;
+  $('login-error').textContent = 'Не удалось открыть учебную среду: ' + error.message + '. Войдите повторно.';
+}
 async function enter() {
+  clearWorkspace();
   state = await api('/api/state'); course = (await api('/api/course')).lessons;
+  selectedStudent = state.student.id;
+  students = (await api('/api/students')).students;
+  currentDay = state.current_day;
+  sessionStorage.setItem('hb-learning-student', selectedStudent);
   sessionStorage.setItem('hb-learning-token', token); $('token').value = '';
   $('login').hidden = true; $('shell').hidden = false; paintState();
+  selectTab('lesson');
   await selectLesson(currentDay); await refreshMessages(); await refreshFiles();
 }
 $('login-form').addEventListener('submit', async event => {
-  event.preventDefault(); token = $('token').value.trim();
-  try {await enter();} catch (err) {token = ''; sessionStorage.removeItem('hb-learning-token'); window.alert('Вход не выполнен: ' + err.message);}
+  event.preventDefault(); token = $('token').value.trim(); selectedStudent = '';
+  $('login-error').textContent = '';
+  $('login-form').querySelector('button').disabled = true;
+  try {await enter();} catch (err) {recoverLogin(err);}
+  finally {$('login-form').querySelector('button').disabled = false;}
 });
+$('student-select').addEventListener('change', async () => {
+  if (!state || state.role !== 'owner') return;
+  selectedStudent = $('student-select').value;
+  try {await enter();} catch (err) {recoverLogin(err);}
+});
+$('refresh-progress').addEventListener('click', () => action(async () => {
+  await refreshState(); await refreshMessages();
+}, 'Прогресс обновлён.'));
 $('download-handbook').addEventListener('click', () => action(async () => {
   const response = await fetch('/api/handbook', {headers:{Authorization:'Bearer ' + token}});
   if (!response.ok) throw new Error((await response.json()).error || 'Учебник недоступен');
@@ -178,8 +237,9 @@ $('download-handbook').addEventListener('click', () => action(async () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }, 'PDF-учебник загружен.'));
 $('logout').addEventListener('click', () => {
-  token = ''; state = null; sessionStorage.removeItem('hb-learning-token');
-  $('messages').replaceChildren(); $('lesson-text').replaceChildren();
+  token = ''; selectedStudent = ''; clearWorkspace(); sessionStorage.removeItem('hb-learning-token');
+  sessionStorage.removeItem('hb-learning-student');
+  $('login-error').textContent = '';
   $('shell').hidden = true; $('login').hidden = false;
 });
 document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => selectTab(button.dataset.tab)));
@@ -215,7 +275,7 @@ $('submission-form').addEventListener('submit', event => {event.preventDefault()
   await api('/api/submissions', {day:currentDay, operation_id:operationId(), explanation:$('explanation').value,
     evidence:[{criterion:$('criterion').value, method:$('method').value, expected:$('expected').value, actual:$('actual').value,result:$('result').value}]});
   await refreshReviews(); selectTab('review');
-}, 'Работа передана владельцу. Самооценка не является автоматическим зачётом.');});
+}, 'Работа передана куратору. Самооценка не является автоматическим зачётом.');});
 $('refresh-review').addEventListener('click', () => action(refreshReviews));
 $('refresh-incidents').addEventListener('click', () => action(refreshIncidents));
 $('production').addEventListener('click', () => action(async () => {
@@ -227,4 +287,4 @@ $('production').addEventListener('click', () => action(async () => {
   const note = window.prompt('Основание решения:'); if (!note) return;
   await api('/api/production', {enabled, attested:enabled, scope, note}); await refreshState();
 }, 'Решение о локальном допуске сохранено. Удалённая публикация не включена.'));
-if (token) enter().catch(() => {token = ''; sessionStorage.removeItem('hb-learning-token'); $('shell').hidden = true; $('login').hidden = false;});
+if (token) enter().catch(recoverLogin);

@@ -19,7 +19,7 @@ class APITest(unittest.TestCase):
         self.environment = envpatch.dict(os.environ, {'HB_MENTOR': 'off', 'HB_API_KEY': '', 'HB_API_URL': '', 'HB_MODEL': ''})
         self.environment.start()
         self.addCleanup(self.environment.stop)
-        self.tmp = tempfile.TemporaryDirectory(dir=ROOT)
+        self.tmp = tempfile.TemporaryDirectory(prefix='hb-api-', dir=os.environ.get('TMPDIR'))
         self.addCleanup(self.tmp.cleanup)
         spec = importlib.util.spec_from_file_location('hb_app', ROOT / 'app.py')
         self.assertTrue((ROOT / 'app.py').exists(), 'Importable app.py is not implemented')
@@ -211,7 +211,8 @@ class APITest(unittest.TestCase):
         (fixture / 'lessons' / 'day-01.md').write_text('# Подробный день 1')
         self.app.course_dir = fixture
         self.assertEqual(self.req('/api/lesson?day=1')[1]['text'], '# Подробный день 1')
-        self.assertIn('Мини-урок', self.req('/api/lesson?day=2')[1]['text'])
+        self.assertEqual(self.req('/api/lesson?day=2')[0], 403)
+        self.assertIn('Мини-урок', self.req('/api/lesson?day=2', role='owner')[1]['text'])
 
     def test_production_requires_24_acceptances_and_explicit_owner_attestation(self):
         self.project()

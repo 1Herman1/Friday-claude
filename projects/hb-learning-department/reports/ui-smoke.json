@@ -1,7 +1,7 @@
 {
   "status": "passed",
   "browser": "Chromium headless",
-  "fixture": "Disposable generated local credentials, demonstration project only",
+  "fixture": "Disposable generated local credentials, demonstration projects only; real employee data untouched",
   "checks": [
     "Student login; 24 lessons; production disabled; real course text",
     "Message persists as text, no HTML injection",
@@ -10,11 +10,15 @@
     "Authenticated PDF download matches built handbook byte-for-byte",
     "Provider-off error is explicit; durable queue; no fabricated AI response",
     "Reload restores dialogue, project and accepted progress",
+    "Accepted first lesson unlocks lesson two; reload opens current lesson",
+    "Owner switches Test/Matvey; separate progress, dialogue, editor, files and reviews; student cross-scope request denied",
+    "Injected 503 on owner profile switch shows login/error, clears stale auth, and allows reauthentication",
     "390px responsive layout has no horizontal overflow; no uncaught page errors"
   ],
   "screenshots": [
     "desktop-learning.png",
     "desktop-workspace.png",
+    "desktop-owner-profiles.png",
     "mobile-learning.png"
   ],
   "live_model_tested": false,
