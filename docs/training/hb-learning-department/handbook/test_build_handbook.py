@@ -4,6 +4,15 @@ from pathlib import Path
 from build_handbook import Book, fonts
 
 class BuildTest(unittest.TestCase):
+    def test_handbook_uses_curator_instead_of_personal_name(self):
+        import re
+        from pypdf import PdfReader
+        reader = PdfReader(Path(__file__).parent / 'HB-Web-Development-Handbook.pdf')
+        text = '\n'.join(page.extract_text() or '' for page in reader.pages)
+        self.assertIsNone(re.search(r'\bГерман(?:а|у|ом|е)?\b', text))
+        self.assertIn('куратор', text)
+        self.assertIn('куратору', text)
+
     def test_handbook_has_no_repeated_demo_payment_warning(self):
         from pypdf import PdfReader
         reader = PdfReader(Path(__file__).parent / 'HB-Web-Development-Handbook.pdf')
