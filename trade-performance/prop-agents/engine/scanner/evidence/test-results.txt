@@ -1,0 +1,18 @@
+test_cli_artifacts_match_snapshot (test_scanner.CollectionTests) ... ok
+test_contracts_without_usable_usdt_universe_are_fatal (test_scanner.CollectionTests) ... ok
+test_malformed_trade_rows_are_explicit_failure (test_scanner.CollectionTests) ... ok
+test_missing_universe_is_fatal_not_successful_empty_scan (test_scanner.CollectionTests) ... ok
+test_partial_enrichment_has_explicit_coverage_and_failures (test_scanner.CollectionTests) ... ok
+test_report_contains_all_rows_and_escaped_content (test_scanner.EnrichmentTests) ... ok
+test_trade_flow_uses_live_buyer_maker_field (test_scanner.EnrichmentTests) ... ok
+test_unknown_and_nonfinite_are_never_zero (test_scanner.EnrichmentTests) ... ok
+test_volume_outlier_is_cross_sectional_not_history (test_scanner.EnrichmentTests) ... ok
+test_api_error_is_not_empty_market (test_scanner.PublicClientTests) ... ok
+test_curl_has_hard_deadline_and_no_credentials (test_scanner.PublicClientTests) ... ok
+test_only_allowlisted_get_endpoints (test_scanner.PublicClientTests) ... ok
+test_all_active_usdt_even_when_ticker_missing (test_scanner.UniverseTests) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 1.145s
+
+OK

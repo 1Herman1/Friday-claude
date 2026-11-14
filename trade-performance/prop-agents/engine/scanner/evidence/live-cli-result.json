@@ -1,0 +1,32 @@
+{
+  "status": "partial",
+  "generated_at": "2026-11-14T21:49:01.491189+00:00",
+  "coverage": {
+    "universe_count": 908,
+    "contracts_received": 1334,
+    "tickers_received": 957,
+    "ticker_present": 908,
+    "ticker_missing": [],
+    "funding_present": 908,
+    "oi_present": 7,
+    "oi_attempted": 8,
+    "oi_not_requested_count": 900,
+    "buy_flow_attempted": 3,
+    "buy_flow_present": 3,
+    "buy_flow_not_requested_count": 905,
+    "funding_missing": [],
+    "ticker_invalid": []
+  },
+  "failures": [
+    {
+      "endpoint": "openInterest",
+      "symbol": "PUSSY-USDT",
+      "error": "curl exit 28: curl: (28) SSL connection timeout"
+    }
+  ],
+  "artifacts": {
+    "snapshot": "/Users/germanbryzgalov/Friday-claude/trade-performance/prop-agents/engine/scanner/artifacts/20261114T214901Z/snapshot.json",
+    "report": "/Users/germanbryzgalov/Friday-claude/trade-performance/prop-agents/engine/scanner/artifacts/20261114T214901Z/report.html",
+    "raw": "/Users/germanbryzgalov/Friday-claude/trade-performance/prop-agents/engine/scanner/artifacts/20261114T214901Z/raw.json"
+  }
+}

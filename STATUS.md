@@ -129,6 +129,10 @@
 - Дальше: ТЗ v3 (`journal/TZ.md`, топик Т6). База — локально на Mac: PostgreSQL 17 запущен (launchd, БД `tradeperf`). Следующий этап J0: shared/db (Prisma, миграции, seed) + tp_core
 
 ## Prop-agents — `trade-performance/prop-agents`
+
+- 15.11 Т1: требования расширены (`EXPANSION-2026-11-15.md`): BingX scanner, отдельное исследование арбитража своих счетов, обязательный news/macro/fundamentals контекст, управляющий поверх кодовых quant/risk gates. Реальные заявки/переводы не включались.
+- 15.11 проверено родителем: `engine/scanner/` read-only snapshot 908 активных USDT perpetual; ticker/funding 908/908, OI 7/8 запрошенных (900 не запрашивались), flow 3/3 (905 не запрашивались); partial, volume/OI history UNKNOWN. HTML и 13 тестов проверены. `engine/quant_gate/` standalone, НЕ wired; новые + risk tests 153 passed.
+- 15.11 аудит SMC: прежние v0.2 CSV/цифры воспроизведены, но вывод об отсутствии преимущества всей SMC отозван (`engine/smc_audit/AUDIT-RU.md`, поправка в старом отчёте). Экспорт 171328 решений (9849 taken, 161479 skipped, сумма 9 повторяющихся сценариев); найдены stale IFVG, TP2 lookahead, SL на экстремуме, OHLC/расходные ограничения. 9+8 тестов OK; самостоятельный replay всех 9 preview-сценариев совпал, ещё 3 prefix-check PASS. Большие CSV/JSONL локально вне git. Live-конфиг и риск-лимиты не менялись; полная v0.3/0.3.3 не выпущена.
 - Статус: 🟢
 - Обновлено: 2026-11-11
 - Решение Т5 от 11.11: v0.3 — **снятие 1h → подтверждение/вход IFVG 15m**. Реализован отдельный `clusters/smc-btc/v03_preview.py`, карточка `CARD-v0.3.md`; 8 тестов OK, родительский повторный replay реальных MEXC SPOT свечей 22.10–11.11 и 75 prefix-проверок OK. После warmup 8 суток: без окна 20 IFVG-кандидатов, crypto 12, NY 10; это не сделки/доходность. Production заблокирован: HTF-зона 4h/D, окно и исполнимый SL ещё не утверждены. Live-конфиг v0.1 не переключён, реальных ордеров нет.

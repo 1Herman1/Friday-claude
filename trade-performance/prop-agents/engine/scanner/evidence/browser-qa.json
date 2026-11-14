@@ -1,0 +1,12 @@
+{
+  "report": "artifacts/20261114T214901Z/report.html",
+  "rows": 908,
+  "filtered_EVAA_rows": 1,
+  "missing_filter_rows": 0,
+  "mobile": {
+    "width": 390,
+    "body": 330,
+    "errors": []
+  },
+  "console_errors": []
+}
