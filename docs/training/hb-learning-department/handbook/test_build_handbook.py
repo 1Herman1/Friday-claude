@@ -4,6 +4,16 @@ from pathlib import Path
 from build_handbook import Book, fonts
 
 class BuildTest(unittest.TestCase):
+    def test_handbook_has_no_repeated_demo_payment_warning(self):
+        from pypdf import PdfReader
+        reader = PdfReader(Path(__file__).parent / 'HB-Web-Development-Handbook.pdf')
+        old_footer = 'Учебные примеры FORMA. Не руководство к работе с реальными платежами.'
+        for number, page in enumerate(reader.pages, start=1):
+            text = page.extract_text() or ''
+            self.assertNotIn(old_footer, text, 'Old footer on page %s' % number)
+            if number > 1:
+                self.assertIn('Основы AI-веб-разработки', text)
+
     def test_pdf_brand_is_not_parsed_as_a_broken_entity(self):
         from pypdf import PdfReader
         text = PdfReader(Path(__file__).parent / 'HB-Web-Development-Handbook.pdf').pages[0].extract_text()

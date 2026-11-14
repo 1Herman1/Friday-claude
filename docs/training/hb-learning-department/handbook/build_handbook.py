@@ -47,7 +47,8 @@ def inline(text):
 
 
 class Book(BaseDocTemplate):
-    def __init__(self, filename):
+    def __init__(self, filename, footer_text='Учебные примеры FORMA. Не руководство к работе с реальными платежами.'):
+        self.footer_text = footer_text
         super().__init__(str(filename), pagesize=A4, leftMargin=48, rightMargin=48,
                          topMargin=54, bottomMargin=48, title='H&B — основы AI-веб-разработки',
                          author='H&B Learning Department', pageCompression=1)
@@ -67,7 +68,7 @@ class Book(BaseDocTemplate):
         canvas.setFont('HB', 8)
         canvas.setFillColor(colors.HexColor('#5a6963'))
         canvas.drawString(48, A4[1]-26, 'H&B  /  LEARNING DEPARTMENT')
-        canvas.drawString(48, 28, 'Учебные примеры FORMA. Не руководство к работе с реальными платежами.')
+        canvas.drawString(48, 28, self.footer_text)
         canvas.drawRightString(A4[0]-48, 28, str(doc.page))
         canvas.restoreState()
 
@@ -168,7 +169,7 @@ def main():
         n, url = entry['id'], entry['url']
         label = entry.get('title') or url
         story.append(Paragraph('<a name="source-%s"/>[%s] <link href="%s" color="#366b64">%s</link>' % (n, n, escape(url, {'"': '&quot;'}), escape(label)), styles['small']))
-    book = Book(args.output)
+    book = Book(args.output, footer_text='Основы AI-веб-разработки')
     book.multiBuild(story)
     print(json.dumps({'pdf': args.output, 'words': len(complete.split()), 'russian_words': len(re.findall(r'[А-Яа-яЁё]+(?:-[А-Яа-яЁё]+)*', body)), 'chapters': len(re.findall(r'^## Глава ', body, re.M)), 'terms': len(re.findall(r'^\d+\. \*\*', body, re.M))}, ensure_ascii=False))
 
