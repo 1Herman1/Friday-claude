@@ -4,6 +4,20 @@ from pathlib import Path
 from build_handbook import Book, fonts
 
 class BuildTest(unittest.TestCase):
+    def test_workbook_uses_curator_and_clean_footer(self):
+        import re
+        from pypdf import PdfReader
+        reader = PdfReader(Path(__file__).parent / 'HB-Student-Workbook-24-Days.pdf')
+        for number, page in enumerate(reader.pages, start=1):
+            text = page.extract_text() or ''
+            self.assertIsNone(re.search(r'\bГерман(?:а|у|ом|е)?\b', text), 'Personal name on page %s' % number)
+            self.assertNotIn('Учебные примеры FORMA. Не руководство к работе с реальными платежами.', text)
+            if number > 1:
+                self.assertIn('Практикум · 24 учебных дня', text)
+        text = '\n'.join(page.extract_text() or '' for page in reader.pages)
+        self.assertIn('куратора', text)
+        self.assertIn('куратору', text)
+
     def test_handbook_uses_curator_instead_of_personal_name(self):
         import re
         from pypdf import PdfReader

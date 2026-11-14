@@ -10,9 +10,16 @@ from build_handbook import Book, fonts, inline
 
 BASE = Path(__file__).resolve().parent
 
+
+def student_copy(text):
+    """Use a generic curator role in student-facing prose, not internal owner records."""
+    text = re.sub(r'\bГерман(ом|а|у|е)?\b', lambda m: 'куратор' + (m.group(1) or ''), text)
+    return re.sub(r'(^|[.!?]\s+|\*\*\s+)куратор\b', lambda m: m.group(1) + 'Куратор', text, flags=re.M)
+
+
 def main():
     fonts()
-    source = (BASE.parent / 'course.md').read_text()
+    source = student_copy((BASE.parent / 'course.md').read_text())
     matches = list(re.finditer(r'^#### День (\d{2}) — (.+)$', source, re.M))
     assert [int(m[1]) for m in matches] == list(range(1,25))
     styles = {
@@ -22,7 +29,7 @@ def main():
         'worksheet':ParagraphStyle('Worksheet',fontName='HB-Bold',fontSize=13,leading=18,spaceBefore=8,spaceAfter=12,keepWithNext=True),
         'small':ParagraphStyle('Small',fontName='HB',fontSize=9,leading=13,spaceAfter=9),
     }
-    story=[Spacer(1,70),Paragraph('H&amp;B',styles['cover']),Paragraph('ПРАКТИКУМ<br/>24 УЧЕБНЫХ ДНЯ',styles['cover']),Paragraph('Рабочая тетрадь студента',styles['chapter']),Paragraph('Задания, критерии приёмки и место для собственных наблюдений. Читать вместе с учебником «Основы AI-веб-разработки».',styles['body']),Paragraph('Редакция 14 ноября 2026. 8 недель, 3 дня в неделю. Все данные FORMA вымышленные.',styles['small']),Paragraph('Это практические задания согласованной программы, а не утверждение, что ученик их выполнил. Принятие результата и выпуск — решение Германа.',styles['body']),PageBreak(),Paragraph('Содержание',styles['chapter'])]
+    story=[Spacer(1,70),Paragraph('H&amp;B',styles['cover']),Paragraph('ПРАКТИКУМ<br/>24 УЧЕБНЫХ ДНЯ',styles['cover']),Paragraph('Рабочая тетрадь студента',styles['chapter']),Paragraph('Задания, критерии приёмки и место для собственных наблюдений. Читать вместе с учебником «Основы AI-веб-разработки».',styles['body']),Paragraph('Редакция 14 ноября 2026. 8 недель, 3 дня в неделю. Все данные FORMA вымышленные.',styles['small']),Paragraph('Это практические задания согласованной программы, а не утверждение, что ученик их выполнил. Принятие результата и выпуск — решение куратора.',styles['body']),PageBreak(),Paragraph('Содержание',styles['chapter'])]
     toc=TableOfContents();toc.levelStyles=[ParagraphStyle('TOC0',fontName='HB',fontSize=9,leading=12,spaceBefore=0)]
     story += [toc,PageBreak()]
     for i,m in enumerate(matches):
@@ -39,7 +46,7 @@ def main():
         story.append(Paragraph('Дата / версия артефакта: ____________________    Решение владельца: ____________________',styles['small']))
         if i != len(matches)-1:story.append(PageBreak())
     out=BASE/'HB-Student-Workbook-24-Days.pdf'
-    book=Book(out);book.title='H&B — практикум на 24 учебных дня';book.multiBuild(story)
+    book=Book(out, footer_text='Практикум · 24 учебных дня');book.title='H&B — практикум на 24 учебных дня';book.multiBuild(story)
     print(json.dumps({'pdf':str(out),'days':len(matches)},ensure_ascii=False))
 
 if __name__=='__main__':main()
