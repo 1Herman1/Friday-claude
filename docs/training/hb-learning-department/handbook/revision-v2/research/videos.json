@@ -1,0 +1,232 @@
+[
+  {
+    "id": 1,
+    "topic": "composition_hierarchy",
+    "subject": "Композиция и визуальная иерархия",
+    "status": "verified_real_video",
+    "url": "https://www.youtube.com/watch?v=-8ScOuQbEoU",
+    "youtube_id": "-8ScOuQbEoU",
+    "title": "Композиция за 30 минут! Это изменит твой дизайн навсегда!",
+    "channel": "VideoSmile",
+    "channel_url": "https://www.youtube.com/@VideoSmile",
+    "upload_date": "20250527",
+    "duration_seconds": 1858,
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "level": "Базовый, русский",
+    "language": {
+      "original": "ru",
+      "nonautomatic_subtitles": [
+        "ru"
+      ],
+      "russian_automatic_translation_listed": false,
+      "status": "Русская речь: metadata language=ru. Есть ru в subtitles, не в automatic_captions. В automatic_captions перечислены ru/ru-orig (автораспознавание). Проверен список дорожек, не их текст/точность и не доступность в каждом регионе. live_chat не считается субтитрами."
+    },
+    "access": "yt-dlp availability=public и oEmbed HTTP 200 без cookies/входа; воспроизведение и региональные ограничения не проверялись. Связанные курсы, файлы и инструменты не объявляются бесплатными.",
+    "evidence": {
+      "citation_id": 11,
+      "oembed_citation_id": 12,
+      "oembed_url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=-8ScOuQbEoU&format=json",
+      "metadata_file": "evidence/video-01-metadata.json",
+      "inspected_scope": "В описании автора перечислены иерархия, пятно, сетка, контраст, воздух, ритм, баланс и практика с баннером. Проверены описание и авторское оглавление; видео целиком не просмотрено.",
+      "full_video_watched": false,
+      "transcript_inspected": false,
+      "description_inspected": true
+    },
+    "questions": [
+      "Что является главным акцентом и какими двумя средствами он выделен?",
+      "Как изменится композиция при удвоении длины русского заголовка?"
+    ],
+    "mini_practice": "Сделайте два hero одного сервиса с одинаковыми текстами: один с типографическим акцентом, второй с изображением. Покажите порядок чтения стрелками и объясните CTA.",
+    "limitation": "Название обещает очень сильный результат; это рекламная формулировка автора, не наша оценка. Примеры баннеров переносите в веб только после проверки адаптивности."
+  },
+  {
+    "id": 2,
+    "topic": "typography_grid",
+    "subject": "Типографика и сетка",
+    "status": "verified_real_video",
+    "url": "https://www.youtube.com/watch?v=gb6jS8Kjtz4",
+    "youtube_id": "gb6jS8Kjtz4",
+    "title": "Как построить сетку. Графический дизайн, ч1",
+    "channel": "ГРАФИЧ",
+    "channel_url": "https://www.youtube.com/@grafffich",
+    "upload_date": "20180622",
+    "duration_seconds": 3016,
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "level": "Базовый, русский",
+    "language": {
+      "original": "ru",
+      "nonautomatic_subtitles": [],
+      "russian_automatic_translation_listed": false,
+      "status": "Русская речь: metadata language=ru. Неавтоматические русские субтитры в metadata не обнаружены. В automatic_captions перечислены ru/ru-orig (автораспознавание). Проверен список дорожек, не их текст/точность и не доступность в каждом регионе. live_chat не считается субтитрами."
+    },
+    "access": "yt-dlp availability=public и oEmbed HTTP 200 без cookies/входа; воспроизведение и региональные ограничения не проверялись. Связанные курсы, файлы и инструменты не объявляются бесплатными.",
+    "evidence": {
+      "citation_id": 13,
+      "oembed_citation_id": 14,
+      "oembed_url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=gb6jS8Kjtz4&format=json",
+      "metadata_file": "evidence/video-02-metadata.json",
+      "inspected_scope": "Прочитано полное описание с дополнительными комментариями автора: сетка колонок и базовых линий, интерлиньяж и контраст кеглей. Это урок InDesign/журнальной вёрстки, не CSS-руководство.",
+      "full_video_watched": false,
+      "transcript_inspected": false,
+      "description_inspected": true
+    },
+    "questions": [
+      "От какого текста и интерлиньяжа начинается сетка?",
+      "Какие правила из печати нельзя буквально перенести в responsive web?"
+    ],
+    "mini_practice": "Сверстайте в Figma статью с тремя уровнями текста и одной сеткой. Затем сделайте мобильную версию с тем же порядком чтения и объясните изменения.",
+    "limitation": "Материал опубликован в 2018 году. Не принимайте тезис о неактуальности модульной сетки за универсальный закон; не переносите печатные пункты напрямую в CSS и не считайте рекомендации автора нормативом."
+  },
+  {
+    "id": 3,
+    "topic": "client_brief_concepts",
+    "subject": "Клиентский бриф → направления → концепция",
+    "status": "verified_real_video",
+    "url": "https://www.youtube.com/watch?v=QjrYGysBKv8",
+    "youtube_id": "QjrYGysBKv8",
+    "title": "Как создаются дизайн-концепции сайтов в студии? На примере реального пресейла | Практика #10",
+    "channel": "PRAGMATICA",
+    "channel_url": "https://www.youtube.com/@PRAGMATICADESIGN",
+    "upload_date": "20250122",
+    "duration_seconds": 437,
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "level": "Базовый/практический, русский",
+    "language": {
+      "original": "ru",
+      "nonautomatic_subtitles": [],
+      "russian_automatic_translation_listed": false,
+      "status": "Русская речь: metadata language=ru. Неавтоматические русские субтитры в metadata не обнаружены. В automatic_captions перечислены ru/ru-orig (автораспознавание). Проверен список дорожек, не их текст/точность и не доступность в каждом регионе. live_chat не считается субтитрами."
+    },
+    "access": "yt-dlp availability=public и oEmbed HTTP 200 без cookies/входа; воспроизведение и региональные ограничения не проверялись. Связанные курсы, файлы и инструменты не объявляются бесплатными.",
+    "evidence": {
+      "citation_id": 15,
+      "oembed_citation_id": 16,
+      "oembed_url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=QjrYGysBKv8&format=json",
+      "metadata_file": "evidence/video-03-metadata.json",
+      "inspected_scope": "Прочитаны описание студии и её оглавление: задача клиента, подбор референсов и стилей, отбор идей, финальная концепция, прототип для презентации. Это разбор одного пресейла, а не универсальный курс брифинга.",
+      "full_video_watched": false,
+      "transcript_inspected": false,
+      "description_inspected": true
+    },
+    "questions": [
+      "Какая задача клиента должна ограничивать выбор стиля?",
+      "Каким артефактом объясняется клиенту связь решения с задачей?"
+    ],
+    "mini_practice": "Для вымышленного клиента составьте одностраничный бриф: аудитория, задача, CTA, контент, ограничения и критерии согласования. Предложите два разных направления и выберите одно по этим критериям.",
+    "limitation": "Пример про косметический бренд не заменяет сбор требований у вашего клиента. Не выдавайте чужие референсы/прототип за готовую собственную концепцию."
+  },
+  {
+    "id": 4,
+    "topic": "reference_analysis",
+    "subject": "Анализ референсов: от наблюдения к гипотезе",
+    "status": "verified_real_video",
+    "url": "https://www.youtube.com/watch?v=0cbngt-MFsE",
+    "youtube_id": "0cbngt-MFsE",
+    "title": "Понедельничные референсы #67 (Разбор сайтов, web-design, UX/UI, Figma) вайбкодинг, исследования",
+    "channel": "Слава Кивич",
+    "channel_url": "https://www.youtube.com/@Kivich_Viacheslav",
+    "upload_date": "20250908",
+    "duration_seconds": 575,
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "level": "Базовый/практический, русский",
+    "language": {
+      "original": "ru",
+      "nonautomatic_subtitles": [],
+      "russian_automatic_translation_listed": false,
+      "status": "Русская речь: metadata language=ru. Неавтоматические русские субтитры в metadata не обнаружены. В automatic_captions перечислены ru/ru-orig (автораспознавание). Проверен список дорожек, не их текст/точность и не доступность в каждом регионе. live_chat не считается субтитрами."
+    },
+    "access": "yt-dlp availability=public и oEmbed HTTP 200 без cookies/входа; воспроизведение и региональные ограничения не проверялись. Связанные курсы, файлы и инструменты не объявляются бесплатными.",
+    "evidence": {
+      "citation_id": 17,
+      "oembed_citation_id": 18,
+      "oembed_url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=0cbngt-MFsE&format=json",
+      "metadata_file": "evidence/video-04-metadata.json",
+      "inspected_scope": "Прочитано описание автора: примеры упаковки чая, поиска с превью и sidebar; также ссылки на research и vibe coding. Это авторский разбор конкретных находок, не систематический курс и не проверка UX-метрик.",
+      "full_video_watched": false,
+      "transcript_inspected": false,
+      "description_inspected": true
+    },
+    "questions": [
+      "Где заканчивается наблюдение автора и начинается гипотеза о пользе для пользователя?",
+      "Что нужно проверить на живом сайте, чего не видно по превью?"
+    ],
+    "mini_practice": "Выберите один показанный приём и заполните карточку: оригинальный URL, задача, наблюдение, гипотеза, ограничения, проверка на mobile/keyboard. Сделайте свой вариант для другого продукта.",
+    "limitation": "Мнение автора не является результатом пользовательского исследования. Не приписывайте показанным решениям рост конверсии и не сохраняйте только скриншот."
+  },
+  {
+    "id": 5,
+    "topic": "scroll_motion_gsap",
+    "subject": "Scroll-driven motion / GSAP ScrollTrigger",
+    "status": "verified_real_video",
+    "url": "https://www.youtube.com/watch?v=X7IBa7vZjmo",
+    "youtube_id": "X7IBa7vZjmo",
+    "title": "Introducing ScrollTrigger for GSAP",
+    "channel": "GSAP Learning",
+    "channel_url": "https://www.youtube.com/@GreenSockLearning",
+    "upload_date": "20200601",
+    "duration_seconds": 1303,
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "level": "Дополнительный продвинутый, английский",
+    "language": {
+      "original": "en-US",
+      "nonautomatic_subtitles": [],
+      "russian_automatic_translation_listed": true,
+      "status": "Исходная речь: metadata language=en-US. Неавтоматические русские субтитры в metadata не обнаружены. В automatic_captions есть ru с параметром tlang=ru (автоматический перевод). Проверен список дорожек, не их текст/точность и не доступность в каждом регионе. live_chat не считается субтитрами."
+    },
+    "access": "yt-dlp availability=public и oEmbed HTTP 200 без cookies/входа; воспроизведение и региональные ограничения не проверялись. Связанные курсы, файлы и инструменты не объявляются бесплатными.",
+    "evidence": {
+      "citation_id": 19,
+      "oembed_citation_id": 20,
+      "oembed_url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=X7IBa7vZjmo&format=json",
+      "metadata_file": "evidence/video-05-metadata.json",
+      "inspected_scope": "Прочитаны описание и авторское оглавление GSAP: basics, toggleActions, start/end, scrub, pinning, snapping, callbacks. Дополнительно прочитана текущая официальная страница ScrollTrigger; видео встроено в её Detailed walkthrough.",
+      "full_video_watched": false,
+      "transcript_inspected": false,
+      "description_inspected": true
+    },
+    "questions": [
+      "Чем запуск анимации по пересечению границы отличается от scrub?",
+      "Что остаётся доступным, если убрать pinning и отключить анимацию?"
+    ],
+    "mini_practice": "Сделайте маленький HTML/CSS/JS-прототип с одной анимацией opacity/transform и ScrollTrigger. Включите markers для отладки; добавьте статичное состояние для reduced motion и проверьте resize.",
+    "limitation": "Видео 2020 года: сверяйте API и установку с актуальными docs, а не со старыми greensock.com из описания. Не начинайте с переписывания сложного award-сайта; HTML/CSS и основы JS — обязательная подготовка."
+  },
+  {
+    "id": 6,
+    "topic": "3d_spline",
+    "subject": "3D и интерактивность / Spline",
+    "status": "verified_real_video",
+    "url": "https://www.youtube.com/watch?v=Kxz8fzU2OUE",
+    "youtube_id": "Kxz8fzU2OUE",
+    "title": "New to Spline? Watch This First! An Introduction to Spline 3D | Beginners Tutorial",
+    "channel": "Spline",
+    "channel_url": "https://www.youtube.com/@splinetool",
+    "upload_date": "20250214",
+    "duration_seconds": 1575,
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "level": "Дополнительный продвинутый, английский",
+    "language": {
+      "original": "en-US",
+      "nonautomatic_subtitles": [],
+      "russian_automatic_translation_listed": true,
+      "status": "Исходная речь: metadata language=en-US. Неавтоматические русские субтитры в metadata не обнаружены. В automatic_captions есть ru с параметром tlang=ru (автоматический перевод). Проверен список дорожек, не их текст/точность и не доступность в каждом регионе. live_chat не считается субтитрами."
+    },
+    "access": "yt-dlp availability=public и oEmbed HTTP 200 без cookies/входа; воспроизведение и региональные ограничения не проверялись. Связанные курсы, файлы и инструменты не объявляются бесплатными.",
+    "evidence": {
+      "citation_id": 21,
+      "oembed_citation_id": 22,
+      "oembed_url": "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=Kxz8fzU2OUE&format=json",
+      "metadata_file": "evidence/video-06-metadata.json",
+      "inspected_scope": "Прочитаны описание Spline, оглавление и страница Spline Academy: интерфейс, объекты и камера, состояния/анимация, export, embedding и community. Связь страницы с YouTube ID подтверждена VideoObject JSON-LD.",
+      "full_video_watched": false,
+      "transcript_inspected": false,
+      "description_inspected": true
+    },
+    "questions": [
+      "Зачем этой странице 3D, а не обычная статичная иллюстрация?",
+      "Какие параметры камеры и света меняют читаемость объекта?"
+    ],
+    "mini_practice": "Соберите сцену из трёх примитивов с двумя материалами, одним светом и двумя состояниями. Подготовьте изображение-fallback и объясните, как оно сохранит смысл без 3D.",
+    "limitation": "Урок не гарантирует бесплатность всех способов export/embedding. Наличие пункта меню не подтверждает ваш тариф. Перед использованием проверьте права на remix, мобильную производительность и необходимость сцены."
+  }
+]

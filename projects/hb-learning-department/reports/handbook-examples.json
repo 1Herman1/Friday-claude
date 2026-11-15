@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "checks": [
+    "hero revised: actual CSS edit saved through API, 28px narrow headline applied, no horizontal overflow",
+    "hero: exact book HTML/CSS saved via app, sanitized preview, desktop/mobile grid, no overflow, focusable CTA",
+    "ceramics: exact book HTML/CSS saved via app, sanitized preview, desktop/mobile grid, no overflow, focusable CTA"
+  ],
+  "live_model_tested": false,
+  "fixture": "Disposable student; no real employee state; screenshots are the real sanitized preview, not a completed integration"
+}

@@ -4,6 +4,25 @@ from pathlib import Path
 from build_handbook import Book, fonts
 
 class BuildTest(unittest.TestCase):
+    def test_short_directory_tree_stays_on_one_page(self):
+        from reportlab.platypus import KeepTogether
+        from build_handbook import markdown_flowables
+        fonts()
+        tree = '```text\nforma/\n  index.html\n  styles/\n    main.css\n```'
+        flowables = markdown_flowables(tree, {})
+        self.assertEqual(len(flowables), 1)
+        self.assertIsInstance(flowables[0], KeepTogether)
+
+    def test_v2_answers_are_the_last_section(self):
+        from pypdf import PdfReader
+        reader = PdfReader(Path(__file__).parent / 'HB-Web-Development-Handbook.pdf')
+        text = '\n'.join(page.extract_text() or '' for page in reader.pages)
+        answers = text.rfind('Ответы и разборы упражнений')
+        sources = text.rfind('Источники и дальнейшее чтение')
+        self.assertGreater(answers, sources)
+        self.assertIn('Ответ 1.1', text[answers:])
+        self.assertIn('Глава 22.', text[:answers])
+
     def test_workbook_uses_curator_and_clean_footer(self):
         import re
         from pypdf import PdfReader

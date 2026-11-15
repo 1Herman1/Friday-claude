@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "name": "Awwwards",
+    "url": "https://www.awwwards.com/",
+    "title": "Awwwards - Website Awards - Best Web Design Trends",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Главная с номинантами и победителями доступна без входа; видны Log in, Sign Up, Be Pro и Academy. Условия Pro и стоимость курсов не проверялись.",
+    "evidence": {
+      "citation_id": 1,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://www.awwwards.com/",
+      "observed_title": "Awwwards - Website Awards - Best Web Design Trends",
+      "http_status": 200,
+      "excerpt": "Winners Recent Sites of the Day.",
+      "local_file": "evidence/source-01.txt"
+    },
+    "skill": "Композиция промосайтов, крупная типографика, переходы между секциями и сценарий скролла.",
+    "use": "Выберите два сайта одной отрасли. Откройте оригиналы, опишите порядок акцентов и сделайте свой wireframe из пяти блоков под другой бриф.",
+    "exercise": "Выберите два сайта одной отрасли. Откройте оригиналы, опишите порядок акцентов и сделайте свой wireframe из пяти блоков под другой бриф.",
+    "limitation": "Награда не доказывает конверсию, доступность или пригодность для малого бюджета. Скриншот не показывает сценарий и скорость; не копируйте фирменную графику."
+  },
+  {
+    "id": 2,
+    "name": "Recent / бывший Godly",
+    "url": "https://recent.design/?ref=godly",
+    "title": "Recent — Design Inspiration",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Публичная главная и категории прочитаны без входа. Доступность всех карточек, сохранения, платных функций и внешних работ не проверялась.",
+    "evidence": {
+      "citation_id": 2,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://recent.design/?ref=godly",
+      "observed_title": "Recent — Design Inspiration",
+      "http_status": 200,
+      "excerpt": "All Web Interface Branding Motion Illustration Posters Print",
+      "local_file": "evidence/source-02.txt"
+    },
+    "skill": "Сопоставление веба, интерфейсов, брендинга и motion; различение общего настроения и конкретного приёма.",
+    "use": "Найдите три разных примера с одним приёмом контраста. Для каждого запишите задачу и ограничение, затем примените принцип к собственному hero.",
+    "exercise": "Найдите три разных примера с одним приёмом контраста. Для каждого запишите задачу и ограничение, затем примените принцип к собственному hero.",
+    "limitation": "godly.website перенаправил на Recent: не выдавайте старую коллекцию Godly за неизменившийся сервис. Слайды и картинки не заменяют оригинальный сайт; не переносите чужой стиль целиком."
+  },
+  {
+    "id": 3,
+    "name": "Siteinspire",
+    "url": "https://www.siteinspire.com/",
+    "title": "Best Website Design Inspiration | Siteinspire",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Публичный каталог открыт в свежем браузере без входа; видны категории и карточки. urllib получил 429. Возможности аккаунта и платные ограничения не проверялись.",
+    "evidence": {
+      "citation_id": 3,
+      "method": "fresh public browser; initial urllib 429",
+      "final_url": "https://www.siteinspire.com/",
+      "observed_title": "Best Website Design Inspiration | Siteinspire",
+      "http_status": null,
+      "excerpt": "A showcase of the web’s finest design + talent",
+      "local_file": "evidence/source-03.txt"
+    },
+    "skill": "Сдержанная композиция, типографические сайты и сравнение по стилю, типу, теме и платформе.",
+    "use": "Возьмите три сайта одного типа. Зарисуйте сетку первого экрана без графики, сравните ширины текста и выравнивания; сделайте четвёртый вариант для своего контента.",
+    "exercise": "Возьмите три сайта одного типа. Зарисуйте сетку первого экрана без графики, сравните ширины текста и выравнивания; сделайте четвёртый вариант для своего контента.",
+    "limitation": "Кураторский отбор не является пользовательским исследованием. Проверяйте мобильный оригинал: статичная превью-картинка скрывает меню, фокус и прокрутку."
+  },
+  {
+    "id": 4,
+    "name": "One Page Love",
+    "url": "https://onepagelove.com/",
+    "title": "One Page Love — One Page Website Inspiration and Templates",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Публичные примеры и категории доступны без входа. На главной отдельно показаны Free и Premium templates; это не означает бесплатность всех шаблонов. Покупки и скачивания не выполнялись.",
+    "evidence": {
+      "citation_id": 4,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://onepagelove.com/",
+      "observed_title": "One Page Love — One Page Website Inspiration and Templates",
+      "http_status": 200,
+      "excerpt": "Templates Browse All Templates Premium Free",
+      "local_file": "evidence/source-04.txt"
+    },
+    "skill": "Структура одностраничников и отдельных секций: hero, социальное доказательство, pricing, FAQ, CTA.",
+    "use": "Для одного брифа сопоставьте три секции FAQ и три CTA. Соберите свою последовательность страницы и объясните, какое возражение снимает каждый блок.",
+    "exercise": "Для одного брифа сопоставьте три секции FAQ и три CTA. Соберите свою последовательность страницы и объясните, какое возражение снимает каждый блок.",
+    "limitation": "Каталог смешивает вдохновение и шаблоны. Не копируйте последовательность без проверки брифа; бесплатный просмотр не даёт прав на код, фотографии и шрифты."
+  },
+  {
+    "id": 5,
+    "name": "Httpster",
+    "url": "https://httpster.net/",
+    "title": "Website Design Inspiration | Httpster",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Главная, стилевые и тематические категории и ссылки Visit получены без авторизации. Скрытые функции, тарифы и условия внешних сайтов не проверялись.",
+    "evidence": {
+      "citation_id": 5,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://httpster.net/",
+      "observed_title": "Website Design Inspiration | Httpster",
+      "http_status": 200,
+      "excerpt": "Hand-picked website design inspiration with typographic, minimal, brutalist vibes.",
+      "local_file": "evidence/source-05.txt"
+    },
+    "skill": "Типографика, необычные сетки, минимализм и выразительный характер редакционных сайтов.",
+    "use": "Отфильтруйте Typographic или Grid. У трёх оригинальных сайтов выпишите шрифтовые роли и интервалы; создайте свой текстовый блок с другим содержанием.",
+    "exercise": "Отфильтруйте Typographic или Grid. У трёх оригинальных сайтов выпишите шрифтовые роли и интервалы; создайте свой текстовый блок с другим содержанием.",
+    "limitation": "Экспериментальная навигация не всегда понятна новичку. Переходите по Visit, проверяйте клавиатуру и мобильный экран; не собирайте только скриншоты."
+  },
+  {
+    "id": 6,
+    "name": "Minimal Gallery",
+    "url": "https://minimal.gallery/",
+    "title": "Minimal Gallery – Hand-picked web design inspiration, premium templates, tools and more",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Публичный каталог с типами сайтов и платформами открыт без входа. Есть Templates, Bookmarks и формы коллекций; условия сохранения и цены шаблонов не проверялись.",
+    "evidence": {
+      "citation_id": 6,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://minimal.gallery/",
+      "observed_title": "Minimal Gallery – Hand-picked web design inspiration, premium templates, tools and more",
+      "http_status": 200,
+      "excerpt": "Minimal Gallery is a curated source of website design inspiration for creatives.",
+      "local_file": "evidence/source-06.txt"
+    },
+    "skill": "Минималистичная иерархия, ритм отступов, соотношение текста и пустоты, портфолио и сервисные страницы.",
+    "use": "Возьмите один референс как гипотезу о ритме. Постройте свою шкалу отступов и три текстовых уровня; проверьте их на длинном русском заголовке и мобильном экране.",
+    "exercise": "Возьмите один референс как гипотезу о ритме. Постройте свою шкалу отступов и три текстовых уровня; проверьте их на длинном русском заголовке и мобильном экране.",
+    "limitation": "Минимализм не равен отсутствию содержания. Не переносите пустоты и пропорции из картинки без реального текста; не копируйте чужие изображения."
+  },
+  {
+    "id": 7,
+    "name": "Curated",
+    "url": "https://curated.design/",
+    "title": "Web design inspiration from real, live websites — Curated",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Каталог прочитан без входа. На главной прямо указано, что advanced filters, сортировка библиотеки и сохранённые поиски относятся к Curated Pro. Есть sign in/sign up; покупка не проверялась.",
+    "evidence": {
+      "citation_id": 7,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://curated.design/",
+      "observed_title": "Web design inspiration from real, live websites — Curated",
+      "http_status": 200,
+      "excerpt": "Advanced filters come with Curated Pro",
+      "local_file": "evidence/source-07.txt"
+    },
+    "skill": "Сравнение реальных сайтов и секций по отрасли и визуальному характеру.",
+    "use": "Для сервиса выберите три отраслевых примера. Составьте таблицу: что обещают, каким блоком доказывают, куда ведут CTA; придумайте собственную структуру доказательств.",
+    "exercise": "Для сервиса выберите три отраслевых примера. Составьте таблицу: что обещают, каким блоком доказывают, куда ведут CTA; придумайте собственную структуру доказательств.",
+    "limitation": "Метка real/live не подтверждает работоспособность каждого внешнего сайта сегодня. Откройте оригинал, проверьте адаптивность и не переносите чужое оформление или контент."
+  },
+  {
+    "id": 8,
+    "name": "HOVERSTAT.ES",
+    "url": "https://www.hoverstat.es/",
+    "title": "HOVERSTAT.ES | The home of alternative web-design.",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Публичные записи архива и редакционные пояснения доступны без входа. Условия отправки работ и сторонних сайтов не проверялись.",
+    "evidence": {
+      "citation_id": 8,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://www.hoverstat.es/",
+      "observed_title": "HOVERSTAT.ES | The home of alternative web-design.",
+      "http_status": 200,
+      "excerpt": "The home of alternative web-design.",
+      "local_file": "evidence/source-08.txt"
+    },
+    "skill": "Нестандартные взаимодействия, hover, экспериментальная навигация и связь движения со смыслом.",
+    "use": "Выберите одно взаимодействие из архива. Запишите три состояния и триггер, затем спроектируйте свой упрощённый вариант без hover для сенсорного экрана.",
+    "exercise": "Выберите одно взаимодействие из архива. Запишите три состояния и триггер, затем спроектируйте свой упрощённый вариант без hover для сенсорного экрана.",
+    "limitation": "Эффектный hover на записи не гарантирует удобство. Нужны проверка оригинала, альтернативы для touch/клавиатуры и reduced motion; не копируйте эффект покадрово."
+  },
+  {
+    "id": 9,
+    "name": "GSAP Showcase",
+    "url": "https://gsap.com/showcase/",
+    "title": "GSAP Showcase",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Showcase с примерами и ссылками доступен без авторизации. На странице есть Login/Create Account; условия отправки сайта и ограничения инструментов здесь не проверялись.",
+    "evidence": {
+      "citation_id": 9,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://gsap.com/showcase/",
+      "observed_title": "GSAP Showcase",
+      "http_status": 200,
+      "excerpt": "GSAP Gallery All",
+      "local_file": "evidence/source-09.txt"
+    },
+    "skill": "Движение как часть структуры сайта: скролл-сцены, смена состояний и синхронизация текста с визуалом.",
+    "use": "Для одного сайта нарисуйте схему: триггер → изменяемое свойство → диапазон скролла → цель. Сделайте собственный текстовый motion-spec без заимствования кода.",
+    "exercise": "Для одного сайта нарисуйте схему: триггер → изменяемое свойство → диапазон скролла → цель. Сделайте собственный текстовый motion-spec без заимствования кода.",
+    "limitation": "Попадание в showcase не означает, что любой эффект нужен вашему проекту. Скриншот скрывает тайминг и производительность; не имитируйте сложный motion без доступной статичной версии."
+  },
+  {
+    "id": 10,
+    "name": "Spline Community",
+    "url": "https://community.spline.design/",
+    "title": "Spline Community - A new home for your creativity",
+    "retrieved_at": "2026-11-15T17:21:40+0300",
+    "verification": "verified_primary_live_page",
+    "access": "Стартовая страница публична, есть Login / Sign Up и Join the community. Открытие конкретного проекта, remix/export и тарифные ограничения не проверены; не обещаем их бесплатность.",
+    "evidence": {
+      "citation_id": 10,
+      "method": "urllib HTTPS GET, no cookies, no login",
+      "final_url": "https://community.spline.design/",
+      "observed_title": "Spline Community - A new home for your creativity",
+      "http_status": 200,
+      "excerpt": "The platform to discover, remix and share 3D designs",
+      "local_file": "evidence/source-10.txt"
+    },
+    "skill": "Интерактивные 3D-композиции: свет, материал, глубина, камера и соответствие сцены задаче страницы.",
+    "use": "После открытия доступного проекта разложите сцену на формы, материалы, свет и камеру. Сделайте собственную сцену из трёх примитивов и опишите статичный fallback.",
+    "exercise": "После открытия доступного проекта разложите сцену на формы, материалы, свет и камеру. Сделайте собственную сцену из трёх примитивов и опишите статичный fallback.",
+    "limitation": "Remix не является разрешением выдавать чужую сцену за свою. Проверяйте условия конкретного проекта, вес и мобильную производительность; картинка не показывает интерактивность."
+  }
+]

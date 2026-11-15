@@ -29,7 +29,7 @@ def main():
         'worksheet':ParagraphStyle('Worksheet',fontName='HB-Bold',fontSize=13,leading=18,spaceBefore=8,spaceAfter=12,keepWithNext=True),
         'small':ParagraphStyle('Small',fontName='HB',fontSize=9,leading=13,spaceAfter=9),
     }
-    story=[Spacer(1,70),Paragraph('H&amp;B',styles['cover']),Paragraph('ПРАКТИКУМ<br/>24 УЧЕБНЫХ ДНЯ',styles['cover']),Paragraph('Рабочая тетрадь студента',styles['chapter']),Paragraph('Задания, критерии приёмки и место для собственных наблюдений. Читать вместе с учебником «Основы AI-веб-разработки».',styles['body']),Paragraph('Редакция 14 ноября 2026. 8 недель, 3 дня в неделю. Все данные FORMA вымышленные.',styles['small']),Paragraph('Это практические задания согласованной программы, а не утверждение, что ученик их выполнил. Принятие результата и выпуск — решение куратора.',styles['body']),PageBreak(),Paragraph('Содержание',styles['chapter'])]
+    story=[Spacer(1,60),Paragraph('H&amp;B',styles['cover']),Paragraph('ПРАКТИКУМ<br/>24 УЧЕБНЫХ ДНЯ',styles['cover']),Paragraph('Дизайн и веб-прототипы',styles['body']),Paragraph('Задания, критерии приёмки и место для собственных наблюдений. Читать вместе с редакцией 2 учебника «Дизайн и основы AI-веб-разработки».',styles['body']),Paragraph('Редакция 2 / 15 ноября 2026. 8 недель, 3 дня в неделю. Все данные FORMA вымышленные.',styles['small']),Paragraph('В каждом дне есть дизайн-спринт со ссылкой на разобранный пример. Номера глав учебника не равны номерам дней; ответы к упражнениям книги находятся её последним разделом. Здесь сохраняются собственные наблюдения и артефакты дневной практики.',styles['body']),Paragraph('Сейчас доступны статические HTML/CSS-прототипы. Задания с JS/React, моделью, сетью или публикацией выполняются после подготовки соответствующей среды, а не имитируются ради зачёта. Принятие результата и выпуск — решение куратора.',styles['body']),PageBreak(),Paragraph('Содержание',styles['chapter'])]
     toc=TableOfContents();toc.levelStyles=[ParagraphStyle('TOC0',fontName='HB',fontSize=9,leading=12,spaceBefore=0)]
     story += [toc,PageBreak()]
     for i,m in enumerate(matches):
@@ -43,7 +43,7 @@ def main():
             story.append(Paragraph(label,styles['small']))
             story.append(Spacer(1,14));story.append(HRFlowable(width='100%',thickness=.5,color=colors.HexColor('#b8c8bf')))
             story.append(Spacer(1,9))
-        story.append(Paragraph('Дата / версия артефакта: ____________________    Решение владельца: ____________________',styles['small']))
+        story.append(Paragraph('Дата / версия артефакта: ____________________    Решение куратора: ____________________',styles['small']))
         if i != len(matches)-1:story.append(PageBreak())
     out=BASE/'HB-Student-Workbook-24-Days.pdf'
     book=Book(out, footer_text='Практикум · 24 учебных дня');book.title='H&B — практикум на 24 учебных дня';book.multiBuild(story)

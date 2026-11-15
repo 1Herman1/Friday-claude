@@ -156,6 +156,138 @@
       "url": "https://www.postgresql.org/docs/current/ddl-constraints.html",
       "title": "PostgreSQL: constraints",
       "accessed": "2026-11-13"
+    },
+    {
+      "id": 27,
+      "url": "https://www.awwwards.com",
+      "title": "Awwwards",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 28,
+      "url": "https://recent.design/?ref=godly",
+      "title": "Recent / бывший Godly",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 29,
+      "url": "https://www.siteinspire.com",
+      "title": "Siteinspire",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 30,
+      "url": "https://onepagelove.com",
+      "title": "One Page Love",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 31,
+      "url": "https://httpster.net",
+      "title": "Httpster",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 32,
+      "url": "https://minimal.gallery",
+      "title": "Minimal Gallery",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 33,
+      "url": "https://curated.design",
+      "title": "Curated",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 34,
+      "url": "https://www.hoverstat.es",
+      "title": "HOVERSTAT.ES",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 35,
+      "url": "https://gsap.com/showcase",
+      "title": "GSAP Showcase",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 36,
+      "url": "https://community.spline.design",
+      "title": "Spline Community",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 37,
+      "url": "https://www.youtube.com/watch?v=-8ScOuQbEoU",
+      "title": "Композиция за 30 минут! Это изменит твой дизайн навсегда!",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 38,
+      "url": "https://www.youtube.com/watch?v=gb6jS8Kjtz4",
+      "title": "Как построить сетку. Графический дизайн, ч1",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 39,
+      "url": "https://www.youtube.com/watch?v=QjrYGysBKv8",
+      "title": "Как создаются дизайн-концепции сайтов в студии? На примере реального пресейла | Практика #10",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 40,
+      "url": "https://www.youtube.com/watch?v=0cbngt-MFsE",
+      "title": "Понедельничные референсы #67 (Разбор сайтов, web-design, UX/UI, Figma) вайбкодинг, исследования",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 41,
+      "url": "https://www.youtube.com/watch?v=X7IBa7vZjmo",
+      "title": "Introducing ScrollTrigger for GSAP",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 42,
+      "url": "https://www.youtube.com/watch?v=Kxz8fzU2OUE",
+      "title": "New to Spline? Watch This First! An Introduction to Spline 3D | Beginners Tutorial",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 43,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API",
+      "title": "MDN: WebGL",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 44,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+      "title": "MDN: position and sticky",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 45,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video",
+      "title": "MDN: video element",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 46,
+      "url": "https://gsap.com/docs/v3/Plugins/ScrollTrigger",
+      "title": "GSAP: current ScrollTrigger documentation",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 47,
+      "url": "https://web.dev/learn/design",
+      "title": "web.dev: Learn Responsive Design",
+      "accessed": "2026-11-15"
+    },
+    {
+      "id": 48,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Transitions/Using",
+      "title": "MDN: CSS transitions (source capture in revision-v2/design/source-notes.md)",
+      "accessed": "2026-11-16"
     }
   ]
 }

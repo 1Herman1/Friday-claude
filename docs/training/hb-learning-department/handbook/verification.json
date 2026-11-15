@@ -1,28 +1,44 @@
 [
   {
     "file": "HB-Web-Development-Handbook.pdf",
-    "pages": 39,
-    "bytes": 293899,
+    "pages": 118,
+    "bytes": 1392037,
     "all_pages_have_text": true,
-    "chapters": 18,
+    "chapters": 22,
     "terms": 100,
-    "clickable_external_sources": 26,
+    "exercises": 30,
+    "answers": 30,
+    "embedded_images": 12,
+    "registered_sources": 48,
+    "clickable_external_urls": 48,
+    "answers_are_last": true,
     "rendered_review_pages": [
       1,
       2,
+      11,
+      12,
+      17,
       25,
-      39
+      52,
+      66,
+      72,
+      81,
+      88,
+      104,
+      118
     ]
   },
   {
     "file": "HB-Student-Workbook-24-Days.pdf",
     "pages": 26,
-    "bytes": 153179,
+    "bytes": 161044,
     "all_pages_have_text": true,
     "days": 24,
+    "daily_design_sprints": 24,
     "rendered_review_pages": [
       1,
-      3
+      3,
+      26
     ]
   }
 ]
