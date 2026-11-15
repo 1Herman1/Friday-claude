@@ -4,7 +4,7 @@ date: 2026-11-11
 source: hermes-telegram
 chat: Трейдинг - крипта
 topic: Оценить схему заработка на Spoofing криптомонет
-status: raw
+status: digested
 ---
 
 # Hermes · Трейдинг - крипта / Оценить схему заработка на Spoofing криптомонет · 2026-11-11

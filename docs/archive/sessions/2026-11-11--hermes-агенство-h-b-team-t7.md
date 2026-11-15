@@ -4,7 +4,7 @@ date: 2026-11-11
 source: hermes-telegram
 chat: Агенство H&B team
 topic: Создать ИИ-конструктор сайтов и приложений в России
-status: raw
+status: digested
 ---
 
 # Hermes · Агенство H&B team / Создать ИИ-конструктор сайтов и приложений в России · 2026-11-11

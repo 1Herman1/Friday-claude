@@ -4,7 +4,7 @@ date: 2026-11-14
 source: hermes-telegram
 chat: Агенство H&B team
 topic: Обучение сотрудника — H&B Learning Department
-status: raw
+status: digested
 ---
 
 # Hermes · Агенство H&B team / Обучение сотрудника — H&B Learning Department · 2026-11-14

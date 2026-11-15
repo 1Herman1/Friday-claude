@@ -4,7 +4,7 @@ date: 2026-11-11
 source: hermes-telegram
 chat: Агенство H&B team
 topic: Слушай я хотел создать обучение для того чтобы…
-status: raw
+status: digested
 ---
 
 # Hermes · Агенство H&B team / Слушай я хотел создать обучение для того чтобы… · 2026-11-11

@@ -4,7 +4,7 @@ date: 2026-11-11
 source: hermes-telegram
 chat: Трейдинг - крипта
 topic: Сигналы смарт-мани
-status: raw
+status: digested
 ---
 
 # Hermes · Трейдинг - крипта / Сигналы смарт-мани · 2026-11-11
