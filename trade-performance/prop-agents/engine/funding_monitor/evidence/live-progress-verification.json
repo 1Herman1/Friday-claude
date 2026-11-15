@@ -1,0 +1,87 @@
+{
+  "saw_actual_in_progress": true,
+  "saw_new_completed_snapshot": true,
+  "trace": [
+    {
+      "served_at": "2026-11-15T21:55:41.327Z",
+      "snapshot_at": "2026-11-15T21:54:31.095472+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": true,
+      "current_venue": "Gate",
+      "progress_at": "2026-11-15T21:55:41.136055+00:00"
+    },
+    {
+      "served_at": "2026-11-15T21:55:45.435Z",
+      "snapshot_at": "2026-11-15T21:54:31.095472+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": true,
+      "current_venue": "Binance",
+      "progress_at": "2026-11-15T21:55:44.512182+00:00"
+    },
+    {
+      "served_at": "2026-11-15T21:55:49.671Z",
+      "snapshot_at": "2026-11-15T21:54:31.095472+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": true,
+      "current_venue": "Binance",
+      "progress_at": "2026-11-15T21:55:47.342020+00:00"
+    },
+    {
+      "served_at": "2026-11-15T21:55:53.907Z",
+      "snapshot_at": "2026-11-15T21:54:31.095472+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": true,
+      "current_venue": "Binance",
+      "progress_at": "2026-11-15T21:55:47.342020+00:00"
+    },
+    {
+      "served_at": "2026-11-15T21:55:58.112Z",
+      "snapshot_at": "2026-11-15T21:54:31.095472+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": true,
+      "current_venue": "OKX",
+      "progress_at": "2026-11-15T21:55:57.824967+00:00"
+    },
+    {
+      "served_at": "2026-11-15T21:56:02.259Z",
+      "snapshot_at": "2026-11-15T21:54:31.095472+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": true,
+      "current_venue": "OKX",
+      "progress_at": "2026-11-15T21:55:57.824967+00:00"
+    },
+    {
+      "served_at": "2026-11-15T21:56:06.461Z",
+      "snapshot_at": "2026-11-15T21:54:31.095472+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": true,
+      "current_venue": "OKX",
+      "progress_at": "2026-11-15T21:55:57.824967+00:00"
+    },
+    {
+      "served_at": "2026-11-15T21:56:10.645Z",
+      "snapshot_at": "2026-11-15T21:54:31.095472+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": true,
+      "current_venue": "OKX",
+      "progress_at": "2026-11-15T21:56:10.589851+00:00"
+    },
+    {
+      "served_at": "2026-11-15T21:56:14.773Z",
+      "snapshot_at": "2026-11-15T21:56:11.006659+00:00",
+      "status": "ok",
+      "observations": 3827,
+      "running": false,
+      "current_venue": "",
+      "progress_at": "2026-11-15T21:56:11.005081+00:00"
+    }
+  ]
+}

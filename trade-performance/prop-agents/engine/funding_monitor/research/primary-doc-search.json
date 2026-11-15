@@ -1,0 +1,77 @@
+[
+  {
+    "query": "site.bitget.com/api-doc/contract/market/Get-Current-Funding-Rate \"symbol\" \"fundingRateInterval\"",
+    "result": {
+      "success": true,
+      "data": {
+        "web": [
+          {
+            "url": "https://bitget.com/docs/catalog/market/derivatives",
+            "title": "Derivatives & Funding Rate",
+            "description": "`symbol`\n\u200bstring\nTrading pair name, e.g. `BTCUSDT`\n`fundingRate`\n\u200bstring\n[Current funding rate](https://www.bitget.com/trade-info/funding_rate). In decimal form, e.g. 0.000088 represents 0.0088%\n`fundingRateInterval`\n\u200bstring\nFunding rate settlement period, unit: hour\n1 represents 1 hour, 2 represents 2 hours, and so on\n`nextUpdate`\n\n`fundingRate`\n\u200bstring\nFunding rate\nIn decimal form, e.g. 0.000074 represents 0.0074%\n`fundingRateTimestamp`\n\u200bstring\nSettlement time\nUnix millisecond timestamp",
+            "position": 1
+          },
+          {
+            "url": "https://api.bitget.com/api/v3/market/current-fund-rate?category=USDT-FUTURES&symbol=BTCUSDT",
+            "title": "api.bitget.com/api/v3/market/current-fund-rate",
+            "description": "{\"code\":\"00000\",\"msg\":\"success\",\"requestTime\":1794600473695,\"data\":[{\"symbol\":\"BTCUSDT\",\"fundingRate\":\"0.000083\",\"fundingRateInterval\":\"8\",\"nextUpdate\":\"1794614400000\",\"minFundingRate\":\"-0.003\",\"maxFundingRate\":\"0.003\",\"cashDividend\":\"\",\"cashDividendNextUpdate\":\"null\",\"lastFundingRate\":\"0.000044\",\"nextFundingRate\":\"0.000083\",\"baselnterestRate\":\"0.0001\",\"impactMarginNotional\":\"60000\"}]}",
+            "position": 2
+          }
+        ],
+        "served_by": "keenable",
+        "rescued_from": "openai-native",
+        "backend_error": "Configured backend 'openai-native' failed this call (openai-native declares OpenAI's server-side web_search tool; it cannot run as a client-side search and requires the Codex Responses transport (provider openai-codex). For client-side search use firecrawl (default) or another backend.); result served by the keyless free tier. The next call will use 'openai-native' again."
+      }
+    }
+  },
+  {
+    "query": "site.developers.binance.com \"fundingInfo\" \"fundingIntervalHours\"",
+    "result": {
+      "success": true,
+      "data": {
+        "web": [
+          {
+            "url": "https://dev.binance.vision/t/delivery-api-funding-info/18792",
+            "title": "Delivery API Funding Info - Futures API - Binance Developer Community",
+            "description": "When accessing https://dapi.binance.com/dapi/v1/fundingInfo, I am always returned an empty list, but able to get some valid response from other endpoints like fundingRate and klines. Am I missing something in my query? This exact same query works for the futures endpoints at fapi, but i\u2019m not getting anything for dapi. Query: response = requests.get(\u201c https://dapi.binance.com/dapi/v1/fundingInfo\u201d) Results: Expected Results: ```auto [ { \"symbol\": \"BLZUSDT\", \"adjustedFundingRateCap\": \"0.02500000\", \"adjustedFundingRateFloor\": \"-0.02500000\", \"fundingIntervalHours\": 8, \"disclaimer\": false   // ingore }... ] ``` albin February 19, 2024, 10:18am 2 Hey, The API funding Info returns information about funding contracts that had their funding rate cap, rate floor, or interval hours adjusted. If there were no adjustments in the last interval, it returns an empty array. For more information, refer to the documentation and the contract info.",
+            "position": 1
+          },
+          {
+            "url": "https://github.com/binance/binance-futures-connector-python/blob/main/binance/um_futures/market.py",
+            "title": "binance/um_futures/market.py",
+            "description": "def funding_rate(self, symbol: str, **kwargs): \"\"\" | | **Funding Rate History :API endpoint: ``GET /fapi/v1/fundingRate`` :API doc: https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Rate-History :parameter symbol: string; the trading symbol. :parameter limit: optional int; limit the results. Default 500, max 1000. :parameter startTime: optional int :parameter endTime: optional int **Notes** - If startTime and endTime are not sent, the most recent limit datas are returned. - If the number of data between startTime and endTime is larger than limit, return as startTime + limit. - In ascending order. | \"\"\" params = {\"symbol\": symbol, **kwargs} return self.query(\"/fapi/v1/fundingRate\", params) def funding_info(self): \"\"\" | | **Get Funding Rate Info** | *Query funding rate info for symbols that had FundingRateCap/FundingRateFloor/fundingIntervalHours adjustment* :API endpoint: ``GET /fapi/v1/fundingInfo`` :API doc: https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Info | \"\"\" return self.query(\"/fapi/v1/fundingRate\")",
+            "position": 2
+          }
+        ],
+        "served_by": "exa",
+        "rescued_from": "openai-native",
+        "backend_error": "Configured backend 'openai-native' failed this call (openai-native declares OpenAI's server-side web_search tool; it cannot run as a client-side search and requires the Codex Responses transport (provider openai-codex). For client-side search use firecrawl (default) or another backend.); result served by the keyless free tier. The next call will use 'openai-native' again."
+      }
+    }
+  },
+  {
+    "query": "site.developers.binance.com \"premiumIndex\" \"lastFundingRate\"",
+    "result": {
+      "success": true,
+      "data": {
+        "web": [
+          {
+            "url": "https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Mark-Price",
+            "title": "Market Data - Futures (USD\u24c8-M) REST API - Binance",
+            "description": "curl --request GET \\\n  --url 'fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=%3Cstring%3E&period=%3Cstring%3E'\nExample Responses\n200\n[\n  {\n    \"symbol\": \"BTCUSDT\",\n    \"longShortRatio\": \"0.1960\",\n    \"longAccount\": \"0.6622\",\n    \"shortAccount\": \"0.3378\",\n    \"timestamp\": 1591261042378\n  }\n]\napplication/json\n\nMark Price \n\nMark Price and Funding Rate\nGET /fapi/v1/premiumIndex\nfapi.binance.com\n\nMark Price \u203a Request Weight \n\nThis endpoint consumes IP-based request weight. Heavier endpoints consume more of your IP rate limit capacity.\nLearn more in the Rate limits section.\nIP Weight\n1 with symbol, 10 without symbol\n\nMark Price \u203a Query Parameters \n\nsymbol\n\u200b string\nExample: BTCUSDT\n\nMark Price \u203a Responses \n\n200\nMark Price\noneOf\nExactly one variant must match .\n\nDecision Table\n\n* Variant | Matching Criteria\n* Variant 1 | type = object\n* Variant 2 | type = array\nProperties for Variant 1:\nsymbol\n\u200b string\nSymbol.\nExample: BTCUSDT\nmarkPrice\n\u200b string\nmark price\nExample: 11793.63104562\nindexPrice\n\u200b string\nindex price\nExample: 11781.80495970\nestimatedSettlePrice\n\u200b string\nEstimated Settle Price, only useful in the last hour before the settlement starts.\nExample: 11781.16138815\nlastFundingRate\n\u200b string\nThis is the Latest funding rate\nExample: 0.00038246\ninterestRate\n\u200b string\nInterest Rate.\nExample: 0.00010000\nnextFundingTime\n\u200b integer \u00b7 int64\nNext Funding Time.\nExample: 1597392000000\ntime\n\u200b integer \u00b7 int64\nTime.\nExample: 1597370495002\nGET / fapi/ v1/ premiumIndex\nLoading\u2026\ncurl --request GET \\\n  --url fapi.binance.com/fapi/v1/premiumIndex\nExample Responses\n200\n{\n  \"symbol\": \"BTCUSDT\",\n  \"markPrice\": \"11793.63104562\",\n  \"indexPrice\": \"11781.80495970\",\n  \"estimatedSettlePrice\": \"11781.16138815\",\n  \"lastFundingRate\": \"0.00038246\",\n  \"interestRate\": \"0.00010000\",\n  \"nextFundingTime\": 1597392000000,\n  \"time\": 1597370495002\n}\napplication/json\n\nMark Price Kline/Candlestick Data \n\nKline/candlestick bars for the mark price of a symbol. Klines are uniquely identified by their open time.\nGET /fapi/v1/markPriceKlines\nfapi.binance.com\n\nMark Price Kline/Candlestick Data \u203a Request Weight \n\nThis endpoint consumes IP-based request weight. Heavier endpoints consume more of your IP rate limit capacity.\nLearn more in the Rate limits section.\nIP Weight\nbased on parameter LIMIT\n* LIMIT | weight\n\n...\n\nThis endpoint consumes IP-based request weight. Heavier endpoints consume more of your IP rate limit capacity.\nLearn more in the Rate limits section.\nIP Weight 200\n\nOld Trades Lookup (MARKET_DATA) \u203a Headers \n\nX-MBX-APIKEY\n\u200b string \u00b7 required\nAn API Key is required to access this endpoint and must be included in the request headers. To create an API Key, refer to: binance.com/en/support/faq/detail/360002502072 .\nExample: API_KEY\n\n...\n\nPremium index Kline Data \n\nPremium index kline bars of a symbol. Klines are uniquely identified by their open time.\nGET /fapi/v1/premiumIndexKlines\nfapi.binance.com\n\nPremium index Kline Data \u203a Request Weight \n\nThis endpoint consumes IP-based request weight. Heavier endpoints consume more of your IP rate limit capacity.\nLearn more in the Rate limits section.\nIP Weight\nbased on parameter LIMIT\n* LIMIT | weight\n* [1,100) | 1\n* [100, 500) | 2\n* [500, 1000] | 5\n* > 1000 | 10\n\nPremium index Kline Data \u203a Query Parameters \n\nsymbol\n\u200b string \u00b7 required\nAfter CM migration, accepts both UM and CM symbols.\nExample: BTCUSDT\ninterval\n\u200b string \u00b7 enum \u00b7 required\nEnum values:\n1m\n3m\n5m\n15m\n30m\n1h\n2h\n4h\nshow 7 more\nExample: 1m\nstartTime\n\u200b integer \u00b7 int64\nStart time\nExample: 1623319461670\nendTime\n\u200b integer \u00b7 int64\nEnd time\nExample: 1641782889000\nlimit\n\u200b integer \u00b7 int64 \u00b7 max: 1500\nExample: 50\nDefault: 500\n* If startTime and endTime are not sent, the most recent klines are returned.\n\nPremium index Kline Data \u203a Responses \n\n200\nPremium index Kline Data\n\u200b array[]\n\u200b tuple[12] \u00b7 minItems: 12 \u00b7 maxItems: 12\n[0]\n\u200b integer \u00b7 int64 \u00b7 required\nOpen time\nExample: 1691603820000\n[1]\n\u200b string \u00b7 required\nOpen\nExample: -0.00042931\n[2]\n\u200b string \u00b7 required\nHigh\nExample: -0.00023641\n[3]\n\u200b string \u00b7 required\nLow\nExample: -0.00059406\n[4]\n\u200b string \u00b7 required\nClose\nExample: -0.00043659\n[5]\n\u200b string \u00b7 required\nIgnore\nExample: 0\n[6]\n\u200b integer \u00b7 int64 \u00b7 required\nClose time\nExample: 1691603879999\n[7]\n\u200b string \u00b7 required\nIgnore\nExample: 0\n[8]\n\u200b integer \u00b7 required\nIgnore\nExample: 12\n[9]\n\u200b string \u00b7 required\nIgnore\nExample: 0\n[10]\n\u200b string \u00b7 required\nIgnore\nExample: 0\n[11]\n\u200b string \u00b7 required\nIgnore\nExample: 0\nGET / fapi/ v1/ premiumIndexKlines\nLoading\u2026\ncurl --request GET \\\n  --url 'fapi.binance.com/fapi/v1/premiumIndexKlines?symbol=%3Cstring%3E&interval=%3Cstring%3E'\nExample Responses\n200\n[\n  [\n    1691603820000,\n    \"-0.00042931\",\n    \"-0.00023641\",\n    \"-0.00059406\",\n    \"-0.00043659\",\n    \"0\",\n    1691603879999,\n    \"0\",\n    12,\n    \"0\",\n    \"0\",\n    \"0\"\n  ]\n]\napplication/json\n\nQuarterly Contract Settlement Price",
+            "position": 1
+          },
+          {
+            "url": "https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Rate-Info",
+            "title": "Market Data - Futures (USD\u24c8-M) REST API | Binance Developer Docs",
+            "description": "curl --request GET \\\n  --url 'fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=%3Cstring%3E&period=%3Cstring%3E'\nExample Responses\n200\n[\n  {\n    \"symbol\": \"BTCUSDT\",\n    \"longShortRatio\": \"0.1960\",\n    \"longAccount\": \"0.6622\",\n    \"shortAccount\": \"0.3378\",\n    \"timestamp\": 1591261042378\n  }\n]\napplication/json\n\nMark Price \n\nMark Price and Funding Rate\nGET /fapi/v1/premiumIndex\nfapi.binance.com\n\nMark Price \u203a Request Weight \n\nThis endpoint consumes IP-based request weight. Heavier endpoints consume more of your IP rate limit capacity.\nLearn more in the Rate limits section.\nIP Weight\n1 with symbol, 10 without symbol\n\nMark Price \u203a Query Parameters \n\nsymbol\n\u200b string\nExample: BTCUSDT\n\nMark Price \u203a Responses \n\n200\nMark Price\noneOf\nExactly one variant must match .\n\nDecision Table\n\n* Variant | Matching Criteria\n* Variant 1 | type = object\n* Variant 2 | type = array\nProperties for Variant 1:\nsymbol\n\u200b string\nSymbol.\nExample: BTCUSDT\nmarkPrice\n\u200b string\nmark price\nExample: 11793.63104562\nindexPrice\n\u200b string\nindex price\nExample: 11781.80495970\nestimatedSettlePrice\n\u200b string\nEstimated Settle Price, only useful in the last hour before the settlement starts.\nExample: 11781.16138815\nlastFundingRate\n\u200b string\nThis is the Latest funding rate\nExample: 0.00038246\ninterestRate\n\u200b string\nInterest Rate.\nExample: 0.00010000\nnextFundingTime\n\u200b integer \u00b7 int64\nNext Funding Time.\nExample: 1597392000000\ntime\n\u200b integer \u00b7 int64\nTime.\nExample: 1597370495002\nGET / fapi/ v1/ premiumIndex\nLoading\u2026\ncurl --request GET \\\n  --url fapi.binance.com/fapi/v1/premiumIndex\nExample Responses\n200\n{\n  \"symbol\": \"BTCUSDT\",\n  \"markPrice\": \"11793.63104562\",\n  \"indexPrice\": \"11781.80495970\",\n  \"estimatedSettlePrice\": \"11781.16138815\",\n  \"lastFundingRate\": \"0.00038246\",\n  \"interestRate\": \"0.00010000\",\n  \"nextFundingTime\": 1597392000000,\n  \"time\": 1597370495002\n}\napplication/json\n\nMark Price Kline/Candlestick Data \n\nKline/candlestick bars for the mark price of a symbol. Klines are uniquely identified by their open time.\nGET /fapi/v1/markPriceKlines\nfapi.binance.com\n\n...\n\nPremium index Kline Data \n\nPremium index kline bars of a symbol. Klines are uniquely identified by their open time.\nGET /fapi/v1/premiumIndexKlines\nfapi.binance.com\n\nPremium index Kline Data \u203a Request Weight \n\nThis endpoint consumes IP-based request weight. Heavier endpoints consume more of your IP rate limit capacity.\nLearn more in the Rate limits section.\nIP Weight\nbased on parameter LIMIT\n* LIMIT | weight",
+            "position": 2
+          }
+        ],
+        "served_by": "parallel",
+        "rescued_from": "openai-native",
+        "backend_error": "Configured backend 'openai-native' failed this call (openai-native declares OpenAI's server-side web_search tool; it cannot run as a client-side search and requires the Codex Responses transport (provider openai-codex). For client-side search use firecrawl (default) or another backend.); result served by the keyless free tier. The next call will use 'openai-native' again."
+      }
+    }
+  }
+]

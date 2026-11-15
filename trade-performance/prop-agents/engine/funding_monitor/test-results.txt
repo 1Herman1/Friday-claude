@@ -1,0 +1,21 @@
+test_saved_live_feeds_filter_active_usdt_and_preserve_units (test_monitor.AdapterTests) ... ok
+test_progress_atomic_output_errors_and_replay (test_monitor.CollectionTests) ... {"at": "2026-11-15T15:22:57.132448+00:00", "stage": "collection", "status": "running", "message": "Public GET collection started"}
+{"at": "2026-11-15T15:22:57.132731+00:00", "stage": "BingX", "status": "running", "message": "Fetching public bulk contract/funding data"}
+{"at": "2026-11-15T15:22:57.132989+00:00", "stage": "BingX", "status": "request", "message": "https://open-api.bingx.com/openApi/swap/v2/quote/contracts"}
+{"at": "2026-11-15T15:22:57.139340+00:00", "stage": "BingX", "status": "received", "message": "bingx_contracts bytes=693858"}
+{"at": "2026-11-15T15:22:57.533385+00:00", "stage": "BingX", "status": "request", "message": "https://open-api.bingx.com/openApi/swap/v2/quote/premiumIndex"}
+{"at": "2026-11-15T15:22:57.542103+00:00", "stage": "BingX", "status": "received", "message": "bingx_funding bytes=242129"}
+{"at": "2026-11-15T15:22:57.946662+00:00", "stage": "BingX", "status": "ok", "message": "828 observations"}
+{"at": "2026-11-15T15:22:57.949232+00:00", "stage": "Gate", "status": "running", "message": "Fetching public bulk contract/funding data"}
+{"at": "2026-11-15T15:22:57.953262+00:00", "stage": "Gate", "status": "request", "message": "https://api.gateio.ws/api/v4/futures/usdt/contracts"}
+{"at": "2026-11-15T15:22:57.955558+00:00", "stage": "Gate", "status": "error", "message": "gate_contracts: OSError: test outage"}
+{"at": "2026-11-15T15:22:58.352461+00:00", "stage": "Gate", "status": "error", "message": "0 observations; gate_contracts: OSError: test outage; No verified active USDT perpetual observations"}
+{"at": "2026-11-15T15:22:58.354053+00:00", "stage": "collection", "status": "partial", "message": "Collection complete: 828 observations"}
+ok
+test_decimal_sign_missing_and_unknown_interval (test_monitor.NormalizationTests) ... ok
+test_sign_interval_timing_and_exact_identity (test_monitor.PairTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.404s
+
+OK
