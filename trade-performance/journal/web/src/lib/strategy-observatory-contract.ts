@@ -1,0 +1,36 @@
+export type StrategyMode = 'LIVE_OBSERVATION' | 'SAVED_SIGNALS' | 'PREVIEW' | 'BACKTEST_ONLY';
+export type StrategyState = 'running' | 'fresh' | 'partial' | 'error' | 'stale' | 'saved' | 'missing' | 'blocked' | 'not_connected' | 'not_wired';
+export type StrategyFact = { label: string; value: string | null; note?: string };
+export type StrategyStage = { id: string; title: string; kind: 'code' | 'LLM' | 'human'; state: StrategyState; at: string | null; detail: string };
+export type StrategyCandidate = { id: string; symbol: string; side: string | null; state: string; at: string | null; summary: string; facts: StrategyFact[]; blockers: string[] };
+export type StrategyEvent = { at: string | null; stage: string; state: string; message: string };
+export type StrategyPanel = {
+ id: string;
+ code: string;
+ title: string;
+ subtitle: string;
+ mode: StrategyMode;
+ state: StrategyState;
+ updated_at: string | null;
+ last_attempt_at: string | null;
+ market: string;
+ version: string;
+ facts: StrategyFact[];
+ stages: StrategyStage[];
+ blockers: string[];
+ columns: { key: string; label: string }[];
+ rows: Record<string, string | null>[];
+ total_rows: number;
+ candidates: StrategyCandidate[];
+ events: StrategyEvent[];
+ curve?: { at: string; value: string }[];
+ notes: string[];
+ sources: string[];
+};
+export type StrategyObservatoryResponse = {
+ schema_version: 1;
+ served_at: string;
+ read_only: true;
+ execution_enabled: false;
+ strategies: StrategyPanel[];
+};

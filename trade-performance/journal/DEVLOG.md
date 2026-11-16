@@ -2,6 +2,14 @@
 
 Хронология: что сделано, что решено, что дальше. Новые записи сверху. ТЗ — `TZ.md`, запуск — `RUN.md`.
 
+## 2026-11-17 — витрина пяти семей стратегий
+
+- `/agents-monitor`: отдельные workspace Funding, SMC, Pump, Donchian S1 и TSMOM S4/S4L. Новый read-only `/api/strategy-observatory`, общий тип контракта; старая funding-консоль сохранена в `/agents-monitor/funding-detail`.
+- Дизайн по выбранному референсу: матовые угольные/коричневые панели, медные рамки и компактные зелёные/янтарные состояния. У каждой стратегии — процесс, кандидаты/таблица, честный блок кривой без выдуманного PnL, инспектор и события.
+- Источники и режимы разделены: live funding / saved pump DB131 / SMC v0.3 preview + legacy / исторические S1 и S4/S4L. Mode LIVE в signals не называется реальными заявками. Секреты и приватные поля сделок в ответ не попадают; SELECT использует существующий reader.
+- Проверки: 11 тестов PASS, tsc/scoped ESLint PASS, независимый read-only review и исправление замечания #03; основной агент повторил переключение всех пяти на1440 и mobile390, HTTP/schema/source counts. Издержки whole-period и split-метрики в inspector не смешиваются; текущий funding progress не заменяет возраст completed data.
+- Автоторговля, риск-лимиты, модели и расписания не менялись. Локальная витрина не external/24×7 production. Приёмка/скрины: `../prop-agents/reports/strategy-vitrine-acceptance/ACCEPTANCE.md`.
+
 ## 2026-11-16 — разборы дневника на Codex
 
 - Решение Германа: Claude Code/Opus для дневника заменён на Codex по подписке ChatGPT. Hermes уже использует `openai-codex/gpt-6.1-sol`; его глобальная конфигурация не менялась.
