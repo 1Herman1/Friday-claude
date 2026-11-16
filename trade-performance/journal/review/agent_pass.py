@@ -149,24 +149,9 @@ def save_chart(cur, tid, png):
     return ATT_DIR / key
 
 
-def call_opus(prompt, img_dir):
-    tok = Path.home() / ".claude" / "hermes-oauth-token"
-    e = dict(os.environ)
-    if tok.exists():
-        e["CLAUDE_CODE_OAUTH_TOKEN"] = tok.read_text().strip()
-    t0 = time.time()
-    p = subprocess.run(["claude", "-p", "--model", ar.MODEL, "--output-format", "json", "--tools", "Read", "--allowedTools", "Read",
-                        "--add-dir", str(img_dir), "--append-system-prompt", ar.SYSTEM],
-                       input=prompt, capture_output=True, text=True, env=e, timeout=900, cwd=str(img_dir))
-    ms = int((time.time() - t0) * 1000)
-    try:
-        d = json.loads(p.stdout)
-    except Exception:
-        return {"ok": False, "error": (p.stderr or p.stdout)[-800:], "ms": ms}
-    u = d.get("usage") or {}
-    return {"ok": not d.get("is_error"), "text": d.get("result") or "", "error": d.get("result") if d.get("is_error") else None,
-            "ms": ms, "model": next(iter(d.get("modelUsage") or {}), ar.MODEL), "in": u.get("input_tokens"), "out": u.get("output_tokens"),
-            "cache": (u.get("cache_read_input_tokens") or 0) + (u.get("cache_creation_input_tokens") or 0), "cost": d.get("total_cost_usd")}
+def call_model(prompt, image=None):
+    return ar.call_codex(prompt, ar.SYSTEM, model=ar.MODEL,
+                         images=[image] if image and image.exists() else [])
 
 
 def review_one(tid, png, dry=False):
@@ -178,12 +163,12 @@ def review_one(tid, png, dry=False):
         img = save_chart(cur, tid, png) if png and png.exists() and not dry else png
         prompt = (job["ctx"] + "\n\n## Рынок (MEXC, публичные свечи)\n" + market_ctx(sym, side, op, cl, float(ea or 0), float(xa or 0))
                   + "\n\n## Риск\n" + RISK_RULE + "\n" + risk_ctx(cur, tid)
-                  + (f"\n\n## Скрин графика\nФайл: {img} — открой его инструментом Read." if img else "\n\n## Скрин графика\nнет")
+                  + (f"\n\n## Скрин графика\nФайл: {img} — изображение приложено к запросу." if img else "\n\n## Скрин графика\nнет")
                   + "\n\n## Задача\n" + DEEP_TASK)
         if dry:
             return {"title": job["title"], "prompt": prompt}
         started = datetime.now(timezone.utc)
-        r = call_opus(prompt, ATT_DIR)
+        r = call_model(prompt, img)
         body, fnd = ar.split_json(r.get("text", "")) if r["ok"] else (None, None)
         fnd = dict(fnd or {}, agent=PROMPT_VERSION)
         cur.execute("DELETE FROM ai_reviews WHERE trade_id = %s AND status = 'running'", (tid,))
@@ -193,7 +178,7 @@ def review_one(tid, png, dry=False):
         rid = cur.fetchone()[0]
         cur.execute(f"""INSERT INTO llm_calls (id, organization_id, ai_review_id, role, provider, model, billing, prompt_version, prompt_hash,
                           prompt, response, input_tokens, output_tokens, cache_tokens, cost_usd, latency_ms, status, error, started_at)
-                        VALUES (gen_random_uuid(), {ORG}, %s, 'post_trade_review', 'anthropic', %s, 'SUBSCRIPTION', %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                        VALUES (gen_random_uuid(), {ORG}, %s, 'post_trade_review', 'openai-codex', %s, 'SUBSCRIPTION', %s, %s, %s, %s, %s, %s, %s, %s, %s,
                                 %s, %s, %s)""",
                     (rid, r.get("model", ar.MODEL), PROMPT_VERSION, hashlib.sha256(prompt.encode()).hexdigest()[:16], ar.SYSTEM + "\n\n" + prompt,
                      r.get("text"), r.get("in"), r.get("out"), r.get("cache"), r.get("cost"), r["ms"], "ok" if r["ok"] else "error",

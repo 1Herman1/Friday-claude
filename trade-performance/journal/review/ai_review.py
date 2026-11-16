@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""J4: ИИ-разбор сделки / недели на Claude Opus (через Claude Code по подписке Max).
+"""J4: ИИ-разбор сделки / недели на Codex (через Codex CLI по подписке ChatGPT).
 
   ai_review.py trade <#N | uuid | last> [--dry-run]
   ai_review.py week  [--from YYYY-MM-DD --to YYYY-MM-DD] [--dry-run]   (по умолч. последние 7 дней)
 
-Пишет ai_reviews (kind=trade|weekly) + llm_calls (provider=anthropic, billing=SUBSCRIPTION, полный промпт/ответ),
-печатает разбор в Markdown (его Hermes отправляет в топик Т6). Для SaaS заменить call_opus() на Anthropic API.
---dry-run: собирает контекст и печатает промпт, Opus не вызывает, в БД не пишет.
+Пишет ai_reviews (kind=trade|weekly) + llm_calls (provider=openai-codex, billing=SUBSCRIPTION, полный промпт/ответ),
+печатает разбор в Markdown (его Hermes отправляет в топик Т6). Авторизация Codex CLI независима от авторизации Hermes; API-ключи не используются.
+--dry-run: собирает контекст и печатает промпт, Codex не вызывает, в БД не пишет.
 """
 import argparse
 import hashlib
 import json
 import os
-import subprocess
 import sys
-import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -24,11 +22,11 @@ import psycopg
 ROOT = Path(__file__).resolve().parents[2]
 MSK = ZoneInfo("Europe/Moscow")
 ORG = "(SELECT id FROM organizations WHERE slug = 'german')"
-PROMPT_VERSION = "j4-v1"
-MODEL = "opus"
+PROMPT_VERSION = "j4-v2-codex"
+from codex_client import call_codex, MODEL
 
 SYSTEM = """Ты — жёсткий, но доброжелательный наставник трейдера. Пишешь по-русски, кратко, без воды и без морали.
-Трейдер — Герман: торгует фьючерсы MEXC, основные сетапы — шорт пампов альткоинов и BTC по SMC (15m).
+Трейдер — Герман: торгует фьючерсы BingX (исторические сделки также MEXC), основные сетапы — шорт пампов альткоинов и BTC по SMC (15m).
 Опирайся ТОЛЬКО на данные ниже. Не выдумывай цены, уровни и события, которых нет в данных. Если данных не хватает — так и скажи, что нужно записать.
 Ты не даёшь торговых сигналов и не предсказываешь рынок — ты разбираешь поведение и исполнение."""
 
@@ -190,25 +188,8 @@ def build_week(cur, d_from, d_to):
             "from": a, "to": b, "n": len(rows)}
 
 
-def call_opus(prompt):
-    tok = Path.home() / ".claude" / "hermes-oauth-token"
-    e = dict(os.environ)
-    if tok.exists():
-        e["CLAUDE_CODE_OAUTH_TOKEN"] = tok.read_text().strip()
-    t0 = time.time()
-    p = subprocess.run(["claude", "-p", "--model", MODEL, "--output-format", "json", "--tools", "",
-                        "--append-system-prompt", SYSTEM],
-                       input=prompt, capture_output=True, text=True, env=e, timeout=1500, cwd=str(Path.home()))
-    ms = int((time.time() - t0) * 1000)
-    try:
-        d = json.loads(p.stdout)
-    except Exception:
-        return {"ok": False, "error": (p.stderr or p.stdout)[-800:], "ms": ms}
-    u = d.get("usage") or {}
-    return {"ok": not d.get("is_error"), "text": d.get("result") or "", "error": None if not d.get("is_error") else d.get("result"),
-            "ms": ms, "model": next(iter(d.get("modelUsage") or {}), MODEL), "in": u.get("input_tokens"),
-            "out": u.get("output_tokens"), "cache": (u.get("cache_read_input_tokens") or 0) + (u.get("cache_creation_input_tokens") or 0),
-            "cost": d.get("total_cost_usd")}
+def call_model(prompt):
+    return call_codex(prompt, SYSTEM, model=MODEL)
 
 
 def split_json(text):
@@ -247,13 +228,13 @@ def main():
         prompt = job["ctx"] + "\n\n## Задача\n" + job["task"]
         if a.dry_run:
             print(prompt)
-            print(f"\n[dry-run] {len(prompt)} символов, Opus не вызывался")
+            print(f"\n[dry-run] {len(prompt)} символов, Codex не вызывался")
             return
         if job["kind"] == "weekly" and not job.get("n"):
             print(json.dumps({"ok": True, "skipped": "за период нет закрытых сделок"}, ensure_ascii=False))
             return
         started = datetime.now(timezone.utc)
-        r = call_opus(prompt)
+        r = call_model(prompt)
         body, fnd = split_json(r.get("text", "")) if r["ok"] else (None, None)
         cur.execute(f"""INSERT INTO ai_reviews (id, organization_id, user_id, trade_id, kind, period_from, period_to, status, content_md, findings)
                         VALUES (gen_random_uuid(), {ORG}, (SELECT id FROM users WHERE telegram_user_id = 7098788894), %s, %s, %s, %s, %s, %s, %s)
@@ -263,7 +244,7 @@ def main():
         rid = cur.fetchone()[0]
         cur.execute(f"""INSERT INTO llm_calls (id, organization_id, ai_review_id, role, provider, model, billing, prompt_version, prompt_hash,
                           prompt, response, input_tokens, output_tokens, cache_tokens, cost_usd, latency_ms, status, error, started_at)
-                        VALUES (gen_random_uuid(), {ORG}, %s, %s, 'anthropic', %s, 'SUBSCRIPTION', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                        VALUES (gen_random_uuid(), {ORG}, %s, %s, 'openai-codex', %s, 'SUBSCRIPTION', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
                     (rid, "post_trade_review" if job["kind"] == "trade" else "weekly_review", r.get("model", MODEL), PROMPT_VERSION,
                      hashlib.sha256((SYSTEM + prompt).encode()).hexdigest()[:16], SYSTEM + "\n\n" + prompt, r.get("text"),
                      r.get("in"), r.get("out"), r.get("cache"), r.get("cost"), r["ms"], "ok" if r["ok"] else "error",
@@ -271,7 +252,7 @@ def main():
         conn.commit()
         if not r["ok"]:
             sys.exit(json.dumps({"ok": False, "review_id": str(rid), "error": r.get("error")}, ensure_ascii=False))
-        print(f"🧠 Разбор {job['title']} (Opus)\n\n{body}")
+        print(f"🧠 Разбор {job['title']} (Codex)\n\n{body}")
 
 
 if __name__ == "__main__":
