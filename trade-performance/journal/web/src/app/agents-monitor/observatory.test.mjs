@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { selectStrategy, filterRows, sourceAge, isObservatory, modeLabel } from './observatory-helpers.ts';
+import { selectStrategy, filterRows, sourceAge, isObservatory, modeLabel, visualActivity } from './observatory-helpers.ts';
+
+test('visual activity only follows a real running stage and respects disabled effects',()=>{
+ assert.equal(visualActivity('running',true),'running');
+ assert.equal(visualActivity('running',false),'quiet');
+ for(const state of ['fresh','saved','blocked','partial','not_connected','not_wired','error','stale']) assert.equal(visualActivity(state,true),'quiet');
+});
 
 test('URL selection is dynamic and invalid identifiers fall back to first available strategy', () => {
  const panels = [{id:'funding'}, {id:'tsmom'}, {id:'future'}];

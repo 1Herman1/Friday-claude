@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-17",
+  "tests": {
+    "node_pass": 17,
+    "node_fail": 0,
+    "tsc": "PASS",
+    "scoped_eslint": "PASS"
+  },
+  "desktop": {
+    "width": 1440,
+    "strategies_checked": [
+      "funding",
+      "smc",
+      "pump",
+      "donchian",
+      "tsmom"
+    ],
+    "all_five_sections_present": true,
+    "horizontal_overflow": false
+  },
+  "mobile": {
+    "width": 390,
+    "guide_open": true,
+    "guide_columns": "334px",
+    "horizontal_overflow": false
+  },
+  "motion": {
+    "toggle_off_running_animations": 0,
+    "paused_running_animations": 0,
+    "paused_active_stages": 0,
+    "reduced_motion_running_animations": 0,
+    "offline_running_animations": 0,
+    "offline_active_stages": 0,
+    "api_recovery": "PASS",
+    "historical_running_badges_animation": "none",
+    "real_running": {
+      "run_id": "20261117T175313.782982Z",
+      "venue": "Gate",
+      "edge_animation": "observatory_amberBreath__6W_Tu",
+      "chip_animation": "observatory_amberBreath__6W_Tu"
+    }
+  },
+  "format_example_observed": {
+    "raw": "-0.01900000",
+    "display": "-1.9%"
+  },
+  "scope": "Visual/read-only only; no collector schedules, models, limits or orders changed."
+}

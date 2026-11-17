@@ -1,4 +1,5 @@
 import type { StrategyMode, StrategyObservatoryResponse } from '../../lib/strategy-observatory-contract';
+export function visualActivity(state:string, enabled:boolean):'running'|'quiet' { return enabled&&state==='running'?'running':'quiet'; }
 export function selectStrategy<T extends {id:string}>(panels:T[], id:string|null):T|null { return panels.find(p=>p.id===id)??panels[0]??null; }
 export function filterRows(rows:Record<string,string|null>[], query:string) { const q=query.trim().toLocaleLowerCase('ru'); return q?rows.filter(row=>Object.values(row).some(v=>v?.toLocaleLowerCase('ru').includes(q))):rows; }
 export function sourceAge(at:string|null, now:number):string { if(!at||!now||!Number.isFinite(Date.parse(at)))return 'время неизвестно'; const seconds=Math.floor((now-Date.parse(at))/1000); if(seconds<0)return 'время в будущем'; if(seconds<60)return `${seconds} с назад`; if(seconds<3600)return `${Math.floor(seconds/60)} мин назад`; if(seconds<86400)return `${Math.floor(seconds/3600)} ч назад`; return `${Math.floor(seconds/86400)} д назад`; }

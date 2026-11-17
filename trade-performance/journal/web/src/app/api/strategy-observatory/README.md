@@ -1,5 +1,13 @@
 # Strategy Observatory — read-only адаптеры
 
+## Чтение витрины и ресурсы (17.11.2026)
+
+На `/agents-monitor` встроена справка «Как читать витрину». API по-прежнему возвращает исходные ставки как точные десятичные строки. Только отображение long_rate / short_rate / indicative_diff_per_hour преобразует доли в проценты существующим строковым percent(): settlement для long/short, %/час для разницы. Исходное значение остаётся в title; неизвестные интервалы не заполняются.
+
+Проверенный `engine/funding_monitor/monitor.py` обращается напрямую к публичным API BingX, Bitget, Gate, Binance и OKX; LLM SDK/модель не вызывается. Collector и polling этого read-only UI расходуют 0 LLM-токенов; разработка/объяснения в чате, отдельные journal/SMC LLM-review и будущий управляющий — отдельные контуры. CoinGlass, новости и исполнение здесь не подключены. OI/volume/depth этим funding collector не собираются: наличие отдельного BingX snapshot не означает continuous enrichment.
+
+Эффекты не являются индикатором LLM-вызова: анимируется только подтверждённый текущий RUNNING stage, не записи о старте в исторической ленте. На UI pause/API offline эффекты выключены. Есть кнопка «Эффекты» и prefers-reduced-motion. Торговые настройки не меняются.
+
 ## Граница ответственности
 
 `GET /api/strategy-observatory` возвращает контракт `schema_version: 1`, `read_only: true`, `execution_enabled: false` и **ровно пять** панелей: `funding`, `smc`, `pump`, `donchian`, `tsmom`. Торговля, изменение риска, настройка LLM, запуск коллекторов и запись в БД отсутствуют. Наличие Python-кода, сохранённого результата или DB mode `LIVE` не доказывает работающий процесс либо реальные заявки.
