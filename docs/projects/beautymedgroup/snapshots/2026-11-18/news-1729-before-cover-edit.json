@@ -1,0 +1,385 @@
+{
+  "id": 1729,
+  "date": "2026-10-20T10:00:00",
+  "date_gmt": "2026-10-20T07:00:00",
+  "guid": {
+    "rendered": "https://beautymedgroup.ru/?p=1729",
+    "raw": "https://beautymedgroup.ru/?p=1729"
+  },
+  "modified": "2026-10-27T12:50:26",
+  "modified_gmt": "2026-10-27T09:50:26",
+  "password": "",
+  "slug": "optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie",
+  "status": "publish",
+  "type": "post",
+  "link": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/",
+  "title": {
+    "raw": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие",
+    "rendered": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие"
+  },
+  "content": {
+    "raw": "<p>Стабильная работа клиники невозможна без бесперебойного обеспечения профессиональной косметикой. В течение прошедшего периода команда «БьютиМедГрупп» вела интенсивную работу с испанскими производственными площадками для оптимизации логистических цепочек.</p>\n<p>Мы рады сообщить о результатах этой работы:</p>\n<ul>\n<li><strong>Расширение складской матрицы:</strong> на склад поступили дополнительные объёмы базовых линеек домашнего ухода, которые врачи рекомендуют своим пациентам.</li>\n<li><strong>Приоритетные позиции:</strong> обеспечен неснижаемый запас профессиональных препаратов для процедур по биомиметическим протоколам.</li>\n<li><strong>Новинки:</strong> в ближайшее время будет представлен расширенный каталог средств для постпроцедурного восстановления.</li>\n</ul>\n<p>Мы гарантируем, что ключевые препараты для вашей практики всегда есть в наличии. Проверить актуальные остатки и оформить заказ можно через личный кабинет или у вашего закреплённого менеджера.</p>",
+    "rendered": "<p>Стабильная работа клиники невозможна без бесперебойного обеспечения профессиональной косметикой. В течение прошедшего периода команда «БьютиМедГрупп» вела интенсивную работу с испанскими производственными площадками для оптимизации логистических цепочек.</p>\n<p>Мы рады сообщить о результатах этой работы:</p>\n<ul>\n<li><strong>Расширение складской матрицы:</strong> на склад поступили дополнительные объёмы базовых линеек домашнего ухода, которые врачи рекомендуют своим пациентам.</li>\n<li><strong>Приоритетные позиции:</strong> обеспечен неснижаемый запас профессиональных препаратов для процедур по биомиметическим протоколам.</li>\n<li><strong>Новинки:</strong> в ближайшее время будет представлен расширенный каталог средств для постпроцедурного восстановления.</li>\n</ul>\n<p>Мы гарантируем, что ключевые препараты для вашей практики всегда есть в наличии. Проверить актуальные остатки и оформить заказ можно через личный кабинет или у вашего закреплённого менеджера.</p>\n",
+    "protected": false,
+    "block_version": 0
+  },
+  "excerpt": {
+    "raw": "",
+    "rendered": "<p>Стабильная работа клиники невозможна без бесперебойного обеспечения профессиональной косметикой. В течение прошедшего периода команда «БьютиМедГрупп» вела интенсивную работу с испанскими производственными площадками для оптимизации логистических цепочек. Мы рады сообщить о результатах этой работы: Расширение складской матрицы: на склад поступили дополнительные объёмы базовых линеек домашнего ухода, которые врачи рекомендуют своим пациентам. Приоритетные позиции: обеспечен неснижаемый запас [&hellip;]</p>\n",
+    "protected": false
+  },
+  "author": 21,
+  "featured_media": 1749,
+  "comment_status": "open",
+  "ping_status": "open",
+  "sticky": false,
+  "template": "",
+  "format": "standard",
+  "meta": {
+    "footnotes": ""
+  },
+  "categories": [
+    181
+  ],
+  "tags": [],
+  "permalink_template": "https://beautymedgroup.ru/novosti/%postname%/",
+  "generated_slug": "optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie",
+  "class_list": [
+    "post-1729",
+    "post",
+    "type-post",
+    "status-publish",
+    "format-standard",
+    "has-post-thumbnail",
+    "hentry",
+    "category-novosti"
+  ],
+  "acf": {
+    "vklyuchitvyklyuchit_slajder": false,
+    "slajder_v_statyah": null,
+    "vklyuchitvyklyuchit_opisanie_posle_slajdera": false,
+    "opisanie_posle_slajdera": "",
+    "vklyuchitvyklyuchit_otobrazhenie_osnovatelya_kompanii": false,
+    "foto_osnovatelya": null,
+    "imya_familiya": "",
+    "dolzhnost": "",
+    "products": null,
+    "interest": null
+  },
+  "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v24.0 - https://yoast.com/wordpress/plugins/seo/ -->\n<title>Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп</title>\n<meta name=\"description\" content=\"Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп | Эксклюзивный дистрибьютор профессиональных косметических брендов ISSÉIMI и GLACÉE Skincare\" />\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/\" />\n<meta property=\"og:locale\" content=\"ru_RU\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп\" />\n<meta property=\"og:description\" content=\"Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп | Эксклюзивный дистрибьютор профессиональных косметических брендов ISSÉIMI и GLACÉE Skincare\" />\n<meta property=\"og:url\" content=\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/\" />\n<meta property=\"og:site_name\" content=\"BeautyMedGroup\" />\n<meta property=\"article:published_time\" content=\"2026-10-20T07:00:00+00:00\" />\n<meta property=\"article:modified_time\" content=\"2026-10-27T09:50:26+00:00\" />\n<meta property=\"og:image\" content=\"https://beautymedgroup.ru/wp-content/uploads/2022/12/slider.webp\" />\n\t<meta property=\"og:image:width\" content=\"568\" />\n\t<meta property=\"og:image:height\" content=\"404\" />\n\t<meta property=\"og:image:type\" content=\"image/webp\" />\n<meta name=\"author\" content=\"BeautyMedGroup\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Article\",\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#article\",\"isPartOf\":{\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/\"},\"author\":{\"name\":\"BeautyMedGroup\",\"@id\":\"https://beautymedgroup.ru/#/schema/person/464cb71f0039ee9ad9fc7173d0139666\"},\"headline\":\"Оптимизация складской программы: расширение ассортимента и гарантированное наличие\",\"datePublished\":\"2026-10-20T07:00:00+00:00\",\"dateModified\":\"2026-10-27T09:50:26+00:00\",\"mainEntityOfPage\":{\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/\"},\"wordCount\":109,\"commentCount\":0,\"publisher\":{\"@id\":\"https://beautymedgroup.ru/#organization\"},\"image\":{\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#primaryimage\"},\"thumbnailUrl\":\"https://beautymedgroup.ru/wp-content/uploads/2026/10/news-warehouse-stock.jpg\",\"articleSection\":[\"Новости\"],\"inLanguage\":\"ru-RU\",\"potentialAction\":[{\"@type\":\"CommentAction\",\"name\":\"Comment\",\"target\":[\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#respond\"]}]},{\"@type\":\"WebPage\",\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/\",\"url\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/\",\"name\":\"Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп\",\"isPartOf\":{\"@id\":\"https://beautymedgroup.ru/#website\"},\"primaryImageOfPage\":{\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#primaryimage\"},\"image\":{\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#primaryimage\"},\"thumbnailUrl\":\"https://beautymedgroup.ru/wp-content/uploads/2026/10/news-warehouse-stock.jpg\",\"datePublished\":\"2026-10-20T07:00:00+00:00\",\"dateModified\":\"2026-10-27T09:50:26+00:00\",\"description\":\"Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп | Эксклюзивный дистрибьютор профессиональных косметических брендов ISSÉIMI и GLACÉE Skincare\",\"breadcrumb\":{\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#breadcrumb\"},\"inLanguage\":\"ru-RU\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/\"]}]},{\"@type\":\"ImageObject\",\"inLanguage\":\"ru-RU\",\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#primaryimage\",\"url\":\"https://beautymedgroup.ru/wp-content/uploads/2026/10/news-warehouse-stock.jpg\",\"contentUrl\":\"https://beautymedgroup.ru/wp-content/uploads/2026/10/news-warehouse-stock.jpg\",\"width\":1000,\"height\":750,\"caption\":\"Склад профессиональной косметики и сборка заказа\"},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Главная\",\"item\":\"https://beautymedgroup.ru/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Оптимизация складской программы: расширение ассортимента и гарантированное наличие\"}]},{\"@type\":\"WebSite\",\"@id\":\"https://beautymedgroup.ru/#website\",\"url\":\"https://beautymedgroup.ru/\",\"name\":\"BeautyMedGroup\",\"description\":\"«БьютиМедГрупп» – официальный дистрибьютор профессиональных косметических брендов из Испании\",\"publisher\":{\"@id\":\"https://beautymedgroup.ru/#organization\"},\"potentialAction\":[{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://beautymedgroup.ru/?s={search_term_string}\"},\"query-input\":{\"@type\":\"PropertyValueSpecification\",\"valueRequired\":true,\"valueName\":\"search_term_string\"}}],\"inLanguage\":\"ru-RU\"},{\"@type\":\"Organization\",\"@id\":\"https://beautymedgroup.ru/#organization\",\"name\":\"ООО «БьютиМедГрупп»\",\"alternateName\":\"БьютиМедГрупп\",\"url\":\"https://beautymedgroup.ru/\",\"logo\":{\"@type\":\"ImageObject\",\"inLanguage\":\"ru-RU\",\"@id\":\"https://beautymedgroup.ru/#/schema/logo/image/\",\"url\":\"https://beautymedgroup.ru/wp-content/uploads/2023/01/isseimi.webp\",\"contentUrl\":\"https://beautymedgroup.ru/wp-content/uploads/2023/01/isseimi.webp\",\"width\":1280,\"height\":830,\"caption\":\"ООО «БьютиМедГрупп»\"},\"image\":{\"@id\":\"https://beautymedgroup.ru/#/schema/logo/image/\"},\"sameAs\":[\"https://t.me/isseimi_and_glacee\",\"https://vk.com/isseimi_and_glacee\",\"https://www.youtube.com/@BeautyMedGroup\"]},{\"@type\":\"Person\",\"@id\":\"https://beautymedgroup.ru/#/schema/person/464cb71f0039ee9ad9fc7173d0139666\",\"name\":\"BeautyMedGroup\",\"image\":{\"@type\":\"ImageObject\",\"inLanguage\":\"ru-RU\",\"@id\":\"https://beautymedgroup.ru/#/schema/person/image/\",\"url\":\"https://secure.gravatar.com/avatar/cce8b18fa2692c494a68d160c4723692589aff6317491cf2a6c4cb113ce84bdd?s=96&d=mm&r=g\",\"contentUrl\":\"https://secure.gravatar.com/avatar/cce8b18fa2692c494a68d160c4723692589aff6317491cf2a6c4cb113ce84bdd?s=96&d=mm&r=g\",\"caption\":\"BeautyMedGroup\"}}]}</script>\n<!-- / Yoast SEO plugin. -->",
+  "yoast_head_json": {
+    "title": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп",
+    "description": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп | Эксклюзивный дистрибьютор профессиональных косметических брендов ISSÉIMI и GLACÉE Skincare",
+    "robots": {
+      "index": "index",
+      "follow": "follow",
+      "max-snippet": "max-snippet:-1",
+      "max-image-preview": "max-image-preview:large",
+      "max-video-preview": "max-video-preview:-1"
+    },
+    "canonical": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/",
+    "og_locale": "ru_RU",
+    "og_type": "article",
+    "og_title": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп",
+    "og_description": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп | Эксклюзивный дистрибьютор профессиональных косметических брендов ISSÉIMI и GLACÉE Skincare",
+    "og_url": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/",
+    "og_site_name": "BeautyMedGroup",
+    "article_published_time": "2026-10-20T07:00:00+00:00",
+    "article_modified_time": "2026-10-27T09:50:26+00:00",
+    "og_image": [
+      {
+        "width": 568,
+        "height": 404,
+        "url": "https://beautymedgroup.ru/wp-content/uploads/2022/12/slider.webp",
+        "type": "image/webp"
+      }
+    ],
+    "author": "BeautyMedGroup",
+    "twitter_card": "summary_large_image",
+    "schema": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Article",
+          "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#article",
+          "isPartOf": {
+            "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/"
+          },
+          "author": {
+            "name": "BeautyMedGroup",
+            "@id": "https://beautymedgroup.ru/#/schema/person/464cb71f0039ee9ad9fc7173d0139666"
+          },
+          "headline": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие",
+          "datePublished": "2026-10-20T07:00:00+00:00",
+          "dateModified": "2026-10-27T09:50:26+00:00",
+          "mainEntityOfPage": {
+            "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/"
+          },
+          "wordCount": 109,
+          "commentCount": 0,
+          "publisher": {
+            "@id": "https://beautymedgroup.ru/#organization"
+          },
+          "image": {
+            "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#primaryimage"
+          },
+          "thumbnailUrl": "https://beautymedgroup.ru/wp-content/uploads/2026/10/news-warehouse-stock.jpg",
+          "articleSection": [
+            "Новости"
+          ],
+          "inLanguage": "ru-RU",
+          "potentialAction": [
+            {
+              "@type": "CommentAction",
+              "name": "Comment",
+              "target": [
+                "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#respond"
+              ]
+            }
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/",
+          "url": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/",
+          "name": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп",
+          "isPartOf": {
+            "@id": "https://beautymedgroup.ru/#website"
+          },
+          "primaryImageOfPage": {
+            "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#primaryimage"
+          },
+          "image": {
+            "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#primaryimage"
+          },
+          "thumbnailUrl": "https://beautymedgroup.ru/wp-content/uploads/2026/10/news-warehouse-stock.jpg",
+          "datePublished": "2026-10-20T07:00:00+00:00",
+          "dateModified": "2026-10-27T09:50:26+00:00",
+          "description": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие – БьютиМедГрупп | Эксклюзивный дистрибьютор профессиональных косметических брендов ISSÉIMI и GLACÉE Skincare",
+          "breadcrumb": {
+            "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#breadcrumb"
+          },
+          "inLanguage": "ru-RU",
+          "potentialAction": [
+            {
+              "@type": "ReadAction",
+              "target": [
+                "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/"
+              ]
+            }
+          ]
+        },
+        {
+          "@type": "ImageObject",
+          "inLanguage": "ru-RU",
+          "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#primaryimage",
+          "url": "https://beautymedgroup.ru/wp-content/uploads/2026/10/news-warehouse-stock.jpg",
+          "contentUrl": "https://beautymedgroup.ru/wp-content/uploads/2026/10/news-warehouse-stock.jpg",
+          "width": 1000,
+          "height": 750,
+          "caption": "Склад профессиональной косметики и сборка заказа"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://beautymedgroup.ru/novosti/optimizacziya-skladskoj-programmy-rasshirenie-assortimenta-i-garantirovannoe-nalichie/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Главная",
+              "item": "https://beautymedgroup.ru/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Оптимизация складской программы: расширение ассортимента и гарантированное наличие"
+            }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://beautymedgroup.ru/#website",
+          "url": "https://beautymedgroup.ru/",
+          "name": "BeautyMedGroup",
+          "description": "«БьютиМедГрупп» – официальный дистрибьютор профессиональных косметических брендов из Испании",
+          "publisher": {
+            "@id": "https://beautymedgroup.ru/#organization"
+          },
+          "potentialAction": [
+            {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://beautymedgroup.ru/?s={search_term_string}"
+              },
+              "query-input": {
+                "@type": "PropertyValueSpecification",
+                "valueRequired": true,
+                "valueName": "search_term_string"
+              }
+            }
+          ],
+          "inLanguage": "ru-RU"
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://beautymedgroup.ru/#organization",
+          "name": "ООО «БьютиМедГрупп»",
+          "alternateName": "БьютиМедГрупп",
+          "url": "https://beautymedgroup.ru/",
+          "logo": {
+            "@type": "ImageObject",
+            "inLanguage": "ru-RU",
+            "@id": "https://beautymedgroup.ru/#/schema/logo/image/",
+            "url": "https://beautymedgroup.ru/wp-content/uploads/2023/01/isseimi.webp",
+            "contentUrl": "https://beautymedgroup.ru/wp-content/uploads/2023/01/isseimi.webp",
+            "width": 1280,
+            "height": 830,
+            "caption": "ООО «БьютиМедГрупп»"
+          },
+          "image": {
+            "@id": "https://beautymedgroup.ru/#/schema/logo/image/"
+          },
+          "sameAs": [
+            "https://t.me/isseimi_and_glacee",
+            "https://vk.com/isseimi_and_glacee",
+            "https://www.youtube.com/@BeautyMedGroup"
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://beautymedgroup.ru/#/schema/person/464cb71f0039ee9ad9fc7173d0139666",
+          "name": "BeautyMedGroup",
+          "image": {
+            "@type": "ImageObject",
+            "inLanguage": "ru-RU",
+            "@id": "https://beautymedgroup.ru/#/schema/person/image/",
+            "url": "https://secure.gravatar.com/avatar/cce8b18fa2692c494a68d160c4723692589aff6317491cf2a6c4cb113ce84bdd?s=96&d=mm&r=g",
+            "contentUrl": "https://secure.gravatar.com/avatar/cce8b18fa2692c494a68d160c4723692589aff6317491cf2a6c4cb113ce84bdd?s=96&d=mm&r=g",
+            "caption": "BeautyMedGroup"
+          }
+        }
+      ]
+    }
+  },
+  "_links": {
+    "self": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729",
+        "targetHints": {
+          "allow": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/types/post"
+      }
+    ],
+    "author": [
+      {
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/users/21"
+      }
+    ],
+    "replies": [
+      {
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/comments?post=1729"
+      }
+    ],
+    "version-history": [
+      {
+        "count": 1,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729/revisions"
+      }
+    ],
+    "predecessor-version": [
+      {
+        "id": 1750,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729/revisions/1750"
+      }
+    ],
+    "wp:featuredmedia": [
+      {
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media/1749"
+      }
+    ],
+    "wp:attachment": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media?parent=1729"
+      }
+    ],
+    "wp:term": [
+      {
+        "taxonomy": "category",
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/categories?post=1729"
+      },
+      {
+        "taxonomy": "post_tag",
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/tags?post=1729"
+      }
+    ],
+    "wp:action-publish": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729"
+      }
+    ],
+    "wp:action-unfiltered-html": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729"
+      }
+    ],
+    "wp:action-sticky": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729"
+      }
+    ],
+    "wp:action-assign-author": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729"
+      }
+    ],
+    "wp:action-create-categories": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729"
+      }
+    ],
+    "wp:action-assign-categories": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729"
+      }
+    ],
+    "wp:action-create-tags": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729"
+      }
+    ],
+    "wp:action-assign-tags": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/posts/1729"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}
