@@ -1,0 +1,16 @@
+{
+  "operation": "local_optical_background_integration",
+  "input": "/Users/germanbryzgalov/Friday-claude/docs/projects/beautymedgroup/media/news-1728-cover-variants/variant-05-refined/variant-05-refined.png",
+  "output": "/Users/germanbryzgalov/Friday-claude/docs/projects/beautymedgroup/media/news-1728-cover-variants/variant-05-refined/variant-05-background-softened.png",
+  "dimensions": [
+    1448,
+    1086
+  ],
+  "defocus_radius_px": 6.2,
+  "mask_feather_radius_px": 15,
+  "product_contrast_reduction": "13.7% warm ambient blend, feathered locally; no object transparency",
+  "unchanged_foreground_below_y": 320,
+  "foreground_pixel_equality_verified": true,
+  "input_sha256": "ff4baf78d5cc54bd651b91937bf2a2f5e6568cac82a899db1f88382a03bac903",
+  "output_sha256": "393d35af1d4988c8066d4daf1981ad67e98b393b9f825de3483ee486053e4cb7"
+}

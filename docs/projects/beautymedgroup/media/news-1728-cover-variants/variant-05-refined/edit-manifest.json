@@ -1,0 +1,102 @@
+{
+  "operation": "local_image_postprocessing",
+  "native_generation_success": false,
+  "note": "Prior native edit was blocked and produced no image. This result is exclusively local compositing; prior records retained.",
+  "base": "/Users/germanbryzgalov/Friday-claude/docs/projects/beautymedgroup/media/news-1728-cover-variants/variant-05/variant-05.png",
+  "output": "/Users/germanbryzgalov/Friday-claude/docs/projects/beautymedgroup/media/news-1728-cover-variants/variant-05-refined/variant-05-refined.png",
+  "preview": "/Users/germanbryzgalov/Friday-claude/docs/projects/beautymedgroup/media/news-1728-cover-variants/variant-05-refined/preview.jpg",
+  "dimensions": [
+    1448,
+    1086
+  ],
+  "font": "/System/Library/Fonts/Supplemental/Arial.ttf",
+  "heading_font": "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+  "text_heading": "ЧТО ЭТО ТАКОЕ?",
+  "text": "Это персонализированный пилинг-конструктор, который «собирается» в соответствии с потребностями кожи конкретного человека.",
+  "page_quadrilateral_xy": [
+    [
+      365.0,
+      694.0
+    ],
+    [
+      711.0,
+      757.0
+    ],
+    [
+      680.0,
+      914.0
+    ],
+    [
+      336.0,
+      850.0
+    ]
+  ],
+  "page_cleanup_polygon_xy": [
+    [
+      355,
+      662
+    ],
+    [
+      730,
+      728
+    ],
+    [
+      685,
+      920
+    ],
+    [
+      331,
+      852
+    ]
+  ],
+  "products": [
+    {
+      "source": "/Users/germanbryzgalov/Friday-claude/docs/projects/beautymedgroup/media/asian-cosmetologist-products/references/elite-200ml-esseime.jpg",
+      "box_xyxy": [
+        536,
+        17,
+        591,
+        235
+      ],
+      "depth_blur_sigma_px": 0.58
+    },
+    {
+      "source": "/Users/germanbryzgalov/Friday-claude/docs/projects/beautymedgroup/media/asian-cosmetologist-products/references/kgf-gel-regenerador-de-piel-esseime.jpg",
+      "box_xyxy": [
+        424,
+        65,
+        500,
+        238
+      ],
+      "depth_blur_sigma_px": 0.65
+    }
+  ],
+  "method": {
+    "paper": "Local residual-based old-ink detection and feathered glyph inpainting retaining original paper lighting; perspective-warped real Cyrillic font.",
+    "products": "GrabCut alpha masks from exact supplied source photos, room white balance, depth blur, contact shadows; old silhouettes replaced with local wall/tray reconstruction; original front rail retained."
+  },
+  "verification": {
+    "changed_pixels": 101010,
+    "outside_allowed_regions_changed_pixels": 0,
+    "allowed_regions_xyxy": [
+      [
+        390,
+        0,
+        685,
+        265
+      ],
+      [
+        320,
+        650,
+        735,
+        930
+      ]
+    ],
+    "base_sha256": "bbc83130a29c8c7fa043da6fdbd36d5716cc8d433a46e0e2dffadf1551839daa"
+  },
+  "limitations": [
+    "Background rebuilt locally where old containers occluded wall/tray.",
+    "Product fine print is naturally small at native scene scale; brand comes from authentic product photos, not recreated lettering.",
+    "Lower paragraph is replaced with a shorter approved excerpt; original upper headings and artwork retained."
+  ]
+}

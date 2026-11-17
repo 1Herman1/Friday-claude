@@ -1,0 +1,28 @@
+{
+  "desktop": {
+    "width": 756,
+    "overflow": false,
+    "images": [
+      {
+        "src": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-300x225.jpg",
+        "loaded": true,
+        "width": 448,
+        "height": 240
+      }
+    ],
+    "og": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi.jpg"
+  },
+  "mobile": {
+    "width": 390,
+    "overflow": false,
+    "images": [
+      {
+        "src": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-300x225.jpg",
+        "loaded": true,
+        "width": 0,
+        "height": 0
+      }
+    ],
+    "og": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi.jpg"
+  }
+}

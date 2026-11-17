@@ -1,0 +1,208 @@
+{
+  "id": 1775,
+  "date": "2026-11-18T02:30:39",
+  "date_gmt": "2026-11-17T23:30:39",
+  "guid": {
+    "rendered": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi.jpg",
+    "raw": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi.jpg"
+  },
+  "modified": "2026-11-18T02:30:39",
+  "modified_gmt": "2026-11-17T23:30:39",
+  "slug": "isseimi-rabota-s-klinicheskimi-protokolami",
+  "status": "inherit",
+  "type": "attachment",
+  "link": "https://beautymedgroup.ru/isseimi-rabota-s-klinicheskimi-protokolami/",
+  "title": {
+    "raw": "ISSEIMI — работа с клиническими протоколами",
+    "rendered": "ISSEIMI — работа с клиническими протоколами"
+  },
+  "author": 21,
+  "featured_media": 0,
+  "comment_status": "open",
+  "ping_status": "closed",
+  "template": "",
+  "meta": [],
+  "permalink_template": "https://beautymedgroup.ru/?attachment_id=1775",
+  "generated_slug": "isseimi-rabota-s-klinicheskimi-protokolami",
+  "class_list": [
+    "post-1775",
+    "attachment",
+    "type-attachment",
+    "status-inherit",
+    "hentry"
+  ],
+  "acf": [],
+  "description": {
+    "raw": "",
+    "rendered": "<p class=\"attachment\"><a href='https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi.jpg'><img loading=\"lazy\" decoding=\"async\" width=\"300\" height=\"225\" src=\"https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-300x225.jpg\" class=\"attachment-medium size-medium\" alt=\"Специалист изучает методические материалы ISSEIMI перед процедурой\" srcset=\"https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-300x225.jpg 300w, https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-1024x768.jpg 1024w, https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-768x576.jpg 768w, https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-600x450.jpg 600w, https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi.jpg 1448w\" sizes=\"auto, (max-width: 300px) 100vw, 300px\" /></a></p>\n"
+  },
+  "caption": {
+    "raw": "",
+    "rendered": ""
+  },
+  "alt_text": "Специалист изучает методические материалы ISSEIMI перед процедурой",
+  "media_type": "image",
+  "mime_type": "image/jpeg",
+  "media_details": {
+    "width": 1448,
+    "height": 1086,
+    "file": "2026/11/bmg-news-clinical-protocols-isseimi.jpg",
+    "filesize": 229474,
+    "sizes": {
+      "medium": {
+        "file": "bmg-news-clinical-protocols-isseimi-300x225.jpg",
+        "width": 300,
+        "height": 225,
+        "filesize": 12069,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-300x225.jpg"
+      },
+      "large": {
+        "file": "bmg-news-clinical-protocols-isseimi-1024x768.jpg",
+        "width": 1024,
+        "height": 768,
+        "filesize": 78186,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-1024x768.jpg"
+      },
+      "thumbnail": {
+        "file": "bmg-news-clinical-protocols-isseimi-150x150.jpg",
+        "width": 150,
+        "height": 150,
+        "filesize": 5164,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-150x150.jpg"
+      },
+      "medium_large": {
+        "file": "bmg-news-clinical-protocols-isseimi-768x576.jpg",
+        "width": 768,
+        "height": 576,
+        "filesize": 50041,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-768x576.jpg"
+      },
+      "thumb-320x177": {
+        "file": "bmg-news-clinical-protocols-isseimi-320x177.jpg",
+        "width": 320,
+        "height": 177,
+        "filesize": 10398,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-320x177.jpg"
+      },
+      "woocommerce_thumbnail": {
+        "file": "bmg-news-clinical-protocols-isseimi-300x300.jpg",
+        "width": 300,
+        "height": 300,
+        "filesize": 14203,
+        "uncropped": false,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-300x300.jpg"
+      },
+      "woocommerce_single": {
+        "file": "bmg-news-clinical-protocols-isseimi-600x450.jpg",
+        "width": 600,
+        "height": 450,
+        "filesize": 34546,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-600x450.jpg"
+      },
+      "woocommerce_gallery_thumbnail": {
+        "file": "bmg-news-clinical-protocols-isseimi-100x100.jpg",
+        "width": 100,
+        "height": 100,
+        "filesize": 2930,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi-100x100.jpg"
+      },
+      "full": {
+        "file": "bmg-news-clinical-protocols-isseimi.jpg",
+        "width": 1448,
+        "height": 1086,
+        "mime_type": "image/jpeg",
+        "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi.jpg"
+      }
+    },
+    "image_meta": {
+      "aperture": "0",
+      "credit": "",
+      "camera": "",
+      "caption": "",
+      "created_timestamp": "0",
+      "copyright": "",
+      "focal_length": "0",
+      "iso": "0",
+      "shutter_speed": "0",
+      "title": "",
+      "orientation": "0",
+      "keywords": [],
+      "alt": ""
+    }
+  },
+  "post": null,
+  "source_url": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-clinical-protocols-isseimi.jpg",
+  "missing_image_sizes": [],
+  "filename": "bmg-news-clinical-protocols-isseimi.jpg",
+  "filesize": 229474,
+  "exif_orientation": 1,
+  "image_output_format": null,
+  "image_save_progressive": false,
+  "image_quality": {
+    "default": 82,
+    "sizes": []
+  },
+  "_links": {
+    "self": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media/1775",
+        "targetHints": {
+          "allow": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+          ]
+        }
+      }
+    ],
+    "collection": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media"
+      }
+    ],
+    "about": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/types/attachment"
+      }
+    ],
+    "author": [
+      {
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/users/21"
+      }
+    ],
+    "replies": [
+      {
+        "embeddable": true,
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/comments?post=1775"
+      }
+    ],
+    "wp:action-unfiltered-html": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media/1775"
+      }
+    ],
+    "wp:action-assign-author": [
+      {
+        "href": "https://beautymedgroup.ru/wp-json/wp/v2/media/1775"
+      }
+    ],
+    "curies": [
+      {
+        "name": "wp",
+        "href": "https://api.w.org/{rel}",
+        "templated": true
+      }
+    ]
+  }
+}
