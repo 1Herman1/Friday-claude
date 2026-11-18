@@ -1,0 +1,42 @@
+{
+  "desktop_article": {
+    "width": 1440,
+    "overflow": false,
+    "og": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-education-masterclass-isseimi.jpg",
+    "inline": [
+      {
+        "loaded": true,
+        "src": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-education-demonstration-isseimi-768x576.jpg",
+        "width": 762,
+        "height": 571.5
+      }
+    ],
+    "caption": "Иллюстрация практической демонстрации средств ISSEIMI."
+  },
+  "mobile_article": {
+    "width": 390,
+    "overflow": false,
+    "og": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-education-masterclass-isseimi.jpg",
+    "inline": [
+      {
+        "loaded": true,
+        "src": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-education-demonstration-isseimi-600x450.jpg",
+        "width": 374,
+        "height": 280.5
+      }
+    ],
+    "caption": "Иллюстрация практической демонстрации средств ISSEIMI."
+  },
+  "mobile_news_list": {
+    "width": 390,
+    "overflow": false,
+    "images": [
+      {
+        "loaded": true,
+        "src": "https://beautymedgroup.ru/wp-content/uploads/2026/11/bmg-news-education-masterclass-isseimi-600x450.jpg",
+        "width": 374,
+        "height": 240
+      }
+    ]
+  }
+}

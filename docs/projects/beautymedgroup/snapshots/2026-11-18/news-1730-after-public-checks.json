@@ -1,0 +1,14 @@
+[
+  {
+    "url": "https://beautymedgroup.ru/novosti/obrazovatelnyj-blok-razbor-slozhnyh-klinicheskih-sluchaev-i-podderzhka-praktikuyushhih-vrachej/",
+    "status": 200,
+    "cover_present": true,
+    "inline_present": true
+  },
+  {
+    "url": "https://beautymedgroup.ru/novosti/",
+    "status": 200,
+    "cover_present": true,
+    "inline_present": false
+  }
+]
