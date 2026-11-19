@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { CatalogEditorial } from './CatalogEditorial'
+import { SERUM_COVER } from './CatalogCovers'
 import { pluralize } from '@/lib/format'
 import type { CategoriesTreeResponse } from '@/types/api'
 
@@ -41,14 +42,19 @@ function MobileCatalogGrid({ categories }: CatalogGridProps) {
       )}
 
       {/* Rest categories - grid 2x3 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start gap-6">
         {categories.map(category => (
           <Link
             key={category.slug}
             to={`/catalog/${category.slug}`}
-            className="group bg-card rounded-block overflow-hidden transition-transform duration-200 hover:-translate-y-1"
+            className={category.slug === 'syvorotki' ? 'group catalog-tile catalog-serum catalog-illustrated text-foreground rounded-block overflow-hidden' : 'group bg-card rounded-block overflow-hidden transition-transform duration-200 hover:-translate-y-1'}
           >
-            {category.image ? (
+            {category.slug === 'syvorotki' ? (
+              <>
+                <div className="catalog-tile-copy"><h2>{category.name}</h2><p className="catalog-count">{category.productCount} {pluralize(category.productCount, ['товар', 'товара', 'товаров'])}</p></div>
+                <img className="catalog-cover" src={SERUM_COVER} alt="" loading="lazy" width="1254" height="1254" />
+              </>
+            ) : category.image ? (
               <>
                 <div className="aspect-square bg-card flex items-center justify-center relative overflow-hidden">
                   <img

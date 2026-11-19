@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+export const SERUM_COVER = '/photos/catalog/syvorotki-pilot-05-native.png'
+
 /** One local gate for visibility, reduced motion and data saving. */
 function useCoverMotion() {
   const ref = useRef<HTMLDivElement>(null)

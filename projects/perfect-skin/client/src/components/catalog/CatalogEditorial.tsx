@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
-import { AllProductsCover, BestsellerCover } from './CatalogCovers'
+import { AllProductsCover, BestsellerCover, SERUM_COVER } from './CatalogCovers'
 import { pluralize } from '@/lib/format'
 import type { CategoriesTreeResponse as Category } from '@/types/api'
 import './catalog-composition.css'
 
 const EDITORIAL: Record<string, { span: number; tone: string; image?: string }> = {
   'kremy-dlya-litsa-i-shei': { span: 5, tone: 'bg-muted text-foreground', image: '/photos/m16-1254.webp' },
-  syvorotki: { span: 5, tone: 'bg-primary text-primary-foreground', image: '/photos/m4.webp' },
+  syvorotki: { span: 5, tone: 'catalog-serum text-foreground', image: SERUM_COVER },
   ochishchenie: { span: 3, tone: 'bg-muted text-foreground' },
   maski: { span: 4, tone: 'bg-accent text-foreground' },
   flyuidy: { span: 2, tone: 'bg-primary text-primary-foreground' },
@@ -18,7 +18,7 @@ const EDITORIAL: Record<string, { span: number; tone: string; image?: string }> 
 
 function CategoryTile({ category }: { category: Category }) {
   const art = EDITORIAL[category.slug] || { span: 4, tone: 'bg-muted text-foreground' }
-  const image = category.image || art.image
+  const image = category.slug === 'syvorotki' ? SERUM_COVER : category.image || art.image
   return <Link to={`/catalog/${category.slug}`} className={`catalog-tile catalog-span-${art.span} ${art.tone} ${image ? 'catalog-illustrated' : ''}`}>
     <div className="catalog-tile-copy"><h2>{category.name}</h2><p className="catalog-count">{category.productCount} {pluralize(category.productCount, ['товар', 'товара', 'товаров'])}</p></div>
     {image && <img className="catalog-cover" src={image} alt="" loading="lazy" onError={e => { e.currentTarget.style.visibility = 'hidden' }} />}
