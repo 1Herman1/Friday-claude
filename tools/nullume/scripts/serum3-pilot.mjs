@@ -23,7 +23,7 @@ export const STATUS = 'https://api.kie.ai/api/v1/jobs/recordInfo?taskId=';
 export const TOKEN = 'confirm-serum3-one-126';
 
 const FRAMES = fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum3-pilot', import.meta.url));
-const CAP = 126;
+const QUOTED_CREDITS = 126;
 const JSON_LIMIT = 1024 * 1024;
 const VIDEO_LIMIT = 64 * 1024 * 1024;
 const PNG_LIMIT = 10_000_000;
@@ -196,7 +196,7 @@ export async function validatePublicMetadata(request = httpsOnce) {
   const schema = await fetchSchema(request);
   checkSchema(schema, draft);
   await checkPrice(request);
-  return { model: MODEL, duration: '10', credits: CAP, usd: 0.63 };
+  return { model: MODEL, duration: '10', credits: QUOTED_CREDITS, usd: 0.63 };
 }
 
 async function readLocal(dir, name, limit) {
@@ -237,14 +237,15 @@ export async function checkFrames(dir) {
   }
 }
 
-function providerClient(request, key) {
+function providerClient(request, key, existingTask) {
   let expectedPayload;
   let submitted = false;
-  let activeTask;
+  let activeTask = existingTask;
+  const readOnly = existingTask !== undefined;
   const transport = async (url, init) => {
     const method = init.method ?? 'GET';
-    const allowedGet = method === 'GET' && (url === CREDIT || (activeTask && url === STATUS + activeTask));
-    const allowedCreate = method === 'POST' && url === CREATE && !submitted &&
+    const allowedGet = method === 'GET' && ((!readOnly && url === CREDIT) || (activeTask && url === STATUS + activeTask));
+    const allowedCreate = !readOnly && method === 'POST' && url === CREATE && !submitted &&
       expectedPayload && init.body === expectedPayload;
     requirePilot(allowedGet || allowedCreate, 'Authenticated endpoint rejected.');
     if (allowedCreate) submitted = true;
@@ -279,9 +280,55 @@ async function upload(request, key, bytes, name, folder) {
   return url;
 }
 
+// Only idempotent status/download reads enter this retry helper. No create or upload caller.
+async function retryRead(read, pause) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try { return await read(); }
+    catch {
+      if (attempt === 2) throw new PilotFailure('Provider read failed after three attempts.');
+      await pause(1000);
+    }
+  }
+}
+
+async function retrieveTask({ id, key, client, request, pause }) {
+  for (let poll = 0; poll < 65; poll++) {
+    const status = await retryRead(() => client.status('jobs', id), pause);
+    requirePilot(status.taskId === id && status.model === MODEL, 'Provider task response rejected.');
+    if (status.state === 'success') {
+      const charged = status.creditsConsumed;
+      requirePilot(charged === undefined || (Number.isSafeInteger(charged) && charged >= 0),
+        'Provider billing data rejected.');
+      requirePilot(typeof status.resultJson === 'string', 'Provider result rejected.');
+      const result = parse(status.resultJson, 'Provider result rejected.');
+      requirePilot(Array.isArray(result?.resultUrls) && result.resultUrls.length === 1, 'Provider result rejected.');
+      const url = checkVideoUrl(result.resultUrls[0]);
+      requirePilot(!url.includes(key), 'Video response rejected.');
+      const video = await retryRead(() => boundedRequest(request, url, {}, VIDEO_LIMIT, 60_000), pause);
+      requirePilot(video.headers.get('content-type')?.split(';')[0].trim() === 'video/mp4' &&
+        video.bytes.length >= 16 && video.bytes.toString('ascii', 4, 8) === 'ftyp', 'Invalid provider video.');
+      const summary = { taskId: id, quotedCredits: QUOTED_CREDITS, providerBillingCap: false,
+        billingViolation: charged !== undefined && charged > QUOTED_CREDITS };
+      if (charged !== undefined) summary.creditsConsumed = charged;
+      return { summary, video: video.bytes };
+    }
+    requirePilot(['waiting', 'queuing', 'generating'].includes(status.state), 'Provider task stopped.');
+    if (poll < 64) await pause(10_000);
+  }
+  throw new PilotFailure('Provider polling limit reached.');
+}
+
 export async function runPilot({
-  dir = FRAMES, mode, confirmation, attempt, getKey, request = httpsOnce, pause = delay, onSubmitted = () => {},
+  dir = FRAMES, mode, confirmation, attempt, getKey, request = httpsOnce, pause = delay, onSubmitted = () => {}, existingTask, submitOnly = false,
 }) {
+  if (mode === 'recover-existing-task') {
+    const id = taskId(existingTask);
+    const key = getKey();
+    requirePilot(typeof key === 'string' && /^[A-Za-z0-9_.~-]{1,512}$(?![\s\S])/.test(key), 'Kie credential unavailable.');
+    requirePilot(!id.includes(key), 'Recovery task rejected.');
+    const { client } = providerClient(request, key, id);
+    return retrieveTask({ id, key, client, request, pause });
+  }
   requirePilot(mode === 'dry-run' || (mode === 'generate-one' && confirmation === TOKEN && attempt === '1'),
     'Run authorization rejected.');
   const frames = await checkFrames(dir);
@@ -289,14 +336,14 @@ export async function runPilot({
   const schema = await fetchSchema(request);
   checkSchema(schema, draft);
   await checkPrice(request);
-  if (mode === 'dry-run') return { summary: { maxCredits: CAP } };
+  if (mode === 'dry-run') return { summary: { quotedCredits: QUOTED_CREDITS, providerBillingCap: false } };
 
   try {
     const key = getKey();
     requirePilot(typeof key === 'string' && /^[A-Za-z0-9_.~-]{1,512}$(?![\s\S])/.test(key), 'Kie credential unavailable.');
     const { client, setTask, setPayload } = providerClient(request, key);
     const credits = await client.credits();
-    requirePilot(Number.isFinite(credits) && credits >= CAP, 'Insufficient provider credits.');
+    requirePilot(Number.isFinite(credits) && credits >= QUOTED_CREDITS, 'Insufficient provider credits.');
 
     const folder = 'serum3-pilot/' + randomUUID();
     const first = await upload(request, key, frames[0], 'first.png', folder);
@@ -304,6 +351,8 @@ export async function runPilot({
     const createPayload = payload(first, tail);
     checkSchema(schema, createPayload);
     setPayload(createPayload);
+    // Recheck after uploads, immediately before the only billable POST. This is NOT a billing reservation.
+    await checkPrice(request);
     const id = taskId(await client.create('jobs', MODEL, createPayload.input));
     requirePilot(!id.includes(key), 'Create response rejected.');
     setTask(id);
@@ -313,29 +362,8 @@ export async function runPilot({
       console.warn('Submission metadata write failed; continuing to preserve the provider result.');
     }
 
-    for (let poll = 0; poll < 65; poll++) {
-      const status = await client.status('jobs', id);
-      requirePilot(status.taskId === id && status.model === MODEL, 'Provider task response rejected.');
-      if (status.state === 'success') {
-        const charged = status.creditsConsumed;
-        requirePilot(charged === undefined || (Number.isSafeInteger(charged) && charged >= 0 && charged <= CAP),
-          'Provider reported credits outside the cap.');
-        requirePilot(typeof status.resultJson === 'string', 'Provider result rejected.');
-        const result = parse(status.resultJson, 'Provider result rejected.');
-        requirePilot(Array.isArray(result?.resultUrls) && result.resultUrls.length === 1, 'Provider result rejected.');
-        const url = checkVideoUrl(result.resultUrls[0]);
-        requirePilot(!url.includes(key), 'Video response rejected.');
-        const video = await boundedRequest(request, url, {}, VIDEO_LIMIT, 60_000);
-        requirePilot(video.headers.get('content-type')?.split(';')[0].trim() === 'video/mp4' &&
-          video.bytes.length >= 16 && video.bytes.toString('ascii', 4, 8) === 'ftyp', 'Invalid provider video.');
-        const summary = { taskId: id, maxCredits: CAP };
-        if (charged !== undefined) summary.creditsConsumed = charged;
-        return { summary, video: video.bytes };
-      }
-      requirePilot(['waiting', 'queuing', 'generating'].includes(status.state), 'Provider task stopped.');
-      if (poll < 64) await pause(10_000);
-    }
-    throw new PilotFailure('Provider polling limit reached.');
+    if (submitOnly) return { summary: { taskId: id, state: 'submitted', quotedCredits: QUOTED_CREDITS, providerBillingCap: false } };
+    return await retrieveTask({ id, key, client, request, pause });
   } catch (error) {
     if (error instanceof PilotFailure) throw error;
     throw new PilotFailure('Authenticated pilot failed. Submission may have occurred.');
@@ -385,6 +413,27 @@ export function authorizePaidRun(env) {
     env.SERUM3_APPROVED_RUN_ID === env.GITHUB_RUN_ID, 'Run authorization rejected.');
 }
 
+export function authorizeRecoveryRun(env) {
+  const id = taskId(env.SERUM3_RECOVERY_TASK_ID);
+  requirePilot(env.GITHUB_ACTIONS === 'true' && env.GITHUB_EVENT_NAME === 'workflow_dispatch' && env.RUNNER_TEMP &&
+    /^\d{1,20}$/.test(env.GITHUB_RUN_ID ?? '') && env.SERUM3_APPROVED_RUN_ID === env.GITHUB_RUN_ID &&
+    /^\d{1,20}$/.test(env.SERUM3_SOURCE_RUN_ID ?? '') &&
+    env.SERUM3_APPROVED_SOURCE_RUN_ID === env.SERUM3_SOURCE_RUN_ID && env.SERUM3_APPROVED_TASK_ID === id,
+  'Recovery authorization rejected.');
+}
+
+export async function writeTaskReceipt(dir, id, env) {
+  taskId(id);
+  requirePilot(/^\d{1,20}$/.test(env.GITHUB_RUN_ID ?? '') && /^[a-f0-9]{40}$/.test(env.GITHUB_SHA ?? ''),
+    'Receipt context rejected.');
+  const receipt = { taskId: id, sourceRunId: env.GITHUB_RUN_ID, sourceSha: env.GITHUB_SHA, model: MODEL,
+    duration: '10', quotedCredits: QUOTED_CREDITS, providerBillingCap: false, state: 'submitted' };
+  const handle = await open(join(dir, 'task-receipt.json'), 'wx', 0o600);
+  try { await handle.writeFile(JSON.stringify(receipt) + '\n'); await handle.sync(); }
+  finally { await handle.close(); }
+  return receipt;
+}
+
 async function main() {
   const [mode, ...extra] = process.argv.slice(2);
   requirePilot(extra.length === 0, 'Run authorization rejected.');
@@ -396,24 +445,34 @@ async function main() {
       catch { console.warn('Actions summary write failed; result preservation continues.'); }
     }
   };
+  requirePilot(['dry-run', 'generate-one', 'recover-existing-task'].includes(mode), 'Run authorization rejected.');
+  if (mode === 'recover-existing-task') authorizeRecoveryRun(process.env);
   if (mode === 'generate-one') {
     authorizePaidRun(process.env);
     // Exclusive directory also refuses a second process in the same job.
     await mkdir(join(process.env.RUNNER_TEMP, 'serum3-result'), { mode: 0o700 });
   }
-  const verifiedFrames = await checkFrames(FRAMES);
-  for (const frame of verifiedFrames) await validateDecodedMedia(frame, 'png');
+  if (mode === 'recover-existing-task') {
+    await mkdir(join(process.env.RUNNER_TEMP, 'serum3-result'), { recursive: true, mode: 0o700 });
+  } else {
+    const verifiedFrames = await checkFrames(FRAMES);
+    for (const frame of verifiedFrames) await validateDecodedMedia(frame, 'png');
+  }
   const result = await runPilot({
     mode, confirmation: process.env.SERUM3_CONFIRMATION, attempt: process.env.GITHUB_RUN_ATTEMPT,
+    submitOnly: mode === 'generate-one', existingTask: process.env.SERUM3_RECOVERY_TASK_ID,
     getKey() {
       const key = process.env.KIE_API_KEY;
       delete process.env.KIE_API_KEY;
       return key;
     },
     onSubmitted: async (id) => {
-      await appendSummary('Submitted provider task `' + id + '`. Maximum credits ' + CAP + '.');
-      await writeFile(join(process.env.RUNNER_TEMP, 'serum3-result', 'result.json'),
-        JSON.stringify({ taskId: id, maxCredits: CAP, state: 'submitted' }) + '\n', { mode: 0o600 });
+      // Persist and fsync locally before any status read; next Actions step publishes this receipt independently.
+      try { await writeTaskReceipt(join(process.env.RUNNER_TEMP, 'serum3-result'), id, process.env); }
+      finally {
+        await appendSummary('Submitted provider task `' + id + '`. Quoted 126 credits / USD0.63; NOT a provider billing ceiling.');
+        if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT, 'task_id=' + id + '\n');
+      }
     },
   });
   if (result.video) {
@@ -427,8 +486,9 @@ async function main() {
     await writeFile(join(output, 'result.json'), JSON.stringify(result.summary) + '\n', { flag: 'w', mode: 0o600 });
     const charged = result.summary.creditsConsumed;
     if (charged !== undefined) await appendSummary('Provider-reported credits consumed ' + charged + '.');
-  } else {
-    await appendSummary('Dry run passed. Verified public price ' + CAP + ' credits.');
+    if (result.summary.billingViolation) throw new PilotFailure('Provider-reported charge exceeds quote; paid output preserved for reconciliation.');
+  } else if (mode === 'dry-run') {
+    await appendSummary('Dry run passed. Quoted ' + QUOTED_CREDITS + ' credits / USD0.63; NOT a provider billing ceiling.');
   }
 }
 

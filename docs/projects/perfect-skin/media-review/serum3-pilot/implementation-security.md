@@ -1,5 +1,7 @@
 # Serum3 pilot — implementation / parent security handoff
 
+> Execution correction: [quote vs billing ceiling, protected-environment status, durable task receipt and GET-only recovery](execution-recovery.md). That document supersedes the execution/activation statements below where they differ; older frame/native evidence here is historical, not acceptance of current output.
+
 ## Status and real blocker
 
 Capability implemented; **NOT generation-ready**. No upload or paid request occurred. Native Codex made one real call with all seven required original/label/scene references; the tool rejected it before generation: `referenced_image_paths must contain at most 5 paths`. Independently parsed native session contains one call, one rejection, zero completed images. No final frame exists, so `frames.json` is deliberately `ready:false` with null hashes. No reference was dropped, merged or substituted. Parent must decide the permitted <=5-reference strategy before another native call; the one-completed-image allowance remains unused. No source photos or synthetic decoder-test media are committed here.

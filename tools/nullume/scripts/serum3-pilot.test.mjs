@@ -91,6 +91,134 @@ function mock(options = {}) {
 
 const generate = { mode: 'generate-one', confirmation: TOKEN, attempt: '1', getKey: () => key };
 
+test('recovery reads only the existing task and retries transient status and download failures', async () => {
+  const base = mock();
+  const calls = [];
+  let statuses = 0;
+  let downloads = 0;
+  const result = await runPilot({ mode: 'recover-existing-task', existingTask: id,
+    dir: '/nonexistent/no-frames', getKey: () => key, pause: async () => {},
+    request: async (url, init) => {
+      calls.push(url);
+      assert.equal(init.method ?? 'GET', 'GET');
+      assert.ok([STATUS + id, video].includes(url));
+      if (url === STATUS + id && ++statuses === 1) return new Response('raw ' + key, { status: 503 });
+      if (url === video && ++downloads === 1) throw Error('raw ' + key);
+      return base.request(url, init);
+    } });
+  assert.equal(result.video.compare(mp4), 0);
+  assert.deepEqual(calls, [STATUS + id, STATUS + id, video, video]);
+  assert.equal(calls.filter((url) => url === CREATE || url === UPLOAD).length, 0);
+  assert.doesNotMatch(JSON.stringify(result.summary), /mock-key|raw/);
+});
+
+test('recovery exhausts bounded reads without creating or leaking a secret', async () => {
+  const calls = [];
+  await assert.rejects(runPilot({ mode: 'recover-existing-task', existingTask: id,
+    getKey: () => key, pause: async () => {}, request: async (url, init) => {
+      calls.push(url);
+      assert.equal(url, STATUS + id);
+      assert.equal(init.method ?? 'GET', 'GET');
+      throw Error('raw ' + key);
+    } }), (error) => {
+      assert.doesNotMatch(error.message, /raw|mock-key/);
+      assert.equal(error.cause, undefined);
+      return true;
+    });
+  assert.equal(calls.length, 3);
+});
+
+test('recovery pending polling and failed downloads are finite and never fall back to creation', async () => {
+  for (const scenario of ['pending', 'download-fails', 'wrong-model', 'failed-task']) {
+    const base = mock();
+    const calls = [];
+    await assert.rejects(runPilot({ mode: 'recover-existing-task', existingTask: id, getKey: () => key,
+      pause: async () => {}, request: async (url, init) => {
+        calls.push(url);
+        assert.equal(init.method ?? 'GET', 'GET');
+        assert.ok([STATUS + id, video].includes(url));
+        if (url === video) throw Error('raw ' + key);
+        if (scenario === 'pending') return Response.json({ code: 200, data: { taskId: id, model: MODEL, state: 'generating' } });
+        if (scenario === 'wrong-model') return Response.json({ code: 200, data: { taskId: id, model: 'other', state: 'success' } });
+        if (scenario === 'failed-task') return Response.json({ code: 200, data: { taskId: id, model: MODEL, state: 'fail', failMsg: key } });
+        return base.request(url, init);
+      } }), (error) => { assert.doesNotMatch(error.message, /raw|mock-key/); return true; });
+    assert.equal(calls.filter((url) => url === CREATE || url === UPLOAD).length, 0);
+    assert.equal(calls.length, scenario === 'pending' ? 65 : scenario === 'download-fails' ? 4 : 1);
+  }
+});
+
+test('overquoted billing is flagged separately while preserving the paid output', async () => {
+  const { request, calls } = mock({ charged: 127 });
+  const result = await runPilot({ mode: 'recover-existing-task', existingTask: id, getKey: () => key, request });
+  assert.equal(result.summary.creditsConsumed, 127);
+  assert.equal(result.summary.billingViolation, true);
+  assert.equal(result.summary.providerBillingCap, false);
+  assert.equal(result.summary.quotedCredits, 126);
+  assert.equal(result.summary.maxCredits, undefined);
+  assert.ok(calls.includes(video));
+});
+
+test('submit-only records a sanitized receipt before any status read', () => withFrames(async (dir) => {
+  const { request, calls } = mock();
+  let receipt;
+  const result = await runPilot({ ...generate, dir, request, submitOnly: true,
+    onSubmitted: async (value) => { receipt = value; assert.equal(calls.at(-1), CREATE); } });
+  assert.equal(receipt, id);
+  assert.equal(result.summary.taskId, id);
+  assert.equal(result.summary.state, 'submitted');
+  assert.equal(result.video, undefined);
+  assert.equal(calls.filter((url) => url === CREATE).length, 1);
+  assert.ok(!calls.includes(STATUS + id));
+}));
+
+test('recovery authorization binds exact task, source run and current reviewed run', () => {
+  const env = { GITHUB_ACTIONS: 'true', GITHUB_EVENT_NAME: 'workflow_dispatch', RUNNER_TEMP: '/runner/temp',
+    GITHUB_RUN_ID: '12345', SERUM3_APPROVED_RUN_ID: '12345', SERUM3_RECOVERY_TASK_ID: id,
+    SERUM3_APPROVED_TASK_ID: id, SERUM3_SOURCE_RUN_ID: '12200', SERUM3_APPROVED_SOURCE_RUN_ID: '12200' };
+  assert.equal(typeof pilot.authorizeRecoveryRun, 'function');
+  assert.doesNotThrow(() => pilot.authorizeRecoveryRun(env));
+  for (const overrides of [{ SERUM3_APPROVED_TASK_ID: 'b'.repeat(32) }, { SERUM3_APPROVED_SOURCE_RUN_ID: '9' },
+    { SERUM3_APPROVED_RUN_ID: '9' }, { GITHUB_EVENT_NAME: 'push' }, { SERUM3_RECOVERY_TASK_ID: 'bad\n' }]) {
+    assert.throws(() => pilot.authorizeRecoveryRun({ ...env, ...overrides }));
+  }
+});
+
+test('task receipt is exclusive sanitized durable JSON bound to original run and source SHA', () => withFrames(async (dir) => {
+  assert.equal(typeof pilot.writeTaskReceipt, 'function');
+  const receipt = await pilot.writeTaskReceipt(dir, id, { GITHUB_RUN_ID: '12345', GITHUB_SHA: 'b'.repeat(40) });
+  const { readFile } = await import('node:fs/promises');
+  assert.deepEqual(JSON.parse(await readFile(join(dir, 'task-receipt.json'), 'utf8')), receipt);
+  assert.deepEqual(receipt, { taskId: id, sourceRunId: '12345', sourceSha: 'b'.repeat(40), model: MODEL,
+    duration: '10', quotedCredits: 126, providerBillingCap: false, state: 'submitted' });
+  await assert.rejects(pilot.writeTaskReceipt(dir, id, { GITHUB_RUN_ID: '12345', GITHUB_SHA: 'b'.repeat(40) }));
+}));
+
+test('CLI recovery rejects missing binding before touching absent frame files', async () => {
+  const { spawnSync } = await import('node:child_process');
+  const { fileURLToPath } = await import('node:url');
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL('./serum3-pilot.mjs', import.meta.url)), 'recover-existing-task'],
+    { env: { PATH: process.env.PATH }, encoding: 'utf8' });
+  assert.equal(result.status, 1);
+  assert.doesNotMatch(result.stderr, /frame/);
+  assert.match(result.stderr, /task ID|Recovery authorization/);
+});
+
+test('changed quote after uploads blocks creation before payment', () => withFrames(async (dir) => {
+  const base = mock();
+  let prices = 0;
+  const calls = [];
+  await assert.rejects(runPilot({ ...generate, dir, request: async (url, init) => {
+    calls.push(url);
+    if (url === PRICE && ++prices === 2) return Response.json({ code: 200,
+      data: { records: [{ ...record, creditPrice: '127' }], total: 1 } });
+    return base.request(url, init);
+  } }), /price/);
+  assert.equal(prices, 2);
+  assert.equal(calls.filter((url) => url === UPLOAD).length, 2);
+  assert.equal(calls.filter((url) => url === CREATE).length, 0);
+}));
+
 test('public metadata can be checked without frame files or any credential', async () => {
   const { request, calls } = mock();
   assert.equal(typeof pilot.validatePublicMetadata, 'function');
@@ -140,8 +268,8 @@ test('generate submits exactly one fixed request and yields sanitized data', () 
   const { request, calls } = mock();
   const result = await runPilot({ ...generate, dir, request });
   assert.equal(result.video.compare(mp4), 0);
-  assert.deepEqual(result.summary, { taskId: id, maxCredits: 126, creditsConsumed: 126 });
-  assert.deepEqual(calls, [DOC, PRICE, CREDIT, UPLOAD, UPLOAD, CREATE, STATUS + id, video]);
+  assert.deepEqual(result.summary, { taskId: id, quotedCredits: 126, providerBillingCap: false, billingViolation: false, creditsConsumed: 126 });
+  assert.deepEqual(calls, [DOC, PRICE, CREDIT, UPLOAD, UPLOAD, PRICE, CREATE, STATUS + id, video]);
   assert.deepEqual(Object.keys(payload(first, tail).input).sort(), ['duration', 'image_url', 'prompt', 'tail_image_url']);
   assert.equal(payload(first, tail).input.duration, '10');
 }));
@@ -185,7 +313,7 @@ test('malicious provider results stop without leaking errors or retrying', () =>
     [{ createError: true }, 1], [{ createStatus: 429 }, 1], [{ createStatus: 421 }, 1], [{ id: 'bad?taskId=injected' }, 1],
     [{ result: JSON.stringify({ resultUrls: [video + '?token=marker'] }) }, 1],
     [{ result: JSON.stringify({ resultUrls: [video, video] }) }, 1],
-    [{ charged: 127 }, 1], [{ upload: 'https://127.0.0.1/x.png' }, 0], [{ balance: 125 }, 0],
+    [{ charged: -1 }, 1], [{ upload: 'https://127.0.0.1/x.png' }, 0], [{ balance: 125 }, 0],
   ]) {
     const { request, calls } = mock(options);
     await assert.rejects(runPilot({ ...generate, dir, request }), (error) => {
@@ -208,8 +336,8 @@ test('rejects echoed credentials before forwarding media or recording the task',
     const { request, calls } = mock({ ...options, key: suppliedKey });
     await assert.rejects(runPilot({ ...generate, dir, request, getKey: () => suppliedKey }), /response rejected/);
     assert.deepEqual(calls, options.upload ? [DOC, PRICE, CREDIT, UPLOAD] :
-      options.id ? [DOC, PRICE, CREDIT, UPLOAD, UPLOAD, CREATE] :
-        [DOC, PRICE, CREDIT, UPLOAD, UPLOAD, CREATE, STATUS + id]);
+      options.id ? [DOC, PRICE, CREDIT, UPLOAD, UPLOAD, PRICE, CREATE] :
+        [DOC, PRICE, CREDIT, UPLOAD, UPLOAD, PRICE, CREATE, STATUS + id]);
   }
 }));
 

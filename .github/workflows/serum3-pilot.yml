@@ -17,14 +17,26 @@ name: Serum3 video pilot
         options:
           - dry-run
           - generate-one
+          - recover-existing-task
       confirmation:
-        description: Confirm one generation at 126 credits after review
+        description: Confirm one generation quoted at 126 credits; NOT a provider billing cap
         type: choice
         required: true
         default: none
         options:
           - none
           - confirm-serum3-one-126
+
+      task_id:
+        description: Existing provider task ID from sanitized receipt (recovery only)
+        type: string
+        required: false
+        default: ''
+      source_run_id:
+        description: Original submission run ID from receipt (recovery only)
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -39,6 +51,7 @@ jobs:
       github.event_name == 'push' ||
       (github.event_name == 'workflow_dispatch' && github.run_attempt == '1' &&
       (inputs.mode == 'dry-run' ||
+        (inputs.mode == 'recover-existing-task' && github.ref == 'refs/heads/ci/serum3-bounded-pilot') ||
         (inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum3-one-126' &&
           github.ref == 'refs/heads/ci/serum3-bounded-pilot')))
     runs-on: ubuntu-24.04
@@ -61,10 +74,11 @@ jobs:
       - name: Offline regression tests
         run: node --test tools/nullume/scripts/serum3-pilot.test.mjs
       - name: Fresh public exact quote and first/end-frame schema (no credential)
+        if: inputs.mode != 'recover-existing-task'
         run: >-
           node --input-type=module -e "import {validatePublicMetadata} from './tools/nullume/scripts/serum3-pilot.mjs'; console.log(await validatePublicMetadata());"
       - name: Full dry run including real local frame validation
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && inputs.mode != 'recover-existing-task'
         run: node tools/nullume/scripts/serum3-pilot.mjs dry-run
 
   generate:
@@ -72,7 +86,8 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' && github.run_attempt == '1' &&
       github.ref == 'refs/heads/ci/serum3-bounded-pilot' &&
-      inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum3-one-126'
+      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum3-one-126') ||
+        inputs.mode == 'recover-existing-task')
     runs-on: ubuntu-24.04
     environment: serum3-pilot
     timeout-minutes: 30
@@ -92,21 +107,56 @@ jobs:
           npm run build
           ffmpeg -version > /dev/null
           node --test scripts/serum3-pilot.test.mjs
-      - name: Require explicit environment arming for this exact run
-        if: vars.SERUM3_PILOT_ARMED != 'confirm-serum3-one-126' || vars.SERUM3_APPROVED_RUN_ID != github.run_id
+      - name: Require explicit environment arming for this exact run and mode
+        id: gate
+        env:
+          MODE: ${{ inputs.mode }}
+          ARMED: ${{ vars.SERUM3_PILOT_ARMED }}
+          APPROVED_RUN: ${{ vars.SERUM3_APPROVED_RUN_ID }}
+          TASK: ${{ inputs.task_id }}
+          APPROVED_TASK: ${{ vars.SERUM3_RECOVERY_TASK_ID }}
+          SOURCE_RUN: ${{ inputs.source_run_id }}
+          APPROVED_SOURCE_RUN: ${{ vars.SERUM3_RECOVERY_SOURCE_RUN_ID }}
         run: |
-          echo 'Serum3 pilot environment is unarmed.'
-          exit 1
-      - name: Submit one reviewed pilot
+          test "$APPROVED_RUN" = "$GITHUB_RUN_ID"
+          if [ "$MODE" = generate-one ]; then
+            test "$ARMED" = confirm-serum3-one-126
+          else
+            test "$MODE" = recover-existing-task
+            test -n "$TASK" && test "$TASK" = "$APPROVED_TASK"
+            test -n "$SOURCE_RUN" && test "$SOURCE_RUN" = "$APPROVED_SOURCE_RUN"
+          fi
+      - name: Submit one reviewed pilot (no polling, no create retry)
         id: submit
-        if: vars.SERUM3_PILOT_ARMED == 'confirm-serum3-one-126' && vars.SERUM3_APPROVED_RUN_ID == github.run_id
+        if: inputs.mode == 'generate-one'
         env:
           KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
           SERUM3_CONFIRMATION: confirm-serum3-one-126
           SERUM3_APPROVED_RUN_ID: ${{ vars.SERUM3_APPROVED_RUN_ID }}
         run: node tools/nullume/scripts/serum3-pilot.mjs generate-one
+      - name: Publish sanitized task receipt immediately, before polling
+        if: always() && steps.submit.outputs.task_id != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: serum3-task-receipt-${{ github.run_id }}
+          path: ${{ runner.temp }}/serum3-result/task-receipt.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Retrieve existing paid task (GET only, bounded retries)
+        id: retrieve
+        if: >-
+          always() && steps.gate.outcome == 'success' &&
+          (steps.submit.outputs.task_id != '' || inputs.mode == 'recover-existing-task')
+        env:
+          KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
+          SERUM3_APPROVED_RUN_ID: ${{ vars.SERUM3_APPROVED_RUN_ID }}
+          SERUM3_RECOVERY_TASK_ID: ${{ steps.submit.outputs.task_id || inputs.task_id }}
+          SERUM3_APPROVED_TASK_ID: ${{ steps.submit.outputs.task_id || vars.SERUM3_RECOVERY_TASK_ID }}
+          SERUM3_SOURCE_RUN_ID: ${{ steps.submit.outputs.task_id && github.run_id || inputs.source_run_id }}
+          SERUM3_APPROVED_SOURCE_RUN_ID: ${{ steps.submit.outputs.task_id && github.run_id || vars.SERUM3_RECOVERY_SOURCE_RUN_ID }}
+        run: node tools/nullume/scripts/serum3-pilot.mjs recover-existing-task
       - name: Preserve video and sanitized metadata even after a later failure
-        if: always() && steps.submit.outcome != 'skipped' && steps.submit.outcome != ''
+        if: always() && steps.retrieve.outcome != 'skipped' && steps.retrieve.outcome != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: serum3-pilot-review
