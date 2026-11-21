@@ -3,6 +3,13 @@ name: Nullume KIE read-only readiness
 # Separate from live-check: no generation path, arbitrary inputs or secret-bearing installs.
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - ci/nullume-kie-readiness-run
+    paths:
+      - .github/workflows/nullume-readiness.yml
+      - tools/nullume/scripts/kie-readiness.mjs
+      - tools/nullume/scripts/kie-readiness.test.mjs
 
 permissions:
   contents: read
@@ -13,6 +20,13 @@ concurrency:
 
 jobs:
   readiness:
+    if: >-
+      github.repository == '1Herman1/Friday-claude' &&
+      ((github.event_name == 'push' && !github.event.deleted &&
+        github.ref == 'refs/heads/ci/nullume-kie-readiness-run') ||
+       (github.event_name == 'workflow_dispatch' &&
+        (github.ref == 'refs/heads/claude/greeting-nnz368' ||
+         github.ref == 'refs/heads/ci/nullume-kie-readiness-run')))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -21,6 +35,9 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          # Execute only the independently reviewed source, never the pushed/dispatch ref.
+          repository: 1Herman1/Friday-claude
+          ref: 50ceca1c601a689be68070526419da569f890ddf
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
