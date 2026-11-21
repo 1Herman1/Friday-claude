@@ -1,0 +1,27 @@
+{
+  "verified_at": "2026-11-21T19:50:32.269359+00:00",
+  "model": "kling/v2-5-turbo-image-to-video-pro",
+  "duration": "10",
+  "jobs": 1,
+  "credits": 126,
+  "usd": 0.63,
+  "max_credits": 126,
+  "price_source": "https://api.kie.ai/client/v1/model-pricing/page",
+  "exact_record": {
+    "modelDescription": "kling 2.5 turbo, image-to-video, Turbo Pro-10.0s",
+    "interfaceType": "video",
+    "provider": "Kling",
+    "creditPrice": "126",
+    "creditUnit": "per video",
+    "usdPrice": "0.63",
+    "falPrice": "0.7",
+    "discountRate": 10.0,
+    "anchor": "https://kie.ai/kling-2-5?model=kling%2Fv2-5-turbo-image-to-video-pro",
+    "discountPrice": false
+  },
+  "schema_source": "https://docs.kie.ai/market/kling/v25-turbo-image-to-video-pro.md",
+  "schema_sha256": "4bf221c00aef4a305e58dd12a810f1032912ddbff0492d97e63bb4b3bc52a9c4",
+  "paid_requests": 0,
+  "uploads": 0,
+  "scope": "Public exact duration-specific quote; generation remains parent-review gated. Not a provider-enforced spending cap."
+}

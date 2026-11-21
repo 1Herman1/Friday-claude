@@ -1,0 +1,82 @@
+{
+  "generation_completed": 0,
+  "image_generation_attempts": 1,
+  "native_limit": 5,
+  "required_reference_count": 7,
+  "blocked": true,
+  "blocker": "Native tool rejected7 referenced_image_paths; max5. No references dropped, merged, or silently substituted. Parent must decide allowed reference strategy before retry.",
+  "refs": [
+    {
+      "role": "product",
+      "id": "993aa0e7-7f9a-49a5-a0ba-660cfb6afaf4",
+      "slug": "4d-hyal-cross-superuvlazhnyayushhaya-syvorotka",
+      "source_path": "docs/projects/perfect-skin/media-review/serum-video-v3/references/1-original.jpg",
+      "sha256": "ba4c4ec6eac98d73b5a843b4872a89f65938e64e49616aaa3ec978c15e2876f3",
+      "native_input_path": "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/1-original.jpg",
+      "ai_permission": true,
+      "publication_permission": false
+    },
+    {
+      "role": "label",
+      "id": "993aa0e7-7f9a-49a5-a0ba-660cfb6afaf4",
+      "slug": "4d-hyal-cross-superuvlazhnyayushhaya-syvorotka",
+      "source_path": "docs/projects/perfect-skin/media-review/serum-video-v3/references/1-label.png",
+      "sha256": "9caac19e3a412dc61b75b6b888ac225393b94e990bc32e6906b23ef5a3d77322",
+      "native_input_path": "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/1-label.png",
+      "ai_permission": true,
+      "publication_permission": false
+    },
+    {
+      "role": "product",
+      "id": "0b5a81f5-a7f4-4a74-bca7-8b547dd2e16d",
+      "slug": "blockmelan-depigmentiruyushhaya-syvorotka",
+      "source_path": "docs/projects/perfect-skin/media-review/serum-video-v3/references/2-original.jpg",
+      "sha256": "cb222a0bd1698306d8590c3680640ec51b9e24f5a9cb31a3c1c7faf01bf69469",
+      "native_input_path": "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/2-original.jpg",
+      "ai_permission": true,
+      "publication_permission": false
+    },
+    {
+      "role": "label",
+      "id": "0b5a81f5-a7f4-4a74-bca7-8b547dd2e16d",
+      "slug": "blockmelan-depigmentiruyushhaya-syvorotka",
+      "source_path": "docs/projects/perfect-skin/media-review/serum-video-v3/references/2-label.png",
+      "sha256": "bd5681e58031a85944de0c3550b0cafbd5c3e3a4795c96bc065cc8db64334acc",
+      "native_input_path": "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/2-label.png",
+      "ai_permission": true,
+      "publication_permission": false
+    },
+    {
+      "role": "product",
+      "id": "70d28a3b-681e-4047-982d-92e83bdb5516",
+      "slug": "fluvix-syvorotka-obnovlyayushhaya",
+      "source_path": "docs/projects/perfect-skin/media-review/serum-video-v3/references/3-original.jpg",
+      "sha256": "98ecedf72cb72e3a08e6538b70cdd6abeea77ce981675272310f697bca3f22b1",
+      "native_input_path": "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/3-original.jpg",
+      "ai_permission": true,
+      "publication_permission": false
+    },
+    {
+      "role": "label",
+      "id": "70d28a3b-681e-4047-982d-92e83bdb5516",
+      "slug": "fluvix-syvorotka-obnovlyayushhaya",
+      "source_path": "docs/projects/perfect-skin/media-review/serum-video-v3/references/3-label.png",
+      "sha256": "d88eeb1314bb1363aa3dd806277bfde119a94a2add04a4a146fe39f1819092a5",
+      "native_input_path": "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/3-label.png",
+      "ai_permission": true,
+      "publication_permission": false
+    },
+    {
+      "role": "scene",
+      "source_path": "docs/projects/perfect-skin/media-review/catalog-repeat-fix/references/scene-approved.png",
+      "sha256": "1d96b3f46dd17ec3c4e117b824091507116080839854fb8770e8e3afe9342d6c",
+      "native_input_path": "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/scene-approved.png",
+      "ai_permission": true,
+      "publication_permission": false
+    }
+  ],
+  "native_session": "/Users/germanbryzgalov/.codex/sessions/2026/11/21/rollout-2026-11-21T22-49-54-01a1ffa8-7b58-7f01-833a-8a69950de1f2.jsonl",
+  "frame_sha256": null,
+  "uploads": 0,
+  "kie_generation_requests": 0
+}
