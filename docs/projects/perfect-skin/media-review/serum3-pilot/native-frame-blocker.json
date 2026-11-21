@@ -1,0 +1,16 @@
+{
+  "status": "blocked_before_generation",
+  "tool": "image_gen__imagegen",
+  "referenced_image_paths": [
+    "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/1-original.jpg",
+    "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/1-label.png",
+    "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/2-original.jpg",
+    "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/2-label.png",
+    "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/3-original.jpg",
+    "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/3-label.png",
+    "/Users/germanbryzgalov/.hermes/cache/scratch/serum3-native-final/scene-approved.png"
+  ],
+  "manifest": "inputs.json",
+  "error": "`referenced_image_paths` must contain at most 5 paths",
+  "completed_id": null
+}
