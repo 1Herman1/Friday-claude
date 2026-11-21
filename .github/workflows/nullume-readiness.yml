@@ -1,0 +1,38 @@
+name: Nullume KIE read-only readiness
+
+# Separate from live-check: no generation path, arbitrary inputs or secret-bearing installs.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nullume-kie-readiness
+  cancel-in-progress: false
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: tools/nullume
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Build without provider secrets or install scripts
+        run: |
+          npm ci --ignore-scripts --omit=optional
+          npm run build
+          node --test scripts/kie-readiness.test.mjs
+      - name: Public model schema and pricing (no credential)
+        run: node scripts/kie-readiness.mjs --model
+      - name: Authenticated balance through Nullume (read-only)
+        env:
+          KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
+        run: node scripts/kie-readiness.mjs --balance
