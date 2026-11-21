@@ -41,7 +41,7 @@ jobs:
       (inputs.mode == 'dry-run' ||
         (inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum3-one-126' &&
           github.ref == 'refs/heads/ci/serum3-bounded-pilot')))
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -53,6 +53,8 @@ jobs:
       - name: Build Nullume without credentials or install scripts
         working-directory: tools/nullume
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
           npm ci --ignore-scripts --omit=optional
           npm run build
           ffmpeg -version > /dev/null
@@ -71,7 +73,7 @@ jobs:
       github.event_name == 'workflow_dispatch' && github.run_attempt == '1' &&
       github.ref == 'refs/heads/ci/serum3-bounded-pilot' &&
       inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum3-one-126'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: serum3-pilot
     timeout-minutes: 30
     steps:
@@ -84,6 +86,8 @@ jobs:
       - name: Build and test Nullume before credential injection
         working-directory: tools/nullume
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
           npm ci --ignore-scripts --omit=optional
           npm run build
           ffmpeg -version > /dev/null
