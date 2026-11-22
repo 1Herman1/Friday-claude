@@ -10,8 +10,8 @@ import {httpsOnce,boundedRequest,isPublicIPv4,validateDecodedMedia} from './seru
 export {isPublicIPv4};
 const ROOT=fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum-motion-transfer/',import.meta.url));
 export const MODEL='bytedance/seedance-2-mini';
-export const FREEZE_SHA='e6730865da14af848a320ca87d4bf2988f2e22bf9d36410721ed07e8406a3b50';
-const BUNDLE_SHA='c45019d0ea87605efa23e39dbf9522ea1874715883296dbf3f92e47f8274e0a0';
+export const FREEZE_SHA='b6de3b78c2779da28bcbe29c2019aa5fc43fee9b9d8ce037b4c4a2d4af1d1bc4';
+const BUNDLE_SHA='1ce3d0b9784e5c8848a2aa48441b083af5768b91e013e702d626d6e6e2d8e282';
 export const TOKEN='confirm-serum-motion-one-100';
 export const PRICE='https://api.kie.ai/client/v1/model-pricing/page';
 export const DOC='https://docs.kie.ai/market/bytedance/seedance-2-mini.md';
@@ -64,7 +64,7 @@ export function exactPrice(pages){
  }
  check(seen===total&&matches.length===1);const r=matches[0];
  check(r.provider==='ByteDance'&&r.interfaceType==='video'&&r.creditPrice==='5'&&r.creditUnit==='per second'&&r.usdPrice==='0.025'&&r.discountPrice===false);
- check(5*(10+10)===100);return {total,quotedCredits:100,providerBillingCap:false};
+ check(freeze.referenceDurationSeconds===3&&5*(3+10)===65&&freeze.quotedCredits===65);return {total,quotedCredits:65,providerBillingCap:false};
 }
 async function json(request,url,init){const r=await boundedRequest(request,url,init);try{return JSON.parse(r.bytes.toString());}catch{fail();}}
 export async function publicMetadata(request=httpsOnce){
@@ -106,7 +106,7 @@ export function fixedSession(request,key,existingTask){
 }
 export async function writeReceipt(dir,id,env){
  taskId(id);check(/^\d{1,20}$/.test(env.GITHUB_RUN_ID??'')&&/^[a-f0-9]{40}$/.test(env.GITHUB_SHA??''));
- const receipt={taskId:id,sourceRunId:env.GITHUB_RUN_ID,sourceSha:env.GITHUB_SHA,model:MODEL,duration:10,resolution:'720p',quotedCredits:100,providerBillingCap:false,assetsFreezeSha256:FREEZE_SHA,state:'submitted'};
+ const receipt={taskId:id,sourceRunId:env.GITHUB_RUN_ID,sourceSha:env.GITHUB_SHA,model:MODEL,duration:10,resolution:'720p',quotedCredits:65,providerBillingCap:false,assetsFreezeSha256:FREEZE_SHA,state:'submitted'};
  const h=await open(join(dir,'task-receipt.json'),'wx',0o600);try{await h.writeFile(JSON.stringify(receipt)+'\n');await h.sync();}finally{await h.close();}return receipt;
 }
 export async function submit({request=httpsOnce,key,assets,onSubmitted}){
@@ -136,7 +136,7 @@ export async function recover({request=httpsOnce,key,id,pause=delay}){
    const video=await boundedRequest(request,u,{},64*1024*1024,60000);
    check(video.headers.get('content-type')?.split(';')[0]==='video/mp4'&&video.bytes.length>=16&&video.bytes.toString('ascii',4,8)==='ftyp');
    const c=d.creditsConsumed;check(c===undefined||(Number.isFinite(c)&&c>=0));
-   return {video:video.bytes,summary:{taskId:id,model:MODEL,quotedCredits:100,providerBillingCap:false,...(c===undefined?{}:{creditsConsumed:c,billingViolation:c>100})}};
+   return {video:video.bytes,summary:{taskId:id,model:MODEL,quotedCredits:65,providerBillingCap:false,...(c===undefined?{}:{creditsConsumed:c,billingViolation:c>100})}};
   }
   check(['waiting','queuing','generating'].includes(d.state));if(i<64)await pause(10000);
  }
@@ -151,7 +151,7 @@ async function main(){
    check(process.env.GITHUB_ACTIONS!=='true');const pack={};for(const a of freeze.assets)pack[a.path]=readFileSync(join(process.env.SERUM_MOTION_LOCAL_DRY_ASSETS,a.path)).toString('base64');
    const assets=verifyAssets(pack);for(let i=0;i<8;i++)await validateDecodedMedia(assets[i],i===7?'video':'image');
   }
-  console.log('PASS credential-free dry-run; quote 100 credits / USD0.50; providerBillingCap=false.');return;
+  console.log('PASS credential-free dry-run; quote 65 credits / USD0.325; providerBillingCap=false.');return;
  }
  check(['generate-one','recover-existing-task'].includes(mode));authorize(process.env,mode==='recover-existing-task');
  const dir=join(process.env.RUNNER_TEMP,'serum-motion-result');
@@ -166,7 +166,7 @@ async function main(){
     // If local receipt persistence fails, retain the validated ID in Actions control-plane output/summary.
     // The workflow still refuses polling unless the independent receipt artifact upload succeeds.
     if(process.env.GITHUB_OUTPUT)await appendFile(process.env.GITHUB_OUTPUT,'task_id='+id+'\n');
-    if(process.env.GITHUB_STEP_SUMMARY)await appendFile(process.env.GITHUB_STEP_SUMMARY,'Task `'+id+'`; quoted100 credits / USD0.50, NOT a provider cap.\n');
+    if(process.env.GITHUB_STEP_SUMMARY)await appendFile(process.env.GITHUB_STEP_SUMMARY,'Task `'+id+'`; quoted65 credits / USD0.325, NOT a provider cap.\n');
    }
   }});return;
  }

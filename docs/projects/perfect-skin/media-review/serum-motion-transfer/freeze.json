@@ -1,7 +1,7 @@
 {
   "model": "bytedance/seedance-2-mini",
   "providerBillingCap": false,
-  "quotedCredits": 100,
+  "quotedCredits": 65,
   "assets": [
     {
       "path": "assets/1-original.jpg",
@@ -70,28 +70,29 @@
       "mime": "image/png"
     },
     {
-      "path": "assets/appearance-only-last-attached-frame.png",
-      "sha256": "9e8f33f19ae5a538ee6f2e1fb8b61d8c141c2cd540808f1af4d7804439f4000f",
-      "role": "appearance-only",
+      "path": "assets/final-composition.png",
+      "sha256": "657616ac24aebf1426228f913390b63db202c11a21aaa472b9dd0836001eb810",
+      "role": "final-composition-reference",
       "dimensions": [
-        1764,
-        1176
+        1112,
+        834
       ],
-      "size": 712424,
+      "size": 441105,
       "mime": "image/png"
     },
     {
-      "path": "MOTION-REFERENCE-1080x720-10S.mp4",
-      "sha256": "402a2779ec7332ca838d4c5fc641397dc3a5dbb2eb5b7f9082fb09c70e3a7ca8",
+      "path": "assets/third-roll-only-3s-hold.mp4",
+      "sha256": "342fd55936026e111d92760177b13438c0fbabb7a77d9af68b4215c4540c2898",
       "dimensions": [
-        1080,
+        676,
         720
       ],
-      "size": 155621,
+      "size": 373643,
       "mime": "video/mp4"
     }
   ],
-  "prompt": "Use the supplied motion reference video as the sole choreography reference, not as packaging artwork. Create ONE continuous silent 10 second product cover with a fixed camera on seamless white. Keep the same three rigid bodies, entry timings, horizontal trajectories, coupled axial rolling, gentle contact/recoil and final still hold as the reference video. Bodies remain LYING throughout; never stand them up. First 4D HYAL CROSS enters from the LEFT; then BLOCKMELAN; then FLUVIX. Final left-to-right order is FLUVIX, BLOCKMELAN, 4D HYAL CROSS. Keep the larger reference-video framing and empty left title-safe area. Use reference images 1/2/3 as the actual three bottle identities; images 4/5/6 show their exact original label lettering respectively. Image 7 is ONLY final appearance/material/label evidence; do NOT copy its upright pose or any motion from its original video. Replace schematic proxy materials and tiny placeholder labels with the real packages: 4D HYAL CROSS white narrow dropper, polished silver collar and white bulb; BLOCKMELAN short amber dropper with narrow black bulb/collar, not a spray; FLUVIX rounded amber spray with white collar and translucent cover, not a dropper. Preserve silhouettes, closures, proportions, label typography, marks, colors and product identities throughout. Cartons in source photos are evidence only, NOT animated objects. Moderate soft contact/cast shadows stronger than the light v2 render, not heavy black shadows. Never add extra bottles, caps, props, cartons, hands, text overlays, cuts, camera moves or sound. Hold steady after the final recoil. Do not morph one bottle into another.",
+  "prompt": "Create ONE continuous SILENT 10 second premium product-cover video on seamless white, fixed camera. Use ONLY the real attached video as the motion reference: it is the isolated THIRD bottle entry from the owner video, with a technical final-frame hold appended. There is NO proxy or 3D animation input. Transfer this same edge-rolling entry technique to each of the three actual bottles. The bottle bodies rotate about their own longitudinal axes while translating horizontally; the printed label is attached to the curved surface and travels around the bottle edge with the rotation, disappearing on the far side then coming around naturally. Never slide a static front-facing label across the screen; never spin the whole image flat in the screen plane. Do not copy or average the first or second entry from the original video: neither is supplied. Apply the third-entry motion to all three packages in sequence, first 4D HYAL CROSS, then BLOCKMELAN, then FLUVIX, entering from the left and settling with restrained natural recoil. Preserve every rigid bottle, closure and label identity throughout, no morphing. Images 1/2/3 are exact product identities; 4/5/6 are their exact label lettering in the same order. Image 7 is the owner's actual final frame and is the final composition target: FLUVIX left, BLOCKMELAN centre, 4D HYAL CROSS right, grouped on the right with generous empty white title space left. Finish with that composition and a still hold. This multimodal-reference route uses image 7 via prompt, not a strict last-frame API guarantee. Preserve the original reference's image-plane cap-up orientation while reproducing the axial label-around-edge rotation; do not invent a different sideways layout. 4D HYAL CROSS is the white narrow dropper with polished silver collar and white bulb; BLOCKMELAN is the short amber serum with black dropper; FLUVIX is the larger amber spray with white collar and translucent cap. Match silhouettes, proportions, packaging colors, logos, typography and original label words. Cartons are evidence only, never animated objects. Soft visible contact shadows, no heavy black shadow. No extra bottles, detached caps, props, hands, overlays, camera motion, cuts, sound or music.",
   "schema_sha256": "faee51ee448c785f9d60cebf868c853bf6e955a0d764edd90eb0cae0bef55a64",
-  "motion_source_sha256": "9f7dda18c39fd8373ab33e3bc5cc2a27e8c740505f72a313c14b64e37073df8c"
+  "motion_source_sha256": "dc123ee77b843ad929054a85050063e5635a5a60ff4557fe2f44b07ae0961b09",
+  "referenceDurationSeconds": 3
 }

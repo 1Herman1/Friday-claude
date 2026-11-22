@@ -38,8 +38,8 @@ const key='test-nonsecret-key',id='a'.repeat(32);
 const reply=x=>new Response(JSON.stringify(x),{status:200});
 const urls=()=>m.freeze.assets.map((a,i)=>`https://tempfile.redpandaai.co/job/${i}.`+a.path.split('.').at(-1));
 const pages=()=>Array.from({length:8},(_,i)=>JSON.parse(readFileSync(new URL('../../../docs/projects/perfect-skin/media-review/serum-motion-transfer/evidence/price-page-'+(i+1)+'.json',import.meta.url))));
-test('archived 709 rows give exactly one 100-credit quote; drift and duplicates blocked',()=>{
- const p=pages();assert.deepEqual(m.exactPrice(p),{total:709,quotedCredits:100,providerBillingCap:false});
+test('archived 709 rows give exactly one 65-credit v5 quote; drift and duplicates blocked',()=>{
+ const p=pages();assert.deepEqual(m.exactPrice(p),{total:709,quotedCredits:65,providerBillingCap:false});
  const row=p.flatMap(p=>p.data.records).find(r=>r.modelDescription==='bytedance/seedance-2-mini, 720P with video');row.creditPrice='6';assert.throws(()=>m.exactPrice(p));
  const d=pages();d[0].data.records[0]={...d.flatMap(p=>p.data.records).find(r=>r.modelDescription==='bytedance/seedance-2-mini, 720P with video')};assert.throws(()=>m.exactPrice(d));
  assert.throws(()=>m.exactPrice(pages().slice(0,7)));
