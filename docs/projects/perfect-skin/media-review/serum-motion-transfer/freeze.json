@@ -1,0 +1,97 @@
+{
+  "model": "bytedance/seedance-2-mini",
+  "providerBillingCap": false,
+  "quotedCredits": 100,
+  "assets": [
+    {
+      "path": "assets/1-original.jpg",
+      "sha256": "ba4c4ec6eac98d73b5a843b4872a89f65938e64e49616aaa3ec978c15e2876f3",
+      "role": "product",
+      "dimensions": [
+        1000,
+        1000
+      ],
+      "size": 48899,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/2-original.jpg",
+      "sha256": "cb222a0bd1698306d8590c3680640ec51b9e24f5a9cb31a3c1c7faf01bf69469",
+      "role": "product",
+      "dimensions": [
+        800,
+        800
+      ],
+      "size": 29332,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/3-original.jpg",
+      "sha256": "98ecedf72cb72e3a08e6538b70cdd6abeea77ce981675272310f697bca3f22b1",
+      "role": "product",
+      "dimensions": [
+        800,
+        800
+      ],
+      "size": 29271,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/1-label-padded.png",
+      "sha256": "f815c4d4738f881df081463ea82de0232dacb27d5234a978cf404c979cc7481b",
+      "role": "label",
+      "dimensions": [
+        512,
+        512
+      ],
+      "size": 66864,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/2-label-padded.png",
+      "sha256": "a7ffeaa0236cf57c7394487e30ce2e42810bd6ce5f46d224e3a45ee4a9af91a8",
+      "role": "label",
+      "dimensions": [
+        512,
+        512
+      ],
+      "size": 27853,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/3-label-padded.png",
+      "sha256": "4c8afac499545c4c2e97fb68ea61c5dea48fef157c0434312afa290899b0d97d",
+      "role": "label",
+      "dimensions": [
+        512,
+        512
+      ],
+      "size": 34454,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/appearance-only-last-attached-frame.png",
+      "sha256": "9e8f33f19ae5a538ee6f2e1fb8b61d8c141c2cd540808f1af4d7804439f4000f",
+      "role": "appearance-only",
+      "dimensions": [
+        1764,
+        1176
+      ],
+      "size": 712424,
+      "mime": "image/png"
+    },
+    {
+      "path": "MOTION-REFERENCE-1080x720-10S.mp4",
+      "sha256": "402a2779ec7332ca838d4c5fc641397dc3a5dbb2eb5b7f9082fb09c70e3a7ca8",
+      "dimensions": [
+        1080,
+        720
+      ],
+      "size": 155621,
+      "mime": "video/mp4"
+    }
+  ],
+  "prompt": "Use the supplied motion reference video as the sole choreography reference, not as packaging artwork. Create ONE continuous silent 10 second product cover with a fixed camera on seamless white. Keep the same three rigid bodies, entry timings, horizontal trajectories, coupled axial rolling, gentle contact/recoil and final still hold as the reference video. Bodies remain LYING throughout; never stand them up. First 4D HYAL CROSS enters from the LEFT; then BLOCKMELAN; then FLUVIX. Final left-to-right order is FLUVIX, BLOCKMELAN, 4D HYAL CROSS. Keep the larger reference-video framing and empty left title-safe area. Use reference images 1/2/3 as the actual three bottle identities; images 4/5/6 show their exact original label lettering respectively. Image 7 is ONLY final appearance/material/label evidence; do NOT copy its upright pose or any motion from its original video. Replace schematic proxy materials and tiny placeholder labels with the real packages: 4D HYAL CROSS white narrow dropper, polished silver collar and white bulb; BLOCKMELAN short amber dropper with narrow black bulb/collar, not a spray; FLUVIX rounded amber spray with white collar and translucent cover, not a dropper. Preserve silhouettes, closures, proportions, label typography, marks, colors and product identities throughout. Cartons in source photos are evidence only, NOT animated objects. Moderate soft contact/cast shadows stronger than the light v2 render, not heavy black shadows. Never add extra bottles, caps, props, cartons, hands, text overlays, cuts, camera moves or sound. Hold steady after the final recoil. Do not morph one bottle into another.",
+  "schema_sha256": "faee51ee448c785f9d60cebf868c853bf6e955a0d764edd90eb0cae0bef55a64",
+  "motion_source_sha256": "9f7dda18c39fd8373ab33e3bc5cc2a27e8c740505f72a313c14b64e37073df8c"
+}
