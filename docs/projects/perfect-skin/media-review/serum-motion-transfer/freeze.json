@@ -1,0 +1,98 @@
+{
+  "model": "bytedance/seedance-2-mini",
+  "providerBillingCap": false,
+  "quotedCredits": 65,
+  "assets": [
+    {
+      "path": "assets/1-original.jpg",
+      "sha256": "ba4c4ec6eac98d73b5a843b4872a89f65938e64e49616aaa3ec978c15e2876f3",
+      "role": "product",
+      "dimensions": [
+        1000,
+        1000
+      ],
+      "size": 48899,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/2-original.jpg",
+      "sha256": "cb222a0bd1698306d8590c3680640ec51b9e24f5a9cb31a3c1c7faf01bf69469",
+      "role": "product",
+      "dimensions": [
+        800,
+        800
+      ],
+      "size": 29332,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/3-original.jpg",
+      "sha256": "98ecedf72cb72e3a08e6538b70cdd6abeea77ce981675272310f697bca3f22b1",
+      "role": "product",
+      "dimensions": [
+        800,
+        800
+      ],
+      "size": 29271,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/1-label-padded.png",
+      "sha256": "f815c4d4738f881df081463ea82de0232dacb27d5234a978cf404c979cc7481b",
+      "role": "label",
+      "dimensions": [
+        512,
+        512
+      ],
+      "size": 66864,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/2-label-padded.png",
+      "sha256": "a7ffeaa0236cf57c7394487e30ce2e42810bd6ce5f46d224e3a45ee4a9af91a8",
+      "role": "label",
+      "dimensions": [
+        512,
+        512
+      ],
+      "size": 27853,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/3-label-padded.png",
+      "sha256": "4c8afac499545c4c2e97fb68ea61c5dea48fef157c0434312afa290899b0d97d",
+      "role": "label",
+      "dimensions": [
+        512,
+        512
+      ],
+      "size": 34454,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/final-composition.png",
+      "sha256": "657616ac24aebf1426228f913390b63db202c11a21aaa472b9dd0836001eb810",
+      "role": "final-composition-reference",
+      "dimensions": [
+        1112,
+        834
+      ],
+      "size": 441105,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/third-roll-only-3s-hold.mp4",
+      "sha256": "342fd55936026e111d92760177b13438c0fbabb7a77d9af68b4215c4540c2898",
+      "dimensions": [
+        676,
+        720
+      ],
+      "size": 373643,
+      "mime": "video/mp4"
+    }
+  ],
+  "prompt": "Create ONE continuous SILENT 10 second premium product-cover video on seamless white, fixed camera. Use ONLY the real attached video as the motion reference: it is the isolated THIRD bottle entry from the owner video, with a technical final-frame hold appended. There is NO proxy or 3D animation input. Transfer this same edge-rolling entry technique to each of the three actual bottles. The bottle bodies rotate about their own longitudinal axes while translating horizontally; the printed label is attached to the curved surface and travels around the bottle edge with the rotation, disappearing on the far side then coming around naturally. Never slide a static front-facing label across the screen; never spin the whole image flat in the screen plane. Do not copy or average the first or second entry from the original video: neither is supplied. Apply the third-entry motion to all three packages in sequence, first 4D HYAL CROSS, then BLOCKMELAN, then FLUVIX, entering from the left and settling with restrained natural recoil. Preserve every rigid bottle, closure and label identity throughout, no morphing. Images 1/2/3 are exact product identities; 4/5/6 are their exact label lettering in the same order. Image 7 is the owner's actual final frame and is the final composition target: FLUVIX left, BLOCKMELAN centre, 4D HYAL CROSS right, grouped on the right with generous empty white title space left. Finish with that composition and a still hold. This multimodal-reference route uses image 7 via prompt, not a strict last-frame API guarantee. Preserve the original reference's image-plane cap-up orientation while reproducing the axial label-around-edge rotation; do not invent a different sideways layout. 4D HYAL CROSS is the white narrow dropper with polished silver collar and white bulb; BLOCKMELAN is the short amber serum with black dropper; FLUVIX is the larger amber spray with white collar and translucent cap. Match silhouettes, proportions, packaging colors, logos, typography and original label words. Cartons are evidence only, never animated objects. Soft visible contact shadows, no heavy black shadow. No extra bottles, detached caps, props, hands, overlays, camera motion, cuts, sound or music.",
+  "schema_sha256": "faee51ee448c785f9d60cebf868c853bf6e955a0d764edd90eb0cae0bef55a64",
+  "motion_source_sha256": "dc123ee77b843ad929054a85050063e5635a5a60ff4557fe2f44b07ae0961b09",
+  "referenceDurationSeconds": 3
+}

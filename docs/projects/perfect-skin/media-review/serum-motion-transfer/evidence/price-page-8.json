@@ -1,0 +1,122 @@
+{
+  "code": 200,
+  "msg": "success",
+  "data": {
+    "records": [
+      {
+        "modelDescription": "Topaz Image Upscaler, image-upscale, 4K",
+        "interfaceType": "image",
+        "provider": "Topaz",
+        "creditPrice": "20.0",
+        "creditUnit": "per image",
+        "usdPrice": "0.1",
+        "falPrice": "0.16",
+        "discountRate": 37.5,
+        "anchor": "https://kie.ai/topaz-image-upscale",
+        "discountPrice": false
+      },
+      {
+        "modelDescription": "Topaz Image Upscaler, image-upscale, 2K",
+        "interfaceType": "image",
+        "provider": "Topaz",
+        "creditPrice": "10.0",
+        "creditUnit": "per image",
+        "usdPrice": "0.05",
+        "falPrice": "0.08",
+        "discountRate": 37.5,
+        "anchor": "https://kie.ai/topaz-image-upscale",
+        "discountPrice": false
+      },
+      {
+        "modelDescription": "kling 2.6 motion control, video to video, 1080P",
+        "interfaceType": "video",
+        "provider": "Kling",
+        "creditPrice": "20.2",
+        "creditUnit": "per second",
+        "usdPrice": "0.101",
+        "falPrice": "0.112",
+        "discountRate": 9.82,
+        "anchor": "https://kie.ai/kling-2.6-motion-control",
+        "discountPrice": false
+      },
+      {
+        "modelDescription": "kling 2.6 motion control, video-to-video, 720P",
+        "interfaceType": "video",
+        "provider": "Kling",
+        "creditPrice": "12.6",
+        "creditUnit": "per second",
+        "usdPrice": "0.063",
+        "falPrice": "0.07",
+        "discountRate": 10.0,
+        "anchor": "https://kie.ai/kling-2.6-motion-control",
+        "discountPrice": false
+      },
+      {
+        "modelDescription": "gpt image 1.5, image-to-image, high",
+        "interfaceType": "image",
+        "provider": "OpenAI",
+        "creditPrice": "22.0",
+        "creditUnit": "per image",
+        "usdPrice": "0.11",
+        "falPrice": "0.133",
+        "discountRate": 17.29,
+        "anchor": "https://kie.ai/gpt-image-1.5?model=gpt-image%2F1.5-image-to-image",
+        "discountPrice": false
+      },
+      {
+        "modelDescription": "gpt image 1.5, image-to-image, medium",
+        "interfaceType": "image",
+        "provider": "OpenAI",
+        "creditPrice": "4.0",
+        "creditUnit": "per image",
+        "usdPrice": "0.02",
+        "falPrice": "0.034",
+        "discountRate": 41.18,
+        "anchor": "https://kie.ai/gpt-image-1.5?model=gpt-image%2F1.5-image-to-image",
+        "discountPrice": false
+      },
+      {
+        "modelDescription": "gpt image 1.5, text-to-image, high",
+        "interfaceType": "image",
+        "provider": "OpenAI",
+        "creditPrice": "22.0",
+        "creditUnit": "per image",
+        "usdPrice": "0.11",
+        "falPrice": "0.133",
+        "discountRate": 17.29,
+        "anchor": "https://kie.ai/gpt-image-1.5?model=gpt-image%2F1.5-text-to-image",
+        "discountPrice": false
+      },
+      {
+        "modelDescription": "gpt image 1.5, text-to-image, medium",
+        "interfaceType": "image",
+        "provider": "OpenAI",
+        "creditPrice": "4.0",
+        "creditUnit": "per image",
+        "usdPrice": "0.02",
+        "falPrice": "0.034",
+        "discountRate": 41.18,
+        "anchor": "https://kie.ai/gpt-image-1.5?model=gpt-image%2F1.5-text-to-image",
+        "discountPrice": false
+      },
+      {
+        "modelDescription": "google imagen4, text-to-image, default",
+        "interfaceType": "image",
+        "provider": "Google",
+        "creditPrice": "8.0",
+        "creditUnit": "per request",
+        "usdPrice": "0.04",
+        "falPrice": "",
+        "discountRate": 0.0,
+        "anchor": "https://kie.ai/google/imagen4?model=google%2Fimagen4",
+        "discountPrice": false
+      }
+    ],
+    "total": 709,
+    "size": 100,
+    "current": 8,
+    "orders": [],
+    "searchCount": true,
+    "pages": 8
+  }
+}
