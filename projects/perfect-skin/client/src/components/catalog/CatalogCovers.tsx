@@ -3,7 +3,7 @@ import { CatalogCrossfadeTile } from './CatalogCrossfadeTile'
 import { CATALOG_SEQUENCES, REVIEW_COVERS, REVIEW_BESTSELLER_PRODUCT_ID } from './catalog-scenes'
 export { CatalogCrossfadeTile } from './CatalogCrossfadeTile'
 
-export const SERUM_COVER = '/photos/catalog/syvorotki-pilot-05-native.png'
+export const SERUM_COVER = '/photos/catalog/serum-approved-final.png'
 
 export function AllProductsCover({ enableMotion = true }: { enableMotion?: boolean }) {
   const scenes = enableMotion ? CATALOG_SEQUENCES.all : undefined

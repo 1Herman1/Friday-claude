@@ -9,13 +9,34 @@ const out=process.env.OUT_DIR || '/Users/germanbryzgalov/.hermes/cache/scratch/p
 await mkdir(out,{recursive:true})
 const server=await preview({root,preview:{host:'127.0.0.1',port:0,strictPort:false,proxy:{'/api':{target:'http://193.233.102.5',changeOrigin:true}}}})
 const base=`http://127.0.0.1:${server.httpServer.address().port}`
-const browser=await chromium.launch({headless:true})
-const result={base,api:'live read-only HTTP API through local proxy',errors:[],widths:[],assets:[],tests:[]}
+// Use the same minimal real-Chromium launch as manual playback review, not
+// Playwright's feature-disabling headless-shell defaults. No frame-rate overrides.
+const browser=await chromium.launch({headless:true,ignoreDefaultArgs:true,args:['--headless=new','--remote-debugging-pipe','--no-first-run','--no-default-browser-check'],...(process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{})})
+// Capture before React replaces the ended video with its exact final poster.
+const observePlayback=()=>{
+ window.__serumPlayback={firstFrame:null,ended:null}
+ document.addEventListener('loadeddata',event=>{
+  const v=event.target
+  if(v instanceof HTMLVideoElement&&v.classList.contains('catalog-serum-video'))v.requestVideoFrameCallback((now,meta)=>{window.__serumPlayback.firstFrame={mediaTime:meta.mediaTime,presentedFrames:meta.presentedFrames,width:meta.width,height:meta.height}})
+ },true)
+ document.addEventListener('ended',event=>{
+  const v=event.target
+  if(v instanceof HTMLVideoElement&&v.classList.contains('catalog-serum-video')){const q=v.getVideoPlaybackQuality();window.__serumPlayback.ended={currentTime:v.currentTime,totalVideoFrames:q.totalVideoFrames,droppedVideoFrames:q.droppedVideoFrames,corruptedVideoFrames:q.corruptedVideoFrames}}
+ },true)
+}
+const assertPlayback=metrics=>{
+ assert.ok(metrics.firstFrame?.presentedFrames>=1,'actual first frame must be presented')
+ assert.equal(metrics.ended?.totalVideoFrames,600,'whole true60 stream must reach browser frame accounting')
+ assert.equal(metrics.ended?.currentTime,10)
+ assert.equal(metrics.ended?.corruptedVideoFrames,0)
+ assert.ok(metrics.ended.droppedVideoFrames/600<0.05,'measured browser drops below 5%, not a universal zero-drops claim')
+}
+const result={base,browser:{version:browser.version(),executable:process.env.CHROME_PATH||chromium.executablePath(),launch:'minimal headless=new, no frame-rate overrides; screen recording disabled during performance measurement'},api:'live read-only HTTP API through local proxy',errors:[],widths:[],assets:[],tests:[]}
 const manifest=JSON.parse(await readFile(new URL('catalog-production-assets.json',import.meta.url)))
 try{
  for(const a of manifest.assets){const r=await fetch(base+a.src);assert.equal(r.status,200);const mime=r.headers.get('content-type');assert.match(mime,a.src.endsWith('.mp4')?/video\/mp4/:/image\//);assert.equal(createHash('sha256').update(Buffer.from(await r.arrayBuffer())).digest('hex'),a.sha256);result.assets.push({src:a.src,mime,sha256:a.sha256})}
  const api=await fetch('http://193.233.102.5/api/v1/categories/tree'); const categoryPayload=await api.json();await writeFile(out+'/live-categories.json',JSON.stringify(categoryPayload,null,2))
- for(const width of [320,390,768,900,1023,1024,1440]){
+ for(const width of [320,390,768,900,1023,1024,1280,1440]){
   const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'})
   const page=await context.newPage(); const documents=[];const media=[]
   page.on('pageerror',e=>result.errors.push(e.message));page.on('request',r=>{if(r.isNavigationRequest()&&r.frame()===page.mainFrame())documents.push(r.url());if(/serum-approved.*mp4/.test(r.url()))media.push(r.url())})
@@ -45,9 +66,12 @@ try{
   const drawer=await page.locator('[aria-label="Закрыть меню"]').evaluate(e=>({hidden:e.closest('[aria-hidden]')?.getAttribute('aria-hidden'),box:e.parentElement.parentElement.getBoundingClientRect().toJSON(),css:getComputedStyle(e.parentElement.parentElement).transform,cl:e.parentElement.parentElement.className}))
   assert.ok(drawer.box.x >= width - 1, 'closed mobile drawer must be fully outside viewport; hidden focus must not scroll its clipping parent')
   result.widths.push({width,documents,tiles,videoRequests:media.length,drawer});await context.close();console.log('PASS layout/navigation/reduced',width)
+  // Keep repeated real home/catalog/history API reads below the live rate limit.
+  await new Promise(resolve=>setTimeout(resolve,15000))
  }
- if(process.env.CATALOG_ONLY !== '1') {
- const context=await browser.newContext({viewport:{width:1440,height:450},recordVideo:{dir:out+'/recordings',size:{width:1440,height:900}}})
+ {
+ const context=await browser.newContext({viewport:{width:1440,height:450}})
+ await context.addInitScript(observePlayback)
  const page=await context.newPage();const requests=[];page.on('pageerror',e=>result.errors.push(e.message));page.on('request',r=>{if(/serum-approved.*mp4/.test(r.url()))requests.push(r.url())})
  await page.goto(base+'/catalog');await page.locator('.catalog-index .catalog-tile').first().waitFor();await page.waitForTimeout(1000)
  assert.equal(requests.length,0,'offscreen serum makes zero video requests')
@@ -63,6 +87,7 @@ try{
  assert.ok(playbackQuality.totalVideoFrames>=350,'true60 browser must actually decode hundreds of frames, not only report 60fps metadata')
  assert.ok(playbackQuality.droppedVideoFrames/Math.max(1,playbackQuality.totalVideoFrames)<0.05,'actual browser dropped-frame ratio must be below 5%')
  await page.waitForFunction(()=>document.querySelector('.catalog-serum-media')?.dataset.finished==='true',null,{timeout:6000});assert.equal(await v.count(),0)
+ result.desktopPlayback=await page.evaluate(()=>window.__serumPlayback);assertPlayback(result.desktopPlayback)
  await page.evaluate(()=>scrollTo(0,0));await serum.scrollIntoViewIfNeeded();await page.waitForTimeout(700);assert.equal(await v.count(),0)
  await page.setViewportSize({width:768,height:900});await page.waitForFunction(()=>!document.querySelector('.catalog-editorial'));await page.locator('.catalog-index a[href="/catalog/syvorotki"]').scrollIntoViewIfNeeded();await page.waitForTimeout(500);assert.equal(await v.count(),0,'completed serum must not replay across responsive remount');await page.setViewportSize({width:1440,height:450});await page.locator('.catalog-editorial').waitFor();await serum.scrollIntoViewIfNeeded()
  assert.deepEqual(await serum.locator('h2').boundingBox(),heading)
@@ -79,17 +104,19 @@ try{
  for(const tile of await page.locator('.catalog-index .catalog-tile').all()){await tile.scrollIntoViewIfNeeded();await page.waitForTimeout(350)}
  await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:out+'/catalog-motion-full.png',fullPage:true});await context.close()
  // Mobile real playback and full catalogue recording; static/save-data lifecycle checks.
- const mobileContext=await browser.newContext({viewport:{width:390,height:844},recordVideo:{dir:out+'/mobile-recordings',size:{width:390,height:844}}})
+ const mobileContext=await browser.newContext({viewport:{width:390,height:844}})
+ await mobileContext.addInitScript(observePlayback)
  const mobile=await mobileContext.newPage();await mobile.goto(base+'/catalog');await mobile.locator('.catalog-index .catalog-tile').first().waitFor();await mobile.waitForTimeout(800)
  await mobile.locator('.catalog-index a[href="/catalog/syvorotki"]').scrollIntoViewIfNeeded();await mobile.waitForFunction(()=>document.querySelector('.catalog-serum-video')?.currentTime>0.3)
  // Browser visibility event fault injection exercises the actual document.hidden handler.
  await mobile.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'))});await mobile.waitForTimeout(300);assert.equal(await mobile.locator('.catalog-serum-video').evaluate(e=>e.paused),true)
  await mobile.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'))});await mobile.waitForFunction(()=>document.querySelector('.catalog-serum-media')?.dataset.finished==='true',null,{timeout:16000})
+ result.mobilePlayback=await mobile.evaluate(()=>window.__serumPlayback);assertPlayback(result.mobilePlayback)
  for(const tile of await mobile.locator('.catalog-index .catalog-tile').all()){await tile.scrollIntoViewIfNeeded();await mobile.waitForTimeout(350)}await mobile.screenshot({path:out+'/mobile-playback-full.png',fullPage:true});await mobileContext.close()
- const saver=await browser.newContext({viewport:{width:390,height:844}});await saver.addInitScript(()=>Object.defineProperty(navigator,'connection',{value:{saveData:true,addEventListener(){},removeEventListener(){}}}));const savePage=await saver.newPage();const saveRequests=[];savePage.on('request',r=>{if(/serum-approved.*mp4/.test(r.url()))saveRequests.push(r.url())});await savePage.goto(base+'/catalog');await savePage.locator('.catalog-index a[href="/catalog/syvorotki"]').scrollIntoViewIfNeeded();await savePage.waitForTimeout(600);assert.equal(saveRequests.length,0);await saver.close();result.tests.push('mobile normal 10s playback recording; simulated document-hidden pauses/resumes; saveData zero video requests')
+ const saver=await browser.newContext({viewport:{width:390,height:844}});await saver.addInitScript(()=>Object.defineProperty(navigator,'connection',{value:{saveData:true,addEventListener(){},removeEventListener(){}}}));const savePage=await saver.newPage();const saveRequests=[];savePage.on('request',r=>{if(/serum-approved.*mp4/.test(r.url()))saveRequests.push(r.url())});await savePage.goto(base+'/catalog');await savePage.locator('.catalog-index a[href="/catalog/syvorotki"]').scrollIntoViewIfNeeded();await savePage.waitForTimeout(600);assert.equal(saveRequests.length,0);await saver.close();result.tests.push('mobile normal 10s playback with first-frame/end metrics; simulated document-hidden pauses/resumes; saveData zero video requests')
  // Failed media transport returns exact final poster, never a black/empty tile.
  const failed=await browser.newContext({viewport:{width:390,height:900}});await failed.route('**/serum-approved-60fps.mp4',r=>r.abort());const failure=await failed.newPage();await failure.goto(base+'/catalog');await failure.locator('.catalog-index a[href="/catalog/syvorotki"]').scrollIntoViewIfNeeded();await failure.waitForFunction(()=>document.querySelector('.catalog-serum-media')?.dataset.failed==='true');assert.equal(await failure.locator('.catalog-serum-poster').evaluate(e=>e.complete&&e.naturalWidth>0),true);assert.equal(await failure.locator('.catalog-serum-video').count(),0);await failure.screenshot({path:out+'/load-failure-390.png'});await failed.close();result.tests.push('aborted video transport retains decoded exact final poster')
- } else result.tests.push('CATALOG-ONLY: media integration intentionally blocked until clean60 artifact arrives')
+ }
  assert.deepEqual(result.errors,[]);result.pass=true
-}catch(e){result.pass=false;result.failure=e.stack;console.error(e);process.exitCode=1}
+}catch(e){result.pass=false;result.failure=e.stack;for(const [i,c] of browser.contexts().entries())for(const [j,p] of c.pages().entries()){await p.screenshot({path:`${out}/failure-${i}-${j}.png`,fullPage:true}).catch(()=>{});await writeFile(`${out}/failure-${i}-${j}.txt`,await p.locator('body').innerText());result.failureURL=p.url()}console.error(e);process.exitCode=1}
 finally{await writeFile(out+'/browser-result.json',JSON.stringify(result,null,2));await browser.close();await new Promise(r=>server.httpServer.close(r));console.log(JSON.stringify({pass:result.pass,tests:result.tests,out,failure:result.failure},null,2))}

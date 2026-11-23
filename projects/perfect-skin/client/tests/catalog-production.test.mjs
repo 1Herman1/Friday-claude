@@ -6,7 +6,7 @@ const root=new URL('../',import.meta.url)
 const manifest=JSON.parse(await readFile(new URL('catalog-production-assets.json',import.meta.url)))
 test('only exact accepted derivatives and video are promoted',async()=>{
  const expected=manifest.assets.map(a=>a.src.split('/').at(-1)).sort()
- const actual=(await readdir(new URL('public/photos/catalog/',root))).filter(n=>n!=='syvorotki-pilot-05-native.png').sort()
+ const actual=(await readdir(new URL('public/photos/catalog/',root))).sort()
  assert.deepEqual(actual,expected)
  for(const a of manifest.assets)assert.equal(createHash('sha256').update(await readFile(new URL('public'+a.src,root))).digest('hex'),a.sha256)
 
@@ -21,6 +21,10 @@ test('production serum replaces CSS roll, has no looping or controls',async()=>{
 })
 test('production dist promotes intended assets but contains no research adapters or flags',async()=>{
  const dist=new URL('dist/',root)
+ const catalogue=(await readdir(new URL('photos/catalog/',dist))).sort()
+ assert.deepEqual(catalogue,manifest.assets.map(a=>a.src.split('/').at(-1)).sort(),'default dist must exclude old catalogue assets')
+ const files=await readdir(dist,{recursive:true})
+ assert.ok(!files.some(n=>/media-review|research|withdrawn|24fps|diagnostic60|smooth60/i.test(n)))
  for(const a of manifest.assets)assert.equal(createHash('sha256').update(await readFile(new URL(a.src.slice(1),dist))).digest('hex'),a.sha256)
  for(const name of await readdir(new URL('assets/',dist))){
  if(!name.endsWith('.js'))continue
