@@ -1,0 +1,210 @@
+{
+  "approval": "Current catalogue covers approved; video 24fps acceptance WITHDRAWN by owner: Должно быть60fps...видеотормозит. No push or deploy until fresh clean60 corrected cylindrical label artifact + actual browser verification and independent review.",
+  "baseline": "ead3643284e740986b548f1d44b63258e9342111",
+  "assets": [
+    {
+      "cover_id": "all",
+      "src": "/photos/catalog/review-all.webp",
+      "sha256": "f37a42b5703dc0908b554252926ded4b8b8db5405b5a5cbb822b22b482511d3a",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-all.webp",
+      "native_sha256": "ac3f66f9ebbd6113b98ae7468e92c847d07225cf53a695e71d5e03bbda579dc9"
+    },
+    {
+      "cover_id": "kremy-dlya-litsa-i-shei",
+      "src": "/photos/catalog/review-kremy-dlya-litsa-i-shei.webp",
+      "sha256": "34470c4a4496f7f520ef69c591413f72df25060b6e8fde772bc74fe80aa1a15f",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-kremy-dlya-litsa-i-shei.webp",
+      "native_sha256": "46b5fbfadcd33a8a12c070d95cb86bb30ec9368733e018eca108c5e9c71d4003"
+    },
+    {
+      "cover_id": "bestseller",
+      "src": "/photos/catalog/bestseller-tts-v2.png",
+      "sha256": "7288f231524ab4dca4069879e7c95abf388dbdf1facdffa4dd14a718f4fa64c5",
+      "source": "docs/projects/perfect-skin/media-review/catalog-final-choice/bestseller-v2-alpha.png",
+      "native_sha256": "7c947f4ecc548f18e0dccf127d07358c5781a7b0e5841fd506149e9788bd3cfb"
+    },
+    {
+      "cover_id": "ochishchenie",
+      "src": "/photos/catalog/review-ochishchenie.webp",
+      "sha256": "a58080c82ad0ff8eee44f1ee502ff914e710f865699f6518e0aacc9d16de6028",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-ochishchenie.webp",
+      "native_sha256": "5d19f9e2681d49e242d14a060e94c9592f52a704006ee3ffc2ff18e6c627f105"
+    },
+    {
+      "cover_id": "maski",
+      "src": "/photos/catalog/review-maski.webp",
+      "sha256": "0fc822954db3602f706364b63867f37b030f517251084491da289b894b04021e",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-maski.webp",
+      "native_sha256": "a5a43fb8c9009924ade1305c02c61886325fdf25170f6921f93ec2357004f3b5"
+    },
+    {
+      "cover_id": "flyuidy",
+      "src": "/photos/catalog/review-flyuidy.webp",
+      "sha256": "af888deb5a3cbd31f3f29add8c0450a6847f8fde46ebc68006b8138c041c425e",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-flyuidy.webp",
+      "native_sha256": "8924903f0104215b695f494db5401fe578ec8a492f86c98500e6ed76717b9080"
+    },
+    {
+      "cover_id": "toniki",
+      "src": "/photos/catalog/review-toniki.webp",
+      "sha256": "d3ef61c829b8889239dcc4d45b88d1179a1ebb6714fa61190aefebd5634ad144",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-toniki.webp",
+      "native_sha256": "02b260a4614aeff8af64feca97647e8375d8b01c4f6d9c30ea347e826e9ab20c"
+    },
+    {
+      "cover_id": "kremy-dlya-vek",
+      "src": "/photos/catalog/review-kremy-dlya-vek.webp",
+      "sha256": "37110e32f55d056f8073916724c09e483fe2bee25a3fc4ed3d0e2879573cbb68",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-kremy-dlya-vek.webp",
+      "native_sha256": "6a76f50eb9c03b2cdb657710633bc85428b5423678ce1b404f375dc767642d69"
+    },
+    {
+      "cover_id": "masla",
+      "src": "/photos/catalog/review-masla.webp",
+      "sha256": "fd7be2ca447327244be078dfdc83d86bd1b704804a736d2fc393b4a7a16fd3ff",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-masla.webp",
+      "native_sha256": "a8f0cd886f2e3d408c2292b65f6b58e766d48f2275055bb9a5d276735897fb8c"
+    },
+    {
+      "cover_id": "nabory",
+      "src": "/photos/catalog/review-nabory-v3.webp",
+      "sha256": "1ac85949c5989c654eb22453da533a07802c97e335c38883b82dcafe311ca356",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-nabory-v3.webp",
+      "native_sha256": "05029151c329e0cd7fc888900ed8c03d9e319a613ecc9b38b6088e6c1165b368"
+    },
+    {
+      "cover_id": "cream-night",
+      "src": "/photos/catalog/review-cream-night.webp",
+      "sha256": "aef6f7f4e063356659664c55831655272378f4ccfeff056671799b291a568cfa",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/integration/derivatives/review-cream-night.webp",
+      "native_sha256": "45cf92958d227f72f9b61e340e470b96288daac5f26fc9c89105e66c31225b22"
+    },
+    {
+      "cover_id": "unique-sea-foam",
+      "src": "/photos/catalog/review-unique-sea-foam.webp",
+      "sha256": "3cd95f8e30a3c069ad0d72cf5a1aef7b483ff76b09d9fa6c51bad4009d45f973",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/carousel-unique/sea-foam/review-unique-sea-foam.webp",
+      "native_sha256": "371e758475be86f21b024c36729f44f6879e168f1dadeca91d682214ee4430d1"
+    },
+    {
+      "cover_id": "unique-dinamizante",
+      "src": "/photos/catalog/review-unique-dinamizante.webp",
+      "sha256": "67a9739d23fb7508248dd88a65119fcfae8d8b6d2abeefca349e4a582834c876",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/carousel-unique/dinamizante/review-unique-dinamizante.webp",
+      "native_sha256": "4ba570ddb632e4cd59bcdb960c52811e2a5c0c693314eb8d1c997be8f3fdb544"
+    },
+    {
+      "cover_id": "unique-energel",
+      "src": "/photos/catalog/review-unique-energel.webp",
+      "sha256": "8be4d6203cfab25ca38e1f8adb4aa686c9dcfcdd85049e470643a9f5a1c8aa0d",
+      "source": "docs/projects/perfect-skin/media-review/catalog-family/carousel-unique/energel/review-unique-energel.webp",
+      "native_sha256": "b12bec57fc7cf12c0d8e7738db9a012384732acd44c727acaf71986786bc60e6"
+    },
+    {
+      "cover_id": "syvorotki-final-poster",
+      "src": "/photos/catalog/serum-approved-final.png",
+      "sha256": "6ce192b16c07450decf585a6177de0ead6cb674f9d291a2ed82666a2df52a6d2",
+      "source": "exact decoded frame 239"
+    }
+  ],
+  "release_status": "BLOCKED_PENDING_TRUE_60FPS",
+  "withdrawn_video": {
+    "cover_id": "syvorotki-video",
+    "src": "/photos/catalog/serum-approved-24fps.mp4",
+    "sha256": "8ffceb7b45610863b937bfa2197048c4e44220f52cbcc9c5b61c6e8ba541dd0a",
+    "source": "docs/projects/perfect-skin/media-review/serum-generation-v5/local-third-label-3d-v1/render/third-label-cylindrical-24fps.mp4"
+  },
+  "withdrawn_video_probe": {
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+        "profile": "High",
+        "codec_type": "video",
+        "codec_tag_string": "avc1",
+        "codec_tag": "0x31637661",
+        "width": 960,
+        "height": 960,
+        "coded_width": 960,
+        "coded_height": 960,
+        "closed_captions": 0,
+        "film_grain": 0,
+        "has_b_frames": 2,
+        "pix_fmt": "yuv420p",
+        "level": 31,
+        "chroma_location": "left",
+        "field_order": "progressive",
+        "refs": 4,
+        "is_avc": "true",
+        "nal_length_size": "4",
+        "id": "0x1",
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "time_base": "1/12288",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 122880,
+        "duration": "10.000000",
+        "bit_rate": "3424998",
+        "bits_per_raw_sample": "8",
+        "nb_frames": "240",
+        "nb_read_frames": "240",
+        "extradata_size": 45,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0
+        },
+        "tags": {
+          "language": "und",
+          "handler_name": "VideoHandler",
+          "vendor_id": "[0][0][0][0]",
+          "encoder": "Lavc61.19.100 libx264"
+        }
+      }
+    ],
+    "format": {
+      "filename": "/Users/germanbryzgalov/.hermes/cache/scratch/ps-catalog-release-20261124/projects/perfect-skin/client/public/photos/catalog/serum-approved-24fps.mp4",
+      "nb_streams": 1,
+      "nb_programs": 0,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "format_long_name": "QuickTime / MOV",
+      "start_time": "0.000000",
+      "duration": "10.000000",
+      "size": "4284965",
+      "bit_rate": "3427972",
+      "probe_score": 100,
+      "tags": {
+        "major_brand": "isom",
+        "minor_version": "512",
+        "compatible_brands": "isomiso2avc1mp41",
+        "encoder": "Lavf61.7.100"
+      }
+    }
+  },
+  "required_video": {
+    "src": "/photos/catalog/serum-approved-60fps.mp4",
+    "fps": "60/1",
+    "frames": 600,
+    "duration": 10,
+    "audio_streams": 0,
+    "status": "NOT_RECEIVED",
+    "source_policy": "Fresh MCI from approved corrected cylindrical 24fps frames; NOT old static-label smooth60 or rejected ghosting diagnostic60"
+  }
+}

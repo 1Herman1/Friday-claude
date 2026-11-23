@@ -43,13 +43,14 @@ export function useCatalogFacets(filters: Omit<CatalogFilters, 'sort' | 'limit' 
         )
         if (!cancelled) setData(response)
       } catch (err) {
+        if (cancelled) return
         if (err instanceof ApiError) {
           setError(err)
         } else {
           setError(new ApiError(500, 'UNKNOWN_ERROR', 'Неизвестная ошибка'))
         }
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
     let cancelled = false

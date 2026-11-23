@@ -44,11 +44,11 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         aria-hidden="true"
       />
 
-      {/* Drawer. Обёртка overflow-hidden: сдвинутая за экран шторка
-          иначе растягивает страницу и даёт горизонтальный скролл. */}
+      {/* Clip without a scroll container: focus/history must not pull a closed drawer back into view. */}
       <div
-        className="fixed inset-0 z-50 overflow-hidden pointer-events-none"
+        className="fixed inset-0 z-50 overflow-clip pointer-events-none"
         aria-hidden={!isOpen}
+        ref={element => { if (element) element.inert = !isOpen }}
       >
       <div
         className={`absolute right-0 top-0 bottom-0 w-[calc(100%-48px)] max-w-sm bg-background shadow-lg transform transition-transform duration-300 ease-out ${isOpen ? 'pointer-events-auto' : ''} ${

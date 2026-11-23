@@ -1,3 +1,4 @@
+import './catalog-composition.css'
 import { useState } from 'react'
 import { isUploadedImage } from '@/lib/product-image'
 import { Link } from 'react-router-dom'
@@ -59,7 +60,7 @@ export function ProductCard({ product, onAddToCart, eager, aspectRatio = '3/4' }
   }
 
   return (
-    <div className="bg-card rounded-block overflow-hidden transition-transform duration-200 hover:-translate-y-1 flex flex-col h-full">
+    <div className="catalog-card bg-card rounded-block overflow-hidden flex flex-col h-full">
       {/* Image */}
       <div className="relative">
         <Link to={`/product/${product.slug}`} className="block overflow-hidden bg-card">
