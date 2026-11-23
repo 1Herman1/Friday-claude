@@ -1,0 +1,35 @@
+{
+  "paidActions": 0,
+  "networkCalls": 0,
+  "aesGcmRoundtripVerified": true,
+  "assets": [
+    {
+      "role": "source_video",
+      "sha256": "8fcd85cfe950228e13aacf9d5f9c873a0f290a2583b695e01950907054797986",
+      "bytes": 520240,
+      "width": 432,
+      "height": 736,
+      "codec": "h264",
+      "pixelFormat": "yuv420p",
+      "frames": 48,
+      "fps": "24/1",
+      "duration": "2.000000",
+      "streams": 1,
+      "fullDecode": true
+    },
+    {
+      "role": "identity_reference",
+      "sha256": "8b066ea65f39e300bd04e51c9108fd8a06476d3e0e09449423d97c769bd54885",
+      "bytes": 182920,
+      "width": 432,
+      "height": 736,
+      "codec": "png",
+      "pixelFormat": "rgb24",
+      "frames": 1,
+      "fps": "25/1",
+      "duration": null,
+      "streams": 1,
+      "fullDecode": true
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "model": "wan/2-7-videoedit",
+  "duration": 2,
+  "resolution": "720p",
+  "quotedCredits": 32,
+  "quotedUsd": "0.16",
+  "providerBillingCap": false,
+  "maxCreateAttempts": 1,
+  "assets": [
+    {
+      "path": "third-source-crop-api.mp4",
+      "role": "source_video",
+      "mime": "video/mp4",
+      "size": 520240,
+      "sha256": "8fcd85cfe950228e13aacf9d5f9c873a0f290a2583b695e01950907054797986"
+    },
+    {
+      "path": "accepted-final-third-crop.png",
+      "role": "identity_reference",
+      "mime": "image/png",
+      "size": 182920,
+      "sha256": "8b066ea65f39e300bd04e51c9108fd8a06476d3e0e09449423d97c769bd54885"
+    }
+  ],
+  "settings": {
+    "prompt": "Edit only the single FLUVIX amber spray bottle in this cropped real video. Preserve its existing horizontal translation, outline, cap-up long-axis orientation, lighting, camera and background. Change the body surface motion from a front-facing slide to a visible physical axial roll about its own longitudinal axis: the attached curved front lettering must travel around the cylindrical edge, disappear fully to show the unprinted reverse side, and return to the front before the last frame. No in-plane rotation, no wobbling, no label crossfade, no new bottle, no carton. Keep the exact source first and last appearances. Do not move any bottle contour or shadow. No audio.",
+    "negative_prompt": "static front label sliding, label dissolve, planar image spin, new carton, extra bottle, changing geometry, camera motion",
+    "resolution": "720p",
+    "duration": 2,
+    "audio_setting": "origin",
+    "prompt_extend": false,
+    "watermark": false,
+    "seed": 0
+  },
+  "schema_sha256": "684a3f7ea3f0c60a206356660ee957dfb57a2f2d797084ca94eafe698c3ee386",
+  "sourceBaseSha256": "354624bf8116c50b6c6f8e1b2c64e6590836f593c3560cce1333c2121e145478",
+  "sourceFrames": [
+    144,
+    192
+  ],
+  "cropXYXY": [
+    0,
+    128,
+    432,
+    864
+  ],
+  "sourceFps": 24,
+  "compositePolicy": "Body-interior tracking mask only, all pixels outside mask immutable at lossless RGB stage; no rectangle paste; independent alignment/endpoint/matte review required. No site publication."
+}

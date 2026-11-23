@@ -1,0 +1,137 @@
+name: WAN2.7 third-only edit (one 32-credit job)
+"on":
+  push:
+    branches: [ci/serum-wan27-third-only]
+    paths:
+      - .github/workflows/serum-wan-third.yml
+      - tools/nullume/scripts/serum-wan-*.mjs
+      - docs/projects/perfect-skin/media-review/serum-wan-third/**
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        required: true
+        default: dry-run
+        options: [dry-run, generate-one, recover-existing-task]
+        description: Exactly one reviewed fixed case, or GET-only recovery
+      confirmation:
+        type: choice
+        required: true
+        default: none
+        options: [none, confirm-wan-third-one-32]
+        description: Quoted 32 credits USD0.16, NOT a provider-enforced ceiling
+      task_id:
+        type: string
+        default: ''
+        description: Existing sanitized receipt task ID, recovery only
+      source_run_id:
+        type: string
+        default: ''
+        description: Original receipt run ID, recovery only
+permissions:
+  contents: read
+concurrency:
+  group: serum-wan-third-one
+  cancel-in-progress: false
+jobs:
+  preflight:
+    if: github.repository == '1Herman1/Friday-claude'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Offline hostile-input and duplicate-create regression tests, no credentials
+        run: node --test tools/nullume/scripts/serum-wan-third.test.mjs
+      - name: Syntax build, no dependency installation or credentials
+        run: |
+          node --check tools/nullume/scripts/serum-wan-third.mjs
+          node --check tools/nullume/scripts/serum-wan-transport.mjs
+      - name: Credential-free archived schema, 710-row quote, freeze and encrypted bundle validation
+        run: node tools/nullume/scripts/serum-wan-third.mjs dry-run
+      - name: Fresh exact public schema and price via real TLS transport, no credential
+        if: inputs.mode != 'recover-existing-task'
+        run: >-
+          node --input-type=module -e "import {publicMetadata} from './tools/nullume/scripts/serum-wan-third.mjs'; console.log(await publicMetadata());"
+  paid:
+    needs: preflight
+    if: >-
+      github.repository == '1Herman1/Friday-claude' &&
+      github.event_name == 'workflow_dispatch' && github.run_attempt == '1' &&
+      github.ref == 'refs/heads/ci/serum-wan27-third-only' &&
+      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-wan-third-one-32') || inputs.mode == 'recover-existing-task')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    # Reuse protected environment without changing any of its protection rules.
+    # WAN_THIRD_* variables are independent of the old Kling adapter's arming.
+    environment: serum3-pilot
+    env:
+      WAN_THIRD_APPROVED_RUN_ID: ${{ vars.WAN_THIRD_APPROVED_RUN_ID }}
+      WAN_THIRD_APPROVED_SHA: ${{ vars.WAN_THIRD_APPROVED_SHA }}
+      WAN_THIRD_ARMED: ${{ vars.WAN_THIRD_ARMED }}
+      WAN_THIRD_CONFIRMATION: ${{ inputs.confirmation }}
+      WAN_THIRD_TASK_ID: ${{ inputs.task_id }}
+      WAN_THIRD_APPROVED_TASK_ID: ${{ vars.WAN_THIRD_RECOVERY_TASK_ID }}
+      WAN_THIRD_SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+      WAN_THIRD_APPROVED_SOURCE_RUN_ID: ${{ vars.WAN_THIRD_RECOVERY_SOURCE_RUN_ID }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Install decoder and rerun tests before any credential injection
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          node --test tools/nullume/scripts/serum-wan-third.test.mjs
+      - name: Require independent exact-run and exact-SHA environment arming before secrets
+        id: gate
+        env:
+          MODE: ${{ inputs.mode }}
+        run: >-
+          node --input-type=module -e "import {authorize} from './tools/nullume/scripts/serum-wan-third.mjs'; authorize(process.env, process.env.MODE === 'recover-existing-task');"
+      - name: Verify and decode exactly two frozen assets; upload and submit exactly once (no retry)
+        id: submit
+        if: inputs.mode == 'generate-one'
+        env:
+          KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
+          WAN_THIRD_ASSET_KEY: ${{ secrets.WAN_THIRD_ASSET_KEY }}
+        run: node tools/nullume/scripts/serum-wan-third.mjs generate-one
+      - name: Durably publish sanitized receipt BEFORE any polling
+        id: receipt
+        if: always() && steps.submit.outputs.task_id != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: serum-wan-third-task-receipt-${{ github.run_id }}
+          path: ${{ runner.temp }}/serum-wan-third-result/task-receipt.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Bounded GET-only retrieval; no upload, credit check or create in this process
+        id: retrieve
+        if: >-
+          always() && steps.gate.outcome == 'success' &&
+          ((steps.receipt.outcome == 'success' && steps.submit.outputs.task_id != '') || inputs.mode == 'recover-existing-task')
+        env:
+          KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
+          WAN_THIRD_TASK_ID: ${{ steps.submit.outputs.task_id || inputs.task_id }}
+          WAN_THIRD_APPROVED_TASK_ID: ${{ steps.submit.outputs.task_id || vars.WAN_THIRD_RECOVERY_TASK_ID }}
+          WAN_THIRD_SOURCE_RUN_ID: ${{ steps.submit.outputs.task_id && github.run_id || inputs.source_run_id }}
+          WAN_THIRD_APPROVED_SOURCE_RUN_ID: ${{ steps.submit.outputs.task_id && github.run_id || vars.WAN_THIRD_RECOVERY_SOURCE_RUN_ID }}
+        run: node tools/nullume/scripts/serum-wan-third.mjs recover-existing-task
+      - name: Preserve original output and sanitized metadata (not design accepted)
+        if: always() && steps.retrieve.outcome != '' && steps.retrieve.outcome != 'skipped'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: serum-wan-third-output-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/serum-wan-third-result/unverified.mp4
+            ${{ runner.temp }}/serum-wan-third-result/result.json
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0
