@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { tradeChartRange } from "./trade-chart-range";
 import { createChart, CandlestickSeries, createSeriesMarkers, ColorType, LineStyle, type UTCTimestamp, type SeriesMarker, type Time } from "lightweight-charts";
 
 type C = { time: number; open: number; high: number; low: number; close: number };
 type Fill = { t: number; price: number; open: boolean; side: string; liq: boolean; qty: number };
 
-export default function TradeChart({ candles, fills, entry, exit, stop, step }: { candles: C[]; fills: Fill[]; entry: number; exit: number | null; stop: number | null; step: number }) {
+export default function TradeChart({ candles, fills, entry, exit, stop, step, isOpen = false }: { candles: C[]; fills: Fill[]; entry: number; exit: number | null; stop: number | null; step: number; isOpen?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!ref.current || !candles.length) return;
@@ -44,13 +45,12 @@ export default function TradeChart({ candles, fills, entry, exit, stop, step }: 
       };
     }).sort((a, b) => (a.time as number) - (b.time as number));
     createSeriesMarkers(s, markers);
-    const first = Math.min(...fills.map((f) => f.t)), last = Math.max(...fills.map((f) => f.t));
-    const span = Math.max(last - first, step * 20);
-    chart.timeScale().setVisibleRange({ from: (first - span * 0.6) as UTCTimestamp, to: (last + span * 0.4) as UTCTimestamp });
+    const range = tradeChartRange(candles, fills, step, isOpen);
+    chart.timeScale().setVisibleRange({ from: range.from as UTCTimestamp, to: range.to as UTCTimestamp });
     const ro = new ResizeObserver(() => chart.applyOptions({ width: ref.current!.clientWidth }));
     ro.observe(ref.current);
     return () => { ro.disconnect(); chart.remove(); };
-  }, [candles, fills, entry, exit, stop, step]);
-  if (!candles.length) return <div className="py-16 text-center text-sm text-zinc-500">Свечи недоступны (MEXC не отдал историю по этому тикеру)</div>;
+  }, [candles, fills, entry, exit, stop, step, isOpen]);
+  if (!candles.length) return <div className="py-16 text-center text-sm text-zinc-500">Рыночные свечи недоступны по этому тикеру</div>;
   return <div ref={ref} className="w-full" />;
 }

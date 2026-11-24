@@ -7,6 +7,11 @@ export default function FilterBar({ f, symbols, action, tags, sort }: P) {
   const L = ({ t, children }: { t: string; children: React.ReactNode }) => <label className="flex flex-col gap-1 text-xs text-zinc-400">{t}{children}</label>;
   return (
     <form action={action} className="flex flex-wrap items-end gap-2 text-sm">
+      <L t="биржа">
+        <select name="venue" defaultValue={f.venue ?? ""} className={cls}>
+          <option value="">все биржи</option><option value="bingx">BingX</option><option value="mexc">MEXC · архив</option>
+        </select>
+      </L>
       {sort && (
         <L t="сортировка">
           <select name="sort" defaultValue={f.sort ?? "date_desc"} className={cls}>

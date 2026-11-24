@@ -7,9 +7,11 @@ export const EMOTIONS = ["спокойствие", "уверенность", "с
 const API_ALIASES: Record<string, string> = { MONUSDT: "MONAD_USDT" };
 
 export type TradeCard = {
-  id: string; n: number; symbol: string; base: string; side: string; status: string;
+  id: string; n: number; symbol: string; base: string; venue: string; side: string; status: string;
   opened_at: Date; closed_at: Date | null; entry_avg: string; exit_avg: string | null; max_qty: string;
   gross_pnl: string; fees: string; funding: string; net_pnl: string; liq: boolean;
+  margin_mode: string | null; leverage: string | null;
+  live_unrealized: string | null; live_qty: string | null; live_avg: string | null; live_at: string | null;
   entry_reason: string | null; emotion_before: string | null; emotion_after: string | null;
   confidence: number | null; followed_plan: boolean | null; planned_stop: string | null;
   playbook: string | null; prev_id: string | null; next_id: string | null;
@@ -20,12 +22,22 @@ export async function tradeCard(id: string) {
     WITH o AS (SELECT id, row_number() OVER (ORDER BY opened_at)::int AS n,
                       lag(id) OVER (ORDER BY opened_at) AS prev_id, lead(id) OVER (ORDER BY opened_at) AS next_id
                FROM trades WHERE deleted_at IS NULL)
-    SELECT t.id, o.n, i.symbol, i.base_asset AS base, t.side, t.status, t.opened_at, t.closed_at, t.entry_avg, t.exit_avg,
+    SELECT t.id, o.n, i.symbol, i.base_asset AS base, v.slug AS venue, t.side, t.status, t.opened_at, t.closed_at, t.entry_avg, t.exit_avg,
            t.max_qty, t.gross_pnl, t.fees, coalesce(t.funding, 0) AS funding, t.net_pnl, t.stop_is_liquidation AS liq,
            t.entry_reason, t.emotion_before, t.emotion_after, t.confidence, t.followed_plan, t.planned_stop,
-           p.name AS playbook, o.prev_id, o.next_id
+           p.name AS playbook, o.prev_id, o.next_id, t.margin_mode,t.leverage,
+           live.unrealized AS live_unrealized, live.qty AS live_qty, live.avg AS live_avg, live.at AS live_at
     FROM trades t JOIN instruments i ON i.id = t.instrument_id JOIN o ON o.id = t.id
+    JOIN accounts a ON a.id = t.account_id JOIN venues v ON v.id = a.venue_id
     LEFT JOIN playbooks p ON p.id = t.playbook_id
+    LEFT JOIN LATERAL (
+      SELECT item->>'unrealizedProfit' AS unrealized, item->>'positionAmt' AS qty,
+             item->>'avgPrice' AS avg, r.payload->>'at' AS at
+      FROM raw_records r CROSS JOIN LATERAL jsonb_array_elements(r.payload->'positions') item
+      WHERE r.account_id=a.id AND r.stream='api:bingx_positions' AND r.external_id='snapshot'
+        AND replace(item->>'symbol','-','')=i.symbol AND item->>'positionSide'=t.side::text
+      LIMIT 1
+    ) live ON t.status='OPEN'
     WHERE t.id = $1`, [id]);
   if (!t) return null;
   const [fills, notes, tags, playbooks, rules, shots, reviews] = await Promise.all([
@@ -53,18 +65,19 @@ export async function tradeCard(id: string) {
 
 export type Candle = { time: number; open: number; high: number; low: number; close: number };
 
-// свечи с площадки исполнения (MEXC, публичный API), окно = сделка ± запас
-export type CandleSource = "MEXC" | "Binance" | "Bybit" | "реконструкция";
+// Публичные рыночные свечи; источник всегда возвращаем отдельно от площадки сделки.
+export type CandleSource = "BingX" | "MEXC" | "Binance" | "Bybit" | "реконструкция";
 const BN_IV: Record<string, string> = { Min5: "5m", Min15: "15m", Min60: "1h", Hour4: "4h" };
 const BY_IV: Record<string, string> = { Min5: "5", Min15: "15", Min60: "60", Hour4: "240" };
 
 async function getJson(url: string, live: boolean) {
-  const r = await fetch(url, { next: { revalidate: live ? 60 : 86400 }, headers: { "User-Agent": "Mozilla/5.0" } });
+  const r = await fetch(url, { next: { revalidate: live ? 60 : 86400 }, headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(10000) });
+  if (!r.ok) throw new Error(`Candle HTTP ${r.status}`);
   return r.json();
 }
 
-// История свечей: MEXC → Binance Futures → Bybit linear. Делистнутые на MEXC контракты (code 1001) MEXC не отдаёт вообще.
-export async function candles(symbol: string, from: Date, to: Date | null): Promise<{ interval: string; data: Candle[]; source: CandleSource | null }> {
+// История свечей: BingX для сделок BingX, затем явно обозначенные резервные площадки.
+export async function candles(symbol: string, from: Date, to: Date | null, venue = "mexc"): Promise<{ interval: string; data: Candle[]; source: CandleSource | null }> {
   const start = Math.floor(from.getTime() / 1000);
   const end = Math.floor((to ?? new Date()).getTime() / 1000);
   const dur = Math.max(end - start, 60);
@@ -72,6 +85,25 @@ export async function candles(symbol: string, from: Date, to: Date | null): Prom
   const pad = Math.max(dur * 0.6, step * 40);
   const a = Math.floor(start - pad), b = Math.floor(end + pad / 2);
   const live = !to;
+  if (venue.toLowerCase() === "bingx") {
+    try {
+      const params = new URLSearchParams({ symbol: symbol.replace(/USDT$/, "-USDT"), interval: BN_IV[interval], startTime: String(a * 1000), endTime: String(b * 1000), limit: "1440" });
+      const j = await getJson(`https://open-api.bingx.com/openApi/swap/v3/quote/klines?${params}`, live);
+      if (j?.code === 0 && Array.isArray(j.data) && j.data.length) {
+        // v3 returns objects, newest first, with millisecond opening times and string prices.
+        const byTime = new Map<number, Candle>();
+        for (const k of j.data) {
+          if (!k || ![k.time, k.open, k.high, k.low, k.close].every((v) => (typeof v === "string" && v.trim() !== "") || typeof v === "number")) continue;
+          const candle = { time: Number(k.time) / 1000, open: Number(k.open), high: Number(k.high), low: Number(k.low), close: Number(k.close) };
+          const { time, open, high, low, close } = candle;
+          if (![time, open, high, low, close].every(Number.isFinite) || time < a || time > b || !Number.isInteger(time) || low <= 0 || low > Math.min(open, close) || high < Math.max(open, close)) continue;
+          byTime.set(time, candle);
+        }
+        const data = [...byTime.values()].sort((x, y) => x.time - y.time);
+        if (data.length) return { interval, source: "BingX", data };
+      }
+    } catch {}
+  }
   const apiSym = API_ALIASES[symbol] ?? symbol.replace(/USDT$/, "_USDT");
   try {
     const j = await getJson(`https://contract.mexc.com/api/v1/contract/kline/${apiSym}?interval=${interval}&start=${a}&end=${b}`, live);

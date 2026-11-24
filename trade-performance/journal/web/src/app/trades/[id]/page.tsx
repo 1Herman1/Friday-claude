@@ -43,12 +43,12 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
   const card = await tradeCard(id);
   if (!card) notFound();
   const { t, fills, notes, tags, playbooks, rules, shots, reviews, signal, running } = card;
-  const mk = await candles(t.symbol, new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
+  const mk = await candles(t.symbol, new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null, t.venue);
   const c = mk.data.length ? mk : { interval: "Min60", data: reconstruct(fills), source: "реконструкция" as const };
   const diary = notes.filter((n) => n.diary);
   const other = notes.filter((n) => !n.diary);
   const dshots = shots.filter((a) => a.diary);
-  const ex = excursions(c.data, t.side, Number(t.entry_avg), new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
+  const ex = c.source === "реконструкция" ? null : excursions(c.data, t.side, Number(t.entry_avg), new Date(t.opened_at), t.closed_at ? new Date(t.closed_at) : null);
   const durH = ((t.closed_at ? new Date(t.closed_at).getTime() : Date.now()) - new Date(t.opened_at).getTime()) / 3600e3;
   const notional = Number(t.entry_avg) * Number(t.max_qty);
   const stopPct = t.planned_stop ? (Math.abs(Number(t.entry_avg) - Number(t.planned_stop)) / Number(t.entry_avg)) * 100 : null;
@@ -86,13 +86,25 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
         {t.status === "OPEN" && <span className="rounded bg-sky-900/60 px-2 py-0.5 text-xs text-sky-200">открыта</span>}
       </div>
 
+      {t.status === "OPEN" && (
+        <div className="rounded-2xl border border-amber-700/50 bg-amber-950/20 p-4 text-sm">
+          <h3 className="mb-2 font-semibold text-amber-200">Открытая позиция · результат ещё не окончательный</h3>
+          <Row k="Реализовано с комиссиями и фандингом" v={usd(t.net_pnl)} cls={pnlClass(t.net_pnl)} />
+          <Row k="Плавающий PnL (отдельно)" v={t.live_unrealized !== null ? usd(t.live_unrealized) : "нет снимка"} cls={t.live_unrealized !== null ? pnlClass(t.live_unrealized) : ""} />
+          {t.live_qty && <Row k="Остаток / средняя цена на бирже" v={`${num(t.live_qty, 4)} ${t.base} / ${px(t.live_avg)}`} />}
+          <Row k="Плечо / режим маржи" v={`${t.leverage ? num(t.leverage, 0) + "×" : "—"} / ${t.margin_mode ?? "неизвестен"}`} />
+          {t.live_at && <p className="mt-2 text-xs text-zinc-400">Снимок от {dt(new Date(Number(t.live_at)))} МСК; не потоковая котировка.</p>}
+          {t.margin_mode === "CROSSED" && <p className="mt-2 text-amber-200">Кросс-маржа: возможный убыток не ограничен выделенной начальной маржой позиции.</p>}
+        </div>
+      )}
+
       <div id="trade-chart" className="rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-3">
         <div className="mb-1 flex flex-wrap gap-2 text-xs text-zinc-500">
-          <span>{t.symbol} · {c.source ?? "нет данных"} · {IV[c.interval]} · время МСК</span>
-          {c.source && c.source !== "MEXC" && c.source !== "реконструкция" && <span className="rounded bg-sky-500/10 px-1.5 text-sky-300">контракт делистнут на MEXC — свечи с {c.source}</span>}
-          {c.source === "реконструкция" && <span className="rounded bg-amber-500/10 px-1.5 text-amber-300">рынка нет ни на MEXC, ни на Binance/Bybit — линия построена по твоим исполнениям (1ч), это хронология входов/выходов, не рынок</span>}
+          <span>{t.symbol} · площадка сделки: {t.venue} · свечи: {c.source ?? "нет данных"} · {IV[c.interval]} · время МСК</span>
+          {c.source && c.source !== "реконструкция" && c.source.toLowerCase() !== t.venue.toLowerCase() && <span className="rounded bg-sky-500/10 px-1.5 text-sky-300">резервный источник: {c.source} — это не свечи {t.venue}; цены и MFE/MAE могут отличаться</span>}
+          {c.source === "реконструкция" && <span className="rounded bg-amber-500/10 px-1.5 text-amber-300">рыночные свечи недоступны через API — линия построена по твоим исполнениям (1ч), это хронология входов/выходов, не рынок</span>}
         </div>
-        <TradeChart candles={c.data} step={STEP[c.interval]} entry={Number(t.entry_avg)} exit={t.exit_avg ? Number(t.exit_avg) : null}
+        <TradeChart candles={c.data} step={STEP[c.interval]} isOpen={t.status === "OPEN"} entry={Number(t.entry_avg)} exit={t.exit_avg ? Number(t.exit_avg) : null}
           stop={t.planned_stop ? Number(t.planned_stop) : null}
           fills={fills.map((f) => ({ t: Math.floor(new Date(f.executed_at).getTime() / 1000), price: Number(f.price), qty: Number(f.qty),
             open: (f.side === "BUY") === (f.position_side === "long"), side: f.position_side, liq: f.liq }))} />
@@ -236,7 +248,7 @@ export default async function TradePage({ params }: { params: Promise<{ id: stri
 
       <div className="rounded-2xl border border-violet-900/50 bg-violet-950/15 p-4">
         <div className="mb-2 flex items-center gap-3">
-          <h3 className="text-sm font-medium text-violet-200">🧠 ИИ-разбор (Opus)</h3>
+          <h3 className="text-sm font-medium text-violet-200">🧠 ИИ-разбор · аналитик</h3>
           {running ? <span className="text-xs text-violet-300">⏳ агент разбирает сделку (1–3 мин), обнови страницу</span> : (
             <form action={runReview.bind(null, t.id)} className="ml-auto">
               <button className="rounded-md border border-violet-700 px-3 py-1 text-xs text-violet-200 hover:bg-violet-900/40">{reviews.length ? "Разобрать заново" : "Разобрать агентом"}</button>

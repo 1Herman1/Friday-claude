@@ -7,7 +7,7 @@ mkdirSync(out, { recursive: true });
 const ids = JSON.parse(process.argv[3]); // [[n, id, base], ...]
 const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 1400, height: 1000 } });
-await p.goto(base + "/trades?sort=date_asc"); await p.waitForTimeout(1500);
+await p.goto(base + (process.env.JOURNAL_LIST_PATH ?? "/trades?sort=date_asc")); await p.waitForTimeout(1500);
 await p.screenshot({ path: `${out}/000_list.png`, fullPage: true });
 let ok = 0, fail = [];
 for (const [n, id, coin] of ids) {

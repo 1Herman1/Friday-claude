@@ -40,11 +40,30 @@ def load_env():
             os.environ.setdefault(k.strip(), v.strip().strip("'\""))
 
 
+_CLOCK = {}
+
+
+def exchange_timestamp(refresh=False):
+    """Use exchange time anchored to monotonic time, not the Mac wall clock."""
+    now = time.monotonic()
+    if refresh or not _CLOCK or now - _CLOCK['at'] > 60:
+        start = time.monotonic()
+        req = urllib.request.Request(
+            BASES[0] + '/openApi/swap/v2/server/time?timestamp=' + str(int(time.time() * 1000)),
+            headers={'User-Agent': UA, 'Cache-Control': 'no-cache'})
+        r = json.load(urllib.request.urlopen(req, timeout=30))
+        if r.get('code') != 0:
+            raise RuntimeError('BingX server time unavailable')
+        end = time.monotonic()
+        _CLOCK.update(ms=int(r['data']['serverTime']), at=(start + end) / 2)
+    return int(_CLOCK['ms'] + (time.monotonic() - _CLOCK['at']) * 1000)
+
+
 def private(path, params=None):
     key = os.environ["BINGX_API_KEY"]
     sec = os.environ.get("BINGX_SECRET_KEY") or os.environ["BINGX_API_SECRET"]
     for attempt in range(5):
-        p = {**(params or {}), "timestamp": int(time.time() * 1000), "recvWindow": 10000}
+        p = {**(params or {}), "timestamp": exchange_timestamp(refresh=attempt > 0), "recvWindow": 10000}
         qs = "&".join(f"{k}={p[k]}" for k in sorted(p))
         sig = hmac.new(sec.encode(), qs.encode(), hashlib.sha256).hexdigest()
         base = BASES[min(attempt, 1)]
@@ -70,7 +89,10 @@ def fetch_orders(days):
     while t < end:
         b = min(t + w, end)
         d = private("/openApi/swap/v2/trade/allOrders", {"startTime": t, "endTime": b, "limit": 1000}) or {}
-        for o in (d.get("orders") if isinstance(d, dict) else d) or []:
+        rows = (d.get("orders") if isinstance(d, dict) else d) or []
+        if len(rows) >= 1000:
+            raise ValueError('BingX order coverage: saturated response; narrow history window')
+        for o in rows:
             if o["orderId"] not in seen:
                 seen.add(o["orderId"])
                 out.append(o)
@@ -87,6 +109,8 @@ def fetch_funding(days):
         b = min(t + 7 * 86400_000, end)
         d = private("/openApi/swap/v2/user/income",
                     {"incomeType": "FUNDING_FEE", "startTime": t, "endTime": b, "limit": 1000}) or []
+        if len(d) >= 1000:
+            raise ValueError('BingX funding coverage: saturated response; narrow history window')
         out += d
         t = b + 1
         time.sleep(0.25)
@@ -120,6 +144,56 @@ def fills(orders):
     return out
 
 
+def fetch_fill_details(days):
+    end = exchange_timestamp()
+    start, out = end - days * 86400_000, []
+    while start < end:
+        stop = min(start + 7 * 86400_000 - 1000, end)
+        data = private('/openApi/swap/v2/trade/allFillOrders',
+                       {'tradingUnit': 'COIN', 'startTs': start, 'endTs': stop}) or {}
+        rows = data.get('fill_orders', []) if isinstance(data, dict) else data
+        if len(rows) >= 1000:
+            raise ValueError('BingX fill coverage: saturated response; narrow the history window')
+        out.extend(rows)
+        start = stop + 1
+        time.sleep(.25)
+    return out
+
+
+def detailed_fills(orders, details):
+    """Preserve each actual execution; retain the first legacy order key for trade IDs."""
+    groups = defaultdict(list)
+    for row in details:
+        groups[str(row['orderId'])].append(row)
+    normalized = []
+    expected = {str(o['orderId']) for o in orders if D(o.get('executedQty')) > 0}
+    if set(groups) != expected:
+        raise ValueError('BingX fill coverage: missing executions or matching orders')
+    for base in fills(orders):
+        o = base['o']
+        oid = str(o['orderId'])
+        rows = sorted(groups.get(oid, []), key=lambda r: (
+            r['filledTm'], json.dumps(r, sort_keys=True, default=str)))
+        if sum((D(r['volume']) for r in rows), Decimal(0)) != base['qty']:
+            raise ValueError(f'BingX fill coverage mismatch for order {oid}')
+        remaining = base['pnl']
+        repeated = defaultdict(int)
+        for index, row in enumerate(rows):
+            fingerprint = hashlib.sha256(json.dumps(row, sort_keys=True, default=str).encode()).hexdigest()[:20]
+            repeated[fingerprint] += 1
+            ext = f'order:{oid}' if index == 0 else f'order:{oid}:fill:{fingerprint}:{repeated[fingerprint]}'
+            qty, price = D(row['volume']), D(row['price'])
+            pnl = None
+            if base['pnl'] is not None:
+                # Order PnL is authoritative; individual close-fill allocation is proportional.
+                pnl = remaining if index == len(rows) - 1 else base['pnl'] * qty / base['qty']
+                remaining -= pnl
+            normalized.append({**base, 'o': {**o, '_fills': rows}, 'external_id': ext,
+                               'qty': qty, 'price': price, 'fee': -D(row['commission']),
+                               'pnl': pnl, 'when': datetime.fromisoformat(row['filledTm'].replace('Z', '+00:00'))})
+    return sorted(normalized, key=lambda r: (r['when'], r['external_id']))
+
+
 def side_at(fl, sym, when):
     """Сторона открытой позиции по инструменту в момент when (для фандинга)."""
     pos = defaultdict(Decimal)
@@ -142,7 +216,9 @@ def main():
         sys.exit("нет BINGX_API_KEY в trade-performance/.env")
     orders, funding = fetch_orders(a.days), fetch_funding(a.days)
     positions = private("/openApi/swap/v2/user/positions") or []
-    fl = fills(orders)
+    pending = private("/openApi/swap/v2/trade/openOrders") or {}
+    open_orders = pending.get('orders', []) if isinstance(pending, dict) else pending
+    fl = detailed_fills(orders, fetch_fill_details(a.days))
     if a.dry_run:
         print(json.dumps({"orders": len(orders), "fills": len(fl), "funding": len(funding),
                           "open_positions": [{k: str(p.get(k)) for k in ("symbol", "positionSide", "positionAmt",
@@ -207,10 +283,16 @@ def main():
                            position_side, price, qty, qty_contracts, quote_qty, fee, fee_asset, fee_quote, is_maker,
                            realized_pnl, is_liquidation, executed_at, origin, raw_record_id)
                            VALUES (gen_random_uuid(), %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'USDT',%s,%s,%s,%s,%s,'IMPORT',%s)
-                           ON CONFLICT (account_id, external_id) DO NOTHING""",
-                        (org, acc, instrument(f["sym"]), f"order:{o['orderId']}", f["side"], f["pside"], f["price"],
+                           ON CONFLICT (account_id, external_id) DO UPDATE SET
+                             price=EXCLUDED.price, qty=EXCLUDED.qty, qty_contracts=EXCLUDED.qty_contracts,
+                             quote_qty=EXCLUDED.quote_qty, fee=EXCLUDED.fee, fee_quote=EXCLUDED.fee_quote,
+                             realized_pnl=EXCLUDED.realized_pnl, executed_at=EXCLUDED.executed_at,
+                             is_maker=EXCLUDED.is_maker, raw_record_id=EXCLUDED.raw_record_id
+                           WHERE (executions.price,executions.qty,executions.fee_quote,executions.realized_pnl,executions.executed_at)
+                             IS DISTINCT FROM (EXCLUDED.price,EXCLUDED.qty,EXCLUDED.fee_quote,EXCLUDED.realized_pnl,EXCLUDED.executed_at)""",
+                        (org, acc, instrument(f["sym"]), f["external_id"], f["side"], f["pside"], f["price"],
                          f["qty"], f["qty"], f["qty"] * f["price"], f["fee"], f["fee"],
-                         (o.get("type") or "").upper() == "LIMIT", f["pnl"], f["liq"], f["when"], rid))
+                         None, f["pnl"], f["liq"], f["when"], rid))
             st["fills_new" if cur.rowcount else "fills_dup"] += 1
 
         for x in funding:
@@ -225,11 +307,28 @@ def main():
             st["funding_new" if cur.rowcount else "funding_dup"] += 1
 
         raw("api:bingx_positions", "snapshot", {"at": int(time.time() * 1000), "positions": positions})
+        raw("api:bingx_open_orders", "snapshot", {"at": int(time.time() * 1000), "orders": open_orders})
 
         cur.execute("""SELECT max(finished_at) FROM import_jobs WHERE account_id = %s AND mode = 'api'
                        AND status = 'SUCCEEDED'""", (acc,))
         prev = cur.fetchone()[0]
-        rb = rebuild(cur, acc)
+        rb = rebuild(cur, acc, soft_delete=True)
+        # Historical leverage comes from the first actual order, never an assumed 10x.
+        cur.execute("""UPDATE trades t SET leverage = x.leverage
+                       FROM (SELECT DISTINCT ON (e.trade_id) e.trade_id,
+                         nullif(regexp_replace(r.payload->>'leverage', '[^0-9.]', '', 'g'), '')::numeric AS leverage
+                         FROM executions e JOIN raw_records r ON r.id=e.raw_record_id
+                         WHERE e.account_id=%s ORDER BY e.trade_id,e.executed_at,e.external_id) x
+                       WHERE t.id=x.trade_id AND t.leverage IS NULL""", (acc,))
+        for p in positions:
+            cur.execute("""UPDATE trades SET leverage=%s, margin_used=%s, margin_mode=%s,
+                              liquidation_price=%s, updated_at=now()
+                           WHERE account_id=%s AND instrument_id=%s AND side::text=%s
+                             AND status='OPEN' AND deleted_at IS NULL""",
+                        (D(p['leverage']), D(p.get('initialMargin')),
+                         'ISOLATED' if p.get('isolated') else 'CROSSED',
+                         D(p.get('liquidationPrice')) or None, acc,
+                         instrument(p['symbol']), p['positionSide']))
         closed_new = ""
         if prev:
             cur.execute("""SELECT i.base_asset, t.side, t.net_pnl, t.stop_is_liquidation FROM trades t

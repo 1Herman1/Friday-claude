@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { trades, symbols, allTags, summary, SEGMENTS, SEG_LABEL, RANDOM_TAG, type Filters } from "@/server/stats";
+import { trades, openTrades, symbols, allTags, summary, SEGMENTS, SEG_LABEL, RANDOM_TAG, type Filters } from "@/server/stats";
 import { usd, px, dt, pnlClass } from "@/lib/fmt";
 import FilterBar from "@/components/FilterBar";
 import RowLink from "@/components/RowLink";
@@ -8,17 +8,30 @@ export const dynamic = "force-dynamic";
 
 export default async function Trades({ searchParams }: { searchParams: Promise<Filters> }) {
   const f = await searchParams;
-  const [list, syms, tags, s] = await Promise.all([trades(f), symbols(), allTags(), summary(f)]);
+  const [list, syms, tags, s, opened] = await Promise.all([trades(f), symbols(), allTags(), summary(f), openTrades(f)]);
   const segOf = (tg: string[] | null) => Object.keys(SEGMENTS).find((k) => tg?.includes(SEGMENTS[k]));
   const qs = (k: string, v: string) => "?" + new URLSearchParams({ ...(f as Record<string, string>), [k]: v }).toString();
   const wr = Number(s.n) ? Math.round((Number(s.wins) / Number(s.n)) * 100) : 0;
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <h1 className="text-xl font-semibold">Сделки <span className="text-zinc-500">({list.length})</span></h1>
+        <h1 className="text-xl font-semibold">Сделки <span className="text-zinc-500">({list.length} закрытых{opened.length ? ` + ${opened.length} открытых` : ""})</span></h1>
+        <div className="flex gap-2 text-sm">
+          <Link href={qs("venue", "")} className="rounded border border-zinc-700 px-2 py-1">Все биржи</Link>
+          <Link href={qs("venue", "bingx")} className="rounded border border-sky-800 px-2 py-1 text-sky-300">BingX</Link>
+          <Link href={qs("venue", "mexc")} className="rounded border border-zinc-700 px-2 py-1">MEXC · архив</Link>
+        </div>
         <Link href="/trades/new" className="rounded-md border border-zinc-700 px-3 py-1 text-sm text-zinc-200 hover:bg-zinc-800">+ сделка вручную</Link>
         <FilterBar f={f} symbols={syms.map((x) => x.s)} action="/trades" tags={tags} sort />
       </div>
+      {opened.length > 0 && <section className="rounded-2xl border border-amber-800/60 bg-amber-950/15 p-4">
+        <h2 className="mb-2 font-semibold text-amber-200">Открытые позиции · {opened.length}</h2>
+        <p className="mb-3 text-xs text-zinc-400">Не входят в статистику закрытых сделок ниже. Плавающий PnL и время снимка — в карточке.</p>
+        <div className="grid gap-3 sm:grid-cols-2">{opened.map((t) => <Link key={t.id} href={`/trades/${t.id}`} className="rounded-xl border border-zinc-700 p-3 hover:border-sky-500">
+          <div className="font-medium">#{t.n} {t.symbol} · {t.side} · {t.leverage ? Number(t.leverage) + "×" : "—"} · {t.margin_mode ?? "маржа неизвестна"}</div>
+          <div className="mt-1 text-sm text-zinc-400">Реализовано с комиссиями и фандингом: <span className={pnlClass(t.net_pnl)}>{usd(t.net_pnl)}</span></div>
+        </Link>)}</div>
+      </section>}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           ["Net PnL", <span key="n" className={pnlClass(s.net)}>{usd(s.net)}</span>],

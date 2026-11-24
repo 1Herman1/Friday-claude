@@ -128,9 +128,13 @@ def shoot(jobs):
         return
     jf = JOURNAL / "data" / "logs" / f"shot_jobs_{os.getpid()}.json"
     jf.write_text(json.dumps(jobs))
-    p = subprocess.run(["node", str(SHOT), str(jf)], cwd=str(SHOT.parent), capture_output=True, text=True, timeout=60 * len(jobs) + 60)
+    env = {**os.environ, "PLAYWRIGHT_BROWSERS_PATH": os.environ.get("PLAYWRIGHT_BROWSERS_PATH", str(Path.home() / ".hermes/browser-cache/journal"))}
+    p = subprocess.run(["node", str(SHOT), str(jf)], cwd=str(SHOT.parent), capture_output=True, text=True,
+                       env=env, timeout=60 * len(jobs) + 60)
     log(f"shots: {p.stdout.strip()} {p.stderr.strip()[-300:]}")
     jf.unlink(missing_ok=True)
+    if p.returncode or any(not Path(j['out']).exists() for j in jobs):
+        raise RuntimeError(f"Chart screenshots incomplete: {p.stdout.strip()} {p.stderr.strip()[:500]}")
 
 
 def save_chart(cur, tid, png):

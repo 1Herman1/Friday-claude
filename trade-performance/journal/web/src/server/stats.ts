@@ -2,7 +2,7 @@ import "server-only";
 import { q } from "./db";
 
 export type Filters = { from?: string; to?: string; side?: string; symbol?: string; liq?: string;
-  seg?: string; rnd?: string; tag?: string; sort?: string };
+  seg?: string; rnd?: string; tag?: string; sort?: string; venue?: string };
 
 // сегменты риска (ставит core/risk_audit.py тегом) и случайные сделки
 export const SEGMENTS: Record<string, string> = {
@@ -21,9 +21,10 @@ export const SORTS: Record<string, [string, string]> = {
 };
 
 // Фильтры → WHERE. Время дня считаем по МСК (timezone пользователя).
-function where(f: Filters) {
-  const c: string[] = ["t.deleted_at IS NULL", "t.status = 'CLOSED'"];
+function where(f: Filters, status: "OPEN" | "CLOSED" = "CLOSED") {
+  const c: string[] = ["t.deleted_at IS NULL", `t.status = '${status}'`];
   const p: unknown[] = [];
+  if (f.venue) { p.push(f.venue); c.push(`EXISTS (SELECT 1 FROM venues v WHERE v.id=i.venue_id AND v.slug = $${p.length})`); }
   if (f.from) { p.push(f.from); c.push(`t.opened_at >= $${p.length}::date`); }
   if (f.to) { p.push(f.to); c.push(`t.opened_at < ($${p.length}::date + 1)`); }
   if (f.side === "LONG" || f.side === "SHORT") { p.push(f.side); c.push(`t.side = $${p.length}::"TradeSide"`); }
@@ -45,6 +46,14 @@ export type TradeRow = {
   entry_avg: string; exit_avg: string; notional: string; gross_pnl: string; fees: string; net_pnl: string;
   liq: boolean; dur_h: string; fills: number; cum: string; tags: string[] | null; reviewed: boolean; diary: string | null;
 };
+
+export async function openTrades(f: Filters) {
+  const w = where(f, "OPEN");
+  return q<{ id: string; n: number; symbol: string; side: string; net_pnl: string; leverage: string | null; margin_mode: string | null }>(`
+    SELECT t.id,o.n,i.base_asset AS symbol,t.side,t.net_pnl,t.leverage,t.margin_mode
+    ${FROM} JOIN (SELECT id,row_number() over(order by opened_at)::int AS n FROM trades WHERE deleted_at IS NULL) o ON o.id=t.id
+    ${w.sql} ORDER BY t.opened_at DESC`, w.p);
+}
 
 export async function allTags() {
   return q<{ name: string; n: number }>(`SELECT g.name, count(*)::int AS n FROM tags g JOIN trade_tags tt ON tt.tag_id = g.id

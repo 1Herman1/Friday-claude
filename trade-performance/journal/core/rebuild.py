@@ -11,7 +11,7 @@ from decimal import Decimal
 EPS = Decimal("1e-9")
 
 
-def rebuild(cur, account_id):
+def rebuild(cur, account_id, *, soft_delete=False):
     cur.execute("""
         SELECT e.id, e.external_id, e.instrument_id, e.side, e.position_side, e.price, e.qty, e.qty_contracts,
                coalesce(e.quote_qty, e.price*e.qty), coalesce(e.fee_quote, 0), coalesce(e.realized_pnl, 0),
@@ -82,8 +82,9 @@ def rebuild(cur, account_id):
                 OR playbook_id IS NOT NULL OR confidence IS NOT NULL OR followed_plan IS NOT NULL
                 OR EXISTS (SELECT 1 FROM notes n WHERE n.trade_id = trades.id)
                 OR EXISTS (SELECT 1 FROM trade_tags g WHERE g.trade_id = trades.id))"""
-    cur.execute(f"""DELETE FROM trades WHERE account_id = %s AND origin = 'IMPORT' AND NOT (id = ANY(%s))
-                    AND NOT {human}""", (account_id, keep))
+    stale_action = "UPDATE trades SET deleted_at = now()" if soft_delete else "DELETE FROM trades"
+    cur.execute(f"""{stale_action} WHERE account_id = %s AND origin = 'IMPORT' AND NOT (id = ANY(%s))
+                    AND deleted_at IS NULL AND NOT {human}""", (account_id, keep))
     stale = cur.rowcount
     cur.execute(f"""UPDATE trades SET deleted_at = now() WHERE account_id = %s AND origin = 'IMPORT'
                     AND deleted_at IS NULL AND NOT (id = ANY(%s)) AND {human}""", (account_id, keep))
