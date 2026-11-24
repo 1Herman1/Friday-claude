@@ -1,0 +1,65 @@
+{
+  "assets": [
+    {
+      "path": "assets/1-original.jpg",
+      "sha256": "ba4c4ec6eac98d73b5a843b4872a89f65938e64e49616aaa3ec978c15e2876f3",
+      "size": 48899,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/2-original.jpg",
+      "sha256": "cb222a0bd1698306d8590c3680640ec51b9e24f5a9cb31a3c1c7faf01bf69469",
+      "size": 29332,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/3-original.jpg",
+      "sha256": "98ecedf72cb72e3a08e6538b70cdd6abeea77ce981675272310f697bca3f22b1",
+      "size": 29271,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/1-label-padded.png",
+      "sha256": "f815c4d4738f881df081463ea82de0232dacb27d5234a978cf404c979cc7481b",
+      "size": 66864,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/2-label-padded.png",
+      "sha256": "a7ffeaa0236cf57c7394487e30ce2e42810bd6ce5f46d224e3a45ee4a9af91a8",
+      "size": 27853,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/3-label-padded.png",
+      "sha256": "4c8afac499545c4c2e97fb68ea61c5dea48fef157c0434312afa290899b0d97d",
+      "size": 34454,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/native-01.png",
+      "sha256": "b255ff8be2cea0578bd861c7db9ed0fcc6adf65288cd2978a7c680cfd1ab65eb",
+      "size": 1171799,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/motion-reference.mp4",
+      "sha256": "8c1bbb6342bb5cea99ff1d94d07ea7552120217002c3ccc3f6a3fef5e8dd97c6",
+      "size": 162984,
+      "mime": "video/mp4"
+    }
+  ],
+  "prompt": "Generate exactly ONE NEW continuous 10-second silent 21:9 wide product video. This is not an extension, padding, reframe, pan, translation or mirror of an old square video. Create genuinely longer individual horizontal travel across the wide scene. Fixed orthographic-like overhead product camera, seamless full white floor, soft realistic contact shadows. Bottle long axes remain cap-up in image, as in the original product arrangement; products lie on the white support plane and roll axially about their own longitudinal axes while translating left to right. Never interpret cap-up in image as bottles standing on their bases and spinning/sliding. Rigid package proportions throughout. No camera movement, zoom, group-plane drift, in-plane somersault, levitation, wobbling caps, duplicated products, cardboard boxes or extra props.\nImages 1,2,3 are exact product identities: 4D HYAL CROSS, BLOCKMELAN, FLUVIX. Images 4,5,6 are their exact photographed label lettering in matching order; do not normalize catalog names into different printed letters. Use bottle only from each packshot, never its box. Image 7, the supplied native wide scene, is the NEW WIDE final composition target only, not a first-frame instruction. Do not begin with all products visible. All labels and logos remain attached to their curved bottle surfaces; their printing wraps around the moving cylinder, disappears behind its edge and returns naturally. No static front-facing label sliding and no mirror/reversed letters. Preserve closure geometry, materials, colors and photographed typography. 4D HYAL CROSS is the narrow white GLAC\u00c9E dropper with white bulb and reflective silver collar. BLOCKMELAN is the short amber/frosted ISSEIMI bottle with black dropper. Fluvix is the larger amber spray bottle with white ribbed collar and translucent cap.\n0.0-0.4s: completely empty white view. 0.4-3.4s: FIRST 4D HYAL CROSS crosses the OUTER LEFT image edge, not an inner padded square boundary; axial rolling continues across almost the entire canvas and naturally decelerates to its rightmost final place. It then stays at rest, apart from tiny causal contact response, never translating as a group. 3.5-6.0s: SECOND BLOCKMELAN enters from OUTER LEFT with the same axial rolling mechanism, travels right, gently touches the first bottle, briefly recoils to settle immediately left of it. 6.1-8.6s: THIRD Fluvix enters from OUTER LEFT, axially rolls across the new wide floor, gently touches the second bottle, briefly recoils and settles left of the group. Contacts must precede recoil; no interpenetration or tunneling. Tiny neighbor response is allowed only at actual contact, not a late global slide. 8.7-10.0s: all completely still in normal front-label orientation, final left-to-right order FLUVIX / BLOCKMELAN / 4D HYAL CROSS. Keep the group in the RIGHT part of the canvas, not center-left. Preserve clear upper title region and broad empty travel/negative space to left. Keep whole products, caps, bases and shadows within the final crop.\nComposition coordinates refer to the final 553x220 view, not output pixels: final silhouettes approximately Fluvix x375..425 y56..204, BLOCKMELAN x431..478 y109..204, 4D HYAL CROSS x484..529 y59..204. Soft shadows end by x537 and y211. No product above y54 at any time. Achieve final bottle proportions from the actual supplied references; the numeric boxes are maximum target envelopes, not permission to stretch. The 21:9 video is proportionally cropped vertically, never horizontally at desktop, into 553x220. No text overlays, decoration, sound or music. No old square composition, no shorter travel followed by moving the whole group. Final still is a visual target via multimodal references, not a strict last-frame API guarantee.\n\nVideo 1 is the real owner third-bottle axial roll cropped to one bottle, slowed with a disclosed ending hold to three seconds. Transfer ONLY its rigid axial surface-rotation mechanism and causal floor-contact/recoil, not its short travel, dimensions, crop, background composition or any standing appearance. Synthesize the specified genuinely long LEFT outer-edge to RIGHT individual travels. The supplied final scene has known ambiguous support pose; resolve this as lying on the floor with longitudinal side contact, never standing on bases. Its identity, title-safe whitespace and final geometry are the target. Keep all print normal, not mirrored, visible again at rest. No group drift, no camera motion.\n",
+  "schema_sha256": "1d20ec92e049b6b2cbea3c80e81168b873c54d24d72b7a99ba93062355812dff",
+  "referenceDurationSeconds": 3,
+  "quotedCredits": 65,
+  "ownerMaximumCredits": 82,
+  "poseVerdict": "KNOWN_AMBIGUITY_OWNER_INFORMED_PROCEED_NOT_PASS",
+  "authorization": "Latest owner explicitly ordered START ACTUAL ONE PAID VIDEO GENERATION using native01, six refs and actual motion reference. One create no retry, no deploy.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "720p",
+    "duration": 10,
+    "generate_audio": false
+  }
+}
