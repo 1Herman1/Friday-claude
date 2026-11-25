@@ -1,0 +1,52 @@
+{
+  "scope": "Current pinned snapshot/ledger/source integrity and research package links, not runtime or semantic equivalence",
+  "friday_baseline_head": "388ec708f39583172d7f36110f6424cc175b5512",
+  "friday_comparator_paths_checked": 271,
+  "friday_changed_since_inventory": [],
+  "git_and_whitespace": {
+    "output": "388ec708f39583172d7f36110f6424cc175b5512",
+    "exit_code": 0,
+    "error": null
+  },
+  "relative_links_checked": 29,
+  "missing_links": [],
+  "coverage_counts": {
+    "impeccable": {
+      "full": 1646,
+      "byte-alias-to-full": 823,
+      "byte-alias-to-classified": 46,
+      "classified-reviewed": 2471,
+      "binary-metadata-only": 48
+    },
+    "kowalski": {
+      "full": 36
+    },
+    "taste": {
+      "full": 531,
+      "binary-metadata-only": 163,
+      "classified-reviewed": 970
+    }
+  },
+  "coverage_totals": {
+    "impeccable": 5034,
+    "kowalski": 36,
+    "taste": 1664
+  },
+  "partial_or_unclassified_paths": 0,
+  "upstream_executed": false,
+  "integrations_tested": false,
+  "primary_document_sha256": {
+    "docs/research/design-agent-upgrade/README.md": "b0e3d2065d20708577818f7deaa91c54fc78a11caf3a316e8d9cde1a6fdb3d72",
+    "docs/research/design-agent-upgrade/IMPLEMENTATION.md": "1462178218fb7c5bcab25a726014c049cce7356768f4ec70fc9f6ab2dbe3cd07",
+    "docs/research/design-agent-upgrade/deep-audit/README.md": "da8b49e6fbc85c1bfd6ec5cc713854c9d3a7c38f2c92ff26aa33d2755e2e1c69",
+    "docs/research/design-agent-upgrade/deep-audit/COMPARISON.md": "20739ee8b53113643eeb70f984bd118485ca05c8a851c4c0da931baeb757c9c4",
+    "docs/research/design-agent-upgrade/deep-audit/data-families-final.md": "7caf4406df3ed37024d1b4623bed434c4a81dd47c35157304b3996a7f1442256",
+    "docs/research/design-agent-upgrade/deep-audit/support-authored-test.md": "72ec01113d7bfc9c734a87d8832a9c1ad6adacbd65f596ca77f349dcd1b1d358"
+  },
+  "authored_test_closure": {
+    "files": 5,
+    "lines": 1933,
+    "hashes_ranges_artifact_kind_and_merged_status": "PASS",
+    "note": "substantive reading separately reported, not inferred from structural scan"
+  }
+}

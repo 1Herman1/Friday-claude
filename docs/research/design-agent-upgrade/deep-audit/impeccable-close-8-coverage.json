@@ -1,0 +1,1462 @@
+{
+  "job": "impeccable-close-8",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/impeccable",
+  "verdict": "INCOMPLETE",
+  "read_policy": "full = фактическое полное substantive reading в текущем проходе; hashing не считается чтением",
+  "files": [
+    {
+      "path": "crates/browser/src/cdp.rs",
+      "sha256": "42e96e033a2cff517b596a416b250638484e4452d840a04b41dcdffcbe74e6dd",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 2749,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/attach.rs",
+      "sha256": "22eede2d1633af25467e4ce8b8ff343f0e88a6c0f57a378e560d32060e566de0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          504
+        ]
+      ],
+      "total_lines": 504,
+      "substantive_note": "Полностью прочитаны loopback discovery/target disambiguation, isolated timer shim, prepare/restore/scan error flow и unit tests. Restore очищает marker attributes лишь document, не open shadow roots; restored:true не сверяет scroll.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/lib.rs",
+      "sha256": "b670ce7bcc099fde7f7ff72cf80dfa329a88e6e2287b795f400eff3038902894",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 2742,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/fullpage.rs",
+      "sha256": "a631cdcf72dcf2c292b071be73e1dec7714904d387eba7497dc1a25833dd596b",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1683,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/validity.rs",
+      "sha256": "679a6b97f4be5a9e2ae7d400606d6086156bc468acde23a3e3acc7406e827862",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          781
+        ]
+      ],
+      "total_lines": 781,
+      "substantive_note": "Полностью прочитаны CDP response and in-page probe, 3000-char title/marker gate, known-host/header/50%-overlay signals, consent-wall outside-text/media exceptions, printable evidence и все embedded tests. Heuristic gate, not all login/error pages detectable.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/consent.rs",
+      "sha256": "380fb99adc6f41f32e57b974e0f0f525890fba4294ffcdc29b408be4d7f53ca6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1095
+        ]
+      ],
+      "total_lines": 1095,
+      "substantive_note": "Полностью прочитаны vendor-specific roots/backdrops/locks, showing/parked-away/containing-block/shadow text probe, custom cookie-choice labels and content gates, CSS/inline hide ownership, app-shell/site-modal preserve, blur/aria/overflow unlock, report merges and tests. Никакого click/cookie consent choice, но runtime DOM/style/aria/class mutations реальны.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/snapshot_engine.rs",
+      "sha256": "82d57cae5c5c1b73772fe237c553bc7b47f290afe9b2099d18c0e39db84ee562",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          699
+        ]
+      ],
+      "total_lines": 699,
+      "substantive_note": "Полностью прочитан plain-JS snapshot producer include, JSON parse, scroll probes 5s, geometry recapture, hit-test fixpoint cap12, browser_config, image/raster/CSS background IO and compositing, retry/restore visual pass. Core visual verdict algorithms и producer JS отдельно не прочитаны; geometry-only recapture assumes unchanged styles/tree.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/screenshot_contrast.rs",
+      "sha256": "789ad1684e8e4070976ac4b980bc78494e998a4284e587cc0ea3ca9f45950535",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          951
+        ]
+      ],
+      "total_lines": 951,
+      "substantive_note": "Полностью прочитан PNG decode/diff, glyph gating/core delegated verdict, RTL/document/viewport clip transforms, repeated-selector picking, scroll restore, text-hide/halo CSS apply/cleanup, measured vs unresolved и embedded tests. PICK fallback on changed match count wrongly chooses first candidate; tests may silently skip unavailable browser.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/response_capture.rs",
+      "sha256": "f9b9a0860664fcf064bfda15e3352b6edc58491f54f9fcf193b15a06d93e8aac",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          398
+        ]
+      ],
+      "total_lines": 398,
+      "substantive_note": "Полностью прочитан event journal, redirect invalidation, frame/loader binding, decoded-text vs byte matching, bounded bodies, explicit missing/truncated/changed states и все 5 unit tests; observed bytes не доказывают paint.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/motion.js",
+      "sha256": "641c326358ce2ca5f62e0d443d3ed5a9d4bc1430ded38b936cee2672b239e8b8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          271
+        ]
+      ],
+      "total_lines": 271,
+      "substantive_note": "Полностью прочитан disposable-page collector: WAAPI wrapping, open shadow recursion, pseudo estimates, overlap paint ordering, readiness/seek/finish, finite timing/2000 element/10s guards. Closed roots и произвольный JS motion не доказаны.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/reaper.rs",
+      "sha256": "0f8dbddd82ef73096a971d4f1ca6f1589c17437de83fed4e9fb7da304d40987b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          176
+        ]
+      ],
+      "total_lines": 176,
+      "substantive_note": "Полностью прочитаны register/unregister, Unix default-disposition signal arming, async-safe pipe, cleanup thread, group SIGKILL/profile removal и atexit coordination; Windows не покрыт; ошибок cleanup caller не получает.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/overlays.rs",
+      "sha256": "d78a1b6f20ed58fcdf889ec0cac71ab176cc344dc0b6c5fcbce1597fade75e4b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          764
+        ]
+      ],
+      "total_lines": 764,
+      "substantive_note": "Полностью прочитаны driver.js tour/Lovable badge tables, preloader/intro/splash structural tests, 90% viewport/five-point hit testing, opacity/gradient/finite-animation/age-consent exclusion, wait probe and hide/unlock/report/tests. Только driver.js tour known; temporary visibility/pointer-events probes restore same task; keep gates not bypassed by click.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/html_snapshot.rs",
+      "sha256": "2780cc7842a67fee4b19c26ea66fc92c06f7aa7fd04756636dcf6c1f414ce965",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          460
+        ]
+      ],
+      "total_lines": 460,
+      "substantive_note": "Полностью прочитаны explicit served/bound immutable snapshot, hash manifest/revalidation, budgets/path traversal/no-symlink/identity checks, passive vs assembled CSP, strict Host+GET routes, per-connection threads/drop shutdown и embedded test. Assembled допускает pinned inline JS, не полноценный security sandbox.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/browser/src/motion.rs",
+      "sha256": "528ccf6af027109ae3c0766212c81468cb00cbe4c7f6cbca504462c86995d90d",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1075,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/page.rs",
+      "sha256": "7ee025fe51da00841614e4644bcaf8404a0c80618e150f98656b5cdc3f1b03f6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          39
+        ]
+      ],
+      "total_lines": 39,
+      "substantive_note": "Полностью прочитан is_full_page: strip HTML comments then doctype/html/head case-insensitive regex and false-positive header test.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/registry.rs",
+      "sha256": "646821d0303ca664e7240bb6f4876c5f40e7fc8a7ffd46bb3c923dcc92645aed",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          993
+        ]
+      ],
+      "total_lines": 993,
+      "substantive_note": "Полностью прочитаны все rule metadata rows и runtime lookup/extension/scopes/immediate-tier/advisory contracts и tests. Registry descriptions не counted implemented rules. extend checks builtins/previous packs but not duplicate IDs within newly supplied slice.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/constants.rs",
+      "sha256": "4336d1ecb94c6a4b76a54a515981310a817185c428e503724d5af740c1c8cf5e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          286
+        ]
+      ],
+      "total_lines": 286,
+      "substantive_note": "Полностью прочитаны SAFE/BORDER tag difference, overused font normalization/list, brand-own-domain exceptions, CSS generic/serif lists, WCAG large-text/em-dash thresholds and tests. Taste font list не blanket Friday ban.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/js.rs",
+      "sha256": "f686e0ff3d6d4448ceae5d5f9d6f47e084e80b847bd6133b999522eb2dd1a6a2",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 863,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/js_ext_b.rs",
+      "sha256": "6ccae6193fc3e562a3832f90a72dc3fe5baff5b8687ccfe968891fb0422a804e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          49
+        ]
+      ],
+      "total_lines": 49,
+      "substantive_note": "Полностью прочитаны UTF16 len/slice lossy orphan, numeric truthiness, regex split, SameValueZero and tests; pure portability helpers.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/color.rs",
+      "sha256": "940a8443b395ce55d66ef611818c5f5f6026b5efa9175940f5b9b53f317881e4",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1330,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/lib.rs",
+      "sha256": "121955e21837094e422f2afc33756fd4870623330df31be9efb216973a555028",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          30
+        ]
+      ],
+      "total_lines": 30,
+      "substantive_note": "Полностью прочитана module wiring/helper-only WASM layer; real rule logic lives in core, module names не доказательство чтения exports.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/fdlibm_trig.rs",
+      "sha256": "f1439b336c25180ac781a7cbaaf01d95e7bdac531683709b01eaffd26c81f557",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 562,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/findings.rs",
+      "sha256": "4075f9068461da46f3226e606009795c4565f1363a2bafc4482f4b5f8e3087b6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          110
+        ]
+      ],
+      "total_lines": 110,
+      "substantive_note": "Полностью прочитан serialized finding schema/key order, advisory derived from effective severity, registry lookup optional vs panic, extras and shape test. Это данные/formatting, не implemented detector checks.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/rule_pack.rs",
+      "sha256": "3ef41a6d6b79092c4e928b91fac7a1e9b4eb415509465d79a0f15562879cceab",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          104
+        ]
+      ],
+      "total_lines": 104,
+      "substantive_note": "Полностью прочитан process-lifetime RulePack contract, optional text/element/page hooks, registry install collision panic and RulePackSet. Проверки supplied downstream; base rule logic не в этом файле.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/js_ext_a.rs",
+      "sha256": "a33e9941ed228e645d9215c697144ee943f534734ca990ae19c4a715fd1993da",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 242,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/fonts.rs",
+      "sha256": "a47910aa87610532d2100f9d1ccf885bd3b049cbe87123bf67d13f64d2555dad",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          120
+        ]
+      ],
+      "total_lines": 120,
+      "substantive_note": "Полностью прочитаны Google Fonts URL regex/extract, form-url decoding (+/%/lossy UTF8), family normalizing/removing axis suffix, repeated params and tests; no font fetch, Cyrillic support не проверяется.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/inline_ignores.rs",
+      "sha256": "a8d51a147b8c9a19d85188f24f68ed7aa76722c116cc39df9b85c2c59ca00b4d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          652
+        ]
+      ],
+      "total_lines": 652,
+      "substantive_note": "Полностью прочитаны regex directive parse/fold, file/line/next-line/wildcard semantics, normalized IDs, integer-line matching, finding-index unused waivers, retired IDs and embedded tests. Scans raw lines (не AST comments), source text can suppress; reason optional.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/css/mod.rs",
+      "sha256": "6ae1dd302757aea2a14b98554ecd2b298c73cf43d93535467402c78398e2a1b5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "total_lines": 5,
+      "substantive_note": "Полностью прочитаны два module exports measures/scan; сами parsers не прочитаны.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/css/scan.rs",
+      "sha256": "63581dfb9910936d1f50d001a276e7012a0529c6b9427f69c36d39581c27912e",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 976,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/css/measures.rs",
+      "sha256": "49adb5c60819919da7f3afcb002919989430fe3ba040f7cd3e1c1760ecbb4780",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1462,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/vectors/checks_a.rs",
+      "sha256": "956b98432cd22ea053843b00530dd5173a2d61139a0049b5fc977e2f141ce694",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 153,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/vectors/mod.rs",
+      "sha256": "7371f5cefb92f262fb48ec3e44c9eb86487e0afb80a4985f3ba861488fcb004f",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 450,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/vectors/checks_b.rs",
+      "sha256": "de7206f40b30e5635122e6d26efda65bdd09663287e2684ce78cf1828fb4cf40",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 174,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/browser/selector.rs",
+      "sha256": "8c2790e712213724a10c0483489c65adf48f20ad001bbbd6c5d6463611cfd872",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 793,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/browser/fake_dom.rs",
+      "sha256": "32cf4865e4920e38d85202d2887fab42c8b740814d8aa4f9032f8584d5cc5516",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 686,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/browser/mod.rs",
+      "sha256": "a9042b404806525f1b24c8813816e21e28ab2ba6dde9f80d624760d73e53309a",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 244,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/browser/dom.rs",
+      "sha256": "4593731225f85d4dac067d2f0489c2034e9a29dec0bc85e135747694e81d6e0c",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 695,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/browser/snapshot.rs",
+      "sha256": "70139332035936d756ede15bb9ce1a7a5b443e81ad7f91fc8c51705baf3be791",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1735,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/browser/visual.rs",
+      "sha256": "ffe81c164a255c4882e0a3da2c230ec6098f00e02af4860cfe9b30fbd48493af",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          94
+        ]
+      ],
+      "total_lines": 94,
+      "substantive_note": "Полностью прочитаны plain-data PaintedRect/Box4/RasterPlan/StackNode/CssPlan/Prepared schemas; решений о contrast здесь нет, они в core.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/rules/types.rs",
+      "sha256": "4b9bb9832c686f05ecbf68b064960925d480910b2315a6532c13f240ba185c53",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          561
+        ]
+      ],
+      "total_lines": 561,
+      "substantive_note": "Полностью прочитаны data options plus glyph/icon/transparent-ink/tracked-eyebrow/shadow-color/length helpers. Unknown corners/surfaces modelled отдельно; ColorOpts carries paint/opacity/identity semantics. Actual check_* elsewhere.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/rules/html_patterns.rs",
+      "sha256": "2fd6c518d3f7f7bb3527aea039828d34e481c782994576cad08ecb474074b52e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          11
+        ]
+      ],
+      "total_lines": 11,
+      "substantive_note": "Полностью прочитана schema style_text/class_text, это corpora data не HTML scan implementation.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/rules/mod.rs",
+      "sha256": "a8b5a54fb811c5e312529d6efe9f902bd79684cbb2d197bcfc2c316b81a41227",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          8
+        ]
+      ],
+      "total_lines": 8,
+      "substantive_note": "Полностью прочитаны exports html_patterns/text/types; перечисление не semantic coverage children.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/foundation/src/rules/text.rs",
+      "sha256": "07cf0c96c1b5ac27d8e567cf66b8fd22fb4f031f58f2fc250df15a2142f74f4f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          428
+        ]
+      ],
+      "total_lines": 428,
+      "substantive_note": "Полностью прочитаны selectors and calibrated typography constants, weight/line-clamp/bold-title/UI-floor helper logic, script-sensitive justify exceptions, numbered-label parser with UTF16 max40 and index<=40. Core candidate checks not in file.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/design.rs",
+      "sha256": "bd4ba8de52ca17829c3495089718c76a195c90aa139d846a7a25fa925583dcf6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          541
+        ]
+      ],
+      "total_lines": 541,
+      "substantive_note": "Полностью прочитан default-on contents upload: local sync/generation and scopes, anchored reader, bounded text/sidecar/body, digest/cache/admission locks, deadline/read worker/renewal, response receipts, forget и tests.",
+      "previous_status": "partial",
+      "previous_ranges": [
+        [
+          1,
+          150
+        ]
+      ]
+    },
+    {
+      "path": "crates/account/src/session.rs",
+      "sha256": "4abeff1397ff5c9053234191f8bdcbca350af912c30e99661f1db66fcf9cadba",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          609
+        ]
+      ],
+      "total_lines": 609,
+      "substantive_note": "Полностью прочитаны load/quiet/upload snapshot, generation lineage, lock-scoped refresh rotation, one-401 retry, entitlement, detached renewal-only subprocess and bounded read worker, Windows pipe inheritance и embedded regression tests.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/switches.rs",
+      "sha256": "b946f2a2e485d6f8f837359238fc474f34adcd7c01e757fc5524f42521ce8ceb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          106
+        ]
+      ],
+      "total_lines": 106,
+      "substantive_note": "Remote parse arrays/null/rev/meSet и Link lifecycle binding/fetch/push прочитаны полностью; backend returns только IDs, не произвольный rule text; все ошибки сводятся к None.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/health.rs",
+      "sha256": "5f6c499fa9a809a72e8064d272b5e4942e16cc1702b64466e5df66aa0da600fa",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1524
+        ]
+      ],
+      "total_lines": 1524,
+      "substantive_note": "Полностью прочитаны wanted/sign-in telemetry exception, DESIGN separate upload, health/foundations payloads and receipts, mutable Local preferences locks, repo/remote/SSH alias identity, git deadlines/subprocesses, opaque fingerprints/truncation, daily refresh and all tests. Реальные label/place metadata расходятся с introductory counts-only wording; health POST не держит off admission lock; total5s не enforced across refresh/git/design/foundations.",
+      "previous_status": "partial",
+      "previous_ranges": [
+        [
+          1,
+          160
+        ]
+      ]
+    },
+    {
+      "path": "crates/account/src/prototypes.rs",
+      "sha256": "6a2a7ee52c51a67d559fd38a200a5611bfb00aa286f1e1cae4f9e68071f316c3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          102
+        ]
+      ],
+      "total_lines": 102,
+      "substantive_note": "Полностью прочитаны accepted-session deterministic UUID hash, 23h/+60s age/target/variant guards, critique shared consent/send path, repoKey only and receipts/errors; no embedded tests.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/config.rs",
+      "sha256": "a92b5ea5af34e59bf474334e3516669980dc7da17972548038b2aa0d3934340a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          198
+        ]
+      ],
+      "total_lines": 198,
+      "substantive_note": "Origin normalization HTTPS/loopback-only HTTP, hashed issuer state directories, service-specific display/home/resource, env home selection, on_origin/browser_safe semantics и unit tests прочитаны полностью.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/store.rs",
+      "sha256": "e5d9ffb56756d261ca5fe827f3d7a1d8914ce63d40bdf3e4545812ad22770dee",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          864
+        ]
+      ],
+      "total_lines": 864,
+      "substantive_note": "Полностью прочитаны pinned File/Keychain, lock/drop, private handle validation, secret-first save/tombstone-first logout, fsync+rename writes, home-wide preference locks, macOS/Windows native credential FFI и tests. Alternate-backend cleanup ошибки игнорируются save:353.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/setup_status.rs",
+      "sha256": "2294bad465a3ebc85673cfaa61a2158cbdf4532422ba92a96ee4779c359676f0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          335
+        ]
+      ],
+      "total_lines": 335,
+      "substantive_note": "Полностью прочитаны GET setup with project header, version/places validation, sanitized server-authored next commands (printed not executed), text/json local callback separation, plan display helper and tests. Header не гарантирует отсутствие proxy/server logging.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/world.rs",
+      "sha256": "86ba2ec077e17676289471e65dff2031e01d7adf23fae2ba27677acb2c9e4a26",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          799
+        ]
+      ],
+      "total_lines": 799,
+      "substantive_note": "Полностью прочитаны slug/response caps, resolver destination and existing-context no-overwrite, --print no writes, world-line roundtrip, swatches parsing, create-new sidecar→DESIGN rollback, Unix anchored dir handles/non-Unix recheck race, tests. Server design text не исполняется здесь и не является instruction authority.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/oauth.rs",
+      "sha256": "191b0a0cbff01e2d208618518810a9235616d594c14f0a7306834ee581b12297",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          719
+        ]
+      ],
+      "total_lines": 719,
+      "substantive_note": "Полностью прочитаны issuer metadata, dynamic advertised scopes, PKCE/state/iss, bounded parallel callback listener, duplicate-query rejection, token scope fallback, exchange/refresh/revoke и embedded tests. Transport/store/session остаются отдельными dependencies.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/critiques.rs",
+      "sha256": "a6b5ca8b53f366e33df44aa22c21f35a3b131271d2adb8c2cb565e398f0bcc66",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          579
+        ]
+      ],
+      "total_lines": 579,
+      "substantive_note": "Полностью прочитаны default-on report uploads, cleaned metadata/score/N-A/body limits, quiet still uploads, CI/telemetry gates, scope checks, lifecycle matching, admission lock, status/on/off/forget, daily notices и frame-session/request callbacks. Detached critique-frames spawned after success (393–399).",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/http.rs",
+      "sha256": "6f44279d6a0ad4582100330028fdf0ac04b3f31d647ea7006ed29773378ff8bd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          413
+        ]
+      ],
+      "total_lines": 413,
+      "substantive_note": "Полностью прочитан origin-checked no-redirect HTTP client, deadline caveat DNS, sanitized errors/tokens, bounded JSON/raw bytes, signed upload without bearer и unit-test intent.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/design_read.rs",
+      "sha256": "eb4021e1f84082c8ad1ecd7f5c332bff46158c6aa405d44bf2386d829c6e0738",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          320
+        ]
+      ],
+      "total_lines": 320,
+      "substantive_note": "Полностью прочитаны Unix handle-relative openat/no-follow/nonblock, Windows NtOpenFile/identity/reparse/resident checks, bounded reads и root replacement/FIFO/cloud tag tests; no upstream execution.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/receipt.rs",
+      "sha256": "404c85c4194ede87cc4759d83f33ca0e8bd9d7609702dac52c5b24358ce08885",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          83
+        ]
+      ],
+      "total_lines": 83,
+      "substantive_note": "Полностью прочитаны http(s) receipt validation, fallback app links, thread-local JSON collection, priority receipt sorting и quiet/error human streams; links not origin-constrained and never fetched here.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/plans.rs",
+      "sha256": "98f918c72b61123ea60ca7f2e329229fa6669053ad8d5be5bf43ec28c1cb52e5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          145
+        ]
+      ],
+      "total_lines": 145,
+      "substantive_note": "Полностью прочитан unauthenticated optional 5s plans fetch, known plan IDs, bounded cleaned terminal text, builds relation, soon flags and tests; errors → None/plain-Pro fallback.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/taste.rs",
+      "sha256": "5a1216ca729a1c47f027ca6b085069950be74bc4b2f664dbbdfa80f6dc2d4992",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          394
+        ]
+      ],
+      "total_lines": 394,
+      "substantive_note": "Полностью прочитаны 60s stale refresh, repository/focus cache+ETag/304/fallback, issuer/login+copy concurrency locks, read CLI since/rev/paused semantics and explicit note body/idempotency/POST. Telemetry optout intentionally не выключает preference GET; own no-taste gate; tests прочитаны.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/stale_grant.rs",
+      "sha256": "2ec8c87447f30756241e77e1cbaeed0c754b65e7ba1d08fc9b5e98d4d3cea677",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          308
+        ]
+      ],
+      "total_lines": 308,
+      "substantive_note": "Полностью прочитаны optional scopes offered/held, bounded credential-free metadata worker, health legacy denied marker, per-login shared once notice with lifecycle lock, quiet leaves notice owed; tests concurrency/time budget.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/setup.rs",
+      "sha256": "2a32f3ae36a1ce9d4939af16bad8b72346c382ea09e7b83d868d41fa55af5bf6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          355
+        ]
+      ],
+      "total_lines": 355,
+      "substantive_note": "Полностью прочитаны consent login marker/daily claim, projected bounded inventory payload, epoch gating, detached report network path, status/on/off/forget. Final check and POST не сериализованы с off/forget; forget accepts any JSON response.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/pro/mod.rs",
+      "sha256": "0e60a560759d701f7f21d1f7c8d0dd4e558c0f84fcc00209a6024d1ca91c4aba",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1049
+        ]
+      ],
+      "total_lines": 1049,
+      "substantive_note": "Полностью прочитаны per-engine/account content-addressed Pro cache, floor locks/antirollback, refusal and generation state, signed manifest/artifact hash download, JWKS lease refresh, offline decision/renew pacing, detached subprocess and exec handoff, fallback and tests. Cryptographic origin не означает security чужого бинаря; closed Pro rules не доступны аудиту.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/account/src/pro/verify.rs",
+      "sha256": "41ccc5f2b0fcce5f2e793d1e7d165fdc0368f9fbaee324adfd4cf113585fc513",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          379
+        ]
+      ],
+      "total_lines": 379,
+      "substantive_note": "Полностью прочитаны Ed25519 pinned release keyring/test feature, exact raw manifest signature plus schema/size/hash/engine/target checks, JWS alg/kid/curve/artifact/time validations, <=7d/+300s lease bounds and signing tests. Release build feature provenance не проверена.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/skills/src/util.rs",
+      "sha256": "e6d2c4f95995beeb5491d363edb6dde57e7abc3356b5291ccb91467a52f489ee",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          305
+        ]
+      ],
+      "total_lines": 305,
+      "substantive_note": "Полностью прочитаны Node-compatible env/tmp/path/fs wrappers, mkdtemp retries, ignored cleanup errors, recursive symlink-following copy preserving modes, symlink/executable writes, error strings and UTF16 helpers. Helpers themselves not sandboxed; upstream never executed.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/skills/src/hook_manifest.rs",
+      "sha256": "7126635be1d02e3f68e33e5cb24c0d7c8bd9f7e428f45b20321c077bd1bb84f9",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1124,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/skills/src/bundle.rs",
+      "sha256": "5b64e097d773855e702b1214e9893cbe0093a2d07b19e74f5e94a23dc77a42e1",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1463,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "partial",
+      "previous_ranges": [
+        [
+          265,
+          654
+        ]
+      ]
+    },
+    {
+      "path": "crates/skills/src/commands.rs",
+      "sha256": "6430693037824f264d0abdff6660eaf017cc854b94e9223a9394a83761b87bf5",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1290,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "partial",
+      "previous_ranges": [
+        [
+          145,
+          389
+        ],
+        [
+          682,
+          981
+        ]
+      ]
+    },
+    {
+      "path": "crates/skills/src/prompt.rs",
+      "sha256": "7e3f250f8e02af754763d0e9ff8fcff305f0da546b8fd1149fff5d6c9ac1d610",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          2
+        ]
+      ],
+      "total_lines": 2,
+      "substantive_note": "Полностью прочитан re-export impeccable_common::prompt; prompts implementation в другом crate не прочитана этим проходом.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/skills/src/providers.rs",
+      "sha256": "d82c8faa9a6c64dd3d249eada6e7b45c2a82abfb88bebd1c01dfd47387d3e3db",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1160
+        ]
+      ],
+      "total_lines": 1160,
+      "substantive_note": "Полностью прочитаны provider aliases/layouts/home overrides incl Hermes profile helper dependency, project/user scope resolution, ambiguous update targets, realpath dedupe, harness detection and migrations, frontmatter version parser, flags and all embedded tests. migrate_unprefix deletes canonical before rename; migration not executed; actual Hermes helper outside scope.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/jsnum.rs",
+      "sha256": "e5ca5d03cd7c46367cae5e4c70a19776b334c8fc6b4f0a06bf7daab4b7137694",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          118
+        ]
+      ],
+      "total_lines": 118,
+      "substantive_note": "Полностью прочитаны local JS round/u8 wrapping/exact-decimal toFixed/round_fixed/hex and embedded tests. Domain assumptions: finite values/small digits; general JS conformance не доказана.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/review_groups.rs",
+      "sha256": "2fad43cda1300fc098240897a4f70cfacc22efdbb46e7e2705ef3e4469ecb9e7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          66
+        ]
+      ],
+      "total_lines": 66,
+      "substantive_note": "Полностью прочитаны reviewGroup names Unicode max120, kind/container compatibility, peer-only ancestor rejection and cycle guard; raster индивидуально, embedded tests.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/lib.rs",
+      "sha256": "c2ae4a1406f96b6bd185117f0235c2c96d0190f3359bb3d81072190b8228b441",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          56
+        ]
+      ],
+      "total_lines": 56,
+      "substantive_note": "Полностью прочитаны pure module exports, IEEE CRC32 and LE f32-byte checksum helpers. CRC parity не visual acceptance и не cryptographic integrity.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/metrics.rs",
+      "sha256": "89f8d0260a22a4ca4d8a0163063e8263172887f3068b30e48e45a7bb485c88b2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          513
+        ]
+      ],
+      "total_lines": 513,
+      "substantive_note": "Полностью прочитаны f32 grayscale over white/blur/window SSIM/shift tolerant structure, Lab deltaE/histograms/dominant palettes, detail loss/addition grid, RGB diff and horizontal bands. Pure numeric heuristics; no caller acceptance thresholds read; no embedded tests.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/png_io.rs",
+      "sha256": "5552f48374d0e6bb2a175f57b3bd1ee7b5144a898f6a5cbc33990a6a2ab3df32",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          231
+        ]
+      ],
+      "total_lines": 231,
+      "substantive_note": "Полностью прочитаны png EXPAND/STRIP16 RGBA decode/text, encode/roundtrip shape, direct source reads without stale conversion cache, original-byte static PNG/WebP/JPEG review <=32MP and no animated WebP, tests. load_raster itself performs fs read despite crate pure description.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/hero.rs",
+      "sha256": "a1558ac4c1b2a78b88926d400718c73382ddf58dd20a122bfa33150718b6aa35",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 616,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/source_pixels.rs",
+      "sha256": "ad55a7e9c46e3f9bb899dea482ce40e927b10d77db5448c5b90c4cc3fcaa8536",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          185
+        ]
+      ],
+      "total_lines": 185,
+      "substantive_note": "Полностью прочитаны aspect/min-size/variance guards, 32-wide area+smooth fractional registration, >=.995 correlation/RMSE<=7 copy signal and transformed/independent/flat tests. Signal не provenance proof и не заменяет compositional metric.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/raster.rs",
+      "sha256": "6861f6bc93063accf4eb3a33a1fb081202ac4a2e968544fb484b4619dac4a092",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          319
+        ]
+      ],
+      "total_lines": 319,
+      "substantive_note": "Полностью прочитаны Image buffer assumptions, clamp/crop, integer-box downsample/bilinear grow, fit/blit/fill/stroke, bitmap labels and full glyph table (не classified). No process/network; public images assume valid positive shape.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/font_index.rs",
+      "sha256": "daaa1dfb8f4796fe1d0a2871bc64b9dc3e32f69cde9e6bea7e3d4fb59c2c729d",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 286,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/comp/src/font_fingerprint.rs",
+      "sha256": "ccf777e162b364f0a0618c37bb86a6c3373885c51bc1351993e7b274b7e5c245",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1195,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/core/src/browser/text_collectors.rs",
+      "sha256": "a0e7ff1f0db9b265f7f188eb995eb7234be9abcd6713d9477e209f5e1cc75053",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 1895,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/core/src/browser/hidden_mockup.rs",
+      "sha256": "d0c3bb0ef5de831cbcb04d77204578c8f16712369e4a9c1016acd348399f55c6",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 929,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/core/src/browser/text_geometry.rs",
+      "sha256": "8279ea62a3a160c0d6bd84bd7561aafe10db553b04b5e5cd0e88e6acfa627e55",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 752,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/core/src/browser/field_label.rs",
+      "sha256": "e49551c47e02b9712a33b47b8fecaf5d5afd716db6692d5b2265d9dc98ce955a",
+      "status": "not-read-in-this-pass",
+      "ranges": [],
+      "total_lines": 286,
+      "substantive_note": "Не прочитан содержательно в этом проходе; предыдущий статус и ranges не повышаются до full.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/core/tests/rule_pack.rs",
+      "sha256": "4a94d6bfd01a0aefdff90b07d632365dc433443a866b03b61076d48375f74f14",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          205
+        ]
+      ],
+      "total_lines": 205,
+      "substantive_note": "Полностью прочитаны fake-DOM element+page marker hooks, built-in IDs/order preservation, disabled_rules and skip_scan tests; test commentary byte-identical шире реальных assertions IDs/page_level.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    },
+    {
+      "path": "crates/core/src/checks/mod.rs",
+      "sha256": "084a7cf71efcdfe51bc25f6bfa4066e30ec1fe9baf29eb59905a9cb52a296dc3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          73
+        ]
+      ],
+      "total_lines": 73,
+      "substantive_note": "Полностью прочитана concern/module routing карта и exports. Комментарии перечисляют heuristics но их реализация в других файлах; не приравнивать wiring к прочитанным checks.",
+      "previous_status": "mechanical-scan-only",
+      "previous_ranges": []
+    }
+  ],
+  "summary": {
+    "assigned_files": 85,
+    "assigned_lines": 51094,
+    "full_files": 57,
+    "read_lines": 22644
+  },
+  "gaps": [
+    {
+      "path": "crates/browser/src/cdp.rs",
+      "ranges": [
+        [
+          1,
+          2749
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/browser/src/lib.rs",
+      "ranges": [
+        [
+          1,
+          2742
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/browser/src/fullpage.rs",
+      "ranges": [
+        [
+          1,
+          1683
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/browser/src/motion.rs",
+      "ranges": [
+        [
+          1,
+          1075
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/js.rs",
+      "ranges": [
+        [
+          1,
+          863
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/color.rs",
+      "ranges": [
+        [
+          1,
+          1330
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/fdlibm_trig.rs",
+      "ranges": [
+        [
+          1,
+          562
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/js_ext_a.rs",
+      "ranges": [
+        [
+          1,
+          242
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/css/scan.rs",
+      "ranges": [
+        [
+          1,
+          976
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/css/measures.rs",
+      "ranges": [
+        [
+          1,
+          1462
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/vectors/checks_a.rs",
+      "ranges": [
+        [
+          1,
+          153
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/vectors/mod.rs",
+      "ranges": [
+        [
+          1,
+          450
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/vectors/checks_b.rs",
+      "ranges": [
+        [
+          1,
+          174
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/browser/selector.rs",
+      "ranges": [
+        [
+          1,
+          793
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/browser/fake_dom.rs",
+      "ranges": [
+        [
+          1,
+          686
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/browser/mod.rs",
+      "ranges": [
+        [
+          1,
+          244
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/browser/dom.rs",
+      "ranges": [
+        [
+          1,
+          695
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/foundation/src/browser/snapshot.rs",
+      "ranges": [
+        [
+          1,
+          1735
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/skills/src/hook_manifest.rs",
+      "ranges": [
+        [
+          1,
+          1124
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/skills/src/bundle.rs",
+      "ranges": [
+        [
+          1,
+          1463
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/skills/src/commands.rs",
+      "ranges": [
+        [
+          1,
+          1290
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/comp/src/hero.rs",
+      "ranges": [
+        [
+          1,
+          616
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/comp/src/font_index.rs",
+      "ranges": [
+        [
+          1,
+          286
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/comp/src/font_fingerprint.rs",
+      "ranges": [
+        [
+          1,
+          1195
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/core/src/browser/text_collectors.rs",
+      "ranges": [
+        [
+          1,
+          1895
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/core/src/browser/hidden_mockup.rs",
+      "ranges": [
+        [
+          1,
+          929
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/core/src/browser/text_geometry.rs",
+      "ranges": [
+        [
+          1,
+          752
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    },
+    {
+      "path": "crates/core/src/browser/field_label.rs",
+      "ranges": [
+        [
+          1,
+          286
+        ]
+      ],
+      "reason": "Содержательное чтение в текущем проходе не выполнено; previous_ranges отдельно, не выданы за новое чтение."
+    }
+  ],
+  "limitations": [
+    "Назначение НЕ закрыто полностью. Полнота только для full строк ledger.",
+    "Только static source review, без запуска upstream/браузера/тестов/установок/хуков.",
+    "Зависимости вне assignment прослежены только на явно названных границах; закрытые Pro checks и live services не проверены.",
+    "Существующие чужие reports и runtime не изменены."
+  ]
+}

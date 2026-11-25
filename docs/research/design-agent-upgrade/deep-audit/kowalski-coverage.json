@@ -1,0 +1,1303 @@
+{
+  "upstream_root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/kowalski",
+  "upstream_sha": "64eb3deb9a5fbfa041faf783e0bc3fd635872e9c",
+  "coverage_basis": "Full human-model substantive reading through tools; not inferred from hashes/search. Truncated CATALOG lines 61-88 reread separately. Empty .pl inspected as empty.",
+  "state": "complete-source-and-assigned-local-comparison",
+  "source_files": [
+    {
+      "path": ".gitattributes",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          2
+        ]
+      ],
+      "empty": false,
+      "sha256": "c7b91a8020b8144953c7e7096631324706c9b85a6bb04ba7aede9431f8105916",
+      "line_count": 2,
+      "substantive_note": "skills Markdown detectable; README documentation"
+    },
+    {
+      "path": ".gitignore",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "empty": false,
+      "sha256": "cf237c7aff44efbe6e502e645c3e06da03a69d7bdeb43392108ef3348143417e",
+      "line_count": 1,
+      "substantive_note": ".DS_Store only"
+    },
+    {
+      "path": ".pl",
+      "status": "full",
+      "ranges": [],
+      "empty": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "line_count": 0,
+      "substantive_note": "empty tracked file"
+    },
+    {
+      "path": "LICENSE",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          21
+        ]
+      ],
+      "empty": false,
+      "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
+      "line_count": 21,
+      "substantive_note": "MIT 2026 Emil Kowalski; retain copyright and permission notice"
+    },
+    {
+      "path": "README.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          63
+        ]
+      ],
+      "empty": false,
+      "sha256": "5d442010b00b14cb272ccc96255770cb2a81063958a878b598d79a4a08f38d53",
+      "line_count": 63,
+      "substantive_note": "19 listed skills; actual tree includes twentieth write-swift; install is npx skills, not executed"
+    },
+    {
+      "path": "performance-cheatsheet.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          15
+        ]
+      ],
+      "empty": false,
+      "sha256": "814de0807d55bb2f21944eb5be33fafbc776817e4c1bed5503ab5243f0bc6cc0",
+      "line_count": 15,
+      "substantive_note": "transform/opacity, virtualization, blur <20px, Motion 14.2+, direct refs, measured will-change"
+    },
+    {
+      "path": "skills/animate-expo/RECIPES.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          386
+        ]
+      ],
+      "empty": false,
+      "sha256": "31373774c7eef1d3d9f366b638fa2b722f9c730a98e292cda1aa7df2c2b39a56",
+      "line_count": 386,
+      "substantive_note": "Every recipe and its setup/version/interaction caveats analyzed in K2",
+      "analysis_section": "K2"
+    },
+    {
+      "path": "skills/animate-expo/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          263
+        ]
+      ],
+      "empty": false,
+      "sha256": "67e5d2ebe23b3edf52ce9d399532f2ead2bd7eff127919dd1c3bbe489b04dd4d",
+      "line_count": 263,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K2",
+      "analysis_section": "K2"
+    },
+    {
+      "path": "skills/animate/RECIPES.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          324
+        ]
+      ],
+      "empty": false,
+      "sha256": "129cddcba35dedacd307ef2de7f2c71e6d23efd9c1756dde44168241207581f9",
+      "line_count": 324,
+      "substantive_note": "Every recipe and its setup/version/interaction caveats analyzed in K1",
+      "analysis_section": "K1"
+    },
+    {
+      "path": "skills/animate/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          209
+        ]
+      ],
+      "empty": false,
+      "sha256": "4ce49ea635ec175b45552bae070ea07b2d6aa5367047994250c1c095b71c8585",
+      "line_count": 209,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K1",
+      "analysis_section": "K1"
+    },
+    {
+      "path": "skills/animation-performance/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          222
+        ]
+      ],
+      "empty": false,
+      "sha256": "6481e7a611b54c0d1d229ac3ac516c05648e63aa79de88c0a1bdc5ae2666ab80",
+      "line_count": 222,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K3",
+      "analysis_section": "K3"
+    },
+    {
+      "path": "skills/animation-vocabulary/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          179
+        ]
+      ],
+      "empty": false,
+      "sha256": "42df33f1583483cc441fcd76693b3399148602705d2e9b8a26665d6b1951cd0b",
+      "line_count": 179,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K4",
+      "analysis_section": "K4"
+    },
+    {
+      "path": "skills/apple-design/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          287
+        ]
+      ],
+      "empty": false,
+      "sha256": "7fbacf928637e136da6d475358d0639667a3637ba772f03f8e815bb4c0b86946",
+      "line_count": 287,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K5",
+      "analysis_section": "K5"
+    },
+    {
+      "path": "skills/ask-emil/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          72
+        ]
+      ],
+      "empty": false,
+      "sha256": "b14d6fec27af1ce59e48c5444520c08abc3ae90e93e1843e19ca382512ac6233",
+      "line_count": 72,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K6",
+      "analysis_section": "K6"
+    },
+    {
+      "path": "skills/ask-sonner/API.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "empty": false,
+      "sha256": "0e0c44a4a28c5f2ceaefc5fb215bf75febe29166066dd502fc7a47ef390c0593",
+      "line_count": 64,
+      "substantive_note": "Full reference rules/table/template and exceptions analyzed in K7",
+      "analysis_section": "K7"
+    },
+    {
+      "path": "skills/ask-sonner/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          88
+        ]
+      ],
+      "empty": false,
+      "sha256": "4350ebfef0437875de80cc989059900b21ad621ea09f4709cc2917e7dee82d46",
+      "line_count": 88,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K7",
+      "analysis_section": "K7"
+    },
+    {
+      "path": "skills/break-ui/CATALOG.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          135
+        ]
+      ],
+      "empty": false,
+      "sha256": "80522dcc81039bf317bce5adcb7b499e9d9da3c98952abb4dfb34ba6c1c32360",
+      "line_count": 135,
+      "substantive_note": "Full reference rules/table/template and exceptions analyzed in K8",
+      "analysis_section": "K8"
+    },
+    {
+      "path": "skills/break-ui/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          177
+        ]
+      ],
+      "empty": false,
+      "sha256": "fb126d176f3b6bf7dfe71f2ae6620ab3dd81e6282c672a1801720055addfce18",
+      "line_count": 177,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K8",
+      "analysis_section": "K8"
+    },
+    {
+      "path": "skills/choreograph/RECIPES.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          287
+        ]
+      ],
+      "empty": false,
+      "sha256": "c256ff760f42d905b19f97becd2c0caaf40a95b41b49770c973281374c9600cf",
+      "line_count": 287,
+      "substantive_note": "Every recipe and its setup/version/interaction caveats analyzed in K9",
+      "analysis_section": "K9"
+    },
+    {
+      "path": "skills/choreograph/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          170
+        ]
+      ],
+      "empty": false,
+      "sha256": "0a6802bb2fd5a3993842d48332b8ab56ae5bab369ffa8700f85f6fcff56b8478",
+      "line_count": 170,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K9",
+      "analysis_section": "K9"
+    },
+    {
+      "path": "skills/emil-design-eng/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          684
+        ]
+      ],
+      "empty": false,
+      "sha256": "cdbfe467e6c9a4940c3a19e795cecf1ba659378d7412e06c245c6ae49da47da6",
+      "line_count": 684,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K10",
+      "analysis_section": "K10"
+    },
+    {
+      "path": "skills/find-animation-opportunities/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          139
+        ]
+      ],
+      "empty": false,
+      "sha256": "331479e0d867f90d637ef3ef1bdbbd38498d144ab493442afdfbc138abc751b4",
+      "line_count": 139,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K11",
+      "analysis_section": "K11"
+    },
+    {
+      "path": "skills/gestures/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          112
+        ]
+      ],
+      "empty": false,
+      "sha256": "1928c86cce924a2a178ddd156ba5ed0f184665a1f95b549724ffb5ae703e994f",
+      "line_count": 112,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K12",
+      "analysis_section": "K12"
+    },
+    {
+      "path": "skills/improve-animations/AUDIT.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          116
+        ]
+      ],
+      "empty": false,
+      "sha256": "90312d201cd8ce7dc8add4147570cd47cdb6c901e9980951d9f7b4851b738524",
+      "line_count": 116,
+      "substantive_note": "Full reference rules/table/template and exceptions analyzed in K13",
+      "analysis_section": "K13"
+    },
+    {
+      "path": "skills/improve-animations/PLAN-TEMPLATE.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          72
+        ]
+      ],
+      "empty": false,
+      "sha256": "e25250c49937e183cca5bc42a057d9f5407a0cacd30d0aad1a4b6d59d7b2a844",
+      "line_count": 72,
+      "substantive_note": "Full reference rules/table/template and exceptions analyzed in K13",
+      "analysis_section": "K13"
+    },
+    {
+      "path": "skills/improve-animations/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          113
+        ]
+      ],
+      "empty": false,
+      "sha256": "632be90e04261192112571b05abd5708fbb846808a4a7780717ee206daa6c6f6",
+      "line_count": 113,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K13",
+      "analysis_section": "K13"
+    },
+    {
+      "path": "skills/learn-taste/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          157
+        ]
+      ],
+      "empty": false,
+      "sha256": "d624b8cd475eec24c5dc3f49b0380b56c8dab8399df11b92d7c9685aa8d4d33e",
+      "line_count": 157,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K14",
+      "analysis_section": "K14"
+    },
+    {
+      "path": "skills/mobile-native/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          314
+        ]
+      ],
+      "empty": false,
+      "sha256": "705e267bc47ea61e4c6f94d121efeebdb994055f482673b8a72f4a0dd62f1968",
+      "line_count": 314,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K15",
+      "analysis_section": "K15"
+    },
+    {
+      "path": "skills/pick-ui-library/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          86
+        ]
+      ],
+      "empty": false,
+      "sha256": "db10dc6b2a0c340d873f69e35140ceb3c929e15664b33fcacd1ecb25c5574df3",
+      "line_count": 86,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K16",
+      "analysis_section": "K16"
+    },
+    {
+      "path": "skills/prototype/PICKER.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          201
+        ]
+      ],
+      "empty": false,
+      "sha256": "6c1d7a8d1f34dbc83a2e2068cd49f42107f1d02fb4e80369bb4e978d1e026b8d",
+      "line_count": 201,
+      "substantive_note": "Full reference rules/table/template and exceptions analyzed in K17",
+      "analysis_section": "K17"
+    },
+    {
+      "path": "skills/prototype/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          100
+        ]
+      ],
+      "empty": false,
+      "sha256": "30def86c5a5a0794a954b2a046d24c847c7129f316d79892abff73d54d79adc0",
+      "line_count": 100,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K17",
+      "analysis_section": "K17"
+    },
+    {
+      "path": "skills/remove-animations/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          166
+        ]
+      ],
+      "empty": false,
+      "sha256": "228d98a3d05637f2ff8fc2d1c2bd88c14783c8c901105cac39a7ae24a4d3e408",
+      "line_count": 166,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K18",
+      "analysis_section": "K18"
+    },
+    {
+      "path": "skills/review-animations/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          113
+        ]
+      ],
+      "empty": false,
+      "sha256": "9ceb5072ce5d5e51b07efa60817c66d06fc6492b7900b44dff5ff0f8f7bcf188",
+      "line_count": 113,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K19",
+      "analysis_section": "K19"
+    },
+    {
+      "path": "skills/review-animations/STANDARDS.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          188
+        ]
+      ],
+      "empty": false,
+      "sha256": "2d2c28e9fe98dd55a879bafa1684827c812eb31f6b63fe578141d3978ddc664e",
+      "line_count": 188,
+      "substantive_note": "Full reference rules/table/template and exceptions analyzed in K19",
+      "analysis_section": "K19"
+    },
+    {
+      "path": "skills/write-swift/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          396
+        ]
+      ],
+      "empty": false,
+      "sha256": "ad8f3af70b627c165ecd73ecdba49449e35301dd845c397cf813f06582bbdac2",
+      "line_count": 396,
+      "substantive_note": "Trigger, hard rules, values/exceptions, workflow, dependencies, output and Friday status analyzed in K20",
+      "analysis_section": "K20"
+    },
+    {
+      "path": "ui-cheatsheet.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          16
+        ]
+      ],
+      "empty": false,
+      "sha256": "d5a23c3fa6e5f8b0ab5a44df406780112b8bd494b45c47e82ad72855a4d6b004",
+      "line_count": 16,
+      "substantive_note": "absolute timestamps after week, tabular nums, -0.02em, 65ch, press .97, shrink0, eased gradient, blur2, plural rules"
+    }
+  ],
+  "friday_root": "/Users/germanbryzgalov/Friday-claude",
+  "friday_revision_basis": "working tree with pre-existing dirty edits; BRIEF HEAD 388ec708f39583172d7f36110f6424cc175b5512",
+  "local_evidence": [
+    {
+      "path": "docs/research/design-agent-upgrade/deep-audit/BRIEF.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          23
+        ]
+      ],
+      "sha256": "845fce2df215838fa187b832b87d09c183b9869d528d9a71aff08052538e312a",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/agents/core/researcher.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          77
+        ]
+      ],
+      "sha256": "c97402192e6add1d03f48001dcdddb9aa3a9093c6d2747f11244d54489509375",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/CODEX.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1004
+        ]
+      ],
+      "sha256": "5c156df22a42d7e4f6c4d0ad2b69d21009ff2417818ed37c0a83d083289749f8",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "README.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          57
+        ]
+      ],
+      "sha256": "6a3f5807b5cb62db65f6627cd4641cce45e8637c076817af0b9662606f70c66f",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/motion.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          196
+        ]
+      ],
+      "sha256": "7cc3cf39a0e1d4ed8b4c1be6ef5e13f88f5a183fb92a46ed309a7781d6dcab15",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/motion-engine.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          81
+        ]
+      ],
+      "sha256": "3fbe88dbccfe0b5c4e7dcc72b296c8204149b9c66cce5a622ee76161c3142e9d",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/apple-patterns.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          95
+        ]
+      ],
+      "sha256": "79b12c68d6f1512ff400539d4524829d7db645d282c4801c00e6c855241972d9",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/design-principles.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          116
+        ]
+      ],
+      "sha256": "14bc9be975a8b2227fb93b7633a1f107efd57a7fe64a94c2333ba12daf7f087f",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/typography-pairs.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          62
+        ]
+      ],
+      "sha256": "d866d668a18cc3046d1621c3c63ace852bee9391c255588aa9e0e9becbb2ff90",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/templates/motion.ts",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          122
+        ]
+      ],
+      "sha256": "a7572e26ccca3dbd84e0a1fa7b4160b82d63d2a82a0d39e1fa6d15804efb8ed4",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/ux-guidelines.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          183
+        ]
+      ],
+      "sha256": "b07971cc828573200da145b3c582bad50e0bb2e37e6d1925a3a633208cdb37a0",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/design-profiles.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "sha256": "24890af1c7129791dc6220480e6b6289b4369772cbceec864edcf417e5047c1c",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/anti-patterns/typescript.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          36
+        ]
+      ],
+      "sha256": "61c117ebce2933662f1294ef3b2d3b7d43ed1341c2ee9b3bd3e85fd5a7170cb5",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/anti-patterns/database.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          30
+        ]
+      ],
+      "sha256": "1dbb7c2562f85f2642e2f744c1da97b286c3264d69bb074cf53b28309cc35ba7",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/core/anti-patterns/security.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          329
+        ]
+      ],
+      "sha256": "cdb729656462969bbc4828c9695cbd73e24965f786cfe00b16bf61b28fb82354",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/workflows/review-loop.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "sha256": "e2f5985cc87035f9f81d1156cfc06028669d46e1e96b5c40c83a4323574b4f49",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/agents/design/motion-curator.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          81
+        ]
+      ],
+      "sha256": "2ed8996af6f1b54db237b5c63e1305f4ed5d87fd76703f4261b49cb325eb99ce",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/agents/motion-curator.toml",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "sha256": "a8ccdf4a12cf3c9f86400280ad6355ceaa6b7c4a7ff43b6ac2535bef081bd04f",
+      "reading_basis": "full substantive tool reading; long TOML decoded or exact decoded-body equality to fully read MD plus full name/description; no claim live runtime"
+    },
+    {
+      "path": ".codex/agents/design/design-reviewer.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          196
+        ]
+      ],
+      "sha256": "750464269418720610045daaf74d5875c59f0275a5646cf2042a9d4b9a81cb63",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/agents/design-reviewer.toml",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "sha256": "2501dce083481f58fdf906af5b2bc62f73401c5cdf872f5eb14a128494779e00",
+      "reading_basis": "full substantive tool reading; long TOML decoded or exact decoded-body equality to fully read MD plus full name/description; no claim live runtime"
+    },
+    {
+      "path": ".codex/agents/design/design-department.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          155
+        ]
+      ],
+      "sha256": "5bb8dbf92270923d2de35d9212cc86104494a76f758b4a068e457d44cbf73ac8",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/agents/design-department.toml",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "sha256": "c070ad0716912bfe8a2066120ccd40c47c55511375f9f6171eaee015d56a30f0",
+      "reading_basis": "full substantive tool reading; long TOML decoded or exact decoded-body equality to fully read MD plus full name/description; no claim live runtime"
+    },
+    {
+      "path": ".codex/agents/design/component-curator.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          106
+        ]
+      ],
+      "sha256": "266dd2c653dcc4a9706ac81c304f668d1434de8f179d6f4a8b72bdf40302047c",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/agents/component-curator.toml",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "sha256": "353d6c7c629a1c9936326a880b509d639a9d416ba40281b40dd0c2c9576959f6",
+      "reading_basis": "full substantive tool reading; long TOML decoded or exact decoded-body equality to fully read MD plus full name/description; no claim live runtime"
+    },
+    {
+      "path": ".codex/agents/quality/performance-optimizer.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          89
+        ]
+      ],
+      "sha256": "dfb1cf8be98a8ebb2d25ef0ec4c3bdb5374c5f098bd98ef8432a246290f0ad12",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/agents/performance-optimizer.toml",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "sha256": "15f22fe27cf0609416c1e6909983aadd9b1002bc9c6bd4a56bac7715a86647d4",
+      "reading_basis": "full substantive tool reading; long TOML decoded or exact decoded-body equality to fully read MD plus full name/description; no claim live runtime"
+    },
+    {
+      "path": ".codex/agents/design/taste-curator.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          281
+        ]
+      ],
+      "sha256": "1cfb5f5ffb5e34d475eb282884864ba43dbff663dec245ac1a27ef4c8492f37a",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/agents/taste-curator.toml",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "sha256": "e1ed638ce4ec5f30d9d9d563b672c525d27afcba13c0bedc663e2f4d3ef59c64",
+      "reading_basis": "full substantive tool reading; long TOML decoded or exact decoded-body equality to fully read MD plus full name/description; no claim live runtime"
+    },
+    {
+      "path": ".codex/skills/design-system/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          92
+        ]
+      ],
+      "sha256": "ebef2518bb48fef6ff50435f6123c50773adb427a34ce916f4acf9cec66b455e",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/skills/polish/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          60
+        ]
+      ],
+      "sha256": "140f4e3c27b4e0c6fc393b49dcc38bdfb72948a5df2ebdbbae3c050263817d23",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/skills/audit-design/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          56
+        ]
+      ],
+      "sha256": "51cd1b67c2ae044da87267f9b039117deb7482e08e4b84beae2fb9dd0a9bafad",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/skills/preflight/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          68
+        ]
+      ],
+      "sha256": "9e48ddfe74f1f300ccc552983bd19516af4857f3aa15117be7b42cbcb2009df4",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/skills/react-native/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          114
+        ]
+      ],
+      "sha256": "827368428d305aad6f9dbd1a2ad744e7ec8c1ab150c67de36e1eb0c5fcaeecfa",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/commands/design-system.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          74
+        ]
+      ],
+      "sha256": "1244a11a4c37f11c25a116b557788c7be31b69933cf975dd81c9a6559b1c3764",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/commands/polish.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          42
+        ]
+      ],
+      "sha256": "b7b6c0353d73f6ce33e22edcae58790a70fc80e9241b418ee122dc39e896ba8e",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/commands/audit-design.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          38
+        ]
+      ],
+      "sha256": "0f61b3f200d53b906dbdbc12ca0a838071c1aa6afd17440bc4feea8fe16a280c",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/scripts/design-lint.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          303
+        ]
+      ],
+      "sha256": "f13c0e61b06a1e2cca7c26ec3756a0373dc85e93a4a03ca2392153f6c4688966",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/scripts/screenshot.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          152
+        ]
+      ],
+      "sha256": "11ef2b9872c4bb3a69c5bff5321903dc9babb8dd0149dd4fae4b947102188839",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".claude/agents/design/motion-curator.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          69
+        ]
+      ],
+      "sha256": "6589c19bc752fffff2af4c54b0084fa89b00dcf38981a308c2b460f18512d404",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".claude/agents/design/design-reviewer.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          162
+        ]
+      ],
+      "sha256": "4c60621155ff943ea010ff2d0b6b3a3efd2126b57f0ee8ffb2fdb01dca4a61b0",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".claude/commands/polish.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          36
+        ]
+      ],
+      "sha256": "165940a4d5ccdd131cf2c9214cdf1f5d50752040d87d4e0a74067385f1ff7ab6",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".claude/commands/audit-design.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "sha256": "88f8e80e65f1deaba438c6dc2223a06c02418b0a11e6a5c86d5e0f0f3f1f68c8",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/projects/perfect-skin/brand.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          119
+        ]
+      ],
+      "sha256": "6b7ce59adac7a12513a9b8cc39059d5b650f62bbad0d00fd4dd653e325574f46",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": "docs/projects/perfect-skin/media-review/catalog-family/motion/recommendation.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          47
+        ]
+      ],
+      "sha256": "d0322a400c600ac1bbde3c1ccfa1961434e27490cdb8010b2aa7ab00dda28869",
+      "reading_basis": "full substantive reading, aggregated output omissions reread where necessary"
+    },
+    {
+      "path": ".codex/config.toml",
+      "status": "partial",
+      "ranges": [
+        [
+          37,
+          63
+        ],
+        [
+          117,
+          119
+        ]
+      ],
+      "sha256": "d7e83eddaf5803e15a44b7e3ce5d2acfdf4fb5d915941629b1791c013bcbf2bd",
+      "reading_basis": "Only safe agent registration ranges; no integrations/credentials"
+    },
+    {
+      "path": "docs/projects/perfect-skin/specs/desktop-refinement-2026-11-12.md",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          43
+        ]
+      ],
+      "sha256": "3b17b41212ea55b3ac52abc0e15a797d2115c9cddee93e481aa2dbe395027cb6",
+      "reading_basis": "Owner no-hover-lift, scope and preserved tokens"
+    },
+    {
+      "path": "docs/projects/perfect-skin/design-system/pages/home.md",
+      "status": "partial",
+      "ranges": [
+        [
+          490,
+          534
+        ]
+      ],
+      "sha256": "a1b1ad57f825470c08acbe090017e04bef0247cd6c54a75fba19866677b8b258",
+      "reading_basis": "Scoped documented M3 coverflow exception and later-section precedence, not whole home spec"
+    }
+  ],
+  "relative_markdown_links": [
+    {
+      "from": "skills/animate-expo/SKILL.md",
+      "line": 227,
+      "target": "RECIPES.md",
+      "exists": true
+    },
+    {
+      "from": "skills/animate/SKILL.md",
+      "line": 175,
+      "target": "RECIPES.md",
+      "exists": true
+    },
+    {
+      "from": "skills/ask-sonner/SKILL.md",
+      "line": 16,
+      "target": "API.md",
+      "exists": true
+    },
+    {
+      "from": "skills/break-ui/SKILL.md",
+      "line": 60,
+      "target": "CATALOG.md",
+      "exists": true
+    },
+    {
+      "from": "skills/choreograph/RECIPES.md",
+      "line": 3,
+      "target": "SKILL.md",
+      "exists": true
+    },
+    {
+      "from": "skills/choreograph/SKILL.md",
+      "line": 84,
+      "target": "RECIPES.md",
+      "exists": true
+    },
+    {
+      "from": "skills/choreograph/SKILL.md",
+      "line": 131,
+      "target": "RECIPES.md",
+      "exists": true
+    },
+    {
+      "from": "skills/improve-animations/PLAN-TEMPLATE.md",
+      "line": 71,
+      "target": "AUDIT.md",
+      "exists": true
+    },
+    {
+      "from": "skills/improve-animations/SKILL.md",
+      "line": 26,
+      "target": "AUDIT.md",
+      "exists": true
+    },
+    {
+      "from": "skills/improve-animations/SKILL.md",
+      "line": 26,
+      "target": "PLAN-TEMPLATE.md",
+      "exists": true
+    },
+    {
+      "from": "skills/improve-animations/SKILL.md",
+      "line": 54,
+      "target": "AUDIT.md",
+      "exists": true
+    },
+    {
+      "from": "skills/improve-animations/SKILL.md",
+      "line": 94,
+      "target": "PLAN-TEMPLATE.md",
+      "exists": true
+    },
+    {
+      "from": "skills/prototype/SKILL.md",
+      "line": 30,
+      "target": "PICKER.md",
+      "exists": true
+    },
+    {
+      "from": "skills/prototype/SKILL.md",
+      "line": 65,
+      "target": "PICKER.md",
+      "exists": true
+    },
+    {
+      "from": "skills/review-animations/SKILL.md",
+      "line": 23,
+      "target": "STANDARDS.md",
+      "exists": true
+    },
+    {
+      "from": "skills/review-animations/SKILL.md",
+      "line": 35,
+      "target": "STANDARDS.md",
+      "exists": true
+    },
+    {
+      "from": "skills/review-animations/SKILL.md",
+      "line": 113,
+      "target": "STANDARDS.md",
+      "exists": true
+    }
+  ],
+  "executing_payload_parity": {
+    "registration_file": ".codex/config.toml",
+    "roles": [
+      "motion-curator",
+      "design-reviewer",
+      "design-department",
+      "component-curator",
+      "performance-optimizer",
+      "taste-curator"
+    ],
+    "check": "JSON-decode TOML basic string, exact full MD body equality after heading; all true",
+    "live_reload_or_execution_verified": false
+  },
+  "counts": {
+    "source_files": 36,
+    "source_full": 36,
+    "source_partial": 0,
+    "source_skills": 20,
+    "source_references": 9,
+    "source_lines": 5938,
+    "local_full": 44,
+    "local_partial": 3,
+    "relative_markdown_links": 17,
+    "broken_relative_markdown_links": 0
+  },
+  "report": "kowalski-full.md",
+  "limitations": [
+    "No upstream/runtime execution, install, UI or live hardware checks",
+    "External links/library version claims not independently fetched",
+    "Absence scoped to inspected common documents/roles/workflows, not every application",
+    "No edits outside the two assigned audit artifacts; Claude tree read-only",
+    "Default system Python lacked tomllib; decoded standard JSON-compatible TOML instruction strings without installation"
+  ],
+  "findings_index": {
+    "D1": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D2": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D3": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D4": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D5": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D6": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D7": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D8": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D9": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D10": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D11": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D12": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D13": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    },
+    "D14": {
+      "report_section": 4,
+      "status": "proposed-only; not implemented"
+    }
+  }
+}

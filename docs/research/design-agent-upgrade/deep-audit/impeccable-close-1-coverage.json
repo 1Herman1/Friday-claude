@@ -1,0 +1,1706 @@
+{
+  "job": "impeccable-close-1",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/impeccable",
+  "audit_only": true,
+  "files": [
+    {
+      "path": "tests/cursor-plugin.test.mjs",
+      "sha256": "38ee7be5a0d2670f09c10931ad0f327be6d82de08dc199c20c8a645d02f07fef",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          126
+        ]
+      ],
+      "total_lines": 126,
+      "substantive_note": "Stage only Cursor payload, rewrite runtime base dir including Windows cmd, five agents, hook Write matcher and relocated cwd/stdin/exit propagation; version drift and real provider links nonzero; fixtures executed only by test, not audit."
+    },
+    {
+      "path": "tests/live-agent-target.test.mjs",
+      "sha256": "40749fde6ea8b708dfd5b9daf31d01492b753496c1415a30a69bd0dc07520e3c",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1176,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/plugin-e2e.test.mjs",
+      "sha256": "ca4f539638591b40d05fbeb51249a73432c5093722a9f621f3fa035131b74c93",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          152
+        ]
+      ],
+      "total_lines": 152,
+      "substantive_note": "Real claude loader installed inventory in HOME/USERPROFILE/config isolated temp: skill1, all shipped agents, hooks3 SessionStart/PostToolUse/Stop. CLI detection runs at import; missing CLI skip; inventory not behavior proof."
+    },
+    {
+      "path": "tests/live-exit.test.mjs",
+      "sha256": "a87d96ff2eafde27665607a3ef45de564179703b8b20af84d8c0c14fae8b0fe7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          83
+        ]
+      ],
+      "total_lines": 83,
+      "substantive_note": "Engine server test arm reaper, SSE connected frame, POST user exit then disconnect/reconnect before poll must preserve queued exit; no engine skip."
+    },
+    {
+      "path": "tests/token-budget.test.mjs",
+      "sha256": "eed8462b3a9a76b8ffb240ff969def7d4edd559ff3a63102276ffcc4266a5181",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          78
+        ]
+      ],
+      "total_lines": 78,
+      "substantive_note": "Per-file and aggregated use byte caps require explicit cap for new references; engine context/target/clean hook stdout bounded with isolated home, telemetry/update/staleness disabled; not token tokenizer."
+    },
+    {
+      "path": "tests/bundle-signing.test.mjs",
+      "sha256": "c8ab610670b48026e5cdb1357f7dbe2a9fe4da73c4e990068b0cf3cdba9a30dd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          85
+        ]
+      ],
+      "total_lines": 85,
+      "substantive_note": "Ed25519 shared Rust/Node public fixture vector, exact version/size/hash/artifact/keyId/domain binding; production excludes public test key; reject invalid version/unknown/RSA; secret reader stub public sig only error sanitized."
+    },
+    {
+      "path": "tests/live-e2e-accept-cleanup-regression.test.mjs",
+      "sha256": "f0564b18e64131ca4742e1a3614431d2b8ac285fa0606d98931df9fc4b05776e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          278
+        ]
+      ],
+      "total_lines": 278,
+      "substantive_note": "Opt-in provider-backed React fixture real steer/pick/3 variants/cycle2/accept; require both clean source and clean DOM AND durable snapshot.phase completed, no reserved runtime attrs; detailed stale wrapper diagnostics. Browser launches before provider availability skip."
+    },
+    {
+      "path": "tests/live-browser-session.test.mjs",
+      "sha256": "cd93a8d9575e50f5ad6065d5c394f12a5716851c0eab3d8b6b737a9dddd07d33",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          103
+        ]
+      ],
+      "total_lines": 103,
+      "substantive_note": "Storage max checkpoint monotonic across instances, stale save preserves revision; insecure origin getRandomValues then Math.random UUID fallback; randomUUID throw fallback, blocked localStorage disables persistence."
+    },
+    {
+      "path": "tests/launcher-download.test.mjs",
+      "sha256": "1387cd5ea2c388c50adc610ec5db08fe5fc970d230dcd5f2b1fcbdac1a6e7294",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          821
+        ]
+      ],
+      "total_lines": 821,
+      "substantive_note": "Full fault matrix local HTTP + harmless shell/cmd payloads: pinned manifest before fetch, CRLF last line, cache stamp digest/size/mtime trust shortcut, stale/changed hash revalidation, download0/404/transport/hash errors/removal before/after move; no unverified residue; interrupt130/143 cleanup and dead-old staging sweep; final-host503/504 attribution, cmd PATH shims vs exe percent args/call, sibling exact version/probe/executable repair; cached fastpath process budget uname/wc, Windows arch fallback/backslash path."
+    },
+    {
+      "path": "tests/extension-devtools.test.mjs",
+      "sha256": "5415c35956728b3b11f7b6d1e050e4ef50c8d5c78638911bcfebd1597653a90f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          156
+        ]
+      ],
+      "total_lines": 156,
+      "substantive_note": "VM panel Chrome API stubs, pending settings fetch; report rendered copy-all/single metadata advisories category; hard shadow advisory no prescriptive fallback, mapped bounce animate retained; quality/slop categorization counts, URL, clipboard buttons actual handlers."
+    },
+    {
+      "path": "tests/extension-build.test.mjs",
+      "sha256": "8a13f2949c49266928c188e21676ea908a64d8213f38a313844e246e0510460d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 775,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/extension-walks.test.mjs",
+      "sha256": "b594101256b52a8e4b737ee227519c39ff63fffdf6f4a4ff414b7b099c33ea6e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 2918,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-e2e-cli-options.test.mjs",
+      "sha256": "0492035d27e3925d6d96f436f1bedfa1879766711bd253891823b1365b51d11c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          44
+        ]
+      ],
+      "total_lines": 44,
+      "substantive_note": "Exact option parser tests equals/separate/absent/first duplicate/missing or flag value; empty equals accepted."
+    },
+    {
+      "path": "tests/check-loop-release.test.mjs",
+      "sha256": "927245c7e499a3250e5d1ce55752596de3a248476f2743840ae0896bd64b367c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          58
+        ]
+      ],
+      "total_lines": 58,
+      "substantive_note": "Stub fetch checks immutable version checksum pins, record idempotency/refuse overwrite, HTTPS except loopback, redirects signed query, malformed version/pins/status404 reject; no real network proof."
+    },
+    {
+      "path": "tests/live-top-layer.test.mjs",
+      "sha256": "88c4755fbe3da2e6e3e2e8ad4be3b822f9ead2ff592b70e0c33457d56ec0ce1c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          248
+        ]
+      ],
+      "total_lines": 248,
+      "substantive_note": "Actual pointer not synthetic click: chrome reparent into topmost native modal host and restore on close/remove, nested/reopen order, isolate dialog light-dismiss, clone excludes chrome; outlines transform+scroll align, clipboard fallback textarea in noninert modal host."
+    },
+    {
+      "path": "tests/plugin-paths.test.js",
+      "sha256": "ee9f5a4b3bbb88411771f5630344a47495589e231527a9131f7efbd309815ad9",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 401,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/extension-popup.test.mjs",
+      "sha256": "de0a1ad8a47b9bdf5225b9759aa2d85b52cc521935324bbebddecd0362a37140",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 969,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-browser-ignores.test.mjs",
+      "sha256": "da6bdf75f65d3827a4067ff043e7635166a47637a7ee5de193d4b8217327bd21",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 346,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/motion-capture.test.mjs",
+      "sha256": "3c94bcefd9cf02866b3815fedd36f38ea401eb8e691143d05a5cfaf48a7fdc1e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "total_lines": 80,
+      "substantive_note": "VM animation fake tests rate+origin wall-clock sampling, negative/zero rate, finished entrances unchanged, pending pause settles frozen timeline, sub-ms snaps endpoint."
+    },
+    {
+      "path": "tests/skill-workflow-browser.test.mjs",
+      "sha256": "e287be41c963a7b6807ea1579500dd1841c26a4edeec69844c0f3d3d1e9d8544",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          50
+        ]
+      ],
+      "total_lines": 50,
+      "substantive_note": "Preflight actionable launch failure, actual multimodal captures offline click effects, independent pages parallel viewports, block external requests, reject traversal/symlink and non-PNG."
+    },
+    {
+      "path": "tests/validate-plugin-versions.test.js",
+      "sha256": "e4c8d674b9d9aaa73dd97e16a8fafc703d77e16e047c7c5b651fe1df29fed32e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          218
+        ]
+      ],
+      "total_lines": 218,
+      "substantive_note": "Root plugin authoritative version, marketplace/npm only actual CLI optional deps/subtree/Codex/skill drift, absent paths skip, malformed/missing root version errors; metadata.version preferred nested fields and CRLF support."
+    },
+    {
+      "path": "tests/live-e2e-agent-output.test.mjs",
+      "sha256": "2a361bbceb5a84341d9becad7e7920e818cf3dd27b221df752682221bff4f841",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 235,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-browser-source.test.mjs",
+      "sha256": "da2ce52b8f82f3512dbc01312afab479a118ec5854a712f2f8db68446884b429",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1937,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/new-work-e2e.test.mjs",
+      "sha256": "0f01b318031a20b74b6e144c0a9b3c26ee645c1653cccc72370c31c328690eb5",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1225,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/ci-test-plan.test.mjs",
+      "sha256": "6392bd700a42c796856d1540debd4a5bbc029fc1bf568d20d02181794b65e5ff",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          163
+        ]
+      ],
+      "total_lines": 163,
+      "substantive_note": "Dispatch explicit workflow browser opt-in/preinstall before billed tests, multi-family protocol; file routes binary version/framework vs detector/skill, push deterministic only schedule E2E matrix, test files trigger own running lanes."
+    },
+    {
+      "path": "tests/component-review-bundle.test.js",
+      "sha256": "07870506429b1d48eabb7bea7836966c433b92bed441c1caa1d5d76b78947c95",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          8
+        ]
+      ],
+      "total_lines": 8,
+      "substantive_note": "Bun browser minified IIFE build output exact shared component review asset equality; audit did not run build."
+    },
+    {
+      "path": "tests/live-e2e-llm-agent.test.mjs",
+      "sha256": "388094833e1f6a72cd64f08943086b212a664a3b3e1ac4276c359362ff34f9ca",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1840,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/vscode-extension.test.mjs",
+      "sha256": "4f525db4f7f7b6ecea32b06fee717c6755ff4a2c4f0f882d86bf9bed38160319",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          95
+        ]
+      ],
+      "total_lines": 95,
+      "substantive_note": "Skill-only extension no runtime/main/scripts, untrusted/virtual workspace false, version parity, degraded resources, quote idempotent POSIX/Windows base dir, relocation cwd/env invariance, deterministic stale removal."
+    },
+    {
+      "path": "tests/readme-gitignore.test.mjs",
+      "sha256": "6f54bd9006f910583c7c5e656cbde8c9b466265df0cf855e0bec4af0f65dc1f8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "total_lines": 52,
+      "substantive_note": "README extracted fenced gitignore tested real git ignore ephemeral review/questions nested, keep config/critique versionable."
+    },
+    {
+      "path": "tests/live-svelte-adapter-deepseek.test.mjs",
+      "sha256": "cfc2cc5fe00f1541e00f495a69694c9849731acfbe7283ee32235cfa69844dce",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 871,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/extension-agent.test.mjs",
+      "sha256": "86e707bd760f4a766f9a10910e8f2633fa9472d3c4bb5178ee25fba703cd3942",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 427,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/validate-plugin-manifest.test.js",
+      "sha256": "d1c42c8f1d80c837be7a0127cafc91f8d6f4d2aafee73c94fab4e1f94f482c46",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          208
+        ]
+      ],
+      "total_lines": 208,
+      "substantive_note": "Fail closed unknown loader keys/agents key (any shape), trailing slash skills, emitted rename/provider-selected agent presence, all errors together, badJSON/nonobject; missing subtree skip allowed; tracked dist compared same sync not fresh source."
+    },
+    {
+      "path": "tests/live-static-accept.test.mjs",
+      "sha256": "f0f9bce3150c3c862fd6cb2b8b3811d2dca364d21d71d830539411ee414c9ee9",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          147
+        ]
+      ],
+      "total_lines": 147,
+      "substantive_note": "Static Python HTTP no HMR: accepted variant wrapper removed immediately only one visible, scoped style survives new pick fallback window; later sessions rule isolation; tune vars persist after accept."
+    },
+    {
+      "path": "tests/release.test.mjs",
+      "sha256": "74b95f04683522a8d49d91494cadaf9d7a1b67234249edcff7a094426fc03f78",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 519,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/extension-account.test.mjs",
+      "sha256": "329395807497d319c97854ba1158f205eba1b252c813db0dbe87815ea71bd80d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 840,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/publish-platform-packages.test.mjs",
+      "sha256": "a2002706691df5330b58e56257fc819845ff874b64faaf23130140d0fc9184ca",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          113
+        ]
+      ],
+      "total_lines": 113,
+      "substantive_note": "Target templates strict bin/name/version/license/executable; checksum sidecar missing/malformed/mismatch refuse; registry 404 means unpublished. Local HTTP doubles not publish proof."
+    },
+    {
+      "path": "tests/openai-plugin.test.mjs",
+      "sha256": "180977bb4d979890fdcc1fab2f848e0bef980b0345ca8b458056c02f57fc96a2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          103
+        ]
+      ],
+      "total_lines": 103,
+      "substantive_note": "OpenAI package selects Codex not Claude payload, agents manifest icon, no hooks accepted; version release posthint upload zip/submission docs. Loader live not exercised."
+    },
+    {
+      "path": "tests/root-commands-sync.test.js",
+      "sha256": "ae76034706932bd0130818b4969fa5f4ae01c70a8b38847b9c92502bd51284cd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          73
+        ]
+      ],
+      "total_lines": 73,
+      "substantive_note": "Mirror generated OpenCode slash bridge overwrite own stale, preserve other local pinned commands; skip absent commands dir."
+    },
+    {
+      "path": "tests/workflow-security.test.js",
+      "sha256": "de645f146c820b0da196ca087be199fb7e055be66702f62b966b754ba599db92",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          38
+        ]
+      ],
+      "total_lines": 38,
+      "substantive_note": "All top-level workflow remote actions full SHA, CI read-only no job escalation, explicit sync/sheriff write allowances; local composite nested actions not traversed by test."
+    },
+    {
+      "path": "tests/oracle.test.mjs",
+      "sha256": "e3ddbc48701198614e64ed4584828dea86e75675211fcbd0d680a13494bac0f8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          41
+        ]
+      ],
+      "total_lines": 41,
+      "substantive_note": "Spawn corpus runner with optional prefix, missing engine skip, require status0; summary last line and bounded failure messages; actual no execution."
+    },
+    {
+      "path": "tests/process-group.test.mjs",
+      "sha256": "65452e13457b3f74c02f565dae43d342d806d206747fb695390b3d4ada4d5a19",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          200
+        ]
+      ],
+      "total_lines": 200,
+      "substantive_note": "POSIX actual detached process group shutdown tests prompt reaped exit vs zombie polling, SIGTERM graceful then SIGKILL stubborn, second signal/exit reaches stopping group, no-op already exited, shutdown status."
+    },
+    {
+      "path": "tests/test-suites.test.mjs",
+      "sha256": "99c759efd17daa6cb791850165ac8483b932024308df8f3f2f6999691cc1097d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          76
+        ]
+      ],
+      "total_lines": 76,
+      "substantive_note": "Every discovered test registered default/opt-in, defaults no duplicates, opt-in workflow browser absent default, every own test change triggers lane that actually runs it."
+    },
+    {
+      "path": "tests/skill-reference.test.mjs",
+      "sha256": "3134188cb1f9b73cafc71d21c9e83a94bf70bf3386da9af951ffdc4a2fede98c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          225
+        ]
+      ],
+      "total_lines": 225,
+      "substantive_note": "String/regex authoring gates six direction contract blocks dev-only no browser leakage; exact quote pin seed:none; existing design choice before documenter; native detector NA; reduced-motion alternatives; fingerprint freshness/backlog identity; actual gesture vs viewport; personas Users; tour license choices; score dimensions/mode sections."
+    },
+    {
+      "path": "tests/release-engine-workflow.test.js",
+      "sha256": "6a6a4db6f9c561cd3adc968957ae0a38ba5bbb895227b8e7fa07f68d68be5587",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          198
+        ]
+      ],
+      "total_lines": 198,
+      "substantive_note": "Workflow parsed asserts protected Windows signing OIDC only/no checkout/no manual publish, same-run artifact downloads signed vs unsigned pattern, publisher+timestamp checks, all action SHAs; bash version and smoke scripts executed only when suite run with fixtures, CRLF and cross gate."
+    },
+    {
+      "path": "tests/live-e2e.test.mjs",
+      "sha256": "d2d8de2fa0f4d727ecc7531211fcb64f00001af6d85a433e9369ef4b4e0c954a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 2565,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/build.test.js",
+      "sha256": "4ffaa14125378676f28c4b133e0f5c57698404c0d2b1361fac351d3d13646dc0",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 804,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/hook-build.test.mjs",
+      "sha256": "8bee06a2bf13d44e990d5a1d9182433a8da1579ec1d7e8d76c6f03967ea4f396",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 516,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/skill-workflow-scope.test.mjs",
+      "sha256": "3f19a966973c8f93f4dc757562d2d6c18c933f15bef3d9cae7ec438a6f57751c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          49
+        ]
+      ],
+      "total_lines": 49,
+      "substantive_note": "Scoped text/CSS/mobile-only accepted; mutated/missing header/footer/links fail own invariant; no-op comments/unused CSS/custom vars/format reject."
+    },
+    {
+      "path": "tests/review-theme.test.mjs",
+      "sha256": "abd1dc605832cf4c07d9d837bd9560a402e8d813abb47cebd2ac54b206c003d8",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 405,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/skill-behavior-harness.test.mjs",
+      "sha256": "5d7bd5c4b0b927c98c593537a00f30a3d09f4d5a3659b919dfb6c2979a69a344",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 476,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-boot-fastpath.test.mjs",
+      "sha256": "92e0534104ed20316877e296a46c58b083323b01939133136353164d86877872",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          94
+        ]
+      ],
+      "total_lines": 94,
+      "substantive_note": "Live refuses missing context unless explicit flag; missing named/no init-document, devUrl only probe option; injected actual page origin search; vanilla live schema untouched."
+    },
+    {
+      "path": "tests/live-server-leak.test.mjs",
+      "sha256": "94fd80a17346714bd352f66c03da746821a2fa6af01439439aec703d9334e5f3",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 302,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/rust-test-selection.test.mjs",
+      "sha256": "64aabdb5f3a03a828c2389c4403ed6aa66de1cc3ab2bae57bdbe6885a8e8dd96",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          100
+        ]
+      ],
+      "total_lines": 100,
+      "substantive_note": "Touched crate reverse dependency closure including dev edges, root cargo/toolchain whole workspace, outside included-file/directory real reads vs mentions, explicit chained-join known readers checked names."
+    },
+    {
+      "path": "tests/github-sheriff.test.mjs",
+      "sha256": "4335eb9fd4754b8a3b1c20e1417d145a4dece56f726d0af6aef250efa3715ffc",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 992,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-e2e-steer-agent.test.mjs",
+      "sha256": "d05932ac39c2be09cd18ac908b481a50d20d8c46418af0c9b01713e9218b4ce8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          95
+        ]
+      ],
+      "total_lines": 95,
+      "substantive_note": "Engine+fake poll writes JSX steer marker preserving template className expression; find hero source; no Playwright. Cleanup abort and stop helper, staged tmp not removed here."
+    },
+    {
+      "path": "tests/extension-report.test.mjs",
+      "sha256": "f2134a49bd8f6d6bff6b7313992a2038558fe8a7b1bddd0c21c6fc79cd639a35",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          38
+        ]
+      ],
+      "total_lines": 38,
+      "substantive_note": "Counts individual findings not groups; quality/slop/advisory sections; URL strips fragment keeps query; advisory-only no generic polish suggestion."
+    },
+    {
+      "path": "tests/hook-build-windows.test.mjs",
+      "sha256": "30192946342201e12bfc5162eb3de795df183822ddca395c166a28d531cd3445",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          44
+        ]
+      ],
+      "total_lines": 44,
+      "substantive_note": "Windows only cmd/PowerShell/pwsh spaced unicode path, success hook arg, nonzero launcher failure, missing launcher silently skip."
+    },
+    {
+      "path": "tests/framework-fixtures.test.mjs",
+      "sha256": "a2bad29f36dee613d972e9a40dd75bfb990d088d37605e3e613f7ba7b8ffa78b",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 303,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-reference.test.mjs",
+      "sha256": "55a1c8e1508cbff74faa8caf09c0ae216d6d98904b91701b87d29affda43fd6e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          217
+        ]
+      ],
+      "total_lines": 217,
+      "substantive_note": "Source regex contract guards read-only check vs auto-config, monorepo target projectRoot, foreground poll600000/no reordered steps, manual applier literal data no poll/reply/rollback; capability cssAuthoring not framework guess, provider-specific escalation text; README discloses bypassPermissions/chat switch; vocabulary count from Rust."
+    },
+    {
+      "path": "tests/check-engine-release.test.mjs",
+      "sha256": "9230d528753df7d22d7b0a5be4543934151c765c75f64f41cb9d1e32c3d52964",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          159
+        ]
+      ],
+      "total_lines": 159,
+      "substantive_note": "Local five fake assets/npm registry and sidecars; immutable manifest accurate/missing/mismatch, fetch missing bad digest writes nothing, transient503 retry; no actual release availability proof."
+    },
+    {
+      "path": "tests/skill-behavior/assertions.mjs",
+      "sha256": "bab8a093ed6c5b796e742f52fb08e2576a88cf139aa63c647cd67d780970bfe8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          109
+        ]
+      ],
+      "total_lines": 109,
+      "substantive_note": "English bounded semantic regex, advice no writes/questions/menu scan; excludes .impeccable bookkeeping except critique; workflow init not mandatory, critique optional polish; new-work question+brief before implementation, redesign documentation after last edit; ordered tool denial warning gates."
+    },
+    {
+      "path": "tests/skill-behavior/providers.mjs",
+      "sha256": "353a1279157899b7fff80aa6832eba19f1f80a18d5758cc7e6fea4275903adcb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          140
+        ]
+      ],
+      "total_lines": 140,
+      "substantive_note": "SDK provider dispatch by id prefix, devKey explicit not env; root .env non-provider settings only; OpenAI reasoning high override; default model set, missing key skip semantics not PASS."
+    },
+    {
+      "path": "tests/skill-behavior/harness.mjs",
+      "sha256": "dc943eae361e9446d5cceb2ef2973c2ead03e4a46544f54fba33aebc76e49a39",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          541
+        ]
+      ],
+      "total_lines": 541,
+      "substantive_note": "Neutral production transformer build/staged skill, scoped read/write canonical symlink validation, staged .claude readonly; bash real host not sandbox, provider key stripped, test channel, 20s direct child SIGKILL; snapshot mutations SHA1 excluding symlinks/git/claude/node_modules; references bash full stdout content detection; structured deterministic user, real SDK abort840s and trace/outcome budgets."
+    },
+    {
+      "path": "tests/skill-behavior/fixtures.mjs",
+      "sha256": "a8c66c4159726799c99d05c2ccb2357938ec5372a34ebb6e4aebd27042f19697",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          348
+        ]
+      ],
+      "total_lines": 348,
+      "substantive_note": "Synthetic researcher product+design/iOS/Svelte fixtures explicitly not real proof; AA200%/keyboard/reduced motion; pinned type-led world, independent code fixtures for answerable routing; DESIGN sample body Inter is preservation fixture not universal approval."
+    },
+    {
+      "path": "tests/skill-behavior/scenarios.test.mjs",
+      "sha256": "5c0d09287bb7a39fba99fc047087308bd3ac0cf886461e65d1860110b91ad5a6",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1097,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/skill-behavior/activation-cases.mjs",
+      "sha256": "48bed3985770f1462b2ade1da28b64c3c66ce558fd34c6888106ffb5097ec6d5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "total_lines": 93,
+      "substantive_note": "Activation boundaries positive UI new-work/craft/docs/native, negative backend/tests/CI and no-pixel frontend rewrites, wordmark/print; competing skill descriptions are fixture data."
+    },
+    {
+      "path": "tests/skill-behavior/activation.eval.mjs",
+      "sha256": "359b1db8484331b04bd0a59c64f4d6d3361c4e01a55db069b9f6a217066d11f8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          345
+        ]
+      ],
+      "total_lines": 345,
+      "substantive_note": "Description-only model routing simulation, first decision tools stub; any impeccable Skill call across steps accepted despite BEFORE-anything contract; positive/document recall per-family floors, zero FP, allow<=5% errors; no timeout AbortSignal unlike runTurn; missing keys skip."
+    },
+    {
+      "path": "tests/oracle/run.mjs",
+      "sha256": "0be2ec5de3f07b78870ebe318b826b55be0ff5dcb898c6d81070e9dba699d97e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          43
+        ]
+      ],
+      "total_lines": 43,
+      "substantive_note": "Golden diff runner accepts whole case ID any delta from DELTAS.md; missing golden/fail exit1; platform skip; empty prefix result exits0 no minimum case assertion."
+    },
+    {
+      "path": "tests/oracle/record.mjs",
+      "sha256": "ec8b4d83d634fd810940eff817eb1a496ee6c65e9b34ccbcab5f4be64e5abe34",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "total_lines": 45,
+      "substantive_note": "Golden overwrite from selected prefix engine or historical JS; source missing JS explicit error; no platform filter unlike replay; manual review warning not enforced."
+    },
+    {
+      "path": "tests/oracle/invocation.test.mjs",
+      "sha256": "b2065f1ec252613acfbf0426c476f9c1c1eb785b597a31ebc600ecbee3fe9446",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          20
+        ]
+      ],
+      "total_lines": 20,
+      "substantive_note": "All verbs default NO_TASTE1; only isolated taste fixture explicitly enables with workspace home."
+    },
+    {
+      "path": "tests/oracle/live-helpers.mjs",
+      "sha256": "3c0aa16284ae8987bd44974f09d8806cdb972cc6b8784d3157c44b48cb33fe14",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          183
+        ]
+      ],
+      "total_lines": 183,
+      "substantive_note": "Deterministic staging fake git boundary, journal seq/fixed timestamp, pending manual edits, SHA256 file lock path, variants HTML/JSX scopes and params range/steps/toggle, Astro inline-prefixed adapter."
+    },
+    {
+      "path": "tests/skill-workflow/assertions.mjs",
+      "sha256": "6afc1c7b109518662fdd79db2db21f312f2f9e32354b6b97909cbbf595257802",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          50
+        ]
+      ],
+      "total_lines": 50,
+      "substantive_note": "Design frontmatter colors+typography, schema2 sidecar nonempty extensions/narrative; no-change requires source+contract read and evidence; full completion not checkpoint; desktop/mobile captures after last edit and same sourceHash."
+    },
+    {
+      "path": "tests/skill-workflow/browser.mjs",
+      "sha256": "18165aab5b9484f404f44f93e71bc40c267b5101eb67cda7b46abdd48547d6a8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          131
+        ]
+      ],
+      "total_lines": 131,
+      "substantive_note": "Playwright preflight before billed API; loopback file server, canonical path check, private component paths blocked, external requests blocked except data origin, reduced-motion/SW block; screenshot hashed before/after fonts ready and click; PNG image content actual; cleanup browser/server."
+    },
+    {
+      "path": "tests/skill-workflow/seed-walk.test.mjs",
+      "sha256": "96a1d52ad045f05bf2d852f19884f9dc4e0e4fc9c58e9a240332f3a37e79b701",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "total_lines": 80,
+      "substantive_note": "Opt-in real seeded pricing build measurement; max90steps/30min, estimate Sonnet fixed prices cap default12 despite header goal6; captures counts only bash not browser_snapshot; sole acceptance exists index.html, no complete/quality/budget/time/round assertion."
+    },
+    {
+      "path": "tests/skill-workflow/fixtures.mjs",
+      "sha256": "f3ffa4d5dc2c78510d0fd3b9694bde9ce196baf9c97acbccbb19f332b4b0320b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          10
+        ]
+      ],
+      "total_lines": 10,
+      "substantive_note": "Beige Arial rounded card fixture, protected header/footer data attributes and placeholder case-study for scoped redesign tests."
+    },
+    {
+      "path": "tests/skill-workflow/source-hash.mjs",
+      "sha256": "345563810f6cdfd1a0ccc2e30bd90bb3765236ed10a73f335c68531b0b9a9874",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "total_lines": 22,
+      "substantive_note": "Sorted recursive SHA256 path NUL bytes NUL for html/css/js/images/font assets; hidden/node_modules/symlinks omitted; scope static HTML only."
+    },
+    {
+      "path": "tests/skill-workflow/full-build.test.mjs",
+      "sha256": "9d3b8d188ccd3cf84cf6e8c1502c9c5b597ef3ad1378bedf42e647c3e096e19d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          290
+        ]
+      ],
+      "total_lines": 290,
+      "substantive_note": "Opt-in real billed model with preflight Chromium offline50steps840s; exact one context; init asks before PRODUCT no DESIGN; task question+brief before code; redesigned DESIGN schema2 after final edit; bolder protected content+computed styles; fresh hashed desktop/mobile; critique report BEFORE structured question or explicit skip. Presence of loaded reviewer file not independent review verification."
+    },
+    {
+      "path": "tests/skill-workflow/scope.mjs",
+      "sha256": "6e6b8f65e173345add2d9d53ed0525fa3058a85779385c636bc33c69e436ec1d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          65
+        ]
+      ],
+      "total_lines": 65,
+      "substantive_note": "Two viewport computed styles + pseudo styles diff; preserve header/footer text and header hrefs; JS disabled all network blocked; source comments/unused CSS cannot alone satisfy change; not full screenshot visual identity outside target."
+    },
+    {
+      "path": "tests/skill-workflow/finish-handoff.test.mjs",
+      "sha256": "395c089b78ea28112394e6f367e7365478e5eaedcbac593cee66c0e1a38414c2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "total_lines": 93,
+      "substantive_note": "Synthetic resumed post-review checkpoint, no browser/spawn; extension preserves incumbent docs/missing sidecar drift no repair, first world/redesign writes only DESIGN+sidecar with actual source reads. Prior claimed reviewer success fixture data not evidence."
+    },
+    {
+      "path": "tests/lib/live-servers.mjs",
+      "sha256": "19fa2317039a3a2b38899e7db9efc5cc40b257a47c1497cc6206be288464250e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          128
+        ]
+      ],
+      "total_lines": 128,
+      "substantive_note": "Explicit arm only: env process/run/repo markers, detached pipe reaper non-Windows, exit/signals cleanup direct child then marker process-table sweep with250ms grace; best-effort failure swallowed."
+    },
+    {
+      "path": "tests/lib/provider-blocks.test.js",
+      "sha256": "d271248d789f508ac3569918aa3a9416fd6ffdf3d7d5bca3a3d4ce6d26b7dd84",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          100
+        ]
+      ],
+      "total_lines": 100,
+      "substantive_note": "Known provider standalone blocks matching kept/unwrapped, nonmatching removed/blank normalized, unknown HTML preserved; omp/devin, agents opt-in codex; all configs tags known."
+    },
+    {
+      "path": "tests/lib/dev-keys.mjs",
+      "sha256": "622938d2f7ea2974927bb2053029df9310215ad464306cdc902e1c37b51b2316",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          87
+        ]
+      ],
+      "total_lines": 87,
+      "substantive_note": "Credential suffix regex; env precedence vs cached private0600 developer file; parsing export/quotes/comments; excludes named provider keys children but no complete secret sandbox. Secret files themselves not opened."
+    },
+    {
+      "path": "tests/lib/engine-bin.mjs",
+      "sha256": "de1dcd89ecb2d3724db84016057ba3df1ed3301f41649c23230aa17fc600723e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          51
+        ]
+      ],
+      "total_lines": 51,
+      "substantive_note": "Existence-only binary lookup env/staged/release; null skip; engine env stripped keys, explicit skill/self, extra override, final test telemetry tag."
+    },
+    {
+      "path": "tests/lib/dev-keys.test.mjs",
+      "sha256": "8c7423dc8a8b14ce4161ac1500784848001d9a65c98b49bbceb8b85d3a8f0df8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          68
+        ]
+      ],
+      "total_lines": 68,
+      "substantive_note": "Private key file path/permissions parsing/env precedence, missing empty, child suffix regex strips tested API_KEY/AUTH_TOKEN/ACCESS_TOKEN not baseURL."
+    },
+    {
+      "path": "tests/lib/utils.test.js",
+      "sha256": "116eee02b8ce40ec46ffa3495dc6b0b18d7858fe80e8408eabf2bb06356f5be0",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 705,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-e2e/cli-options.mjs",
+      "sha256": "7fa8ab9f514277cf00716b63744522f67e113f01f7a3ec54307d161887a6aaa1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          23
+        ]
+      ],
+      "total_lines": 23,
+      "substantive_note": "First --name=value or separate value, missing/next -- flag throw; empty equals accepted, single dash accepted."
+    },
+    {
+      "path": "tests/live-e2e/ui.mjs",
+      "sha256": "271e18b99b9dde821c0bbd83301016004600a77e94072da78008b46d06f11712",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1453,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-e2e/preactions.mjs",
+      "sha256": "028a2b0099739677d76e3a8ad401b162cc45173f0dded92f5eaf2056a13a25c6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          142
+        ]
+      ],
+      "total_lines": 142,
+      "substantive_note": "Disarm picker then click/goto/wait; skip click if next awaited visible; finally restore prior active state; cycling retries preactions, HMR reload only LLM, fatal noRetry respected; debug snapshot."
+    },
+    {
+      "path": "tests/live-e2e/steer.mjs",
+      "sha256": "cf6982ea7ee3628a30e23e7d212472db8cb54d52b0bc98c007184521cf510748",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          104
+        ]
+      ],
+      "total_lines": 104,
+      "substantive_note": "UI POST/poll/SSE steer smoke; source marker expected + rendered marker; lock observation optional fast completion; configurable skip/expectDom false; HMR reload retry preserves original failure."
+    },
+    {
+      "path": "tests/live-e2e/agent.mjs",
+      "sha256": "ce8f1d19f1dcac5a96993c76dd1caab5a18d7f6a2f2e55f8c0938f26c066ee1b",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 2688,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/live-e2e/agent-insert.test.mjs",
+      "sha256": "da2f08eb85eda6e2b67864fac38cfcc85abb0fe5e509e0c034e61f8ca93ee6f1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          58
+        ]
+      ],
+      "total_lines": 58,
+      "substantive_note": "Insert event anchor map/default after; fake agent net-new strip not cloned h1, three variants with scoped CSS."
+    },
+    {
+      "path": "tests/live-e2e/session.mjs",
+      "sha256": "a87bade8c5296be376e10d65cddf573cf205141b6962812b78f5d3f04a2cdf8d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          541
+        ]
+      ],
+      "total_lines": 541,
+      "substantive_note": "Full fixture lifecycle git init/commit config -> dependency install with optional Rollup repair -> background helper or root-resolving live ->inject ->framework dev readiness ->real browser+fake/external worker. Env stripping for dev/engine but runInstall inherits process env. Teardown best-effort ordered ctx/agent/worker/dev/helper/tmp. HTTP readiness accepts any<500; engineSync no timeout; dev regex per chunk."
+    },
+    {
+      "path": "tests/new-work-e2e/user-bot.mjs",
+      "sha256": "689bc82c86430b44d1db4a127ce1fa659162a95929fd827888639de3d9b54706",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          196
+        ]
+      ],
+      "total_lines": 196,
+      "substantive_note": "Question daemon state discovery, real Playwright choose/reroll/canon/steer/close-heartbeat actions, optional own Chromium, CLI JSON. resolveQuestion claims newest but sorts objects with mtime string f/no stat. setup navigation before try/finally and close action leaves shared browser context."
+    },
+    {
+      "path": "tests/lib/transformers/provider-blocks.test.js",
+      "sha256": "0cae628a7e357a2b07c3b14137e55396ceea39cb609719c528d74589256abb65",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          137
+        ]
+      ],
+      "total_lines": 137,
+      "substantive_note": "Integration compile bodies/references/agent TOML filtering, nested script paths. Tests delete fixed repo-local test-tmp dir only if run; audit not executed."
+    },
+    {
+      "path": "tests/lib/transformers/providers.test.js",
+      "sha256": "6263b0b1739af75fb7575ab0ec3fddf5bd2919ed4c1bee386dd3019c0e9eb28b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          266
+        ]
+      ],
+      "total_lines": 266,
+      "substantive_note": "Every provider matrix dirs/placeholders/references/frontmatter allowlist, metadata version Codex/agents/Muse, OMP Pi placeholders, Devin no allowed-tools, DSH no unsupported hooks/agents."
+    },
+    {
+      "path": "tests/lib/transformers/factory.test.js",
+      "sha256": "38c43e9083fbc4c5b8674b14d63cbb6c8ba9876d999bce3d439c73d2b3f25f66",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          317
+        ]
+      ],
+      "total_lines": 317,
+      "substantive_note": "Provider-specific description fallback, field allowlist/empty conditions, body transform order/placeholders, refs, clean old output, explicit script marker rewrite ONLY leaves unrelated executable strings/path/regex unchanged, multiple/empty skill shape."
+    },
+    {
+      "path": "tests/lib/transformers/opencode-commands.test.js",
+      "sha256": "5673e9a846521953fc9be343857a3948c6957f0ba532c08d9ddc79397ce0248d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          109
+        ]
+      ],
+      "total_lines": 109,
+      "substantive_note": "OpenCode slash bridge alongside skill recognized frontmatter only, exact description, Skill delegate + args, build/subtask true, no Claude version/user/tools hints, empty no command."
+    },
+    {
+      "path": "tests/oracle/cases/live-generate.mjs",
+      "sha256": "ef86a82206e538243736c3b31b29d3d1e62d2bcd9b702b9dd8215dfadfcaf305",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          44
+        ]
+      ],
+      "total_lines": 44,
+      "substantive_note": "CLI invalid/missing selector/action/count/index/wait verdict and helper absent/no browser attached, masks ports; overlay real targeting deferred to other tests."
+    },
+    {
+      "path": "tests/oracle/cases/context.mjs",
+      "sha256": "ca2c6d25e33d7d3d8027826821d6047a77fb93c19ca83ac901e893944ecbb94e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1053,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/oracle/cases/live-accept.mjs",
+      "sha256": "e9a930dd6bfef0db5f3a799ea9850ac47cd6c691c10c885f9c0b2bbad193cfac",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          213
+        ]
+      ],
+      "total_lines": 213,
+      "substantive_note": "Accept/discard marker boundaries preserve neighbors; strict id/variant, exact range/steps/toggle params, receipts replay/conflicts; no original discard refuses, insert discard valid; Astro inline CSS, generated fallback guard, live/dead lock, page buffer scrub, JSX and Svelte component/source modes."
+    },
+    {
+      "path": "tests/oracle/cases/mcp.mjs",
+      "sha256": "992525d351453450735e9436dad384b31ef8cdec659df2d35a2fa7a2210c49e1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          23
+        ]
+      ],
+      "total_lines": 23,
+      "substantive_note": "Signed-out initialize/ping and SSH taste.get protocol fixture no browser; actual semantic goldens external."
+    },
+    {
+      "path": "tests/oracle/cases/comp.mjs",
+      "sha256": "17c443b8516710106239e886c631283c3edcdd13473344a84213faf6eec3b4d1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          246
+        ]
+      ],
+      "total_lines": 246,
+      "substantive_note": "Deterministic comp grids/spec region kinds/crop guards/diff thresholds/font measure; approved comp SHA freeze+restore, direction-comp option1 gating; responsive missing/displaced first-viewport on third attempt owner route; finish captureInputs includes font edits invalidation; component-review spec-derived packet plate requirements."
+    },
+    {
+      "path": "tests/oracle/cases/critiques.mjs",
+      "sha256": "e1e078f2af6db0838d0d5f9d36114f57c1923382fb3976c78ea879036527ee00",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "total_lines": 22,
+      "substantive_note": "Local signed-out preference status/on/off/bogus persisted JSON fixture, unreachable issuer."
+    },
+    {
+      "path": "tests/oracle/cases/setup.mjs",
+      "sha256": "1bd54fa09d0004551233404207c722364c55a865f85f4bee8ac93e9385a7cb8b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "total_lines": 5,
+      "substantive_note": "Local setup status/default and unknown usage only."
+    },
+    {
+      "path": "tests/oracle/cases/first-viewport.mjs",
+      "sha256": "8e45c193fa4e05600d01d4de0e90cd2e6197eccd189edb5d791eaa31bf52c228",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          8
+        ]
+      ],
+      "total_lines": 8,
+      "substantive_note": "Only CLI thesis/action selector required contract, not browser measurement."
+    },
+    {
+      "path": "tests/oracle/cases/motion.mjs",
+      "sha256": "1faf4a39a995526922316e0260ca8cc4bed42263303ebb3d77175199969c5df2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "total_lines": 7,
+      "substantive_note": "Help/missing args/javascript URL reject fixtures, real pixels elsewhere."
+    },
+    {
+      "path": "tests/oracle/cases/live-wrap.mjs",
+      "sha256": "ca2eca07a3c0cdd09a647f1f325286fea2ccc18297fd9d16c04f6a44058aac75",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          205
+        ]
+      ],
+      "total_lines": 205,
+      "substantive_note": "HTML JSX TSX Astro Vue Svelte fixtures across same-line/self-closing tags, text disambiguation across later files/search dirs, tag-vs-component fallback; generated source refusals; deferred no writes; Svelte compiler linked vs disabled fallback; buffer originals page-aware; insert before/after."
+    },
+    {
+      "path": "tests/oracle/cases/live-roots.mjs",
+      "sha256": "ced0bc97506a62a00932b580812e951af2ac8f3eb8adccd22a2c684087968fad",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          172
+        ]
+      ],
+      "total_lines": 172,
+      "substantive_note": "Monorepo/workspace target/context override/app pointers/config gates; full helper boot/inject/stop; token-port match, idempotent remove; CSP entity+quote restoration, framework adapters conflict refusal and orphan journal healing safe paths."
+    },
+    {
+      "path": "tests/oracle/cases/live-session.mjs",
+      "sha256": "eb788c8a06424108b426fba7c8e80f807645a6d63a1fa4bcf62ea99cc8b7e299",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          86
+        ]
+      ],
+      "total_lines": 86,
+      "substantive_note": "Journal fixture state progression generating/checkpoint/accept/carbonize/complete/manual/mount-failure; source dirty gate incl force, unknown/missing session, stale/dead/alive server record, reply argument validation, stop removes inject. Expected results external goldens."
+    },
+    {
+      "path": "tests/oracle/cases/skills.mjs",
+      "sha256": "5a8135402d8813cbd5df1a73e622d74ff72735e4659659c08638965d1b4826c8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          49
+        ]
+      ],
+      "total_lines": 49,
+      "substantive_note": "Installer help precedes operational work, legacy namespace, Codex unmanaged copy update no targets, Replit detected prompt stops at nonexistent bundle; no install execution here."
+    },
+    {
+      "path": "tests/oracle/cases/live-manual.mjs",
+      "sha256": "47b84ea44726439328144f98d1f276ff3a73e29b93a8b8b19a0e3f84dae046f4",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          99
+        ]
+      ],
+      "total_lines": 99,
+      "substantive_note": "Buffered page-scoped commit/discard with mock agent: source verification rejects claimed applied/no changes, partial keeps pending, undeclared changed file, removal verification, invalid result/buffer and leftover marker, no real provider spawn."
+    },
+    {
+      "path": "tests/oracle/cases/hooks.mjs",
+      "sha256": "190e91f38f288ae331149be1322bacd3f0ef3249ded208ef6c52b0ff147956a0",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 381,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/oracle/cases/live-daemon.mjs",
+      "sha256": "b6e15ef22ea5a2412ac6f832287f918710614baabdb6899a342eea0f75b2ee46",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "total_lines": 45,
+      "substantive_note": "Durable generated event journal restores queue, daemon ready ->poll lease/reply/resume/complete/stop; masks port/time/journal byte counts."
+    },
+    {
+      "path": "tests/oracle/cases/shot.mjs",
+      "sha256": "75dfb7e6a4a84564aa48e6b89da23e0fb540ada732db7b1b408bf11ca8b8416b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          8
+        ]
+      ],
+      "total_lines": 8,
+      "substantive_note": "Required page/missing file/bad viewport CLI fixture; no image visual assertion."
+    },
+    {
+      "path": "tests/oracle/cases/detect.mjs",
+      "sha256": "4f578d4c6ff858d4adabd37635317c6d183bf22146327c17e923907dc05f1f55",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 443,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "tests/oracle/cases/health-design.mjs",
+      "sha256": "69449c7181bb827cca68e2b6bc4b9872cee4a931ae5efc20a8084964995ca1ca",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "total_lines": 22,
+      "substantive_note": "Local health design on/off settings and invalid/signed-out refresh cases."
+    },
+    {
+      "path": "tests/oracle/cases/agents-running.mjs",
+      "sha256": "621b321761cc52392065640d809c8dccc36d2020d1cb02b001c6ca5244940f7b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "total_lines": 5,
+      "substantive_note": "Bad argument route only; process discovery coverage explicitly elsewhere."
+    },
+    {
+      "path": "tests/oracle/cases/switches.mjs",
+      "sha256": "4c4f6dbac135fd33586873831a60a54f3506727f2a2a124a320492d794b244b5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "total_lines": 7,
+      "substantive_note": "Catalog and usage only; per-file home switches not exercised."
+    },
+    {
+      "path": "crates/hook/tests/cache_root_tests.rs",
+      "sha256": "b39877916699032627b24c1010652208ff69d4dedaac687beac1b7ad1416d06e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          240
+        ]
+      ],
+      "total_lines": 240,
+      "substantive_note": "Separate environment-serialized binary tests cache root relocation readable resolved path+8hex collision-resistant suffix, trailing/../ normalization, whitespace and empty default, tilde HOME fallback reject, pending same dir; flagged dedup persists redirects, clean prior-footprint increments, brand-new clean no footprint writes."
+    },
+    {
+      "path": "crates/hook/tests/hook_tests.rs",
+      "sha256": "fe27471b2a2431a76fbc0262129771e8837f15f9f3b60408ca7f3e98ee5b6f60",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 4631,
+      "substantive_note": "Не прочитан в этом продолжении; прежний mechanical-scan-only не является substantive coverage."
+    },
+    {
+      "path": "crates/account/tests/taste_grant.rs",
+      "sha256": "23e913804727c19373d27acb704ca50b7d38d76a3373d8ee193cbd3921fae00d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          92
+        ]
+      ],
+      "total_lines": 92,
+      "substantive_note": "Refresh taste:read revocation clears issuer-owned cached taste rules; keep valid grant, worker403 clearing; another issuer sharing home cannot clear original on login/refresh403/logout."
+    },
+    {
+      "path": "crates/account/tests/receipts.rs",
+      "sha256": "9b68074f8cae41cb2a67afed66a6629a5b11c197707192b39fa9c98d27d01066",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          135
+        ]
+      ],
+      "total_lines": 135,
+      "substantive_note": "Page receipt encodes repo labels, server HTTP(S) link used, control/newline/javascript reject fallback; report local save remote500 honest rerun not implicit retry; DNT explanation once/project; quiet JSON captured URLs foundations-first."
+    },
+    {
+      "path": "crates/account/tests/scopes.rs",
+      "sha256": "81703dc77cb4c96ac81a3cc8ea52fd15aae5dcfcabfcd6f05d1f336987fe6d78",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          144
+        ]
+      ],
+      "total_lines": 144,
+      "substantive_note": "All32 optional scope combinations survive refresh without retrospective grant expansion; omitted token scope keeps original request grants; worlds read requested only if offered."
+    },
+    {
+      "path": "crates/account/tests/login.rs",
+      "sha256": "ba7d875f158233eed45de893e5d11e18abd951296a217bfcc89eea93b0806c8a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          305
+        ]
+      ],
+      "total_lines": 305,
+      "substantive_note": "Fake issuer loopback OAuth lifecycle private0600 credentials; forged state/iss no exchange; stalled callback no DoS; tombstone logout defeats in-flight refresh/login and newer login protected; refresh token adoption, revoke current grant, invalid_grant signs out; local permission denied not false signed-out; successful browser landing only after real exchange."
+    },
+    {
+      "path": "crates/account/tests/pro.rs",
+      "sha256": "106490a22b90129f13838586dff017f118014c606f01ad7049f650649537e549",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          452
+        ]
+      ],
+      "total_lines": 452,
+      "substantive_note": "Signed release/lease/digest cache, bad signature no artifact fetch; explicit entitlement denial immediate invalidation,48h lease last-day renewal, unknown-key refetch once; stale whoami/relogin/logout races login epoch+revision floor, busy lock denial markers, no floor rollback; FIFO artifact safe fallback; failed login save retains Pro."
+    },
+    {
+      "path": "crates/account/tests/taste.rs",
+      "sha256": "d3bb6b5913da0f0b07d35b7f1696c6c1fca230f1a09d6c067391b82149204caf",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          288
+        ]
+      ],
+      "total_lines": 288,
+      "substantive_note": "Rules sanitation direction/id/nonempty, max12x240chars private cache, issuer mismatch no ETag,304 timestamp,500/network preserve403/404 delete; NO_TASTE off vs DNT still reads CI no background; focus caches web/slides/motion fallback400 older server; stable hash notes outcomes validation200 chars; paused personal retains repo rules; old paused-less cache full refetch."
+    },
+    {
+      "path": "crates/account/tests/setup.rs",
+      "sha256": "d1771c793af99d16ae066c15a3b6854500b3dbb34db6f2a0973fb67b2e421a06",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          197
+        ]
+      ],
+      "total_lines": 197,
+      "substantive_note": "Consent optional setup:write; whitelist projection removes private names, daily claim before inventory, device hash stable; forget suppresses, DNT/CI/no telemetry/corrupt local state no schedule; off nonblocking busy network; claims bound login epoch and off/on cancellation."
+    },
+    {
+      "path": "crates/account/tests/support/fake.rs",
+      "sha256": "3534d7392c208e4e878f1a3175f5437fcd9837ec9efdae0118c55ca1c77d42a4",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1192
+        ]
+      ],
+      "total_lines": 1192,
+      "substantive_note": "Full fake HTTP issuer: thread-per-connection no teardown, PKCE S256 exact redirect/resource/client, metadata/consent scopes denied+refresh drops, rotate/reuse/revoke; API whitelists limits and hashes, WebP capture reservation/upload/attach, fake signed release/lease and keys; labels reject control/Cf before trim; parse_scan aggregate consistency. No production server verified."
+    },
+    {
+      "path": "crates/account/tests/support/mod.rs",
+      "sha256": "f1d67d63c7a1d05845af4c8d8d36fd4b66a3c8de91766f80e0eae5884f784bbe",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "total_lines": 1,
+      "substantive_note": "Single public fake module export; fixture code not production."
+    },
+    {
+      "path": "crates/core/src/browser/text_layers.rs",
+      "sha256": "c55552378c4138c00b2fb245aa45893afeea87167097c7a17eeac7a809461cdd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1327
+        ]
+      ],
+      "total_lines": 1327,
+      "substantive_note": "Полностью: four-state contrast verdict, grid coverage thresholds and undecided fallback; covered at .95 opacity/alpha, frosted .75+blur>=8/size-third; textures .1/.3, grid/tile dimensions; detached fill RGB distance24; 85% cover text; below-fold sibling fill/picture/rank bounded depth16/budget3000; JPEG conservative alpha format, clips/masks/opacity/z-order."
+    },
+    {
+      "path": "crates/core/src/checks/text_rules.rs",
+      "sha256": "4abe53c6bbf312e98fb53d98aaa71cd9f7d76fb99b73414a449c5ff2614f50f8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          834
+        ]
+      ],
+      "total_lines": 834,
+      "substantive_note": "Полностью: JS-compatible regex/numeric/UTF16 semantics; kicker исключает date/byline/doc numbering, uppercase+tracking>=.06em, heading>=20px, adaptive 14..16px cap; numbered labels distinct index floor=2; crushed tracking reading -.07/display -.09; CJK half script sample, code chars, monospace first face, em-dash absolute+density, card bounded surface; unit tests отрицательных случаев."
+    },
+    {
+      "path": "crates/core/src/checks/side_bar.rs",
+      "sha256": "283920fcd13990fbe1754db82ec9297a422bbf38ff1380ac2ce0da4e375edda2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          677
+        ]
+      ],
+      "total_lines": 677,
+      "substantive_note": "Полностью: only rounded inline bars >=1px, table/circle/caret exclusions; inset shadows 1..12px x-only; absolute pseudo spanning height, resolved CSS vars; state selector stripping outside functional pseudo; thicker dedupe, important radius precedence; regression cases. Potential CSS fast-path case sensitivity and shorthand cascade limits."
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "sha256": "172d551ddd33cba4f2f38c277c25cdfe12cd07a5e06442eb57bf165a347c11d9",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          34
+        ]
+      ],
+      "total_lines": 34,
+      "substantive_note": "Bun + GitHub actions weekly grouped updates, excludes demo/framework fixtures; no Cargo ecosystem configured."
+    },
+    {
+      "path": ".github/workflows/sheriff.yml",
+      "sha256": "1dd386c170fe6e3928dba8cb9da990b1d741b992a4b56ba763cb8275f15a6147",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          74
+        ]
+      ],
+      "total_lines": 74,
+      "substantive_note": "Issue triage label mutations, scheduled apply warn7/close14, dispatch dry-run, read contents but issues/PR write, fixed maintainers and exemptions."
+    },
+    {
+      "path": ".github/workflows/sync-generated-output.yml",
+      "sha256": "e68deef75b89b578de4b19f37945c25f2b33e431aff0f34d14a8af0262526ce7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          148
+        ]
+      ],
+      "total_lines": 148,
+      "substantive_note": "Push main/next path gates; generated provider paths; token optional PAT, build release, status restricted to generated output, commit direct branch with 5 fresh reset/rebuild push attempts; default token suppresses downstream workflows."
+    },
+    {
+      "path": ".github/workflows/release-engine.yml",
+      "sha256": "9064188c608835fa168e1382167946dca323f5640d12a8524d6cec663aa3b88c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          175
+        ]
+      ],
+      "total_lines": 175,
+      "substantive_note": "Five target build matrix, tag/workspace/version checks, native smoke except ARM cross; Windows separate OIDC signing no checkout, publisher+timestamp verification; publish read-run artifacts and SHA256, contents-write only job; dispatch build-only."
+    },
+    {
+      "path": ".github/actions/setup-bun/action.yml",
+      "sha256": "0248b2b7db6c384507f92e79f944ccb92f1175296b21a95615ea861eb8acf1dc",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          21
+        ]
+      ],
+      "total_lines": 21,
+      "substantive_note": "Pinned setup-bun action, npm global exact version fallback only release failure, equality verify."
+    },
+    {
+      "path": "crates/core/src/browser/mod.rs",
+      "sha256": "35a23d5c92c71b6e3decfa790a6bb607d15d28025d5918e720242c995d1eb40d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          109
+        ]
+      ],
+      "total_lines": 109,
+      "substantive_note": "Полностью: foundation reexports probe/selector, core browser module map, pure logic vs JS async image/canvas bridge; module declares no execution."
+    },
+    {
+      "path": "crates/core/src/vectors.rs",
+      "sha256": "89bb4e106d663755b2e2cb78fe60eb180994c019ae7193491824c249f9d100d5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          35
+        ]
+      ],
+      "total_lines": 35,
+      "substantive_note": "Полностью: ordered dispatcher foundation then vectors_a then vectors_b; unknown None; known union append without dedup."
+    }
+  ],
+  "summary": {
+    "assigned_files": 139,
+    "assigned_lines": 51090,
+    "full_files": 109,
+    "read_lines": 17797,
+    "unread_files": 30,
+    "unread_lines": 33293,
+    "partial_files": 0,
+    "source_hashes_unchanged": true
+  },
+  "verdict": "incomplete-substantive-reading",
+  "method": "Static full reading of marked ranges only; no upstream imports, installers, hooks, binaries, tests or UI execution.",
+  "limitations": [
+    "30 assigned files remain unread; exhaustive assignment is NOT closed.",
+    "SHA256 and line counts are mechanical metadata, never substantive coverage.",
+    "Existing reports are not implicitly merged into current reading ledger."
+  ],
+  "additional_evidence": [
+    {
+      "path": "crates/foundation/src/css/scan.rs",
+      "status": "partial",
+      "ranges": [
+        [
+          235,
+          289
+        ]
+      ],
+      "substantive_note": "CSS declaration block parser lowercases properties, drops important, last value; lengths and zero offsets; not full file."
+    },
+    {
+      "path": "crates/foundation/src/rules/text.rs",
+      "status": "search-evidence-only",
+      "ranges": [
+        [
+          424,
+          428
+        ]
+      ],
+      "substantive_note": "Em-dash floor8 and density500 constants located; no full source review."
+    }
+  ]
+}

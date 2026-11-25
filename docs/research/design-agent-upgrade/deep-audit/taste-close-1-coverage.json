@@ -1,0 +1,1632 @@
+{
+  "job": "taste-close-1",
+  "revision": "d1a2bb41d927083ac7118f60cfc9cdf711810ea0",
+  "root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/taste",
+  "mode": "static-only",
+  "files": [
+    {
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "sha256": "080b835e99353f63650f8966813d735f142293119cd371c554b66a1effc5e3da",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1295
+        ],
+        [
+          3359,
+          4864
+        ],
+        [
+          7490,
+          7589
+        ],
+        [
+          9758,
+          10137
+        ],
+        [
+          10910,
+          11485
+        ]
+      ],
+      "total_lines": 11485,
+      "substantive_note": "Прочитан полный visuals block: static import graph (same-origin/3MB/400 files/20s), GLSL lexical scanner, PNG 5-bit colours/detail, DOM caption candidates, 40 visual cap, rich-first-width exemption, second shots, particle/drift probes, kind/moment/GL policy. Реальная реализация, не только CLI. Остальные blocks пока не прочитаны. Дополнительно полностью basics block (3950–4499), loop/pause/form helpers 7490–7589 и hover/loop/forms orchestration 10910–11219; Tab 40 stops/60ms/350ms retry/3:1, forms Fetch interception fail-open и heuristic sends, no server correctness proof. Прочитаны fallback/slow/reduced/hidden/error propagation9758–10137 и финальный run11349–11485; caps14/16/40/60 screens, rich visual cross-width skip, fail-open Fetch.enable, broad request-success heuristic, quick still runs basics/keyboard, notChecked incomplete. Также полный motion-hooks/tiles/area3359–3949: loops4050/2450ms, tile16 candidates/8 reports/tol24px, held exemptions; area16px occupancy grid/20px growth/12% padding/<50%run25%H,35%WARN/50%FAIL; opacity not part of area content visibility. Launcher/server/CDP/GL_GUARD/IO_HOOK4500–4864 и sweep/narrow11220–11348 дочитаны; profile unique per run, lexical/symlink boundary, injected GLcap4 and forced compile failure; failed/cancelled network exclusions, narrow40screens/8outliers, sweep900ms confirmation.",
+      "gaps": [
+        [
+          1296,
+          3358
+        ],
+        [
+          4865,
+          7489
+        ],
+        [
+          7590,
+          9757
+        ],
+        [
+          10138,
+          10909
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/index.html",
+      "sha256": "b012a3f0fc3d79b2c57591569e99af0a0ad1d9cce7d1047187ca977d16a250ac",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 654,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          654
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/shared.js",
+      "sha256": "e6e0c9e76ec7449e8f62f3b8d80a9803e417fb6abec3201ce359dff571f45dbc",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          569
+        ]
+      ],
+      "total_lines": 569,
+      "substantive_note": "fx adapter: serial still baking, IO/RO, pending markers, drawArrays readback, CSS/2D fallback; glyph sibling overlays/inert clone, mask windows; visible timers, pause propagation, async destroy bag; contrast-tuned palettes. ready may remain pending on mount failure/destroy.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/gallery.html",
+      "sha256": "93f34727dfe6b9872d9cd0cb02f33d8e759a0d52b00570dea45a1f311cf4661d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 528,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          528
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-map/bake.mjs",
+      "sha256": "59fac93b70464ceefd507efd1268aed011800ed4370e311babf1dccb0dc6d780",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          485
+        ]
+      ],
+      "total_lines": 485,
+      "substantive_note": "Полное чтение: Overpass/local input, retries/geometry clipping+simplification/coastline chain/OSM layer classification/labels; walkable graph and binary-heap Dijkstra, station picking and endpoint projection; JSON write. No timeout in fetch, finite lat/lon only; route is approximate80m/min not verified navigation. Relation inner/outer roles discarded.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/motion/demo.html",
+      "sha256": "8bcb548eb3f7fc3d091dcf4a6fa919411f10b9e5dff200dada3f9b0bb4d8e408",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 475,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          475
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/grid-pulse/effect.js",
+      "sha256": "ccb4b6448b27769bc9e25fcd5517c5ce3985a2f009db90ef3acc3b84557e9569",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          414
+        ]
+      ],
+      "total_lines": 414,
+      "substantive_note": "Two2D canvases: static DPR-snapped grid + seeded moving agents with turns,tail,2.4s traces/node flashes; area-scaled pulses1–2.5x. lifecycle60fps/still3, RO/params/palette redraw; no WebGL/backend/network telemetry, purely decorative; host style ownership not restored.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/ridgeline/effect.js",
+      "sha256": "fdaba21889bf350868acdbc31b0d038db76a1d98d150111355909bd1c6ff6931",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          404
+        ]
+      ],
+      "total_lines": 404,
+      "substantive_note": "Seeded gradient noise cached depth rows, adaptive curve samples, painter-order fill+AAstroke triangles singleGL strip; live GL only in view via lifecycle, context failure/loss replaces canvas2D; fit/mask/DPR/palette/set/destroy, cache eviction. Raw makeGL does not explicitly join shared __tpGl budget here.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/ascii-shade/effect.js",
+      "sha256": "a8c0b748921685bd4886c8a3b2063e3190ad9be7124692a6c0ff588a05c1c39d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          390
+        ]
+      ],
+      "total_lines": 390,
+      "substantive_note": "2D glyph atlas sorted measured ink density; half-resolution field interpolated/hysteresis/Bayer, redraw only changed cells; seeded cloud/sphere/wave, page mono after fonts/RO, lifecycle24fps/still7; no-canvas/forcedCSS dotted sphere fallback; dead guard for font callbacks.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/diagrams/diagram.css",
+      "sha256": "cd8ba441f206e7c3a2cd33d55a7e9e9bc225c8f48364c68fa9b7fa490697a3a8",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 377,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          377
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/index.html",
+      "sha256": "cf737c02c3e2d293a4c437581fd1ee2b39c9f3ad5c5cb2b165d0607efedb9eb3",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 365,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          365
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/lib.js",
+      "sha256": "2c70a12cc88e09f02cc9d9322c459207ba682d06e92c0afb69edceb7fb55d880",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          329
+        ]
+      ],
+      "total_lines": 329,
+      "substantive_note": "Native scroll held-stage state machine live/rest/media/print, damped RAF, text split/unsplit, fitLine; WebGL budget and lexical shader guard, loss/destroy. Static lost-context budget and delayed rebuild cleanup defects noted.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/exploded-layers/object.js",
+      "sha256": "b5647e530a6851ba70a51e000b3bdc935e3bc457e9d153b56ac7a94a761fe994",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          297
+        ]
+      ],
+      "total_lines": 297,
+      "substantive_note": "Four perspective photo/halftone/dither/contour sheets in singleGL draw; tilt/hover or touch toggle; seeded imported stage, fit cache, photo load/levels, leader labels>=560; original-photo fallback, top photo failure, ready all loads; decorative decomposition, not real product CAD layers.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/orb-sphere/effect.js",
+      "sha256": "06f1dd7fda33b395fc296e9e1bca91cb51e2eb132afd9ad72139bd2b86b2c379",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          293
+        ]
+      ],
+      "total_lines": 293,
+      "substantive_note": "Analytic sphere normal/3D noise/near-far-shell stars/Fresnel/tonemapping; grid-search safe text clearance and size/crop fallback; palette light/dark bodies/hue correction, shader still6/CSS layered sphere. Not a controllable3D product viewer.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/layout-check.js",
+      "sha256": "aa01f0c864211129bfb0035ffad4b793ec4136102f6d6b775db4285ccbb0e767",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          269
+        ]
+      ],
+      "total_lines": 269,
+      "substantive_note": "Read full DOM geometric check: 12-column lines/gutter/tolerance1.5, shown/inBox/visual exemptions, page/nav edges, asymmetry, 1H/2H screens/grown-phone/photo-chapters exceptions, sparse50%, neighbour ink/ground and hero fold/line counts. House geometry, not general correctness.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-map/component.js",
+      "sha256": "5ca990f5e9c88d717286fc95fa8172a20670063c9799fe66efaca515c2329bfb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          263
+        ]
+      ],
+      "total_lines": 263,
+      "substantive_note": "Baked JSON inline/fetch -> SVG geographic paths/labels/route fit and scale; IO-free still fallback is schematic not real map. Route hover/focus, copy clipboard success/failure timer. bag lifecycle, dead guard, RO/font refresh; malformed data not schema validated.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/product-render/make-posters.html",
+      "sha256": "395c0b1affc38bc30f1568f3a712ac8cc48a3ccbd7e8ee644d086caa83d3353a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 254,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          254
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/painterly-landscape/effect.js",
+      "sha256": "0a1d86df15741e0ede82ad9e8b3f019a6da5a3318ab5354226747488c72b380b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          249
+        ]
+      ],
+      "total_lines": 249,
+      "substantive_note": "Procedural sky+3 hill layers/strokes/lighting, seeded direction away text, light/dark/colour tones; shader maxDpr0.6/still4, separate full-res grain DOM layer and CSS landscape fallback; set/destroy forwards + grain cleanup.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/dither-sequence/object.js",
+      "sha256": "7682c1157db5341c91cda2c07d05388a5001588c2b376e3643fbe4017efe672b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          243
+        ]
+      ],
+      "total_lines": 243,
+      "substantive_note": "GLSL ordered-dither2–6-photo transition, partial failed-image omission; hold2.2s/wipe1.5s/fps30, hover scrub/touch, optional drift and captions; stage kit provides lifecycle/budget. fallback first surviving image, ready all settled; default stock photos explicit; asynchronous callbacks have no destroyed guard in this file.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/film-light-leak/effect.js",
+      "sha256": "3c2021702afbb6ee3d400b779482d8d9bf158a6cf67132d969e906a3a9b9d44c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          228
+        ]
+      ],
+      "total_lines": 228,
+      "substantive_note": "Edge/corner seeded leakage, warped exposure/halation/burn, grain24Hz/breathe/vignette, warm/cool tonal ramps and violet guard; shader fps30/still4/grainCSS radial fallback. Decoration with approximate still.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/silk-folds/effect.js",
+      "sha256": "95f48d8a118dde34d1332c6b5c73ff79e94412021a5b63da4007fcaa1305eb4e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          227
+        ]
+      ],
+      "total_lines": 227,
+      "substantive_note": "Full analytic noise derivative/fold normals/anisotropic sheen,OKLab7-step chroma gamut search; contrast-adjusted calm patch and explicit azure/pink hue turns. shader still6 and linear-gradient cloth fallback. No real material simulation or source imagery.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/liquid-hover/moment.js",
+      "sha256": "fc044e0c972e61c9de777430329115e6d3f1e38f7a37c7663b35949eecd6e654",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          213
+        ]
+      ],
+      "total_lines": 213,
+      "substantive_note": "Два shader passes:128x128 ping-pong flow, 8-bit neutral dead zone/time decay, RGB displacement+shine, original img fallback/touch/reduced;1.2MP/DPR1.5 cap, near mount/far4s free/sharedGL; pending img.load not cancelled and destroy does not mark dead.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-collage.html",
+      "sha256": "9157110e59204b2c95460f62885e7f24044004aef79f3f231597210d607df96e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 208,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          208
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/fluted-glass/effect.js",
+      "sha256": "810133e1c2d1c799990e685e4bf37595dac6037d48125ccd4f6c2de0e72fb1cc",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          206
+        ]
+      ],
+      "total_lines": 206,
+      "substantive_note": "Shader analytic cylindrical ribs over internally generated field, angle/clear/calm/blur+OKLab tonal variants, seeded blobs; still5 and CSS repeating-rib/gradient fallback; shader() owns lifecycle. Does not refract real DOM/photo, decoration only; hue guard changes brand violet.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/prism-dispersion/effect.js",
+      "sha256": "72a6c4a67734eeed3c4d06478d0c044070293046cecf8b89cd1347c18239a6c2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          200
+        ]
+      ],
+      "total_lines": 200,
+      "substantive_note": "Analytic beam/fan/spectrum wall and haze, seeded sway/calm mirroring; violet-exclusion spectrumCentre; shader still2/CSS radial approximation, not real prism physics.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/check.mjs",
+      "sha256": "bd05a54bad447084278aa728164ef0b7ff0a82164f704cabc9b5bde4fedf4d5d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          199
+        ]
+      ],
+      "total_lines": 199,
+      "substantive_note": "Read complete server/CDP launcher and five-size orchestration; static profile boundary, lexical server containment, hero maxChars/compound-word injection, report/errors/exit. Runtime page exceptions only printed, not counted in exit verdict.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/lib.js",
+      "sha256": "22c172166ded3c0ea70925e9a04c37baac291ca6fa9b5a0e4c487a52acf69220",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          189
+        ]
+      ],
+      "total_lines": 189,
+      "substantive_note": "Phone incl coarse landscape; reduced/still/card flags; scrub IO with initially-on rescue; once threshold/tall-target/1500ms starvation/3000ms rescue; accessible nested splitting, line grouping and whole-block clipping; cleanup APIs.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/dot-terrain/effect.js",
+      "sha256": "506eb9b011d77604e60038d158cc926e6bc438142b395a6b5a3952272607690b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          184
+        ]
+      ],
+      "total_lines": 184,
+      "substantive_note": "Ray solved waved ground3 iterations, jitter points3rows*2cols, slope shading/fog/horizon blended stipple; seeded offset/direction; shader still4 and perspective-row CSS fallback. Decorative point cloud not data visualization.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/grain-gradient/effect.js",
+      "sha256": "84be23b54dec56ab0b1e7e6b7b9364244ee62c82583dd3bade19b13912f24d2f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          179
+        ]
+      ],
+      "total_lines": 179,
+      "substantive_note": "Seeded blobs+axis ramp in OKLab/weight dissolve, calm area; grain24Hz or still, tonal hue-distance guard; shader still4/fallbackCSS; no independent events.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/contour-lines/effect.js",
+      "sha256": "8bbdd72bd6ffc3a57a0ca5ddb8c0a72ecace506a865cb2ddd795c3a15350c4f3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          174
+        ]
+      ],
+      "total_lines": 174,
+      "substantive_note": "Imaginary terrain noise and contour gradient, derivative or finite-difference GL1 branch, CSS-pixel linewidth/index/hillshade/tiny-loop suppression, seed offsets; still5/SVG16-contour fallback with own seeded RNG. Not geographic data.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-triptych.html",
+      "sha256": "0dc6ebac27eb5d85629b2b0f39dc0477121617fea3e7c75c86bfeb34f7f62d9e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 172,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          172
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/diagrams/demo.html",
+      "sha256": "972e8c77cf81e75da2a42acbc1ebe7c69dc0fc8ac94e3e17bdbc74e7aa751c23",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 168,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          168
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/pipeline-board/fragment.css",
+      "sha256": "0d5103eaf7e050e5ed95f41bf63681111c205406e022e022050d16bfe5c3f40d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 162,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          162
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-feature-card/component.css",
+      "sha256": "e2cfaf4c5beaa7bab466364c3b702849313a2735987419a755c5200559c116dc",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 161,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          161
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/caustics/effect.js",
+      "sha256": "9d77a0e7069f63b218cf2e9064e5e1a8a09546d16cb5260498d125bbf4bb16c7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          157
+        ]
+      ],
+      "total_lines": 157,
+      "substantive_note": "Voronoi F2-F1/F3-F1 light net, warped plane/focus/depth/calm region; GLSL1/3 hash branch; light/dark+violet guards; shader still5/maxDpr1.5, CSS radial fallback.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/spotlight-cone/effect.js",
+      "sha256": "858178ad41a3b5bc0f399ede25a452f5ba05a5aeda37b627b14f3e902eb977e1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          155
+        ]
+      ],
+      "total_lines": 155,
+      "substantive_note": "Analytic lamp/cone/haze/pool+vignette+calm mask; pool moves away from text and clamps. shader still2/CSS radial fallback; synthetic scene not lighting real elements.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/_demo/in-page.html",
+      "sha256": "5500df4a882942ef96370bc9bae814095fb1df2d42fb6707933fdaa485eb7351",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 149,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          149
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/base.css",
+      "sha256": "e51ce64cef896cb0210f3a2f6a2b67c2ea36f8226d14bf0873b7f58ca7e3413f",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 142,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          142
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/product-render/auto.js",
+      "sha256": "05e098cec0e8d82a7fb05b8ee6f0e0aca45bd7fa8cc3cf4639eff343d782c091",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          133
+        ]
+      ],
+      "total_lines": 133,
+      "substantive_note": "build.js loadProduct cached by URL; data attributes -> mount opts; MutationObserver switches colour/view/scene; radio/button swatches + product:set events are real local variant wiring. Global Map/claimed/cache/listeners lack unmount/retry cleanup here; no cart/order transport.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-statement.html",
+      "sha256": "8f8e1a27c8361640baa240f81170475c475ebbd1ccff2a95f72db70d2127fecb",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 131,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          131
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/terminal-run/fragment.js",
+      "sha256": "a2dfa7b1e2d7e056328cd6bde7c9a586c084d73372f6af6904d68beb8744e9dc",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          131
+        ]
+      ],
+      "total_lines": 131,
+      "substantive_note": "Decorative terminal loop from markup/opts.cmd; types strings/clones output, meter/spinner/whole-row scrolling/reset; ui.js loop dependency supplies scheduling/still/cancel, no process execution.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/photo-chapters/moment.js",
+      "sha256": "2d3034063bad94629c52280ba0d4425e862a581bea8d4539a19310552793533f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          126
+        ]
+      ],
+      "total_lines": 126,
+      "substantive_note": "Photo-led native scrub, 3/4-screen hold, wipe45% share/zoom1.06, count/panel; moves figures/list into stage, restores on rest; portrait phone>=600px height live, reduced rest; resize120ms timer not cleared on destroy.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/photo-dither/object.js",
+      "sha256": "0471d3da5837e03dfe76342ff2283f0359ef4b693c8397ed88b80d9cef83e5f9",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          123
+        ]
+      ],
+      "total_lines": 123,
+      "substantive_note": "Complete shader+palette ink selection,2/3-tone Bayer/blue-noise print, local sharpness/clean-paper thresholds and pointer grain trail; photoGL handles loading/IO/fallback/reduced (dependency not reread); entry0, optional breathe rest frames; not image semantic recognition.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-photo.html",
+      "sha256": "5f0d92270d192f12da651185186c6e9662b553f9f9ff13fea1036dbacb07badc",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 121,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          121
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-film.html",
+      "sha256": "d6e37b577d74091ff01d4d5ee4b31f88b6ac51330e1e9c2a7c29f184fb131ff5",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 120,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          120
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/fonts.html",
+      "sha256": "54eb9bb999ca8fba12862da595f0937339f8f540375ed7540e8ed9228b5b2a53",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 117,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          117
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "sha256": "e42e584f2ddc0cf1937657465e47b3ba71e1cc77d6af3d3709d91a158037ff69",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 116,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          116
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/photo-engraving/object.js",
+      "sha256": "31d32bd3a9577deaf13650b798749e0d4669363b5ddd2ed3ba13825325509dbb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          115
+        ]
+      ],
+      "total_lines": 115,
+      "substantive_note": "Complete swelling-lines shader with derivative antialias, photo-colour wash/paper floor, pointer lens moves lines not source; photoGL, entry0/maxScale2, optional slow light restMotion. No independent lifecycle in adapter.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/product-assembles-into-its-action/demo.html",
+      "sha256": "48df6e963ac09bbb41906e967a06f41955bfcd95d00c8807010840efde113099",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 110,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          110
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/parts-lock-into-the-whole/scene.js",
+      "sha256": "96b93d84cafba3bf3ab3c3fd0d39e6c5f24f4b038f562a4954f63dbd33eb64db",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          109
+        ]
+      ],
+      "total_lines": 109,
+      "substantive_note": "scene()>=1200, panel entrance4directions/word FLIP/detail layer stagger/column settle. Native scroll/rest resets inline cssText; UI showcase, not model assembly backend; removes old caption nodes permanently.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/_demo/make-object.html",
+      "sha256": "606390d1b0dfec9da1a49df4ebe28ad3f8bbc06eee7a30b798544f22f068261d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 104,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          104
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/dot-becomes-the-full-stop/scene.js",
+      "sha256": "515c09cbaa70f54efc2345596000d8739f44a9398b70a83be87401b087a23a4c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          102
+        ]
+      ],
+      "total_lines": 102,
+      "substantive_note": "Accessible word split+moving dot, log diameter shrink/path positions, phone2rows fitLine, optional inverse cut/subline; native held scene/rest unsplit restores text. Empty heading not validated before last.textContent.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/fly-into-the-shape/scene.js",
+      "sha256": "c2eb516e5de03c75f0b71c5098737e9276ea6913b1b15a7586b4cef6d1a0ce4b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          101
+        ]
+      ],
+      "total_lines": 101,
+      "substantive_note": "SVG path-number scaler for abs/relative/arcs -> per-frame CSS path clipping; native held3Dturn/log grow, title clone and final band; phone/rest, remove cloned face on destroy. rin/centre trusted inputs, no sanitizing schema here.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/components/_lab.html",
+      "sha256": "ea846b8a3537b98e952973611410a6256a23fe5801702b205213ff78439fc762",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 96,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          96
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-chart/component.js",
+      "sha256": "870b64d648a54329c3ba5c0b6e739f445edb3377f61dc4a0048a74d07887fbe2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          95
+        ]
+      ],
+      "total_lines": 95,
+      "substantive_note": "Sample local DATA and fixed dates/MAX; SVG curve/masked area + optional still ruling; pointer/keyboard/Home/End/Escape tooltip and table. No analytics backend; focus/blur cleanup incomplete.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_print-core/make-fallbacks.html",
+      "sha256": "c12289eec992d34deea69e13d7835ce45dcc70f4f906a04c199c8f0147dfc429",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 89,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          89
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/fly-into-the-shape/demo.html",
+      "sha256": "219634b2245d198ab8aca1e8f8a926c1b269122198bab6433bfb69538f829ca7",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 89,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          89
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-progress/component.js",
+      "sha256": "5855f619a78701eb0dcaa0b39756ced24ed17aee6311c2dda9c9ea6d9db064cd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          85
+        ]
+      ],
+      "total_lines": 85,
+      "substantive_note": "Simulated import progress, native progress values, clipped effect; RAF/IO/visibility/pause and reduced still64%; no file upload backend. tuned mounts + bag cleanup.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/pinned-chapters/moment.js",
+      "sha256": "d5e8df0c1237018ca191962ff9cb73a1da2bf88e9c3ae2d451de0276b258c7ec",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          85
+        ]
+      ],
+      "total_lines": 85,
+      "substantive_note": "Native sticky steps/images; live>=1024x640 non-reduced,2-screen hold; mobile/static original step figures; accessible words not cloned, data-edge-free while live; teardown restores figures but pending resize timer not cleared.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_scenes/demo.js",
+      "sha256": "a565f2d57a7aca072ecdd7d9c81114a13fa033166e833d31ba57c22c3a71810a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 83,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          83
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/photo-kit/demo.js",
+      "sha256": "c0bc29e835c03406280aafc34640abb99bdb5fc77e1ef22bcf021df3b6887f48",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 81,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          81
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/letter-physics/demo.html",
+      "sha256": "db2a8da130e51bfe2f4eb95dccbbb418a5beb2b3c5f06725d65d976d9572d251",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 81,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          81
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/fixed-hero-object/demo.html",
+      "sha256": "e0749d22d76d51ceed2ac457a8e420dd0b66f49a40ef5796b83244d3257e4736",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 80,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          80
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/icons/demo.html",
+      "sha256": "6f38735404cf4477a5ca6749de84e86ffe2b2e2a0a11f0e48a17e5ec5b316168",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 78,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          78
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/photo-chapters/demo.html",
+      "sha256": "9b545f8cb2874831aa2fc93a3d52fbea1920231423f3e11c6e721f5c935d2100",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 77,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          77
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/counter-rolls/demo.html",
+      "sha256": "05dff3917b49be1134bdd161c3cce5cf384f34afc0a65c6ccf344978b3d1ebae",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 76,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          76
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/lines-rise/demo.html",
+      "sha256": "692eed1a2bc064ce7cd805c5bf93c17b2c6e10c60a8574df7165b0c6b8dfc900",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 76,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          76
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/object-through-giant-type/demo.html",
+      "sha256": "c244b8386149f94089b4fa4e4bd79f1e3944f078dfc70a388af4b613b1e58205",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 72,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          72
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-button/component.js",
+      "sha256": "352bbb7aaefe2a81cf4bcd8f39f360a1a01aa278989cbb9b9bf5ae981d1fd8fc",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          70
+        ]
+      ],
+      "total_lines": 70,
+      "substantive_note": "Hover/focus effect decorator only, base button action in markup; lazy async mount/dead guard, pause500ms/free4000ms, palette contrast and clean teardown.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_print-core/blank-ground.html",
+      "sha256": "9e3ed42ad4c641233d6ca621322e97c92b508cc0084a6742b4155cd47a4268c8",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 70,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          70
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/fixed-hero-object/scene.css",
+      "sha256": "66a4f224aa4a60ef5b8d92df39f29244e2b5656c199630050b6bcd7d0220abff",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 68,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          68
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/photo-chapters/moment.css",
+      "sha256": "645b83991a49fdc2b7cdd6b73d07e1802607cd78afc4b66d3628cc2bf5152672",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 67,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          67
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/powers-of-ten-pullback/scene.css",
+      "sha256": "0a7abb40a9b17b21440b9a3f0b8cadfeedcd3b92ac1c83070842429a94412930",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 67,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          67
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-tabs/component.js",
+      "sha256": "9ea25cbf104208a59133b2f48b8e53ea18c4d6d7c38162f24ec29312d0197d03",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          66
+        ]
+      ],
+      "total_lines": 66,
+      "substantive_note": "Actual tabs switch panels, aria-selected/roving tabindex/arrows/Home/End; optional flat/still pill; resize/fonts/scroller edges, cleanup. Does not initialize panel visibility via choose on first init.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/word-rotate/demo.html",
+      "sha256": "5524c8a7ec9c43a7795951225470855dd8a1b86a2636740a386c66876702a70a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 65,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          65
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-tabs/component.css",
+      "sha256": "b76cf6875a7161d6d937de4879d77d27c16ae4313c76fff9e7a646391f38f1ad",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 64,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/marquee-row/demo.html",
+      "sha256": "ba2da16d620866d1e1765e5abc630141101bd0d32dbe214f6fd885a2e358edec",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 64,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/product-assembles-into-its-action/scene.css",
+      "sha256": "10ef4e5243dba6b9d3b68a4027eabb8ef8e5ee599ce35fa102690bc7722e277b",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 64,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          64
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/picture-develops/demo.html",
+      "sha256": "525371b14d8421ce0336de8b07eb2906f482abb7c62868ecf28280e2e375c64b",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 62,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          62
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/line-carries-colour/moment.js",
+      "sha256": "4bcbd2836b471a2a591ea3e4e5a3bfb0e5c90a5ad107eaa7550d5d1d06829d55",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          61
+        ]
+      ],
+      "total_lines": 61,
+      "substantive_note": "Native scrubbed inset cover/hairline, block-opacity guard avoids slicing text; reduced static, RO/fonts remeasure, destroy releases blocks/stage; fonts callback no dead guard.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_print-core/lint-glsl.mjs",
+      "sha256": "34867112003ff5976dedb3f5c6c8828689206453ba8db54c6ebc65c5675037d2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          60
+        ]
+      ],
+      "total_lines": 60,
+      "substantive_note": "Node CLI loads print3d glslProblems; default dynamically imports every print-* object and calls source(), validates form and first shared vert/print, implicit texture() model rule. Explicit-files lexical template scan discards interpolations and only reads recognized GLSL; not pure read-only static execution, never run.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "sha256": "adc107498053f15a0a57b915e32ae42ad7e9a958476b795013148c6fd5687f64",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 58,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          58
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "sha256": "ef7d099e2ebaa038f3b1c803fe7c187316f8b1c2a5b43cf4968f5fa9555d18d0",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 58,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          58
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/picture-develops/demo-film.html",
+      "sha256": "c3499ccc7554ae9c6c5884b4ec4e0a33e935e05dfdcbd1615582cd8dde13897f",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 56,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          56
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-avatar/component.js",
+      "sha256": "ed5445665110ac2b26c3e2b52c3061b74f93e9915c257c83a0518c9698de1174",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          55
+        ]
+      ],
+      "total_lines": 55,
+      "substantive_note": "Mock active-speaker rotation order every3400ms, effect ring/RO/pauser/visible timer; no audio/call detection or transport; async mounts collected.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/powers-of-ten-pullback/scene.js",
+      "sha256": "b69662aec5a86724999a7fac7bf7cccdaf33b56dc2a936f946e29740a7e27f3a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          55
+        ]
+      ],
+      "total_lines": 55,
+      "substantive_note": "scene lib maps native scroll to log-space screen/device zoom and copy reveal; geo measured relative stage, phone/rest finished layout, cleanup clears cssText; illustrative device not functional app.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/files/fragment.css",
+      "sha256": "dc7046291c60568cd2ef9b722fd23bf94666d5b99432269a357e26d4dfe22987",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 53,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          53
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/chat/fragment.css",
+      "sha256": "230314eeafe2ac30726b2717d82f584c281aecd1de0fb9832a9b2639471aa165",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 52,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          52
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/letter-physics/scene.css",
+      "sha256": "4d6e667b893744b8ac659b07b7eb9e406307b39f5a69f76ea4cda9373835f9f5",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 51,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          51
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/parts-lock-into-the-whole/scene.css",
+      "sha256": "b7f68b74cb3e07c5df8ae85beb3fa39dd306359a0a2ec733f00621911feebbc7",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 50,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          50
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-bars/component.css",
+      "sha256": "b1e4696238998e616c70fad81bd233a6e95bc4ac2f2683c80127f4f25088ee6e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 48,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          48
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/fly-into-the-shape/scene.css",
+      "sha256": "f0a5aae91de33896ee3dbf0f84a2a738b4dbb5f8b58804315dffb8fe7a4555ef",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 48,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          48
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/liquid-hover/demo.html",
+      "sha256": "2e2ca94e910f46fa0ac548383f272e2ddd70ef78ee1bdb22c79910dcaee01eb4",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 47,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          47
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/files/fragment.html",
+      "sha256": "88a734f9758f8c786d368d573d869fba3b26d4988779c64c07f59a4f17b255ba",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 47,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          47
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/backgrounds/check.html",
+      "sha256": "5e1085b2a9b2e0e3f89af6e88880fd6f5b40c66f0906ccf88056123d4f269bad",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 45,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          45
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/lines-rise/moment.js",
+      "sha256": "1532fdb3d92bd6e7d9cd79e881762688110edb0f4552fd264239408fabbe13a8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "total_lines": 45,
+      "substantive_note": "Finite WAAPI heading line masks90ms stagger/1s and follow800ms, mo-safe/reduced bailout, font-ready then once/rescue; finish cancels animations and shows content, destroy observers. Decorative entrance, no content fetching.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/closing-lift/moment.js",
+      "sha256": "9dc823892c4a927798bb1d551aed0c6328baa45bf534c02ce17d37a9d3e00923",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          44
+        ]
+      ],
+      "total_lines": 44,
+      "substantive_note": "Sticky sheet uncovers final img+CTA, native scrub settle1.05–1.3 and opacity/transform, reduced static; focus-visible action scrolls sheet away; clean event/scrub/style teardown.",
+      "gaps": []
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-avatar/component.css",
+      "sha256": "ddd2e2fb99fdcaa411a858cd853064075d5cc6a1b58afd2dc8581de3fc58b3cb",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 42,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          42
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/liquid-type/demo.html",
+      "sha256": "09b48f5703fcc64199ea39e01773214d5a135f0658463b5df73be2e80e455808",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 42,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          42
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/pipeline-board/fragment.html",
+      "sha256": "b7017f2c6542f7aa07985b7defa0711a7576303a4269f254af89108c48458168",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 40,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          40
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-search/component.css",
+      "sha256": "3afa024ce713e9bdcf61eb8319ced4456d085c5b5427e2278d58161c7cb77122",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 38,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          38
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/apps/fragment.css",
+      "sha256": "68264f78cb98adf590294adc29c1128005c276aa33576a1ed0db57724c4d5294",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 36,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          36
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/_lab/selftest.html",
+      "sha256": "d0084f6d7d85e6f11505fa4d83e0e80cdc5c30a5e31bedc6496d080659f268af",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 35,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          35
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/calendar/fragment.html",
+      "sha256": "4487008e03fd01474a362cb915b4becd77f45d24c5ac4a760dfe084fe2c58aa8",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 31,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          31
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/slider/fragment.css",
+      "sha256": "5e0e1ee6f67fac8b07929064c87d72b7ef5af4042d6a3427c8c9ae0f7b91aeb3",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 31,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          31
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/code/fragment.css",
+      "sha256": "afaa55bca2ff006ec3ddaae71be484052af6b1424aae885e40448ca31b1f0f11",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 28,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          28
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/terminal-run/fragment.html",
+      "sha256": "94b215847a0b59c1b581fa424046f5910842ab8dd8f3803f523142df26b2fe76",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 24,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          24
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/gallery.html",
+      "sha256": "ad739c6523f228f16106829b1ebf039526bc61cd8d4f1dd5e96c4de248bc9a82",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 15,
+      "substantive_note": "Назначен; в текущем follow-up ещё не прочитан. Предыдущее покрытие не присвоено автоматически.",
+      "gaps": [
+        [
+          1,
+          15
+        ]
+      ]
+    }
+  ],
+  "summary": {
+    "assigned_files": 108,
+    "assigned_lines": 26840,
+    "statuses": {
+      "partial": 1,
+      "unread": 64,
+      "full": 43
+    },
+    "substantively_read_lines": 12034,
+    "unread_lines": 14806,
+    "complete": false
+  },
+  "previous_coverage_policy": "Ranges reflect only substantive reads in this follow-up, not inherited partial ranges.",
+  "dependency_metadata": [
+    {
+      "path": "skills/taste-skill/assets/effects/fx.js",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_scenes/kit.js",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/photo-kit/photo.js",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/product-render/build.js",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_print-core/print3d.js",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/ui.js",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/moments.js",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/scenes.js",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/heroes.json",
+      "exists": true,
+      "status": "not-reread-in-this-followup",
+      "note": "Dependency existence only; not a new full-source review."
+    }
+  ],
+  "comparators_read": [
+    ".codex/CODEX.md",
+    ".codex/workflows/review-loop.md",
+    "README.md",
+    ".codex/scripts/screenshot.mjs",
+    ".codex/scripts/design-lint.mjs",
+    "docs/core/templates/motion.ts",
+    ".codex/commands/preflight.md"
+  ],
+  "verdict": "PARTIAL — полнота assigned scope не достигнута; никакого runtime PASS"
+}

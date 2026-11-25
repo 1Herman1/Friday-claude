@@ -1,0 +1,854 @@
+{
+  "job": "impeccable-close-7",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/impeccable",
+  "verdict": "READ_SCOPE_CLOSED_STATIC_FINDINGS_OPEN_RUNTIME_NOT_RUN",
+  "coverage_summary": {
+    "assigned_files": 64,
+    "full_files": 64,
+    "assigned_lines": 51098,
+    "covered_lines": 51098,
+    "html_test_files": 36,
+    "remaining_reading_gaps": [],
+    "assignment_paths_match": true,
+    "source_hashes_and_line_counts_match": true,
+    "runtime_executed": false,
+    "findings": ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8"],
+    "report": "impeccable-close-7.md",
+    "method": "Продолженное substantive source reading; включительные ranges. Хеши/суммы сверены отдельно и не являются доказательством semantic reading. No upstream execution. Product/runtime/dependency-boundary gaps перечислены в report, не скрыты под full."
+  },
+  "files": [
+    {
+      "path": "skill/scripts/live-browser.js",
+      "sha256": "3d2a723589f9d4caeca2a96ea1d0f5a4a595a35426dbd0ea1688d78159cd099a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          13925
+        ]
+      ],
+      "total_lines": 13925,
+      "substantive_note": "Полностью13925 строк. Trace: annotation/copy/removal stash→manual commit202/SSE repair/rollback; generate creation gate+capture optional plain vs annotated semantic; compiled Svelte/Vue import/runtime/contract-v2 DOM prop hydration+mount ack/card retry; source HTML injection vs compiled no parsing; HMR ownership and optimistic durable-intent accept≠source verification; checkpoints/storage/root+pathname isolation/adoption/orphan handling; target leases/renew before Go/multitab retry; scanId stale gates+ignore resolver; voice secure/cloud/autosubmit; GL shader epoch+cleanup; DESIGN.md/sidecar live HTML+CSS shadow rendering. Static findings: no mount epoch across progressive reinjection; detect script no onerror retry; teardown leaves design/annot/edit chrome and anonymous focus/scout observers; raw component innerHTML not sandbox."
+    },
+    {
+      "path": "skill/scripts/live-browser-ignores.js",
+      "sha256": "ba8905ab865fde5162e34fc17eb80eba26cc990b319b14a6eed6ca89fd491897",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          246
+        ]
+      ],
+      "total_lines": 246,
+      "substantive_note": "Full ignore resolver: decode URL/index/suffix candidates, unambiguous pageFiles else common root; wildcard values require file scope, ignoreFiles skipScan, malformed globs fail-open toward findings. Framework route-source mapping explicitly unresolved."
+    },
+    {
+      "path": "skill/scripts/live-browser-dom.js",
+      "sha256": "4b379aff87ce0f485008a2b6a0dc711d00a869f5cf0ec2459279d6364fbf0c9e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          320
+        ]
+      ],
+      "total_lines": 320,
+      "substantive_note": "Full DOM helper: picker >=20px, framework ownership, id generation fallback, modal top-layer popover reparenting, mutation observer lifecycle, shadow UI mount, clipboard textarea + focus restore, propagation/focus-trap suppression. Browser DOM mutated deliberately."
+    },
+    {
+      "path": "crates/core/src/browser/element_checks.rs",
+      "sha256": "7d4f5987e8492e2c433c330a4dc4cc2f1115949f1ab8535d33aa3fc360a2bd8b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          13721
+        ]
+      ],
+      "total_lines": 13721,
+      "substantive_note": "Прочитано1–2100: stripe/pseudo/inset/row/cell status+geometry+radius, child edge; pseudo color/gradient surface ownership/transforms and 256-color cap; text/icon/control/inheritance/disabled/shadow capture uncertainty; reveal vs state opacity (control severity retained); filter matrices and unknown ink routing начало. Продолжение полностью дочитано, см. последующие диапазоны. 2101–3900: filter paint ownership vs unknown, opacity fold over surface, clipped gradient best-stop fail, shimmer plateau>=50%, lowcontrast gates/dedupe after ignores+paint+mockup, text-layer consistency, icon/card-title/tile, italic/hero, motion pulse exception, glow detached-surface rescore and AI palette visibility начало. 3901–6350 implementation: AI gradient stop-majority/chroma/declaredDS/blur+media/8px256area; neon ink held for page two-hue signal, radial own/ancestor backdrop+covering media share and5000text rect cache; h1 firstscreen, GPT pair+comparable-row vs hidden outflow; overflow nearest semantic popover clip ownership and harm-only text spill/collision with code/truncation/generated glyph exemptions. 6351–9300 FakeDom tests fully read incl shimmer, beststop gradient, clipped extents/fixed containing block, stripe/state/copy opacity/disabled/reveal rest, media layers/ignore-before-dedupe, icon tiles and h1. 9301–13721 дочитаны полностью: palette declared tokens/code-highlight/stop-majority и barely-fades exemptions; radial own/ancestor compositing, media opacity/order/transparent formats/mask и text cache; harm-only overflow, inline truncate, code/page-shell/containing-block/clip-margin, finite running width animation; GPT comparable row depth, hidden flyout vs scroll-reveal; slotted shadow ink; stale/unanswered hit tests, 85% occlusion; below-fold photo/card paint ordering, unknown mask/radius/filter; SVG currentColor-only; blend-before-filter, running filter and mid-reveal tests. Все FakeDom assertions прочитаны, не запускались."
+    },
+    {
+      "path": "crates/html/tests/footer_headings.rs",
+      "sha256": "5a316130c99a8262ef3f6973f8bba7c4a672c71ae1af3742753c786c23ced054",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "total_lines": 32,
+      "substantive_note": "Footer chrome skip exemption but skips within footer column titles retained; closing CTA exception. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/background_shorthand_reset.rs",
+      "sha256": "d0f470757735a1a673ffec04fa41b3d442dc95924758ec60e0d3b071fbd28922",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          564
+        ]
+      ],
+      "total_lines": 564,
+      "substantive_note": "Implicit transparent reset vs explicit color/currentColor, important/order/hover image swaps, cycle/5000chain bounds, icons vs cover/auto scaling, conservative custom-property hover skip. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/css_rules.rs",
+      "sha256": "d66d0e71553bc0bcddf2e94d6c07d4c35ce5743647a907e480a7fc9fcb3da6f8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          130
+        ]
+      ],
+      "total_lines": 130,
+      "substantive_note": "Node css-tree expected fixture comparison and explicit signed shorthand whitespace restoration; corpus equality not browser truth. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/sampled_contrast.rs",
+      "sha256": "46b13b70c4540d40af9e69cd1b04295dd74bd3c0e370fe7c0ecde9e8bb4595d3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          2075
+        ]
+      ],
+      "total_lines": 2075,
+      "substantive_note": "Полностью прочитаны 2075 строк assertions/helpers: sRGB/P3/OKLCH Color4, text stroke, inherited hue-group/opacity/gradients clipping, image unknown/null incomplete, glyph paint contexts, per-span descendant gradient fallback, explicit static inability for unknown surface; snapshots are sampled-color fixtures, not browser execution."
+    },
+    {
+      "path": "crates/html/tests/oracle_html.rs",
+      "sha256": "40293c797094e405ce78bb5d96247cdfa0a4f633798a66eedba3dd65deb3d399",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          250
+        ]
+      ],
+      "total_lines": 250,
+      "substantive_note": "JS goldens exact finding arrays with path masking/text analyzer wiring/inline ignores off; missing inputs skipped and no minimum matched assert. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/negative_tracking.rs",
+      "sha256": "22403be08a1eea8104b7e83f104148eb313a1e111b68f792f1103dea0e6910fd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          54
+        ]
+      ],
+      "total_lines": 54,
+      "substantive_note": "Exactly three crushed tracking cases, snippets normalized em/px/font size; external CJK fixture expected exemption. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/stripe_child.rs",
+      "sha256": "c9e062cc65283a906b45dc02764fe1a0a58a88c2376731e2e8249e468feb5fc3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          291
+        ]
+      ],
+      "total_lines": 291,
+      "substantive_note": "Static absolute/flex stripe child geometry rounded far edge, authored auto/inset/flow/alignment/var/inherit; relative width unknown skipped. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/counted_pairs.rs",
+      "sha256": "bce59eddb2e0e1e29162a81c62cea01a27d323f9e07f8bad68be157dd26305d0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          76
+        ]
+      ],
+      "total_lines": 76,
+      "substantive_note": "One finding per color pair with counted copies, advisory vs warning never merged, outer panel nested cards count; static lacks vendor/pixel context. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/source_lines.rs",
+      "sha256": "d78341adb6b471e92d477032b5fab13bf133f4e01a06f326038ed91d63afc22d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          114
+        ]
+      ],
+      "total_lines": 114,
+      "substantive_note": "Start-tag source lines incl wrapped tags, quotes/comments/scripts/raw text/SVG title/processing instruction; next-line ignore and duplicate-pair count. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/italic_heading.rs",
+      "sha256": "8d88eef501dc0e76c630b6e2f3d5ed59cf934e6d9852781a6a7483f98c439301",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          34
+        ]
+      ],
+      "total_lines": 34,
+      "substantive_note": "Once per heading italic serif emphasis including descendants/clamp; small/sans/hidden/roman/body exemptions. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/justified_text.rs",
+      "sha256": "2c1117ce8fed51fdde7f2e2d35ee86267739b7a4a4cba0cfd498999c18917a71",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          149
+        ]
+      ],
+      "total_lines": 149,
+      "substantive_note": "Narrow <=45-char Latin measure flags; ancestor width, auto-hyphens and CJK/Thai/Arabic exemptions; unknown width not guessed; short one-line heading passes. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/nested_cards_embedded.rs",
+      "sha256": "cd3e21b7a0b802c7c00a84f36302dfe76d13909d202dc877a7e817fa7d6a1064",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          155
+        ]
+      ],
+      "total_lines": 155,
+      "substantive_note": "Embedded figure/player/output and modal outer panel exemptions; ordinary controls/card within dialog nested card retained; mono page not automatic exemption. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/tight_leading.rs",
+      "sha256": "812ffe20f0b4cc810b34e61922322c34c9bbbe812a8c5959b7572732cd9b0014",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          197
+        ]
+      ],
+      "total_lines": 197,
+      "substantive_note": "Body floor1.3 with display/headings/sr-only/clamp exceptions, floating tolerance at boundary; documents static false positives for unknown line count/pitch vs browser. Source assertions read, not run."
+    },
+    {
+      "path": "crates/html/tests/cascade_units.rs",
+      "sha256": "99fecc1ba2fabd8152eaa6d600583faeb428ab4791c1ab850b0f412bd3a2730d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1041
+        ]
+      ],
+      "total_lines": 1041,
+      "substantive_note": "Полностью прочитаны 1041 строк: em/rem font context, custom property CSS-wide initial/inherit/unset, inheritance/borders/importance, @layer revert and shorthand reset, dynamic calc widths, transparent ancestor backgrounds and inline overrides; specification of static cascade boundaries, not passing runtime results."
+    },
+    {
+      "path": "crates/html/tests/vectors.rs",
+      "sha256": "48f581b390b2d72cdb717f1a07d9aabbc705dd060adfd3e56500dc5570c40d20",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          201
+        ]
+      ],
+      "total_lines": 201,
+      "substantive_note": "CSS cascade replay: undef/negzero canonicalization, missing/unknown function SKIP and total_fail0 only; empty corpus can green. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/link_text_contrast.rs",
+      "sha256": "6799903d4d24b32582860ba9fcda87687922f480f8788aecc88c485a0dcab17d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          647
+        ]
+      ],
+      "total_lines": 647,
+      "substantive_note": "Actual control/SAFE_TAGS text surfaces, inheritance dedupe, hidden/details/template excludes, media hiding bypass, gradient clip and photograph uncertainty; explicitly pins invisible identical-color text false negative. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/clipped_overflow.rs",
+      "sha256": "35e677eba0e3d1bf6497e29b2bce451014a70f0b065a719fca964de664374bd8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          91
+        ]
+      ],
+      "total_lines": 91,
+      "substantive_note": "Popover-child semantics and nearest clip ownership, transformed menus/empty menus/native dialog; intentional crop/carousel/ribbon/modal top-layer exempt. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/wide_tracking.rs",
+      "sha256": "87770c824229babd54f2a7117634ef07e666e4325ea70ac9ee2caed40090e22c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          135
+        ]
+      ],
+      "total_lines": 135,
+      "substantive_note": "Short/declared uppercase vs long typed capitals, lowercase/capitalize and CJK; hidden translated child must not change run. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/side_accent_radius.rs",
+      "sha256": "a98e7617f50e8e56bbd7415a4534160d0453b20ea120ba574d41c42b8c72e0fb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          254
+        ]
+      ],
+      "total_lines": 254,
+      "substantive_note": "Square sidebars pass; rounded border/pseudo/inset all consistent including1px, logical widths/hover cascade/inline radius overrides, row state selective matches. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/hard_offset_shadow.rs",
+      "sha256": "0271e71cc754e02516c914a41c751eb0a857797903cf5a647191da981c080432",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          112
+        ]
+      ],
+      "total_lines": 112,
+      "substantive_note": "Advisory only, invalid entire shadow lists rejected, named/functional color/alpha and inline waivers. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/static_flush.rs",
+      "sha256": "d2a8cf63360e8a5d2a0c5d64e796be4ee39c729328f1ac1cd2b8ecbc6d48fd31",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          451
+        ]
+      ],
+      "total_lines": 451,
+      "substantive_note": "Declaration-based inset through transparent single chains/stack shells, margin collapse/BFC/flex, centering height/logical padding, unknown math skipped; static-only false positives enumerated. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/ignored_linked_stylesheet.rs",
+      "sha256": "f371c0ea8f66454e07e882762f857a78ffac8f5b61b1ab8d3a768c7eceb26061",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          42
+        ]
+      ],
+      "total_lines": 42,
+      "substantive_note": "Waived vendor sheet not pattern-scanned but still participates cascade for real text contrast. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/wiring.rs",
+      "sha256": "a8111a9359969fad5427eb97dc6baf79ea78c6ad7551619de300235d2dbe706a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          313
+        ]
+      ],
+      "total_lines": 313,
+      "substantive_note": "Before/kept user-source inventory forms/fields/id/handlers/scripts/test hooks multiset and content; target/version validation, status exits0/1/2; temp writes and ignored saved inventory. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/rule_pack.rs",
+      "sha256": "3a230fad9a569aa1beea0c9e69b4b6bf62eb935658c3a9119bd5b55c00698af2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          148
+        ]
+      ],
+      "total_lines": 148,
+      "substantive_note": "RulePack extension appended after builtins, document hook wins over text, inline waiver valid; global registry installed in tests. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/gradient_surface_contrast.rs",
+      "sha256": "74adf29ac96ab60f1b2c6cd03f7425ba1081fb4917cd3d61a2d1dac875a28f3f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          190
+        ]
+      ],
+      "total_lines": 190,
+      "substantive_note": "Alpha+opacity compositing, same-pair/per-box counted dedupe, background shorthand ground; worst-stop static overflags away from gradient band, unknown layout explicit. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/broken_image.rs",
+      "sha256": "7bf1e543f02d2dce075d8060eea37604caba397ec9cc541ba44e765ca9ae29b7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          57
+        ]
+      ],
+      "total_lines": 57,
+      "substantive_note": "srcset/Angular/Vue/Svelte/lazy data bindings accepted as source, empty/unrelated bindings and bare ngSrcset flag; no network/image load validation. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/unresolved_custom_properties.rs",
+      "sha256": "90c1cba270628e081b219fe03f6d52ebb298c80377209e1f3c4242b137af8ea9",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          286
+        ]
+      ],
+      "total_lines": 286,
+      "substantive_note": "Unknown padding/font/border/outline not assumed0/inherited; concrete and nested fallback real flags; missing linked CSS warns incomplete. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/gpt_border_shadow.rs",
+      "sha256": "e97e8e7b94d84b3f92054fa7a002adfb6c6975764b393f95cf27eb961bd62030",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          312
+        ]
+      ],
+      "total_lines": 312,
+      "substantive_note": "Repeated >=3 similar same-tag cards with up to2 wrappers, negative spread/inset/hidden popover exclusions, staged reveal retained; static dark-surface false positive documented. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/low_contrast_advisory.rs",
+      "sha256": "ac9c2cb20ac47ae512d21229b82a730b99eba043643d97b73e6b7fb2297fe2ea",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          245
+        ]
+      ],
+      "total_lines": 245,
+      "substantive_note": "Near-AA ratios downgraded advisory, decoration/mockups/labelled placeholders and bold-face names; severity-separated dedupe; not strict WCAG gate. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/undersized_ui_text.rs",
+      "sha256": "631b59f46c14b12211edea887422e305ec055994197145318cce0154c70ba020",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          79
+        ]
+      ],
+      "total_lines": 79,
+      "substantive_note": "11px functional/10px fine print floors with0.1px tolerance, html furniture class ignored but body class applies. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/radial_spotlight.rs",
+      "sha256": "9acdc0209f694870f8c75517cac9828603a5ee8c05b2d304213e28829c41701c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          230
+        ]
+      ],
+      "total_lines": 230,
+      "substantive_note": "Prominence alpha/opacity/surface/copy, brightest stop, underlying layers; photos fallback alpha not measured contrast. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/hero_kicker.rs",
+      "sha256": "7ed605220dadd15a193fd8830e43b3237674e84b4e5047e1cdcbab63e3daa841",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          35
+        ]
+      ],
+      "total_lines": 35,
+      "substantive_note": "Smallcaps font vs Simplified Chinese SC/byline/date/path; fixture missing silently returns test success. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/all_caps_body.rs",
+      "sha256": "da24aa8baaf0c6c5ec36b3fe15a58b26f7305b982e7fd7c1acbbe7fef1b4bebb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          99
+        ]
+      ],
+      "total_lines": 99,
+      "substantive_note": "Own text run not subtree, >=80-char sentence vs CTA; fixture missing skip. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/placeholder_contrast.rs",
+      "sha256": "d223332b903928b8c0b6619b32f881fb58e0056738fcdafc247d5323e27f939e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          122
+        ]
+      ],
+      "total_lines": 122,
+      "substantive_note": "Pseudo selectors bare/descendant/sibling, translucent/frosted inputs, filled inputs and UA default skipped. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/advisory_contexts.rs",
+      "sha256": "36cef575870d1658822f0e516e0ea563579700e0d9da0389eecfd554e2245c23",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          284
+        ]
+      ],
+      "total_lines": 284,
+      "substantive_note": "Micro-label/fine-print/framed mockups advisory not failure; controls/consent still failing; structure vs actual layout/transform limits explicit. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/html/tests/robustness.rs",
+      "sha256": "079babeaef82b2609f567cdf75440c536040be4e4ee952fb5dc60f71bec30c11",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "total_lines": 93,
+      "substantive_note": "First12 sorted fixtures with bounded truncation + garbage/800deep/1000wide/noise; no universal fuzz proof, missing fixtures skip. Полностью прочитан source тестов, не прогон."
+    },
+    {
+      "path": "crates/agents/src/targets.rs",
+      "sha256": "4b56b0c1afcdc8e3276d668716701cbc2d98e997c1e030fc40be7eb128a81982",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          207
+        ]
+      ],
+      "total_lines": 207,
+      "substantive_note": "Targets user settings/hooks/config/AGENTS; plan renders without target writes but CLI acquires state lock. Status exact-resource matching and manual Codex trust actions; CLI MCP observations can execute harness."
+    },
+    {
+      "path": "crates/agents/src/render.rs",
+      "sha256": "fa485615f67c134e60d9a48d5fd8103df314594653bebadaf0d814185190364d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          971
+        ]
+      ],
+      "total_lines": 971,
+      "substantive_note": "Duplicate-key JSON refusal, additive exact hooks, marked instruction drift preservation, surgical TOML features/approval editing, explicit false refuses hooks; HTTP MCP/permissions merge/undo with baseline."
+    },
+    {
+      "path": "crates/agents/src/lib.rs",
+      "sha256": "f6932dff4f1b90961136e0ad2531f44a8f20bc22dd431c3ab616b493488735b7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          594
+        ]
+      ],
+      "total_lines": 594,
+      "substantive_note": "Spec and per-harness Hook formats; flock vs non-Unix create-new lock, v2 journals and intent transactions, rollback guarded by before/after, 0700 home/0600 state writes, installed_specs/recover API."
+    },
+    {
+      "path": "crates/agents/src/fs_writer.rs",
+      "sha256": "919dcf97ed76dd42c05565687a4b69e54231064d57df723b079e718182097ffb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          290
+        ]
+      ],
+      "total_lines": 290,
+      "substantive_note": "Canonical symlink target, Unix uid/dev/ino, before-content checks, 0600 unique temp+fsync+rename+dir sync+readback; delete guard. Error paths can leave temps; no CAS rename."
+    },
+    {
+      "path": "crates/agents/src/tests.rs",
+      "sha256": "0061f6a8fd85dd9e6aef7bd3ab54cc8df88aa48ba2cbf4b39c84d1ab409268c5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1704
+        ]
+      ],
+      "total_lines": 1704,
+      "substantive_note": "Full source tests for CRLF/markers/duplicate JSON/TOML false switch, symlink/dangling/cyclic targets, interrupted boundaries/recover, two owners/accounts/shared claims, surgical undo, user drift, missing journal, per-server approvals, older hooks=false journal, redacted list with unreadable journal, Cursor/Copilot/OpenCode resource/dir recovery. No concurrent render-to-write seam test seen."
+    },
+    {
+      "path": "crates/agents/src/resources.rs",
+      "sha256": "e35032b9b4b13930a82d82206628b3b3cc0817d553e7387679fc7154aaa77437",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          750
+        ]
+      ],
+      "total_lines": 750,
+      "substantive_note": "Apply preflight drift/ownership, targets old+new, pending intent before writes, source snapshots/resource claims; undo exact restore vs surgical remove, shared Codex switches/approval preservation, MCP sync. Noted render-to-write race."
+    },
+    {
+      "path": "crates/agents/src/mcp.rs",
+      "sha256": "3638cf60ca3212159f15b4f4e5d7b19f2c2caeb62e1e66a66166f4444e2b40e4",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          329
+        ]
+      ],
+      "total_lines": 329,
+      "substantive_note": "Preflight old/desired/peer collisions, subprocess Claude/Codex MCP get/add/remove, text/JSON observation; add first-install verification only, failures nonzero get treated absent; no child timeout."
+    },
+    {
+      "path": "crates/agents/src/cli.rs",
+      "sha256": "82a9421e67a304adf51e19489dacfd1a4212189a571d055c160b35c97f86124c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          251
+        ]
+      ],
+      "total_lines": 251,
+      "substantive_note": "Version/owner/harness/root/spec validation; user installation hash ID; global state lock, plan/status/apply/undo/recover dispatch; list redacts paths/commands but observes MCP via CLI."
+    },
+    {
+      "path": "crates/agents/src/tests/mcp.rs",
+      "sha256": "891e9e98ec56da5b34e1d1f57e2777659c3815f7ac12f85bf67bd0b52c731bf1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          267
+        ]
+      ],
+      "total_lines": 267,
+      "substantive_note": "Full fake CLI integration tests: name collision, MCP interrupted add recovery, peer shared server claims, drift preserved during undo, Codex --json get. Tests are source intent, not execution."
+    },
+    {
+      "path": "crates/core/src/checks/css_scan.rs",
+      "sha256": "278b0960f2c38a2e76eca633431f20a8a9acfcf91c7e3aa5ae66f0bbdf120bbb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          4185
+        ]
+      ],
+      "total_lines": 4185,
+      "substantive_note": "Полностью прочитаны 4185 строк включая tests: custom props global last-write/depth8 (not CSS cascade), raw glow/grid/halo, pseudo/inset stripes with host-corner index nesting+unknown mixins/interpolation, UTF16 locations, organic polygon/path geometry (16curve samples), buried-raster alpha>=.9 and intentional JS blend whitespace bug, pulse/marquee keyframes/motion guards, reduced-motion stripping, header/nav dot severity. Raw regex/heuristic surface not a CSS or layout engine."
+    },
+    {
+      "path": "crates/mcp/src/presence.rs",
+      "sha256": "6d987c5ee9cc7c174601db0997f9683172220c4d645ffdb941f49da31af860e0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          333
+        ]
+      ],
+      "total_lines": 333,
+      "substantive_note": "Full presence+tests: ps parent chain up to8, start-time PID reuse checks, local cwd/repo/session record 0600/0700; drop removes; listing deletes stale only if nonempty ps; seen vs connected. Windows absent."
+    },
+    {
+      "path": "crates/mcp/src/lib.rs",
+      "sha256": "e7ad5b7c67065be2b3d24841f3cdc172e686924f41c671ab1b6928e3b96f0f79",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          570
+        ]
+      ],
+      "total_lines": 570,
+      "substantive_note": "Full stdio RPC proxy: quiet initialize/list; lazy one-retry OAuth hold+progress; account Session network /mcp, artifact file upload, local browser relay, presence. Async sign-in worker/5min create-new lock; missing scope distinct from workspace refusal."
+    },
+    {
+      "path": "crates/mcp/src/asset.rs",
+      "sha256": "82ed358ca2559e4231ce24a364e6c6d90de305d8618429411ae0886167b0a75d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          154
+        ]
+      ],
+      "total_lines": 154,
+      "substantive_note": "Full upload reader+tests: extension-based allowed MIME, 1..50MiB, no terminal symlink, handle identity Unix dev/ino vs Windows len/mtime, bounded read/hash, reservation/dedupe; accepts arbitrary absolute or relative path by contract, no workspace sandbox."
+    },
+    {
+      "path": "crates/mcp/src/tests.rs",
+      "sha256": "6fe0a5e91f169250d6d815a3956d667e08382144ba501ff3249bacff30cd772b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          134
+        ]
+      ],
+      "total_lines": 134,
+      "substantive_note": "Full scripted Upstream tests: exactly one auth retry/progress, no browser on initialize/list, sign-in tool list_changed, no notification replies, other failures not auth, SSH/no-browser env semantics. Not executed."
+    },
+    {
+      "path": "crates/mcp/src/browser.rs",
+      "sha256": "912cbac8388d854c2ad3c1aaa48693b322d9ebd0b7afeeb0d43c9e24109130da",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          287
+        ]
+      ],
+      "total_lines": 287,
+      "substantive_note": "Full native messaging relay: allowlisted extension origin, native-endian capped frames, 0700/0600 socket, one flock-like host lock, mutex driver/pending IDs, probe no claim, agent disconnect cleanup; 6min calls, Unix only. Extension owns site consent and Pro (not reviewed here)."
+    },
+    {
+      "path": "crates/core/src/browser/line_breaks.rs",
+      "sha256": "719df57526d80d0e5f835a6d00bfcc4656b68387eb9b89d5fecf1583a101d46f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          936
+        ]
+      ],
+      "total_lines": 936,
+      "substantive_note": "Full implementation+FakeDom tests: rendered line/last-word rects, <=30% tail/30-char prose, heading <35%/20-char/2..3 lines, authored balance/pretty exceptions, clips/multicolumn/mixed fonts/hidden/CJK conservative skips; raw pretty fallback lacks selector specificity/conditions/linked sheets."
+    },
+    {
+      "path": "crates/wasm/tools/snapshot-diff.mjs",
+      "sha256": "27b1d9b23566b769162f4fa7cb11c9ef81b16b8f5477e5986b2f3f6803cab482",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          111
+        ]
+      ],
+      "total_lines": 111,
+      "substantive_note": "Full source: Puppeteer + dist bundle + fixture HTTP server; live Dom vs snapshot exact finding JSON, stats capture/core/bytes/rounds/unknownStyleProps. Errors caught increment failures; pageerrors and unknown style props only printed; empty --only selection not rejected. Side effects Chrome/server/remote --url if run; not run."
+    },
+    {
+      "path": "crates/wasm/tools/ab-diff.mjs",
+      "sha256": "618b1f831c4536f592b68cfa25e5cf01c34932c0834cf4cbf6d49e84b3035c3b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          131
+        ]
+      ],
+      "total_lines": 131,
+      "substantive_note": "Full source: old checkout JS vs current dist WASM; same page reloaded for each bundle, rule projection, exact findings+hidden text and optional visual arrays, timings; caught navigation/runtime error fails, pageerrors diagnostic only. Puppeteer/createRequire/HTTP/Chrome/optional remote URL dependencies, no minimum target count. Not run."
+    },
+    {
+      "path": "crates/wasm/tools/disabled-values-check.mjs",
+      "sha256": "1af81ed57b2b78be25c16ba4f0be9c862601afa6c7b2ab38205f410cde2e70e0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          179
+        ]
+      ],
+      "total_lines": 179,
+      "substantive_note": "Full source: extension-mode scanId message collection with 5s polling; positive undocumented Poppins/color controls, exact waived count reduction, unrelated findings survive, hex-rgb value equivalence, skipScan empties. Missing result coerced to empty findings without separate received status. Puppeteer+built bundle+HTTP fixtures; CI Chrome no-sandbox args. Not run."
+    },
+    {
+      "path": "crates/wasm/tools/ext-diff.mjs",
+      "sha256": "f32209f829d5b01ac49c5c7ced4a0df32d59bc8e89f626b6c6e6c34888ac43d4",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          228
+        ]
+      ],
+      "total_lines": 228,
+      "substantive_note": "Full source: two extension Chrome launches and SW sendScanToTab; 60s settle polling; rect-insensitive A/B verdict, optional strict CSP fixture and popup/panel/toggle/no-window-API message flow. F6: A/B does not require injected or !failed before equality, both null can pass; B-only mode checks success. Chrome/extension/HTTP/optional remote URLs side effects only described, not run."
+    },
+    {
+      "path": "crates/wasm/tools/skip-scan-check.mjs",
+      "sha256": "cbcdfbc203a9eaa3117c3e31f20ea7482e91ca3f6adb9219c49f701aa1355da5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          134
+        ]
+      ],
+      "total_lines": 134,
+      "substantive_note": "Full source: positive visual-contrast control waits up to8s; skipScan scanId then2.5s bounded observation; requires >=1 results post, every post empty and no overlay/label markers. Separate control prevents vacuous overall success; observation is not arbitrary-late async proof. Puppeteer/dist/HTTP/Chrome, CI no-sandbox args. Not run."
+    },
+    {
+      "path": "crates/core/tests/vectors.rs",
+      "sha256": "9ed6bc26a2b9ccefb7d1062a860db4bae3fc24e673c9ba76e621d8a3bcee154b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          267
+        ]
+      ],
+      "total_lines": 267,
+      "substantive_note": "Full vector runner: known union dispatch, retired IDs filtered, canonical undef/negative-zero, Windows4ULP, unknown/missing vectors SKIP; only mismatches fail, zero total can pass."
+    },
+    {
+      "path": "crates/core/src/checks/vectors_b.rs",
+      "sha256": "74fbf86ffbf3846c67edf4976f12018981e212bfd0c55c48612a5ff4cf36d9f8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          234
+        ]
+      ],
+      "total_lines": 234,
+      "substantive_note": "Full group-b vector adapter: JS decode/coercion to measures/text inputs, exact known function dispatch, unknown/rejected None; not implementation of underlying rules."
+    },
+    {
+      "path": "crates/cli/assets/opencode-loop-plugin.ts",
+      "sha256": "103d88ac24a6d56f656a37e66a9447aba20999779b0c759a7775ffc60e8074d6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "total_lines": 52,
+      "substantive_note": "Full plugin template: substituted trusted COMMAND via /bin/sh lifecycle/register; SHA-derived session UUID, waiting Set idle dedupe, background Stop then promptAsync reason, lifecycle SessionStart, tool response registration. Unbounded stdout, no deadline, errors resolved empty; prompt rejection unhandled."
+    }
+  ]
+}

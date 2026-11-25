@@ -1,0 +1,990 @@
+{
+  "assignment": "closure-8",
+  "assigned_lines": 17974,
+  "entries": [
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/src/cdp.rs",
+      "sha256": "42e96e033a2cff517b596a416b250638484e4452d840a04b41dcdffcbe74e6dd",
+      "total_lines": 2749,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "CDP transport: puppeteer parity, exclusive temp profiles/reaper, process ownership, synchronous event streaming, bounded exceptions, origin-only auth, deadlines, disposable versus isolated attached pages, loader-bound native DOM/style/pseudo capture.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1600,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/quality.rs",
+      "sha256": "0fc45b0e139db895c29687875d02f19c5fba3c3c24430f16b25fe7da9be289fe",
+      "total_lines": 8274,
+      "status": "partial",
+      "ranges": [
+        [
+          4801,
+          6400
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          4801,
+          6400
+        ]
+      ],
+      "substantive_note": "FakeDom regression contracts: glyph-vs-box padding, clipping/transforms, visible fill continuity and gradients/photos, chips <27.5px, font-scaled air, leading >=1.3 body carveouts, Latin tracking, actual rendered line lengths/CJK and viewport gutters 12px <=480/16px otherwise; finite horizontal entrance versus permanent overflow. Tests read not run.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1600,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-e2e.test.mjs",
+      "sha256": "d2d8de2fa0f4d727ecc7531211fcb64f00001af6d85a433e9369ef4b4e0c954a",
+      "total_lines": 2565,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "Live E2E intent: real fixture install/dev server/browser with fake or credential-gated LLM agent, source+computed style+network proof, scoped CSS per adapter, state/reload/params/mount failure/revision cache/storage-loss/missed-SSE stale-read/orphan/foreign-project/annotations/manual ack/exit regressions. KnownLimitation converts failures to skips; empty fixtures no-op. Not executed.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1600,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/page_checks.rs",
+      "sha256": "fe15b0381c5762bcb43f8da53e12060394bdbea0a5d810e34091ccf6ea1d0221",
+      "total_lines": 10136,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          3200
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1601,
+          3200
+        ]
+      ],
+      "substantive_note": "Heading rhythm production algorithm: bounded spacer/shadow/paint/eyebrow/prose walks, structural repeated-component Dice>=0.7, >=2 offending h2-h4, above<.75below with >=12px deficit or even gaps under measured prose; exclusions landmarks/run-in/quotes/cards/hidden. Visible-ground cream checks 95% coverage, dark canvas/layers/text conservative inference; unstarted sliders are capture notes not page defects.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1600,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/checks/text_context.rs",
+      "sha256": "35a0e6b2e89d18a69d92e1fb1a320fbaecf526957b1103ae2c4fa87283305538",
+      "total_lines": 3121,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          3121
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1601,
+          3121
+        ]
+      ],
+      "substantive_note": "Micro-label production gates (units/steps/charts, no money/control/nav/form/table/heading exemption) plus regression suite for dotted/phone/scaled demo frames, sample-caption closed English labels, real controls/code/primary-page text remain readable; fine-print No/Advisory/Exempt, policy body and accordions not blanket exempt. No mutation outside test trees.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1521,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/context/src/critique_storage.rs",
+      "sha256": "bc0fc16341d5821d5a39aa8b7159bd6f737aa6473be95d86ffed7384893b5097",
+      "total_lines": 1452,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1452
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1452
+        ]
+      ],
+      "substantive_note": "Critique/audit store: per-target workspace roots, URL identity excludes query/hash, local SHA fingerprint expires/closes stale reports, collision-safe history, ownership/legacy slugs, <=64KiB nofollow regular input, metadata cleaning, local config precedence, default runtime gitignore, saved callback. Static write errors: write_all(false) still reports success/path (690-703); close ignores fs::write result (387). Tests target isolation/legacy/collisions/config, not disk-write failure.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1452,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/src/lib.rs",
+      "sha256": "b670ce7bcc099fde7f7ff72cf80dfa329a88e6e2287b795f400eff3038902894",
+      "total_lines": 2742,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          2742
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1601,
+          2742
+        ]
+      ],
+      "substantive_note": "Evidence identity preserves repeated-id match index and scan node/rect, 1.5s drift polling and post-shot motion flag >max(half box,16px); best-effort screenshot missing is not clean proof. Contrast analytic->pixel routed fallback with budget, paused video/restoration, unresolved advisory/unmeasured drop, dedup pairs/vendor/error caps, declared-purple override tests. Consent/overlay hides and reveal scrolling mutate disposable capture state.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1142,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/tests/agent_target.rs",
+      "sha256": "55b2e7a0cf711cf2e865fd3bd617a35fe57846d920bdb281a844d7a919ae0274",
+      "total_lines": 1047,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1047
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1047
+        ]
+      ],
+      "substantive_note": "Protocol integration tests: local real live-server/fake SSE overlays; token/input validation, 1-8 variants, held requests, per-client leases/reconnect/disconnect/grace/no-match vs busy, generate-event backstop, superseded/unknown/late claimant fencing before journal, reply+poll, cold boot/dev-server-gone and harness browser guards. Tests spawn processes/write fixtures; none run.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1047,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/js.rs",
+      "sha256": "f686e0ff3d6d4448ceae5d5f9d6f47e084e80b847bd6133b999522eb2dd1a6a2",
+      "total_lines": 863,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          863
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          863
+        ]
+      ],
+      "substantive_note": "Pure JS compatibility: exact whitespace/ASCII regex case fold, decimal/radix printing/ties, toFixed exact expansion, parseFloat prefix versus Number whole string/parseInt, signed zero/NaN math, Kahan hypot/fdlibm trig, serde numeric shape. Unit tests encode boundary parity; not executed. Not a design skill or Friday delta unless porting a detector.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 863,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/browser/selector.rs",
+      "sha256": "8c2790e712213724a10c0483489c65adf48f20ad001bbbd6c5d6463611cfd872",
+      "total_lines": 793,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          793
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          793
+        ]
+      ],
+      "substantive_note": "Servo selectors/cssparser snapshot adapter: recorded UI/form/media states, derived complements, invalid selectors errors versus known pseudo-element never matches, quirks id/class and HTML vs SVG case. Explicit limitations shadow host/parts/custom state absent, visited never, simplified lang filtering. Tests parser surface, not complete Chrome conformance. Pure snapshot reads.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 793,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/index.html",
+      "sha256": "b012a3f0fc3d79b2c57591569e99af0a0ad1d9cce7d1047187ca977d16a250ac",
+      "total_lines": 654,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          654
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          654
+        ]
+      ],
+      "substantive_note": "13-object gallery encodes domain fit/never rules: 5 code products, 3 photo print styles, 5 scenes; photo leads; turntable never client actual product. 12-column editorial layout, responsive stacking, four token palettes. Mount lifecycle MAX4/CAPphoto3 near viewport, dynamic imports/destroy/underlays/palette localStorage/idle prefetch and credit metadata. Clipboard failure still displays Copied; photo metadata fallback empty can throw; mount failure reschedules retries and may leave appended host. No visual/GPU proof.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 654,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/effects/gallery.html",
+      "sha256": "93f34727dfe6b9872d9cd0cb02f33d8e759a0d52b00570dea45a1f311cf4661d",
+      "total_lines": 528,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          528
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          528
+        ]
+      ],
+      "substantive_note": "Effect gallery full CSS+embedded palette catalog and module: eight family labels, per-effect look/bestOn/palette/random eligibility, seeded repeatable hero+4 card deal versus bounded local history; calm text region from geometry; palette-derived UI, filters/pause/clipboard toast/URL state/fallback/webgl1/pinned-time controls. Missing index explicit error; ui import hides cards; mount failures console warn yet ready=1. Gallery GL16 differs production4, all tiles mounted via fx lifecycle dependency.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 528,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/skill-behavior-harness.test.mjs",
+      "sha256": "5d7bd5c4b0b927c98c593537a00f30a3d09f4d5a3659b919dfb6c2979a69a344",
+      "total_lines": 476,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          476
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          476
+        ]
+      ],
+      "substantive_note": "Harness negative controls demand actual successful content reads (images as images), source-hash fresh desktop+mobile captures after final edits, separate tokens+v2 sidecar, no-change evidence, consent/brief/build/document order; advice no mutations/scans/invented prerequisite; denial warnings before next tool; no provider key inheritance; denied/compound/symlink writes blocked; checkpoints distinct completion; failure traces retained. Mock models exercise harness, not taste quality or live model performance.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 476,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/vectors/mod.rs",
+      "sha256": "7371f5cefb92f262fb48ec3e44c9eb86487e0afb80a4985f3ba861488fcb004f",
+      "total_lines": 450,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          450
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          450
+        ]
+      ],
+      "substantive_note": "Oracle replay codec encodes undefined/NaN/Inf/-0/Map/Set, dispatches checks_a/b then color conversion/contrast and inline-ignore functions with JS coercion, known-function tables expose missing vectors; roundtrip test. Pure functions except invoked dependencies; malformed map payload expects/panics, trusted fixture interface not untrusted-input API.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 450,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/advisory_contexts.rs",
+      "sha256": "f94f010730208f381515fb55506bac16876659391d55185f53752e3a058cce24",
+      "total_lines": 350,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          350
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          350
+        ]
+      ],
+      "substantive_note": "Installed-browser regression intent confirms micro labels/fine-print/framed mockups advisory with real controls/code/consent retained warnings, one nested-panel finding counts siblings, SVG rendered size; absent browser early return prints skip, not runtime evidence. Local HTTP fixtures; no execution.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 350,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/tests/entry_capture.rs",
+      "sha256": "07f69b075e6a856caa65f0e2de4230f3e6abe0fab4b8df53a5b4f892bd2b2880",
+      "total_lines": 337,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          337
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          337
+        ]
+      ],
+      "substantive_note": "Capture anti-cheat tests: private/package/source excluded inventory, symlinks fail, stable fresh receipts bound to assets+unserved approved comp; refuse comp path/copy/data URI/undeclared raster coverage, native pseudo geometry and mobile declared-plate identity, remote transport same checks, per-region receipts. Browser optional early returns; synthetic fixture .env content not real credentials. Not executed.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 337,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/loop_connect.rs",
+      "sha256": "6e92438014a7d611c4ec5e4493fbce3c16ea8faa39cad3922663a0945c590e02",
+      "total_lines": 1900,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          1900
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1601,
+          1900
+        ]
+      ],
+      "substantive_note": "Taste block opt-in/update/remove under support lock, re-resolves connected targets after unlocked prompt, per-file answers persist only changed state; No removes blocks, disconnect retries failed files and forgets successes. Global agent rules/support metadata side effects, not standalone Taste repo. Tests rollback install record and production/staging MCP allowlist/override feature boundaries; no installation performed.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 300,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-e2e-llm-agent.test.mjs",
+      "sha256": "388094833e1f6a72cd64f08943086b212a664a3b3e1ac4276c359362ff34f9ca",
+      "total_lines": 1840,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          1840
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1601,
+          1840
+        ]
+      ],
+      "substantive_note": "LLM response validator tests: preserve picked visible copy; reject source-identical/no material change and multiple editable leaf splits, allow full-copy single child; JSON fence parsing, nonempty variants/params shape, no style/framework/wrapper markup, no backtick/interpolation/unbalanced CSS, diagnostics first500chars. Pure validation test intent, no provider runtime proof.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 240,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/unread_surfaces.rs",
+      "sha256": "fdbbe614579ff5d1c6d8d3507ef40c1fa814b5d83fbea1bd7b64cfb93285f33e",
+      "total_lines": 233,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          233
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          233
+        ]
+      ],
+      "substantive_note": "Browser contrast tests: sibling/negative-z/pseudo surfaces scored only where painted, photo pixels, scrim/outline/faded media controls, mobile right-column vs parked drawer; replay retains scan/content-hidden origins only, never resurrects pixel-superseded verdict. Missing browser early return; local fixture server and engine launch would have effects if run, not executed.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 233,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/layout/hero-triptych.html",
+      "sha256": "0dc6ebac27eb5d85629b2b0f39dc0477121617fea3e7c75c86bfeb34f7f62d9e",
+      "total_lines": 172,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          172
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          172
+        ]
+      ],
+      "substantive_note": "Software triptych Carte: text/collage/CTA three zones, object-specific menu/poster/phone mockups in cqw with 13px minimum and mobile removes extra dishes; role=img with alt summary, local licensed photos, system/layout.js dependencies for cycling/nav/enter. Claimed counts/prices are demo content not verified business facts.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 172,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-feature-card/component.css",
+      "sha256": "e2cfaf4c5beaa7bab466364c3b702849313a2735987419a755c5200559c116dc",
+      "total_lines": 161,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          161
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          161
+        ]
+      ],
+      "substantive_note": "Feature cards CSS: subgrid equal text heights, nested radii outer-minus-inset, stable card/panel with opaque clipped UI windows, payment/payout/invite states, pointer/ring/caret keyframes and pause placement; mobile hides chip/select not title; reduced-motion rule only caret here, JS/global gating outside assigned CSS required.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 161,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/layout/hero-word.html",
+      "sha256": "303df1d1ac7dc38286159e1ae09570488953839edc5756a8abfe60e60febb32d",
+      "total_lines": 142,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          142
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          142
+        ]
+      ],
+      "substantive_note": "Service word hero: Archivo variable wdth, flat ground explicitly no tech effects, rotating flats/offices/pianos/studios data words; concrete price/inclusion facts/quote mockup role=img plus review claims and .example mail links. Shared system/layout/background code referenced, no backend/real evidence asserted.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 142,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/layout/hero-split.html",
+      "sha256": "14e4de0da31712306995320d251da0583b95a8e83da9ca9abcf510686274a718",
+      "total_lines": 121,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          121
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          121
+        ]
+      ],
+      "substantive_note": "Service split hero: Fraunces+Figtree, warm tokens, text/photo 5+6 cols, high-priority real image, small booking overlay, price rows/lazy secondary photo/mailto CTA, credits. JS nav/motion external; not a complete functional booking product.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 121,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/_lab/loops.html",
+      "sha256": "1996a139caf4a112721af070740223e629b82d63d7ecd49bdbac4256226328ed",
+      "total_lines": 117,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          117
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          117
+        ]
+      ],
+      "substantive_note": "UI loop lab: 19 placement recipes but default query chooses six; corner/rise/cut/fade rules, only slider centered, cursor overlays still window; restrained grain fields and one painterly background, query time pin/theme repaint, ui.grounds promises static cached picture/context release (implementation external), fetched index no catch.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 117,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/_print-core/make-fallbacks.html",
+      "sha256": "c12289eec992d34deea69e13d7835ce45dcc70f4f906a04c199c8f0147dfc429",
+      "total_lines": 89,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          89
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          89
+        ]
+      ],
+      "substantive_note": "Maintainer-only fallback poster generator: serial object mount/ready/refuse fallback/pose/snapshot/destroy, light/dark and extra plates, render plates+color side-by-side canvas PNG, downloadable data URLs __plates; ready=error on failure, no disk save until user download; failed shoot lacks finally destroy.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 89,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/icons/demo.html",
+      "sha256": "6f38735404cf4477a5ca6749de84e86ffe2b2e2a0a11f0e48a17e5ec5b316168",
+      "total_lines": 78,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          78
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          78
+        ]
+      ],
+      "substantive_note": "Icons demo HTML/CSS/catalog substantively inspected via structural extraction; inline SVG geometry classified (1362 geometry/group/definition tags), not manual path/visual review. Logo original colors vs monochrome customer row, aspect categories tall/land/wide, alt/role labels, responsive grid/file cards, Inter font and no JS. All entries parsed, no assertion actual integrations exist.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 78,
+      "hash_verified": true,
+      "content_review": "substantive-markup-css-and-catalog; inline-svg-geometry-classified",
+      "classification": {
+        "geometry_tags": 1362,
+        "rule": "All inline path/shape/group/defs data parsed structurally; not visual or manual coordinate review."
+      }
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/powers-of-ten-pullback/scene.css",
+      "sha256": "0a7abb40a9b17b21440b9a3f0b8cadfeedcd3b92ac1c83070842429a94412930",
+      "total_lines": 67,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "substantive_note": "Pullback CSS: static finished copy+device composition and live hidden copy/ground with will-change, scoped ground ink/action contrast, desktop 12-col vs stacked tablet. At <=767 final later .pb__screen aspect-ratio 1/1 overrides earlier 4/5 comment/rule. Scroll/reduced-motion gating belongs external scene JS.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 67,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/marquee-row/demo.html",
+      "sha256": "ba2da16d620866d1e1765e5abc630141101bd0d32dbe214f6fd885a2e358edec",
+      "total_lines": 64,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "substantive_note": "Marquee demo: semantic city list speed36, mo-js class and 2.5s mo-safe, preloaded modules/shared moment css, invoice mockup, static next section/photo credit. Real marquee pause/reduced motion lives referenced moment implementation, not HTML; demo customer count not factual proof.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 64,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/shaped-window-over-fixed-world/demo.html",
+      "sha256": "3c501418c94794e7e596995303144b69d45681e17f495a88bdce564d0c153b58",
+      "total_lines": 57,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          57
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          57
+        ]
+      ],
+      "substantive_note": "Shaped fixed-world demo: photographic fjord world with headline/CTA/lede and factual-looking survey metrics, sc-js/sc-safe2.5s, scene stage --h2 and external scene engine/styles; proper image alt/credits, anchors placeholders. Static HTML does not prove scrolling/a11y behavior.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 57,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-bars/component.css",
+      "sha256": "b1e4696238998e616c70fad81bd233a6e95bc4ac2f2683c80127f4f25088ee6e",
+      "total_lines": 48,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "substantive_note": "Bar CSS labelled scale, 220px plot/180mobile, --h values, static accent fallback then transparent live effect windows, newest bar outer accent ring instead of dimming others; hover-only values for earlier bars, no focus rule in inspected CSS so accessible data path must be supplied by HTML/JS.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 48,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/backgrounds/check.html",
+      "sha256": "5e1085b2a9b2e0e3f89af6e88880fd6f5b40c66f0906ccf88056123d4f269bad",
+      "total_lines": 45,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "substantive_note": "Contrast fixture: 800px grounds, invisible ink/muted probes, photo scrim grey+pale+worst-case white, liquid start/mid/end frozen transforms with data-no-pause; index-defined text-zone pixel check contract, not contrast results.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 45,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/terminal-run/fragment.html",
+      "sha256": "94b215847a0b59c1b581fa424046f5910842ab8dd8f3803f523142df26b2fe76",
+      "total_lines": 24,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          24
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          24
+        ]
+      ],
+      "substantive_note": "Terminal fragment static successful end state, typed command/progress/4 file rows/128 tests summary/next prompt caret via data-term-* hooks; decorative aria-hidden chrome, animation/controls external ui loader. Simulated UI not execution output.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 24,
+      "hash_verified": true,
+      "content_review": "substantive-static"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/context/src/question_page.rs",
+      "sha256": "6c1bd64c44a04626abfe51180bc9c19157abcc9866970ab4005c2c1500c5f73f",
+      "total_lines": 26,
+      "status": "partial",
+      "ranges": [
+        [
+          8,
+          9
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          8,
+          9
+        ]
+      ],
+      "substantive_note": "CORRECTED after expanded-string read: PAGE concat generated picker 74067char HTML/JS (1030 decoded lines), not reexport. Responsive card deck/text-only/canon/declined provenance, motion failsafe1.6s/reduced motion, opposite-face pointer fencing, 5s heartbeat, POST answer/reroll, bounded next round1200ms/8misses and silent stalled watch, comp polling gen stamps/4min fallback label, sandbox sketch readiness/4s reveal, billed comp confirm + reversible code path, art failure honest fallback. Static risk: answer/dealAgain await fetch without checking response.ok; build-path fetch unhandled/unacknowledged; modal focus trap absent in this template. Theme CSS concat reference not plain generated content; external producer interpolation escaping outside scope.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 2,
+      "hash_verified": true,
+      "content_review": "substantive-static",
+      "decoded_review": {
+        "decoded_lines": 1030,
+        "physical_lines": [
+          8,
+          9
+        ],
+        "method": "JSON-compatible Rust string segments decoded as data, entire HTML/CSS/JS read in medium batches; no upstream execution"
+      }
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/walks/consent-rules.js",
+      "sha256": "9a0285969ab05d195388390bff9c66e3d3b28863a1a349c45e5ae1c769612d7a",
+      "total_lines": 3788,
+      "status": "partial",
+      "ranges": [
+        [
+          41,
+          41
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          41,
+          41
+        ]
+      ],
+      "substantive_note": "CORRECTED: giant generated bundle invocation/data (478645chars), not directText. Classified entire parsed compact table schema: v1,4077 interned strings,1355 rules; generic[0,493),frame[491,525),specific[493,1355) overlap intentionally not summed. Every record/schema/operation-family enumerated by static parser, representative operations read; NOT manual per-domain verification. Declarative existence/visibility/cookie checks, click/hide/check/uncheck/retry/conditional/wait/shadow+iframe/style/eval-ref families; config enabled optOut+reject,20 detect retries,2s prehide,cosmetic/generated/heuristics main-world on,filter-list/logs off. Consent mutation not neutral screenshot cleanup; named eval code/decoder earlier lines outside assignment and NOT executed.",
+      "assigned_coverage_complete": true,
+      "assigned_covered_lines": 1,
+      "hash_verified": true,
+      "content_review": "generated-data-classified",
+      "classification": {
+        "strings": 4077,
+        "rule_records": 1355,
+        "operation_counts": {
+          "e": 1629,
+          "check": 751,
+          "v": 1465,
+          "c": 1356,
+          "if": 346,
+          "then": 346,
+          "k": 574,
+          "else": 238,
+          "intermediate": 12,
+          "timeout": 667,
+          "optional": 290,
+          "wv": 788,
+          "cc": 506,
+          "h": 162,
+          "wait": 480,
+          "all": 205,
+          "eval": 61,
+          "negated": 47,
+          "exists": 74,
+          "visible": 53,
+          "waitForThenClick": 88,
+          "waitForVisible": 25,
+          "w": 57,
+          "retry": 65,
+          "retryInterval": 58,
+          "any": 63,
+          "waitFor": 12,
+          "click": 47,
+          "removeClass": 10,
+          "selector": 15,
+          "addStyle": 3,
+          "stylesheet": 6,
+          "stylesheetId": 5,
+          "setStyle": 2,
+          "text": 11,
+          "hide": 1
+        },
+        "index": {
+          "genericRuleRange": [
+            0,
+            493
+          ],
+          "frameRuleRange": [
+            491,
+            525
+          ],
+          "specificRuleRange": [
+            493,
+            1355
+          ],
+          "genericStringEnd": 2182,
+          "frameStringEnd": 2246
+        },
+        "rule": "Complete static JSON parse/schema+all operation-family classification, representative rules read; not manual domain-by-domain certification; decoder/eval bodies outside assigned line."
+      }
+    }
+  ],
+  "verification": "static-only; no upstream code execution",
+  "covered_assigned_lines": 17974,
+  "covered_assigned_ranges": 34,
+  "all_assigned_ranges_complete": true,
+  "hash_validation": "All 34 final source SHA-256 values equal initial ledger; line counts and bounds checked.",
+  "roots": {
+    "impeccable": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/impeccable",
+    "taste": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/taste"
+  },
+  "local_comparison_sources": [
+    {
+      "repo": "Friday",
+      "path": ".codex/agents/design/design-reviewer.md",
+      "sha256": "750464269418720610045daaf74d5875c59f0275a5646cf2042a9d4b9a81cb63",
+      "total_lines": 196,
+      "review": "static content; no invocation"
+    },
+    {
+      "repo": "Friday",
+      "path": ".codex/agents/design/design-department.md",
+      "sha256": "5bb8dbf92270923d2de35d9212cc86104494a76f758b4a068e457d44cbf73ac8",
+      "total_lines": 155,
+      "review": "static content; no invocation"
+    },
+    {
+      "repo": "Friday",
+      "path": "docs/core/motion.md",
+      "sha256": "7cc3cf39a0e1d4ed8b4c1be6ef5e13f88f5a183fb92a46ed309a7781d6dcab15",
+      "total_lines": 196,
+      "review": "static content; no invocation"
+    },
+    {
+      "repo": "Friday",
+      "path": ".codex/workflows/review-loop.md",
+      "sha256": "e2f5985cc87035f9f81d1156cfc06028669d46e1e96b5c40c83a4323574b4f49",
+      "total_lines": 80,
+      "review": "static content; no invocation"
+    },
+    {
+      "repo": "Friday",
+      "path": ".codex/scripts/screenshot.mjs",
+      "sha256": "11ef2b9872c4bb3a69c5bff5321903dc9babb8dd0149dd4fae4b947102188839",
+      "total_lines": 152,
+      "review": "static content; no invocation"
+    },
+    {
+      "repo": "Friday",
+      "path": ".codex/scripts/design-lint.mjs",
+      "sha256": "f13c0e61b06a1e2cca7c26ec3756a0373dc85e93a4a03ca2392153f6c4688966",
+      "total_lines": 303,
+      "review": "static content; no invocation"
+    },
+    {
+      "repo": "Friday",
+      "path": ".codex/agents/design-reviewer.toml",
+      "sha256": "2501dce083481f58fdf906af5b2bc62f73401c5cdf872f5eb14a128494779e00",
+      "total_lines": 3,
+      "review": "static content; no invocation"
+    }
+  ],
+  "reference_resolution": {
+    "taste_literal_local_refs": 495,
+    "unresolved_as_page_relative": [
+      {
+        "source": "skills/taste-skill/assets/objects/index.html",
+        "ref": "./assets/objects/photo-dither/object.js",
+        "exists": false
+      },
+      {
+        "source": "skills/taste-skill/assets/objects/index.html",
+        "ref": "./assets/objects/photo-engraving/object.js",
+        "exists": false
+      },
+      {
+        "source": "skills/taste-skill/assets/objects/index.html",
+        "ref": "./assets/objects/photo-halftone/object.js",
+        "exists": false
+      },
+      {
+        "source": "skills/taste-skill/assets/objects/index.html",
+        "ref": "assets/img/object-on-white.jpg",
+        "exists": false
+      },
+      {
+        "source": "skills/taste-skill/assets/objects/index.html",
+        "ref": "assets/img/photo.jpg",
+        "exists": false
+      }
+    ],
+    "interpretation": "Five unresolved paths are copy-snippet/example destinations, not active imports. Dynamic/index-driven/external refs not runtime verified."
+  },
+  "limitations": [
+    "No upstream execution/import/install/hooks/tests/UI.",
+    "Generated consent table and SVG geometry classified, not manually verified per-domain/per-coordinate.",
+    "Partial status refers to source-file review, complete assigned ranges reported separately.",
+    "No visual, GPU, live IDE/provider or installed configuration verification."
+  ]
+}

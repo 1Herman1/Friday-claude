@@ -1,0 +1,668 @@
+{
+  "source_sha": "d1a2bb41d927083ac7118f60cfc9cdf711810ea0",
+  "status": "partial-audit",
+  "upstream_execution": false,
+  "files": [
+    {
+      "path": ".agents/plugins/marketplace.json",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          21
+        ]
+      ],
+      "sha256": "b9325fd668c8c27de5b82cd415287219804243615be6af9f6af2f347298d5290",
+      "total_lines": 21
+    },
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          25
+        ]
+      ],
+      "sha256": "dacce5e147af42b5d6f744ae71af5e26645767a6bcff0699deb5d1411568b618",
+      "total_lines": 25
+    },
+    {
+      "path": ".codex-plugin/plugin.json",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          35
+        ]
+      ],
+      "sha256": "57f2d2c887b80d461bf2cd3e4860edda1d8863c4c6f98ad12c1d3a95fbc3510f",
+      "total_lines": 35
+    },
+    {
+      "path": ".gitattributes",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "sha256": "1d5d71dcc6ccd28ab46a335349ecc74742ca4b81f4fcad212f8d134f70f1f13e",
+      "total_lines": 1
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "sha256": "38f3a3fac585c3c35d6ed2297baba8d2d22ea974fa9799f842771c2f7c42d916",
+      "total_lines": 1
+    },
+    {
+      "path": ".github/workflows/check-skills.yml",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          33
+        ]
+      ],
+      "sha256": "b6b4d5d240e78c2c1a9736f8bf6158cc7d4d340d8c290d91cd9952620a3b22a8",
+      "total_lines": 33
+    },
+    {
+      "path": ".gitignore",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "sha256": "f25f8a8c6cb348a0ac695bde8280d39827f0bc183c1185a57de234ce117f61eb",
+      "total_lines": 5
+    },
+    {
+      "path": "CHANGELOG.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          299
+        ]
+      ],
+      "sha256": "51eda0bba3c63738fcc6534c22fd2f0fe0fd0c26f052d4d2045b2549ee2231f7",
+      "total_lines": 299
+    },
+    {
+      "path": "LICENSE",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          21
+        ]
+      ],
+      "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df",
+      "total_lines": 21
+    },
+    {
+      "path": "README.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          255
+        ]
+      ],
+      "sha256": "3af31983efae5ba6e649ceabee2db6e58cdc91c9e2dd74554639e9f86d568e75",
+      "total_lines": 255
+    },
+    {
+      "path": "examples/v2/CREDITS.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          69
+        ]
+      ],
+      "sha256": "5e865281e168253eb49ce77ee2028c797a5c5c9eb2db54213ec9d1dae35de18e",
+      "total_lines": 69
+    },
+    {
+      "path": "install.sh",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          181
+        ]
+      ],
+      "sha256": "18eb1038f27b6abd926971a97ca41212225575da0c03b3168c35a0f2d6a2b2f8",
+      "total_lines": 181
+    },
+    {
+      "path": "skills/taste-skill/SKILL.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          381
+        ]
+      ],
+      "sha256": "0c7a5852a5217be79cab422c6d58329b776f0c25bd6da8a7a01707ce75be6206",
+      "total_lines": 381
+    },
+    {
+      "path": "skills/taste-skill/references/backgrounds.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          111
+        ]
+      ],
+      "sha256": "b8d593ffaadcc390503d86fc094ed3bf4e070c1ee7927c1e1c1251443409c9c1",
+      "total_lines": 111
+    },
+    {
+      "path": "skills/taste-skill/references/cards.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          309
+        ]
+      ],
+      "sha256": "f70d8c41c55ff7e777b5ce51cbe61fee05c024b268c744beb53528ec8a4869a1",
+      "total_lines": 309
+    },
+    {
+      "path": "skills/taste-skill/references/copy-moves.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          138
+        ]
+      ],
+      "sha256": "6e5c7eb52ab5cbe61c07eb936c3d17d4432f02dbae2da1f1bbab5e9aef7b2400",
+      "total_lines": 138
+    },
+    {
+      "path": "skills/taste-skill/references/copy-registers.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          154
+        ]
+      ],
+      "sha256": "8e2e6d5b9ef09e38bfdd2f1c9a32796bd91c1f3f99c6c51abbbe89d99119d6fd",
+      "total_lines": 154
+    },
+    {
+      "path": "skills/taste-skill/references/copy-tells.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          126
+        ]
+      ],
+      "sha256": "e113d4f788f64e44e92cefa0823be4cf0662f2806ed87f91aa52d9cf8877d6ed",
+      "total_lines": 126
+    },
+    {
+      "path": "skills/taste-skill/references/copy-voice.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          179
+        ]
+      ],
+      "sha256": "3a287b8f10384229aa52e6d75480fddc377aafd05f7d0ee9d1a180d2ebf44e8a",
+      "total_lines": 179
+    },
+    {
+      "path": "skills/taste-skill/references/copy.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          193
+        ]
+      ],
+      "sha256": "607520bc4213e06e6635f4fa44915d3fb5482b5b2e3779faa0a5c9d2abcc9e69",
+      "total_lines": 193
+    },
+    {
+      "path": "skills/taste-skill/references/diagrams.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          95
+        ]
+      ],
+      "sha256": "2aafd9ad74d2fc620174c23aa48f9ce6201ce33c1b441630973af9509a9b723e",
+      "total_lines": 95
+    },
+    {
+      "path": "skills/taste-skill/references/effects-creative.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          245
+        ]
+      ],
+      "sha256": "5d91932981577d300c8f1b2907811335777552eccb333b07c50ef5b1c000bbc9",
+      "total_lines": 245
+    },
+    {
+      "path": "skills/taste-skill/references/effects-objects.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          298
+        ]
+      ],
+      "sha256": "053eb08058dfa970cda3cb71ee469d14025fb86c4eb8d70b4a112ef47760c4cb",
+      "total_lines": 298
+    },
+    {
+      "path": "skills/taste-skill/references/effects-usage.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          182
+        ]
+      ],
+      "sha256": "4522bce7971e31e776c845b008b6f40997ab97a68d49cf2bb4493f72798a5342",
+      "total_lines": 182
+    },
+    {
+      "path": "skills/taste-skill/references/gate.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          204
+        ]
+      ],
+      "sha256": "14946f5ad6b4abdf6dad65a693b2eeb98912e8253b9c4f10da0840e4efafc651",
+      "total_lines": 204
+    },
+    {
+      "path": "skills/taste-skill/references/icons.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          86
+        ]
+      ],
+      "sha256": "d385f027d63d488a27ae63bef8bcff2cb4358e74cb0ad7454e4e9da6a49f8381",
+      "total_lines": 86
+    },
+    {
+      "path": "skills/taste-skill/references/layout-v4.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          297
+        ]
+      ],
+      "sha256": "6316217db46993977700cf4203cc29f96cad0d7bf3a97e877241b1be0901fd19",
+      "total_lines": 297
+    },
+    {
+      "path": "skills/taste-skill/references/moments.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          214
+        ]
+      ],
+      "sha256": "eee7b8e18aaa268ac6ea31b58d7444b164ff10b1cf0ccea93b02904b9a0dd9e7",
+      "total_lines": 214
+    },
+    {
+      "path": "skills/taste-skill/references/motion.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          234
+        ]
+      ],
+      "sha256": "d7bc6fe01cab8a1c1e921309291828c68f875a25907317279842cf306391c373",
+      "total_lines": 234
+    },
+    {
+      "path": "skills/taste-skill/references/perf.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "sha256": "fcf55304221bd2b371ba3a80dd2e9efa1e176c104c1d28eac1dd266f804871c8",
+      "total_lines": 46
+    },
+    {
+      "path": "skills/taste-skill/references/photos.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          263
+        ]
+      ],
+      "sha256": "b115cafc205ee20f19e6e90d061d24d31460966f1bd4315fb3434ca2d560c33e",
+      "total_lines": 263
+    },
+    {
+      "path": "skills/taste-skill/references/scenes.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          127
+        ]
+      ],
+      "sha256": "3de1b89ecd2b9b9777b8b04f69c5e5a2fc0fb8dbff0f3feb06f2fe9e5b90599b",
+      "total_lines": 127
+    },
+    {
+      "path": "skills/taste-skill/references/sections-library.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1120
+        ]
+      ],
+      "sha256": "ce1c6bc27c41a3b49430a9ad3f06e02efd22471b869e4d3ea802a947ae6fb0c9",
+      "total_lines": 1120
+    },
+    {
+      "path": "skills/taste-skill/references/sections.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          634
+        ]
+      ],
+      "sha256": "999cb82dba04d205052725e93a240fcb59be1c1d7ab31129a191eb6f4ee31e89",
+      "total_lines": 634
+    },
+    {
+      "path": "skills/taste-skill/references/system.md",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          230
+        ]
+      ],
+      "sha256": "f6bfbdb36b49c4584b4fd10ff24e9e97098bd93d09da3e08e8424500ee641d01",
+      "total_lines": 230
+    },
+    {
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          530
+        ],
+        [
+          4535,
+          4714
+        ],
+        [
+          11180,
+          11485
+        ]
+      ],
+      "remaining_ranges": [
+        [
+          531,
+          4534
+        ],
+        [
+          4715,
+          11179
+        ]
+      ],
+      "note": "Full instructional contract/header, visual module start, server/CDP launch and final orchestration read; middle rule implementations not fully read. Search/import inventory is not substantive coverage.",
+      "sha256": "080b835e99353f63650f8966813d735f142293119cd371c554b66a1effc5e3da",
+      "total_lines": 11485
+    },
+    {
+      "path": "skills/taste-skill/scripts/copy-lint.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          463
+        ]
+      ],
+      "sha256": "1d9238959378867f24fdc232279c8526fe985aa09435d36ad745c0573b646bdb",
+      "total_lines": 463
+    },
+    {
+      "path": "skills/taste-skill/scripts/effects.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          561
+        ]
+      ],
+      "sha256": "65069543a7dd4b635357b757e32da4b48db855614ea74a6d123910b9c8a7be0a",
+      "total_lines": 561
+    },
+    {
+      "path": "skills/taste-skill/scripts/fx-gallery.template.html",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1319
+        ]
+      ],
+      "sha256": "b84b2a632c0e5225bc23981e53e0383ab0ec51b772489df56927dc023ac32868",
+      "total_lines": 1319
+    },
+    {
+      "path": "skills/taste-skill/scripts/fx-lab.template.html",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          389
+        ]
+      ],
+      "sha256": "c356b0decc2d80c8f054b3fcefe19001954c6cdd5c0e8ba1be4636309457b802",
+      "total_lines": 389
+    },
+    {
+      "path": "skills/taste-skill/scripts/gate.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          891
+        ]
+      ],
+      "sha256": "f5b9b70ea93dbbbff73e9df72259385573d37b97f2634f258bf5954ed993fd4c",
+      "total_lines": 891
+    },
+    {
+      "path": "skills/taste-skill/scripts/icons.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          609
+        ]
+      ],
+      "sha256": "b3ed816fb6c60a3746dade9283b0e5db93e0c08e8b532439f41250d0a148a359",
+      "total_lines": 609
+    },
+    {
+      "path": "skills/taste-skill/scripts/moments.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          569
+        ]
+      ],
+      "sha256": "0e4d0afb3a4a7ae75a353f76adf02c3b6ef5bbcbd25e53418a5c52d48a83e707",
+      "total_lines": 569
+    },
+    {
+      "path": "skills/taste-skill/scripts/perf.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          435
+        ]
+      ],
+      "sha256": "b17f9ebd37746c2526b03b331310c86ddfd9289db47f1e7cbbee29f50b59ed30",
+      "total_lines": 435
+    },
+    {
+      "path": "skills/taste-skill/scripts/photos.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1025
+        ]
+      ],
+      "sha256": "aa949f12c078c744af3180cdde8629fbab5a4594e77160acf30272326053b18e",
+      "total_lines": 1025
+    },
+    {
+      "path": "skills/taste-skill/scripts/shoot.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          483
+        ]
+      ],
+      "sha256": "183cde0444a7a17310e157c031f565d36d9b704afd0c9ce7aadde05d933647fd",
+      "total_lines": 483
+    },
+    {
+      "path": "skills/taste-skill/scripts/start.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          470
+        ]
+      ],
+      "sha256": "0aae0d87b7b43bf5543d456bed4029c6986e835143a32c6b05c51d89035029ee",
+      "total_lines": 470
+    },
+    {
+      "path": "tests/frontmatter.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "sha256": "571147eaace6706a4c44435c6da3dd76a0038a8128f55a0f92b7dcea46d9be3f",
+      "total_lines": 67
+    },
+    {
+      "path": "tests/kit-clean.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          168
+        ]
+      ],
+      "sha256": "3a1c11111e393577e3335d0ab8ce37edd83c457c6a5973f79ce72ac32c2fe6bc",
+      "total_lines": 168
+    },
+    {
+      "path": "tests/text-encoding.mjs",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "sha256": "7f325399c9146a8df8f67925326daf319685c2ee4108da02f7ff36b76396683b",
+      "total_lines": 32
+    }
+  ],
+  "complete": false,
+  "counts": {
+    "full": 49,
+    "partial": 1
+  },
+  "assigned_total": 50,
+  "excluded_owner": "taste asset/library worker: assets/**, skills/taste-skill/assets/**, library/** and binary example images; examples/v2/CREDITS.md read here.",
+  "local_comparators": [
+    "docs/core/design-principles.md",
+    "docs/core/design-profiles.md",
+    "docs/core/motion.md",
+    ".codex/commands/design-system.md",
+    ".codex/commands/preflight.md",
+    ".codex/agents/design/taste-curator.md",
+    ".codex/agents/design/design-reviewer.md",
+    ".codex/agents/design/motion-curator.md",
+    ".codex/agents/design/component-curator.md",
+    ".codex/agents/design/icon-curator.md",
+    ".codex/agents/marketing/marketing-agent.md",
+    ".codex/scripts/design-lint.mjs",
+    ".codex/scripts/screenshot.mjs"
+  ],
+  "historical_evidence": {
+    "taste_source_shallow": true,
+    "taste_commit": "ca50fb45124799ffede313598cda99251a09f086",
+    "supplemental_files": "scratch/design-deep-audit/historical-taste-skill-{v1,v2-experimental}.md; partial header/dial keyword review, not assigned snapshot",
+    "friday_dials_added_commit": "9fa7681580aacf75ac7a1aa8fb59c8789205524f",
+    "causal_provenance": "not proven"
+  },
+  "verification": {
+    "assigned_paths_unique": true,
+    "counts": {
+      "full": 49,
+      "partial": 1
+    },
+    "references_full": 22,
+    "script_mjs_full": 9,
+    "script_mjs_partial": 1,
+    "source_hash_mismatches": [],
+    "runtime_tests_executed": false
+  },
+  "partial_ranges_note": "Only contiguous substantively read sections are credited; import/search hits elsewhere in consistency.mjs are not promoted to full coverage."
+}

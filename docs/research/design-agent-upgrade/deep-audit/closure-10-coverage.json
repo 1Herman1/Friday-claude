@@ -1,0 +1,695 @@
+{
+  "assignment": "closure-10",
+  "verdict": "complete_assigned_ranges_static_only",
+  "assigned_ranges": 32,
+  "covered_ranges": 32,
+  "assigned_lines": 17974,
+  "covered_lines": 17974,
+  "status_policy": "partial denotes range-audit scope even where assigned range equals full file; assigned_range_complete applies only to assignment",
+  "hash_validation": "32/32 match inventory before and after substantive reading",
+  "runtime_executed": false,
+  "truncation_recovery": [
+    {
+      "path": "crates/browser/tests/evidence.rs",
+      "ranges": [
+        [
+          438,
+          475
+        ]
+      ]
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/lab.html",
+      "ranges": [
+        [
+          40,
+          56
+        ]
+      ]
+    }
+  ],
+  "additional_context": [
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/page_checks.rs",
+      "ranges": [
+        [
+          4760,
+          4800
+        ]
+      ]
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/text_collectors.rs",
+      "ranges": [
+        [
+          1550,
+          1600
+        ]
+      ]
+    }
+  ],
+  "files": [
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/src/fullpage.rs",
+      "total_lines": 1683,
+      "range": [
+        1,
+        1600
+      ],
+      "sha256": "a631cdcf72dcf2c292b071be73e1dec7714904d387eba7497dc1a25833dd596b",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "CDP-снимок не сводится к fullPage: вложенный скроллер, RTL/отрицательный origin, ширина до 4096 CSS px, виртуализированный пустой хвост и resize-relayout переключают захват на PNG-тайлы. До 240 тайлов, до 40 отдельных viewport-захватов для элементов за пределами общего кадра. Отдельные элементы разрешаются по сохранённой node identity, затем по индексу повторного selector. Неподвижные перекрытия временно получают opacity:0 с восстановлением и disclosure hidden_covers; открытый modal не скрывается. Ошибки захвата оставляют findings без картинки. Layout-проба 6×6, горизонтальное движение ≥2px минимум двух и четверти измеренных блоков; возврат дважды через 100ms, ожидание до 2s. Пустые полосы отличают от медиа. Тесты проверяют transient resize, невзаимозаменяемость двигающихся виджетов, границы и скроллер. Документ возвращается к началу, а не к произвольному исходному scrollX/Y; вложенные ancestor scroll offsets element-shot не восстанавливаются.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/visual.rs",
+      "total_lines": 7021,
+      "range": [
+        1,
+        1600
+      ],
+      "sha256": "6b74b1628e9b485e682047f39caeaa555bf16b5692b82771d3de82411c3aa155",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "Это начало подсистемы визуального контраста, не весь verdict: Rust принимает Dom и делегирует shared foundation/color/text_layers/painted, а асинхронные pixels/scroll находятся в JS bundle. Reasons: image/gradient/background-clip text, text-shadow, opacity, blend/filter/backdrop. Почти непрозрачная подложка ≥0.8 допускает pixel-путь, halo требует разделения с ink ≥2:1. Малый повторяющийся raster ≤256px считается texture, одиночный небольшой no-repeat — icon, не фон текста. Paint-модель различает Picture/Fill/PseudoFill/Unmodelled/Gradient; отрицательный z-index, stacking context, transformed pseudo quads и неизвестный origin не заменяются простым contrast(color,background). Обход ограничен 32 уровнями/соседями, 6 обычными или 24 покрывающими уровнями, 64 детьми и 1024 узлами. Неизвестная геометрия уводит к осторожной классификации, не доказывает pass. В данном Rust-срезе DOM не меняется.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/hook/tests/hook_tests.rs",
+      "total_lines": 4631,
+      "range": [
+        1,
+        1600
+      ],
+      "sha256": "fe27471b2a2431a76fbc0262129771e8837f15f9f3b60408ca7f3e98ee5b6f60",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "Контракты hook-тестов: буквальная session identity без shell injection; SessionStart append без повторов; Gemini BeforeTool меняет только читающий session build-phase, AfterAgent использует deny; чужую сессию/continuation не перехватывает. Напоминания о незавершённом comp ограничены; ship привязан к artifact/captureInputs SHA и аннулируется изменением HTML/CSS. Для monorepo DESIGN выбирается по файлу приложения без переноса cache root. Debt attribution использует проверенный dirty-worktree preimage, а не HEAD: new/pre-existing/unknown; source body в cache не пишется, одинаковые дополнительные occurrences не теряются. Есть UTF16 budget, фильтры sensitive/generated, symlink scope, shared/local config, extension suffix, восемь последних cache sessions, worktree common info/exclude, advisory tiers и безопасно quoted ignore-value hints. Это определения тестов: запуск создавал бы temp/config/git/shell side effects; здесь не запускались.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/page_checks.rs",
+      "total_lines": 10136,
+      "range": [
+        4801,
+        6400
+      ],
+      "sha256": "fe15b0381c5762bcb43f8da53e12060394bdbea0a5d810e34091ccf6ea1d0221",
+      "status": "partial",
+      "ranges": [
+        [
+          4801,
+          6400
+        ]
+      ],
+      "substantive_note": "Реальные DOM-правила text-occlusion и first-viewport-column-overflow. Occlusion читает painted-at-capture и glyph/line geometry: исключает sr-only, blur, движущийся marquee, pinned overlay, media, buried curtain и точную надпечатку тех же glyphs; порог text/graphic 45%, box/border 30%. Отдельно headline ≥40px, который нависает над краем чужой карточки, и opaque padding inline, реально перекрывший текст соседа. Декоративный mockup переводит часть находок в advisory, не стирая controls/leak. First-fold: широкая flex/grid секция, длинная колонка >1.4vh и сосед ≤vh, реально рядом, стартуют близко; nav/tab/sticky/link rails, hidden details и clipped content корректируют выбор. FakeDom-тесты фиксируют aliases/загрузку/реальный render шрифта, минимум 5% букв, CJK fallback, иерархию с шагом 1.25, popup/control-strip/page-frame исключения nested cards и run-in heading rhythm. Чистый статический Dom-анализ.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/skills/tests/hook_manifest_tests.rs",
+      "total_lines": 1463,
+      "range": [
+        1,
+        1463
+      ],
+      "sha256": "4864b3fdfddfaa3abed931ddee213e609e02a4a207a5bae4172df1574fef4f4c",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1463
+        ]
+      ],
+      "substantive_note": "Полный набор тестов переписывания hook manifests: разные shell/command fields и пути Claude/Codex/Cursor/Copilot/Grok/Gemini/Antigravity; project/home/CODEX_HOME; legacy mjs → launcher; идемпотентные merge/prune только своих handlers, сохранение чужих hooks/settings и enabled:false. Gemini JSONC сначала backup; malformed whole settings не заменяются даже force. Project-hook не удаляется до полноценной home-замены и существующего launcher. Явно документированы Windows gaps: GROK_SHELL=cmd escaping и VS Code agent-host при single-quoted пути с пробелами. Тестовые shell-spawn/write не выполнялись.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-e2e/ui.mjs",
+      "total_lines": 1453,
+      "range": [
+        1,
+        1453
+      ],
+      "sha256": "271e18b99b9dde821c0bbd83301016004600a77e94072da78008b46d06f11712",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1453
+        ]
+      ],
+      "substantive_note": "Playwright helpers для живой панели: shadow-root queries, pick/insert exclusivity, detect overlays без перехвата pointer при pick, Design Raw/loaded/error/close, annotations pin/stroke/upload shape, реальный keyboard focus configure, count2..4/action/Go, Tune, edit-copy/apply/source readback, steer lock/unlock, insert anchor. CYCLING требует не только счётчик, но arrived variants и при наличии debug — mounted variant; computed font-weight доказывает render. Зависший generating shader даёт no-retry: reload не должен скрыть дефект. Есть mount-error/retry. Ограничения: handshake после init/bar лишь ждёт 250ms, а не доказывает SSE; часть fallback использует DOM.click, скрывает annotation/Astro toolbar и не равна чисто пользовательскому клику.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundations-scan/src/lib.rs",
+      "total_lines": 2786,
+      "range": [
+        1601,
+        2786
+      ],
+      "sha256": "a4a042892a07e33bd0424f389bb575b64ec60e68ebd1be9700f73aa7565d82e1",
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          2786
+        ]
+      ],
+      "substantive_note": "Хвост foundations scanner: favicon плюс крупная иконка/локальный manifest; framework-aware 404; social preview; privacy+terms по путям; error-tracking по зависимостям/API evidence; reduced-motion/token presence и giant-file exclusions. Это readiness hints: один motion guard или token usage может засчитать всю область, имя legal route не доказывает правовое соответствие. Secrets получают отдельные read/byte budgets, tracked git и максимум пять безопасных locations без значений. Failed git/incomplete list/overbudget не превращается в чистый Checked. Исключения публичных env/stand-ins, binary/lockfiles, parsing comments только для evidence, не secrets. CI block/list commands и README code commands отделяют исполняемую подсказку от prose/scaffolding.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/oracle/cases/context.mjs",
+      "total_lines": 1053,
+      "range": [
+        1,
+        1053
+      ],
+      "sha256": "ca2c6d25e33d7d3d8027826821d6047a77fb93c19ca83ac901e893944ecbb94e",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1053
+        ]
+      ],
+      "substantive_note": "Полный offline oracle corpus, не golden outputs: env isolation; context/doctor по product/design/target/native/monorepo/git boundaries, staleness throttle и hook coverage/recent cache. Doctor --fix/idempotence/drift; design-compact archive/no-symlink/no-overwrite, lookup и font-fetch отказы до сети. Pin/unpin не трогает foreign commands, OpenCode получает commands. Surface briefs primary/related/routes, report enabled:false/latest/trend, palette seed precedence, PNG/JPEG prompt metadata и WebP sidecar, git UI signals, CSP Next proxy. Concept seed включает modes/quotas/catalog/degraded/roll records. Generate-image только fake/error/ref-unreachable; question — answer/reroll/flip, recorded root, 30min hand budget, stale comp fingerprints, sidecars, per-hand generated marker и обязательные comps/catalog identity. Fixture setup создавал бы файлы/git; реальные генерации, browser и server этим файлом не доказаны.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/hidden_mockup.rs",
+      "total_lines": 929,
+      "range": [
+        1,
+        929
+      ],
+      "sha256": "d0c3bb0ef5de831cbcb04d77204578c8f16712369e4a9c1016acd348399f55c6",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          929
+        ]
+      ],
+      "substantive_note": "HiddenMockups: только уверенно declared inert/aria-hidden frame ≥120×80, ≥3 rendered text runs, ≤3000 узлов, меньше половины текста страницы. Landmarks/h1/text hosts, modal backdrop/chrome, carousel/peer/копия split text и readable sr alternative не mockup. Working UI: ≥2 поля или поле+label, либо половина linked text runs, также сохраняет обычную проверку. Screenshot aria-label означает advisory, не drop. DROP_RULES ровно low-contrast/nested-cards/tiny-text/undersized-ui-text/cramped-padding/clipped-overflow-container; заголовки declared mockup не участвуют в outline по контракту модуля. Per-page caches, без DOM-записей. Много positive/negative FakeDom twins.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "total_lines": 11485,
+      "range": [
+        10138,
+        10909
+      ],
+      "sha256": "080b835e99353f63650f8966813d735f142293119cd371c554b66a1effc5e3da",
+      "status": "partial",
+      "ranges": [
+        [
+          10138,
+          10909
+        ]
+      ],
+      "substantive_note": "Срез consistency — orchestration и конкретные house checks, не вся программа. Группировка одной причины/selector/severity, crops; новая CDP tab на ширину, fonts/prescroll/rendered.html, до 80 остановок с шагом .85vh и восьми held scenes, pixel helper, hide-and-diff visual/text plate, повтор через 1.2s. Hierarchy 1.15/1.3; ≤2 hero actions и CTA hero/pricing/close; полный hero на первый экран; tablet main CTA; UI ground 3:1, image text worst tenth 3/4.5, plain body 7:1, button ground1.3; visual coverage около25%; photo-grade consistency; grid offsets2..24px с optical exception; nav form/current/edges; section gaps25%/60%; ≤2 button styles. Scroll-reveal/pinned/scroll-linked и text-only sections часто FAIL независимо от продукта. Ошибки safe-обёрток накапливаются, не все calls safe. Скроллит/скрывает DOM, проверяет ссылки по сети, пишет HTML/JPEG crops. Эти маркетинговые вкусовые ограничения нельзя объявлять универсальными Friday.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/evidence.rs",
+      "total_lines": 588,
+      "range": [
+        1,
+        588
+      ],
+      "sha256": "3f983c567fcb1c82d0d287db346f126373f4551d6661ca72095f85136d18fe8f",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          588
+        ]
+      ],
+      "substantive_note": "Browser evidence integration tests: CLI отказывает captcha405/404, evidence сохраняет validity/screenshot и ноль findings без scan_snapshot. Проверяются post-reveal реальные дефекты, painted hidden/visible twins, selectors/rects; replay точь-в-точь только SCAN/CONTENT_HIDDEN, pixel visual contrast исключён. Повторный id не ведёт к первой скрытой копии, есть node identity, transient cleanup, scan/measured/afterShot drift и halo anchor. Нет browser/fixture — тест может skip; определения не runtime PASS.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/context/src/roll_selection.rs",
+      "total_lines": 532,
+      "range": [
+        1,
+        532
+      ],
+      "sha256": "66143518f91314a39273dc05c70244bb31f8cb40fb87749a14675adbe7828e47",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          532
+        ]
+      ],
+      "substantive_note": "Детерминированный SHA-ranking approved catalog: rating1 даёт один ticket, остальные два, family diversity, niche fallback, mode/strength filters. Operate — 5 graphic+1 interaction+0 atmosphere, пустая неприемлемая non-graphic quota переносится в graphic; reroll предпочитает unseen, затем reuse без starvation. Compositions: exact mode без fallback, platform exclusion, grain preference, family-first/topup и match metadata. Проверка parity >100 recorded cases в тестах; здесь только чистый код selection, без записи/сети.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/hook-build.test.mjs",
+      "total_lines": 516,
+      "range": [
+        1,
+        516
+      ],
+      "sha256": "8bee06a2bf13d44e990d5a1d9182433a8da1579ec1d7e8d76c6f03967ea4f396",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          516
+        ]
+      ],
+      "substantive_note": "Build pipeline test contracts: реальные event/matcher/таймауты/платформенные поля и guard launcher без Node, shared manifest fixtures JS↔Rust. Hermes не получает hooksJsonFor manifest: transformer копирует __init__.py/plugin.yaml с transform_tool_result/pre_verify. Проверки generated output условны SYNCED launcher, допускают старый Cursor preToolUse до release sync. Это не доказательство установленного/доверенного hook runtime.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/text_geometry.rs",
+      "total_lines": 404,
+      "range": [
+        1,
+        404
+      ],
+      "sha256": "0c321acad2d1b2a3c314ed692ceef21b39d4988d03c8907e4c52ad85a5831aac",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          404
+        ]
+      ],
+      "substantive_note": "Geometry browser tests: Range lines ≥85 chars при ориентире<80 с CJK/font condition; viewport gutter отдельно от page sideways overflow, mobile12px. Short bold title/clamp исключения tight-leading, chip glyph vs content box на27.5px, только реально видимые края cramped padding. Text spill подтверждается paint, исключаются свободное место, terminal/code, hover tooltip; edge-flush только x-card scroller. Local browser/server/fc-list запуск не выполнялся, отсутствие browser даёт skip.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/effects/lab.html",
+      "total_lines": 390,
+      "range": [
+        1,
+        390
+      ],
+      "sha256": "32add36aeda0f9e859ec3de6a69c9df7ec2bd9ce073414ad560fddc5a9fce8e3",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          390
+        ]
+      ],
+      "substantive_note": "Effects lab — palette/light/dark/colour, grid/card/wide/hero, UI overlay и calmX/Y, sliders/seed/reset/copy snippet, pause/play, URL state, force fallback/WebGL1/fixed clock. Зависимости fx.js/index.json; gallery cap16 против обычного4. При index error явная ошибка/инструкция; mount rejection локально не пойман, конкурирующие remount не сериализованы в этом файле. CSS buttons34px — не Friday production44px. Реальный вид не открывался.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/foundations/local.rs",
+      "total_lines": 327,
+      "range": [
+        1,
+        327
+      ],
+      "sha256": "9573d724e7c3101f1fd7a03997967c9fdb3bd506658a4787031b4a35cd369e7d",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          327
+        ]
+      ],
+      "substantive_note": "Disk Source foundations: bounded walk и read без leaf symlink, head8KiB binary detection/whole read; nearest git root только для top config/до200 workflows. git ls-files -z --cached, fsmonitor:false, deadline3s/kill и различение NotRepo/Failed. Full detect/foundations, не edit hook. Disk/listing test требует непустые ≥4 states и >1 read pass перед equality; fixtures, git и команды не выполнялись.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/text_collectors.rs",
+      "total_lines": 1895,
+      "range": [
+        1601,
+        1895
+      ],
+      "sha256": "a0e7ff1f0db9b265f7f188eb995eb7234be9abcd6713d9477e209f5e1cc75053",
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          1895
+        ]
+      ],
+      "substantive_note": "Хвост FakeDom tests: em-dash не считает lone dash matrix cells, shown select options и структурные list separators, но считает prose; rendered uppercase не теряется. Label-before-heading поднимается до четырёх wrappers и требует proximity/box; numbered mono index beside heading; повторённый текст только ≥3 distinct painted spots, ID-like classes и одинаковые list positions не отдельные spots. Это intent тестов, не новые реализации collectors.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/product-render/make-posters.html",
+      "total_lines": 254,
+      "range": [
+        1,
+        254
+      ],
+      "sha256": "395c0b1affc38bc30f1568f3a712ac8cc48a3ccbd7e8ee644d086caa83d3353a",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          254
+        ]
+      ],
+      "substantive_note": "Poster baker: print3d/build product spec, GL4, до4MP/no adapt; ждёт live ready и отказывается снимать fallback как успешный render. Reference accent plates+colour проходят gamma/filmic relight, coverage/shadow crop, connected components убирают фрагменты close-up и близкую тень; focus/cut/box и measured-vs-predicted report. Полный/половинный WebP, packed fallback PNG, __files/__manifest/__report, ready/error. Outer catch явный; shoot destroy не finally при ошибке ready/snapshot. Не сохраняет исходную фотографию товара пиксель-в-пиксель.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp/tests/record.mjs",
+      "total_lines": 199,
+      "range": [
+        1,
+        199
+      ],
+      "sha256": "78b29823b91c31229d66d4f6fad3c8fce627c48f95538c386eca462c3a3b61ed",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          199
+        ]
+      ],
+      "substantive_note": "Frozen parity recorder: imports удалённых JS png/raster/metrics/font/hero библиотек через старый checkout override. Пишет fixture PNG и golden/parity.json с CRC/structure/color/detail/bands/font/hero results для flat/recolor/shift/self. В текущем snapshot отсутствуют skill/scripts/lib/png.mjs и skill/scripts/comp-diff.mjs: подтверждённая воспроизводимость требует старый revision. Сам recorder не тест actual port и не запущен.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/effects/god-rays/effect.js",
+      "total_lines": 184,
+      "range": [
+        1,
+        184
+      ],
+      "sha256": "b92c56e079b536868ac941debb8e5a686e3471c86ed76d5726fee733557e538f",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          184
+        ]
+      ],
+      "substantive_note": "God-rays: angular noise shafts/haze/dust, seed/time, OKLab warm light с сохранением светлоты light ground, ellipse calm area, source aim уходит от верхнего text block. Schema origin/tilt/spread/density/intensity/falloff/speed/dust/tint/calm, still6 и radial+linear CSS fallback. shader/fx.js владеет ресурсами/планировкой/reduced motion; этот файл их сам не гарантирует.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/pipeline-board/fragment.css",
+      "total_lines": 162,
+      "range": [
+        1,
+        162
+      ],
+      "sha256": "0d5103eaf7e050e5ed95f41bf63681111c205406e022e022050d16bfe5c3f40d",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          162
+        ]
+      ],
+      "substantive_note": "Pipeline CSS: waiting/run/done/passed/reset, один accent на running spinner1s/bar --k, done — ink check/time. Container widths399/299/279, ≥680 horizontal nodes+log, phone100%. Fine-pointer hover/pressed; token --u, ui-spin снаружи. Нет CI backend/failure model или локального reduced-motion gate.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/vectors/checks_a.rs",
+      "total_lines": 153,
+      "range": [
+        1,
+        153
+      ],
+      "sha256": "956b98432cd22ea053843b00530dd5173a2d61139a0049b5fc977e2f141ce694",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          153
+        ]
+      ],
+      "substantive_note": "Vector adapter rules.checks: восемь dispatch functions emoji/custom props/selector/length/zero/marquee/pulse/stripReducedMotionBlocks. Сохраняет JS undefined/null/truthy/string-array и UTF16→byte offset semantics. Неизвестный module/function→None, невалидная длина/index→Null; фактический CSS анализ делегирован css_scan.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/print-cards/object.js",
+      "total_lines": 131,
+      "range": [
+        1,
+        131
+      ],
+      "sha256": "eacf4bfdb81f421e2f0d0634aa76e996d56f0c14a12d8fc1708d31d3a875983c",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          131
+        ]
+      ],
+      "substantive_note": "Playing cards: десять SDF cards, ace/diamond pips и back lattice, два материала print/render; u_step fan toggle, spin/hover light через definePrint. Label/press, camera/bounds/shadow32/step1s и card/tile/hero/narrow placement. A11y/lifecycle/reduced motion — контракт внешнего print3d, не доказательство из object.js; это процедурный ассет, не оригинальный клиентский товар.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/product-assembles-into-its-action/demo.html",
+      "total_lines": 110,
+      "range": [
+        1,
+        110
+      ],
+      "sha256": "48df6e963ac09bbb41906e967a06f41955bfcd95d00c8807010840efde113099",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          110
+        ]
+      ],
+      "substantive_note": "Invoice assembly demo: semantic ordered five steps, data-at rows/action/paid, skip#after и roleimg screenshot, аудитория/цена/benefit copy. Shared scenes/css и Google Instrument Sans; sc-safe через2.5s. href# и проценты/суммы — demo content, не действующий invoice workflow.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/_scenes/lint-glsl.mjs",
+      "total_lines": 82,
+      "range": [
+        1,
+        82
+      ],
+      "sha256": "2f61970b00756881950e00453cbfcc2336b192a0b88b2adef24e49c9cf57ba68",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          82
+        ]
+      ],
+      "substantive_note": "GLSL lint entrypoint: kit glslLint/GLSL_PRINT/GLSL_LIB, selfcheck12 bad+4 good; default пять scene objects, четыре form expansions или explicit GLSL templates; неизвестные interpolation удаляет, remap lines, exit1 при проблемах. SwiftShader screenshot не доказывает strictGPU compilation. В explicit mode файл без marked literals даёт checked0 и успешный выход, непустой scope не защищён здесь.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/dot-becomes-the-full-stop/demo.html",
+      "total_lines": 81,
+      "range": [
+        1,
+        81
+      ],
+      "sha256": "a1640dec62d3d0f78aadfbcb65a397e7ce792915158a0be5cd7ef0df98a784fe",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          81
+        ]
+      ],
+      "substantive_note": "Payroll dot/full-stop demo: semantic h2 claim и support text, roleimg product panel, included-service rows и inverse palette/Onest. sc-safe2.5s/shared scenes. 4200 companies/no late — пример, не проверенная фактура; animation/reduced motion находятся вне назначенного demo.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/object-through-giant-type/demo.html",
+      "total_lines": 72,
+      "range": [
+        1,
+        72
+      ],
+      "sha256": "c244b8386149f94089b4fa4e4bd79f1e3944f078dfc70a388af4b613b1e58205",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          72
+        ]
+      ],
+      "substantive_note": "Giant-type/globe demo: aria full quote, blockquote halves, print-globe opts и globe.png still/host, scenes+print auto. Google Inter/Inter Tight конфликтуют с Friday default-brand запретом. Latency/uptime/person quote — demo-only. sc-safe2.5s; runtime сцены этим HTML не доказан.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/letters-assemble/demo.html",
+      "total_lines": 61,
+      "range": [
+        1,
+        61
+      ],
+      "sha256": "30e6e96f53dbf50aa2bf919f873d6f08eefc25f5c2484f86f2fa5995a165e706",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          61
+        ]
+      ],
+      "substantive_note": "Letters-assemble demo: semantic h2/sub, pipeline UI mock, facade photo с alt, explicit demo copy. mo-safe2.5s, preloads moments/lib/moment, shared css и Google Schibsted/Hanken. Сама сборка букв/reduced motion не в этом файле; UI mock не реальная pipeline.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-pricing/component.css",
+      "total_lines": 55,
+      "range": [
+        1,
+        55
+      ],
+      "sha256": "4ef6f904b50b9bdfbbda66fb84ad71f6f9cc2dc9559edce388b516761b76af8d",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          55
+        ]
+      ],
+      "substantive_note": "Pricing CSS: 3plans→1 ниже900px; badge переносится под name, >=900 subgrid5rows выравнивает цены/CTA/list. Featured fallback border остаётся до is-live, masked ring+top wash pointer:none и contentz1. Theme variables и button semantics внешние; billing/выбор плана не реализованы CSS.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-prompt/component.css",
+      "total_lines": 50,
+      "range": [
+        1,
+        50
+      ],
+      "sha256": "9e1da55131ea77ceef1d326d7814e0610f83b966b1835362d81c09a61844afa7",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          50
+        ]
+      ],
+      "substantive_note": "Prompt CSS: plain fallback card исчезает лишь при фактическом первом frame canvas opacity1; focus-visible host outline, negative-margin glow, textarea52px. Tools/send32px, hints/pause30px конфликтуют с Friday44px. Нет request/cancel/loading states; literal inline-style selector связан с renderer implementation.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-avatar/component.css",
+      "total_lines": 42,
+      "range": [
+        1,
+        42
+      ],
+      "sha256": "ddd2e2fb99fdcaa411a858cd853064075d5cc6a1b58afd2dc8581de3fc58b3cb",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          42
+        ]
+      ],
+      "substantive_note": "Avatar CSS: is-speaking и --fx-x/y перемещают маску ring/glow; initials/status/live blink/equalizer; responsive64→52. Явный prefers-reduced-motion выключает blink/eq/transition ring. Audio speaker detection/network backend отсутствуют в CSS.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/search/fragment.css",
+      "total_lines": 30,
+      "range": [
+        1,
+        30
+      ],
+      "sha256": "a951621b80158e6c166e95a25b5a9d9632c531853ba735695417ad292a416432",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          30
+        ]
+      ],
+      "substantive_note": "Search CSS: field52px, rows40px, caret blink, is-sel/is-hidden/is-stale opacity.38, matching bold и kbd cues; phone100%. Нет реального input/keyboard/search/stale-response ordering, local reduced-motion не задан. Inset accent selected row — semantic state, не автоматически декоративный side-tab.",
+      "assigned_range_complete": true,
+      "inventory_sha256_match": true
+    }
+  ]
+}

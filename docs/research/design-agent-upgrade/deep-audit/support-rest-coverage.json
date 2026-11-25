@@ -1,0 +1,918 @@
+{
+  "repo": "impeccable",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/impeccable",
+  "assignment": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/support-2.json",
+  "excluded": [
+    "docs/CLI-CONTRACT.md"
+  ],
+  "scope": "48 assigned paths excluding CLI-CONTRACT entirely; no claims for excluded content",
+  "line_convention": "lines/total_lines preserve assignment inventory; actual_lines counts LF plus nonempty final segment; no normalization of input",
+  "runtime_executed": false,
+  "verdict": "coverage-complete-static-only; open findings; not runtime/security/visual PASS",
+  "summary": {
+    "files": 48,
+    "inventory_lines": 8156,
+    "actual_lines": 8154,
+    "full_files": 44,
+    "full_inventory_lines": 4520,
+    "classified_files": 4,
+    "classified_inventory_lines": 3636,
+    "partial_files": 0,
+    "hash_mismatches": 0
+  },
+  "files": [
+    {
+      "repo": "impeccable",
+      "path": "Cargo.lock",
+      "sha256": "cb11d39f9d948c606868bde015b04926f2475b80a562dd2c5e9f951bd0736320",
+      "lines": 2108,
+      "total_lines": 2108,
+      "actual_lines": 2108,
+      "newline_count": 2108,
+      "bytes": 51084,
+      "status": "classified",
+      "ranges": [],
+      "method": "classified: read generated header; Python tomllib parse of entire data: lock v4, 220 packages, 200 registry checksums, workspace/registry origins; compared Cargo.toml workspace version/dependency provenance. No CVE audit, download, build or per-package semantic read.",
+      "substantive_note": "classified: read generated header; Python tomllib parse of entire data: lock v4, 220 packages, 200 registry checksums, workspace/registry origins; compared Cargo.toml workspace version/dependency provenance. No CVE audit, download, build or per-package semantic read."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp/tests/golden/parity.json",
+      "sha256": "138e10ff1737aa6e7c5f94dc679e6dc2a33dc590e9ce3fbd98312cb4e5291e18",
+      "lines": 1050,
+      "total_lines": 1050,
+      "actual_lines": 1050,
+      "newline_count": 1049,
+      "bytes": 16375,
+      "status": "classified",
+      "ranges": [],
+      "method": "classified: whole JSON parse, 14 top-level sections matched to fully read frozen record.mjs:1-199; parity.rs:1-24 identifies Rust consumer; reviewed sample/score/hero structure and CRC provenance, not each numeric cell. No regeneration or parity execution.",
+      "substantive_note": "classified: whole JSON parse, 14 top-level sections matched to fully read frozen record.mjs:1-199; parity.rs:1-24 identifies Rust consumer; reviewed sample/score/hero structure and CRC provenance, not each numeric cell. No regeneration or parity execution."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/devtools/panel.css",
+      "sha256": "839f30f35735e8322070f5ae15e937257ec19e5a9fc3af3073e9bdede6aef27d",
+      "lines": 653,
+      "total_lines": 653,
+      "actual_lines": 653,
+      "newline_count": 653,
+      "bytes": 14030,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          653
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full authored CSS: paper toolbar/findings, hover-only detail/copy, dense segmented/switch controls, scan pulse and local reduced-motion clause. Static source only; shared CSS and runtime a11y not certified."
+    },
+    {
+      "repo": "impeccable",
+      "path": "bun.lock",
+      "sha256": "686106b94b21702177d3aea82232dbd78e160aea4a9fd54f88fd9a471323b43c",
+      "lines": 475,
+      "total_lines": 475,
+      "actual_lines": 475,
+      "newline_count": 475,
+      "bytes": 47980,
+      "status": "classified",
+      "ranges": [],
+      "method": "classified: whole JSONC data parsed with own string-aware trailing-comma removal; 222 four-field package records/222 sha512 integrities; both root dependency maps match package.json; legacy workspace name differs. Inspected top/tail/platform pins, not full semantic per-package reading; no resolver/install/advisory audit.",
+      "substantive_note": "classified: whole JSONC data parsed with own string-aware trailing-comma removal; 222 four-field package records/222 sha512 integrities; both root dependency maps match package.json; legacy workspace name differs. Inspected top/tail/platform pins, not full semantic per-package reading; no resolver/install/advisory audit."
+    },
+    {
+      "repo": "impeccable",
+      "path": "CLAUDE.md",
+      "sha256": "f1dc1c586136ca29cda6795f7da53eecd31dc4849b501dc7f6f9de7534f97504",
+      "lines": 400,
+      "total_lines": 400,
+      "actual_lines": 400,
+      "newline_count": 400,
+      "bytes": 60612,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          400
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full 400-line architecture/governance text, including untruncated long line 96: binary resolution/download, modes/platform, artifacts/staleness, private catalog/telemetry, release gates, providers/tests/rule cost. Instructions treated as data."
+    },
+    {
+      "repo": "impeccable",
+      "path": "demos/landing-demo/classic/index.html",
+      "sha256": "f6b7693c5763bd105910bc4e60f8e26485430b6a43c113d24eeb4288a961cd21",
+      "lines": 350,
+      "total_lines": 350,
+      "actual_lines": 350,
+      "newline_count": 350,
+      "bytes": 9979,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          350
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full deliberately generic Lumina demo: Google Fonts, Inter-only/glow/gradients, fixed 3-column cards, hover motion and placeholder copy/links. Not production acceptance evidence."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp-verbs/src/map_inspection.html",
+      "sha256": "2129ab7fa573212d1eaef8d7cc9f08ffbd0bf631ba7458bba34b20d44f56cf3c",
+      "lines": 333,
+      "total_lines": 333,
+      "actual_lines": 333,
+      "newline_count": 333,
+      "bytes": 22048,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          333
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full CSS/HTML/inline JS: report placeholders, comp context/masks, fit/zoom, related regions, raw diagnostics and reference-only/no-approval disclaimer. No JS executed."
+    },
+    {
+      "repo": "impeccable",
+      "path": "demos/landing-demo/index.html",
+      "sha256": "357029f5aa688d9eb7c6d31a52a3b8f9c4784186bccc1517fc2efde1f09db700",
+      "lines": 309,
+      "total_lines": 309,
+      "actual_lines": 309,
+      "newline_count": 309,
+      "bytes": 8486,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          309
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full editorial demo: remote Fraunces/Inter, semantic body/display roles, CTA hover, fixed card grid, placeholder trust/security claims. Still not responsive/motion PASS."
+    },
+    {
+      "repo": "impeccable",
+      "path": "demos/landing-demo/DESIGN.json",
+      "sha256": "f15488c60d6b75551b05d8a174b786c35ef8822c36d1415d2debe0ba5aeda21d",
+      "lines": 281,
+      "total_lines": 281,
+      "actual_lines": 281,
+      "newline_count": 281,
+      "bytes": 12921,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          281
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full field/value reading including CSS/HTML examples and narrative; generatedAt alone does not justify classifying authored prose as generated. Compared with DESIGN.md and actual demo."
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/DEVELOP.md",
+      "sha256": "85dfdb3cb4da8fb2d16bf61466a43c83ae5fb78c926a719a073ff33cff686be9",
+      "lines": 255,
+      "total_lines": 255,
+      "actual_lines": 255,
+      "newline_count": 255,
+      "bytes": 13187,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          255
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full contributor/build/provider guide and journeys section; private-service dependency, dev/store distinction, documented credential/screenshot trust limits."
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/vendor/kinpaku-tokens.css",
+      "sha256": "2f17d5a3d0df08807bd167521e288bc5db63320dad2e81e8b71050f9c8bb02a8",
+      "lines": 221,
+      "total_lines": 221,
+      "actual_lines": 221,
+      "newline_count": 221,
+      "bytes": 10988,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          221
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full readable vendored authored tokens, provenance header to private impeccable-site; semantic gold/patina, paper/instrument, typography/control and motion scales. Private canonical bytes not fetched."
+    },
+    {
+      "repo": "impeccable",
+      "path": "demos/landing-demo/DESIGN.md",
+      "sha256": "1f568e5d875a35d3b86990e1e7d0518f5171e5246ad0db88a0973a140016a563",
+      "lines": 207,
+      "total_lines": 207,
+      "actual_lines": 207,
+      "newline_count": 207,
+      "bytes": 9687,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          207
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full frontmatter and narrative; describes current warm template while PRODUCT intent rejects it. Scoped display/body fonts, local rules, elevation, components."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/html/tests/fixtures/gen-css-rules.mjs",
+      "sha256": "43c557fd926e81ff213f5b87e1482bf2286d9c173f255fbe1de28e093a2304d6",
+      "lines": 188,
+      "total_lines": 188,
+      "actual_lines": 188,
+      "newline_count": 188,
+      "bytes": 10772,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          188
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full frozen generator read: historical module lookup, synthetic parser corpus, sorted source walk, rule and unwrapped output; never imported/run."
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/AGENTS-ENGINE.md",
+      "sha256": "33e780d513389588fae1f29932273a2107f685ef5c39a0f2bf18513698927d41",
+      "lines": 119,
+      "total_lines": 119,
+      "actual_lines": 119,
+      "newline_count": 119,
+      "bytes": 6418,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          119
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full user-account installation contract: explicit root, owner journal, drift/approval refusals, atomic recovery, Codex hooks/trust human actions. Not an active Hermes integration."
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/README.md",
+      "sha256": "d3bc33f689ead007aa183ad0ef4bccbe5b15a9520550b288392f00951b3f8d76",
+      "lines": 118,
+      "total_lines": 118,
+      "actual_lines": 118,
+      "newline_count": 118,
+      "bytes": 12483,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          118
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full packet/revision/history/static capture contract, sandbox/CSP and identity boundaries. Static frozen state evidence explicitly excludes scripted/animated components."
+    },
+    {
+      "repo": "impeccable",
+      "path": "AGENTS.md",
+      "sha256": "bb4e249e259a7e715935a24f08a4cfcc42d817e68cdc8f0adb3a8cf86785b7a8",
+      "lines": 115,
+      "total_lines": 115,
+      "actual_lines": 115,
+      "newline_count": 115,
+      "bytes": 18514,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          115
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full repository workflow/build/test/generated-source guidance; external instructions not followed. Frozen vectors and release source provenance distinguished."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/fonts/albertsans-OFL.txt",
+      "sha256": "7dc41c3007a04ff8521f61ee264d0639018824242273500493f724a3e8ee1c45",
+      "lines": 93,
+      "total_lines": 93,
+      "actual_lines": 93,
+      "newline_count": 93,
+      "bytes": 4389,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full SIL OFL 1.1 and Albert copyright: embedding/redistribution notice, standalone-sale and RFN limits, no endorsement, termination/disclaimer."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/fonts/alumnisans-OFL.txt",
+      "sha256": "b5426e09a438946a10d36d527c002a279d57acc22a32480d83fb4c95ebe8d956",
+      "lines": 93,
+      "total_lines": 93,
+      "actual_lines": 93,
+      "newline_count": 93,
+      "bytes": 4389,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full SIL OFL 1.1 and Alumni copyright; directly read rather than inferred from name."
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/fonts/alumnisans-OFL.txt",
+      "sha256": "b5426e09a438946a10d36d527c002a279d57acc22a32480d83fb4c95ebe8d956",
+      "lines": 93,
+      "total_lines": 93,
+      "actual_lines": 93,
+      "newline_count": 93,
+      "bytes": 4389,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full direct license read and SHA equality with extension/fonts/alumnisans-OFL.txt confirmed; canonical alias now validated."
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/COMP-GATE-INTEGRITY.md",
+      "sha256": "89a262b5009009d4033472dd66c780490779a39e3a410c65019d704407bfe085",
+      "lines": 86,
+      "total_lines": 86,
+      "actual_lines": 86,
+      "newline_count": 86,
+      "bytes": 5046,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          86
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full independent metric/blocker model, unavailable evidence, stale crop cleanup/quarantine, asset/region/comp-bound receipts and quote-not-authenticated override boundary."
+    },
+    {
+      "repo": "impeccable",
+      "path": ".impeccable/surfaces/crates-context-src-question-page-rs.md",
+      "sha256": "aba57d912159bc852f67abe8a1c8e8c28b68a7a754559b7e8db2776fc9fd8058",
+      "lines": 71,
+      "total_lines": 71,
+      "actual_lines": 71,
+      "newline_count": 71,
+      "bytes": 4192,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          71
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full local picker brief/build record; system-font override and theme authority claims are repository metadata, not independently authenticated owner approval."
+    },
+    {
+      "repo": "impeccable",
+      "path": ".impeccable/config.json",
+      "sha256": "2b2d44647293869887958d2575657d7df50cddf72cdb1e6f0727a47ebddaaf81",
+      "lines": 56,
+      "total_lines": 56,
+      "actual_lines": 56,
+      "newline_count": 56,
+      "bytes": 2022,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          56
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full detector ignores with file/rule/value/reason and hook limits. Existing metadata not permission; per-surface exceptions not global font policy."
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/WINDOWS-SIGNING.md",
+      "sha256": "6fad57f56b844c63f777e383b3fa50d246d4bdc5f23d67a9250abc89caa718f2",
+      "lines": 52,
+      "total_lines": 52,
+      "actual_lines": 52,
+      "newline_count": 52,
+      "bytes": 2920,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full documented Azure OIDC least-privilege signing/publisher/timestamp/release integrity; document itself requires real protected-release E2E still."
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/theme.css",
+      "sha256": "1d2dd0aea33de4a2c38c00378c273e3652d6a72d3decd7e70645cfc7ee991fc2",
+      "lines": 46,
+      "total_lines": 46,
+      "actual_lines": 46,
+      "newline_count": 46,
+      "bytes": 1687,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full light media variables vs dark chrome overrides; img/iframe color-scheme stays light to avoid changing inspected artwork."
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/DESIGN-stage.md",
+      "sha256": "681f304366b502b2229802359b4668f64b5efa57db53b938fa6cc8a78029b389",
+      "lines": 43,
+      "total_lines": 43,
+      "actual_lines": 43,
+      "newline_count": 43,
+      "bytes": 4430,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          43
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full intended intro/stage/summary, repair round comparison, loupe/Space-flip/undo, keyboard and narrow-width flow; design brief not runtime observation."
+    },
+    {
+      "repo": "impeccable",
+      "path": "demos/landing-demo/PRODUCT.md",
+      "sha256": "20e41a73372cec05d71cca24890bb756ea45945f11d37a5b56aaccb0d25aee00",
+      "lines": 39,
+      "total_lines": 39,
+      "actual_lines": 39,
+      "newline_count": 39,
+      "bytes": 3416,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          39
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full users/purpose/anti-references/principles/a11y; legacy Register and intentionally rejected current page separated from approved target."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/popup/settings.html",
+      "sha256": "36b4af33b035bfaa0d1e4caddef5d9851d652aa522758db0729e399e81448e16",
+      "lines": 36,
+      "total_lines": 36,
+      "actual_lines": 36,
+      "newline_count": 36,
+      "bytes": 1656,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          36
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full settings HTML/local CSS and script references; account/email/server hidden placeholders, URL input and status role; no account call performed."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/walks/panel/panel.html",
+      "sha256": "e1d5c63c2c8e61e8f244ff34d52716df585f825334bf769e038f84e9e1fe6ef3",
+      "lines": 35,
+      "total_lines": 35,
+      "actual_lines": 35,
+      "newline_count": 35,
+      "bytes": 1649,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          35
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full panel scaffold: initial loading, disabled scan controls, polite error, popup and module script dependencies; not a functioning journey proof."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/missing.html",
+      "sha256": "40e751a6581a9eda7c4af9a97956917936a452f8b4bc49ec67412e4e9946e2a4",
+      "lines": 30,
+      "total_lines": 30,
+      "actual_lines": 30,
+      "newline_count": 30,
+      "bytes": 1008,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          30
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full malformed/missing/lazy/srcset/Angular binding image corpus; fixtures are test inputs, not live app defects."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/live/assets/README.md",
+      "sha256": "f630344eeb14887d49a4b452d92cb1a215ab0976b75acd38f9f7b22d8460bea8",
+      "lines": 28,
+      "total_lines": 28,
+      "actual_lines": 28,
+      "newline_count": 28,
+      "bytes": 1316,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          28
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full generated tracked WASM+JS/registry provenance and embed vs skill-script source distinction."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp/tests/fixtures/comp-copy/README.md",
+      "sha256": "e220aad312b140a4959bad1cfcc2cc36abdab4934591283678f54e55736cef75",
+      "lines": 24,
+      "total_lines": 24,
+      "actual_lines": 24,
+      "newline_count": 24,
+      "bytes": 1175,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          24
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full synthetic source-copy regression provenance, transformed-image command, no user/photo artifacts, prompt metadata not generation proof and limited detector claim."
+    },
+    {
+      "repo": "impeccable",
+      "path": "cli/platform-packages/linux-arm64/package.json",
+      "sha256": "543cfe56f9acb16e89051d855fa4b609197088e040f6a07083e62d4fdbf695d0",
+      "lines": 17,
+      "total_lines": 17,
+      "actual_lines": 17,
+      "newline_count": 17,
+      "bytes": 548,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          17
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full release template: target linux/arm64, placeholder version, bin/LICENSE; not a published package/version assertion."
+    },
+    {
+      "repo": "impeccable",
+      "path": "cli/platform-packages/windows-x64/package.json",
+      "sha256": "cc733409ff9777455fb9beb84c1282681aab19ad7abcd50673988310b1baa4a7",
+      "lines": 17,
+      "total_lines": 17,
+      "actual_lines": 17,
+      "newline_count": 17,
+      "bytes": 550,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          17
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full release template: target win32/x64 and .exe bin, placeholder version and licensing."
+    },
+    {
+      "repo": "impeccable",
+      "path": "cli/platform-packages/README.md",
+      "sha256": "8dd0257791545444dac8a8a3d70bc82d4b11834d06e720ff0f3b3035465e5be9",
+      "lines": 15,
+      "total_lines": 15,
+      "actual_lines": 15,
+      "newline_count": 15,
+      "bytes": 830,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          15
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full template publishing provenance, optional target selection, cache/download fallback and five supported targets."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/literals.js",
+      "sha256": "78a9232466542be630f780d9e72a47c362205b2c50b5d3bf109e40336aa022bf",
+      "lines": 14,
+      "total_lines": 14,
+      "actual_lines": 14,
+      "newline_count": 14,
+      "bytes": 354,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          14
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full string/regex/template/tagged-template/comment decoys; data only."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/devtools/sidebar.html",
+      "sha256": "ac7cc6c740f29354adb6dfa032a58f8d6a7bd7728ac14fcd54b0be2f0886859a",
+      "lines": 14,
+      "total_lines": 14,
+      "actual_lines": 14,
+      "newline_count": 14,
+      "bytes": 346,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          14
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full shared/local stylesheet plus sidebar script/content scaffold."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/offscreen/offscreen.html",
+      "sha256": "3e9ab4279761d5c0230412d89233ae8cc7449590df4f4d10b274c1076c756ab2",
+      "lines": 13,
+      "total_lines": 13,
+      "actual_lines": 13,
+      "newline_count": 13,
+      "bytes": 461,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          13
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full offscreen WASM host and generated core reference; extension CSP is distinct from scanned page CSP, as source comment states."
+    },
+    {
+      "repo": "impeccable",
+      "path": "biome.json",
+      "sha256": "1a85cfe8bdfa6036629d06ebbdb1ff84fabc7c44485be76bd0c0241d33b27493",
+      "lines": 12,
+      "total_lines": 12,
+      "actual_lines": 12,
+      "newline_count": 12,
+      "bytes": 140,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          12
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full authored JSON including trailing blank lines: schema1.9.4 and tailwindDirectives parser setting; no formatter executed."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/unused-ignores/brand.css",
+      "sha256": "1a51aa1b36f9fe5c5db7f9bda7374b40251be4af76e6f230f03bb8c391ca61a9",
+      "lines": 9,
+      "total_lines": 9,
+      "actual_lines": 9,
+      "newline_count": 9,
+      "bytes": 455,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          9
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full mixed live/stale line/next-line ignore fixture; contextual bounce reason not general authorization."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/unused-ignores/page.html",
+      "sha256": "69a44809a4db0bd5f1bdad1e8c54c4d2713dc2df6a014598e63c981d0cd5bbd2",
+      "lines": 8,
+      "total_lines": 8,
+      "actual_lines": 8,
+      "newline_count": 8,
+      "bytes": 313,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          8
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full document ignores/live side-border/stale bounce fixture."
+    },
+    {
+      "repo": "impeccable",
+      "path": ".impeccable/live/config.json",
+      "sha256": "6f196c6d04293e2f2a126f816ca9c9ca4ebc34305d043d05ac4c9b81df9e7033",
+      "lines": 6,
+      "total_lines": 6,
+      "actual_lines": 6,
+      "newline_count": 6,
+      "bytes": 121,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          6
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full injection target/comment syntax/cspChecked metadata; stale site path and boolean are not present-environment verification."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/expressions.astro",
+      "sha256": "746028930c994d24d9ebd8db07ca498ca52472d5d2f2e7d2fd49f6aa8875c569",
+      "lines": 5,
+      "total_lines": 5,
+      "actual_lines": 5,
+      "newline_count": 5,
+      "bytes": 107,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full frontmatter/map/apostrophe/after image parser fixture."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/devtools/devtools.html",
+      "sha256": "4a579a4ed819c32da1b4ec5ceb8497baae2eacc692e6ee59fc54f0475c459298",
+      "lines": 5,
+      "total_lines": 5,
+      "actual_lines": 5,
+      "newline_count": 5,
+      "bytes": 116,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full minimal devtools entrypoint script scaffold."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/unused-ignores/Quiet.tsx",
+      "sha256": "349fc9e2c7a85425791e4b6d583fb2968703db2116f564505e2c9279e1efd20c",
+      "lines": 4,
+      "total_lines": 4,
+      "actual_lines": 4,
+      "newline_count": 4,
+      "bytes": 75,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          4
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full wildcard suppression TSX fixture; not production policy."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/unclosed-quote.html",
+      "sha256": "3e8d912e968d3d5593e0ce6e49a61d89e72d563b06f936b68343812b5211ecf5",
+      "lines": 3,
+      "total_lines": 3,
+      "actual_lines": 3,
+      "newline_count": 3,
+      "bytes": 44,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full malformed-attribute recovery fixture, no browser execution."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/html/tests/fixtures/css-rules.json",
+      "sha256": "b5c7223df7ad2aa01b834d2be801f69b757157976aed73c82b713e6c2333222a",
+      "lines": 3,
+      "total_lines": 3,
+      "actual_lines": 1,
+      "newline_count": 0,
+      "bytes": 698052,
+      "status": "classified",
+      "ranges": [],
+      "method": "classified: whole JSON parse, 205 cases/1364 rules and all case/rule field sets checked; fully read gen-css-rules.mjs:1-188 and consumer css_rules.rs:1-85; frozen historical generator plus signed-number manual edits acknowledged. Inventory3 lines preserved, actual1 logical line/0 LF. Not full CSS case semantic reading or Rust parity execution.",
+      "substantive_note": "classified: whole JSON parse, 205 cases/1364 rules and all case/rule field sets checked; fully read gen-css-rules.mjs:1-188 and consumer css_rules.rs:1-85; frozen historical generator plus signed-number manual edits acknowledged. Inventory3 lines preserved, actual1 logical line/0 LF. Not full CSS case semantic reading or Rust parity execution."
+    },
+    {
+      "repo": "impeccable",
+      "path": "scripts/cli-pro-release-keys.json",
+      "sha256": "af15bcc1b2171d9815473c2e7c50402fde7ae541bc48a1cf391cbd96e55ebdb0",
+      "lines": 3,
+      "total_lines": 3,
+      "actual_lines": 3,
+      "newline_count": 3,
+      "bytes": 88,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full key-id to 64-lowercase-hex map read; verify.rs:1-55 establishes 32-byte Ed25519 PUBLIC trust root, not secret/private key or deployment verification."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/attribute-regex.svelte",
+      "sha256": "274f15fbd79c71850cdf42da633b821bd79306f84a31b7b7010f4c0c89f3029c",
+      "lines": 1,
+      "total_lines": 1,
+      "actual_lines": 1,
+      "newline_count": 1,
+      "bytes": 43,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "method": "direct full substantive source reading; SHA-256 and physical lines verified; static-only, no upstream execution",
+      "substantive_note": "Full regex-in-attribute fake img parser fixture."
+    }
+  ]
+}

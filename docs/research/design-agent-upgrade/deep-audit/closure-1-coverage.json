@@ -1,0 +1,465 @@
+{
+  "files": [
+    {
+      "repo": "impeccable",
+      "path": "crates/context/src/serve_question.rs",
+      "sha256": "8dd7d937c053381dfe2696c28bb2ebbacc0ca58e8484a456721f8dbb0249cb1a",
+      "total_lines": 4329,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "Прочитано полностью назначение: decision identity/comp gates, roll TTL1h, ignored runtime/telemetry, downloads8s/no redirects, atomic hand SHA+nonce markers, wait statuses0/2/3/4/5, 90s page-close/30m budget; update игнорирует copy error1490; detached spawn checked only URL8s."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/browser/snapshot.rs",
+      "sha256": "70139332035936d756ede15bb9ce1a7a5b443e81ad7f91fc8c51705baf3be791",
+      "total_lines": 1735,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "Snapshot serde schema/interned styles, backward-compatible unknown vs false, light/flat shadow trees, selector cache, demand-driven hit/scroll facts, readonly Dom, text geometry without synthetic widths; tests of schema/selector/old captures."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/visual.rs",
+      "sha256": "6b74b1628e9b485e682047f39caeaa555bf16b5692b82771d3de82411c3aa155",
+      "total_lines": 7021,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          3200
+        ]
+      ],
+      "substantive_note": "Геометрический paint climb и hit-test3 points; unread verdict 5 samples/4 layers; WCAG3/4.5; outline blur<=2; base12+routed0 budgets, hidden/decorative/covered/reveal exclusions; echo3levels4siblings40boxes4px; wash4096; gradient alpha<.95 or spread2 unresolved."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/hook/tests/hook_tests.rs",
+      "sha256": "fe27471b2a2431a76fbc0262129771e8837f15f9f3b60408ca7f3e98ee5b6f60",
+      "total_lines": 4631,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          3200
+        ]
+      ],
+      "substantive_note": "Hook tests: adapters, source/style expansion, immediate/deferred+Stop cache sync, no footprint clean, quiet/reentrant/sensitive/outside gates; >6 edits suppression; pre-edit >2MiB fail-open/7th identical denial allow; admin config/manifest migration and user-scope safety; Grok/Antigravity stop contracts and event dedup."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/page_checks.rs",
+      "sha256": "fe15b0381c5762bcb43f8da53e12060394bdbea0a5d810e34091ccf6ea1d0221",
+      "total_lines": 10136,
+      "status": "partial",
+      "ranges": [
+        [
+          6401,
+          8000
+        ]
+      ],
+      "substantive_note": "FakeDom regression tests: heading subtitle0vs3px/one-vs-two lines/eyebrow60vs90; band-aware spacers and landmark bounds; closed UI vs never-run reveals/selected tabs; scroll probes/unstarted sliders; edge-flush rails need row and painted/screen edge, table excluded; occlusion real glyphs/inline rows/pointer-events/curtain footer."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/checks/html_patterns.rs",
+      "sha256": "f2aaf32c3b48b159f02ba30ed9bea605d18ca4b41f14617c5d0dedbbe5f0c0dd",
+      "total_lines": 1404,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1404
+        ]
+      ],
+      "substantive_note": "HTML/style/class corpora regex scanners; SVG>=8 primitives >=25%, >=200x200 >=3fills and <=2 text nodes, defs/use accounted, bar series exemption capped400; spacing>=10 >60% <=3values with zero reset excluded; bezier y outside[-.1,1.1], pulse/unread var exemptions; first accepted of16 candidates; repeating gradients distinguish full ramp, theater closed lexicon. No IO/network."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/src/design_system.rs",
+      "sha256": "27e39b44d542e54e3538f8abf54e687c81f3af1c7786f9658c51c0c8fd5d9fbf",
+      "total_lines": 2725,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          2725
+        ]
+      ],
+      "substantive_note": "DESIGN source enforcement fonts/colors/radius/type clamp endpoints; literal context excludes selector/entity; transparent<=.05, pill>=99, unjudgeable allowed; semantic dedupe normalizes color/font/px; tests negative declared components, monorepo ownership/negation/home/symlink boundaries, brand-purple exemption, var fallback/math exclusion."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/src/detect_text.rs",
+      "sha256": "8c2a2257941d050a209d3edf1474559697763acef90e855b354e3ff7c1ff2fda",
+      "total_lines": 2809,
+      "status": "partial",
+      "ranges": [
+        [
+          1781,
+          2809
+        ]
+      ],
+      "substantive_note": "CSS-in-JS extraction, comment masking offset-preserving, image-only literal mask; lazy FileSheet indexes; side-tab depends own rounded corners/cascade and status-row semantics; source/style/template profiling, within2lines dedupe, page analyzers then declared purple filter/rule pack then inline ignores; Stylus indentation explicitly unsupported."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/capture_service.rs",
+      "sha256": "0fb33a7f711f28dabaac2c70864dfd1f5a38ca5502c420c9b2985b8e11c6340b",
+      "total_lines": 884,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          884
+        ]
+      ],
+      "substantive_note": "Capability-auth localhost capture service POST headers8KiB/body16KiB, no Origin/TE/caller rootURL;3h lifetime,active2/TTL180s/latest stage retained;64MiB evidence budgets; root/spec hash/method/frames/receipt/raster-share binding; audit exact saved bytes+verify twice; host human-review boundary; tests malformed/missing/changed evidence fail closed."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/extension-build.test.mjs",
+      "sha256": "8a13f2949c49266928c188e21676ea908a64d8213f38a313844e246e0510460d",
+      "total_lines": 775,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          775
+        ]
+      ],
+      "substantive_note": "Node VM tests real worker/content/offscreen boundaries mocked: Chrome offscreen vs Firefox iframe, singleton startup/retry50pings; partial vs complete/error flags, stale scanId races/navigation/recovery/coalescing, cancelled lazy queue releases host and candidate own capture; no real browser integration proven."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/decorative_text.rs",
+      "sha256": "8070429b473edbb4826d543d1eaeef4d24d27605bf4d1573768819bdd0cd3d1e",
+      "total_lines": 665,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          665
+        ]
+      ],
+      "substantive_note": "Dom facts/classifier split: avatar3 ancestors<=3chars, control labels never decorative; mockup HTML role img vs SVG charts/figcaption; settled opacity not mid-reveal; site identity corroborated host/meta/title; ghost>=120px set-aside plus faint and not page heading; control mockup occlusion retains severity. Tests positive/negative twins."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/context/src/catalog.rs",
+      "sha256": "6fedc9191b58b13b4a91d2123bcc9c3693495140acea8bc5a17ce41d02d913c5",
+      "total_lines": 526,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          526
+        ]
+      ],
+      "substantive_note": "Catalog merge/read only serde+regex+sha2+unicode NFKD; schema>=7/reviews>=2; >=5 wells/3families/3approved all3tiers; form40..360+comma,lineage12..200,3tags,5ordered grammar12..180,spark80..320,leverage20..240; stale review hash12hex; rating1..3/modes uniqueness; date validator accepts any string with digit (438..448)."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/tests/walkthrough.rs",
+      "sha256": "d887ef9406c7f216bc067134900468e321f285dce66822281dc4ab42d752aa77",
+      "total_lines": 474,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          474
+        ]
+      ],
+      "substantive_note": "Integration test intent ffmpeg/ffprobe installed else explicit eprintln skip; H264 silent faststart even640x362, PNG poster, SHA256base64url43chars, sorted ms chapters/default ship; no overwrite original or caller files, numbered collisions/temp cleanup; durationless WebM; exact-end clamp duplicates reject;125s input encode bounded -t121 before too_long."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/extension-agent.test.mjs",
+      "sha256": "86e707bd760f4a766f9a10910e8f2633fa9472d3c4bb5178ee25fba703cd3942",
+      "total_lines": 427,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          427
+        ]
+      ],
+      "substantive_note": "Mocked extension agent integration: native origin ID/store excludes nativeMessaging; allow once/always/no side-panel consent persisted origin; no secrets AX; OAuth/install refused; staging sensitive URLs normalized blocked document/fetch and DNR worker/OOPIF rules; production/persona disallowed; Stop/revoke/disconnect ends, rearm asks again, preserves panel prior state; socket cannot assert agent."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/card_heuristics.rs",
+      "sha256": "5d2ca21c5f7516a9cf467624d57f5fac80fded22e1a4f1082ce0137b819bfeb5",
+      "total_lines": 362,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          362
+        ]
+      ],
+      "substantive_note": "Real installed-browser fixture tests skip without browser; computed box nested cards/main-child exceptions vs static goldens; state-raster/svg/icon placeholders, luminance-gray, footnotes, hierarchy/fold/dash false-positive twins, border-shadow spread/visibility and wrapper-aware labels; local fixture HTTP server only test scaffolding."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/_demo/shoot.mjs",
+      "sha256": "d325d7857fd0602078aed873e3325b07756a5063af94238a704cd015d8927ff2",
+      "total_lines": 340,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          340
+        ]
+      ],
+      "substantive_note": "Node22 builtins CLI index/shoot/probe/make; index installed-skill guarded write except explicit --out bypass; permissive meta webgl0..1 fraction accepted; PNG8bit RGB/RGBA own decoder+zlib; localhost static server startsWith boundary/symlink risks; Chrome only CHROME_PATH or Windows defaults, SwiftShader isolated profile; screenshot1440/390 start/mid/end/reduced, no visual assertion; hangs CDP no timeout; make/probe startup outside finally leaks server if Chrome fails."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-server-leak.test.mjs",
+      "sha256": "94fd80a17346714bd352f66c03da746821a2fa6af01439439aec703d9334e5f3",
+      "total_lines": 302,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          302
+        ]
+      ],
+      "substantive_note": "Node integration leak tests actual engine gated NO_ENGINE/POSIX; detached victim SIGKILL -> reaper15s; stop PID+HTTP port gone; scoped process markers canonical repo hash/run/proc IDs avoid killing neighbor; test cleanup kill only own PID."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/right_box.rs",
+      "sha256": "e4465966022706f4789c47d684f4063baef3c8fde9a3b35c52118eaed18e62b4",
+      "total_lines": 244,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          244
+        ]
+      ],
+      "substantive_note": "Installed browser fixture assertions exact side-tab hairline/far radius, clipping painted popover, heading8above40below, truncated/running tracks exempt, buried text, table rails, carousel duplicates, stacked vs columns, composite controls and code/focus regions. Skip no browser; local test server."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/measured_boxes.rs",
+      "sha256": "51821084558118c30324b5259bf8193ae00904f7ab261a08bef4840616e42a0b",
+      "total_lines": 205,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          205
+        ]
+      ],
+      "substantive_note": "Installed-browser measured padding box, actual glyph occlusion and deck layer, nav menus vs columns1280x800, disabled controls absent and enabled color-pair collapse(and4more), mobile390x844 body text23px vs display24px. Skip no browser."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/low_contrast_advisory.rs",
+      "sha256": "404a98b0e0aaf88541bdddad28ecc054a041254014a465719c92f836f00938ca",
+      "total_lines": 182,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          182
+        ]
+      ],
+      "substantive_note": "All four contrast producers must carry advisory flags consistently:4.2/4.48/4.3 vs4.1 failures,2.8/2.99 vs2.7; decorative avatar/mockup/signature exempt but link/count/badge/kbd fine print not; SVG initial vs digit pixels. Skip installed browser unavailable."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/diagrams/lab.html",
+      "sha256": "41836f2be7704c423e4565be69e5f68b6433939cedb98c19d4c26a0d9f5eba11",
+      "total_lines": 164,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          164
+        ]
+      ],
+      "substantive_note": "Diagram editor imports diagram.js/cards.css/diagram.css and remote Google fonts; preset filters/theme/size/curve/ground/pulse/cycle2.5..4s, JSON debounce350ms parse error border, clipboard catch feedback1.4s; export chooses attribute vs script JSON without HTML-safe escaping; no persist/files except clipboard."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/page_level_forms.rs",
+      "sha256": "24441c6c2002231163fcf84aed617a47d39fe74edff6bdec6077007cae3531e8",
+      "total_lines": 153,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          153
+        ]
+      ],
+      "substantive_note": "Installed-browser page forms tests exact dedupe across element/page scan; painted root darkness not dark player/token; glow visible on target; marquee original+clone one; light4findings,dark2,white0 and4dark twins. Static source only, no tests run."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/layout/hero-statement.html",
+      "sha256": "8f8e1a27c8361640baa240f81170475c475ebbd1ccff2a95f72db70d2127fecb",
+      "total_lines": 131,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          131
+        ]
+      ],
+      "substantive_note": "Software-only dark bg-horizon statement hero, Newsreader/Hanken via Google Fonts +system/layout/background assets; concrete charity copy with facts/pricing/twoCTAs and grant-card role img aria-hidden internals; responsive440px mockup, section/footer semantic headings; demo all links #funds, no real auth/payment."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-feature-card/component.html",
+      "sha256": "df25e26709d36e72bca9278dd35dfd28ecd9ea681ca2f370d38a5e50858fb115",
+      "total_lines": 109,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          109
+        ]
+      ],
+      "substantive_note": "HTML-only four feature cards with seeded painterly landscape/grain effect data hooks and invoice/invite loops; fake payment fields/spans, aria-hidden demo windows, inline payment SVG marks; descriptive readable headings remain. No actual financial/network/write functionality; dependent JS/CSS outside assigned fragment."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/powers-of-ten-pullback/demo.html",
+      "sha256": "0b0220e522ca2aa035a5afe0076e8cdca1a5a37079b0d64b86d6211248335cde",
+      "total_lines": 88,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          88
+        ]
+      ],
+      "substantive_note": "Powers pullback software demo: sc-js/safe2.5s, one held scene --h1 with ground/copy/device, dark Inter/InterTight remote fonts conflicts Friday brand default ban, responsive fixed640px mockup under767px; semantic role-img inbox, no real send, scene runtime imported not executed."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/counter-rolls/demo.html",
+      "sha256": "05dff3917b49be1134bdd161c3cce5cf384f34afc0a65c6ccf344978b3d1ebae",
+      "total_lines": 76,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          76
+        ]
+      ],
+      "substantive_note": "Counter-rolls moment on four real-text stat strings €0/€12/38/2days, quote figcaption and static invoice mock; preload moments/lib/moment, fonts Google + local photo855 attribution, safe class2.5s; desktop stats2columns>=640; pure demo not billing or measured customer facts."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/_lab/object-card.html",
+      "sha256": "702a9d9a1192b343a203cfdb65ac67f149d0b5d3b6168d2f6673d99d6c1283d6",
+      "total_lines": 71,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          71
+        ]
+      ],
+      "substantive_note": "Object card lab sets global WebGL max16(default4 cited comment), two grain still grounds plus halftone lamp/engrave phone auto.mountAll; query theme/a/b whitelist print IDs, Promise.all mount then data-ready;400px panels320 mobile<=760; remote fonts; no catch startup."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/picture-develops/demo.html",
+      "sha256": "525371b14d8421ce0336de8b07eb2906f482abb7c62868ecf28280e2e375c64b",
+      "total_lines": 62,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          62
+        ]
+      ],
+      "substantive_note": "Picture develops printing page: figure3:2 data-moment cell7 with real img fallback and alt1800x1200; local3photos/attributions remotefonts/preloads; pricing/quantity concrete demo placeholders;2.5s safe timer; effect implementation lives moment module, no browser verified."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/window-parallax/demo.html",
+      "sha256": "5e4d40d68d5ec9c84a8bdf2a7bbaf28a4b6a47b7d789285b8e484cedbdf98189",
+      "total_lines": 53,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          53
+        ]
+      ],
+      "substantive_note": "Window parallax tour page: 16:6 frame becomes4:5<=639, travel12 config;3local photos with alt/intrinsics and attribution; remote Google Fonts, shared moment runtime+safe2.5s; textual itinerary factual only within demo, all action href#."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/chat/fragment.css",
+      "sha256": "230314eeafe2ac30726b2717d82f584c281aecd1de0fb9832a9b2639471aa165",
+      "total_lines": 52,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "substantive_note": "Chat CSS fixed400 width, message/source transitions160..360ms, repeat words opacity>=.72; typing3dots900ms stagger150/300, reduced query hides typing only (not all transitions); input40/send30 intentionally illustrative crop, no real chat/network/writes."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/liquid-type/demo.html",
+      "sha256": "09b48f5703fcc64199ea39e01773214d5a135f0658463b5df73be2e80e455808",
+      "total_lines": 42,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          42
+        ]
+      ],
+      "substantive_note": "Liquid type dark sage software demo heading mo-lt__type under data-moment; shared fonts/preload/CSS/runtime +2.5s fail-safe, local facade photo; no custom shader logic in HTML, generic demo copy explicit, href# no app state."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/window/fragment.html",
+      "sha256": "9aa0e1a3d873f7597afb26e9501eeaffd535b2792233fb07455eb047d3c1fc27",
+      "total_lines": 30,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          30
+        ]
+      ],
+      "substantive_note": "Window fragment data-ui=window data-open/work/done values state hooks, six fake inbox rows/status classes and avatar tones; aria-hidden chrome/search/sidebar/headers, noninteractive spans not functional controls; no script/network/write in fragment; requires UI runtime/styles."
+    }
+  ],
+  "assigned_lines": 17975,
+  "complete": true,
+  "covered_assigned_lines": 17975,
+  "assigned_ranges": 32,
+  "verification": {
+    "all_sha256_rechecked": true,
+    "all_total_lines_match": true,
+    "all_assigned_ranges_exact": true,
+    "upstream_executed": false,
+    "browser_or_tests_run": false,
+    "inventory_sha256_and_lines_match": true
+  },
+  "scope_note": "full означает только действительно прочитанный целиком файл; partial не расширен до всего файла. Дополнительный соседний контекст не включён в 17975."
+}

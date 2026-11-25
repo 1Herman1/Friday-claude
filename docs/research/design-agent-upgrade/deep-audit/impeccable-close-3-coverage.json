@@ -1,0 +1,1071 @@
+{
+  "job": "impeccable-close-3",
+  "root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/impeccable",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "verification": "static source only; no upstream execution",
+  "files": [
+    {
+      "path": "crates/context/src/telemetry.rs",
+      "sha256": "6eb3e882afbe30c8208dacde44bb7f785d23a76e48acdb0a165910e871850b30",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1303
+        ]
+      ],
+      "total_lines": 1303,
+      "substantive_note": "Default-on telemetry optout precedence env/user/cwd/project/repo false anywhere wins; off still roll GET with header, chosen suppression caller-owned. Ledger salt/locate delegates common::seed, key durable/round30day, lock3s/10s stale and atomic rename retry; pingId guards late completion and API dedup. Choice fields key/scope/mode/kind/register/catalog+position/version (not code), unknown chosen IDs permitted absent ledger by concept caller. CLI off/on preserves object/handles write error. Full tests cover salts/switch/concurrency/late completion/prune/optout/shape/picker explicit/inferred."
+    },
+    {
+      "path": "crates/context/src/staleness_deep.rs",
+      "sha256": "6974597b5226671d0880a21e7ce756c893a389c610fc20e84d2b443d406129d5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          812
+        ]
+      ],
+      "total_lines": 812,
+      "substantive_note": "Tier2: referenced dead paths; literal normalized color presence (not actual CSS cascade; whole notation mismatch intentionally silent); header/frontmatter coverage, stale ignore IDs/literal paths, hook path existence/user/provider shape, legacy/spent artifacts report, native workspace inheritance. Registry always core hardwired despite manifest feature comment. JSONC hooks read via read_json strict here unlike wiring; deep tests positives/negatives/path/Windows scopes."
+    },
+    {
+      "path": "crates/context/src/design_lookup.rs",
+      "sha256": "cc9086e6854278715473e0c08f0435e7a8e0621cff5deccdbb86a0743e6282bb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          469
+        ]
+      ],
+      "total_lines": 469,
+      "substantive_note": "On-demand names-first case-insensitive tokens/sidecar/CSS custom props/heading sections; comments/fences/quoted URL semicolons handled; compact archive support. Output2400+omitted notice, entry600/section1400; existing refs lexical-only not symlink canonical fence. Tests inline/multiline/comment/unicode/deep value/workspace/bounded output."
+    },
+    {
+      "path": "crates/context/src/hook_markers.rs",
+      "sha256": "4172ad7f79bca61885046a5b52618e567fcf1452d81f401a5eaa36fd6ac53efb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          691
+        ]
+      ],
+      "total_lines": 691,
+      "substantive_note": "Legacy script and launcher marker recognition, separators including UNC/JSON escapes, shell-specific guards, Cursor gate migration, named-hook strip/merge preserving enabled:false/unrelated, JSONC comment stripper. Presence uses regex substring not shell AST/proof of activation. Full tests cover migration/no duplicates/foreign blocks/paths/JSON strings."
+    },
+    {
+      "path": "crates/context/src/palette.rs",
+      "sha256": "d09681e165892e6d310570c5c2c84febf785ca0c55c25ba5fa7abd78fefaf143",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          129
+        ]
+      ],
+      "total_lines": 129,
+      "substantive_note": "--id explicit else --from/env SHA256 deterministic weighted pick, else time/pid PRNG. Reciprocal30-degree-bucket density weights hue distribution. Emits interpolated palette_data TEMPLATE only, no actual contrast/palette generation validation."
+    },
+    {
+      "path": "crates/context/src/concept_seed.rs",
+      "sha256": "5a877dd05cf1d1fcbf2f299ce334a64d99070e3778754ef4ad1e103feb8b6d72",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1677
+        ]
+      ],
+      "total_lines": 1677,
+      "substantive_note": "Product required; scope/mode/grain/platform/candidate5..7/reroll/register validation; deterministic SHA index/deal, local approved catalog then API GET timeout then degraded (settled seeded world needs no network); Operate/Read code-led override. Uses mode files Directions/Comps, seed_text rendered policy, writes roll+salted reference ledger despite telemetry off; API tracked rounds only telemetry on. ping optout, pending/confirmed dedup and same pingId; without ledger chosen raw ID sent. Tests read858..1677 cover settled/replace/bolder, degraded, mode/presentation/buildPath, API/optout, salt switching; no execution."
+    },
+    {
+      "path": "crates/context/src/serve_question.rs",
+      "sha256": "8dd7d937c053381dfe2696c28bb2ebbacc0ca58e8484a456721f8dbb0249cb1a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 4329,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/context/src/util.rs",
+      "sha256": "ea12a95780ec0bdac764d10a222cb26a66a5020aea8d81f94d49937cb2f4974e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          330
+        ]
+      ],
+      "total_lines": 330,
+      "substantive_note": "JS trim/UTF16/number rounding/time serialization helpers; safe_read/read_json swallow errors to None; deterministic sorted dir listing excludes symlink file/dir types. Tests binary rounding/-0 and epoch ISO; no writes."
+    },
+    {
+      "path": "crates/context/src/design_map.rs",
+      "sha256": "a92725432615c519fee70d40a97ebebc08f7aafc0f5d1e3bc92383f5169679cb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          455
+        ]
+      ],
+      "total_lines": 455,
+      "substantive_note": "1600-byte threshold ->2400-byte deterministic map with tokens/roles/font/spacing/radius/northstar/named rules/elevation/do/dont/path pointers. Prunes Do then elevation prose/rules/values/Dont; char-boundary line280 cap. Existing relative token paths only, sidecar colorMeta precedence. Tests bounded huge/multibyte-ish entries, priorities and known design fixtures; no semantic guarantee omitted clauses retained."
+    },
+    {
+      "path": "crates/context/src/detect_csp.rs",
+      "sha256": "73a17cf3e95a909ef9c44ba2b5caeb7c9106209d33eb79c5a1a7cbdbc6738d18",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          298
+        ]
+      ],
+      "total_lines": 298,
+      "substantive_note": "Read-only heuristic shape discovery depth6/prefix64KiB, ignores build/vendor and symlink entries; array config prioritized over string/middleware/meta. Next proxy location marker checks; middleware filename broad. No actual served-header/CSP validation. Tests portable nested config positives/negative helpers/backslash."
+    },
+    {
+      "path": "crates/context/src/roll_selection.rs",
+      "sha256": "66143518f91314a39273dc05c70244bb31f8cb40fb87749a14675adbe7828e47",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 532,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/context/src/context_cli.rs",
+      "sha256": "ad7cb5d304137146ff8d8906ced9eff3c5a93da801a02309315bdfd4a500a2f3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          2090
+        ]
+      ],
+      "total_lines": 2090,
+      "substantive_note": "Полное2090: context rendering product/design/surface/native refs; map1600 and total24k dynamic doc/list compaction preserves tail but unsized directives can exceed ceiling. load_context/provider/hooks external dependencies not imported/executed. boot optionally invokes hook repair callback then latest-version API+best-effort caches; dynamic context is not read-only. Hook coverage heuristic own manifest/recent7day cache; native excludes web; product missing nonblocking narrow refine vs init new builds. Tests user/custom homes/worktrees/declined/no manifest/Gemini/Hermes presence/taste/order/budget/seed world outranks starter and no autonomous reroll."
+    },
+    {
+      "path": "crates/context/src/embed_prompt.rs",
+      "sha256": "0e6d44a1b3b9dde4a4b2dc6c693bf5f4eb5c240fbd3d41c35b67ca27b2f27d61",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          342
+        ]
+      ],
+      "total_lines": 342,
+      "substantive_note": "PNG tEXt/zTXt parse and insert before actual IEND, JPEG COM prefix, other formats JSON sidecar; read fallback and raster recursive scan with exit3 missing. PNG inflate unbounded, walk follows symlinks/no visited set. All write Results discarded with EMBEDDED exit0 -> confirmed false success. No local tests in file."
+    },
+    {
+      "path": "crates/context/src/lib.rs",
+      "sha256": "88136c49b709307d3acace555ca059b6cdff505fa7d1522580fc5a0282917e86",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          65
+        ]
+      ],
+      "total_lines": 65,
+      "substantive_note": "Публичные модули и re-export run_*: context/doctor/pin/signals/seed/question/image/review; jsp/provider/hermes остаются внешними dependencies, перечисление не доказывает их поведение."
+    },
+    {
+      "path": "crates/context/src/surface_briefs.rs",
+      "sha256": "b34ddc3d70562e08a993b786ee98dcc47d595dbc94e1ff533a3a7535666861a8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          437
+        ]
+      ],
+      "total_lines": 437,
+      "substantive_note": "Frontmatter subset JSON scalars/arrays plus loose quoted strings; normalized file/route/URL targets and project boundary; list sorted markdown, resolution exact slug then legacy metadata then unique mapping with monorepo compatibility. Writes overwrite markdown, errors returned; no atomic rename/lock. Tests long slug old collision and cwd semantics."
+    },
+    {
+      "path": "crates/context/src/pin.rs",
+      "sha256": "29090ba575bd1811e0f56e3aeda643cbf03c05b8651027f25ca0a76382dc17f6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          322
+        ]
+      ],
+      "total_lines": 322,
+      "substantive_note": "24-command allowlist, detects20 harness local dirs, Codex$ versus slash; skips non-owned marker skill/command. OpenCode local/global bridge via configured path, marker guarded cleanup; non-OpenCode unpin recursively deletes marked skill directory. create/write/remove Results discarded, counts claim success; sibling metadata overrides embedded. No tests in file."
+    },
+    {
+      "path": "crates/context/src/critique_storage.rs",
+      "sha256": "bc0fc16341d5821d5a39aa8b7159bd6f737aa6473be95d86ffed7384893b5097",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1452,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/context/src/catalog.rs",
+      "sha256": "6fedc9191b58b13b4a91d2123bcc9c3693495140acea8bc5a17ce41d02d913c5",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 526,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/context/src/signals.rs",
+      "sha256": "49599da1ab9ec3d3652918ddd660b39c577827430cd3adc07147d012dcd2b39c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          351
+        ]
+      ],
+      "total_lines": 351,
+      "substantive_note": "Reads setup/latest critique/git, spawns git and TCP probes7 localhost ports (running only socket-open, not HTTP app proof). Chooses upstream/develop/remote/main base, from_diff OR porcelain fallback, not union -> dirty/untracked lost with nonempty committed diff; changed list50 cap feeds scan_targets. No local tests."
+    },
+    {
+      "path": "crates/context/src/doctor.rs",
+      "sha256": "6eb98820ca7826d597b2e6b681e7fde4ba5f13777542f007e2cc6ed3a7d1ad33",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          396
+        ]
+      ],
+      "total_lines": 396,
+      "substantive_note": "Loads context and boot+deep drift/design coverage/hooks/workspace/live/spent artifacts; --fix only auto plus inferred current PRODUCT stamp. Sidecar rename/product write errors ignored and appended applied; Cursor migration handles errors correctly. Report never recollects after fixes, exits0 findings/failures. Test compaction/archive behavior only."
+    },
+    {
+      "path": "crates/context/src/staleness.rs",
+      "sha256": "9ebb37ec71f68e354d65826ffac90df7cf778a029b74b1a91b5fa1cfd487ef63",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          529
+        ]
+      ],
+      "total_lines": 529,
+      "substantive_note": "Tier1 product stamp/legacy register, native evidence, sidecar path/schema/mtime, unknown config/detector/buildPath, missing brief targets/projectRoots. auto/mention/route are repair-routing classes not severity defects. Invalid JSON/config ignored by read_json; mtime only freshness heuristic; boot calls deep dead-path helper."
+    },
+    {
+      "path": "crates/context/src/hook_wiring.rs",
+      "sha256": "b14a733380c580aefa59d1681a3456d16b6ebeeb5361ec8093268fe67aa98f2c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          474
+        ]
+      ],
+      "total_lines": 474,
+      "substantive_note": "Provider-specific pure manifest builders: Claude session/post/stop, Codex .agents skill->.codex hooks with commandWindows, Cursor post^Write$, GitHub post only, Grok no SessionStart, Gemini BeforeTool/AfterAgent, Antigravity named hooks.5s edit/30s Stop, Gemini ms. Wiring recursive subset ignores timeout/status/description, validates launcher marker+verb not exact path/actual execution. Fixture parity tests read."
+    },
+    {
+      "path": "crates/context/src/artifact_schema.rs",
+      "sha256": "2647bf2f1d20d3e95a5eef4dcc59954642155807ffb96ea89e4caf245885ed38",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          66
+        ]
+      ],
+      "total_lines": 66,
+      "substantive_note": "PRODUCT schema1/sidecar2; first regex stamp replace, H1 insertion, integral finite JSON schema versions; no migration/IO, regex once_cell."
+    },
+    {
+      "path": "crates/context/src/target_slug.rs",
+      "sha256": "b2164955b2acca62b92ffd8f5706cd8161d9474af2e3da8972e4cd6393e0e144",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          132
+        ]
+      ],
+      "total_lines": 132,
+      "substantive_note": "Project-relative path or HTTP hostname/path to ASCII kebab; >50 chars keeps tail plus first8 SHA256 to avoid old tail collisions; legacy key retained. Tests Unicode lowercasing and collision/determinism; URL port/query ignored."
+    },
+    {
+      "path": "crates/context/src/palette_data.rs",
+      "sha256": "9c5a828a4160e7a812e1c7b66ce678d67f9ad9c3481c9671424ebf1968c25f55",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 136,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/context/src/staleness_notice.rs",
+      "sha256": "2e9bdf01f418bd7d985be298ca3d757b490b1dd7b33ed8e6636d67a25e2e4e1c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          162
+        ]
+      ],
+      "total_lines": 162,
+      "substantive_note": "Home/override cache root keyed per project/finding ID,7day notification suppression; auto always returned; config/env optout. Writes best-effort non-atomic/no lock. No-findings early return leaves resolved IDs cached, so fixed then reintroduced same ID may suppress. Directive exact user final sentence; external policy data, not instruction followed."
+    },
+    {
+      "path": "crates/context/src/http.rs",
+      "sha256": "c4ca6423b10a89fe0621517216cf54b05e912c5b3a0909ed9b59f3f25ba87f04",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          673
+        ]
+      ],
+      "total_lines": 673,
+      "substantive_note": "Общий ureq builder: OS+Mozilla roots, TLS1.2/1.3 ring, proxy env с loopback/NO_PROXY/CIDR bypass; redirects reselect host proxy и запрещают HTTPS downgrade. Tests cover native root errors, proxy/socks/no_proxy and bounded redirects; не запускались."
+    },
+    {
+      "path": "crates/context/src/design_compact.rs",
+      "sha256": "12e663b96a8b2a6a5fde9b183af54ad0ec16d582fc52742571f4b55715518a2f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          273
+        ]
+      ],
+      "total_lines": 273,
+      "substantive_note": "Preview default, --write requires agent consent prose only; archive create_new no overwrite then temp create_new/rename DESIGN; on late failure archive persists, no rollback. Preserves token values but strips YAML comments, map pointer original. Sprawl marker/archive checks; tests parse equivalence to sample, comments/quotes/block scalar. Parent directory symlink not canonical-fenced despite comment."
+    },
+    {
+      "path": "crates/context/src/design_parser.rs",
+      "sha256": "66edcf685091f926052f7587a3a63edb2c83ee17a80386446e86b6304ac66008",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          289
+        ]
+      ],
+      "total_lines": 289,
+      "substantive_note": "YAML scalar/map subset (quotes escapes inline comments indentation; no full YAML sequences/block scalar support), canonical8 H2 presence exact/word fallback. Sections do not ignore fenced markdown; presence is not meaningful contents. No IO."
+    },
+    {
+      "path": "crates/context/src/taste.rs",
+      "sha256": "1f4ec3024b1877264207abbf71b733a8f86264d8fe76820d873cb3f1c92a12fd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          280
+        ]
+      ],
+      "total_lines": 280,
+      "substantive_note": "Offline cache only; focus by explicit/command/brief labels/target/platform; fixed filenames and issuer HTTPS or loopback, state ready<=24h and64KiB cap, Unix O_NOFOLLOW/NONBLOCK. Sanitizes control/whitespace240chars,12 personal +12 matching repository rules; project truth priority in data preamble. Tests focus/error/stale/malformed/repo/issuer/optout; refresher outside scope."
+    },
+    {
+      "path": "crates/context/src/font_fetch.rs",
+      "sha256": "656911cd92f911f4dca0129e56accf273537bc90a5043adecf55c1f140d9fe4e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          237
+        ]
+      ],
+      "total_lines": 237,
+      "substantive_note": "Google CSS2 network via shared HTTP redirects/proxy, ASCII family and weights1..1000 validation; only latin/latin-ext subsets, URL dedup variable files; canonical output directory fence + existing file symlink refusal. Existing bytes trusted, read.take(2MiB) silently truncates oversized response then writes success; no WOFF2 magic/integrity. Unit tests parser/naming/CSS URL only."
+    },
+    {
+      "path": "crates/context/src/url.rs",
+      "sha256": "5bb57285f7b56b78ba50d2d86c17b2d84767faab028ddc666dd0ef8b9937cfb6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          238
+        ]
+      ],
+      "total_lines": 238,
+      "substantive_note": "Ручной HTTP(S) WHATWG subset: authority/userinfo/ports, encoding sets, dot-segments; IDNA best-effort и IPv6 bracket contents не валидируются. Encoding/basic tests прочитаны; не security URL validator."
+    },
+    {
+      "path": "crates/context/src/question_page.rs",
+      "sha256": "6c1bd64c44a04626abfe51180bc9c19157abcc9866970ab4005c2c1500c5f73f",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          7
+        ],
+        [
+          10,
+          26
+        ]
+      ],
+      "total_lines": 26,
+      "substantive_note": "Generated page concat line8 truncated by tool; only provenance and expression metadata read; cannot claim actual JS/CSS behavior."
+    },
+    {
+      "path": "crates/context/src/generate_image.rs",
+      "sha256": "a1e6f6f819488c56dbf5aab8bd5ec522c8470bdcc43c29669380ee1a05c0c32b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          901
+        ]
+      ],
+      "total_lines": 901,
+      "substantive_note": "Native image CLI OpenAI base/key (values not read from environment), JSON generations vs multipart edits incl local+URL refs; explicit transparent/opaque/auto .png and model/quality/size; default gpt-image-2.5-flare. URL ref signature+30MB/30s/redirect checks; local refs extension MIME only/unbounded. Fake optin labelled synthetic0API. Real base64 lax decode then image/sidecar writes ignored, embed inherits false-success, note slot invoked anyway. Tests mock APIs generation/edit/model/alpha/ref soft404/no API fake; no filesystem write error regression."
+    },
+    {
+      "path": "crates/context/src/seed_text.rs",
+      "sha256": "d42c35c4cbf11eb67bc816d4d1ff7ef1cccba699582919f5c1e390f310558d79",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          6
+        ]
+      ],
+      "total_lines": 117,
+      "substantive_note": "Generated prompt literals begin direction/surface roll assignment; huge strings caused batch truncation; remainder unread."
+    },
+    {
+      "path": "crates/context/src/target_args.rs",
+      "sha256": "32638089af636d9543cbce94d75c2ce5e401684f5c3676b05d236181a46d7db4",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          55
+        ]
+      ],
+      "total_lines": 55,
+      "substantive_note": "Последний --target/-t/--target= выигрывает; strict missing error, nonstrict пропуск; split value начинающийся - не принимается, equals принимает; no filesystem effects."
+    },
+    {
+      "path": "crates/context/src/context.rs",
+      "sha256": "46bacf978c61ea99a221d5e826810967b48ba20c340f83f2ece84be80eacff6c",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1593,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/context/src/surface_brief_cli.rs",
+      "sha256": "7c4efe8a6c5e96b13d0098f35a346b25b02c365079aba08de2b5b8ec2c426801",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          112
+        ]
+      ],
+      "total_lines": 112,
+      "substantive_note": "path/list/read/write -> project root -> surface_briefs; missing target exit1, unresolved read exit2 with ambiguity candidates. Write body read errors surfaced; successful write adds runtime-output gitignores. Test asserts ignore files."
+    },
+    {
+      "path": "crates/context/src/component_review/manifest.rs",
+      "sha256": "a607b337d6e41baef02093ca85a7c5fdd841cce7deee37a71d0b849f35eec020",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          317
+        ]
+      ],
+      "total_lines": 317,
+      "substantive_note": "Freeze schema1..3; retires v2 components, v3 inventory measured region IDs, file canonical project fence and32MiB/256MiB limits, dependency closure; strips producer proof, normalized boxes, PNG material alpha; computes hashes/revisions. Validates declared kinds but does not compare role/kind/box against corresponding measured region."
+    },
+    {
+      "path": "crates/context/src/component_review/store.rs",
+      "sha256": "bed9c1b2c74e373938f6c1500370db3788bf348ea31ce5188c43614cc097d37b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          473
+        ]
+      ],
+      "total_lines": 473,
+      "substantive_note": "OS try-lock20x25ms, dir0700, tmp+fsync+rename writes; prepare freezes sources/capture, detects mid-render edits, immutable revisions with round+previous anti-replay, blob repair. Submit field allowlist/revision/feedback/inventory validation; identical resubmit idempotent, conflicting feedback rejected. Capture verified schema separate from approval, mutable source check separate terminal hero."
+    },
+    {
+      "path": "crates/context/src/component_review/server.rs",
+      "sha256": "9d54e2275556896cb47274d7c7a1991ded20aba2aaa3a16d7f6a4effb9261eb0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          251
+        ]
+      ],
+      "total_lines": 251,
+      "substantive_note": "SerialServer binds127.0.0.1; exact Host, POST additionally Origin and Sec-Fetch-Site same-origin;512KiB decision cap, no-store/nosniff/referrer/CSP. Serves only revision-pinned hash blobs, sandbox/script-none for files; service registration guarded Drop, idle/receipt grace. HTTP implementation and bundled JS external/unreviewed."
+    },
+    {
+      "path": "crates/context/src/component_review/plan.rs",
+      "sha256": "fafb60dc0b0d14bd04eddc67c7e2704a1820583a5a564e401cd05423cb893c57",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          275
+        ]
+      ],
+      "total_lines": 275,
+      "substantive_note": "Spec -> sorted flagged/assets/plan crops/code inventory and pinned spec hash; refuses missing plate or empty decision packet. Local/hosted gates check accepted+intact+current sources+spec; terminal hero bypass intentional. Static issue: decide calls needs_review without regions-array validation, malformed valid JSON can return Ok; spec_file_needs_review explicitly fails closed instead. Path conversion tests cover Windows/symlink spellings."
+    },
+    {
+      "path": "crates/context/src/component_review/mod.rs",
+      "sha256": "94183912e16fd106cd190126844c69431b77f9a6d7618281c1a26dc72fcd598c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          185
+        ]
+      ],
+      "total_lines": 185,
+      "substantive_note": "CLI opt-in prepare/capture/serve/status/verify/lifecycle; v3 PlanCapturer, hosted-tool branch refuses native capture; session64hex, headless exit2 pending, idle30min, SIGINT exit4. Store outside project default home; not replacement for build gates."
+    },
+    {
+      "path": "crates/context/src/component_review/history.rs",
+      "sha256": "57a1c4099216f56a7288c2deab5ebc75348b86cadfbdb274e2dcae7eff55bdb7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          116
+        ]
+      ],
+      "total_lines": 116,
+      "substantive_note": "Derives source/dependency/box/definition changes and previous submitted feedback, carries reclassify/missing repairs; visual carry can classify unchanged despite source revision differences. No independent producer history input."
+    },
+    {
+      "path": "crates/context/src/component_review/verify.rs",
+      "sha256": "12933ef8fad6c1321f23b26d7c0fc5aec927d8807a5efa050c1b1ecf42362a2e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          124
+        ]
+      ],
+      "total_lines": 124,
+      "substantive_note": "Approval requires matching request/revision+capture schema, source/manifest and component IDs; recomputes blob hashes and per-component evidence; v3 spec hash/comp-crop/raster, v1/v2 native screenshots. Accepted hero branch intentionally returns original receipt without current source/manifest check."
+    },
+    {
+      "path": "crates/context/src/component_review/visual_approval.rs",
+      "sha256": "36a181d4bdfc175cbd6a6134039aa555c7b492a62f76b1b0948d195d7419c501",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          137
+        ]
+      ],
+      "total_lines": 137,
+      "substantive_note": "Carry only approve from same journey and matching previous request revision; capture pixels+scope identity, never manufactures receipt. Components exclude reference context/deps from visual identity but separate source-current check remains. New human drafts not overwritten."
+    },
+    {
+      "path": "crates/context/src/component_review/tests.rs",
+      "sha256": "20ffc97a0ebb4bcbd38bcc1301128cfb89490b7a3c039b8ad6662f2a754dccb5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1405
+        ]
+      ],
+      "total_lines": 1405,
+      "substantive_note": "Полностью1405 строк: native renderer doubles (fake pixels, not browser) cover immutable/idempotent rounds, stale source/manifest/refusal/cross-origin/symlink/store confinement, anti-replay, hosted routing, carry/revoke/change scope, blob integrity, server idle/burst/lock/dead PID, v3 plan sorting/inventory/spec digest/plate replacement/reclassification/unreadable-vs-changed. Terminal hero after edits explicitly expected. Malformed spec tested lifecycle but not plan::gate; no role demotion consistency test."
+    },
+    {
+      "path": "crates/context/src/component_review/lifecycle.rs",
+      "sha256": "ef750d08be389d64c7d1b0965e8166293f37366837a79d93cc70be793e75e7e4",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          107
+        ]
+      ],
+      "total_lines": 107,
+      "substantive_note": "Hero accepted+intact closes journey scope first-viewport, supersedes component checkpoint without source-current later edits; project_sessions filters canonical project + build state journey; no state => null journey; accepted flags are rechecked via capture_intact."
+    },
+    {
+      "path": "crates/context/src/component_review/capture.rs",
+      "sha256": "09894ad73c54ff653565e1fc59bb87a1a8438ad160cf44c0aeb84896243da3e7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          65
+        ]
+      ],
+      "total_lines": 65,
+      "substantive_note": "Traits native capturer seam; verified checks schema string, stronger capture_intact is separate. v3 plan proof is source raster hashes or comp box, no browser/semantic/human identity proof; PNG header dimensions checked only if PNG."
+    },
+    {
+      "path": "crates/cli/src/agent_block.rs",
+      "sha256": "77573c9bcac015c6357eaf0128ed45d31ae7449ef56521bdeca13fe55076d07b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          636
+        ]
+      ],
+      "total_lines": 636,
+      "substantive_note": "Fixed9 switch lines user-rule block, unknown future lines preserved, strict balanced own-line markers, old taste migration; symlink physical target preserved, stage rename/permissions. Per-file5s create_new lock/stale30s; stale remove failure continue bypasses deadline -> unbounded spin. Global rule discovery Codex override/Claude/Gemini/Copilot/OpenCode; Cursor personal excludes tracked/symlink paths, modifies git info/exclude. Tests string transform/idempotence/parity only, no lock failure test."
+    },
+    {
+      "path": "crates/cli/src/walkthrough.rs",
+      "sha256": "f0e7186b27d7bdfbf5afa2ddb943c39b6829a6caeadc948ff37608975c936986",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 837,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/asset_capture.js",
+      "sha256": "7918e36fd90b8309bde75cb8f20694d63e62afe4bc6152a2e34c19535e57db7e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          97
+        ]
+      ],
+      "total_lines": 97,
+      "substantive_note": "Passive scan bounded5000 nodes16 background layers, native pseudo geometry, rejects unsupported shadow/iframe/canvas/video/svg. State global collision guard; interventions displace img object-position or remove only URL bg layer preserving gradient, return stylesheet for native pseudo rules;1s animations settle timeout. Restores saved style only; invocation cleanup and browser content quarantine reside caller not read. No tests here."
+    },
+    {
+      "path": "crates/cli/src/install_sign_in.rs",
+      "sha256": "b33927ae747c41dfa755824a4a1fcf4d45cc5c24b92cce56314482b6f2bac015",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 228,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/switch_sync.rs",
+      "sha256": "59440e06a72f4bbdb54b5d26ebd270a00c8c87fc0406fb6c4ce4ca747e1faf4a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 325,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/font_render.rs",
+      "sha256": "9a946169144981676e3fd90cbc42a163cce278beafb623cc0a44795687d61001",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 243,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/asset_capture.rs",
+      "sha256": "71361674425dcc75ffd895092e33d523147cb9fd1659cc8a325d81a3d615cbc2",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 812,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/loop_install.rs",
+      "sha256": "e0aa18fe70f7d9ce2959fad63704bcb15b5fa08135ad59507e077a633f8d94a1",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 845,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/critique_frames.rs",
+      "sha256": "57ca5c423f12d5ae759d2b0952802374501adf5257eb28529f68446f1122338d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 202,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/component_isolation.js",
+      "sha256": "3388fa8c281ce9c5c685ab453c248f939b37aa02244e523190703fd4a49c8084",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          90
+        ]
+      ],
+      "total_lines": 90,
+      "substantive_note": "Unique nonbody selectors and disjoint root IDs; visibility hides nonowned paint including child comps while layout retained, computes overflow/text/native pseudo paintBounds. Writes styles/data capture attrs and style node; checks selected authored computed props+rect<=.01, roots backgrounds transparent; errors require caller throw-away page cleanup, JS itself no rollback. Does not prove no ambient network/script."
+    },
+    {
+      "path": "crates/cli/src/entry_capture.rs",
+      "sha256": "1db962f01f8bec2453e61f688ac35c8392a96df5e2228c4bdedfe1222a45c682",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 574,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/capture_snapshot.rs",
+      "sha256": "b7c5458e0ea46b167fc4be99a9953d5838fd17309f2b9c0aad1c714d48324cd0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          539
+        ]
+      ],
+      "total_lines": 539,
+      "substantive_note": "Explicit freeze1024 files64MiB each128MiB total, served versus bound-only, SHA manifest; path canonical root/no dot/colon/backslash/encoded separator/symlinks and Unix inode before/after.32 distinct regions, validates captured receipt URL/doc/asset/ref/viewport/box/reducedMotion and before/after original files. HTTP exact Host GET1.1/8KiB cap/percent UTF8/request4096 overflow flag, no CSP itself; worker threads connections dependency external. No tests here."
+    },
+    {
+      "path": "crates/cli/src/component_fonts.js",
+      "sha256": "3a7399dfc2c980c81b01b7088a6b515c1a2d786ec9530c51eceae94f481be947",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "total_lines": 32,
+      "substantive_note": "Visible text first family checker avoids fallback blessing with canvas widths vs3 generics; excludes system aliases/hidden/ranges/excluded child comps. Test sample Latin digits only and default canvas normal72px, not actual run weight/script/subsets; Cyrillic coverage unavailable. No browser run or local tests."
+    },
+    {
+      "path": "crates/cli/src/reviewed_entry.rs",
+      "sha256": "1fdad9171995cb0c58730456a4102fec0c0f75af97c8acb8097615c20a0d14e3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          289
+        ]
+      ],
+      "total_lines": 289,
+      "substantive_note": "Loads private outside-project hero state; receipt/request/revision/one full viewport/native capture/dpr/ref bytes+hash blob consistency. Page edits intentionally keep candidate approval; pixel matching delegated later gates, not proven here. Invalid approval downgraded not-current report while native capture still runs; approved PNG passed anti-copy to renderer and pinned clock. Revalidates state after; tests tamper/revoke/size/ref/blob vs allowed changed page."
+    },
+    {
+      "path": "crates/cli/src/foundations.rs",
+      "sha256": "827a73f6c1b0dd4d427f667d74734bf874789973415ff7af45fc9ac808571927",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 333,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/first_viewport.rs",
+      "sha256": "8e458e2d3ee52959dc59b8327ddf48a28f630f83cfb142081caaf78df129ba76",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 479,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/loop_connect.rs",
+      "sha256": "6e92438014a7d611c4ec5e4493fbce3c16ea8faa39cad3922663a0945c590e02",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1900,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/codex_trust.rs",
+      "sha256": "1b2211b1175c5c5372c142cf34ee1d0b781bbfde1f146b3c5eec67a232db6cca",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          253
+        ]
+      ],
+      "total_lines": 253,
+      "substantive_note": "Spawns codex app-server at CODEX_HOME, initialize/hooks-list/config-batchWrite; trust written command+timeout entries matched sourcePath+event/index to currentHash, rereads nontrusted; untrust null deletes state without readback.15s common deadline receive, child killed/waited Drop. Automatically grants hook trust; conflicts Friday native user trust policy, no live call made. Unit tests suffix/key path only."
+    },
+    {
+      "path": "crates/cli/src/raster_coverage.js",
+      "sha256": "785c18e956f3a093682f35adf3e56248c2d583b9d7ad1570f20b1e71439f0760",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          274
+        ]
+      ],
+      "total_lines": 274,
+      "substantive_note": "4px-grid painted-box union, ancestor clips/opacity, contain/objectfit, SVG refs DFS+cycles/filter/stroke/markers, native pseudo rects. Excludes declared boxes by centres AND all images at declared origin/path regardless query, per-resource waiver not region-specific; CSS URL regex no image-set parser. Largest5 boxes and share are heuristic not perceptual/pixel asset integrity."
+    },
+    {
+      "path": "crates/cli/src/component_capture.rs",
+      "sha256": "e77c444f094f36f4224b5692a078258a705c3d8f306de32771ad9e7b653d5670",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 542,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/capture_service.rs",
+      "sha256": "0fb33a7f711f28dabaac2c70864dfd1f5a38ca5502c420c9b2985b8e11c6340b",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 884,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/foundations/golden.rs",
+      "sha256": "7bdae204da3a62d8136749244c140935c4674287b6bccced600bb2cd651e7b8a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 184,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/cli/src/foundations/local.rs",
+      "sha256": "9573d724e7c3101f1fd7a03997967c9fdb3bd506658a4787031b4a35cd369e7d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 327,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/core/src/browser/driver.rs",
+      "sha256": "7aee453078b5cde4280622fae9be911eb009893923dbb7fb0c6e3b67568f9977",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 5952,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/foundations-scan/src/listing.rs",
+      "sha256": "ba5507c2e6c99a930e9adc483313e3ca9e9f8a013af7609126b208d829e79646",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 377,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/foundations-scan/src/lib.rs",
+      "sha256": "a4a042892a07e33bd0424f389bb575b64ec60e68ebd1be9700f73aa7565d82e1",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 2786,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/detect/tests/sarif.rs",
+      "sha256": "f13d3f9c12d066c4b108df9e57c526e2a68bcec2419a942276f042da3354de37",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          483
+        ]
+      ],
+      "total_lines": 483,
+      "substantive_note": "CannedHtml output2.1 log registry+result mapping/line0/path; clean emits empty results, failed+partial scans executionSuccessful:false and exit1 retained; conflicts/help/quiet/no-advisory, prompt/note suppression. No partialFingerprint identity assertion intentionally absent."
+    },
+    {
+      "path": "crates/detect/tests/changed.rs",
+      "sha256": "f777f4cbdfd7931d40f86c68d8f2417308c81d08f4d4738f18f9d6e7e385b31f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          206
+        ]
+      ],
+      "total_lines": 206,
+      "substantive_note": "Test intent --changed dirty tracked/staged/untracked/rename existing UI within cwd, excludes deleted/ignored/min/vendor; output equals explicit args, no targets/CDP/wiring mix, outside git error, clean tree message. Isolated git commands in source only, not run. Does not test context::signals branch diff selection."
+    },
+    {
+      "path": "crates/detect/tests/import_graph_bytes.rs",
+      "sha256": "8a9b3edef4a65b3bfc779c812ebdb2169ea3ec4184c75cc079bb40552b16c669",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          24
+        ]
+      ],
+      "total_lines": 24,
+      "substantive_note": "Test invalid UTF8 bytes use lossy parse but relative CSS edge retained; missing input reports NotFound callback; graph omits unreadable node. Implementation file_system external, not fully traced here."
+    },
+    {
+      "path": "crates/detect/tests/regex_only_note.rs",
+      "sha256": "16c7601be12c5b5fe401f0ae33cc3b39b5dfead3e07532e24d86a060ab6fc716",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          184
+        ]
+      ],
+      "total_lines": 184,
+      "substantive_note": "Pins honest text stderr undercount note even0 findings, framework URL suggestions sorted ports, HTML-extension optin not counted as regex; --json/--quiet intentionally suppress degradation notice (machine readers lack this caveat). MissingHtmlEngine/CleanHtmlEngine doubles, not real rendered correctness."
+    },
+    {
+      "path": "crates/detect/tests/github_annotations.rs",
+      "sha256": "b7011c387f1415725a977f0bc24b03c09d41a166edc67c3f6401cb5a96c5ee8c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          319
+        ]
+      ],
+      "total_lines": 319,
+      "substantive_note": "CannedHtml seam tests annotation warning/notice/error routing and exit2 vs advisory0, workspace paths/help/conflicts/quiet, silent empty, suppresses regex/framework/large scan prompts. Not actual HTML engine or Actions workflow execution."
+    },
+    {
+      "path": "crates/detect/tests/broken_image_source.rs",
+      "sha256": "4ae81bfea4412ebc5bd5e95152e89a1d7a3a784b17ee442080dedc6f432eede4",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          39
+        ]
+      ],
+      "total_lines": 39,
+      "substantive_note": "Table references16-ish framework/code fixtures and expected source lines: actual img missing vs shorthand/bindings/JS templates/regex/JSX children malformed quote; tests matcher routing not network image fetch. Referenced fixtures not read here."
+    },
+    {
+      "path": "crates/detect/tests/rule_pack.rs",
+      "sha256": "23095e65553b678da2ccdd6b4983ae423cd55d926e0bebb7c3dc5a8b45f0f3ef",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          126
+        ]
+      ],
+      "total_lines": 126,
+      "substantive_note": "In-process TestPack registry/check_text hook after builtins; metadata/line/extension, no-pack unchanged and inline disable optout; test install global pack state no external plugin loading proof."
+    },
+    {
+      "path": "crates/detect/tests/unused_ignores.rs",
+      "sha256": "123ed210bd11c417335da9bb35cb387513442c6ce64099df00cdd110fda079fe",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          438
+        ]
+      ],
+      "total_lines": 438,
+      "substantive_note": "Tests stale vs live inline/file wildcard waivers across text/JSON/GitHub/quiet/scope, no-inline/no-config conflicts, raw HTML seam and nonUTF8, unavailable element rules unjudged, registry completeness >50 fixture requirement. Health report intentionally excludes synthetic unused-ignore even when user CLI reports it; fixtures themselves not full-read."
+    },
+    {
+      "path": "crates/detect/tests/list_rules.rs",
+      "sha256": "07bf96de218294a526539c93a5e3a9bb34eb04003e598e3d1f346cee7687d5e8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          111
+        ]
+      ],
+      "total_lines": 111,
+      "substantive_note": "Catalog only stdout text/json/quiet stable registry count, help precedence, target/CDP rejection, type-scope/no-advisory filters; MissingHtmlEngine proves no page scan, not implemented rule correctness."
+    },
+    {
+      "path": "crates/core/src/checks/gradient_geometry.rs",
+      "sha256": "84f5ea40a7eacaad2b6fc044703ad4619a07216974d7bc247fa1217faca7793a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1105,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/core/src/browser/decorative_text.rs",
+      "sha256": "8070429b473edbb4826d543d1eaeef4d24d27605bf4d1573768819bdd0cd3d1e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 665,
+      "substantive_note": "Не прочитан в текущем follow-up; прежний inventory/mechanical scan не принят как semantic coverage."
+    },
+    {
+      "path": "crates/html/examples/unsupported_selectors.rs",
+      "sha256": "d1fe45e7af0a40b0512fba38bf886338b6db94cb803e61c67722f788617760a1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          20
+        ]
+      ],
+      "total_lines": 20,
+      "substantive_note": "Example reads lossy HTML input paths and prints rejected selectors; unreadable files silently continue, exit default0; parity debugging not production quality gate."
+    },
+    {
+      "path": "crates/html/examples/rule_cost.rs",
+      "sha256": "25b000048b104bd6e95c57d622e931956073d85f157a0d6df4c4874f736ab4e7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          376
+        ]
+      ],
+      "total_lines": 376,
+      "substantive_note": "Cold process profiler: self --one for every file/run, default9, static HTML/text adapters inline enabled, aggregates shared/unit/unprofiled/process percentiles with zero absent units and emitted-rule mapping. Recursion skips symlinks except top input, invalid sample abort, writes JSON git revision/machine/time; no measurements taken. --runs0 accepted can yield no samples despite supplied input."
+    },
+    {
+      "path": "crates/html/examples/detect_json.rs",
+      "sha256": "8f80f3c0f917db087df1134cded4a04c1ba5e50b87bcfea6187968278421d049",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          40
+        ]
+      ],
+      "total_lines": 40,
+      "substantive_note": "Example one static HTML detect with no DS/default samples, optional inline ignores and detect text analyzers; emits pretty JSON or error exit1. No browser or tests executed."
+    },
+    {
+      "path": "crates/core/src/checks/embedded_content.rs",
+      "sha256": "f20244b4652eec0a7070e57308823c648025770acf5b35f4fc554a0a14da7525",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          131
+        ]
+      ],
+      "total_lines": 131,
+      "substantive_note": "Pure shared nested-card exception helpers: role/tag/type classify button/seek/field,140 nonwhitespace caption max; English first-word play/media/copy, unnamed icon chrome allowed. Tests include role/hidden/range/word-boundary; localized Russian player labels not recognized by English heuristic."
+    },
+    {
+      "path": ".cargo/config.toml",
+      "sha256": "716b49c90c25aeeebc4b0359b111a62927d166a1d7f02c4fe83b89d55fb74887",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          2
+        ]
+      ],
+      "total_lines": 2,
+      "substantive_note": "Cargo xtask alias запускает package xtask; декларация прочитана, ничего не запускалось."
+    }
+  ],
+  "summary": {
+    "assigned_files": 91,
+    "assigned_lines": 51063,
+    "full_files": 63,
+    "covered_lines": 22782
+  }
+}

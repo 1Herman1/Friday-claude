@@ -1,0 +1,65 @@
+[
+  {
+    "repo": "emilkowalski/skills",
+    "url": "https://github.com/emilkowalski/skills",
+    "default_branch": "main",
+    "sha": "64eb3deb9a5fbfa041faf783e0bc3fd635872e9c",
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-11-15T12:42:50Z"
+  },
+  {
+    "repo": "pbakaus/impeccable",
+    "url": "https://github.com/pbakaus/impeccable",
+    "default_branch": "main",
+    "sha": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-11-25T07:50:46Z"
+  },
+  {
+    "repo": "Leonxlnx/taste-skill",
+    "url": "https://github.com/Leonxlnx/taste-skill",
+    "default_branch": "main",
+    "sha": "d1a2bb41d927083ac7118f60cfc9cdf711810ea0",
+    "license": "MIT",
+    "archived": false,
+    "pushed_at": "2026-11-25T09:10:22Z"
+  },
+  {
+    "repo": "remotion-dev/skills",
+    "url": "https://github.com/remotion-dev/skills",
+    "default_branch": "main",
+    "sha": "a3f4098a2afd0e13f6a6f8c8760e275f75457ea9",
+    "license": null,
+    "archived": false,
+    "pushed_at": "2026-11-24T17:19:19Z"
+  },
+  {
+    "repo": "herdrdev/herdr",
+    "url": "https://github.com/herdrdev/herdr",
+    "default_branch": "master",
+    "sha": "e8d7d9705a7a2c89cef4dd42079379f05685af87",
+    "license": "Apache-2.0",
+    "archived": false,
+    "pushed_at": "2026-11-19T22:15:19Z"
+  },
+  {
+    "repo": "figma/mcp-server-guide",
+    "url": "https://github.com/figma/mcp-server-guide",
+    "default_branch": "main",
+    "sha": "5e4790847aedd4312fff65a11f7695c9c9382be0",
+    "license": null,
+    "archived": false,
+    "pushed_at": "2026-11-24T18:08:31Z"
+  },
+  {
+    "repo": "anthropics/skills",
+    "url": "https://github.com/anthropics/skills",
+    "default_branch": "main",
+    "sha": "e4bb5d960d87126ff3b3a8af1a104b7db67560ba",
+    "license": null,
+    "archived": false,
+    "pushed_at": "2026-11-16T14:22:50Z"
+  }
+]

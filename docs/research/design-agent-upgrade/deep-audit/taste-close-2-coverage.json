@@ -1,0 +1,1214 @@
+{
+  "job": "taste-close-2",
+  "root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/taste",
+  "revision": "d1a2bb41d927083ac7118f60cfc9cdf711810ea0",
+  "files": [
+    {
+      "path": "skills/taste-skill/assets/objects/_print-core/print3d.js",
+      "sha256": "53bfac78c26b7572bfcdd4d263e324a7748b406d3ad09425c4719dd239c3d94a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1795
+        ]
+      ],
+      "total_lines": 1795,
+      "substantive_note": "Полностью прочитаны SDF/form shader, двухпроходная печать, filmic/OKLab poster recoloring, GL pool priority/idle eviction, GPU adaptation, first-frame probe, narrow presets, keyboard/toggle/pause, observers and destroy. Положительный pattern: poster → live → retained frame с общим context budget; риски: 36px pause, no timeout ready, shader poll, residual host inline styles."
+    },
+    {
+      "path": "skills/taste-skill/assets/diagrams/diagram.js",
+      "sha256": "4e8f9b977fcb480d0ce28e6f55c0b3feb766da407271caaed2102c114a04afe4",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1688
+        ]
+      ],
+      "total_lines": 1688,
+      "substantive_note": "Полный substantive read1688: icon resolver/fetch/SVG rewriting, normalization10 layouts (plus internal mind/outline), measured node kinds/captions, routing ports/elbows/rays/orbits, collision multi-attempt fit/height expansion, pulse Program/normalization2.5-4s/busiest still, hover graph traversal, page-kind/phone/reduced/cycles, controls and destroy. Caveats: regex SVG cleaning not sanitizer; node alt first8 labels loses edges; q RAF/font/icon callbacks not canceled on destroy; keyboard hover lacks focusout stop; invalid required spec can throw before safe fallback. diagram.css/presets not read in this pass."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/product-render/build.js",
+      "sha256": "b8fb96a10311a82808588d13a10e157bb1be53efe73d875cbf573596fad790fe",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1387
+        ]
+      ],
+      "total_lines": 1387,
+      "substantive_note": "Полный build1387: material/primitive GLSL, Catmull-Rom paths, shape-surface sampling,10 hardcoded prop factories, scene/color/view expansion, validation, bounds/pose chain, generated SDF/material dispatch, poster variants, image/still/live mount, serialized still queue, alpha/focus/cut framing, swatch/view/scene API and cleanup. Confirmed risks: cyclic motion parent unchecked hangs chain; params angle keys alias variant cache; pending showImage load not token guarded; ready once only; phone/reduced mode selection no change subscription; null blob after clear leaves no render and unresolved ready. print3d dependency full; specs/poster helper not read."
+    },
+    {
+      "path": "skills/taste-skill/assets/system.css",
+      "sha256": "2facb5c5537a3bd44514eacc98715b04f6f19ca9ace11a92d35903941511e71c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1328
+        ]
+      ],
+      "total_lines": 1328,
+      "substantive_note": "Полностью1328: local page token graph/inverse remap, reset/font/spacing/type/grid/nav/hero/frame/browser/ground/tiles/footer/place/forms/actionbar/44px-phone + reduced override. Concrete reusable: screen room via svh/nav/bar/soft min-content, photo separate text at phone/place, factual dimensions as HTML, forms redundant errors, safe-area actionbar and skip link. Not universal stylesheet: many :root/* and font/page switches global; fixed typography/English content in credits/sample strings; system.js must be read separately, not validated by this CSS."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/photo-kit/photo.js",
+      "sha256": "6624915e29e181cd97a3be08a63bde9052d788b772405e7d9637b3a95179cfa5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1138
+        ]
+      ],
+      "total_lines": 1138,
+      "substantive_note": "Полностью1138: image decode cache/bestSrc focus parsing, percentile levels/kmeans/Sobel/void-cluster blue noise, GLSL1/2 LOD/printing/screen blend/trail, lint, texture cache, max3 photo pool + global accounting, parallel compile, quiet idle/tap1600ms/offscreen release, adaptive rendering, CORS/photo fallback, attribution helpers. Positive: restore original img style and native photo fallback. Caveats: glBudget not admission, main-thread blueNoise, no first-frame emptiness probe, no keyboard loupe, host styles not restored; credits escaping does not validate URL scheme; no by treated as owned but does not prove ownership."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/dotted-globe/effect.js",
+      "sha256": "fd15639d33afcb4a60e777c5fe48c442865957e32b9145d3acc28f3ade813ac1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1007
+        ]
+      ],
+      "total_lines": 1007,
+      "substantive_note": "Полностью1007: literal Earth handmade coastline/lakes, fixed23 cities +12 hubs, Fibonacci dots/area alpha/2-pass front-back, seeded timing/lattice quantized radius/cache3, 1x body/bounded canvases, GL60fps→2D30fps→CSS still, 3loss fallback, 4s idle release, calm-aware layout/routes and reduced2 finished arcs. Explicit opt-in global reach only; arcs/cities decorative not real infrastructure. Global budget accounting not admission; CSS loses continents/arcs, host styles remain and fallback clears original shorthand; no pause UI in file, caller must supply."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_scenes/kit.js",
+      "sha256": "71d045472d3006bae6d1c2b51f5b271c099d1c5d1427282c6a2d46b76112e02d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          959
+        ]
+      ],
+      "total_lines": 959,
+      "substantive_note": "Полностью959: palette parent-ground detection, photoURL/fallback/credits, image CPU levels/softCopy/cover, tones, GLSL lint, own hard2 stage pool/fx global accounting, lazy loaded init, compile/frame errors & flat-first-frame fallback, preserve2D freeze, pointer wake/idle/free, fps throttle, resize, shared expanded44px pause and cleanup, matrix helpers. Shared deps fx/photo full. Caveats global glBudget not admission; missing source can still blank fallback; checked flag not reset per context; no reduced-change pause registry sync; host styles not restored."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/fx.js",
+      "sha256": "19e3af0f7c2963a70c3e0e114f599cb9525d1a69f5ebcda5acbd482ba2591374",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          955
+        ]
+      ],
+      "total_lines": 955,
+      "substantive_note": "Полностью прочитан runtime: OKLab gamut reduction, seeded composition/calm slots, parameter clamping, shared lifecycle/media change, GLSL1/2 helpers, lazy GL shader/compile/fallback/adaptive/context loss, registry and cleanup. Уточнение прежнего отчёта: maxLive14 ограничен tpMax default4; custom glBudget лишь учитывает, но не отказывает при полном cap. Opt-in runtime, не безусловный auto. Fallback gl-budget sticky; generic shader first-frame emptiness не проверяет."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/ui.js",
+      "sha256": "a32175d929ce941e69ccccc2819f90967d06c578eeab082a320c6a99c2a4f5c5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          733
+        ]
+      ],
+      "total_lines": 733,
+      "substantive_note": "Прочитан весь UI loader/cache/unique SVG ids, loop timeline/generation abort, held vs keyboard/hover restart, a11y tidy, shared pause hosts; grounds bake queue, viewport priority, DPR/adaptive overrides/retry/stub/live lifecycle. Не production controls; gaps: cached rejection, swallowed module errors, no grounds disposal, lingering host listeners and failed start concurrency."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/duotone-grade/effect.js",
+      "sha256": "353a8a5703cd195e96dc1986c31a56bb643fea95d4ce092bdca3d5e87459ccaf",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          703
+        ]
+      ],
+      "total_lines": 703,
+      "substantive_note": "Полностью703: photo vs seeded plaster-window stand-in, OKLab two/three-tone reach validation14 iterations, gamut/khaki/violet guard, actual cover/position/96px percentile levels, still grain/48s push, CORS CSS blend fallback, texture injection via shader uniforms+canvas MutationObserver and25% resize sharpening, original img alt retained. Positive native photo until graded. Risks: untracked observer580 not disconnected on destroy until later mutation; previous img transition not restored; gradients/scrim contradict modern system no-scrim; calm0 still .5 due calmMax; no responsive src changes."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/cards.html",
+      "sha256": "a37730cd0744abd9431bbeac4e827f1e77a93435f442f09ae12f58de81fcddc6",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 617,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/layout.css",
+      "sha256": "8ae1ad2d798118433554f067d8e012bbce5646c868d154a1087284c5d32f2ac3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          554
+        ]
+      ],
+      "total_lines": 554,
+      "substantive_note": "Полностью прочитан layout CSS: tokenized optical scale/font axes, twelve-column hero/facts, photo solid-box/calm-side and tablet separate text, place phone-fill named grid rows, unboxed product and 7% render bleed, 32px hotspots, collage28px crop safe room, max-word slot, film solid inverse box, triptych breakpoints, centred82% fade/phone28px, short-phone fallback. Positive recipes opt-in; no-scrim policy conflicts with older backgrounds, reduced CSS covers only selected properties."
+    },
+    {
+      "path": "skills/taste-skill/assets/backgrounds/backgrounds.css",
+      "sha256": "86fcfe354fc850ee7b9ace2937199d9180173448bfc63d286d48b26c4fca4b99",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 516,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-dither-object/component.js",
+      "sha256": "dd35254d50da0979f58a7fd154d0a31ad7b94687028e743d63714f75e9be3007",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          480
+        ]
+      ],
+      "total_lines": 480,
+      "substantive_note": "Полностью480: four explicit SDF headphones/chair/camera/drone, per-object hover semantics,96-step bounded marcher28shadow, Bayer onepixel/cell DPR inverse, studio640k cut, initial SVG fallback, reduced baked still, pause wrapper. Generic invented geometry not exact client product. shared.js (bag/still/pauser) dependency not read; async mount cleanup safety depends on it; stage null not guarded, labels English and no keyboard equivalents."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/product-turntable/object.js",
+      "sha256": "f4d2abc11de27aa9fc62e52e59ac4a3db13a11741c6978374af52c1294db2b7f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          430
+        ]
+      ],
+      "total_lines": 430,
+      "substantive_note": "Полностью430: four hardcoded SDF subjects camera/cup/speaker/chair with material lighting/shadows/AO, fitted camera incl platter marks, step15deg autoplay1.7s, critically damped integration/substeps, pointer light, stage pause/pool/fallback PNG. Generic category illustration only, not actual product. Numeric form not range checked; role img interaction has no keyboard turning; missing fallback silently removed."
+    },
+    {
+      "path": "skills/taste-skill/assets/motion/motion.js",
+      "sha256": "e4453f1ac91d81002c5a75dccc1263285267999a8bb2453278ab63232e7062cc",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          406
+        ]
+      ],
+      "total_lines": 406,
+      "substantive_note": "Полностью прочитаны nav intent, transform-only tab indicator, locale-ish numeric parser/width lock/font wait/6s fail-open, HeadlessChrome final-state branch, CSS loop controls, switches, hero word masks + restore + 700ms/2400ms safety. Нет общего destroy; reduced queried без change subscription, глобальные click handlers ставятся даже motion=off."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/soft-light-bars/effect.js",
+      "sha256": "25fc5e759d229a875aec4be4c3b0691d387f7dffed1ca6a08663698aa9137757",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 403,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/lab.html",
+      "sha256": "32add36aeda0f9e859ec3de6a69c9df7ec2bd9ce073414ad560fddc5a9fce8e3",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 390,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/backgrounds/demo.html",
+      "sha256": "af2e536af356b76edad1ec193aaddc25089d4e5edb4c213c45b2262a35fbe01e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          376
+        ]
+      ],
+      "total_lines": 376,
+      "substantive_note": "Полностью прочитано demo: inline palette deck, query overrides/bar/filter, 16 decorative grounds composition, Northgate rota marketing samples/static switches/stats/quotes, remote Picsum853, Google Fonts. Не production data/security evidence; no live backend."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/_demo/shoot.mjs",
+      "sha256": "d325d7857fd0602078aed873e3325b07756a5063af94238a704cd015d8927ff2",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 340,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/motion/motion.css",
+      "sha256": "948bfb7192c908934206ef5776ac28bdd8c3499483d7347cbb24e7b6fb5c6810",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          321
+        ]
+      ],
+      "total_lines": 321,
+      "substantive_note": "Полный CSS: 150/120ms hover asymmetry, 90ms press, instant focus, transform-only indicator, 2px lift, masked 1.03 image zoom, 40x24 switch/20px check, pause safe band, hero early hold/settle and reduced-motion stills. Opt-in stylesheet, не global Friday defaults; отдельные .m-* selectors не scoped motion=off."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/dot-object/object.js",
+      "sha256": "6632876499dd812de28f2c871addfe552de7799ee8af8948c59f9d660b02b096",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          295
+        ]
+      ],
+      "total_lines": 295,
+      "substantive_note": "Полностью295: default remote tulip; cutOut alpha or OKLab Coons border median backdrop model, shadow downweight, blur/floodfill, percentile local tone, hex lattice GLSL points with area radii, color loupe, view+palette invalidation, stage fallback. Not semantic segmentation; object/ground similar hue may fail, N0 ready indefinite. Keyboard loupe absent; callback not destroyed guard."
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/layout.js",
+      "sha256": "46c9d12b66d78b9840b0739750c1509dbc200b70d3cdf8994d34c7e5c1d94399",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          281
+        ]
+      ],
+      "total_lines": 281,
+      "substantive_note": "Полностью прочитаны grid-reserved rotating word/two cycles, font-axis proximity letters, measured line locking after fonts/reflow fallback, inert collage sets, data-step ordering, mobile hotspot nudging, Escape/click-outside, film conversion. No destroy/idempotence or dynamic media changes; live word aria-label remains first sentence. Dependencies ui.js read, assets separate."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/base.css",
+      "sha256": "a56ab8379c24daef6425d36d0870aafb682df033b1e3c5153e12a085b7e8a2a3",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 267,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/line-engraving/effect.js",
+      "sha256": "1ee0b8fb46354a84063c930e8d09d9a6b9704dfe89fd48f8394e9e131d01e683",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          260
+        ]
+      ],
+      "total_lines": 260,
+      "substantive_note": "Полный shader sphere/hills, height-field bent lines analytic coverage, crosshatch light-only, guilloche, calm negative space, palette-relative ink and six-step SVG fallback; still controller stops RAF when drift0; crisp DPR3 fps30. No external data samples; dependency fx.js full."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/halftone-screen/effect.js",
+      "sha256": "461659f0204be47be6df06b7b18420a847061dc36c17e57f333d24b26543becc",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          253
+        ]
+      ],
+      "total_lines": 253,
+      "substantive_note": "Полный shader: area-correct dots, cell-neighbor gooey SDF, dark/light inverted transparent ink overprint, dual screens45deg, seed-weighted sphere/hill/noise and calm field, GLSL2 uniform loops vs GLSL1 static bounds; SVG six-band fallback ignores secondInk/gooey detail. crisp DPR3 fps30; drift0 still consumes lifecycle RAF unlike engraving."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-feature-card/component.js",
+      "sha256": "300106936b2b2732f93aeadf7f0a9381bec736d25188413a8d954781e1f8dabf",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          247
+        ]
+      ],
+      "total_lines": 247,
+      "substantive_note": "Полностью247: procedural day/dusk/meadow palettes not literal brand, three ground overrides still rendering, synthetic pointer/ring translate+scale, end state first/reduced, visibility+hidden+held gated clock, invoice and hardcoded ana@northwind.co invite demo. CSS animations not actually paused by gated clock; promise wait never resolves after destroy, timer finishes next tick; shared.js/still deps not read. Not real send/invite states."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/split-reveal/object.js",
+      "sha256": "d7347b5f1677e706da5525750ed349a4f1754a257dc0aadc34fd4049bbaa0e71",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          234
+        ]
+      ],
+      "total_lines": 234,
+      "substantive_note": "Полностью234: photo↔halftone seam, softened texture/linear levels, adaptive pitch/dark caps/colored seam, 40px slider keyboard arrows shift/Home/End, drag+hover, chips under480 hidden, reduced jump, ready/load fallback. Hidden default remote Picsum1081 + author credit; caller must override. Async image callback lacks dead flag; pan-y residual; aria range0..100 while actual2..98. Shared kit full."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/edge-glow/effect.js",
+      "sha256": "a80443e6718b99c1be66f91c11faa68d0810718bc5d89b27cf5367e37e25bfc5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          227
+        ]
+      ],
+      "total_lines": 227,
+      "substantive_note": "Полный rounded-rect arc-length border and inverse path, capped quarter-lap/sec, linear tail and warm head/inward wash, palette OKLab tones and fallback. Hidden brand mutation: algorithm deliberately rotates hues to avoid violet; cannot be universal Friday brand adapter. No own pause button, depends on caller/lifecycle."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/ruled-grounds/effect.js",
+      "sha256": "2d4cc8b9205a61423d7d33c40695ea2a9f06d076542cd30c18db2145d7b2f10c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          224
+        ]
+      ],
+      "total_lines": 224,
+      "substantive_note": "Полный shader whole-device-pixel ruling/crosses, seeded slow lit focus away from text, edge/calm thinning, static grain; shared shader/CSS geometry, still6s, crisp DPR3 fps30. Violet guard rejects or neutralizes brand hues/mixtures; CSS fallback approximates lighting/static grid. Dependencies fx.js full."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/gradient-mesh/effect.js",
+      "sha256": "8f845a626fb3beeeed1467c7b7372356ef01f9339b0d47f8235c3f7c7577cf80",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          211
+        ]
+      ],
+      "total_lines": 211,
+      "substantive_note": "Полный 12-point Gaussian OKLab mesh, two-octave warp and broad derivative relief, Jacobian grid constant width/joins, seed jitter/rotation and nearest-calm neutral points, tone eligibility, CSS patchwork/straight-grid fallback, DPR1.25. Data procedural not telemetry; choosing far hue may discard accent, not exact brand reproduction."
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-centred.html",
+      "sha256": "4ccee121eb05f94d8a824f0a5924657c6fae572e2d10b82c6edd6162ffc12da6",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 207,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/print-lamp/object.js",
+      "sha256": "99bcbcc6f701b904b86544446df1faeaf42fe78b6e764b5a46772727e67cf84d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 203,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/diff-review/fragment.css",
+      "sha256": "97effcac8b0d609f7432fd2c61e3d82ee314caf50e80e07b61e35f385b5b209f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          200
+        ]
+      ],
+      "total_lines": 200,
+      "substantive_note": "Полный CSS diff review: semantic add/del tint roles, old/new gutters, applied-state counts/suggestion row grid0fr→1fr, comment anchored to code, finite spinner/status crossfade, container query wrap/hanging indent and filename priority. Readable positive pattern not default decorative side-bar prescription; no standalone reduced override in file."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/aurora-curtains/effect.js",
+      "sha256": "a08edb4490c957587fed8a11cd9bc76027ace190ec680b67fcc51c82551bdc4e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 192,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/icons/icon.css",
+      "sha256": "a51a01a73eec24531bfff9234d2391c378cbcc74e631b9e893674b8866872d68",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 186,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/effects/god-rays/effect.js",
+      "sha256": "b92c56e079b536868ac941debb8e5a686e3471c86ed76d5726fee733557e538f",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 184,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/backgrounds/check.mjs",
+      "sha256": "930a1ddac06c18d044e2ffba2d529087cd70dedcce45ab7ff56937e6c1ea1fff",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 178,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/print-globe/object.js",
+      "sha256": "fcfaaef2fddceb22d2497532d94c42b85310c91abe2b2776670afa5abc53c01a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 176,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/product-render/make-posters.mjs",
+      "sha256": "98e95acb7c75f6cc2b96c51f65dfbc3f986d6de795605d9920f92e4488f335c4",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 169,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-map/component.css",
+      "sha256": "2d745d7412b7039ab0ad20409b59adfbd242f99463e020e845a987c1b146077d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 168,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/diagrams/lab.html",
+      "sha256": "41836f2be7704c423e4565be69e5f68b6433939cedb98c19d4c26a0d9f5eba11",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 164,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_print-core/cards.html",
+      "sha256": "e195ec4a2a2184a059dec050e4d936714e41678046e8e092f4a5df7a39cdd2b1",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 161,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/picture-develops/moment.js",
+      "sha256": "dbb1d080df3b2ed139850f863ae3b5ac25d5191f1c1fb7092591bb6a404910c4",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 157,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/_demo/in-page-service.html",
+      "sha256": "2fdcdc02c1eae7e34b3c6bde9d7ac1359b2381723710e2b2bdebfb3be22682e9",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 151,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/descend-through-weather/scene.js",
+      "sha256": "8accc2c32c55b68c2724a7e818d63dd4e97c5020b300349365aa449d06ba073a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 150,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/product-render/views.html",
+      "sha256": "4369ece07ef0f019ab640b1e3e9c82655dad87b75ef64eaeff32b42491ff7a41",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          144
+        ]
+      ],
+      "total_lines": 144,
+      "substantive_note": "Полное demo: bike/lamp/robot spec views, image/still/live mode query, swatches targeting multiple frames, fill instrumentation, Google Fonts Inter Tight and hardcoded €1180. role radiogroup содержит button aria-pressed, не role radio/aria-checked. Requires auto.js/specs/posters, dependencies not read here."
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-word.html",
+      "sha256": "303df1d1ac7dc38286159e1ae09570488953839edc5756a8abfe60e60febb32d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 142,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/print-cards/object.js",
+      "sha256": "eacf4bfdb81f421e2f0d0634aa76e996d56f0c14a12d8fc1708d31d3a875983c",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 131,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/pipeline-board/fragment.js",
+      "sha256": "8269ee6ef873b66b93fa70b018c8713a68404d2b7981c8bf6644eda2f29b7a99",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 127,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/backgrounds/backgrounds.js",
+      "sha256": "9a4ad0356d57636d4feabfe07adc17009fdb5515172f90b5ef3b5f1c41f0fa68",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          123
+        ]
+      ],
+      "total_lines": 123,
+      "substantive_note": "Полностью прочитан contrast-headroom detector OKLab/L luminance approximation, dark/away/lowchroma root attributes, explicit overrides, liquid pause/offscreen IO, photo scrim from text bounds+8%/ResizeObserver/font ready. Без destroy; only initial reduced check for pause; not final rendered WCAG proof."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/product-assembles-into-its-action/scene.js",
+      "sha256": "da778730cda3b516fc2a1ddb72e618bd0123f5fbf470531a50f198a6e5721b1d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          123
+        ]
+      ],
+      "total_lines": 123,
+      "substantive_note": "Динамически измеренная сборка реального screen по data-at и captions, row-height simulated clip, nearest-first fold into real action, mates growth tracking, closing line moved/restored. phone rest; missing prerequisites fail-open. Destroy только scene controller: созданный pa__box явно не удаляется; cssText reset стирает client inline styles. lib.js dependency не прочитана."
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-split.html",
+      "sha256": "14e4de0da31712306995320d251da0583b95a8e83da9ca9abcf510686274a718",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 121,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/hero-product.html",
+      "sha256": "3d713641005f08f2fb0ce3848806ce980eca7ba9101dcea99763d41799807017",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 119,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/_lab/loops.html",
+      "sha256": "1996a139caf4a112721af070740223e629b82d63d7ecd49bdbac4256226328ed",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 117,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/index.html",
+      "sha256": "8a245df3c27f78ad09b99fc7aa4d1b5e73677a1edf1e67c075bbb65e64e9a1d0",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 116,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/photo-halftone/object.js",
+      "sha256": "02afe3ef0c902b72180812511fdff349b238fff8dd0ebd6223ec0aafe6df02d3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          115
+        ]
+      ],
+      "total_lines": 115,
+      "substantive_note": "Полный photo halftone shader cosine screen coverage/analytic AA/area→holes, clean tone curve/Sobel edge, linear-light inks, barrel loupe/rim/shadow, photoGL entry0,maxScale2. No sample source in file; source from caller/img. dependency photoGL full, no keyboard loupe."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-feature-card/component.html",
+      "sha256": "df25e26709d36e72bca9278dd35dfd28ecd9ea681ca2f370d38a5e50858fb115",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 109,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/parts-lock-into-the-whole/demo.html",
+      "sha256": "e9569d8d385d2ac091f0ea1d6d9d955787f29cae40d55ab186aa3aa946e88bef",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 109,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-search/component.js",
+      "sha256": "88e2f35841b9eac571d193cc2cf86acb07a1777cb80d463400edab9c66cf7115",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          104
+        ]
+      ],
+      "total_lines": 104,
+      "substantive_note": "Полностью прочитан local combobox filter/wrap keyboard selection/slash shortcut and focus-lazy effect lifecycle700ms pause/4sfree/pending destroy. No remote search; suggestions from markup. Input Arrow keys update selection even list closed; shared.js dependency not read."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/object-through-giant-type/scene.js",
+      "sha256": "c9a41ff4377172281bb00781a2d344d6151902c16953d12eeb486eaa404e3d79",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          104
+        ]
+      ],
+      "total_lines": 104,
+      "substantive_note": "Падение объекта в измеренные gaps половинок giant quote; круговая ширина+Gaussian wake не перекрывает буквы, финальная swell/fall и credit. attachPrint wakes only live+near, sleep rest/far and destroy. Required still/cutout; lib.js/print.js не прочитаны."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/letter-bar-floods-the-ground/scene.js",
+      "sha256": "86a4565e053f13d9ebf679b5190ea797df78486aeb6b6835a71eee213c58004b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          99
+        ]
+      ],
+      "total_lines": 99,
+      "substantive_note": "Measured canvas actual glyph inkBounds, nearest Latin lI|1 fallback pivot, exponential zoom onto solid rasterized-once stem, clipped full-width ground, wait until longest text fits, rest and stem removal. Synthetic pivot via raw text→innerHTML (not escaped); no Russian glyph heuristic. lib.js не прочитана."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/terminal-run/fragment.css",
+      "sha256": "6b1badd66c7f714cb2f2fe959c2738adb3d1caaab2651d0a1aafc27267170e1d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 97,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/shaped-window-over-fixed-world/scene.js",
+      "sha256": "d35bfc55a5209f68f03541c4ef7dd92bfa5f54b6b9d4cd3171501ebb409d21bb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          94
+        ]
+      ],
+      "total_lines": 94,
+      "substantive_note": "Five solid shutter pieces instead of mask seam, one photo fixed behind windows, outward widen→bar close→exponential push→solid caption band, premeasured geometry transform only. Phone rest; shutter removed rest/destroy, cssText resets; lib.js not read."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/window/fragment.css",
+      "sha256": "c1958ddb93aea085a5494ed2b3112ce1e5d303e670b7fcbc4954906d901cf163",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 92,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/powers-of-ten-pullback/demo.html",
+      "sha256": "0b0220e522ca2aa035a5afe0076e8cdca1a5a37079b0d64b86d6211248335cde",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 88,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "sha256": "a9c53725968b05d75cb5da2371b4e90ea429d87447d9da7d46dff92600d26df7",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 85,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/fixed-hero-object/scene.js",
+      "sha256": "5b1be69eb1f3cff0c7b87430412e6762ea6adce18e94bce6d9fc1e8536754df2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          84
+        ]
+      ],
+      "total_lines": 84,
+      "substantive_note": "Alternating text/object lanes, scaled persistent product, chapters inverse ground via opacity, scroll-driven turn, near/live GL wake and sleep. Rest keeps all chapters readable, below-hero restH2; appended fho__ground not explicitly removed destroy, --fho-dark not cleared. lib.js/print.js not read."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_scenes/lint-glsl.mjs",
+      "sha256": "2f61970b00756881950e00453cbfcc2336b192a0b88b2adef24e49c9cf57ba68",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 82,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/photo-kit/demo.css",
+      "sha256": "2ef077b653103325d17b453baf28d309c74d32fc26db999afec7a662559d479e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 81,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/dot-becomes-the-full-stop/demo.html",
+      "sha256": "a1640dec62d3d0f78aadfbcb65a397e7ce792915158a0be5cd7ef0df98a784fe",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 81,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-spotlight/component.js",
+      "sha256": "b3f7053fa271c79e97909e9219740cf23d9852c07aa5c13a6558c33bbd0bee71",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "total_lines": 80,
+      "substantive_note": "Полный one-baked-canvas/multiwindow corner mask, text selection-safe whole-card link, fine-pointer exponential smoother and keyboard equivalent, reduced jump, still params and bag cleanup. shared.js not read; touch static corners."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/letter-bar-floods-the-ground/demo.html",
+      "sha256": "8be792fe39c60f97612ac33d9a74ef66b0ed7bb2845bca3cf6ad8083bfa995f9",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 80,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/letter-physics/scene.js",
+      "sha256": "96390422ef60981e65ac8ff23538d3b1cd7fc8dd6ce156962dcf2de2915b86bc",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          77
+        ]
+      ],
+      "total_lines": 77,
+      "substantive_note": "Полная deterministic glyph burst: measured radial vectors/depth/gravity, short burst fades before clip, answer sentence comes from depth, phone drift branch explicitly runs. split/unsplit delegated lib.js not read; root --lp-k remains after rest."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/iris-opens/moment.js",
+      "sha256": "ced3cfb84422b03d6348d2aac2574c35ccd988c146fade8cd1531cd61caa952a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          76
+        ]
+      ],
+      "total_lines": 76,
+      "substantive_note": "Полный circle ground reveal in inset stage, visible-centre geometry, whole-block corner containment before opacity to avoid sliced words, resize/fonts remeasure, reverse scrub, stage/observer release. lib.blocks/scrub dependency not read; no runtime proof."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/pinned-chapters/moment.css",
+      "sha256": "cc4494a4de79c8fa687f9fe78cc65fa35efe259a263c01537a18820c0dcb44bd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          72
+        ]
+      ],
+      "total_lines": 72,
+      "substantive_note": "Полный pinned chapters CSS: static rows and each own image, phone16:9 max26svh, desktop sticky two columns, grid0fr collapse with inner minheight0, image opacity/scale, print restores all, reduced only removes geometry/transitions (loader must restore hidden step state). moment.js not assigned/read."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_scenes/demo.css",
+      "sha256": "284a768767e0a9f18aec4db9a8c44f0426b4761df4d0c33d2bc4e2bc4a3bc826",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 72,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/_lab/object-card.html",
+      "sha256": "702a9d9a1192b343a203cfdb65ac67f149d0b5d3b6168d2f6673d99d6c1283d6",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 71,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/_demo/demo.css",
+      "sha256": "bfc96ab61ba8f19f1277d1aff2b386e474ebb8331032910f731f47393a7aad5c",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 70,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/liquid-type/moment.js",
+      "sha256": "9ffec4149e73101bc0a83586715923797a364897ae5d5cd92be2f18093fe08d8",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          69
+        ]
+      ],
+      "total_lines": 69,
+      "substantive_note": "Полный SVG turbulence/displacement demand-only energy loop; fine pointer only/coarse+reduced fallback text; no WebGL, selectable text and complete cleanup. Radius option actually scales energy via .5+reach, not radial spatial mask; displacement covers whole headline; decay .93/frame refresh-rate dependent."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/calendar/fragment.css",
+      "sha256": "ae8633594e9a957576cd08635ec9b84301da97f3480240e559140ac2c16daf57",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 68,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/voice/fragment.css",
+      "sha256": "ce099dd37f7de7c54286be4dd18794eb2c10874760d50f3c73d2ec466a7f606b",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 67,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/counter-rolls/moment.js",
+      "sha256": "3eaca0dc3ae3c16cbe71c724d439a06af7f0359306bfcaab413a1a1a715fcdd9",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          66
+        ]
+      ],
+      "total_lines": 66,
+      "substantive_note": "Полный odometer uses final digit at both strip ends, fixed cycles by column, native WAAPI once threshold.4; punctuation preserved and aria-label; destroy cancels but does not restore markup/prior aria-label; implementation turns increase left→right contrary header rightmost-most? cols.length increases yes rightmost more."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_print-core/demo.js",
+      "sha256": "cfbe777070ed01c4dd98d33c29ebf5d0bf2e63e409ec7a5576a74c7a6653fda3",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 65,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/iris-opens/demo.html",
+      "sha256": "55c6280b6b7ce985eb598b9eca62a1f7e3f54f195b93746964b6b077de4b9ecc",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 64,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/product-render/demo.html",
+      "sha256": "f52f1e0e750a21f288b60df5bc2c00124cc79ab450031022fa9f617007411b5f",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 64,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/word-highlight/demo.html",
+      "sha256": "05dac4ad312cafbb0c2352b8c42ec5912804482db0b0ed8767e5216d44d5200b",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 63,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "sha256": "44ac0716d579efbe73c009c0ca281574e06b3a052bbabfec4d5591543246c9f9",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 62,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/letters-assemble/demo.html",
+      "sha256": "30e6e96f53dbf50aa2bf919f873d6f08eefc25f5c2484f86f2fa5995a165e706",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 61,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/headline-arrives/demo.html",
+      "sha256": "618a6ec1870bf369815242a17ae0ab03269e07cb279a0c8f69df6a61538b4a9d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 60,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/closing-lift/demo.html",
+      "sha256": "a09d91560b74f52408595249bca0810a8ce9cec7f6f070b836f8d69455a46565",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 59,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/layout/demo.css",
+      "sha256": "f7064f87ea2654c5f407c26bd7ab232c3758b07421dfdafa46895be474caa3ef",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 57,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/shaped-window-over-fixed-world/demo.html",
+      "sha256": "3c501418c94794e7e596995303144b69d45681e17f495a88bdce564d0c153b58",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 57,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-pricing/component.css",
+      "sha256": "4ef6f904b50b9bdfbbda66fb84ad71f6f9cc2dc9559edce388b516761b76af8d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 55,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/window-parallax/demo.html",
+      "sha256": "5e4d40d68d5ec9c84a8bdf2a7bbaf28a4b6a47b7d789285b8e484cedbdf98189",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 53,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/_demo/demo.css",
+      "sha256": "bd7f1d5f16af644ef2437beac6207c64d0ab982c9e46f91f851158e5b05d6d4b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          53
+        ]
+      ],
+      "total_lines": 53,
+      "substantive_note": "Полный demo chrome CSS: fixed blurred nav36px links, logo/cards and synthetic UX32px button/sidebar/stats, mobile hides third stat. Demo-only; does not establish production controls44px or actual product data."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/descend-through-weather/scene.css",
+      "sha256": "8cfce5e5397cbae2617aec24e5869d3bb50be5caf456fe0fffbbaea3a188bd52",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          52
+        ]
+      ],
+      "total_lines": 52,
+      "substantive_note": "Полный scene CSS: both original photos and readable captions in rest, mobile4:5, live cloud+fixed image layering, solid footer ground not scrim, desktop rest44svh max; JS dependency remains unread."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-band/component.js",
+      "sha256": "7168a9237598b444b9ca0d239e8864fb61e652039bf05f3f69ff1816ec07f99e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          51
+        ]
+      ],
+      "total_lines": 51,
+      "substantive_note": "Полный baked sideband effect placed48px beyond actual text range rects after fonts/resize; stack fallback at900; preset effect tuning, no live slow drift; bag destroys observer/left reset. shared.js not read."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-prompt/component.css",
+      "sha256": "9e1da55131ea77ceef1d326d7814e0610f83b966b1835362d81c09a61844afa7",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 50,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/giant-type-pass/demo.html",
+      "sha256": "a748c567e39e2877862cc79bd7cd6aeb7e839483a44649921873ead6566b5716",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 49,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/letters-assemble/moment.js",
+      "sha256": "ae9b3c7a3b0deb2cd74284ae948458023082b9a92e41771a12084b62dd3a83ed",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "total_lines": 48,
+      "substantive_note": "Полный deterministic char scatter scrub, transform+opacity, whole by mid-screen, reduced early return. Cleanup clears styles but does not unsplit original text; phone gating delegated loader not file."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-chart/component.css",
+      "sha256": "7ea72e24179d372ee551e37a9d69d81fe10727e0543e4bdf10c3064891e54ee3",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 47,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/scenes.css",
+      "sha256": "cb9effc93c84031c68648076cd81b862863615dfb7fc5641cfa88c9ba70a222f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          47
+        ]
+      ],
+      "total_lines": 47,
+      "substantive_note": "Полный held/rest CSS, stage stick only live and ready marker, no-script completed composition, focus-only skip, print geometry release; runtime loader/lib not read. Potential slow-module invisible until sc-safe is confirmed contract, not tested timeout."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-tabs/component.html",
+      "sha256": "41fd0677a01572749422a4f8ef7e97d5df853e9b2d4d07e10c69c7553a3d5610",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 46,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/stat/fragment.css",
+      "sha256": "4fd01fd085a6f5449182f21a76a5b5c7d56ba52097ceb6976740362c00c7ca02",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 45,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/object-through-giant-type/scene.css",
+      "sha256": "fd9521e0a4cc9d97e7dfa93b97a9bd49c5f4dde47ff8f7293e2beb890ce5478f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          43
+        ]
+      ],
+      "total_lines": 43,
+      "substantive_note": "Полный scene CSS: capitals flex halves, warm/cool opacity role, object picture fallback, failure host hidden, static object-before-quote and wrap under767, live perspective1200 layering, phone still smaller. No own reduced rule; loader/lib owns."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/shaped-window-over-fixed-world/scene.css",
+      "sha256": "9f305137372331d24627e4a030998c5e01f6271d383cc6392827f093eed5fc66",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          43
+        ]
+      ],
+      "total_lines": 43,
+      "substantive_note": "Полный CSS: natural rest semantic sequence via order, photo16:8→4:5 mobile, live fixed image+5solid shutters/no mask seams, title/action in outside-window zones, solid ground caption footer. Word nowrap only live; loader sizing needed."
+    },
+    {
+      "path": "skills/taste-skill/assets/moments/headline-arrives/moment.js",
+      "sha256": "be7776664db23472503cb19b9f817181f68a4bf04f40417dd3e5c1c22d75e0e0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          40
+        ]
+      ],
+      "total_lines": 40,
+      "substantive_note": "Полный retired entrance legacy: safety mo-safe skip, split words/chars, fonts500, WAAPI+8sfailsafe, finish cancels; no unsplit or timer removal. Do not enable alongside motion.js hero entrance."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/diff-review/fragment.html",
+      "sha256": "45c0c64f45b4c1610ff7b8911ff693603379ad94e9f7244fd791fb9d236b710f",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 40,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/objects/_print-core/demo.css",
+      "sha256": "12115852fde843255820943ad4a5469d35188d6fa1651838588ca8d0f4578f20",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 39,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/letter-bar-floods-the-ground/scene.css",
+      "sha256": "cbc7d9ad4e3cdc577708b16ed8373360208191b97697b9c9bd77c64eb319bc17",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          38
+        ]
+      ],
+      "total_lines": 38,
+      "substantive_note": "Полный CSS: original pivot hidden behind solid raster-free stem, separate clipped fullwidth ground and statement, phone readable/rest overflow band via100vmax clip, scene tokens. Cannot treat clip-path as compositor-guaranteed; runtime dependency not read."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-progress/component.css",
+      "sha256": "c4da468fa1816bbaba8cac819064735f26e85f71bd2cb872dd83bb967255b497",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 33,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/chat/fragment.html",
+      "sha256": "18006566eddc071a8a195ad3a6bd146e1629d073089d585a440635b51184b4d8",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 32,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/search/fragment.css",
+      "sha256": "a951621b80158e6c166e95a25b5a9d9632c531853ba735695417ad292a416432",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 30,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/ui/window/fragment.html",
+      "sha256": "9aa0e1a3d873f7597afb26e9501eeaffd535b2792233fb07455eb047d3c1fc27",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 30,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    },
+    {
+      "path": "skills/taste-skill/assets/scenes/dot-becomes-the-full-stop/scene.css",
+      "sha256": "ef20c9e9bfaeae9f3def803986e764953967363b49f433129fee23c18b031baa",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          23
+        ]
+      ],
+      "total_lines": 23,
+      "substantive_note": "Полный CSS: at-rest giant balanced statement and subtext, phone21vw, live fitted row/word masking/dot layer and inverse cut. Missing assigned implementation? scene.js not in this assignment, not audited here."
+    },
+    {
+      "path": "skills/taste-skill/assets/components/fx-logos/component.html",
+      "sha256": "d3e7cbc99b1d31d08c7deb7a20f99fc813e35462a0c98e232c928ce26f7841fa",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 11,
+      "substantive_note": "Назначен для substantive reading; предыдущие ranges не засчитаны в этой сессии."
+    }
+  ],
+  "mode": "static-only; no upstream execution",
+  "completion": "incomplete",
+  "summary": {
+    "assigned_files": 117,
+    "full_files": 51,
+    "unread_files": 66,
+    "full_lines": 18560,
+    "assigned_lines": 26836
+  },
+  "dependency_gaps": [
+    "assets/components/shared.js",
+    "assets/scenes/lib.js",
+    "assets/scenes/print.js",
+    "assets/moments/lib.js",
+    "product-render specs/auto.js/posters and binary images; no implicit full credit"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "scope": "Only existing Friday local linter with scratch inputs; no upstream execution, no repo edits. Full linter+import read before running. cwd=scratch so project context not used.",
+  "script_sha256": "f13c0e61b06a1e2cca7c26ec3756a0373dc85e93a4a03ca2392153f6c4688966",
+  "results": [
+    {
+      "case": "missing-target",
+      "target": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/local-lint-probe/does-not-exist.tsx",
+      "exit_code": 0,
+      "stdout": "\nПроблем не обнаружено.\n",
+      "stderr": ""
+    },
+    {
+      "case": "known-error-font-fixture",
+      "target": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/local-lint-probe/approved-body-font.tsx",
+      "exit_code": 0,
+      "stdout": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/local-lint-probe/approved-body-font.tsx:1 — запрещённый шрифт (AI-slop), см docs/core/design-principles.md [ERROR]\n\n1 проблем в 1 файлах\n",
+      "stderr": ""
+    }
+  ],
+  "observations": [
+    "missing-target prints clean and exits 0",
+    "forbidden-font ERROR still exits 0; approval semantics not understood by regex"
+  ]
+}

@@ -1,0 +1,2067 @@
+{
+  "job": "impeccable-close-6",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/impeccable",
+  "verdict": "INCOMPLETE",
+  "files": [
+    {
+      "path": "extension/background/chrome-worker.js",
+      "sha256": "8e7ecd6a0abaae3ce899d9d643b81dc36039139d138dee3a5f214f8685c0f566",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          6
+        ]
+      ],
+      "total_lines": 6,
+      "substantive_note": "Chrome entry: detector, walks и account imports; Firefox/store composition differs."
+    },
+    {
+      "path": "extension/background/service-worker.js",
+      "sha256": "7b2abe280ae7690a0f424eb0ba54438184fbd471838b96d7b3cf300fdb530a44",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          461
+        ]
+      ],
+      "total_lines": 461,
+      "substantive_note": "Per-tab scan identity/recovery guards, lazy offscreen WASM, scoped injection/error, findings badge/panel broadcasts, navigation invalidation and DevTools teardown; ephemeral worker state, offscreen cancellation."
+    },
+    {
+      "path": "extension/popup/popup.js",
+      "sha256": "26c57e684356d269afa3990e421aacef287d47e7eb727c4f3a191760869dc98a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          171
+        ]
+      ],
+      "total_lines": 171,
+      "substantive_note": "Scoped tab+revision prevents stale scan copies; complete/url gate; clipboard rechecks current URL/loading; toggle optimistic."
+    },
+    {
+      "path": "extension/popup/words.js",
+      "sha256": "c5859a79ea0dc35daa61cca745701e29a084d793ee211995781ea40304f8bdb9",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          15
+        ]
+      ],
+      "total_lines": 15,
+      "substantive_note": "Central account copy, excluded store/Firefox."
+    },
+    {
+      "path": "extension/popup/settings.js",
+      "sha256": "77d6fbc6d4e3e953836490d960de138907b47809bee517cf18efa6b3123ed747",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          65
+        ]
+      ],
+      "total_lines": 65,
+      "substantive_note": "Account worker RPC, safe textContent, agentSites removal persisted local; malformed origin URL can abort list render."
+    },
+    {
+      "path": "extension/content/content-script.js",
+      "sha256": "231490255ca6e86537cf905236614f1c45bd704cb7323aa143d39611a89d258d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          369
+        ]
+      ],
+      "total_lines": 369,
+      "substantive_note": "Idempotent isolated-world snapshot/offscreen ask loop; scanGeneration/session cancellation suppress stale results; staged vs final complete; lazy visible contrast recapture serialized; SPA popstate/hash only, no pushState interception."
+    },
+    {
+      "path": "extension/shared/build.js",
+      "sha256": "7413bf31af5fca14979c92833ca5d9807e504f330e708af375ab990bb290b4f2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          4
+        ]
+      ],
+      "total_lines": 4,
+      "substantive_note": "Development build account/devHosts true; staging build rewrites are external dependency."
+    },
+    {
+      "path": "extension/shared/findings-report.js",
+      "sha256": "9c7d4fd43407e00e840dc6802b02a16f84776e709351160f7caef06897581b98",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          128
+        ]
+      ],
+      "total_lines": 128,
+      "substantive_note": "Advisory category overrides; URL fragment removed but query retained; suggested skills frequency-sorted, stale arrange names present."
+    },
+    {
+      "path": "extension/walks/control.js",
+      "sha256": "37b86c8a712a62ebad5406c54309aae09b1f2f650f34317ab0e88590c5e9ea98",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          344
+        ]
+      ],
+      "total_lines": 344,
+      "substantive_note": "Wraps ops with pause/fence and post-read recheck, stale acts refused; asks120s and write reopening after yes; approved plan avoids mid-way questions policy; trusted extension panel controls Stop/takeover/signIn seal; response-size cap."
+    },
+    {
+      "path": "extension/walks/net-hold.js",
+      "sha256": "77d5795ea19d5511255e6e936c8bf765afa993deee812346ea05d75487ca71e7",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          138
+        ]
+      ],
+      "total_lines": 138,
+      "substantive_note": "DNR second layer covers foreign frames/popups/workers, not existing WebSockets or GET mutations; missing permission/update failure degrades to Fetch with note; session rule cleanup/retry."
+    },
+    {
+      "path": "extension/walks/present.js",
+      "sha256": "18adfd99be8fa6a58dc875e14e6477235594b342d25e8f4b5ff31c23cbed4581",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          8
+        ]
+      ],
+      "total_lines": 8,
+      "substantive_note": "Version DOM marker and same-extension here responder; no page reads."
+    },
+    {
+      "path": "extension/walks/handoff.js",
+      "sha256": "8b56bf0a81a6fe634d942d0c4626bc36259c08e6275fac84fe2c50496e9c866a",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          180
+        ]
+      ],
+      "total_lines": 180,
+      "substantive_note": "Strict bounded JSON, fixed paired socket origin/path, account-local port, limited persona/errand/allow schema; separate started handoff accepts arbitrary own-tab web origin pending consent."
+    },
+    {
+      "path": "extension/walks/badge.js",
+      "sha256": "6b48a8ecf0abc6957848302a4220f59772d452f7ac624a0d3f5701ebaa374892",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          290
+        ]
+      ],
+      "total_lines": 290,
+      "substantive_note": "Closed shadow badge and reduced-motion glow; own-world binding/trusted click, Yes visibility+500ms+untransformed/topmost gate; heartbeat expire3s/glow1.5s; capture veiling wrappers and lifecycle cleanup."
+    },
+    {
+      "path": "extension/walks/consent-rules.js",
+      "sha256": "9a0285969ab05d195388390bff9c66e3d3b28863a1a349c45e5ae1c769612d7a",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          40
+        ],
+        [
+          42,
+          80
+        ]
+      ],
+      "total_lines": 3788,
+      "substantive_note": "Bridge 1–40 read: maps init/CMP/popup/optOut/done/error to mutable page state; header declares vendored autoconsent17.2.0 MPL-2.0. Huge compact rule-data line41 truncated by reader, NOT read; generated library42–80 prefix only; remainder unreviewed, not silently full/classified."
+    },
+    {
+      "path": "extension/walks/worker.js",
+      "sha256": "248ddba4f1e89f0a4264e83a2e8687cbc566f008b5c0b6c88461439b746cd336",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          132
+        ]
+      ],
+      "total_lines": 132,
+      "substantive_note": "WebSocket ticket subprotocol, bounded outgoing chunks preserving surrogate pairs; requests dispatch ops and drop stale socket replies, remote requests refused during local agent; reload selected start pages on install."
+    },
+    {
+      "path": "extension/walks/store.js",
+      "sha256": "cd8ecd5d1508060bb86b5a2003d31bc12f9da851a8e3e8caf3358cced32c8407",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          36
+        ]
+      ],
+      "total_lines": 36,
+      "substantive_note": "Pure reducer persisted session; worker restart converts ON_TAB into failed connection; listeners isolated but persistence fire-and-forget."
+    },
+    {
+      "path": "extension/walks/link.js",
+      "sha256": "49b54d27d0d4d0fcd22825883977a3daf75a47e5c7a65898c22be67f588af8e3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          223
+        ]
+      ],
+      "total_lines": 223,
+      "substantive_note": "Strict sender top-frame handoff, session ticket spent/reload twice15s, retries500..8000, disconnect ON_TAB failure, adopted tab origin compare; dev outing.json bypass only devHosts."
+    },
+    {
+      "path": "extension/walks/signin.js",
+      "sha256": "ff4bef7378077ac09aafdca25f1ce2d4461ca9db2d4b3188b5f712841d1675ab",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          177
+        ]
+      ],
+      "total_lines": 177,
+      "substantive_note": "Sign-in URL/401/password/autofill/open-root heuristics; marks secret and maybe-clone DOM nodes; excludes change-password forms; focus password/card/code/cross-origin frame; passkey visibility gap explicit."
+    },
+    {
+      "path": "extension/walks/driver.js",
+      "sha256": "e4571ee86803d98c7a0d94567ca7bf70f56e2d980e528ddaecd9da20e66d4d80",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          2093
+        ]
+      ],
+      "total_lines": 2093,
+      "substantive_note": "Полностью прочитан 1–700/701–1400/1401–2093: CDP ops onlyThisTab; two trust modes legacy source vs named helpers; Fetch/DNR write hold, sign-in pause/cover2s/fence, frame masking, AX secret redaction200 fields, open/adopt cleanup/emulation restore, film84ms/pointer serialization, native select fallback and screenshot crop. Dependencies page-helpers/consent-rules still require separate reading."
+    },
+    {
+      "path": "extension/walks/sight.js",
+      "sha256": "79b803a67546fc864a3df54cda4a2674ab5cc778779fc9867f66f0ef69225294",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          97
+        ]
+      ],
+      "total_lines": 97,
+      "substantive_note": "Persona simulation blur/contrast/gain or linear deuteranopia matrix applied to transmitted pictures; label and bitmap cleanup; not a WCAG verdict."
+    },
+    {
+      "path": "extension/walks/view.js",
+      "sha256": "df9da1ec04b064792e9a42832aff2fa0d1e8a7ccb0427ed866ba9cdf747c17e3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          161
+        ]
+      ],
+      "total_lines": 161,
+      "substantive_note": "Reducer bounds steps200/notes20/issues50, consent question state, pause/takeover/resume, terminal outcomes, invalid actions no-op; v1 stored state not deep validated."
+    },
+    {
+      "path": "extension/walks/toolbar.js",
+      "sha256": "3791aaa295ca85d7f34f16c08165ba311f982d77b92970ef7f8cf46b34909516",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          22
+        ]
+      ],
+      "total_lines": 22,
+      "substantive_note": "Sidepanel open behavior and native toolbar title reflect sign-in/off state, API failures suppressed."
+    },
+    {
+      "path": "extension/walks/inspect.js",
+      "sha256": "c65c62e03583d7685926866048f458a0a9406ca819373c6dbdcf4ffb13c8a236",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          76
+        ]
+      ],
+      "total_lines": 76,
+      "substantive_note": "Fixed stringified styles/ink helpers; no field value returned, stylesheet tokens40, text80, ink visits2000; own text excludes forms/editables, cross-origin styles skipped."
+    },
+    {
+      "path": "extension/walks/page-helpers.js",
+      "sha256": "6be3332853fc4e8140e8decaccc2459b9957ce1bd742585b24ef3be58b7c7eb3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          2259
+        ]
+      ],
+      "total_lines": 2259,
+      "substantive_note": "Полностью прочитан generated helper payload из внешнего server repo: clickByText scoring/modal/ambiguity/hit tests/select mutation; typeInto native setters/noSecrets override; fieldReads redaction; scroll/reveal/restore; signature bounded400k/4000; consent state; font/locale prototype patching; a11y sample200/250/200 focus16 rewrites CSS and blurs; agentSight150; skim blur; secret covers closed roots/styles restoration and verify. Генератор вне snapshot, HASH16 hex protocol identity not content signature."
+    },
+    {
+      "path": "extension/walks/guard.js",
+      "sha256": "e640c8e0c0d2851fc6cae410ec809bab8762dd29d0d9b3130bd5b8fecce964d9",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          416
+        ]
+      ],
+      "total_lines": 416,
+      "substantive_note": "Fetch guard exact origins/top doc fence, writes allowed origins plus hold409, file chooser interception/download cleanup, popup race tracker; explicit GET/WebSocket/OOPIF gaps, staging decoded path exceptions and consent URL list."
+    },
+    {
+      "path": "extension/walks/handoff-content.js",
+      "sha256": "34bb680a8b96ebcf68921a5453dd6d56437890b6410b09fb947790fccae945a1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "total_lines": 45,
+      "substantive_note": "Only script JSON DOM handoff, dedupe text, worker wake port and trusted panel-click; MutationObserver persistent."
+    },
+    {
+      "path": "extension/walks/agent.js",
+      "sha256": "a93a7d0a72207fc978160632fb1d934e333be1577f7951dec99f0fafd3323791",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          479
+        ]
+      ],
+      "total_lines": 479,
+      "substantive_note": "Native local-agent four tools, no eval/CDP; exact origin once/always consent, idle10m/lease1h/Stop, one-call queue; AX tree refs12k, filmstrip6 frames/background warning; agent free writes deliberate delegated trust."
+    },
+    {
+      "path": "extension/devtools/sidebar.js",
+      "sha256": "58d5069dc57bbd5a2fe3b5bdea547815c95b99859f38e52e66db5c5e9ae06404",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          103
+        ]
+      ],
+      "total_lines": 103,
+      "substantive_note": "Findings selectors JSON-embedded into inspectedWindow eval; names/descriptions escaped; disconnect nulls port but no actual reconnect call."
+    },
+    {
+      "path": "extension/devtools/panel.js",
+      "sha256": "beb749aee257d77566c575b98ccb4fb863c635c0f09aecd4490274c0bc8b4489",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          417
+        ]
+      ],
+      "total_lines": 417,
+      "substantive_note": "Escaped finding rendering/settings toggles sync; copy current findings with separately fetched current URL; heartbeat/lazy port reconnect; no scan-failed handling and showScanning does not invalidate cached findings."
+    },
+    {
+      "path": "extension/devtools/devtools.js",
+      "sha256": "9282a55132342657667f9d4a98bc7020a20bc746ac0903f22de64f160e67f374",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          50
+        ]
+      ],
+      "total_lines": 50,
+      "substantive_note": "Creates panel/sidebar; first-connect setting gates autoscan; reconnect100ms and heartbeat20s."
+    },
+    {
+      "path": "extension/account/flow.js",
+      "sha256": "eecfa08779e312c658a3343d9c2c812b97c069afb2a281f3810d2c37b98957b2",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          119
+        ]
+      ],
+      "total_lines": 119,
+      "substantive_note": "Pure PKCE S256/random32 bytes, issuer metadata endpoints origin-pinned, callback state/iss/duplicates/code validation; tokens require access+refresh, default expiry900."
+    },
+    {
+      "path": "extension/account/session.js",
+      "sha256": "c80cda2a347a72d3e220af6c011df99abcecf4e879fd96c28fcffa74ee92f7bb",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          488
+        ]
+      ],
+      "total_lines": 488,
+      "substantive_note": "IDB commits before access use; issuer/client/resource records; serialized per-issuer edits and refresh; redirect:error/omit credentials; deferred revocation; PKCE login, list limits/face origin; keep checks state only causing overlap race candidate."
+    },
+    {
+      "path": "extension/account/worker.js",
+      "sha256": "045afdc0fd3fd872248690cc82fb078055606aa1a6290217bdbe8868f0c00209",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          282
+        ]
+      ],
+      "total_lines": 282,
+      "substantive_note": "Own extension popup/panel sender allowlist; accountServer allowed metadata; startup status+alarm; APIs for persona/plan/walk/create, typed validation, adoption refusal cancel; dispatch concurrent signIn calls not serialized."
+    },
+    {
+      "path": "extension/account/welcome.js",
+      "sha256": "b24d88e1742c65fda361d6107735fe3b87e03d995f6d5167eed7d830c5975e10",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          9
+        ]
+      ],
+      "total_lines": 9,
+      "substantive_note": "Marks welcome DOM then asks worker panel open on matching click, unlike handoff script no isTrusted check."
+    },
+    {
+      "path": "extension/account/waiting.js",
+      "sha256": "ad21976ab9918848df461c7b04a65d2e50b41794a3066d5162f1e649c7d2264e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          118
+        ]
+      ],
+      "total_lines": 118,
+      "substantive_note": "Alarm0.5min/server journeys notifications; serialized check-ins/storage, issuer+generation guard, decline retry and keep20; notice kept before create intentionally at-most-once."
+    },
+    {
+      "path": "extension/walks/panel/copy.js",
+      "sha256": "f2f7694d80ad83caca1e1ee4c4e0079209ee307b495ff3e5b02a2b55ee316a4d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          288
+        ]
+      ],
+      "total_lines": 288,
+      "substantive_note": "Central UX copy and privacy onboarding explicitly disclose signed-in actions and screenshots/video to provider; speech Google disclosure; plans vs mid-walk questions distinguished; hardcoded en-GB dates."
+    },
+    {
+      "path": "extension/walks/panel/panel.js",
+      "sha256": "da6c58137366d74fa7394aa89ca63284094a762e54d1a7b00df0207097d962b1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1484
+        ]
+      ],
+      "total_lines": 1484,
+      "substantive_note": "Полностью прочитан sidepanel DOM UI: sender worker RPC, persona/app cache origin routing and late responses, faces retries bounded, typed-safe textContent, modal inert/focus return, mic permission and cleanup, speculative plan after1.2s/min12/max3 consumes remote quota before Send, plan/approval/walk, Stop/results/history/errors, FLIP/reduced-motion, first-run global flag, startup/stubs gated dev build. Backend generation/source signing/real browser unverified."
+    },
+    {
+      "path": "extension/walks/panel/stub.js",
+      "sha256": "3c14f40d0329a2660957bd2eb9c957b50c31c8728b8c7a49efa6b67e8012a7f0",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          203
+        ]
+      ],
+      "total_lines": 203,
+      "substantive_note": "Hand-authored stand-in fixture states constructed via real reducer; pre-walk account/persona/plan/history/voice/width extremes plus dangerous plan; no proof real UI/network works."
+    },
+    {
+      "path": "extension/walks/panel/voice.js",
+      "sha256": "e1dbef52b3acd8c99a5bebd0400289bbdcf5ceb20edc58886d9790efdfb34e11",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          151
+        ]
+      ],
+      "total_lines": 151,
+      "substantive_note": "Continuous recognition restart/stall handling keeps editable words; stop2s abort fallback, drop unhooks; separate mic meter track/context cleanup; speech service is external dependency."
+    },
+    {
+      "path": "extension/walks/mic/mic.js",
+      "sha256": "fa41f9e66f1cb5df02dac45ff3ccf8467b3297dc5b6df4f381d403ae3dba142f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          51
+        ]
+      ],
+      "total_lines": 51,
+      "substantive_note": "One-time getUserMedia permission tab; immediate track stop, close1.2s; permission-specific error UI/settings retry."
+    },
+    {
+      "path": "crates/browser/tests/gradient_surface.rs",
+      "sha256": "4a74901158f3f72dc55443b039fb59b11eff220bb14c72b1942548072a51d56d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          124
+        ]
+      ],
+      "total_lines": 124,
+      "substantive_note": "Browser fixture checks glyph-position gradient/background and nested alpha compositing; exact snippets, header dedupe vs distinct tile surfaces; skips missing browser/fixture."
+    },
+    {
+      "path": "crates/browser/tests/brand_and_vendors.rs",
+      "sha256": "0e1b8cdb787200654e43350ae00fc45ff2219a460bcb194e157a3c760fda3c63",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 303,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/line_breaks.rs",
+      "sha256": "0e177475370dc4bd98e328c31c342262f06967eaa2e044a73f462f35479bbce3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          111
+        ]
+      ],
+      "total_lines": 111,
+      "substantive_note": "Rendered line boxes straggler/unbalanced heading; monospace/ch fixtures stabilize metrics; pretty/balance/narrow/manual-break exemptions and advisory-only severity. One selector appears in both flag and pass sets: verify fixture behavior (flag-pretty-ancestor vs pass-pretty-ancestor differ)."
+    },
+    {
+      "path": "crates/browser/tests/csp_passivity.rs",
+      "sha256": "de95f3bfebd612245565ac602fd6932f72ab2dd730903693e30ffa812eb58c32",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          92
+        ]
+      ],
+      "total_lines": 92,
+      "substantive_note": "Low-level Browser::new_page/goto validates CSP-blocked inline flag and marker unchanged; does not invoke BrowserEngine.detect_url, so indirect passivity regression coverage only; launch failure skips."
+    },
+    {
+      "path": "crates/browser/tests/transient_opacity.rs",
+      "sha256": "81685a4b752d9c0ec48d77205eebbc946ea5a2409d1d496ac881e97fb8280407",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          150
+        ]
+      ],
+      "total_lines": 150,
+      "substantive_note": "At-rest ink alpha blends, timed reveals score declared ink; stepper peers demote advisory while inactive actionable text stays hard finding; asserts exact counts4/16."
+    },
+    {
+      "path": "crates/browser/tests/card_heuristics.rs",
+      "sha256": "5d2ca21c5f7516a9cf467624d57f5fac80fded22e1a4f1082ce0137b819bfeb5",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 362,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/design_system_palette.rs",
+      "sha256": "93b69a0671c39c30c0810fb3c77487333e9f7c3a5df5ffdcda1a5c7c24466384",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          138
+        ]
+      ],
+      "total_lines": 138,
+      "substantive_note": "Native CLI subprocess file URL DESIGN.md OKLCH parsing-to-browser match, approved palette suppresses ai-color/drift and undeclared neon still reports; browser/binary missing skip, temp cleanup."
+    },
+    {
+      "path": "crates/browser/tests/transparent_shell.rs",
+      "sha256": "3350bcc3c89696a2630652faf74b496dadee3f47df42b92068afee7ec6fe6108",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          55
+        ]
+      ],
+      "total_lines": 55,
+      "substantive_note": "Browser cramped-padding shell flags exact offset/negative margin/collapsing margin selectors while border/flex/grid/flow-root containment passes."
+    },
+    {
+      "path": "crates/browser/tests/evidence_findings.rs",
+      "sha256": "40d726419914653071fbd76460a83676466e75fb663c07f962c6472f9f7a9366",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 331,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/not_at_rest_timed.rs",
+      "sha256": "3921b988e5d78c3a16b02a83c634af3110a4ee2dac347b647ad524922bef4a21",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          103
+        ]
+      ],
+      "total_lines": 103,
+      "substantive_note": "Timed imminent opacity/slide/hidden changes suppress at-rest findings; requires four persistent flag controls and no pass/hidden-content findings."
+    },
+    {
+      "path": "crates/browser/tests/color_scheme.rs",
+      "sha256": "0c94e5bee3b50e5d4b842f9f5f62b9737d2097c903fe0df760d8913dc7763d80",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "total_lines": 48,
+      "substantive_note": "Forces dark-host browser then detect_url_evidence must render light and no low-contrast; probe/launch unsupported skips. Does not exercise desired dark-theme quality."
+    },
+    {
+      "path": "crates/browser/tests/low_contrast_pixel_reads.rs",
+      "sha256": "7633d5ce77cb3419faac821e24ecc1b94542910dad4892353a48b1bf6e1d6c81",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          92
+        ]
+      ],
+      "total_lines": 92,
+      "substantive_note": "Pixel pass must measure soft text-shadow on photo and >=.8 opaque glass; failing pairs pixel contrast nonadvisory, good photo clears element verdict."
+    },
+    {
+      "path": "crates/browser/tests/page_level_forms.rs",
+      "sha256": "24441c6c2002231163fcf84aed617a47d39fe74edff6bdec6077007cae3531e8",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 153,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/contrast_surfaces.rs",
+      "sha256": "0b699f28016b665957ad63f7513cd5ec81328514e5ac99ac59f145fcb3bdcbe3",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          92
+        ]
+      ],
+      "total_lines": 92,
+      "substantive_note": "Exact low-contrast3/dark-glow2 selectors; best gradient ink stop evidence, tiled/photo/transparent ground false-positive twins."
+    },
+    {
+      "path": "crates/browser/tests/fullpage_screenshot.rs",
+      "sha256": "0127c7e8a10f4c0bb77477356c7ab9b003054e6686621144dc4b2f81d23fb48a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 1053,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/image_load_state.rs",
+      "sha256": "439b8051149509652ca826db82cd9c10e683251d6ab470b628868e7ea58e3a48",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          108
+        ]
+      ],
+      "total_lines": 108,
+      "substantive_note": "Browser snapshot Dom and in-page probe parity for loaded/404 picture-selected/lazy-unrequested/nonIMG; asserts natural-size/complete/currentSrc sentinels; includes 10-probe source dependency."
+    },
+    {
+      "path": "crates/browser/tests/counted_pairs.rs",
+      "sha256": "e8d4b92d6cae41e0aa49b9a07672001f92d8943d911ec047c436703c97bc91e1",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 153,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/visual_contrast_gates.rs",
+      "sha256": "b1aa5d0e7b3ecb1291edb2548c447c90fdb23e8fcb7791d9ffda583838c8c7a6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          111
+        ]
+      ],
+      "total_lines": 111,
+      "substantive_note": "Shared text visibility/disabled/zero-ink/glyph gates apply pixel/sample passes too; image-cover vs icon/sprite ground; paired positive controls prevent all-suppressed success."
+    },
+    {
+      "path": "crates/browser/tests/page_globals.rs",
+      "sha256": "29ae8be99c89d132fbaa2d637733943fa3e7a5c07676625c1c27988a922205b4",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 260,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/low_contrast_labels_and_faces.rs",
+      "sha256": "747dba5bb0b6f144829afa3c2127b3d9df13fe8ce34ae9150272ea78e924d3ab",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          145
+        ]
+      ],
+      "total_lines": 145,
+      "substantive_note": "Visible field label demotes low-contrast hint placeholder advisory, only-label remains failing; named bold cut adjusts large text3:1 even computed weight400; asserts counts13/6."
+    },
+    {
+      "path": "crates/browser/tests/covered_text.rs",
+      "sha256": "0c8a5b239188746b754c0f0b2bf2c4c05e9f8659f46c5b132bd81943480a9d7f",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          122
+        ]
+      ],
+      "total_lines": 122,
+      "substantive_note": "Covered text/unread photo/layers produce no hard contrast; partial wash/texture stays scored; dedup first uncovered pair and +3 count; stale live/capture box must not create occlusion."
+    },
+    {
+      "path": "crates/browser/tests/text_forms.rs",
+      "sha256": "c18feb1e8dc042fe77fbf80b6075c32d4b00a13778c58775ee3ef4426cd0271c",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 165,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/round13_defects.rs",
+      "sha256": "67db5a6aa5c9108f25340b9cc68e4257c291baae276155542b9e2eb798afb1ec",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 181,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/low_contrast_settled_states.rs",
+      "sha256": "63a05e3aabc77ff1448f9d6254c62600666d411504ddfab84c55a684ae4545f6",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          86
+        ]
+      ],
+      "total_lines": 86,
+      "substantive_note": "Persistent CTA entrance/white-on-white/card/footer slogan remain warnings, wordmark advisory, paused breath still scored; no pass selector findings."
+    },
+    {
+      "path": "crates/browser/tests/on_screen.rs",
+      "sha256": "31b0af75f6d0473512c6ca44a982814f259996b095b1a5623c85943bf11cec97",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          147
+        ]
+      ],
+      "total_lines": 147,
+      "substantive_note": "Text quarter-width on-page/clipping gate; exact5 color-pair reports, collapsed counts+2/+1, zero box vs zero anchor, visible heading-only rhythm2."
+    },
+    {
+      "path": "crates/browser/tests/consent_hiding.rs",
+      "sha256": "f7e09b2a463ff10ef0326995de86e275c22f6e1a31790e642577e137f94a4b9c",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 700,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/heading_rhythm.rs",
+      "sha256": "df41a1633967f0d13fc8a5f1f6f5016cb4ecd57262e75ee0ec6d9ef3849c9289",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          148
+        ]
+      ],
+      "total_lines": 148,
+      "substantive_note": "28 crowded headings, wrapper/gap/body prose equal gaps; labels/bands/accordion/pullquote false-positive exemptions; font-dependent gap allows15 or16px."
+    },
+    {
+      "path": "crates/browser/tests/surface_resolution.rs",
+      "sha256": "75427d438e7cc222033b42af059b66f38ed80ca05f36f8e1fb30a7eb00a52303",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          139
+        ]
+      ],
+      "total_lines": 139,
+      "substantive_note": "display:contents root ignored; exact same ink suppressed vs near ink failing; open shadow backgrounds, partial viewport/photo, ligatures/x, counter and frosted opacity surface."
+    },
+    {
+      "path": "crates/browser/tests/labels_and_code.rs",
+      "sha256": "1d20ca003703d0e6ba6f8b447c770861b2a1fcaf96ea44b6ce3ae4f5e4ab4696",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          130
+        ]
+      ],
+      "total_lines": 130,
+      "substantive_note": "Code syntax token color exemptions vs genuine neon, side-column labels not kickers, textarea composer not nested card, class part rather than substring furniture."
+    },
+    {
+      "path": "crates/browser/tests/cdp_attach.rs",
+      "sha256": "28109a0464acd79c4e39d8c931337df72cfd0347408b841f1d0a11b9a7f821b9",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 427,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/right_box.rs",
+      "sha256": "e4465966022706f4789c47d684f4063baef3c8fde9a3b35c52118eaed18e62b4",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 244,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/hard_offset_shadow.rs",
+      "sha256": "f6a09c02ce78093d9f9a355843c479d7141b90f7340bbdb51229c12b3c50aa9b",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          132
+        ]
+      ],
+      "total_lines": 132,
+      "substantive_note": "Browser fixture parity hard shadow counts4/6/4 incl named/function colors and invalid lists; asserts advisory flag==severity for all findings."
+    },
+    {
+      "path": "crates/browser/tests/pixel_pass_identity.rs",
+      "sha256": "9507e4a8e856a7354ef38f1d7ced5427d594822a69e8351c22892d0d16554496",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          133
+        ]
+      ],
+      "total_lines": 133,
+      "substantive_note": "Duplicate ID collapsed first copy must not hijack candidate; RTL negative document-x vs viewport capture aligned actual text; positive pixel verdict required."
+    },
+    {
+      "path": "crates/browser/tests/evidence.rs",
+      "sha256": "3f983c567fcb1c82d0d287db346f126373f4551d6661ca72095f85136d18fe8f",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 588,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/differential.rs",
+      "sha256": "2a11bdd953d592f247c45af444ba6b6e3b96d36edd10fb22735e769d3aadbc2c",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 330,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/computed_forms.rs",
+      "sha256": "bf3db8919e9b1ff2ab6435f15da70937760ecb3d92b7c9b577ad110945cbdda1",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 189,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/overlay_hiding.rs",
+      "sha256": "a5609193161868c4c0df61a3248e8d3aef3ca5d703c8e4a9d8525522d3668b2a",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 557,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/hidden_and_hydration.rs",
+      "sha256": "a6a9d4dc816e5a0df508ea5c071be0c04723ecd71f9e44f1e89c401d596eda61",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          117
+        ]
+      ],
+      "total_lines": 117,
+      "substantive_note": "Closed interface excluded hidden share, selected failed reveal counts629/1216=52% exact snippet; hydration React418/423 advisory vs185/site error errors."
+    },
+    {
+      "path": "crates/browser/tests/never_painted.rs",
+      "sha256": "07c2aac36b667f73fb94a1425081ce4086f070fc5b6ce0996a828292c3d75f0c",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          115
+        ]
+      ],
+      "total_lines": 115,
+      "substantive_note": "Cross-rule paint gates with positive twins: flip-front/placeholder/visible clipped border/buried/occluded, theme text transitions stay at-rest; no should-pass findings, exact one clipped-gradient."
+    },
+    {
+      "path": "crates/browser/tests/round11_edge_cases.rs",
+      "sha256": "fae4369f3dab13ef89aa8bf994ef9c48642eea80d917a56605668ceee2689e98",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          132
+        ]
+      ],
+      "total_lines": 132,
+      "substantive_note": "Inactive @media pattern candidates excluded; page-shell code overflow vs narrow scroller; site-name wordmark advisory not page heading; scaled1px ink participates collision."
+    },
+    {
+      "path": "crates/browser/tests/unread_pixel_verdicts.rs",
+      "sha256": "b4739dab6c7667fb365dc77266bb2a11ca310b461697266216d76192485a901e",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          129
+        ]
+      ],
+      "total_lines": 129,
+      "substantive_note": "Unknown plain-photo ground ratio dropped when pixels refuse; outlined/light wash keeps advisory; scrim composited ink ratio advisory rather than fake hard measured contrast."
+    },
+    {
+      "path": "crates/browser/tests/own_box_surface_and_ink.rs",
+      "sha256": "8b57d81e0aff55b2fa026f839d27552372844d92dd28ae1a29a5f6fdf4d6516f",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 159,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/low_contrast_advisory.rs",
+      "sha256": "404a98b0e0aaf88541bdddad28ecc054a041254014a465719c92f836f00938ca",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 182,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/response_capture.rs",
+      "sha256": "bf938990c024699b5c73c687ae2695c858eb8070968537780e912dbd63b7b3d7",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 170,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/paint_grounds.rs",
+      "sha256": "11cb25be4a8ed6efa907bff7c6a3be705e6b0127bcaece0d66c925c088281d55",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          149
+        ]
+      ],
+      "total_lines": 149,
+      "substantive_note": "Skewed pseudo halves, hidden hover ground, stacked text-clipped colors, duplicate blend handoff pixel/advisory; exact visible ink/ground snippets plus should-pass exclusions."
+    },
+    {
+      "path": "crates/browser/tests/not_at_rest.rs",
+      "sha256": "f2d5f195db5a1a20ea1dbad74cae37ccaa78e54dd3cdeada2ea81e455286a8fa",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          130
+        ]
+      ],
+      "total_lines": 130,
+      "substantive_note": "Motion/viewtimeline/closed rows vs stalled reveal text hidden counts687/1654, buried/cramped exact2 each, running painted keyframe glow only; no pass twins."
+    },
+    {
+      "path": "crates/browser/tests/unread_surfaces.rs",
+      "sha256": "fdbbe614579ff5d1c6d8d3507ef40c1fa814b5d83fbea1bd7b64cfb93285f33e",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 233,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/borrowed_grounds.rs",
+      "sha256": "f34d6d63a01c725e54d7d5744ba54af21f532607895d55fcc11176f398cfe7b4",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 152,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/shadow_trees.rs",
+      "sha256": "48d407650c162e000912387476722b585f828723ae6868deff724a6637e5fb73",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 336,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/recall_and_gates.rs",
+      "sha256": "7a0185d466b005b53e5088694e350fe8edca9745717d3a4550fef06b1b43c42f",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 316,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/text_geometry.rs",
+      "sha256": "0c321acad2d1b2a3c314ed692ceef21b39d4988d03c8907e4c52ad85a5831aac",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 404,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/line_length_text_count.rs",
+      "sha256": "a7896db634c354a06daadbd87dee96605dac61f354ec7aab4639bcc5358643cd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          120
+        ]
+      ],
+      "total_lines": 120,
+      "substantive_note": "Only rendered chars excluding inline CSS/script/hidden/indentation and grapheme combining; system-font robust groups of twin findings3/2 or5/3/2; HTTP serves one exact fixture."
+    },
+    {
+      "path": "crates/browser/tests/painted_gate_coverage.rs",
+      "sha256": "7e60a8d036577a4919a95b01f0ced2574f407c316092eeec1cc7007e7066e2ec",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 163,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/not_visible_at_capture.rs",
+      "sha256": "78d928ea6dbd9c9d8218672c49417abfddfdf06102334665d5213a7684c4d2cd",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          102
+        ]
+      ],
+      "total_lines": 102,
+      "substantive_note": "Positive occlusion/viewport/2px/placeholder/frame badge cases; numbered labels count3 only shown; every pass twin absent."
+    },
+    {
+      "path": "crates/browser/tests/scroll_linked_and_sliders.rs",
+      "sha256": "da4e9cee9324f8b3c26449416dd32859740793333d2b41892a094e17f3eac3bf",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          146
+        ]
+      ],
+      "total_lines": 146,
+      "substantive_note": "Active scroll-linked reveals vs #frozen exact706/1000 hidden; all-hidden sliders emit capture note545 not clean truth; records shown_on_scroll facts and replay compares origins-filtered findings+notes."
+    },
+    {
+      "path": "crates/browser/tests/advisory_contexts.rs",
+      "sha256": "f94f010730208f381515fb55506bac16876659391d55185f53752e3a058cce24",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 350,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/isolated_world.rs",
+      "sha256": "96cf8d8adc9574f98f6a291d4d84ff4bbf0f080c1d71a343d142a625cecc2a2d",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          55
+        ]
+      ],
+      "total_lines": 55,
+      "substantive_note": "Prototype-poisoned page geometry999 vs isolated20, globals isolation, old-world navigation failure and navigation during awaited evidence must Err; launch absence skip."
+    },
+    {
+      "path": "crates/browser/tests/declared_mockups.rs",
+      "sha256": "4f1b510185c0b7e3d37eac7dcd5228cf226048f990bc1a4994c87de3765670cd",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 172,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/measured_boxes.rs",
+      "sha256": "51821084558118c30324b5259bf8193ae00904f7ab261a08bef4840616e42a0b",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 205,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/html_snapshot.rs",
+      "sha256": "53aedf1bfbdf604dbe11bab6d450c8ecf25d5bad780079b4f7b4b5cb6bb76a8d",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 266,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/browser/tests/not_shown_at_capture.rs",
+      "sha256": "e96e25bc8115c61ac6f111431e817307b613c34b47562d7490aa11301b76b8d1",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          108
+        ]
+      ],
+      "total_lines": 108,
+      "substantive_note": "Visible inert/dialog/glass/cards/ticker remain scored, drawer/covered/hidden counterparts excluded; pair-based text-occlusion checks distinguish unrelated card collisions."
+    },
+    {
+      "path": "crates/browser/tests/support/http.rs",
+      "sha256": "1f438240f6d9d7ea4cb824c545aae6775ab64e2e5cccdf96022e90e92138c606",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "total_lines": 67,
+      "substantive_note": "Loopback ephemeral per-connection threads avoid speculative Chrome socket stall; read timeout60s/header64KiB cap, arbitrary handler exact path, no-store404; lifetime process, no explicit shutdown."
+    },
+    {
+      "path": "crates/core/src/browser/quality.rs",
+      "sha256": "0fc45b0e139db895c29687875d02f19c5fba3c3c24430f16b25fe7da9be289fe",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 8274,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/core/src/browser/visual.rs",
+      "sha256": "6b74b1628e9b485e682047f39caeaa555bf16b5692b82771d3de82411c3aa155",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 7021,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/core/src/checks/text_context.rs",
+      "sha256": "35a0e6b2e89d18a69d92e1fb1a320fbaecf526957b1103ae2c4fa87283305538",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 3121,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/core/src/checks/measures.rs",
+      "sha256": "c3e54376af1cd553127f5af58142c720a65ad3aa80505a1d6f6f3e7b0589a289",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1815
+        ]
+      ],
+      "total_lines": 1815,
+      "substantive_note": "Pure gates + embedded tests fully read: radial glow alpha.14/contrast1.30/text, gradient mean compositing/background unknown, oversizedH1 font72/chars40/viewport gates, bounded repeated hairline+halo row vs legacy single-element16px gate, hidden text200/150/>30%, caps/tracking label40, SVG raster exemptions, ident BEM/camel split; imports foundation measures implementation not implied read."
+    },
+    {
+      "path": "crates/core/tests/heading_rhythm.rs",
+      "sha256": "963c4a62de51ab6a24872163c6dcd305bdd7e91316de8833f54ed25639c8b077",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 833,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/comp/tests/parity.rs",
+      "sha256": "aeaa8c27196d3cf97fed43358f624584b4d03974a4046b5301a87b9fdafa9653",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 416,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/comp/tests/record.mjs",
+      "sha256": "78b29823b91c31229d66d4f6fad3c8fce627c48f95538c386eca462c3a3b61ed",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 199,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/core/src/checks/vectors_a.rs",
+      "sha256": "cbd5546223d4e4117ef0f2eb67d411c14ca0dc24999ea618166a793f7c7f5331",
+      "status": "unread",
+      "ranges": [],
+      "total_lines": 423,
+      "substantive_note": "Назначен; содержательное чтение ещё не выполнено."
+    },
+    {
+      "path": "crates/wasm/tests/detect_exports.rs",
+      "sha256": "1748e318a2c3bdbc95a2d97b13775e2af7aca1af1c66fe8870cc8a69098224d5",
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          160
+        ]
+      ],
+      "total_lines": 160,
+      "substantive_note": "Native export shape, malformed option default, inline ignore off, DESIGN font fallback, installed custom rule pack and registry append tests. Native call tests not browser WASM runtime proof."
+    }
+  ],
+  "summary": {
+    "assigned_files": 111,
+    "assigned_lines": 51088,
+    "status_counts": {
+      "full": 74,
+      "partial": 1,
+      "unread": 36
+    },
+    "full_lines": 17909,
+    "substantively_read_lines": 17988,
+    "remaining_lines": 33100,
+    "all_assigned_closed": false
+  },
+  "remaining_gaps": [
+    {
+      "path": "extension/walks/consent-rules.js",
+      "ranges": [
+        [
+          41,
+          41
+        ],
+        [
+          81,
+          3788
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/brand_and_vendors.rs",
+      "ranges": [
+        [
+          1,
+          303
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/card_heuristics.rs",
+      "ranges": [
+        [
+          1,
+          362
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/evidence_findings.rs",
+      "ranges": [
+        [
+          1,
+          331
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/page_level_forms.rs",
+      "ranges": [
+        [
+          1,
+          153
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/fullpage_screenshot.rs",
+      "ranges": [
+        [
+          1,
+          1053
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/counted_pairs.rs",
+      "ranges": [
+        [
+          1,
+          153
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/page_globals.rs",
+      "ranges": [
+        [
+          1,
+          260
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/text_forms.rs",
+      "ranges": [
+        [
+          1,
+          165
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/round13_defects.rs",
+      "ranges": [
+        [
+          1,
+          181
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/consent_hiding.rs",
+      "ranges": [
+        [
+          1,
+          700
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/cdp_attach.rs",
+      "ranges": [
+        [
+          1,
+          427
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/right_box.rs",
+      "ranges": [
+        [
+          1,
+          244
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/evidence.rs",
+      "ranges": [
+        [
+          1,
+          588
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/differential.rs",
+      "ranges": [
+        [
+          1,
+          330
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/computed_forms.rs",
+      "ranges": [
+        [
+          1,
+          189
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/overlay_hiding.rs",
+      "ranges": [
+        [
+          1,
+          557
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/own_box_surface_and_ink.rs",
+      "ranges": [
+        [
+          1,
+          159
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/low_contrast_advisory.rs",
+      "ranges": [
+        [
+          1,
+          182
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/response_capture.rs",
+      "ranges": [
+        [
+          1,
+          170
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/unread_surfaces.rs",
+      "ranges": [
+        [
+          1,
+          233
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/borrowed_grounds.rs",
+      "ranges": [
+        [
+          1,
+          152
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/shadow_trees.rs",
+      "ranges": [
+        [
+          1,
+          336
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/recall_and_gates.rs",
+      "ranges": [
+        [
+          1,
+          316
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/text_geometry.rs",
+      "ranges": [
+        [
+          1,
+          404
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/painted_gate_coverage.rs",
+      "ranges": [
+        [
+          1,
+          163
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/advisory_contexts.rs",
+      "ranges": [
+        [
+          1,
+          350
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/declared_mockups.rs",
+      "ranges": [
+        [
+          1,
+          172
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/measured_boxes.rs",
+      "ranges": [
+        [
+          1,
+          205
+        ]
+      ]
+    },
+    {
+      "path": "crates/browser/tests/html_snapshot.rs",
+      "ranges": [
+        [
+          1,
+          266
+        ]
+      ]
+    },
+    {
+      "path": "crates/core/src/browser/quality.rs",
+      "ranges": [
+        [
+          1,
+          8274
+        ]
+      ]
+    },
+    {
+      "path": "crates/core/src/browser/visual.rs",
+      "ranges": [
+        [
+          1,
+          7021
+        ]
+      ]
+    },
+    {
+      "path": "crates/core/src/checks/text_context.rs",
+      "ranges": [
+        [
+          1,
+          3121
+        ]
+      ]
+    },
+    {
+      "path": "crates/core/tests/heading_rhythm.rs",
+      "ranges": [
+        [
+          1,
+          833
+        ]
+      ]
+    },
+    {
+      "path": "crates/comp/tests/parity.rs",
+      "ranges": [
+        [
+          1,
+          416
+        ]
+      ]
+    },
+    {
+      "path": "crates/comp/tests/record.mjs",
+      "ranges": [
+        [
+          1,
+          199
+        ]
+      ]
+    },
+    {
+      "path": "crates/core/src/checks/vectors_a.rs",
+      "ranges": [
+        [
+          1,
+          423
+        ]
+      ]
+    }
+  ],
+  "method": "Полное исходное чтение только ranges; хеширование всех назначенных файлов не даёт semantic coverage. upstream/тесты/импорты/браузер не запускались. Огромная строка consent-rules.js:41 была усечена и исключена.",
+  "additional_sources": [
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/docs/research/design-agent-upgrade/deep-audit/BRIEF.md",
+      "sha256": "845fce2df215838fa187b832b87d09c183b9869d528d9a71aff08052538e312a",
+      "status": "full"
+    },
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/docs/research/design-agent-upgrade/deep-audit/impeccable-runtime.md",
+      "sha256": "159b3dd00eb871bad3e85c0cdffa4eb0c17b43bf2e1cf421b1315f998dd38277",
+      "status": "full"
+    },
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/docs/research/design-agent-upgrade/deep-audit/impeccable-content.md",
+      "sha256": "4bc6099426ca8c46dc38600a009bdf5c92e8a414c7b3dbf824e5566517c33951",
+      "status": "full"
+    },
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/.codex/agents/core/researcher.md",
+      "sha256": "c97402192e6add1d03f48001dcdddb9aa3a9093c6d2747f11244d54489509375",
+      "status": "full"
+    },
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/.codex/CODEX.md",
+      "sha256": "5c156df22a42d7e4f6c4d0ad2b69d21009ff2417818ed37c0a83d083289749f8",
+      "status": "full"
+    },
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/README.md",
+      "sha256": "6a3f5807b5cb62db65f6627cd4641cce45e8637c076817af0b9662606f70c66f",
+      "status": "full"
+    },
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/.codex/workflows/review-loop.md",
+      "sha256": "e2f5985cc87035f9f81d1156cfc06028669d46e1e96b5c40c83a4323574b4f49",
+      "status": "full"
+    },
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/.codex/scripts/design-lint.mjs",
+      "sha256": "f13c0e61b06a1e2cca7c26ec3756a0373dc85e93a4a03ca2392153f6c4688966",
+      "status": "full"
+    },
+    {
+      "path": "/Users/germanbryzgalov/Friday-claude/.codex/scripts/screenshot.mjs",
+      "sha256": "11ef2b9872c4bb3a69c5bff5321903dc9babb8dd0149dd4fae4b947102188839",
+      "status": "full"
+    }
+  ],
+  "literal_extension_imports": [
+    {
+      "source": "extension/background/chrome-worker.js",
+      "line": 4,
+      "specifier": "./service-worker.js",
+      "exists": true
+    },
+    {
+      "source": "extension/background/chrome-worker.js",
+      "line": 5,
+      "specifier": "../walks/worker.js",
+      "exists": true
+    },
+    {
+      "source": "extension/background/chrome-worker.js",
+      "line": 6,
+      "specifier": "../account/worker.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/control.js",
+      "line": 5,
+      "specifier": "./badge.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/control.js",
+      "line": 6,
+      "specifier": "./handoff.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/control.js",
+      "line": 7,
+      "specifier": "./driver.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/control.js",
+      "line": 8,
+      "specifier": "./store.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/control.js",
+      "line": 9,
+      "specifier": "./view.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/net-hold.js",
+      "line": 26,
+      "specifier": "./driver.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/net-hold.js",
+      "line": 27,
+      "specifier": "./guard.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/handoff.js",
+      "line": 7,
+      "specifier": "../shared/build.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/handoff.js",
+      "line": 8,
+      "specifier": "./guard.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/badge.js",
+      "line": 16,
+      "specifier": "./driver.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/badge.js",
+      "line": 17,
+      "specifier": "./page-helpers.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/badge.js",
+      "line": 18,
+      "specifier": "./panel/copy.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/badge.js",
+      "line": 19,
+      "specifier": "./store.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/badge.js",
+      "line": 20,
+      "specifier": "./view.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/worker.js",
+      "line": 49,
+      "specifier": "./driver.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/worker.js",
+      "line": 50,
+      "specifier": "./control.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/worker.js",
+      "line": 51,
+      "specifier": "./link.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/worker.js",
+      "line": 52,
+      "specifier": "./handoff.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/worker.js",
+      "line": 53,
+      "specifier": "./page-helpers.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/worker.js",
+      "line": 54,
+      "specifier": "./toolbar.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/worker.js",
+      "line": 55,
+      "specifier": "./net-hold.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/worker.js",
+      "line": 56,
+      "specifier": "./agent.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/store.js",
+      "line": 4,
+      "specifier": "./view.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/link.js",
+      "line": 20,
+      "specifier": "../shared/build.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/link.js",
+      "line": 21,
+      "specifier": "./control.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/link.js",
+      "line": 22,
+      "specifier": "./driver.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/link.js",
+      "line": 23,
+      "specifier": "./sight.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/link.js",
+      "line": 24,
+      "specifier": "./toolbar.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/link.js",
+      "line": 25,
+      "specifier": "./handoff.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/link.js",
+      "line": 26,
+      "specifier": "./store.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/link.js",
+      "line": 27,
+      "specifier": "./view.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/driver.js",
+      "line": 4,
+      "specifier": "./guard.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/driver.js",
+      "line": 5,
+      "specifier": "./panel/copy.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/driver.js",
+      "line": 6,
+      "specifier": "./page-helpers.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/driver.js",
+      "line": 7,
+      "specifier": "./signin.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/driver.js",
+      "line": 8,
+      "specifier": "./sight.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/driver.js",
+      "line": 9,
+      "specifier": "./inspect.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/sight.js",
+      "line": 5,
+      "specifier": "./panel/copy.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/toolbar.js",
+      "line": 5,
+      "specifier": "./panel/copy.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/toolbar.js",
+      "line": 6,
+      "specifier": "./store.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/agent.js",
+      "line": 15,
+      "specifier": "./driver.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/agent.js",
+      "line": 16,
+      "specifier": "./control.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/agent.js",
+      "line": 17,
+      "specifier": "./net-hold.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/agent.js",
+      "line": 18,
+      "specifier": "./guard.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/agent.js",
+      "line": 19,
+      "specifier": "./store.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/agent.js",
+      "line": 20,
+      "specifier": "./view.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/agent.js",
+      "line": 21,
+      "specifier": "./panel/copy.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/session.js",
+      "line": 17,
+      "specifier": "./flow.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/session.js",
+      "line": 18,
+      "specifier": "../walks/handoff.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/worker.js",
+      "line": 8,
+      "specifier": "../shared/build.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/worker.js",
+      "line": 9,
+      "specifier": "../walks/link.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/worker.js",
+      "line": 10,
+      "specifier": "../walks/control.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/worker.js",
+      "line": 11,
+      "specifier": "../walks/store.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/worker.js",
+      "line": 12,
+      "specifier": "../walks/view.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/worker.js",
+      "line": 13,
+      "specifier": "./flow.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/worker.js",
+      "line": 14,
+      "specifier": "./session.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/worker.js",
+      "line": 15,
+      "specifier": "./waiting.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/waiting.js",
+      "line": 7,
+      "specifier": "../walks/handoff.js",
+      "exists": true
+    },
+    {
+      "source": "extension/account/waiting.js",
+      "line": 8,
+      "specifier": "../walks/panel/copy.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/panel/stub.js",
+      "line": 4,
+      "specifier": "../view.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/panel/stub.js",
+      "line": 5,
+      "specifier": "./copy.js",
+      "exists": true
+    },
+    {
+      "source": "extension/walks/mic/mic.js",
+      "line": 4,
+      "specifier": "../panel/copy.js",
+      "exists": true
+    }
+  ]
+}

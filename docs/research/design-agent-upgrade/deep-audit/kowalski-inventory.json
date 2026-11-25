@@ -1,0 +1,292 @@
+{
+  "repo": "emilkowalski/skills",
+  "url": "https://github.com/emilkowalski/skills",
+  "sha": "64eb3deb9a5fbfa041faf783e0bc3fd635872e9c",
+  "branch": "main",
+  "license_metadata": {
+    "key": "mit",
+    "name": "MIT License",
+    "spdx_id": "MIT",
+    "url": "https://api.github.com/licenses/mit",
+    "node_id": "MDc6TGljZW5zZTEz"
+  },
+  "source_root": "/Users/germanbryzgalov/.hermes/cache/scratch/design-deep-audit/kowalski",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "kind": "text",
+      "bytes": 68,
+      "lines": 2,
+      "sha256": "c7b91a8020b8144953c7e7096631324706c9b85a6bb04ba7aede9431f8105916"
+    },
+    {
+      "path": ".gitignore",
+      "kind": "text",
+      "bytes": 10,
+      "lines": 1,
+      "sha256": "cf237c7aff44efbe6e502e645c3e06da03a69d7bdeb43392108ef3348143417e"
+    },
+    {
+      "path": ".pl",
+      "kind": "text",
+      "bytes": 0,
+      "lines": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "LICENSE",
+      "kind": "text",
+      "bytes": 1070,
+      "lines": 21,
+      "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b"
+    },
+    {
+      "path": "README.md",
+      "kind": "text",
+      "bytes": 5859,
+      "lines": 63,
+      "sha256": "5d442010b00b14cb272ccc96255770cb2a81063958a878b598d79a4a08f38d53"
+    },
+    {
+      "path": "performance-cheatsheet.md",
+      "kind": "text",
+      "bytes": 932,
+      "lines": 15,
+      "sha256": "814de0807d55bb2f21944eb5be33fafbc776817e4c1bed5503ab5243f0bc6cc0"
+    },
+    {
+      "path": "skills/animate-expo/RECIPES.md",
+      "kind": "text",
+      "bytes": 16954,
+      "lines": 386,
+      "sha256": "31373774c7eef1d3d9f366b638fa2b722f9c730a98e292cda1aa7df2c2b39a56"
+    },
+    {
+      "path": "skills/animate-expo/SKILL.md",
+      "kind": "text",
+      "bytes": 18046,
+      "lines": 263,
+      "sha256": "67e5d2ebe23b3edf52ce9d399532f2ead2bd7eff127919dd1c3bbe489b04dd4d"
+    },
+    {
+      "path": "skills/animate/RECIPES.md",
+      "kind": "text",
+      "bytes": 8060,
+      "lines": 324,
+      "sha256": "129cddcba35dedacd307ef2de7f2c71e6d23efd9c1756dde44168241207581f9"
+    },
+    {
+      "path": "skills/animate/SKILL.md",
+      "kind": "text",
+      "bytes": 12122,
+      "lines": 209,
+      "sha256": "4ce49ea635ec175b45552bae070ea07b2d6aa5367047994250c1c095b71c8585"
+    },
+    {
+      "path": "skills/animation-performance/SKILL.md",
+      "kind": "text",
+      "bytes": 14002,
+      "lines": 222,
+      "sha256": "6481e7a611b54c0d1d229ac3ac516c05648e63aa79de88c0a1bdc5ae2666ab80"
+    },
+    {
+      "path": "skills/animation-vocabulary/SKILL.md",
+      "kind": "text",
+      "bytes": 13363,
+      "lines": 179,
+      "sha256": "42df33f1583483cc441fcd76693b3399148602705d2e9b8a26665d6b1951cd0b"
+    },
+    {
+      "path": "skills/apple-design/SKILL.md",
+      "kind": "text",
+      "bytes": 22852,
+      "lines": 287,
+      "sha256": "7fbacf928637e136da6d475358d0639667a3637ba772f03f8e815bb4c0b86946"
+    },
+    {
+      "path": "skills/ask-emil/SKILL.md",
+      "kind": "text",
+      "bytes": 4948,
+      "lines": 72,
+      "sha256": "b14d6fec27af1ce59e48c5444520c08abc3ae90e93e1843e19ca382512ac6233"
+    },
+    {
+      "path": "skills/ask-sonner/API.md",
+      "kind": "text",
+      "bytes": 4663,
+      "lines": 64,
+      "sha256": "0e0c44a4a28c5f2ceaefc5fb215bf75febe29166066dd502fc7a47ef390c0593"
+    },
+    {
+      "path": "skills/ask-sonner/SKILL.md",
+      "kind": "text",
+      "bytes": 7326,
+      "lines": 88,
+      "sha256": "4350ebfef0437875de80cc989059900b21ad621ea09f4709cc2917e7dee82d46"
+    },
+    {
+      "path": "skills/break-ui/CATALOG.md",
+      "kind": "text",
+      "bytes": 8215,
+      "lines": 135,
+      "sha256": "80522dcc81039bf317bce5adcb7b499e9d9da3c98952abb4dfb34ba6c1c32360"
+    },
+    {
+      "path": "skills/break-ui/SKILL.md",
+      "kind": "text",
+      "bytes": 14660,
+      "lines": 177,
+      "sha256": "fb126d176f3b6bf7dfe71f2ae6620ab3dd81e6282c672a1801720055addfce18"
+    },
+    {
+      "path": "skills/choreograph/RECIPES.md",
+      "kind": "text",
+      "bytes": 10079,
+      "lines": 287,
+      "sha256": "c256ff760f42d905b19f97becd2c0caaf40a95b41b49770c973281374c9600cf"
+    },
+    {
+      "path": "skills/choreograph/SKILL.md",
+      "kind": "text",
+      "bytes": 15666,
+      "lines": 170,
+      "sha256": "0a6802bb2fd5a3993842d48332b8ab56ae5bab369ffa8700f85f6fcff56b8478"
+    },
+    {
+      "path": "skills/emil-design-eng/SKILL.md",
+      "kind": "text",
+      "bytes": 28257,
+      "lines": 684,
+      "sha256": "cdbfe467e6c9a4940c3a19e795cecf1ba659378d7412e06c245c6ae49da47da6"
+    },
+    {
+      "path": "skills/find-animation-opportunities/SKILL.md",
+      "kind": "text",
+      "bytes": 9884,
+      "lines": 139,
+      "sha256": "331479e0d867f90d637ef3ef1bdbbd38498d144ab493442afdfbc138abc751b4"
+    },
+    {
+      "path": "skills/gestures/SKILL.md",
+      "kind": "text",
+      "bytes": 8823,
+      "lines": 112,
+      "sha256": "1928c86cce924a2a178ddd156ba5ed0f184665a1f95b549724ffb5ae703e994f"
+    },
+    {
+      "path": "skills/improve-animations/AUDIT.md",
+      "kind": "text",
+      "bytes": 8062,
+      "lines": 116,
+      "sha256": "90312d201cd8ce7dc8add4147570cd47cdb6c901e9980951d9f7b4851b738524"
+    },
+    {
+      "path": "skills/improve-animations/PLAN-TEMPLATE.md",
+      "kind": "text",
+      "bytes": 2915,
+      "lines": 72,
+      "sha256": "e25250c49937e183cca5bc42a057d9f5407a0cacd30d0aad1a4b6d59d7b2a844"
+    },
+    {
+      "path": "skills/improve-animations/SKILL.md",
+      "kind": "text",
+      "bytes": 8666,
+      "lines": 113,
+      "sha256": "632be90e04261192112571b05abd5708fbb846808a4a7780717ee206daa6c6f6"
+    },
+    {
+      "path": "skills/learn-taste/SKILL.md",
+      "kind": "text",
+      "bytes": 9251,
+      "lines": 157,
+      "sha256": "d624b8cd475eec24c5dc3f49b0380b56c8dab8399df11b92d7c9685aa8d4d33e"
+    },
+    {
+      "path": "skills/mobile-native/SKILL.md",
+      "kind": "text",
+      "bytes": 16904,
+      "lines": 314,
+      "sha256": "705e267bc47ea61e4c6f94d121efeebdb994055f482673b8a72f4a0dd62f1968"
+    },
+    {
+      "path": "skills/pick-ui-library/SKILL.md",
+      "kind": "text",
+      "bytes": 4699,
+      "lines": 86,
+      "sha256": "db10dc6b2a0c340d873f69e35140ceb3c929e15664b33fcacd1ecb25c5574df3"
+    },
+    {
+      "path": "skills/prototype/PICKER.md",
+      "kind": "text",
+      "bytes": 7705,
+      "lines": 201,
+      "sha256": "6c1d7a8d1f34dbc83a2e2068cd49f42107f1d02fb4e80369bb4e978d1e026b8d"
+    },
+    {
+      "path": "skills/prototype/SKILL.md",
+      "kind": "text",
+      "bytes": 8095,
+      "lines": 100,
+      "sha256": "30def86c5a5a0794a954b2a046d24c847c7129f316d79892abff73d54d79adc0"
+    },
+    {
+      "path": "skills/remove-animations/SKILL.md",
+      "kind": "text",
+      "bytes": 11555,
+      "lines": 166,
+      "sha256": "228d98a3d05637f2ff8fc2d1c2bd88c14783c8c901105cac39a7ae24a4d3e408"
+    },
+    {
+      "path": "skills/review-animations/SKILL.md",
+      "kind": "text",
+      "bytes": 8309,
+      "lines": 113,
+      "sha256": "9ceb5072ce5d5e51b07efa60817c66d06fc6492b7900b44dff5ff0f8f7bcf188"
+    },
+    {
+      "path": "skills/review-animations/STANDARDS.md",
+      "kind": "text",
+      "bytes": 10347,
+      "lines": 188,
+      "sha256": "2d2c28e9fe98dd55a879bafa1684827c812eb31f6b63fe578141d3978ddc664e"
+    },
+    {
+      "path": "skills/write-swift/SKILL.md",
+      "kind": "text",
+      "bytes": 42776,
+      "lines": 396,
+      "sha256": "ad8f3af70b627c165ecd73ecdba49449e35301dd845c397cf813f06582bbdac2"
+    },
+    {
+      "path": "ui-cheatsheet.md",
+      "kind": "text",
+      "bytes": 1344,
+      "lines": 16,
+      "sha256": "d5a23c3fa6e5f8b0ab5a44df406780112b8bd494b45c47e82ad72855a4d6b004"
+    }
+  ],
+  "total_files": 36,
+  "text_files": 36,
+  "skill_paths": [
+    "skills/animate-expo/SKILL.md",
+    "skills/animate/SKILL.md",
+    "skills/animation-performance/SKILL.md",
+    "skills/animation-vocabulary/SKILL.md",
+    "skills/apple-design/SKILL.md",
+    "skills/ask-emil/SKILL.md",
+    "skills/ask-sonner/SKILL.md",
+    "skills/break-ui/SKILL.md",
+    "skills/choreograph/SKILL.md",
+    "skills/emil-design-eng/SKILL.md",
+    "skills/find-animation-opportunities/SKILL.md",
+    "skills/gestures/SKILL.md",
+    "skills/improve-animations/SKILL.md",
+    "skills/learn-taste/SKILL.md",
+    "skills/mobile-native/SKILL.md",
+    "skills/pick-ui-library/SKILL.md",
+    "skills/prototype/SKILL.md",
+    "skills/remove-animations/SKILL.md",
+    "skills/review-animations/SKILL.md",
+    "skills/write-swift/SKILL.md"
+  ]
+}

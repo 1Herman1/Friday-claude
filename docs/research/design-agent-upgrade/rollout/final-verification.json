@@ -1,0 +1,647 @@
+{
+  "scope": "Owned local design capability rollout; not external MCP/production acceptance",
+  "initial_commit": "1b63e10d639d46767ddb3432d3f599f5a6e2ecd8",
+  "implementation_head": "82a1d6847365adb3ecb9dfaeec3b0c7fb6e96fa9",
+  "stages": [
+    {
+      "stage": "stage02",
+      "base": "1b63e10d639d46767ddb3432d3f599f5a6e2ecd8",
+      "tree": "3f5f245e5803a1dee5576d00aa87843c1dd08c6b",
+      "commit": "f4c6a8ab8c77379214f8b8756f060f3b5634ab65",
+      "blobs": {
+        ".codex/config.toml": {
+          "mode": "100644",
+          "blob": "5ee4393535a7539e4c083961232d67555f3273ba",
+          "sha256": "9c66dc35c49b3e904c9bb3964844ee79b6a34b5503e2bfa6f81e715b285d078a"
+        },
+        ".codex/scripts/lifecycle.py": {
+          "mode": "100644",
+          "blob": "927f69c24ebe4f97bed58f9d4bc406e0245d3cf5",
+          "sha256": "5f4c43d3b0d63daab713d6f7deb44984d5cb08244475f5255985e24c57e23bb3"
+        },
+        ".codex/scripts/test_lifecycle.py": {
+          "mode": "100644",
+          "blob": "11ff5280125b497766ee20e8d70e622d9658c03b",
+          "sha256": "22813a10fed94d769193c935c280e94b454294a649056941904f432a0cca044d"
+        },
+        ".codex/scripts/test_published_owner_policy.py": {
+          "mode": "100644",
+          "blob": "46f55cbed30c7136c752c10eb91a5d8367c3d2bc",
+          "sha256": "f77e47182c37ebe649bd70d7e2ef11817ccfa8f5aebf1708f579789f6b2cd3b1"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-02-baseline-repair.md": {
+          "mode": "100644",
+          "blob": "6e6d934d65d64ef82338fc2bf4522f919b531725",
+          "sha256": "3fa1e4124d0b7fd8e1a207b7588b8e8233e518ad46f7eb9381fcd60f93541abf"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-02-03-secrets-review.md": {
+          "mode": "100644",
+          "blob": "b3009449f874ebf59ae24a334f643c86491bc30e",
+          "sha256": "3cc170a8a2ec4f80e9cf9c9f1915108adb9e6f1f2a9199132f6c092dfde8052f"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-02-03-prospective-review.md": {
+          "mode": "100644",
+          "blob": "f60bc47a3da7cbc924357ce63e81c9f3d847e7a4",
+          "sha256": "f4b71b1b7ae546a33e5fe5163d348a1e4f83d4de4e267b1691e50fca68a25726"
+        },
+        "docs/research/design-agent-upgrade/rollout/publication-ownership.md": {
+          "mode": "100644",
+          "blob": "20dbdcc59a44a06a5725d931f21599270bdb509b",
+          "sha256": "71d279642c2285c46fa5532b23957123fbe4a8730dc48044132533c4c27d2e50"
+        }
+      },
+      "checks": {
+        "python": {
+          "command": "/Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 -m unittest discover -s .codex/scripts -p 'test_*.py'",
+          "output": ".................................................\n----------------------------------------------------------------------\nRan 49 tests in 11.635s\n\nOK",
+          "exit_code": 0,
+          "error": null
+        },
+        "lint": {
+          "command": "node --test .codex/scripts/test-design-lint.mjs",
+          "output": "✔ legacy seed: forbidden-font (29.936125ms)\n✔ legacy seed: purple-blue-gradient (23.636125ms)\n✔ legacy seed: gray-text-on-color-bg (24.088958ms)\n✔ legacy seed: side-border-decor (25.672916ms)\n✔ legacy seed: bounce-elastic-easing (22.882542ms)\n✔ legacy seed: small-touch-target (24.384ms)\n✔ legacy seed: too-round-corners (22.977791ms)\n✔ legacy seed: price-without-division (22.305208ms)\n✔ legacy seed: transition-all (23.315917ms)\n✔ legacy seed: blanket-will-change (23.006708ms)\n✔ legacy seed: ease-in-on-ui (26.68625ms)\n✔ legacy seed: animate-layout-prop (23.590708ms)\n✔ legacy seed: scale-from-zero (23.246625ms)\n✔ legacy seed: marketing-filler (22.840167ms)\n✔ legacy seed: offbrand-hex (23.496458ms)\n✔ legacy seed: offbrand-font (22.367708ms)\n✔ legacy seed: arbitrary-spacing (21.826291ms)\n✔ warning human output stays successful without claiming no findings (23.083709ms)\n✔ clean human output and existing exclusions remain unchanged (25.807833ms)\n✔ imported MASTER scope follows projects and tools path before active project (23.262ms)\n✔ implicit registry keeps src preference and TSX-only discovery through real imported helper (23.589959ms)\n✔ JSON findings are deterministic and preserve exact explicit file spelling (43.007125ms)\n✔ registry coverage retains discovered root targets and deduplicates overlapping roots (22.218542ms)\n✔ unreadable registry produces JSON diagnostic instead of uncaught exception (22.40175ms)\n✔ explicit file keeps legacy non-UI extension support (22.312333ms)\n✔ mixed missing and ERROR target retains actual coverage with exit 1 precedence (21.087ms)\n✔ directory symlink cycles are not traversed or treated as UI files (22.379416ms)\n✔ MASTER ambiguity diagnostics are structured warnings in JSON (44.626292ms)\n✔ unreadable directory is structured and does not abort mixed targets (22.570667ms)\n✔ invalid arguments are structured operational errors (44.201208ms)\n✔ unreadable file produces structured read-error and preserves other results (21.548167ms)\n✔ zero registry targets never claim clean (44.278167ms)\n✔ empty explicit directory is operational failure even alongside valid target (24.391ms)\n✔ explicit directory recurses through TSX JSX HTML CSS and deduplicates overlaps (24.613125ms)\n✔ JSON v1 reports findings, exact paths and coverage without human stdout (21.579458ms)\n✔ ERROR findings exit 2 and keep human output (21.795167ms)\n✔ missing target exits 1 instead of false clean (23.379042ms)\nℹ tests 37\nℹ suites 0\nℹ pass 37\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 986.975875",
+          "exit_code": 0,
+          "error": null
+        },
+        "selftest": {
+          "command": "/Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 .codex/scripts/selftest.py",
+          "output": "WARNING: Source files changed; review and sync: .claude/commands/feature.md\nPASS: 45 original roles + codex-docs; 22 skills; 5 lifecycle events; 3 MCP configs\nPASS: 90 source mappings, source freshness reviewed, native prompt sync, TOML/JSON and script syntax",
+          "exit_code": 0,
+          "error": null
+        },
+        "role-sync": {
+          "command": "/Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 .codex/scripts/sync-roles.py",
+          "output": "Drift: none",
+          "exit_code": 0,
+          "error": null
+        }
+      },
+      "remote_verified": {
+        "commit": "f4c6a8ab8c77379214f8b8756f060f3b5634ab65",
+        "tree": "3f5f245e5803a1dee5576d00aa87843c1dd08c6b",
+        "url": "https://github.com/1Herman1/Friday-claude/commit/f4c6a8ab8c77379214f8b8756f060f3b5634ab65"
+      }
+    },
+    {
+      "stage": "stage03",
+      "base": "f4c6a8ab8c77379214f8b8756f060f3b5634ab65",
+      "tree": "2e38a0d28edc7c31c02a5dbe588a181a87ae3eba",
+      "commit": "e2d59981c2dad3821d4b9c83eba7fc21162481fd",
+      "blobs": {
+        ".codex/CODEX.md": {
+          "mode": "100644",
+          "blob": "84e45b3ad9ea2ab1058a1754619c375e16f7d06d",
+          "sha256": "a8e9fa7bd12e69485fcbc4bdf90dfad11fd5e267c4fb2d72030319945cb8e8f9"
+        },
+        ".codex/agents/design/taste-curator.md": {
+          "mode": "100644",
+          "blob": "f8cbfca712c1e8f96483e3959f6ff1285138ba34",
+          "sha256": "b594fff5ce91ad4f0cea9bd2bca28d9c3ec225b935721dd9297cc8178df7eb1a"
+        },
+        ".codex/agents/taste-curator.toml": {
+          "mode": "100644",
+          "blob": "460e2e3c794350d26ce57515144e0ebad5f4f046",
+          "sha256": "148ed31f829a93f4da991c886d6f2ce3883cd6dc617f96691defee879a9358ff"
+        },
+        ".codex/commands/design-system.md": {
+          "mode": "100644",
+          "blob": "dcc5250d7486859483b65ed842e91be7788d1862",
+          "sha256": "f75fadb6ae80dbe762f9955b22d7ad6c359f5b0a79155199a23889492ebac9bd"
+        },
+        ".codex/skills/design-system/SKILL.md": {
+          "mode": "100644",
+          "blob": "f29948e52618d76cb77b094ded8b1ad2b0ba26c9",
+          "sha256": "31cb027960a4175d8cff1014de81d78859e40b7b7232c433f1a8e2c72b5470de"
+        },
+        ".codex/scripts/test_design_routing.py": {
+          "mode": "100644",
+          "blob": "2d3c3bfbf2b3f458684b9176836c7d7fd558d30c",
+          "sha256": "738e3e8f4e125f81f14016fa660f851df33667a8e7cce0f6fbfc153e95f91641"
+        },
+        ".codex/scripts/design-library.mjs": {
+          "mode": "100644",
+          "blob": "6ade4ed920ae31ded20ea0562aa74590468a55d2",
+          "sha256": "19589d92ddad4c4414bdbdac875fde0875377c68cab1fb78e3d2c2bab9b5add3"
+        },
+        ".codex/scripts/test-design-library.mjs": {
+          "mode": "100644",
+          "blob": "00b6aae38509401cd0e860d1c9fdc9183adf71ed",
+          "sha256": "b7dd3c6bdeae03712be881d374e0ad2270da0e58ad1869ebe004ab7974dc45f2"
+        },
+        "docs/core/design-library/INDEX.md": {
+          "mode": "100644",
+          "blob": "d6e9d1ffa3142e38e65b44cb94d6514874c3fbed",
+          "sha256": "b579016e7e2897614e5ff60705b41820bcf0de5af254ab3e0da84cac56b79ee5"
+        },
+        "docs/core/design-library/LICENSE": {
+          "mode": "100644",
+          "blob": "48a2f6640b81ff8eca9ce7f6a96337692713ef5b",
+          "sha256": "4575a543ab88dad12ccea7d97e563d0bce5b448b06072e65d3264497dad326df"
+        },
+        "docs/core/design-library/manifest.json": {
+          "mode": "100644",
+          "blob": "cb21d5a859d3f553c8716b9cf0baa89d527622f4",
+          "sha256": "f2a3037058a7951eec2161bee0af5a4db17c3a444061d62efea23bd0e98e07d9"
+        },
+        "docs/core/design-library/raw/diagrams.json": {
+          "mode": "100644",
+          "blob": "3a0cb99712bd7ec8f96d9fdd027ef22c2b1425f8",
+          "sha256": "76ef630a24fd63143d6e70329ab1698606357c0999446b1868bff08e929a30aa"
+        },
+        "docs/core/design-library/raw/heroes.json": {
+          "mode": "100644",
+          "blob": "bf642fafa8ae19870129b4bc566a3ede8c82fe8c",
+          "sha256": "ec31203b4857901641dc2c8229ab52bb3dcebd7cadeb9619939a49e76061523e"
+        },
+        "docs/core/design-library/raw/palettes.json": {
+          "mode": "100644",
+          "blob": "e1177973fa94e8d9d6f755455ea20ca507362d4b",
+          "sha256": "96d594648249b2dff17addcd0e2965b0eee0cf2815ae68542add82a87d856d6d"
+        },
+        "docs/core/design-library/raw/typography.json": {
+          "mode": "100644",
+          "blob": "9f90521536d4222ed76f25bef32a45d1b1e7b955",
+          "sha256": "144be2adc366028ec2d380782e9150436f6bf5f1e4177159674c84435250d830"
+        },
+        "docs/core/design-library/receipts/01-summary-green.tap": {
+          "mode": "100644",
+          "blob": "864559326f4f5b6343a04eb3e83383befde7da19",
+          "sha256": "6f69f3b263ff8fcc5428986611f64f44e285eda7d863cd0fc499a86822c11e50"
+        },
+        "docs/core/design-library/receipts/01-summary-red.tap": {
+          "mode": "100644",
+          "blob": "44b6aa5e7c5497b4bb97925eddb71d5763ef74bf",
+          "sha256": "dc985385547c6abb8b6193e083b542b401f3555e74b61f19aeebd1ca9da80fa3"
+        },
+        "docs/core/design-library/receipts/02-provenance-green.tap": {
+          "mode": "100644",
+          "blob": "c9ed8e9a3ee44c9cb10cc3df85dfc5469191cc79",
+          "sha256": "eef8b8af27b9bc1ddd6e1d21e9d4298964000b8ab284de028223b75fd1638883"
+        },
+        "docs/core/design-library/receipts/02-provenance-red.tap": {
+          "mode": "100644",
+          "blob": "5f7d54e52741efa6e312b56a937912e0764e724b",
+          "sha256": "4636b8b988974e91a37cdb14fa5403f59664bd2089c122232f0a6227a324d681"
+        },
+        "docs/core/design-library/receipts/03-list-green.tap": {
+          "mode": "100644",
+          "blob": "279b8df4f9e71e0545fe1f7e0d5ffd45735b121a",
+          "sha256": "6ef39c209a08acf505ab7e42a36d936c538c180262571a2109c1aeb61322c086"
+        },
+        "docs/core/design-library/receipts/03-list-red.tap": {
+          "mode": "100644",
+          "blob": "9710bf34e8462e807a166bcb6905a0ab3019a2db",
+          "sha256": "b6448b4891dbdc8cc08eea2f80bc0730755d34cc2796315ee0845ea15e8aa049"
+        },
+        "docs/core/design-library/receipts/04-get-green.tap": {
+          "mode": "100644",
+          "blob": "f3747fb5bec96e7f1a0c6da498136c8479f5aa15",
+          "sha256": "127dd4ef755631e6e601878071fddd2400076831159f62f6035e3a75c0c9e037"
+        },
+        "docs/core/design-library/receipts/04-get-red.tap": {
+          "mode": "100644",
+          "blob": "443fd91c9bb4e6722025e131b7a7eb5e30e8e035",
+          "sha256": "8242985e16e7465179afdc84cef27558b96a5b8e33ed4ab2a9cef23ac6cdb6e5"
+        },
+        "docs/core/design-library/receipts/05-lookup-errors-green.tap": {
+          "mode": "100644",
+          "blob": "4d9a960c963c9ba94174d7c11b0472e90b99063d",
+          "sha256": "b39eb63648c6435b79bedefcbda1b92c565f05e583c41bfada75600d94e22e18"
+        },
+        "docs/core/design-library/receipts/05-lookup-errors-red.tap": {
+          "mode": "100644",
+          "blob": "9b5cdc6e06b752138c652be62e6b2a47ae73aaad",
+          "sha256": "86537c52e1f680019b3eab314bd1ba78383371fab750f1d1b61592b4b3ce48d7"
+        },
+        "docs/core/design-library/receipts/06-arguments-green.tap": {
+          "mode": "100644",
+          "blob": "317df9c4a024d49a4e8010a04a7525cafee5289a",
+          "sha256": "ce3bcdce35df573e6564fa0879cad64be86d9d68bbf0a7b26a7f4152d7e5d5a5"
+        },
+        "docs/core/design-library/receipts/06-arguments-red.tap": {
+          "mode": "100644",
+          "blob": "42f19da2216327cb73bda21f134e17bc31497d4b",
+          "sha256": "514d6cd3a80cbda969f18835de80b4f3ebf4640e483afdc62864dd6c4bdb2e44"
+        },
+        "docs/core/design-library/receipts/07-read-error-green.tap": {
+          "mode": "100644",
+          "blob": "e6fb1122d05d47a34ff302bd74c0f7fe86ba9f1f",
+          "sha256": "12a4f7ab2553150e7777f68a7000344df3e05cd269472cb7dc09935939552b1d"
+        },
+        "docs/core/design-library/receipts/07-read-error-red.tap": {
+          "mode": "100644",
+          "blob": "cd2b9de985b7b31a31bff186f41b523fb55c30bd",
+          "sha256": "9b60e09a4f166caf03c332aac14d416c1a70b70e275fa485c866f6ea495bd603"
+        },
+        "docs/core/design-library/receipts/08-parse-error-green.tap": {
+          "mode": "100644",
+          "blob": "148821a3c6183b73d347cd9c0808a23301f9f6a7",
+          "sha256": "79ebcc5d1a2326f3a252842efb2051b2ea21f6313761e5fc2732accda76101e5"
+        },
+        "docs/core/design-library/receipts/08-parse-error-red.tap": {
+          "mode": "100644",
+          "blob": "d77c8702ef2ed054d7dbabe90335bc6463cb15e7",
+          "sha256": "55518f23aae7e384e8c55ddeba57c82a7729407123ef91833ea3af7d64e7e5f2"
+        },
+        "docs/core/design-library/receipts/09-schema-error-green.tap": {
+          "mode": "100644",
+          "blob": "36b4b88c5d3566b20101cf846b5f4d61623e10ac",
+          "sha256": "3f8b5e85a6eacdec4f87e879d6f17212298c1113b58cd1e64bc3ab2c4263c8e5"
+        },
+        "docs/core/design-library/receipts/09-schema-error-red.tap": {
+          "mode": "100644",
+          "blob": "9623208bff3f7ab774a4d3789d2f05100eee6d7d",
+          "sha256": "9bc7666034e767fa68b2f6ef55788f108add71c91198be54aef2ed4ac400b5b0"
+        },
+        "docs/core/design-library/receipts/10-integrity-green.tap": {
+          "mode": "100644",
+          "blob": "cdcc16a2f1edcee4363855f8d5358e33eafa63f0",
+          "sha256": "2240ed7d9f96ac945e015892780d7492f78f41b8b9cecf2d22dd9a3264d7e443"
+        },
+        "docs/core/design-library/receipts/10-integrity-red.tap": {
+          "mode": "100644",
+          "blob": "02e63fca586f57be5555fa5d6812809f9e9d0e5c",
+          "sha256": "1778e5cae43395135ab21e12d5ba35deda07ffc3890851b40bf4687cfde7445e"
+        },
+        "docs/core/design-library/receipts/11-manifest-errors-green.tap": {
+          "mode": "100644",
+          "blob": "5dc06f30fc34c781f8bca8b48d75a345486ae10f",
+          "sha256": "3cb0e8b2d59a1bb109e243a5641ad4b234d2aaeb5a308cf7048fb309716cd6a4"
+        },
+        "docs/core/design-library/receipts/11-manifest-errors-red.tap": {
+          "mode": "100644",
+          "blob": "1796c41a7bec726acf338af5666938739533ea7d",
+          "sha256": "d01fcbb8e4eac52a9c8f3b15a09af3a1df438411f139109e8274d52b303b7c1d"
+        },
+        "docs/core/design-library/receipts/12-index-green.tap": {
+          "mode": "100644",
+          "blob": "dee2d3eb8f28deab3510b68ad7eb87f426d9dfcc",
+          "sha256": "53c4b54d81799eaf98b3138c10e52de2e471136e2788e22c6920aba5ca2bcb05"
+        },
+        "docs/core/design-library/receipts/12-index-red.tap": {
+          "mode": "100644",
+          "blob": "cf4c4dffcf3bfb8e388f5b646381febf828633bb",
+          "sha256": "452fdc0127af7f8bc1cd13eb16e4dcf5e029a27bfe4e282217fe2ef509719e78"
+        },
+        "docs/core/design-library/receipts/13-readonly-regression-green.tap": {
+          "mode": "100644",
+          "blob": "9d861be92a891a599829bf905a8f4a8297282b64",
+          "sha256": "798dd124b686d5211819f0a664c0d6ad034059eebfafe1ce973472247a4dd43a"
+        },
+        "docs/core/design-library/receipts/14-committed-source-parity.json": {
+          "mode": "100644",
+          "blob": "d89d4fe442c9d63ce5035a2a4a23fe6cc61b3838",
+          "sha256": "6b4ff19f82a9468f54eae6fca69f2e15bc8c53ea6b5490980c61d1be42419cae"
+        },
+        "docs/core/design-library/receipts/15-final-green.tap": {
+          "mode": "100644",
+          "blob": "bcbe81ab68dcd49aa813b71051faf6ff00c6e646",
+          "sha256": "9a4fa034f5b9c81efe05d46a60ee5c6e01122d7c9813b80487851997f0053f63"
+        },
+        "docs/core/design-library/records/diagrams.md": {
+          "mode": "100644",
+          "blob": "9fd22ebd19cf44f0cf0e3bb35ff5c620ee10c471",
+          "sha256": "e06e466ff71a2a535025c2235d3a6e9e39f51d7cd7c2a9dd04778559f7d1922e"
+        },
+        "docs/core/design-library/records/heroes.md": {
+          "mode": "100644",
+          "blob": "3f147c76b605cdfa54298e6b95ca881b6b874740",
+          "sha256": "5098a275f7c4995d5f08e99467a61d531db117be1f752402ed27c076a2b07cd9"
+        },
+        "docs/core/design-library/records/palettes.md": {
+          "mode": "100644",
+          "blob": "bdae4a4a016e6eef4cff6d9a162b8a4a620bb6f4",
+          "sha256": "962eafc42e29e505f006a83e32cd64536e6069ec4823a18220ac2263f886689c"
+        },
+        "docs/core/design-library/records/typography.md": {
+          "mode": "100644",
+          "blob": "cdf4b7a74d859c24b74be270c4c55c7fb0d4c666",
+          "sha256": "f29ea49afc142903cb9d337e55deebad0aed04f5f22446db8db9cb3921e700ff"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-03-library.md": {
+          "mode": "100644",
+          "blob": "ff02425e47d07bde3b77fe0c759c1d33fb12ba68",
+          "sha256": "ba9d853be3b6d5af6600731f10a3b40f32b2a2cc002963fb2459d404a768efb7"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-03-independent-review.md": {
+          "mode": "100644",
+          "blob": "76e7ebf6fc8e0445a0ce1eb2efda89e278f9c184",
+          "sha256": "72f6547533b2ef21d2f0265e1ceab2553626ed1f8e6946387437481983d022ea"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-03-routing-preservation.json": {
+          "mode": "100644",
+          "blob": "d5d06d85cb29c01fba478588856e29a93aae2e17",
+          "sha256": "2e9bf6c43691365ecd9dc2975fee144dda2b83f3ad2b1ba9ec14f29939ee5f83"
+        }
+      },
+      "checks": {
+        "python": {
+          "command": "/Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 -m unittest discover -s .codex/scripts -p 'test_*.py'",
+          "output": ".....................................................\n----------------------------------------------------------------------\nRan 53 tests in 12.268s\n\nOK",
+          "exit_code": 0,
+          "error": null
+        },
+        "node": {
+          "command": "node --test .codex/scripts/test-design-lint.mjs .codex/scripts/test-design-library.mjs",
+          "output": "✔ summary reports all pinned family counts (29.481125ms)\n✔ manifest pins every raw byte, source path, ID and full MIT notice (1.22825ms)\n✔ get retrieves every complete record without adding or dropping source fields (3497.532ms)\n✔ unknown and traversal families and IDs fail with JSON diagnostics (473.954417ms)\n✔ arguments require explicit summary/list/get with exact arity; no random fallback (202.24625ms)\n✔ missing and unreadable-as-file data produce JSON READ_ERROR (49.005875ms)\n✔ malformed JSON produces a machine-readable PARSE_ERROR (24.819458ms)\n✔ wrong roots, collections, record fields and duplicate IDs produce SCHEMA_ERROR (499.616708ms)\n✔ lookup rejects changed complete records or bytes against provenance hashes (101.007792ms)\n✔ manifest errors fail closed without accepting path traversal or unpinned sources (283.9995ms)\n✔ INDEX enumerates every ID and links to an exact complete record in four counted sections (4.637584ms)\n✔ CLI runs with filesystem writes and child processes forbidden, independent of cwd (152.963708ms)\n✔ real duplicate IDs, ID drift, and changed nested fields are rejected (72.85ms)\n✔ list exposes the exact pinned IDs with useful record descriptors (97.200541ms)\n✔ legacy seed: forbidden-font (26.643666ms)\n✔ legacy seed: purple-blue-gradient (25.0725ms)\n✔ legacy seed: gray-text-on-color-bg (25.705333ms)\n✔ legacy seed: side-border-decor (25.784625ms)\n✔ legacy seed: bounce-elastic-easing (27.53025ms)\n✔ legacy seed: small-touch-target (24.717916ms)\n✔ legacy seed: too-round-corners (23.602583ms)\n✔ legacy seed: price-without-division (25.285125ms)\n✔ legacy seed: transition-all (26.453292ms)\n✔ legacy seed: blanket-will-change (24.418875ms)\n✔ legacy seed: ease-in-on-ui (25.105333ms)\n✔ legacy seed: animate-layout-prop (23.725958ms)\n✔ legacy seed: scale-from-zero (25.750583ms)\n✔ legacy seed: marketing-filler (25.17475ms)\n✔ legacy seed: offbrand-hex (24.871041ms)\n✔ legacy seed: offbrand-font (25.047958ms)\n✔ legacy seed: arbitrary-spacing (24.222458ms)\n✔ warning human output stays successful without claiming no findings (23.581417ms)\n✔ clean human output and existing exclusions remain unchanged (24.191208ms)\n✔ imported MASTER scope follows projects and tools path before active project (25.356ms)\n✔ implicit registry keeps src preference and TSX-only discovery through real imported helper (23.72ms)\n✔ JSON findings are deterministic and preserve exact explicit file spelling (46.745959ms)\n✔ registry coverage retains discovered root targets and deduplicates overlapping roots (23.996083ms)\n✔ unreadable registry produces JSON diagnostic instead of uncaught exception (23.711125ms)\n✔ explicit file keeps legacy non-UI extension support (24.459125ms)\n✔ mixed missing and ERROR target retains actual coverage with exit 1 precedence (23.928292ms)\n✔ directory symlink cycles are not traversed or treated as UI files (27.552375ms)\n✔ MASTER ambiguity diagnostics are structured warnings in JSON (48.136292ms)\n✔ unreadable directory is structured and does not abort mixed targets (23.675917ms)\n✔ invalid arguments are structured operational errors (45.331834ms)\n✔ unreadable file produces structured read-error and preserves other results (24.259083ms)\n✔ zero registry targets never claim clean (48.764291ms)\n✔ empty explicit directory is operational failure even alongside valid target (24.3335ms)\n✔ explicit directory recurses through TSX JSX HTML CSS and deduplicates overlaps (24.7755ms)\n✔ JSON v1 reports findings, exact paths and coverage without human stdout (27.476875ms)\n✔ ERROR findings exit 2 and keep human output (34.48ms)\n✔ missing target exits 1 instead of false clean (43.594583ms)\nℹ tests 51\nℹ suites 0\nℹ pass 51\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 5528.217208",
+          "exit_code": 0,
+          "error": null
+        },
+        "selftest": {
+          "command": "/Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 .codex/scripts/selftest.py",
+          "output": "WARNING: Source files changed; review and sync: .claude/commands/feature.md\nPASS: 45 original roles + codex-docs; 22 skills; 5 lifecycle events; 3 MCP configs\nPASS: 90 source mappings, source freshness reviewed, native prompt sync, TOML/JSON and script syntax",
+          "exit_code": 0,
+          "error": null
+        },
+        "role-sync": {
+          "command": "/Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 .codex/scripts/sync-roles.py",
+          "output": "Drift: none",
+          "exit_code": 0,
+          "error": null
+        }
+      },
+      "remote_verified": {
+        "commit": "e2d59981c2dad3821d4b9c83eba7fc21162481fd",
+        "tree": "2e38a0d28edc7c31c02a5dbe588a181a87ae3eba",
+        "url": "https://github.com/1Herman1/Friday-claude/commit/e2d59981c2dad3821d4b9c83eba7fc21162481fd"
+      }
+    },
+    {
+      "stage": "stage04",
+      "base": "e2d59981c2dad3821d4b9c83eba7fc21162481fd",
+      "tree": "8d6493d853e21ee6e44a1172781fca5eb95afde9",
+      "commit": "ee24dc5645817290b9aa5da7756453e970f5a98c",
+      "blobs": {
+        ".codex/scripts/test-motion-dependency-isolation.mjs": {
+          "mode": "100644",
+          "blob": "21ab0334ee618d575c832479cae3015f989cb92c",
+          "sha256": "67ca06ce18c8f07b308ecaa0f80c7132d8b8bbcf5241ba9ac6e5881fedcb8114"
+        },
+        ".codex/scripts/test-motion-template.mjs": {
+          "mode": "100644",
+          "blob": "76a550ea90d8d8fb75be817b62079d8eb41d375f",
+          "sha256": "330900f6cf7604ba890843fc76e9d547caf6d0cdea996454b384d1d9a64f01fb"
+        },
+        "docs/core/motion-engine.md": {
+          "mode": "100644",
+          "blob": "5d2f8ac1f0970d439a5d997cb6bcd94fa006aa54",
+          "sha256": "fd0fb024c5b860ebe33fb65dc1b706c7319e4d3037052bf0cf2fe7ea16a9e77f"
+        },
+        "docs/core/templates/motion.ts": {
+          "mode": "100644",
+          "blob": "91a79bc2b1c6252780f8de4441063d845b76f6b7",
+          "sha256": "a803bcfaf1d2e66eea7bddb9d56707e94e66b22d98b4a95145534b499b8b0bb3"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/dependencies.lock.json": {
+          "mode": "100644",
+          "blob": "42c3e60254aaa4326b8fc7e758fd20104e81a56f",
+          "sha256": "d5c07cd0ebc685c72ce408abd5d7e085661cbb42596656adaa17097351eb2be5"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/dependencies.package.json": {
+          "mode": "100644",
+          "blob": "9245c4efee4e8e67501771280d1302e157733314",
+          "sha256": "8e72eaaa77bf5f4bb3afe57795a05a0e5407774fb1778b15c5be0abcf3565de0"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/execution-ledger.json": {
+          "mode": "100644",
+          "blob": "accce86034be2500b59e14b8ecfa98bbf8a74d85",
+          "sha256": "64918c617dd9ce20c87063e7aa201e2a475678a0b6d909357552e995dc53c984"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/fixture.html": {
+          "mode": "100644",
+          "blob": "7a7649b86200c6ac2d3c569495ddb3c5984915e8",
+          "sha256": "09fb978e1c9a301feb0918750bc62a5e8cab14dff2528f499e625bc1d1b30244"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/fixture.ts": {
+          "mode": "100644",
+          "blob": "bb2be4aa2ac6b3a4f8c54319b00bac291ccba092",
+          "sha256": "f85ef00cb67bad96af7529d63c9c4a8be6cdabad5b99ff9300eccd891fab8d1c"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/green-1.json": {
+          "mode": "100644",
+          "blob": "cea1e9b61b7d2de909155990456eb4296dfc7810",
+          "sha256": "870d6266d8507f7dda7ffdd5e7bff07e0146fe3a0f4ce41d4530c3d201f3815b"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/green-2.json": {
+          "mode": "100644",
+          "blob": "026a4ddb45f9310f656cf37479c5990f0a646ceb",
+          "sha256": "71c7cd51feab11f5fdc79b17b4ae3d140d2221c46961ee2c6340edeea31acbf6"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/green-final.json": {
+          "mode": "100644",
+          "blob": "24b30f0550b0595d17a437e57e4d773fa48fec58",
+          "sha256": "c033713498704384af35efd7b48208fcde8130314b4139084daee76d198d16c5"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/parent-replay.json": {
+          "mode": "100644",
+          "blob": "a55b94d4448a22d8c3c35157d8b6f9a1d25ad24a",
+          "sha256": "6bdc40234bd563fe0c0d66606056fcd287152e7c67328d29feaf3d60b80120b9"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/red-preference.json": {
+          "mode": "100644",
+          "blob": "7d82b4ff1a2ac6f50508ece31a8b7fc4b7bd9478",
+          "sha256": "976330ffe9bbf7e15a49511240fe6193c2037c1e293e44d07a51dbd45a5cea49"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/red-reduced.json": {
+          "mode": "100644",
+          "blob": "786210763eb584f7d0c8eab63c9ad396f1614ed0",
+          "sha256": "09ff01575d4a2192c8a11737e5ac9ed311cd9fa6f637acf79cf09e29b8bab3d4"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/red-touch-cleanup.json": {
+          "mode": "100644",
+          "blob": "d11ae890cf47446ce559547e6610fcbec0828c0f",
+          "sha256": "1741d1fb1471105099d2be3025a5138bbd806038a8442c076bb97ca9f096c518"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/source-hashes.json": {
+          "mode": "100644",
+          "blob": "66e7639af01d51470e0c66b90e9b28ddb81f120c",
+          "sha256": "fa0eaeaa6393f46df43ef994ff4f758e175153273a4e046cbc954c288f7a2973"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/stage04-motion.md": {
+          "mode": "100644",
+          "blob": "7c06699be9eea479cc91bf8da0b0f607960f3637",
+          "sha256": "2d855654ddfe91b7af38397e0cc002e1cf60e6312ac238085aaa8d739b4c8fc6"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-04-independent-review.md": {
+          "mode": "100644",
+          "blob": "636874710ed9d7a55144b8be6ad5a1ee44d9eb0b",
+          "sha256": "120bda08d7f7c0a0fc7b53ffd96b02d4f100ea909b2d6eac40ab47c95f479fa1"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-04-design-review.md": {
+          "mode": "100644",
+          "blob": "f5726ddd5035f91114e0ffaa7ba31b9aa7c46d89",
+          "sha256": "cedd172709ed77cbc7c6674035d7cc2a74991a5dab5af4c00c1e8449b59be39d"
+        },
+        "docs/research/design-agent-upgrade/rollout/final-parent-delta-review.md": {
+          "mode": "100644",
+          "blob": "f4e9781c10ee15e420c7b16c22fbf760a8a03bb0",
+          "sha256": "82dcf38898b4358906218985f626c44501e6811bb43068d1d7323e7c7e64665d"
+        },
+        "docs/research/design-agent-upgrade/rollout/parent-clean-verification.md": {
+          "mode": "100644",
+          "blob": "e610632eeee4b60f0781b0903a40c3dfafd33e37",
+          "sha256": "f9f3aa4dfe7d292ba462ab80d3e14621faff94cb1ee8979a4c29191ed429b47e"
+        },
+        "docs/research/design-agent-upgrade/rollout/motion-pilot/parent-clean-replay.json": {
+          "mode": "100644",
+          "blob": "d65b9a590c5906cf171680ccda4b3d6e3cf7ed07",
+          "sha256": "6539e6fa7d28359d8e872b8a6f63b48fb0b70f743eef8fcd5c3b9712ee4623be"
+        }
+      },
+      "checks": {
+        "python": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell /Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 -m unittest discover -s .codex/scripts -p 'test_*.py'",
+          "output": ".....................................................\n----------------------------------------------------------------------\nRan 53 tests in 11.565s\n\nOK",
+          "exit_code": 0,
+          "error": null
+        },
+        "node": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell node --test .codex/scripts/test-design-lint.mjs .codex/scripts/test-design-library.mjs .codex/scripts/test-motion-dependency-isolation.mjs",
+          "output": "✔ summary reports all pinned family counts (29.449084ms)\n✔ manifest pins every raw byte, source path, ID and full MIT notice (1.2365ms)\n✔ get retrieves every complete record without adding or dropping source fields (3298.125916ms)\n✔ unknown and traversal families and IDs fail with JSON diagnostics (449.890417ms)\n✔ arguments require explicit summary/list/get with exact arity; no random fallback (201.18675ms)\n✔ missing and unreadable-as-file data produce JSON READ_ERROR (46.724333ms)\n✔ malformed JSON produces a machine-readable PARSE_ERROR (25.229458ms)\n✔ wrong roots, collections, record fields and duplicate IDs produce SCHEMA_ERROR (469.504125ms)\n✔ lookup rejects changed complete records or bytes against provenance hashes (95.771083ms)\n✔ manifest errors fail closed without accepting path traversal or unpinned sources (273.768042ms)\n✔ INDEX enumerates every ID and links to an exact complete record in four counted sections (4.924833ms)\n✔ CLI runs with filesystem writes and child processes forbidden, independent of cwd (141.822667ms)\n✔ real duplicate IDs, ID drift, and changed nested fields are rejected (70.430125ms)\n✔ list exposes the exact pinned IDs with useful record descriptors (96.024ms)\n✔ legacy seed: forbidden-font (27.943666ms)\n✔ legacy seed: purple-blue-gradient (27.309208ms)\n✔ legacy seed: gray-text-on-color-bg (24.082833ms)\n✔ legacy seed: side-border-decor (22.947291ms)\n✔ legacy seed: bounce-elastic-easing (24.51025ms)\n✔ legacy seed: small-touch-target (24.86ms)\n✔ legacy seed: too-round-corners (24.913ms)\n✔ legacy seed: price-without-division (24.970666ms)\n✔ legacy seed: transition-all (23.692791ms)\n✔ legacy seed: blanket-will-change (23.673209ms)\n✔ legacy seed: ease-in-on-ui (23.081666ms)\n✔ legacy seed: animate-layout-prop (23.637209ms)\n✔ legacy seed: scale-from-zero (23.757541ms)\n✔ legacy seed: marketing-filler (24.412958ms)\n✔ legacy seed: offbrand-hex (23.951667ms)\n✔ legacy seed: offbrand-font (23.792084ms)\n✔ legacy seed: arbitrary-spacing (23.778208ms)\n✔ warning human output stays successful without claiming no findings (23.058ms)\n✔ clean human output and existing exclusions remain unchanged (23.727ms)\n✔ imported MASTER scope follows projects and tools path before active project (24.001667ms)\n✔ implicit registry keeps src preference and TSX-only discovery through real imported helper (23.712125ms)\n✔ JSON findings are deterministic and preserve exact explicit file spelling (46.956917ms)\n✔ registry coverage retains discovered root targets and deduplicates overlapping roots (24.043584ms)\n✔ unreadable registry produces JSON diagnostic instead of uncaught exception (24.845875ms)\n✔ explicit file keeps legacy non-UI extension support (21.833458ms)\n✔ mixed missing and ERROR target retains actual coverage with exit 1 precedence (23.627958ms)\n✔ directory symlink cycles are not traversed or treated as UI files (23.736708ms)\n✔ MASTER ambiguity diagnostics are structured warnings in JSON (48.466167ms)\n✔ unreadable directory is structured and does not abort mixed targets (23.117167ms)\n✔ invalid arguments are structured operational errors (54.760084ms)\n✔ unreadable file produces structured read-error and preserves other results (22.95775ms)\n✔ zero registry targets never claim clean (46.491958ms)\n✔ empty explicit directory is operational failure even alongside valid target (24.049292ms)\n✔ explicit directory recurses through TSX JSX HTML CSS and deduplicates overlaps (23.504ms)\n✔ JSON v1 reports findings, exact paths and coverage without human stdout (23.342375ms)\n✔ ERROR findings exit 2 and keep human output (25.688708ms)\n✔ missing target exits 1 instead of false clean (22.948625ms)\n✔ motion pilot refuses ambient Node types outside its explicit dependency prefix (41.362125ms)\nℹ tests 52\nℹ suites 0\nℹ pass 52\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 5240.564208",
+          "exit_code": 0,
+          "error": null
+        },
+        "motion": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell node .codex/scripts/test-motion-template.mjs --integration",
+          "output": "PASS createDraggable export contract\nPASS strict TypeScript against real animejs declarations {\n  animejs: '4.5.0',\n  typescript: '5.9.3',\n  esbuild: '0.28.2',\n  'playwright-core': '1.65.1'\n}\nPASS real-engine SSR import / guarded creation / subscription\nPASS real headless temporal pilot; normal/reduced/dynamic/interrupt/repeat/destroy {\n  work: '/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-A6KRS4',\n  bundles: {\n    before: { bytes: 53304, gzip: 20541 },\n    after: { bytes: 76780, gzip: 27077 }\n  }\n}\nReceipt: /Users/germanbryzgalov/.hermes/cache/scratch/motion-run-A6KRS4/receipt.json",
+          "exit_code": 0,
+          "error": null
+        },
+        "selftest": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell /Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 .codex/scripts/selftest.py",
+          "output": "WARNING: Source files changed; review and sync: .claude/commands/feature.md\nPASS: 45 original roles + codex-docs; 22 skills; 5 lifecycle events; 3 MCP configs\nPASS: 90 source mappings, source freshness reviewed, native prompt sync, TOML/JSON and script syntax",
+          "exit_code": 0,
+          "error": null
+        },
+        "role-sync": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell /Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 .codex/scripts/sync-roles.py",
+          "output": "Drift: none",
+          "exit_code": 0,
+          "error": null
+        }
+      },
+      "remote_verified": {
+        "commit": "ee24dc5645817290b9aa5da7756453e970f5a98c",
+        "tree": "8d6493d853e21ee6e44a1172781fca5eb95afde9",
+        "url": "https://github.com/1Herman1/Friday-claude/commit/ee24dc5645817290b9aa5da7756453e970f5a98c"
+      }
+    },
+    {
+      "stage": "stage05",
+      "base": "ee24dc5645817290b9aa5da7756453e970f5a98c",
+      "tree": "b0bd85b1e496d02425174d94916efad8368a2240",
+      "commit": "82a1d6847365adb3ecb9dfaeec3b0c7fb6e96fa9",
+      "blobs": {
+        ".codex/CODEX.md": {
+          "mode": "100644",
+          "blob": "cf78661be5b0b81284751b8bb775c128fc751392",
+          "sha256": "9fa207590e9c821d12397df498d78a5ff00ff5be3c689921b7420562ee41e8a0"
+        },
+        ".codex/agents/design/taste-curator.md": {
+          "mode": "100644",
+          "blob": "3156698120b91b00e62d0847623088e973d52958",
+          "sha256": "4aa252f3fb3f6c66c82fe45bfb75eff85df612251590cbf45df15c5452a52ca8"
+        },
+        ".codex/agents/taste-curator.toml": {
+          "mode": "100644",
+          "blob": "f80575d0ea4d3cb660f6cfd28e90ac2d9ae3499c",
+          "sha256": "09771984bc2aaa83f21eff7f5be75908b6b5c7d32fc6dfd3891feb10a9541369"
+        },
+        ".codex/commands/design-system.md": {
+          "mode": "100644",
+          "blob": "e8bd1800a7c1f3710463def176db0b615ed4d105",
+          "sha256": "b49078f8e19f8d5533f884f073b68b11dbe2cc0b5bb53ac309fb2fcd133d6bbb"
+        },
+        ".codex/skills/design-system/SKILL.md": {
+          "mode": "100644",
+          "blob": "cefd1cc6db7d18f2907d67e90635355711097fa0",
+          "sha256": "f7b89f208184dc37291f6643364e4a959affb868d44f3f0ccada142648f59424"
+        },
+        ".codex/scripts/design-lint.mjs": {
+          "mode": "100644",
+          "blob": "9a1e675813183e3cecf0df3077c2116e37d2241d",
+          "sha256": "b7a9dfc9fbc8e47e4c7f2f672b8942d8978ebf92e3fab44529498b9f8d5177f6"
+        },
+        ".codex/scripts/test-design-lint.mjs": {
+          "mode": "100644",
+          "blob": "8e46efe488fdf63f6561c3f536bd83fa6d9d755f",
+          "sha256": "d45b50a7b728d4c1794f725c72b688e72b5c791acfcda998232444858b81b05e"
+        },
+        ".codex/scripts/test_design_surface.py": {
+          "mode": "100644",
+          "blob": "f847357f91463a12f449d757f187f9f5d28b7b54",
+          "sha256": "e64f0c69f0f71a83721d5dd9cba357c71fd9ff5a3d1f25469546481e658a2f4a"
+        },
+        ".codex/scripts/test_surface_routing.py": {
+          "mode": "100644",
+          "blob": "fbed0bf6b4781cc335ac4ad97b377e6d93f9e4b3",
+          "sha256": "2ab46e36a3218603d712235b873aa2357af5b072afa91f0f07d41d905f95ae63"
+        },
+        "docs/core/design-surface-workflow.md": {
+          "mode": "100644",
+          "blob": "d7227fd002efe6cda8ca1e3e23fefce43a448d7e",
+          "sha256": "6e391aaeb4ee07e141025558cb301bf6749f150663542bfd9929a836cca4ee2e"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-05-independent-review.md": {
+          "mode": "100644",
+          "blob": "bbc6cfa381b706330d49d4d656505c91f7154d81",
+          "sha256": "c141e23192fa19d8470c0d6f7f12998a389450525a4c460b0b421f102a774936"
+        },
+        "docs/research/design-agent-upgrade/rollout/stage-05-surface-policy.md": {
+          "mode": "100644",
+          "blob": "3c540be8ed3dd6473b71e1730c11aaab29d46994",
+          "sha256": "4a7c577fcd71b2ef8e4d67ef6017768267d21c7df098b887668743e9b1d81e07"
+        }
+      },
+      "checks": {
+        "python": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell /Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 -m unittest discover -s .codex/scripts -p 'test_*.py'",
+          "output": "............................................................\n----------------------------------------------------------------------\nRan 60 tests in 12.015s\n\nOK",
+          "exit_code": 0,
+          "error": null
+        },
+        "node": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell node --test .codex/scripts/test-design-lint.mjs .codex/scripts/test-design-library.mjs .codex/scripts/test-motion-dependency-isolation.mjs",
+          "output": "✔ summary reports all pinned family counts (32.400542ms)\n✔ manifest pins every raw byte, source path, ID and full MIT notice (1.357459ms)\n✔ get retrieves every complete record without adding or dropping source fields (3422.351417ms)\n✔ unknown and traversal families and IDs fail with JSON diagnostics (445.67175ms)\n✔ arguments require explicit summary/list/get with exact arity; no random fallback (200.707167ms)\n✔ missing and unreadable-as-file data produce JSON READ_ERROR (48.993291ms)\n✔ malformed JSON produces a machine-readable PARSE_ERROR (25.093542ms)\n✔ wrong roots, collections, record fields and duplicate IDs produce SCHEMA_ERROR (485.410625ms)\n✔ lookup rejects changed complete records or bytes against provenance hashes (96.585458ms)\n✔ manifest errors fail closed without accepting path traversal or unpinned sources (276.683208ms)\n✔ INDEX enumerates every ID and links to an exact complete record in four counted sections (4.762625ms)\n✔ CLI runs with filesystem writes and child processes forbidden, independent of cwd (147.665834ms)\n✔ real duplicate IDs, ID drift, and changed nested fields are rejected (73.862875ms)\n✔ list exposes the exact pinned IDs with useful record descriptors (90.542791ms)\n✔ legacy seed: forbidden-font (31.006791ms)\n✔ legacy seed: purple-blue-gradient (28.457833ms)\n✔ legacy seed: gray-text-on-color-bg (24.536458ms)\n✔ legacy seed: side-border-decor (23.280209ms)\n✔ legacy seed: bounce-elastic-easing (24.15725ms)\n✔ legacy seed: small-touch-target (24.123167ms)\n✔ legacy seed: too-round-corners (24.608791ms)\n✔ legacy seed: price-without-division (23.89125ms)\n✔ legacy seed: transition-all (24.493791ms)\n✔ legacy seed: blanket-will-change (23.60375ms)\n✔ legacy seed: ease-in-on-ui (24.604041ms)\n✔ legacy seed: animate-layout-prop (23.84ms)\n✔ legacy seed: scale-from-zero (24.632084ms)\n✔ legacy seed: marketing-filler (25.337833ms)\n✔ legacy seed: offbrand-hex (24.438791ms)\n✔ legacy seed: offbrand-font (24.111875ms)\n✔ legacy seed: arbitrary-spacing (24.388916ms)\n✔ target MASTER approved body font and fallback do not trigger forbidden-font (24.675667ms)\n✔ unapproved brand fonts stay ERROR without borrowing another MASTER (49.142ms)\n✔ font approval is exact and does not excuse a second unapproved font (116.380667ms)\n✔ font names outside parsed fontFamily do not grant approval (24.532375ms)\n✔ target without MASTER cannot borrow active project's approved font (25.956792ms)\n✔ warning human output stays successful without claiming no findings (24.108083ms)\n✔ clean human output and existing exclusions remain unchanged (24.2455ms)\n✔ imported MASTER scope follows projects and tools path before active project (24.897042ms)\n✔ implicit registry keeps src preference and TSX-only discovery through real imported helper (23.960917ms)\n✔ JSON findings are deterministic and preserve exact explicit file spelling (47.3705ms)\n✔ registry coverage retains discovered root targets and deduplicates overlapping roots (23.932958ms)\n✔ unreadable registry produces JSON diagnostic instead of uncaught exception (23.493833ms)\n✔ explicit file keeps legacy non-UI extension support (25.027292ms)\n✔ mixed missing and ERROR target retains actual coverage with exit 1 precedence (24.126875ms)\n✔ directory symlink cycles are not traversed or treated as UI files (25.92825ms)\n✔ MASTER ambiguity diagnostics are structured warnings in JSON (49.375333ms)\n✔ unreadable directory is structured and does not abort mixed targets (25.358458ms)\n✔ invalid arguments are structured operational errors (49.236167ms)\n✔ unreadable file produces structured read-error and preserves other results (23.463625ms)\n✔ zero registry targets never claim clean (45.3975ms)\n✔ empty explicit directory is operational failure even alongside valid target (28.616334ms)\n✔ explicit directory recurses through TSX JSX HTML CSS and deduplicates overlaps (24.914625ms)\n✔ JSON v1 reports findings, exact paths and coverage without human stdout (23.416833ms)\n✔ ERROR findings exit 2 and keep human output (24.421042ms)\n✔ missing target exits 1 instead of false clean (24.192041ms)\n✔ motion pilot refuses ambient Node types outside its explicit dependency prefix (41.006666ms)\nℹ tests 57\nℹ suites 0\nℹ pass 57\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 5392.560541",
+          "exit_code": 0,
+          "error": null
+        },
+        "motion": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell node .codex/scripts/test-motion-template.mjs --integration",
+          "output": "PASS createDraggable export contract\nPASS strict TypeScript against real animejs declarations {\n  animejs: '4.5.0',\n  typescript: '5.9.3',\n  esbuild: '0.28.2',\n  'playwright-core': '1.65.1'\n}\nPASS real-engine SSR import / guarded creation / subscription\nPASS real headless temporal pilot; normal/reduced/dynamic/interrupt/repeat/destroy {\n  work: '/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-Psp352',\n  bundles: {\n    before: { bytes: 53304, gzip: 20541 },\n    after: { bytes: 76780, gzip: 27077 }\n  }\n}\nReceipt: /Users/germanbryzgalov/.hermes/cache/scratch/motion-run-Psp352/receipt.json",
+          "exit_code": 0,
+          "error": null
+        },
+        "selftest": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell /Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 .codex/scripts/selftest.py",
+          "output": "WARNING: Source files changed; review and sync: .claude/commands/feature.md\nPASS: 45 original roles + codex-docs; 22 skills; 5 lifecycle events; 3 MCP configs\nPASS: 90 source mappings, source freshness reviewed, native prompt sync, TOML/JSON and script syntax",
+          "exit_code": 0,
+          "error": null
+        },
+        "role-sync": {
+          "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/Users/germanbryzgalov/.hermes/cache/scratch MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell /Users/germanbryzgalov/.hermes/tools/python-3.14.9+20261021-darwin-arm64/bin/python3 .codex/scripts/sync-roles.py",
+          "output": "Drift: none",
+          "exit_code": 0,
+          "error": null
+        }
+      },
+      "remote_verified": {
+        "commit": "82a1d6847365adb3ecb9dfaeec3b0c7fb6e96fa9",
+        "tree": "b0bd85b1e496d02425174d94916efad8368a2240",
+        "url": "https://github.com/1Herman1/Friday-claude/commit/82a1d6847365adb3ecb9dfaeec3b0c7fb6e96fa9"
+      }
+    }
+  ],
+  "remote_actions_runs": {
+    "f4c6a8ab8c77379214f8b8756f060f3b5634ab65": 0,
+    "e2d59981c2dad3821d4b9c83eba7fc21162481fd": 0,
+    "ee24dc5645817290b9aa5da7756453e970f5a98c": 0,
+    "82a1d6847365adb3ecb9dfaeec3b0c7fb6e96fa9": 0
+  },
+  "preexisting_warning": ".claude/commands/feature.md source freshness; manifest not rewritten",
+  "working_python_receipt": "parent-isolated-working-python.json",
+  "clean_full_python": 60,
+  "clean_full_node": 57,
+  "working_full_python": 79,
+  "external_pilots": "not performed; access/target/license/owner gates remain"
+}

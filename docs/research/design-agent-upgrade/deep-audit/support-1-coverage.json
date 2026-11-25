@@ -1,0 +1,941 @@
+{
+  "scope": "support-1.json",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "complete": true,
+  "files": [
+    {
+      "repo": "impeccable",
+      "path": "crates/live/assets/detect-antipatterns-browser.js",
+      "sha256": "24bacb4d6dafe816ae025b4dba5ca9a68a7d695ccaac48ee4878f28ac925f7c5",
+      "total_lines": 4677,
+      "status": "classified",
+      "ranges": [
+        [
+          1,
+          35
+        ]
+      ],
+      "substantive_note": "Generated cargo xtask bundle output, NOT handwritten implementation. Exact normalized-LF assembly prefix/suffix and all nine browser-bundle source parts compared; embedded WASM decoded only as data: 2292003 bytes, valid wasm v1 header, declared size matches. Glue/WASM not recompiled or executed; source-to-binary reproducibility unproven. See generated_evidence.",
+      "classified_ranges": [
+        [
+          1,
+          4677
+        ]
+      ],
+      "artifact_kind": "generated-bundle"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/context/assets/component-review.js",
+      "sha256": "1b608a41dc4d4b23dbab273a5a23e432ac772834974ea7191aedfb2d7b16c5aa",
+      "total_lines": 1633,
+      "status": "classified",
+      "ranges": [
+        [
+          2,
+          35
+        ]
+      ],
+      "substantive_note": "Generated Bun 1.4.4 browser IIFE from ui/component-review/entry.ts via scripts/build-component-review.mjs. Full source theme.css and all three vendored stylesheet values match embedded bundle (kit backticks escaped). Model/packet/decision and failure strings traced; minified JS not manually semantically re-read; no rebuild, runtime or byte-for-byte compiler reproducibility claim.",
+      "classified_ranges": [
+        [
+          1,
+          1633
+        ]
+      ],
+      "artifact_kind": "generated-bundle"
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/vendor/kinpaku-kit.css",
+      "sha256": "3f559c14e34d736a9b4eab6bb6e423b15c576e73e54e75c2f459f10b610b1005",
+      "total_lines": 728,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          728
+        ]
+      ],
+      "substantive_note": "Full readable vendored CSS, source private impeccable-site via sync-kinpaku-kit.mjs selector sections; buttons/tabs/forms/switches/instrument-strip/grain/thumb/coarse-pointer sizing. Ink primary vs extension gold primary is intentional surface distinction, not universal token. Reduced motion guard covers arrow only locally; no blanket motion claim.",
+      "artifact_kind": "vendored-readable-css"
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/comp-fidelity-review-2026-08-17.json",
+      "sha256": "5ec5c6cf0ea20e6152178f9c148a311fad0110bfaa3163111846c02c4452ce01",
+      "total_lines": 580,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          580
+        ]
+      ],
+      "substantive_note": "Full handwritten human annotations: all sample IDs, verdicts, notes and pins read. Parsed 42 samples: 30 fail, 8 unsure, 4 pass; 325 pins. Contradicts COMP-FIDELITY heading 32 builds/230 pins and its verdict distribution. Fidelity comments explicitly distinguish arguably useful changes from approved reproduction.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/walks/panel/panel.css",
+      "sha256": "ea432b461a3e625a4de7afdee19bbea3ccc753ff2608e0226cdd8364926da5ac",
+      "total_lines": 416,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          416
+        ]
+      ],
+      "substantive_note": "Full authored side-panel CSS: persona face-sheet crops; task textarea/scroll fades; device/disability choice; plan/risk/held states; walking history/current-step stable columns; account/modal/onboarding; voice waveform; reduced-motion global rule. Local bundled fonts and independent tokens, not shared stylesheet alias.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/live/assets/antipatterns.json",
+      "sha256": "ea61e3bb0ba5be71ddefa3ae25f67209cadb737031258f8c5eec5bcd99cba199",
+      "total_lines": 392,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          392
+        ]
+      ],
+      "substantive_note": "Full readable GENERATED registry metadata: 62 unique rows, 31 slop/31 quality, 16 advisory/2 explicit error/44 default. id/name/category/description strings all match foundation registry source. Descriptions are design policy, not proof all engine paths execute every rule.",
+      "artifact_kind": "generated-readable-registry"
+    },
+    {
+      "repo": "impeccable",
+      "path": ".impeccable/design.json",
+      "sha256": "cac3fd75b55f9a069b4af5d423dd4df04e78e1bd1abf43b3b38fcd0aa6142770",
+      "total_lines": 347,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          347
+        ]
+      ],
+      "substantive_note": "Full schemaVersion 2 reference sidecar: authored narrative/roles/tonal ramps, 6 HTML/CSS component examples, shadows/motion/rounded metadata; generatedAt not proof of generator. Neutral paper/ink, gold jewelry, patina readable states; 11px functional floor conflicts with 9px tag examples; named spacing/button/shadow exceptions retained explicitly.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/ENGINE.md",
+      "sha256": "0018dfe86a41b126e81cfada68a165eaf42e912f11fe401a7d6783d56daf5aa1",
+      "total_lines": 311,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          311
+        ]
+      ],
+      "substantive_note": "Full runtime map, shared registry/rule-pack hooks, native/WASM/extension split, build/release signing order. Browser artifact generation traced to source without execution. Offline/no-build-download claim needs preprovisioned dependencies/toolchain, and no-Node-runtime wording is not universal for framework adapters.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/COMP-FIDELITY.md",
+      "sha256": "0d9462d1d6afdc550396a7f2e693db248dc3006633755a6db0b608e1ba42ebca",
+      "total_lines": 301,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          301
+        ]
+      ],
+      "substantive_note": "Full 10-sweep historical evaluation and evolving gates: comp regions, plates, text measurements, state machine, forced phases/escape hatches, advisory-vs-veto decision. Current native Rust paths differ from historical .mjs owner paths. Scores are upstream reports not reproduced evidence; numeric pass not complete phase traversal or owner acceptance.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/adr-live-variant-mode.md",
+      "sha256": "cafe097c55097d6544abcee2b43ac94fb75295528482955d5129c5834faadffa",
+      "total_lines": 261,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          261
+        ]
+      ],
+      "substantive_note": "Full historical Implemented ADR: actual source/HMR vs DOM patching, SSE/poll, wrappers, fallback, token/localStorage, cleanup/security and old test counts. Pure-Node/script paths stale after Rust migration. Goal source writes differs from preview-module acceptance implementation; never use ADR as current runtime verification.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/RUNTIME-ENV.md",
+      "sha256": "329e09992b69fdb26d00cdfe4ba39804d71ac6c74563a46ce69cad5c7369b54b",
+      "total_lines": 234,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          234
+        ]
+      ],
+      "substantive_note": "Full environment/auth/health/Pro contract, storage ownership/locks/tombstones/lease floors/threat model. Stale launcher-not-exported statement contradicted by launcher. Health hashes-only summary omits label/place and DESIGN sync; renewal says 2 days vs code 86400 seconds. Actual sign-in/upload not invoked.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/shared/kinpaku.css",
+      "sha256": "eefd6d3c345b9c79bc76929e11c8ab3620d1a7efd5e79311dda1436a9892ee64",
+      "total_lines": 217,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          217
+        ]
+      ],
+      "substantive_note": "Full authored shared extension tokens: paper light theme even dark DevTools, system stand-ins, contrast roles, dense type, tag and focus seam. Header blanket font limitation stale relative to bundled @font-face in popup/panel; 9px tags below declared functional11px floor.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp-verbs/src/region-map.schema.json",
+      "sha256": "0e479e9a5978ecd87b7874fb7e41037cb81730bf21609e9da25ae5763d8248f7",
+      "total_lines": 195,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          195
+        ]
+      ],
+      "substantive_note": "Full draft2020-12 authored region-map contract: required id/kind/note, six kinds; exactly one pixelBox/box/grid; bounds positive, reviewGroup peer semantics, parent/container/codeDrawn/bleed/snap and draft:false. Uniqueness, enclosing relationships and sum-of-coordinates limits are prose/runtime responsibilities, not enforced by JSON Schema alone.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": ".gitignore",
+      "sha256": "8f3e4a64fb1aaaecb9a97cae8398c01b46f5f957886165590d0739eaa77b613c",
+      "total_lines": 145,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          145
+        ]
+      ],
+      "substantive_note": "Full split of trackable context/design/config vs ephemeral live/recovery/cache state; generated detector directories/binaries ignored, fixture dist exceptions; provider output intentionally tracked. Does not establish actual artifact absence or untrack old files.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/STORE_LISTING.md",
+      "sha256": "a2051ddc79b308e8df7a877f57b0355b2655ac9127f0f058ed5dccc18a72d45d",
+      "total_lines": 119,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          119
+        ]
+      ],
+      "substantive_note": "Full DRAFT store copy: 62 current rules, historical v1.4 notes61, local scan vs network journey distinction; store package differs from unpacked account/check-in/speech/current-tab build. Remote scripts/helper migration and secret-field masking explicitly bounded. Not verified against published/store ZIP.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/BUNDLE-SIGNING.md",
+      "sha256": "f828b9eef6e68a6e961de98369300cba5fb4b9d4f13bb535a67757f42e66e0e1",
+      "total_lines": 117,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          117
+        ]
+      ],
+      "substantive_note": "Full Ed25519 signature-first contract: version/artifact/digest/size/key binding, pinned public keys, signer op pipeline and failure cleanup, rotation/replay limitations, explicit unsigned-local trust paths. dry-run no credential proof; no network fallback. Public signing key read, no secrets.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "scripts/token-budget.json",
+      "sha256": "ded54c178ee73acddc7b4ddb9908d0e722e4d74f366db1b757ca891e262acb10",
+      "total_lines": 103,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          103
+        ]
+      ],
+      "substantive_note": "Full authored byte caps: individual LLM references/agent bodies, five loading scenarios, CLI context/hook output caps. Bytes not tokenizer tokens; scenario limits do not prove actual routing/read trace. Useful bounded-context delta vs unbounded Friday documentation.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/devtools/sidebar.css",
+      "sha256": "da7ca5af0a6fbf06687545252d369f70d91f4745a581acf202e1928091e96593",
+      "total_lines": 94,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          94
+        ]
+      ],
+      "substantive_note": "Full selected-element findings UI: gold AI tell tag vs neutral quality chip, patina-deep detail text, narrow pane, finding dividers and empty states; 9px kind chip inconsistent with stated functional floor.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/fonts/albertsans-OFL.txt",
+      "sha256": "7dc41c3007a04ff8521f61ee264d0639018824242273500493f724a3e8ee1c45",
+      "total_lines": 93,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "substantive_note": "Full SIL OFL1.1 including Albert Sans copyright2021: bundle/embed allowed with notice/license; no standalone font sale; RFN restriction on modified names if reserved; no endorsement; derivatives stay OFL; documents not infected. Read directly, not alias to unread canonical.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/fonts/jetbrainsmono-OFL.txt",
+      "sha256": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d",
+      "total_lines": 93,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ],
+      "substantive_note": "Full JetBrains Mono copyright2020 and SIL OFL1.1 conditions, termination and warranty disclaimer. Same legal body does not mean byte alias: distinct attribution/format and SHA retained.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/popup/popup.css",
+      "sha256": "7a617f884591e81d54be08b4db1598e7ea0988510b60e9b5ac66a0ec60cd44d2",
+      "total_lines": 80,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "substantive_note": "Full authored fixed-layout popup, bundled variable fonts, 104px count/tabular numerals, reserved error height, 40px controls, gold primary; stable space design useful but no runtime layout/CLS proof.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/devtools/panel.html",
+      "sha256": "56721d94076d7dc4f21bf2e96e4672af072580952cef4006795aa45ea1c48434",
+      "total_lines": 73,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          73
+        ]
+      ],
+      "substantive_note": "Full toolbar/settings/findings skeleton; copy/rescan/toggle/settings title-named buttons, auto-scan/line-length segmented choices; blur checkbox lacks associated programmatic label in markup. Includes shared findings-report and panel scripts; no execution.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": ".gitattributes",
+      "sha256": "1c12672978c1292daeecc459b6dcb62f525cd5c29701f6b0746fc3ab7d796d50",
+      "total_lines": 70,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          70
+        ]
+      ],
+      "substantive_note": "Full checkout policy: cmd CRLF, sh/launchers LF, fixture/oracle no text conversion, review embed LF; large WASM/goldens -diff, tracked provider roots linguist-generated. Hidden diffs remain reviewable; attributes not semantic exemption.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/vendor/docs-rail.css",
+      "sha256": "b657c01b7b8093445f5f3bbccc799082a4b98bdfb3b7848603d61883690eb0ec",
+      "total_lines": 50,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          50
+        ]
+      ],
+      "substantive_note": "Full vendored selected-row pattern from private site docs CSS: bold group headings, muted links, aria-current ink/gold left border. Selection/navigation border is distinct from ornamental side-tab anti-pattern; generator slice traced.",
+      "artifact_kind": "vendored-readable-css"
+    },
+    {
+      "repo": "impeccable",
+      "path": "docs/NATIVE-CAPTURE.md",
+      "sha256": "cd838af2800b8d1e543f7bb28e86c02b6593067e955a74b141ce2b483143e49e",
+      "total_lines": 45,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "substantive_note": "Full native frozen capture/provenance contract: private host capability/process checks, source+asset hashes, immutable snapshots/current final review, no comp self-display, assembled vs raster receipts/coverage, software raster restoration, pseudo backgrounds, explicit unsupporteds/crop markers. Protocol evidence not owner visual/legal acceptance.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/popup/popup.html",
+      "sha256": "bc89a8f7403ed89dcdf77830dc4e4ec3f880488b981a9ce36a97314421cac868",
+      "total_lines": 40,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          40
+        ]
+      ],
+      "substantive_note": "Full popup accessible text+hidden icons, initial disabled copy/overlay, scan trigger, polite error status reserved area; initial0 is markup not verified completed scan. No Pro footer despite old CSS comment.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "sha256": "10ce57d1c16f584bbb9c5b687a37341119bbcf7430a11a1f778512a5f11bfcdc",
+      "total_lines": 37,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          37
+        ]
+      ],
+      "substantive_note": "Full issue-first feature template, design problem/solution/provider/alternatives/approval fields; provider list partial but no runtime registration claim.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "sha256": "d57f0d10e92ae3a1f64fc96137f212c5155e9dd7a83a3d62aec52bd4ce67d751",
+      "total_lines": 35,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          35
+        ]
+      ],
+      "substantive_note": "Full reproduction/expected/environment/context template and contributor approval note; no actual tests/bug validation.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/elements.jsx",
+      "sha256": "430344bdf6ae2b975df3ccb0155eb7a8725d093835bb8df68984c8c93e15f1b3",
+      "total_lines": 33,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          33
+        ]
+      ],
+      "substantive_note": "Full intentionally non-standalone fixture: distinguish JSX img nodes from strings/template/regex/comments, division, nested attrs, missing/placeholder/dynamic/spread/srcSet and multiline tags; not a runnable application.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "sha256": "d8c216d74d10d1d71dc621eac083b4d2566ac74bc153bab281379c81e4f64e7d",
+      "total_lines": 32,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          32
+        ]
+      ],
+      "substantive_note": "Full issue-first/AI-disclosure/manual-review checklist. Source-files-in-source/ path stale: real authoring skill/crates; preapproved mvanhorn exception in root AGENTS not reflected in this template.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "vscode/README.md",
+      "sha256": "445370c1472c4e7579322110531c0b943b983fb906c4ff3eb64736d1a9593894",
+      "total_lines": 27,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          27
+        ]
+      ],
+      "substantive_note": "Full skill-only marketplace contract: trusted host/VSCode1.109.3, no extension runtime/automatic hooks/telemetry code; launcher may fetch engine, requested verbs side effects, inline role fallback, duplicate name warning and untested remote hosts. No-telemetry-code is not no-engine-network claim.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "cli/platform-packages/darwin-arm64/package.json",
+      "sha256": "e4ed18d3b0bc5c3ac3ef31698d689c8e846a49c58841cc8cef94a032310ebbd2",
+      "total_lines": 17,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          17
+        ]
+      ],
+      "substantive_note": "Full release template not published-version receipt: optional macOS arm64 binary package version0.0.0-engine, bin/ and LICENSE only, SEE LICENSE; target-specific identity differs from other manifests.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "cli/platform-packages/darwin-x64/package.json",
+      "sha256": "7fba84591b3f9760b72035fae754752c6a106fba0972829e82e8d6a9379d4c23",
+      "total_lines": 17,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          17
+        ]
+      ],
+      "substantive_note": "Full macOS x64 optional binary template; target-specific os/cpu/bin/name, placeholder version patched on publish. Not alias by filename similarity.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "cli/platform-packages/linux-x64/package.json",
+      "sha256": "7effb1e8b8fcc67b3e144e7d3349aade073bbb1aede89afbeec36ad0d90d21cc",
+      "total_lines": 17,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          17
+        ]
+      ],
+      "substantive_note": "Full Linux x64 optional binary template; explicit os/cpu/bin/files/license, placeholder version not evidence npm pin mismatch at runtime.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/children-text.tsx",
+      "sha256": "98e19c2bd09923f5d4c7e7bc06380d9ef261606ca14a148de542d8de68e133e4",
+      "total_lines": 16,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          16
+        ]
+      ],
+      "substantive_note": "Full parser false-positive/false-negative fixture: apostrophes, URL/quotes in JSX text, comparison less-than, map callback/comment and nested JSX missing img src; no execution.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/shorthand.svelte",
+      "sha256": "3cd360566a4122e78bf327812cf5debd35ce573542eaff417763a23d265c35e3",
+      "total_lines": 15,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          15
+        ]
+      ],
+      "substantive_note": "Full 15 cases: shorthand src/srcset/spread/bind, explicit placeholder, quoted fake syntax, backslash attr and multiline empty src. Dynamic image bindings not declared broken by absence of literal src.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "demos/landing-demo/package.json",
+      "sha256": "c1759238d4319ea1a501865e0fea1132a82288fc6e2854e4a6b8f5738ce9d215",
+      "total_lines": 14,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          14
+        ]
+      ],
+      "substantive_note": "Full private ESM Vite8 demo manifest, dev/build/preview scripts only, no framework production/deployment contract.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/bindings.vue",
+      "sha256": "a66e639f0f74e3ae4062720554ea1d4b88f80f041f8ed7fe83e9bcf94c9a46c0",
+      "total_lines": 13,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          13
+        ]
+      ],
+      "substantive_note": "Full Vue binding/spread/srcset/modifier/empty/literal decoy/multiline cases; parser behavior design differs from naive regex over raw source.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/walks/mic/mic.html",
+      "sha256": "e96c942300ec8c1a69947b4669d4227b4cc3128746934ac8668676fb77d7363c",
+      "total_lines": 13,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          13
+        ]
+      ],
+      "substantive_note": "Full standalone mic page metadata/viewport/title, side-panel stylesheet and module entry; empty app mount and asking-state are not proof speech availability.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/loop-checksums.txt",
+      "sha256": "374f971183fab1da5d2739ff5c32b89d8c1ae21b7f3376e7fda51fb8fbf288e2",
+      "total_lines": 10,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          10
+        ]
+      ],
+      "substantive_note": "Full generated release pin table seven SHA256 ZIP records for0.1.0-0.2.2 with recorder command, embedded in engine; manifests are pins not verified remote downloads/signatures.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": ".github/CODEOWNERS",
+      "sha256": "fd9272bc61ed1e6f19b9f4e55a691e55ac7407b3c8ef576864b1a44584036423",
+      "total_lines": 8,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          8
+        ]
+      ],
+      "substantive_note": "Full global/scripts/source ownership; source/ special row stale, global wildcard still owns actual skill/crates so not proof ownerless files.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/icons/icon.svg",
+      "sha256": "3db5a8aa6120a2d72930c05ee3213dc2127ce81d24acd8bb8d9a109d07f908dc",
+      "total_lines": 7,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          7
+        ]
+      ],
+      "substantive_note": "Full text SVG source: dark rounded tile/gold two-path slash, not rendered in audit; deliberately distinct from ink on paper UI glyph.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "vscode/.vscodeignore",
+      "sha256": "c66888c0fdcafbb2b9ec057b4c9161ed4026f41bd4a3beac385549ede04681f4",
+      "total_lines": 6,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          6
+        ]
+      ],
+      "substantive_note": "Full allowlist packaging: exclude all, allow package/README/LICENSE/icon/skills only; hook/agent runtime outside payload not installed by this package.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/shorthand.astro",
+      "sha256": "16b5766f88e968875de264ca1ec790af3c426172ca8ebc3237d32729b9e45044",
+      "total_lines": 5,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          5
+        ]
+      ],
+      "substantive_note": "Full Astro shorthand/spread/quoted-decoy/literal real image cases; static fixture not application.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/tooltip-multiline.svelte",
+      "sha256": "f2f923120d41b64fcdc9cb0d62a5be57fdf22ddaaf18fce2a9dd3d099b8ab03f",
+      "total_lines": 4,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          4
+        ]
+      ],
+      "substantive_note": "Full multiline quoted tooltip containing fake img markup: must not be mistaken for actual missing image.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "skills-lock.json",
+      "sha256": "6d57406a7c5268c5c99442d2874449bd59ca8bbdec340ead8d6e7e5605b657d2",
+      "total_lines": 4,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          4
+        ]
+      ],
+      "substantive_note": "Full empty version1 skills object; no locked third-party skill provenance can be inferred.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "scripts/bundle-signing-keys.json",
+      "sha256": "97b15cb3676b4bdfb3a6a006572ca7396224433d5bbe603c314a6b9f4b8bc98e",
+      "total_lines": 3,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "substantive_note": "Full nonsecret production PUBLIC Ed25519 keyring, one release-2026-09 32-byte hex key. Not proof release signature exists or key securely controlled.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/block-close.svelte",
+      "sha256": "9584664d5434d709c454c066321abb8989d3c529f0a629846eee4d6638c8c614",
+      "total_lines": 2,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          2
+        ]
+      ],
+      "substantive_note": "Full Svelte script/control-block-close plus following missing-src img and division expression; regression fixture for lexical resumption.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": ".bun-version",
+      "sha256": "d03d8b268b4171328ac2458ce8ca82d69a1fde38469d4e4faae4f8fa8d8a5e35",
+      "total_lines": 1,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "substantive_note": "Full exact build pin1.4.4 used by build-component-review strict version check; no Bun installed or invoked.",
+      "artifact_kind": "readable-source-or-document"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/tests/fixtures/broken-image/tooltip-same-line.svelte",
+      "sha256": "2778efb9a1cd8729270597d379e88be424be6bd77b196cb21029f7a442888eae",
+      "total_lines": 1,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1
+        ]
+      ],
+      "substantive_note": "Full one-line quoted tooltip fake img: false-positive guard, not actual rendered image node.",
+      "artifact_kind": "readable-source-or-document"
+    }
+  ],
+  "completion_basis": "48 full semantic reads plus 2 explicitly classified generated bundles; no runtime claims",
+  "counts": {
+    "files": 50,
+    "total_lines": 11751,
+    "full_files": 48,
+    "full_lines": 5441,
+    "classified_files": 2,
+    "classified_lines": 6310
+  },
+  "generated_evidence": {
+    "detector_sources": [
+      {
+        "source": "browser-bundle/00-header.js",
+        "exact_present": true,
+        "position": 0,
+        "source_sha256": "583a177c24f71606cd6f043b306723d94f55136faa2bf8520fd2450a921de137"
+      },
+      {
+        "source": "browser-bundle/05-natives.js",
+        "exact_present": true,
+        "position": 411,
+        "source_sha256": "1248768de9a11fc9c101bce5af6afce871eb8663e8596e3035113004fe7bf3f5"
+      },
+      {
+        "source": "browser-bundle/10-probe.js",
+        "exact_present": true,
+        "position": 6731,
+        "source_sha256": "f555bc41fa6624457933e77bc5d1990558fe0400d2bffc582ea36b0600423417"
+      },
+      {
+        "source": "browser-bundle/15-snapshot.js",
+        "exact_present": true,
+        "position": 22203,
+        "source_sha256": "6814c9edea853dd6d78474be22dfdb4d338875cc932d037f6b3c0ff163ac422f"
+      },
+      {
+        "source": "browser-bundle/30-scan-common.js",
+        "exact_present": true,
+        "position": 3195037,
+        "source_sha256": "9746202b12cf8dd9c5a62be254cc0ef7a5331498e18a9a0cd017d998b67b7722"
+      },
+      {
+        "source": "browser-bundle/35-visual.js",
+        "exact_present": true,
+        "position": 3197695,
+        "source_sha256": "51a262e69e46aff6cb5dc7df93fb0c7c5784808bca5b2ce17fcee0f25867b87f"
+      },
+      {
+        "source": "browser-bundle/40-overlay.js",
+        "exact_present": true,
+        "position": 3208757,
+        "source_sha256": "ffe62eca8eeb402e15366a95ac82b9efa578394cd08b4212ae300276809b6fb1"
+      },
+      {
+        "source": "browser-bundle/50-scan.js",
+        "exact_present": true,
+        "position": 3233161,
+        "source_sha256": "a01eb232c7c7abc72907240867adb0f6106b56554d796ebf249614958f87dfb4"
+      },
+      {
+        "source": "browser-bundle/99-footer.js",
+        "exact_present": true,
+        "position": 6441,
+        "source_sha256": "49fac5a3039bbad287ac815d533cf3abd4b4217920cbe2c93bb34a6e30003142"
+      }
+    ],
+    "wasm": {
+      "bytes": 2292003,
+      "sha256": "129b16be3b9eb28cf720dc1fd82ac2b07fc93adee3b901d4b49b0ae0cb82c294",
+      "header": "0061736d01000000"
+    },
+    "review_corpus": {
+      "samples": 42,
+      "verdicts": {
+        "fail": 30,
+        "unsure": 8,
+        "pass": 4
+      },
+      "pins": 325
+    },
+    "review_bundle": {
+      "bytes": 183891,
+      "theme_exact_embed": true,
+      "vendor_tokens_exact_embed": true,
+      "vendor_rail_exact_embed": true,
+      "vendor_kit_template_escaped_exact_embed": true,
+      "rebuilt": false
+    },
+    "detector_assembly_prefix_suffix_exact": true
+  },
+  "limitations": [
+    "WASM/glue and minified JS classified, not manually fully read or rebuilt.",
+    "No upstream execution/import/install/tests/browser/network; no live-runtime conclusions.",
+    "Private site source, eval traces, releases and store ZIP not accessed."
+  ],
+  "verification": {
+    "assigned_paths": 50,
+    "hashes_match_assignment": 50,
+    "line_counts_match_assignment": 50,
+    "unique_paths": 50,
+    "full_files": 48,
+    "full_lines": 5441,
+    "classified_files": 2,
+    "classified_lines": 6310,
+    "upstream_executed": false,
+    "source_edits": false
+  },
+  "supplemental_sources": [
+    {
+      "repo": "impeccable",
+      "path": "AGENTS.md",
+      "sha256": "bb4e249e259a7e715935a24f08a4cfcc42d817e68cdc8f0adb3a8cf86785b7a8",
+      "total_lines": 115,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    },
+    {
+      "repo": "impeccable",
+      "path": "CLAUDE.md",
+      "sha256": "f1dc1c586136ca29cda6795f7da53eecd31dc4849b501dc7f6f9de7534f97504",
+      "total_lines": 400,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    },
+    {
+      "repo": "impeccable",
+      "path": "README.md",
+      "sha256": "8660d4dd9c2c4335fd52759411a68a07db13265df20c654083d868d86543e38e",
+      "total_lines": 254,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    },
+    {
+      "repo": "impeccable",
+      "path": "scripts/build-component-review.mjs",
+      "sha256": "70356160769f9875f7a3d892fe92161b83750790dcc6b621b60390afb5a07f28",
+      "total_lines": 10,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    },
+    {
+      "repo": "impeccable",
+      "path": "scripts/sync-kinpaku-kit.mjs",
+      "sha256": "759da85caf45cd332a1db9513efef7c80d0243df8e86c3935ae21b818aef45c0",
+      "total_lines": 33,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    },
+    {
+      "repo": "impeccable",
+      "path": "scripts/lib/kit-css-module.mjs",
+      "sha256": "4d48f5ffa971fb8c502ba71a5298c622ce3b7ec289ca6c7d0887df8c7c053596",
+      "total_lines": 11,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/bundle/src/lib.rs",
+      "sha256": "2c06cd53010e76abac810695ec4bc47728def31f24b1baf1ea730e09cc8ddf8c",
+      "total_lines": 472,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/xtask/src/main.rs",
+      "sha256": "e6890dd28b1b9cb1109e0bc96d6d0bde04e0794525bf663eb8a12b6f26103891",
+      "total_lines": 135,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    },
+    {
+      "repo": "impeccable",
+      "path": "ui/component-review/entry.ts",
+      "sha256": "b8f853038fdb2840ed2198d7beb5610a5d03dc28c545fb52cbd1dbfb75035d37",
+      "total_lines": 58,
+      "scope": "supporting provenance/claim comparison; not part of assigned counts"
+    }
+  ]
+}

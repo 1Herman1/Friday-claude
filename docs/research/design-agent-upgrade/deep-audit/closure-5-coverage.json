@@ -1,0 +1,1044 @@
+{
+  "assignment": "closure-5",
+  "mode": "static-only",
+  "entries": [
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/driver.rs",
+      "sha256": "7aee453078b5cde4280622fae9be911eb009893923dbb7fb0c6e3b67568f9977",
+      "total_lines": 5952,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          3200
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1601,
+          3200
+        ]
+      ],
+      "substantive_note": "Reconciliation computed/source gradient,bounce,glow,halo,marquee/stripe; painted root luminance .1 and faint wash alpha .1; content-aware marquee dedupe; serializer effective severity/advisory/vendor, stable selectors and fallback; normalized six-rule scoped values; scan excludes own overlays, mockups and category hues; page palette cyan+purple gate, low-contrast ownership. Range stops mid collect pipeline.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/quality.rs",
+      "sha256": "0fc45b0e139db895c29687875d02f19c5fba3c3c24430f16b25fe7da9be289fe",
+      "total_lines": 8274,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "DOM geometry helpers: focusable control <=80 UTF16 chars, button/furniture context, SVG scale viewBox; background boundary accounts white canvas, solid gradient segments, raster siblings and abutting fill; bounded traversal 4/6/200; glyph-band vs content metrics small chip <27.5px quarter-em; clipping .5px, visible line extents; rendered text whitespace/atomic-inline/combining mark model, own nested-list exclusion; flush edge evidence not declared padding.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/extension-walks.test.mjs",
+      "sha256": "b594101256b52a8e4b737ee227519c39ff63fffdf6f4a4ff414b7b099c33ea6e",
+      "total_lines": 2918,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "Static test intent for protocol2/subprotocol/capabilities, paired origin handoff/store restrictions, 8-site guard and cross-origin write refusal; speech pause/restart/stop/drop; secret/password/show-swap detection, label-only agent sight; worker session cleanup; native select key handling; AX redaction; pause/takeover capture barriers and load identity; blank-before-signin still with size cap; remove/reinstall page scripts fail-closed, clear window.name, named helper allowlists, cover closed roots/frames and retry refusal. Last test continues beyond assignment.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/src/detect_text.rs",
+      "sha256": "8c2a2257941d050a209d3edf1474559697763acef90e855b354e3ff7c1ff2fda",
+      "total_lines": 2809,
+      "status": "partial",
+      "ranges": [
+        [
+          181,
+          1780
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          181,
+          1780
+        ]
+      ],
+      "substantive_note": "Lexical state machine strips comments preserving newlines/UTF16 lengths, distinguishes JSX text URLs, regex/division, nested template expressions; markup masking literal strings; CSS/Sass/Astro comment views and styles/CSS-in-JS extraction. Inset top/bottom 3–12px chromatic stripe skips selected/interactive/square/small hosts; FileSheet lazily caches corners/import uncertainty, does not follow imported styles.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "sha256": "080b835e99353f63650f8966813d735f142293119cd371c554b66a1effc5e3da",
+      "total_lines": 11485,
+      "status": "partial",
+      "ranges": [
+        [
+          7590,
+          9189
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          7590,
+          9189
+        ]
+      ],
+      "substantive_note": "Audit/extras/moreChecks gather placeholders, actual content, effect repetition, nested card/fragment rules, pricing/layout seams, caption/row grouping, 7:1 body contrast vs 4.5 labels, loaded/ghost/empty media, WebGL fallback pixel evidence, repeated image/view/object main visual, font load, units/wrapped tabs/button widths/menu targets/hours disagreement, hero product ink size and text density, hover signatures. Stateful WeakSets/maps, page scrolling and inline style suppression/restoration, hash/details mutation, observer and synchronous XHR best-effort spec reads. Helper canvas computes contrast/diff/flatness over holes, region fingerprints.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/tests/critiques.rs",
+      "sha256": "4e2a51c44ffc9ba87a12e037843370726da1ad3b3aaab61fe6dfc7638c22f4ff",
+      "total_lines": 1233,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1233
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1233
+        ]
+      ],
+      "substantive_note": "CLI integration tests with fake account service: local-first reports; explicit off/CI/project gate, OAuth advertised scope, limits/symlink/metadata cleanup, separate audit max20, optout admission/lifecycle locks, bounded timeout, refresh rotation, safe label/place/repo hash and branch/head/pr, notices once/day/signin; successful upload schedules health/foundations and desktop/phone capture; wrong URL/error drops frames. Test declarations, not executed.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/new-work-e2e.test.mjs",
+      "sha256": "0f01b318031a20b74b6e144c0a9b3c26ee645c1653cccc72370c31c328690eb5",
+      "total_lines": 1225,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1225
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1225
+        ]
+      ],
+      "substantive_note": "Real Chromium+engine decision smoke test intent (separate suite): system fonts no remote request; selection/reroll/steer/canon/heartbeat close, followup and state cleanup, salience parity, missing comp after241s text fallback preserves facts, declined adoption, code/comp confirm and streamed image, stale HTML hand isolation and CSP script-none, wireframes, failed artwork and server/deadline stalls silent heartbeat/no false success; fake generation marked SYNTHETIC.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/checks/gradient_geometry.rs",
+      "sha256": "84f5ea40a7eacaad2b6fc044703ad4619a07216974d7bc247fa1217faca7793a",
+      "total_lines": 1105,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1105
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          1105
+        ]
+      ],
+      "substantive_note": "Pure gradient geometry linear/radial parse incl corner angles, px/% stops and fixups, premultiplied composition, origin/padding/tile/repeat and 15 glyph-area samples. Misses vs Unknown explicit; unsupported conic/repeating/calc/OKLCH/fixed remains conservative; opacity fold. Tests pin end-word contrast, underline miss, radial transparency and opacity.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/loop_install.rs",
+      "sha256": "e0aa18fe70f7d9ce2959fad63704bcb15b5fa08135ad59507e077a633f8d94a1",
+      "total_lines": 845,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          845
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          845
+        ]
+      ],
+      "substantive_note": "macOS Loop install/update wrapper: compile-time checksum pins semantic versions, secure redirect validation/max10 and1GiB/300s download bound, SHA before ditto, staged app plist/version/executable verification, exact canonical running executable SIGTERM10s, backup swap rollback; agent connect/taste offers TTY/explicit flags only, MCP-only cross-platform, login nonfatal and JSON contracts.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/asset_capture.rs",
+      "sha256": "71361674425dcc75ffd895092e33d523147cb9fd1659cc8a325d81a3d615cbc2",
+      "total_lines": 812,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          812
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          812
+        ]
+      ],
+      "substantive_note": "Isolated CDP diagnostic capture batch same URL/viewport/reference/motion, exact DOM+pixels+network revision identity/restoration, 3 attempts and60s command budget; response bytes bind assets (JPEG/static PNG no APNG);16-instance/5000-node caps and unsupported shadow/surfaces unavailable, retain scoped known-raster evidence; individual+union interventions handle stacked duplicate art; browser metadata and baseline coverage, never adequate visibility/provenance approval.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/visual.rs",
+      "sha256": "6b74b1628e9b485e682047f39caeaa555bf16b5692b82771d3de82411c3aa155",
+      "total_lines": 7021,
+      "status": "partial",
+      "ranges": [
+        [
+          6401,
+          7021
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          6401,
+          7021
+        ]
+      ],
+      "substantive_note": "Tail tests visual contrast: text-clipped background not surface, translucent URL+fill compositing, routed aria-hidden budget but no hidden budget, fixed/missing/tainted/unread surface unresolved, alpha media and inline picture/deep-cover traversal, placement/repeat/size checks, clipping at hit point, opaque fixed banner excludes text. Static regression intent only.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/component_capture.rs",
+      "sha256": "e77c444f094f36f4224b5692a078258a705c3d8f306de32771ad9e7b653d5670",
+      "total_lines": 542,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          542
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          542
+        ]
+      ],
+      "substantive_note": "Native frozen component capture: pinned local HtmlSnapshot bytes checked response-by-response, static HTML/CSS/SVG only except assembled hero local scripts; fonts/images/animations failures, normalized region crop copies viewport pixels no resize, isolation pseudogeometry/paint bounds, two identical screenshots/DOM/network stable; cache digest+box+isolation+font checks, atomic packet clone/no partial publish, context never separate approval; Chromium tests mostly #[ignore].",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/walks/consent-rules.js",
+      "sha256": "9a0285969ab05d195388390bff9c66e3d3b28863a1a349c45e5ae1c769612d7a",
+      "total_lines": 3788,
+      "status": "partial",
+      "ranges": [
+        [
+          3281,
+          3788
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          3281,
+          3788
+        ]
+      ],
+      "substantive_note": "Bundled AutoConsent runtime tail: normalize config/filter CMPs, deferred prehide/start and focus restore; site-specific->generic->topframe alternate heuristic stages, mutation/retry limits; popup Promise.any then allSettled; autoAction optOut or optIn engines, result/done/selftest/report messages; prehide timeout, global receive bridge. This slice is engine not bridge policy; optIn capability exists but extension test pins reject-only bridge.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/review-theme.test.mjs",
+      "sha256": "abd1dc605832cf4c07d9d837bd9560a402e8d813abb47cebd2ac54b206c003d8",
+      "total_lines": 405,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          405
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          405
+        ]
+      ],
+      "substantive_note": "Playwright theme regressions live OS shell changes must not recolor artwork/matte, transparent sketches pinned light; text4.5/button fill3 and hover/pressed contrast, focus outline/Escape/mobile no overflow/errors; grouped pending/approved dimming preserved. Pixel tolerance <=1 sRGB only for UI recompositing, unlike asset exact capture.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/plugin-paths.test.js",
+      "sha256": "ee9f5a4b3bbb88411771f5630344a47495589e231527a9131f7efbd309815ad9",
+      "total_lines": 401,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          401
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          401
+        ]
+      ],
+      "substantive_note": "Bun plugin adapter tests: skill CLAUDE_SKILL_DIR vs spawned agent CLAUDE_PLUGIN_ROOT, references explicit base token, quoted spaces/PowerShell .cmd & not sh; whole allowed-tools removed, deny unbound preapproval, remove project fallback; agent sidecar fallback and verifier fail on unmatched rewrites. MD recursion leaves scripts unchanged, source allowed-tools retained for other providers.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/switch_sync.rs",
+      "sha256": "59440e06a72f4bbdb54b5d26ebd270a00c8c87fc0406fb6c4ce4ca747e1faf4a",
+      "total_lines": 325,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          325
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          325
+        ]
+      ],
+      "substantive_note": "Detached personal switch three-way sync 60s, page wins concurrent edit else first changed local file push, seed union before initial base; known deleted blocks=alloff, new agent block absence not edit; account issuer cache+catalog whitelist+still_current, create_new stale120s lock --now waits15s, writes all user rule files and projects Cursor separately; best effort errors and cache private write. Not atomic multi-file transaction.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/quality.rs",
+      "sha256": "0fc45b0e139db895c29687875d02f19c5fba3c3c24430f16b25fe7da9be289fe",
+      "total_lines": 8274,
+      "status": "partial",
+      "ranges": [
+        [
+          8001,
+          8274
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          8001,
+          8274
+        ]
+      ],
+      "substantive_note": "Tail quality tests pin rendered character model: pre/pre-wrap indentation/tail and NBSP, Devanagari combining/format marks, prose <80 line intent, per-span whitespace inheritance, hidden/content-visibility semantics, atomic inline spaces and BR edge reset. Not implementation coverage of other unassigned quality functions.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/base.css",
+      "sha256": "a56ab8379c24daef6425d36d0870aafb682df033b1e3c5153e12a085b7e8a2a3",
+      "total_lines": 267,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          267
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          267
+        ]
+      ],
+      "substantive_note": "Tokenized UI fragment base 13px, local brand tiles, OKLab mix/relative OKLCH depth, 4px scale intent, button/chip/avatar/pointer/skeleton/ring/spinner CSS; held/paused classes, explicit solid32px pause button with44px pseudo hit and focus/forced-colors; reduced motion removes loops/transitions. UI pictures deliberately differ from real page controls.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/effects/aurora-curtains/effect.js",
+      "sha256": "a08edb4490c957587fed8a11cd9bc76027ace190ec680b67fcc51c82551bdc4e",
+      "total_lines": 192,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          192
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          192
+        ]
+      ],
+      "substantive_note": "Aurora WebGL shader effect mesh family: up to4 finite S-fold curtains, bounded parameters speed/bands/height/rayDetail/waviness/intensity/stars/calm, seeded geometry/palette tones per light/colour/dark, quiet text ellipse; shader wrapper maxDpr1 still5 and CSS grain+radial+linear fallback. Lifecycle/reduced-motion delegated fx.js, not asserted here.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/foundations/golden.rs",
+      "sha256": "7bdae204da3a62d8136749244c140935c4674287b6bccced600bb2cd651e7b8a",
+      "total_lines": 184,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          184
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          184
+        ]
+      ],
+      "substantive_note": "Ignored opt-in foundations goldens scan disk and git HEAD listing with batched git cat-file reads in thread to avoid pipe deadlock; lazy wanted loop, UTF8/nontext classification, with/without secrets State maps, held/peak text byte accounting. Prints goldens not assertions comparing revisions; never ran.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/product-render/make-posters.mjs",
+      "sha256": "98e95acb7c75f6cc2b96c51f65dfbc3f986d6de795605d9920f92e4488f335c4",
+      "total_lines": 169,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          169
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          169
+        ]
+      ],
+      "substantive_note": "Poster CLI validates build/variants/shaders before browser (check flag exits), root-scoped specs; localhost server5 ports avoid3000; dedicated Chrome profile software SwiftShader, CDP WebSocket, per-variant page generation and immediate output files, merge/prune supports manifest, timeout/own-PID cleanup. Imports build.js; requires Node WebSocket/fetch and Chrome. Prefix-only server confinement, no canonical/symlink check.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/borrowed_grounds.rs",
+      "sha256": "f34d6d63a01c725e54d7d5744ba54af21f532607895d55fcc11176f398cfe7b4",
+      "total_lines": 152,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          152
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          152
+        ]
+      ],
+      "substantive_note": "Borrowed-ground real-browser test skips if no browser; local fixture server denies ..; expected lowcontrast warning/advisory/pass selectors distinguish scrim, moving/skewed chips,sparse vs dense texture, parked underline, decorative ghost text. No exact font-dependent RGB assertions.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/browser/snapshot.rs",
+      "sha256": "70139332035936d756ede15bb9ce1a7a5b443e81ad7f91fc8c51705baf3be791",
+      "total_lines": 1735,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          1735
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1601,
+          1735
+        ]
+      ],
+      "substantive_note": "Snapshot tail tests preserve absent image complete/video ready state as None vs known false/zero, old optional keys not serialized; textLines feature flag and merging own+descendant line fragments, skip nonrendered subtree but keep plain inline contentVisibility; CSS.escape edge contracts.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/parts-lock-into-the-whole/demo.html",
+      "sha256": "e9569d8d385d2ac091f0ea1d6d9d955787f29cae40d55ab186aa3aa946e88bef",
+      "total_lines": 109,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          109
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          109
+        ]
+      ],
+      "substantive_note": "Big scene demo parts assemble into Headroom planning UI (panels, annual figures, layers1/2/3, accessible role-img and section label); Google Geist external, system/scenes demo/scene CSS and scenes.js dependency; sc-js/sc-safe2.5s startup fallback, no actual scene algorithm in file. Placeholder app data/nav not production claims.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/photo-kit/demo.css",
+      "sha256": "2ef077b653103325d17b453baf28d309c74d32fc26db999afec7a662559d479e",
+      "total_lines": 81,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          81
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          81
+        ]
+      ],
+      "substantive_note": "Photo demo CSS light/dark/colour tokens, Inter15px,5:7 grid and21:9/4:5 photos, controls32px/focus, credit kept in solo11.5px overlay, phone single-column at760; no reduced-motion override in this file despite theme transitions. Demo only not general UI kit.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/letter-bar-floods-the-ground/demo.html",
+      "sha256": "8be792fe39c60f97612ac33d9a74ef66b0ed7bb2845bca3cf6ad8083bfa995f9",
+      "total_lines": 80,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "substantive_note": "Ferrite database demo letter stem l expands into next inverse ground; Google Schibsted/Hanken, system/scenes demo/scene CSS+scenes.js, sc-safe2.5s; product console drawn with 2.1M rows/41-day data, semantic role-img, h2-labelled big scene; no animation implementation here.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/_demo/demo.css",
+      "sha256": "bfc96ab61ba8f19f1277d1aff2b386e474ebb8331032910f731f47393a7aad5c",
+      "total_lines": 70,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          70
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          70
+        ]
+      ],
+      "substantive_note": "Moments demo chrome not shipped: sticky nav, responsive split, tokenized mock window and real photo; mobile hero size-containment+min220px preserving content, hide extra mock rows and sidebar to avoid partial rows at1279/639; full-screen rhythm inherited system.css.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/word-highlight/demo.html",
+      "sha256": "05dac4ad312cafbb0c2352b8c42ec5912804482db0b0ed8767e5216d44d5200b",
+      "total_lines": 63,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          63
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          63
+        ]
+      ],
+      "substantive_note": "Word-highlight Relay demo dark/sage/inverse tokens, Schibsted/Hanken external fonts, mo-safe2.5s/modulepreload; long statement strong accent word, UI mock and credited local photo887; actual colour scroll/reduced lifecycle delegated moments.js/moment.js.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/files/fragment.css",
+      "sha256": "dc7046291c60568cd2ef9b722fd23bf94666d5b99432269a357e26d4dfe22987",
+      "total_lines": 53,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          53
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          53
+        ]
+      ],
+      "substantive_note": "File UI fragment CSS responsive auto-fill136px then phone2 cols, local colour brand tile44px,13px names ellipsis->wrapped phone, reading accent border/progress scale440ms and done check360ms nonovershoot, reset/is-cut states; inherits base reduced-motion, no independent controller.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/letter-physics/scene.css",
+      "sha256": "4d6e667b893744b8ac659b07b7eb9e406307b39f5a69f76ea4cda9373835f9f5",
+      "total_lines": 51,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          51
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          51
+        ]
+      ],
+      "substantive_note": "Letter physics CSS static complete composition and .is-live held perspective1100px, .w/.c transform letters, radial dim/background30% for text quiet, large clamp type at767 responsive; static override172px claim. No JS/explicit reduced policy here; scene host owns lifecycle.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-tabs/component.html",
+      "sha256": "41fd0677a01572749422a4f8ef7e97d5df853e9b2d4d07e10c69c7553a3d5610",
+      "total_lines": 46,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          46
+        ]
+      ],
+      "substantive_note": "Tabs HTML semantic tablist4 buttons roving tabindex/selected/control IDs, panels hidden and labelled/focusable, real-looking payment table scope headers, payouts and report links #. Requires companion controller/style to update selection/keyboard; fixed IDs must be namespaced on reuse.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/gallery.html",
+      "sha256": "ad739c6523f228f16106829b1ebf039526bc61cd8d4f1dd5e96c4de248bc9a82",
+      "total_lines": 15,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          15
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          15
+        ]
+      ],
+      "substantive_note": "Gallery13 moments enumerates trigger/domain and concrete phone/reduced-motion fallback: counter/pointer/giant-type/iris/assemble/line/liquid-photo/liquid-type/marquee/photo-chapters/develops/pinned-chapters/word-highlight. Includes pause for marquee and no WebGL phone liquid. Documentation/demo index not runtime proof.",
+      "hash_matches_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-logos/component.html",
+      "sha256": "d3e7cbc99b1d31d08c7deb7a20f99fc813e35462a0c98e232c928ce26f7841fa",
+      "total_lines": 11,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          11
+        ]
+      ],
+      "assigned_ranges": [
+        [
+          1,
+          11
+        ]
+      ],
+      "substantive_note": "Logos HTML labelled section six named integrations GitHub/GitLab/Figma/Notion/Linear/Vercel with local inline currentColor SVG aria-hidden, seeded grain-gradient on li data-fill; Notion mask fixed k-notionicon must namespace if repeated. Claims integrations/demo marks do not establish rights or actual integrations.",
+      "hash_matches_inventory": true
+    }
+  ],
+  "assigned_ranges_count": 33,
+  "assigned_lines": 17974,
+  "reviewed_lines": 17974,
+  "entire_assigned_ranges_reviewed": true,
+  "validation": {
+    "hashes_rechecked": true,
+    "inventory_hash_matches": 33,
+    "range_count": 33,
+    "unique_files": 32,
+    "assigned_lines": 17974,
+    "covered_lines": 17974,
+    "unread_assigned_ranges": [],
+    "truncation_recovery": "exec stdout-95fbcebcd42a.txt omitted middle recovered with read_file 435-480 (quality.rs 434-479)",
+    "relative_references_existence_only": [
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/handoff.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/guard.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/signin.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/panel/voice.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/view.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../scripts/lib/extension-manifests.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/page-helpers.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/page-helpers.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/worker.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/store.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/panel/copy.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/sight.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/driver.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/control.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/store.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/panel/copy.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/page-helpers.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/driver.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/driver.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/link.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/link.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/driver.js?restarted",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/extension-walks.test.mjs",
+        "reference": "../extension/walks/badge.js",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/scripts/consistency.mjs",
+        "reference": "./",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/new-work-e2e.test.mjs",
+        "reference": "./new-work-e2e/user-bot.mjs",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/new-work-e2e.test.mjs",
+        "reference": "./lib/engine-bin.mjs",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/review-theme.test.mjs",
+        "reference": "./lib/engine-bin.mjs",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/plugin-paths.test.js",
+        "reference": "../scripts/lib/utils.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "tests/plugin-paths.test.js",
+        "reference": "../scripts/lib/plugin-paths.js",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/effects/aurora-curtains/effect.js",
+        "reference": "../fx.js",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/objects/product-render/make-posters.mjs",
+        "reference": "./build.js",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/scenes/parts-lock-into-the-whole/demo.html",
+        "reference": "../../system.css",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/scenes/parts-lock-into-the-whole/demo.html",
+        "reference": "../_demo/demo.css",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/scenes/parts-lock-into-the-whole/demo.html",
+        "reference": "../scenes.css",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/scenes/parts-lock-into-the-whole/demo.html",
+        "reference": "../scenes.js",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/scenes/letter-bar-floods-the-ground/demo.html",
+        "reference": "../../system.css",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/scenes/letter-bar-floods-the-ground/demo.html",
+        "reference": "../_demo/demo.css",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/scenes/letter-bar-floods-the-ground/demo.html",
+        "reference": "../scenes.css",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/scenes/letter-bar-floods-the-ground/demo.html",
+        "reference": "../scenes.js",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/moments/word-highlight/demo.html",
+        "reference": "../moments.js",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/moments/word-highlight/demo.html",
+        "reference": "../lib.js",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/moments/word-highlight/demo.html",
+        "reference": "../../system.css",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/moments/word-highlight/demo.html",
+        "reference": "../_demo/demo.css",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/moments/word-highlight/demo.html",
+        "reference": "../_demo/photo-887.jpg",
+        "exists": true
+      },
+      {
+        "repo": "taste",
+        "source": "skills/taste-skill/assets/moments/word-highlight/demo.html",
+        "reference": "../moments.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "crates/cli/tests/critiques.rs",
+        "line": 1,
+        "reference": "../../account/tests/support/fake.rs",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "crates/cli/src/loop_install.rs",
+        "line": 13,
+        "reference": "../loop-checksums.txt",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "crates/cli/src/loop_install.rs",
+        "line": 844,
+        "reference": "../tests/support/loop_install.rs",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "crates/cli/src/asset_capture.rs",
+        "line": 121,
+        "reference": "asset_capture.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "crates/cli/src/asset_capture.rs",
+        "line": 270,
+        "reference": "raster_coverage.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "crates/cli/src/component_capture.rs",
+        "line": 142,
+        "reference": "component_fonts.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "crates/cli/src/component_capture.rs",
+        "line": 150,
+        "reference": "component_isolation.js",
+        "exists": true
+      },
+      {
+        "repo": "impeccable",
+        "source": "crates/cli/src/component_capture.rs",
+        "line": 402,
+        "reference": "../../../ui/component-review/fonts/albertsans.ttf",
+        "exists": true
+      }
+    ],
+    "tests_executed": false,
+    "ui_opened": false,
+    "upstream_imported_or_executed": false
+  }
+}

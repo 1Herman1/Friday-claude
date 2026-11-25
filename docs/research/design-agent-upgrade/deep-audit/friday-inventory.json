@@ -1,0 +1,1918 @@
+{
+  "head": "388ec708f39583172d7f36110f6424cc175b5512",
+  "scope_roots": [
+    "docs/core",
+    ".codex/agents",
+    ".codex/skills",
+    ".codex/commands",
+    ".codex/scripts",
+    ".codex/workflows",
+    ".codex/hooks",
+    ".claude/agents",
+    ".claude/skills",
+    ".claude/commands",
+    ".claude/scripts",
+    ".claude/workflows",
+    ".claude/hooks"
+  ],
+  "files": [
+    {
+      "path": ".claude/agents/README.md",
+      "bytes": 3933,
+      "sha256": "6a562a2a7be1435148f06a6a8e8495bf8a9683dd9b05fe9998e03d72a9c618c4",
+      "lines": 33,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/core/architect.md",
+      "bytes": 3459,
+      "sha256": "ef432b4b2b47b7c79fc7f5ba8498183c750c8279213557c36c8e28cbe371191e",
+      "lines": 52,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/core/coder.md",
+      "bytes": 2797,
+      "sha256": "bbad234363f6b71799aefb5c5184490a817a7c2236b5ede6baf6a0e5a442ac8d",
+      "lines": 47,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/core/debugger.md",
+      "bytes": 4014,
+      "sha256": "c85ad49b1478275939d2ee68a001fe841e1e75baab180a60eebb512274452422",
+      "lines": 83,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/core/orchestrator.md",
+      "bytes": 9485,
+      "sha256": "da5eaac3fbe4355ef30c448166480aacbc3f4b221e2b6871229563e5700e24c9",
+      "lines": 117,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/core/planner.md",
+      "bytes": 2388,
+      "sha256": "64d9790b40f8f2abd3e65d05055770735856ad48693641b5ab2d980ed32bbd23",
+      "lines": 55,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/core/researcher.md",
+      "bytes": 3751,
+      "sha256": "e4407e87c9707049933ae51f678901038f5374545cbcdc7ee3c9717135ccfa77",
+      "lines": 65,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/design/brand-guard.md",
+      "bytes": 8185,
+      "sha256": "e699e7be78b9772a6115e122c41c33d724d24fc9eec9e1a1d223bf88dd6bf103",
+      "lines": 102,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/design/component-curator.md",
+      "bytes": 7329,
+      "sha256": "580451289b89e8d5c32cf0bb535abb494ce83105480e79df9afcbd315649a07d",
+      "lines": 94,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/design/design-department.md",
+      "bytes": 10223,
+      "sha256": "c5d2e41c705214ecf75463d3e06f12854b960bd527a1849d8404a14be9d7430b",
+      "lines": 107,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/design/design-reviewer.md",
+      "bytes": 12314,
+      "sha256": "4c60621155ff943ea010ff2d0b6b3a3efd2126b57f0ee8ffb2fdb01dca4a61b0",
+      "lines": 162,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/design/icon-curator.md",
+      "bytes": 6459,
+      "sha256": "81b1f6e9897cf7021baa13a2174578755b2a0c67f14d121cfd038cfa13a201c6",
+      "lines": 79,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/design/media-generator.md",
+      "bytes": 15048,
+      "sha256": "d18ef4e8086cd96c53ad9d2e2b8158bdbf92c65add8fb8aeb226b2b341bea541",
+      "lines": 156,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/design/motion-curator.md",
+      "bytes": 5593,
+      "sha256": "6589c19bc752fffff2af4c54b0084fa89b00dcf38981a308c2b460f18512d404",
+      "lines": 69,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/design/taste-curator.md",
+      "bytes": 16632,
+      "sha256": "b0d0ae14758963d884ae49b61bda380aa9a302ea661388cd595fa0fbb9bd23ca",
+      "lines": 224,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/legal/rkn-compliance.md",
+      "bytes": 11655,
+      "sha256": "2ccc5711c7b734f323476b03dd6bbf57614fbadc59ff3728b304f4d4e63b4345",
+      "lines": 144,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/marketing/marketing-agent.md",
+      "bytes": 4476,
+      "sha256": "87a0c1522cd60cc7066534e325596ee1c9003d2e45f418e9ef756f2f48713fc4",
+      "lines": 58,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/marketing/seo-department.md",
+      "bytes": 9936,
+      "sha256": "7a9100cfc7cc47daacd9e6210b36c2b924a977693faaeb4b027b5ca3a4c1a816",
+      "lines": 118,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/marketing/seo-specialist.md",
+      "bytes": 2723,
+      "sha256": "bd99ee3ccacb0b7ab2487664fb1bf62db2d9fa306693411d1f00a6664defddee",
+      "lines": 45,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/meta/agent-auditor.md",
+      "bytes": 5780,
+      "sha256": "a9baa1e1b0ae5550adfb86eb3c314342294255dc39effb8fa7284aec55c11c72",
+      "lines": 74,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/meta/agent-evaluator.md",
+      "bytes": 4107,
+      "sha256": "fe5611808eb49f006265ca19b4e7e0e95608580644d3bb9a1030719c910d144a",
+      "lines": 68,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/meta/archivarius.md",
+      "bytes": 5043,
+      "sha256": "e311a9d4de6dd14003b87367eb98a6c2841dee7d76f9437d8ed91d1c85c071e3",
+      "lines": 77,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/meta/challenger.md",
+      "bytes": 8692,
+      "sha256": "7196634a238ee826d96da91604af9a8ea51af99457837c2169e406e8b431fc7d",
+      "lines": 115,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/meta/strategist.md",
+      "bytes": 6187,
+      "sha256": "6d24a00102c26e002c54d02346bf09b0f1011de72f2d901dfe7d8130bb813d61",
+      "lines": 77,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/ops/anthropic-docs.md",
+      "bytes": 4980,
+      "sha256": "3526b6a9f05e9c987112c15b8ebf9e9a6129e1c11b3e8cf1f0b0cc9d3b54bd38",
+      "lines": 72,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/ops/automator.md",
+      "bytes": 3805,
+      "sha256": "862f2fc9dbd01c0b8a57d506abedf70f6d75ed2c805cc8732d08c26e46579366",
+      "lines": 64,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/ops/devops.md",
+      "bytes": 3453,
+      "sha256": "f92ebc5f588a68dccaffe49a80a95025ecbfa44368e8ebe534dbea7265c0d101",
+      "lines": 88,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/ops/documenter.md",
+      "bytes": 3484,
+      "sha256": "dcae97601c3e5629fa85ba2868cbc3e0b9499d4b702775f9205a9cfc9db2a715",
+      "lines": 91,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/quality/performance-optimizer.md",
+      "bytes": 5154,
+      "sha256": "0ba9c8ff3c3aa94079120b6900fb7f276ed8c51ccacf9a8eb6a90d088393ab46",
+      "lines": 77,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/quality/qa-engineer.md",
+      "bytes": 7819,
+      "sha256": "ccabe813ef6afc503a214985b6c5cab2613be54d6b953fef17f104177f427b49",
+      "lines": 97,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/quality/refactor-cleaner.md",
+      "bytes": 3901,
+      "sha256": "4216d4efad2b515f9329a3f280ce054a3a0766594a93e10f36fb91f6da851055",
+      "lines": 61,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/quality/silent-failure-hunter.md",
+      "bytes": 3688,
+      "sha256": "e69d005678a4f539bc3fd8dee7df356dca97aa0f4d4a2bb501e10d086be01d07",
+      "lines": 63,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/review/code-reviewer.md",
+      "bytes": 5294,
+      "sha256": "d2e251e9abddb1dccfba9112040f613573267f308d636d602f2be04f3f82dd0f",
+      "lines": 83,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/review/database-reviewer.md",
+      "bytes": 4362,
+      "sha256": "7004b52ca2316607c31b955a5fb9f9d130f46d7219f4dfd92f3a053e520922de",
+      "lines": 65,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/review/migration-guard.md",
+      "bytes": 7198,
+      "sha256": "c503a1bb5987d0485256baff4c0edf6072587a2d39cd551f6ee0976465779a95",
+      "lines": 104,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/review/react-reviewer.md",
+      "bytes": 4185,
+      "sha256": "cd1ca3d2753a80ed4c01fb0bddc57f11da24334f96d453c1c69c94f87d4aeeea",
+      "lines": 70,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/review/typescript-reviewer.md",
+      "bytes": 4261,
+      "sha256": "55049b8fb4a9d95826e823a601354447eea52a7c660e7eeae1512dcb04fb38ba",
+      "lines": 72,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-api-surface.md",
+      "bytes": 9829,
+      "sha256": "cbb637be25c44a2a9c47699b188f5bb1a1e2cb439de2b9a6b7c9b3ffcdffda20",
+      "lines": 122,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-auth-access.md",
+      "bytes": 8899,
+      "sha256": "d23488942f56fa3f74fff881c66c620674317f1f0ac161329581cdf8341ba155",
+      "lines": 113,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-business-logic.md",
+      "bytes": 7769,
+      "sha256": "62c9c1734de6c988926cab300b99c5a260b73a930183892b3dbd433257efe7c9",
+      "lines": 98,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-department.md",
+      "bytes": 12536,
+      "sha256": "a1fe118146006eb4297be05b278b2576d0d0183b7e1660ffc220777a7b5da1aa",
+      "lines": 136,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-dependency-audit.md",
+      "bytes": 6248,
+      "sha256": "c99f87c5f2eb17384f62e9ab6bbe0556e65a20906eead491597694c25bddc983",
+      "lines": 77,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-incident-response.md",
+      "bytes": 7711,
+      "sha256": "0a82b029893ac848ba979a3c251d5be86a6b3fae737e560beb2a5fbe16d22f0f",
+      "lines": 82,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-infra-cloud.md",
+      "bytes": 8676,
+      "sha256": "01f85d94f9c4e9fc0030c7dbdf736a6dcbe97b3ecf7307930cb1a6347c592b81",
+      "lines": 117,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-observability.md",
+      "bytes": 7610,
+      "sha256": "b4707d5ad587d0d004d8db01f78174499e99246477d97b38abfbf2b373f24e00",
+      "lines": 107,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/agents/security/security-secrets-scanner.md",
+      "bytes": 7171,
+      "sha256": "0b5fa4e7f352572bedee1bbc93af8ce91067dfabac3271a7021d7fa5c865df0d",
+      "lines": 78,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/archive.md",
+      "bytes": 822,
+      "sha256": "e785d6c048c24d36e41ff9787c64a3cabffbff467633f8116d2cb5a600737d1a",
+      "lines": 15,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/audit-design.md",
+      "bytes": 2428,
+      "sha256": "88f8e80e65f1deaba438c6dc2223a06c02418b0a11e6a5c86d5e0f0f3f1f68c8",
+      "lines": 32,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/bugfix.md",
+      "bytes": 1045,
+      "sha256": "bfe222f01978e667c3c671593f5618dabb1388ce6400697e77340cf480f33c9c",
+      "lines": 17,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/council.md",
+      "bytes": 4914,
+      "sha256": "00030a9aad5239dc5f22921706cf7b6f85970d50c2436c247ca187801d682f77",
+      "lines": 79,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/deploy.md",
+      "bytes": 2600,
+      "sha256": "4ba10d28f7e0b35f223e9e3fb2fc2d5e09a6442268edeadf85a600fccb61863f",
+      "lines": 36,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/design-system.md",
+      "bytes": 5357,
+      "sha256": "6843aac6f5c307f1247799d497b52aec53dad27853d88cc188b0499087b434ee",
+      "lines": 68,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/feature.md",
+      "bytes": 1455,
+      "sha256": "1b52ca3e9caf7208008f3bea0a5416db6d5476483623067a9ba659c9f2a39132",
+      "lines": 19,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/polish.md",
+      "bytes": 2893,
+      "sha256": "165940a4d5ccdd131cf2c9214cdf1f5d50752040d87d4e0a74067385f1ff7ab6",
+      "lines": 36,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/preflight.md",
+      "bytes": 4486,
+      "sha256": "4840551fa04b46db8e1cdc02e4ff61d75575bf07c60517512bde8ea8f7797e14",
+      "lines": 44,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/review.md",
+      "bytes": 1596,
+      "sha256": "19469e3f445a3a4fdd0177c222116c1ac1b879dec06b1f08ab77a51b13ef1dc8",
+      "lines": 21,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/rkn.md",
+      "bytes": 1994,
+      "sha256": "513d5f6e7c189a9ee5c461e00d237126d364f0a3e93d08096611830621cec7b6",
+      "lines": 27,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/secure.md",
+      "bytes": 2014,
+      "sha256": "7b070b626751fcb240c9433aed67686ad5f31fdeb5260571af100a7dcf77214f",
+      "lines": 25,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/security-profile.md",
+      "bytes": 3658,
+      "sha256": "f2db7cb00b198c118db062daa1c8998ac7030da1ce1d07b19759106736f428a1",
+      "lines": 49,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/selftest.md",
+      "bytes": 1807,
+      "sha256": "675e2305afed9bad2d58a7efe2b50f725f6fdc4e8bbec4a505c0503a7e0d1569",
+      "lines": 24,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/commands/summary.md",
+      "bytes": 2104,
+      "sha256": "5cb36d64d714de15fb04be9595e451c2329dd4a57cc8675b752e4c54e0738fee",
+      "lines": 40,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/hooks/post-edit-design-lint.sh",
+      "bytes": 1898,
+      "sha256": "196385e20111ae191b292663c719046cf2b608fbace09151cc57fede880095ce",
+      "lines": 51,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/hooks/session-start.sh",
+      "bytes": 9192,
+      "sha256": "9008fc838fb93dd919eeb7a35c9fe9c0954a7d462490826b0a26ab2e1e2a3838",
+      "lines": 141,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/archive-read.sh",
+      "bytes": 1795,
+      "sha256": "da64b4eb6e63133306828e3a2920513177a16a808997de2f4ea8ba5f8c3152d8",
+      "lines": 44,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/archive-session.sh",
+      "bytes": 11189,
+      "sha256": "910da6ebd6da58c1569ff1644f5e2128ae93d917f1671a0ec7287a809f6d2635",
+      "lines": 213,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/design-lint.mjs",
+      "bytes": 10780,
+      "sha256": "f13c0e61b06a1e2cca7c26ec3756a0373dc85e93a4a03ca2392153f6c4688966",
+      "lines": 303,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/hermes-archive.py",
+      "bytes": 7768,
+      "sha256": "401c44a9887aeb20a716692a08856cc3e601764242f46325bd475c22ac8cc9a5",
+      "lines": 159,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/lib/projects.mjs",
+      "bytes": 2968,
+      "sha256": "92b5056f70ddac2c141a04c31e580de1c33753da0f31f4891aeef32ef86726d9",
+      "lines": 59,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/portability-check.sh",
+      "bytes": 10320,
+      "sha256": "6f816ec9775f9410b43e7f4daf9af9b97de80049fb5d2a7f7911a0c01ffa4f3e",
+      "lines": 151,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/rkn-lint.mjs",
+      "bytes": 14351,
+      "sha256": "438610854ead085a2285eb1934e203c4814bfa778adaa588e244e72d15fb938c",
+      "lines": 311,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/screenshot.mjs",
+      "bytes": 6181,
+      "sha256": "984e547c1800b79a00329ee4506ea87a6ed7526152c0990a09aaee12dd194865",
+      "lines": 154,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/security-external-check.sh",
+      "bytes": 6780,
+      "sha256": "1bc5a095f806efd5fb50b473ef80718c0d5cd2af8e11bf96d3bf318407f46a0b",
+      "lines": 153,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/selftest.mjs",
+      "bytes": 18226,
+      "sha256": "525a60630037941211b77a418708f3cc8a969b9457839722552aed9ab6138e9a",
+      "lines": 281,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/sync-agent-blocks.mjs",
+      "bytes": 9575,
+      "sha256": "0562a361de0ed1b7ad9c3bcce05fd482a0dda1d7da493de6af6bf5c29bc7536f",
+      "lines": 201,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/scripts/weekly-report-context.py",
+      "bytes": 2222,
+      "sha256": "190300727c3130532e7ed636d2c0b285c9c8ca3c597f511de34cb5f2de458d91",
+      "lines": 44,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/skills/api-first/SKILL.md",
+      "bytes": 4585,
+      "sha256": "df5194d2afde9e642556b23cbe1195c5b01a35be04bd80d9aecbb1fa32ff57d7",
+      "lines": 120,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/skills/ecommerce/SKILL.md",
+      "bytes": 4698,
+      "sha256": "75c6ceba22da06920b81c1dc6f3a765355b2266ae5892a7d952e0da404d15ed3",
+      "lines": 129,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/skills/landing/SKILL.md",
+      "bytes": 5737,
+      "sha256": "c4d66341983cd97bced314eab6fad3769084ac4f3989a87671ea8b84ea640c85",
+      "lines": 121,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/skills/multi-plan/SKILL.md",
+      "bytes": 2672,
+      "sha256": "d0c9b1cd3f05bed26c60e486390ceb2856b66148c14dc278e54e47655bc9fd33",
+      "lines": 48,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/skills/nullume/SKILL.md",
+      "bytes": 39480,
+      "sha256": "575eafc0f2a9e66072312bbb20d4210dfd16579601a5893124f9ae2fef6afedb",
+      "lines": 576,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/skills/react-native/SKILL.md",
+      "bytes": 3670,
+      "sha256": "b9cab7b461e0d85f0a0010b55682e42b6f8d9665b8f75c93582b7a7ca59314bf",
+      "lines": 106,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/skills/saas-architecture/SKILL.md",
+      "bytes": 4244,
+      "sha256": "08b33d5b319f191c3f662296b5745d3193483cc9a0374de3597d62e3a1bbee45",
+      "lines": 102,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/workflows/automation.md",
+      "bytes": 2299,
+      "sha256": "cac5d2ad1db5fd13920178c7c81045d4be82831dfdad2a1430b2eec6197b2e02",
+      "lines": 60,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/workflows/bug-fix.md",
+      "bytes": 1576,
+      "sha256": "e59fe0c273f53c40087524199f8a5fa0e6bda0567938ffcd44197e7ec1d65798",
+      "lines": 31,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/workflows/deploy.md",
+      "bytes": 4453,
+      "sha256": "46666085837350a2929b075d9618da9efefa38d5be453763081682e17c4fb2d6",
+      "lines": 76,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/workflows/hooks.md",
+      "bytes": 3340,
+      "sha256": "accf9109771bc4a8f06e6fe1da950e82474f151989cb6ed5d10929c50d9b178c",
+      "lines": 60,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/workflows/new-feature.md",
+      "bytes": 2084,
+      "sha256": "60f83f7faff80a1d7ecb711c48b17a3f50cd5b3b40ea628202a2018ca4b4427a",
+      "lines": 38,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".claude/workflows/new-saas.md",
+      "bytes": 5247,
+      "sha256": "2ff4507f3208d7c545665fb3546e5f81ce8e17bc211fdd2d2e190f171258201f",
+      "lines": 100,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/README.md",
+      "bytes": 5099,
+      "sha256": "01559e58f0deaf10b92abdaf7e11ad779edac31d2d62c21cc76b05774eba3ee3",
+      "lines": 54,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/agent-auditor.toml",
+      "bytes": 7929,
+      "sha256": "f7a28024424a60c3595001afdf10819f7366c28144ebc8ca656d76d1177e9b81",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/agent-evaluator.toml",
+      "bytes": 6222,
+      "sha256": "e8b1d9140b3bee82279e6d43d3e940336711f0895d8c76f1ad3c7d6b88477703",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/anthropic-docs.toml",
+      "bytes": 7101,
+      "sha256": "f77d0b780fcfd029af9dfdad8602dbc0dedf25d8457934b049ce5f45e819527f",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/architect.toml",
+      "bytes": 5537,
+      "sha256": "8a81bff79f7bc40ecb6ead74d99166f7cbe70fb2b610c5650c2751292ce9b4cf",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/archivarius.toml",
+      "bytes": 11493,
+      "sha256": "85d62e99d0df344988b6f693a23964dbf9c0da0dcb59c0beb18f9fd5e4babaa2",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/automator.toml",
+      "bytes": 5896,
+      "sha256": "d7aa8057b022e25830631db36c6e29536d65a044dc8ddfcd16f0c1dbd9614081",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/brand-guard.toml",
+      "bytes": 14181,
+      "sha256": "baf8d371e54e4a2a581df9650bebf3c8ecdfec7fe01dc6cf41037aa229e56fcd",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/challenger.toml",
+      "bytes": 10855,
+      "sha256": "0b81568e3b368aa3c1270076f6c6375e9b81e9b902c9cd7bf5bbd46f17266985",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/code-reviewer.toml",
+      "bytes": 7714,
+      "sha256": "4abf0382a5ede818ffb764172f309cd41269ae391677d26ba8997e93bfedbe1b",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/coder.toml",
+      "bytes": 4872,
+      "sha256": "68b8cf605c452ab7916d820ccd0462020859326549af74bb868c2ea73c9020e7",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/codex-docs.md",
+      "bytes": 2700,
+      "sha256": "025b50da2fbaa9aac7fd0c0e256f3c87ab57c8482abf3b7bdef47070b356562f",
+      "lines": 24,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/codex-docs.toml",
+      "bytes": 2910,
+      "sha256": "b146c0c9fea62542a3838a685e0aef3b1205419c8ff1766f8f8dfef6c72caa8a",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/component-curator.toml",
+      "bytes": 9315,
+      "sha256": "353d6c7c629a1c9936326a880b509d639a9d416ba40281b40dd0c2c9576959f6",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/core/architect.md",
+      "bytes": 5055,
+      "sha256": "7bd494999a606ee522b9581545114c2ccd37886c3ceb6bddae9eb8a1a27f6311",
+      "lines": 63,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/core/coder.md",
+      "bytes": 4467,
+      "sha256": "bc43e64da52604bae1709f0b1b3655a9d34a398fc152a881bf56093a92f410cb",
+      "lines": 59,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/core/debugger.md",
+      "bytes": 5689,
+      "sha256": "eaf95899f384655d59f22b35484ef1de46cbfc6361168177189d7b89014c2975",
+      "lines": 95,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/core/orchestrator.md",
+      "bytes": 12114,
+      "sha256": "57b764462cab8f5d1f817160980cfdc647a11772b356b48499ed3efa2051c79f",
+      "lines": 131,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/core/planner.md",
+      "bytes": 4007,
+      "sha256": "80c5eb97264b7ce7fdad769d772916a5173bfee3d52412b29798c3ad7e1c1c6e",
+      "lines": 66,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/core/researcher.md",
+      "bytes": 5376,
+      "sha256": "c97402192e6add1d03f48001dcdddb9aa3a9093c6d2747f11244d54489509375",
+      "lines": 77,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/database-reviewer.toml",
+      "bytes": 6756,
+      "sha256": "367f8928a45611c52ee4c8ef01aa4887fff9ccc72d7e7f3fa85ba0af9c5e9530",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/debugger.toml",
+      "bytes": 6139,
+      "sha256": "471c6b447a0701f0ba578c403182f60e4fb1f75eb7303b87e88d0ff60e24a7f5",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design/brand-guard.md",
+      "bytes": 13486,
+      "sha256": "163461b2764cfd88ab25e75129f7cde8459b64b5852859ecedd3676b7199c764",
+      "lines": 145,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design/component-curator.md",
+      "bytes": 8685,
+      "sha256": "266dd2c653dcc4a9706ac81c304f668d1434de8f179d6f4a8b72bdf40302047c",
+      "lines": 106,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design/design-department.md",
+      "bytes": 15700,
+      "sha256": "5bb8dbf92270923d2de35d9212cc86104494a76f758b4a068e457d44cbf73ac8",
+      "lines": 155,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design/design-reviewer.md",
+      "bytes": 17037,
+      "sha256": "750464269418720610045daaf74d5875c59f0275a5646cf2042a9d4b9a81cb63",
+      "lines": 196,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design/icon-curator.md",
+      "bytes": 7788,
+      "sha256": "e8c418c22745b9755d66586b42a50d652960c029a1cffb761743255bad23bac7",
+      "lines": 91,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design/media-generator.md",
+      "bytes": 14088,
+      "sha256": "dfe9ef1bf878202f56098ca6bfa3a25672071d1af40ab353e2527abff73dcbb8",
+      "lines": 136,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design/motion-curator.md",
+      "bytes": 6940,
+      "sha256": "2ed8996af6f1b54db237b5c63e1305f4ed5d87fd76703f4261b49cb325eb99ce",
+      "lines": 81,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design/taste-curator.md",
+      "bytes": 22664,
+      "sha256": "1cfb5f5ffb5e34d475eb282884864ba43dbff663dec245ac1a27ef4c8492f37a",
+      "lines": 281,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design-department.toml",
+      "bytes": 16445,
+      "sha256": "c070ad0716912bfe8a2066120ccd40c47c55511375f9f6171eaee015d56a30f0",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/design-reviewer.toml",
+      "bytes": 17829,
+      "sha256": "2501dce083481f58fdf906af5b2bc62f73401c5cdf872f5eb14a128494779e00",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/devops.toml",
+      "bytes": 5581,
+      "sha256": "655a33812c298b33cd7b6a4434583dc155d068dbd8b4c7be22edb3f19436514d",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/documenter.toml",
+      "bytes": 5637,
+      "sha256": "669f8ad2b03ab050ac7ebd70615f130a6a3b89ba17bc3e30a892aced32296969",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/icon-curator.toml",
+      "bytes": 8375,
+      "sha256": "a32f65ce7aed086bdb7c6edb95005a5ffb91fb0a56957a48d24e1f6c84bc6b86",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/legal/rkn-compliance.md",
+      "bytes": 12994,
+      "sha256": "7897a9cfacc5784f6130fadcacfc30aedfb83a64631d3abbcdc1b9238c850fb7",
+      "lines": 156,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/marketing/marketing-agent.md",
+      "bytes": 6061,
+      "sha256": "8ac241054f267bc7eb1f5809031c87f31bf37266da523e75dc78ae2aea6942bf",
+      "lines": 70,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/marketing/seo-department.md",
+      "bytes": 11312,
+      "sha256": "5edc63d3939800f32b3f050720c99a9a1936ec50596ce17ca2d70241c38cc054",
+      "lines": 130,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/marketing/seo-specialist.md",
+      "bytes": 4365,
+      "sha256": "00987a422bfa6705cf7594befae84bab518d974f8c6e2910a2ae6138d9091635",
+      "lines": 57,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/marketing-agent.toml",
+      "bytes": 6570,
+      "sha256": "338021b7d328ce2478a86cd2211d1d34bd0ff100b207e112d099a2e647b6676f",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/media-generator.toml",
+      "bytes": 14650,
+      "sha256": "837e7b479ad9c1df458c336d29ee2f456de99dd76b081b2cc9f8180225b18bec",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/meta/agent-auditor.md",
+      "bytes": 7087,
+      "sha256": "b7dd41d7a81f5ee03695cc507ed9ba8ce254ed67074c23d04db928f35adaa1f1",
+      "lines": 86,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/meta/agent-evaluator.md",
+      "bytes": 5798,
+      "sha256": "3581b46e448ed0cd5909cdb51850d9c42684e064eb318650ba27ae4f080f09c4",
+      "lines": 80,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/meta/archivarius.md",
+      "bytes": 10703,
+      "sha256": "05ca74b701d1aebb5ccb0fec493d9200c0bf1ef51ca79a084784e1f903485291",
+      "lines": 125,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/meta/challenger.md",
+      "bytes": 10062,
+      "sha256": "993ccc2bc0d160e43d9b9eb124e651345e9e428d235328730d42ff00edb02d08",
+      "lines": 127,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/meta/strategist.md",
+      "bytes": 7436,
+      "sha256": "a6045d4edcdb8518c60b93105af11dce987c62cb615d56111086357cee3a8f9c",
+      "lines": 88,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/migration-guard.toml",
+      "bytes": 9631,
+      "sha256": "fb6c3db36da93c81e0cffb240fe21486da4709452e68b8e75d720ab839085b81",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/motion-curator.toml",
+      "bytes": 7688,
+      "sha256": "a8ccdf4a12cf3c9f86400280ad6355ceaa6b7c4a7ff43b6ac2535bef081bd04f",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/ops/anthropic-docs.md",
+      "bytes": 6529,
+      "sha256": "1f14b113d5f3f64b91cf33deb2135a78e67f41b3bfd7c2c075fcd840682a368f",
+      "lines": 84,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/ops/automator.md",
+      "bytes": 5467,
+      "sha256": "5acccd53b4f3eade4a6578e6fe51098f518ee7a6f26d1de0b40aed403ea2a18f",
+      "lines": 76,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/ops/devops.md",
+      "bytes": 5134,
+      "sha256": "da8712fe55e56b3a6cf280fc94ad08068fb99eb4114ed4c26c669540c31e13cf",
+      "lines": 100,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/ops/documenter.md",
+      "bytes": 5192,
+      "sha256": "9c5721fc7bfcf787e45c1550b5fda4a10c11a772d80f01a8f92ebaeb79e32e1d",
+      "lines": 103,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/orchestrator.toml",
+      "bytes": 13042,
+      "sha256": "62ab0e55e2dda790e79d7be390c0f51a66feaa3076f6fdbf6a7a77d4fce15fb8",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/performance-optimizer.toml",
+      "bytes": 7274,
+      "sha256": "15f22fe27cf0609416c1e6909983aadd9b1002bc9c6bd4a56bac7715a86647d4",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/planner.toml",
+      "bytes": 4477,
+      "sha256": "62905be6d698b0016b5e95e7ff69737c001e3befa98b09f7d47eaab140d97fe0",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/qa-engineer.toml",
+      "bytes": 9945,
+      "sha256": "7a4d8db383a4f37984090055169d33b1983163af3c32991f75e998cde91231e7",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/quality/performance-optimizer.md",
+      "bytes": 6735,
+      "sha256": "dfb1cf8be98a8ebb2d25ef0ec4c3bdb5374c5f098bd98ef8432a246290f0ad12",
+      "lines": 89,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/quality/qa-engineer.md",
+      "bytes": 9100,
+      "sha256": "d0b2982ed600caf4665a789edf22896b1918baad448c166176fe118e78a399a2",
+      "lines": 109,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/quality/refactor-cleaner.md",
+      "bytes": 5526,
+      "sha256": "637c8380294d8f216602778a3a4f824f158788553e304cb614839064da26a2ef",
+      "lines": 73,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/quality/silent-failure-hunter.md",
+      "bytes": 5589,
+      "sha256": "e09bf47e92fd2eee35f274c7fd48cf3f890ebf15eb34b51f0276b82838da7da7",
+      "lines": 75,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/react-reviewer.toml",
+      "bytes": 7114,
+      "sha256": "9e5add75cdbc7fc5ae632299fc8de0a08a48c53ff48dabea44e8876858d0885c",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/refactor-cleaner.toml",
+      "bytes": 6002,
+      "sha256": "fcc546d0fde6d2b3b960d022affc78e2ae94ec69d884392f44e82cc6ba2431ab",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/researcher.toml",
+      "bytes": 5872,
+      "sha256": "7e29122ca5741ff917b351e0dc5f44618b72e32369ed96d88a55a693a964a782",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/review/code-reviewer.md",
+      "bytes": 7224,
+      "sha256": "31ffd4331a4e02a50a636351aac4b4f679fd659e1a6062a99d42e36d53fdbc6f",
+      "lines": 95,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/review/database-reviewer.md",
+      "bytes": 6183,
+      "sha256": "5ea102d667f1f451f9daa8a731fae897638b6df4e46ff0c885077dbe787a5402",
+      "lines": 77,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/review/migration-guard.md",
+      "bytes": 8828,
+      "sha256": "0c93dfcaaeb02bc3f0f4776fc95b989f7205cd54f235a55a727876366d2f1857",
+      "lines": 116,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/review/react-reviewer.md",
+      "bytes": 6648,
+      "sha256": "f6bbc18c1010924c5bd7c484c1c74172acba4039a85251d566ee0b8a4996e370",
+      "lines": 82,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/review/typescript-reviewer.md",
+      "bytes": 6280,
+      "sha256": "fd42a36e9b18dcd6acbd9036fa8a53911763237e253c94647cef7acf418e0cec",
+      "lines": 84,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/rkn-compliance.toml",
+      "bytes": 13840,
+      "sha256": "b0cf5f2c3eaf7532d03481ba65e5d687f77407226951dac052d91b7458d0afdf",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-api-surface.md",
+      "bytes": 11506,
+      "sha256": "c8c6f836729753ae9cf7cde66f619cda07e7aa7dcfae3ff1198b75efa8c3d809",
+      "lines": 134,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-auth-access.md",
+      "bytes": 10751,
+      "sha256": "99c6f0d398b186f818c136cc9b0afe2090dd254c6eee630108efeaf6d448e1f6",
+      "lines": 125,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-business-logic.md",
+      "bytes": 9450,
+      "sha256": "ecbd0d1d4f9ea83833d60241f3f382baeb2501b83d85cc7913878548eec5e7ab",
+      "lines": 110,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-department.md",
+      "bytes": 13964,
+      "sha256": "9119e968bf82608931a6ff0b547c9d5ea17d463fd97011d184739722951b3b76",
+      "lines": 148,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-dependency-audit.md",
+      "bytes": 8165,
+      "sha256": "205886aafba5cbf4bff7e49f5256b54686161d8ef525fc13c5b80f7f8dbea5ee",
+      "lines": 89,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-incident-response.md",
+      "bytes": 9499,
+      "sha256": "f5127f95cbd093e5797a791ad2637138b0775376333cb2b6c7123dec682cd954",
+      "lines": 94,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-infra-cloud.md",
+      "bytes": 10466,
+      "sha256": "66d742471e10942882f104227f60d05ff32df91eeeb53001cf18a170def862d3",
+      "lines": 129,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-observability.md",
+      "bytes": 9331,
+      "sha256": "5ea3d4e91d2ed5773a161a13f0f6f043ded8f223b8b1576d537287e02b14cbbd",
+      "lines": 119,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security/security-secrets-scanner.md",
+      "bytes": 9060,
+      "sha256": "d90713a8e1664f79da433aab5b9aedab84aa2275e2668acba0671cf8d3e90945",
+      "lines": 90,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-api-surface.toml",
+      "bytes": 12280,
+      "sha256": "3e55ae8890bc60eb8af38f847edac5596f9d3b399e20aa7b29d7aed18f75fd51",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-auth-access.toml",
+      "bytes": 11341,
+      "sha256": "c60382d8c27d0a5586cc371a8f9921120440f8c03578b1d192c6c65602d4e97d",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-business-logic.toml",
+      "bytes": 10196,
+      "sha256": "08045af722064399df2e83d791d14ddd7e28d08287a15552c01085b113de1ced",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-department.toml",
+      "bytes": 14733,
+      "sha256": "796405ee6e7c2788393b863d9b35f478a05ee611f5e08143771ace093e2cc298",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-dependency-audit.toml",
+      "bytes": 8652,
+      "sha256": "22d67644b70740aae4434fe09988f1d8446478762cb2882d026e6617a50a3b9e",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-incident-response.toml",
+      "bytes": 10124,
+      "sha256": "fb250fdc9ed3ce3dd185a9358575fe1179bd19edb04a4c0ed67c1a6d2a3f25ef",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-infra-cloud.toml",
+      "bytes": 11120,
+      "sha256": "19d449e3c1eb186ca69e2491d6715d0dd4fe506da80295c75521bd4279f5e414",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-observability.toml",
+      "bytes": 10044,
+      "sha256": "f354820ac90af66617a24e6f901e7bf2e800101e170a56498401c156c8924d02",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/security-secrets-scanner.toml",
+      "bytes": 9577,
+      "sha256": "643689b1ed8a0d03e8c198396d878d338d3fd0cb72cdd0491a27b4157db807ef",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/seo-department.toml",
+      "bytes": 12036,
+      "sha256": "2e46a9ab66cebfe7f6221926b290ff05de6a00bf8bd86dbd2e66ea334480eeee",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/seo-specialist.toml",
+      "bytes": 4816,
+      "sha256": "8bc8a68d61d6401f91a022c63ddc044e5b165115920c10613828c2dde3e529db",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/silent-failure-hunter.toml",
+      "bytes": 6081,
+      "sha256": "826aac650a12ff52ce842406fedf52e0c125f044dc2161518632b39b173b26a9",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/strategist.toml",
+      "bytes": 8304,
+      "sha256": "df9423796dea38d63dda670416ba950959352eb097e61c06e0a1f53d88e1c611",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/taste-curator.toml",
+      "bytes": 23701,
+      "sha256": "e1ed638ce4ec5f30d9d9d563b672c525d27afcba13c0bedc663e2f4d3ef59c64",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/agents/typescript-reviewer.toml",
+      "bytes": 6781,
+      "sha256": "e1eec456d397a183bdde9a81be8e8096c581229bdaea7fe1a288dc7fd4acbc19",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/archive.md",
+      "bytes": 1191,
+      "sha256": "f1b8a7019b460d3a0f961c8a222f28b3b43217f5191978c263bdc4b60b94986a",
+      "lines": 20,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/audit-design.md",
+      "bytes": 2859,
+      "sha256": "0f61b3f200d53b906dbdbc12ca0a838071c1aa6afd17440bc4feea8fe16a280c",
+      "lines": 38,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/bugfix.md",
+      "bytes": 1434,
+      "sha256": "e9d60a6b17cee77700baf9d7e0cb9787c82f4ca57b681db66ab9d9fb1f61e064",
+      "lines": 22,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/council.md",
+      "bytes": 5320,
+      "sha256": "6f656fb216b88d932a0d5623490ef4dc4677b5f16b7a828693403a7f4875b8ba",
+      "lines": 85,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/deploy.md",
+      "bytes": 3058,
+      "sha256": "99f937e1c52e3ceb3b01733c0b9d457b38ab8f6a033d5b198e2ac6f8ffba898e",
+      "lines": 42,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/design-system.md",
+      "bytes": 5719,
+      "sha256": "1244a11a4c37f11c25a116b557788c7be31b69933cf975dd81c9a6559b1c3764",
+      "lines": 74,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/feature.md",
+      "bytes": 1150,
+      "sha256": "0c00ec605d9879eac79b5d0e45915f91516d9d5ea4aa76f5d353a71a6911101c",
+      "lines": 14,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/polish.md",
+      "bytes": 3246,
+      "sha256": "b7b6c0353d73f6ce33e22edcae58790a70fc80e9241b418ee122dc39e896ba8e",
+      "lines": 42,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/preflight.md",
+      "bytes": 4910,
+      "sha256": "6ed5b7944679110cca47e7b649b42360159668a4e387bf671618c480a75097c4",
+      "lines": 50,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/review.md",
+      "bytes": 1937,
+      "sha256": "2deb411d985bac12b6d7b59596743190e9adfe7a499fa5e63164fd82992c49ae",
+      "lines": 24,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/rkn.md",
+      "bytes": 2381,
+      "sha256": "776eb44e648f30ca3059c90c450b14cb889b36edea982b3b3b3d8b43ba58cc5a",
+      "lines": 33,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/secure.md",
+      "bytes": 2487,
+      "sha256": "6fd42cedd4f0e952fe564726969091b7ecbd8c1c0dd1b5cdc9d79abba1293864",
+      "lines": 31,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/security-profile.md",
+      "bytes": 4012,
+      "sha256": "ee019a300637030a8136bc57becc0c356fc731b988500b57d593ece8f52c8216",
+      "lines": 54,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/selftest.md",
+      "bytes": 1456,
+      "sha256": "e60039e5eef0ef165a2243d76d3bc0a46bd9c81a5a2a697c61a47701d9601861",
+      "lines": 19,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/commands/summary.md",
+      "bytes": 2481,
+      "sha256": "5912f60d1a06bb376fb2bbded00a0f00bb8bb67379c00f6b557ea242a2ab545e",
+      "lines": 45,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/hooks/post-edit-design-lint.sh",
+      "bytes": 95,
+      "sha256": "8c888f9d1a19f3c6978665c8fa04497b53a21d8418181d0e10ad81207a9df639",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/hooks/session-start.sh",
+      "bytes": 93,
+      "sha256": "9837f9ee644564141a2a7a819c8a12003d5a2a92ff85191d1cf843387f72e2d9",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/archive-read.sh",
+      "bytes": 82,
+      "sha256": "2548c5a70c145ad3a6c91b96e4a14f68770ae0c63c754c6124a7e530d096dd61",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/archive-session.sh",
+      "bytes": 82,
+      "sha256": "92295ee85bcbf78576043a5d0f186c0ef349a299f3f107285d85003121eef720",
+      "lines": 3,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/changes.py",
+      "bytes": 5681,
+      "sha256": "660b2f43a667c0ee7da7b65533d2574b7b302c5e0ca443cb0e1e0345890d13b8",
+      "lines": 113,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/design-lint.mjs",
+      "bytes": 10780,
+      "sha256": "f13c0e61b06a1e2cca7c26ec3756a0373dc85e93a4a03ca2392153f6c4688966",
+      "lines": 303,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/hermes-archive.py",
+      "bytes": 7738,
+      "sha256": "679ea6878a602083da3e707b3b3fa8a70266492e3205c19081cce75ae3b026dd",
+      "lines": 159,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/lib/projects.mjs",
+      "bytes": 2968,
+      "sha256": "92b5056f70ddac2c141a04c31e580de1c33753da0f31f4891aeef32ef86726d9",
+      "lines": 59,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/lifecycle.py",
+      "bytes": 10653,
+      "sha256": "e4a18ce5843c67c785c27d81e3dd8f7b7055a4e73cfb706737e2cf91c0fb1e36",
+      "lines": 231,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/mcp-launch.py",
+      "bytes": 616,
+      "sha256": "eccb38db6547930fb6fedc50793478e85347573373b4e5717a50dfe15d250028",
+      "lines": 17,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/portability-check.sh",
+      "bytes": 10322,
+      "sha256": "faeb343e8bd390bf65f524bee8c9727889eb1b0c366549012d9853c26d41536b",
+      "lines": 151,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/rkn-lint.mjs",
+      "bytes": 14351,
+      "sha256": "438610854ead085a2285eb1934e203c4814bfa778adaa588e244e72d15fb938c",
+      "lines": 311,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/screenshot.mjs",
+      "bytes": 5699,
+      "sha256": "11ef2b9872c4bb3a69c5bff5321903dc9babb8dd0149dd4fae4b947102188839",
+      "lines": 152,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/security-external-check.sh",
+      "bytes": 6779,
+      "sha256": "491691a4a477beeda908dc443cbda8198d80b44d4f5866a647cae10175544641",
+      "lines": 153,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/selftest.mjs",
+      "bytes": 231,
+      "sha256": "1f60639e1b7fef2edbc8f18d9ce35b91b74698cb77ca956487ea70bd2c36f4ea",
+      "lines": 4,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/selftest.py",
+      "bytes": 4510,
+      "sha256": "815d3ae36e1e41738643bc56ac30b564ad035b73a7769b7d642a07e4a6a84632",
+      "lines": 82,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/sync-agent-blocks.mjs",
+      "bytes": 9572,
+      "sha256": "94d52736b167b6ad1d34a136a8feaba1e0f5857d015c350bd110864c5e815e62",
+      "lines": 201,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/sync-roles.py",
+      "bytes": 1175,
+      "sha256": "3b48462090fabb242fd035d840191f27f44da42607e5ae42785840ab8bce0f34",
+      "lines": 25,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/task_gate.py",
+      "bytes": 9594,
+      "sha256": "cdae34247a9d9d4624680ae54a5c84cc17f86990df18af05e21b3ee1d3c52f17",
+      "lines": 204,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/test_content_parity.py",
+      "bytes": 10043,
+      "sha256": "a4232e5f5834aa7cae3ac26ae44ff1da63073e2f26652b1ba93ea1616ab7d121",
+      "lines": 169,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/test_lifecycle.py",
+      "bytes": 10299,
+      "sha256": "d6fe4f0cd4c914dcd1e0dd20e7941085a975b48fb1d09673fef9defe11d0bcab",
+      "lines": 233,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/test_media_handoff.py",
+      "bytes": 7651,
+      "sha256": "51285a87e3aaa07dfffe3a607887494810471f1b9db5c25415d92e54bafc37b0",
+      "lines": 159,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/test_task_gate.py",
+      "bytes": 10539,
+      "sha256": "1f2f544304fc24e5b8f1ed068639681d7c955d2fd30cacc49416d155091339d4",
+      "lines": 221,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/scripts/validate_media_handoff.py",
+      "bytes": 9455,
+      "sha256": "21aece625d70bed4581837cbe50812222cea5e4d4e116454aba96fe43b0528b7",
+      "lines": 159,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/api-first/SKILL.md",
+      "bytes": 5147,
+      "sha256": "401e88ab3d8336b0759aeffb61494ec934deb7ecc649979ae4ae1b966f67f946",
+      "lines": 128,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/archive/SKILL.md",
+      "bytes": 2983,
+      "sha256": "89f49f4f4ddc92e1d2dd481ce3a478beaf287e48b9930b782dfdae83cf7f2d56",
+      "lines": 38,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/audit-design/SKILL.md",
+      "bytes": 4674,
+      "sha256": "51cd1b67c2ae044da87267f9b039117deb7482e08e4b84beae2fb9dd0a9bafad",
+      "lines": 56,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/bugfix/SKILL.md",
+      "bytes": 3238,
+      "sha256": "54d3761cd87b3da7287cce35b34e2d665f9455350ba0a424c897c3d087ca3885",
+      "lines": 40,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/council/SKILL.md",
+      "bytes": 7151,
+      "sha256": "4d088778e8fa7198bce4105dfc4db0db6bb2e4726076cd5f62e86a1fe3ebb373",
+      "lines": 103,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/deploy/SKILL.md",
+      "bytes": 4834,
+      "sha256": "214225db2b08e558f85c8442b5cf37f23dd8ff3f1293ff41ab7291744c2a6841",
+      "lines": 60,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/design-system/SKILL.md",
+      "bytes": 7606,
+      "sha256": "ebef2518bb48fef6ff50435f6123c50773adb427a34ce916f4acf9cec66b455e",
+      "lines": 92,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/ecommerce/SKILL.md",
+      "bytes": 5260,
+      "sha256": "6d482f4242167a51ba7a7aa7a1752840a74cedcf220d83e4977349a83150c88c",
+      "lines": 137,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/feature/SKILL.md",
+      "bytes": 1333,
+      "sha256": "983c07e260358970b60b72ad93031845268533d81a9e7e00d040a8cd9aa06234",
+      "lines": 19,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/landing/SKILL.md",
+      "bytes": 6299,
+      "sha256": "348f9ebf170289fcd8a07e1b03458f3cfaf32df559559878ca68aec7cb4aebb9",
+      "lines": 129,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/multi-plan/SKILL.md",
+      "bytes": 3233,
+      "sha256": "c24169a7110a89216a3d86f1942a0ef4c6331c3563a3d82086552dd14b03070b",
+      "lines": 56,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/nullume/SKILL.md",
+      "bytes": 42035,
+      "sha256": "c8379f52e4f5cbd5c2f6b0405a6aa12d17f2811ee0af1803e4fcc33e427267b5",
+      "lines": 608,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/polish/SKILL.md",
+      "bytes": 5127,
+      "sha256": "140f4e3c27b4e0c6fc393b49dcc38bdfb72948a5df2ebdbbae3c050263817d23",
+      "lines": 60,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/preflight/SKILL.md",
+      "bytes": 6725,
+      "sha256": "9e48ddfe74f1f300ccc552983bd19516af4857f3aa15117be7b42cbcb2009df4",
+      "lines": 68,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/react-native/SKILL.md",
+      "bytes": 4232,
+      "sha256": "827368428d305aad6f9dbd1a2ad744e7ec8c1ab150c67de36e1eb0c5fcaeecfa",
+      "lines": 114,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/review/SKILL.md",
+      "bytes": 2094,
+      "sha256": "3a824c3131243b203c49e8e663b9db6989c658faea3de23e3b71af0b87e5530b",
+      "lines": 29,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/rkn/SKILL.md",
+      "bytes": 4222,
+      "sha256": "0279fa806b85d8539d4cf6abeb5a89921a5e7712089ebaff7a113d3af5b5993f",
+      "lines": 51,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/saas-architecture/SKILL.md",
+      "bytes": 4806,
+      "sha256": "cbca9c20c2c0409ce6acd5cf1da084c3e9891b3cee6a567ab1d72ad64e9a3738",
+      "lines": 110,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/secure/SKILL.md",
+      "bytes": 4254,
+      "sha256": "44653dd92bca6b1ea51c6394738f811ab6d0463617d6bd1e48138d2fdf6fc06e",
+      "lines": 49,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/security-profile/SKILL.md",
+      "bytes": 5848,
+      "sha256": "c02bb77eaadbe8cab125e4d270257e4343bd4d809fda6ddbd732b8c6fbf49812",
+      "lines": 72,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/selftest/SKILL.md",
+      "bytes": 1611,
+      "sha256": "d6d3dfcbe009bd9d580e3fd516ff3d8201556c73e4234d4621af7e825a551e2a",
+      "lines": 24,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/skills/summary/SKILL.md",
+      "bytes": 4296,
+      "sha256": "e1d847712c72327b61d4b95fbb4e50a795777aa316c1d68e8403503998392b78",
+      "lines": 63,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/workflows/automation.md",
+      "bytes": 2861,
+      "sha256": "738c1115a266b5306bc91a875f07216113ea3602d013f8beb75fc3e18f819be7",
+      "lines": 68,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/workflows/bug-fix.md",
+      "bytes": 2138,
+      "sha256": "66c5fae319fd63a1ba596c40bc827e68b681b3740173be64cadd54530dd0f4bd",
+      "lines": 39,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/workflows/deploy.md",
+      "bytes": 5015,
+      "sha256": "a805a4325439eb223a8fdf8d91a70dba4ff70116b24497f75e814f378efd9745",
+      "lines": 84,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/workflows/hermes.md",
+      "bytes": 2991,
+      "sha256": "2923d8efc2d549e40fbb8f42f97222d74729fc4cc848c45ed2e3ae6c630c043d",
+      "lines": 34,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/workflows/hooks.md",
+      "bytes": 1927,
+      "sha256": "6afba75844e23a17325cad9ec0e9aea56d78523e29482c3519b1a2eee7fcdd7d",
+      "lines": 25,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/workflows/new-feature.md",
+      "bytes": 1215,
+      "sha256": "9e6fc04b382c6a95facd233964cf875219e9fbc7ec33a74ad51b17c16fbe29c5",
+      "lines": 16,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/workflows/new-saas.md",
+      "bytes": 5808,
+      "sha256": "97c7bef2c660af08e06f6edea7f58ba03ec3c0f1cbc1173c33041763d32ebe14",
+      "lines": 108,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": ".codex/workflows/review-loop.md",
+      "bytes": 7357,
+      "sha256": "e2f5985cc87035f9f81d1156cfc06028669d46e1e96b5c40c83a4323574b4f49",
+      "lines": 80,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/README.md",
+      "bytes": 6964,
+      "sha256": "381407c607637c7e1c7493b6c76d8b98aa03620d52f1b36881bd9cad982b9978",
+      "lines": 84,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/agent-report-format.md",
+      "bytes": 4403,
+      "sha256": "86dccd18ebc7088bea460a1e18d3f62c62100e654b777581211b06e44ff30b65",
+      "lines": 65,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/anti-patterns/database.md",
+      "bytes": 2554,
+      "sha256": "1dbb7c2562f85f2642e2f744c1da97b286c3264d69bb074cf53b28309cc35ba7",
+      "lines": 30,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/anti-patterns/security.md",
+      "bytes": 24063,
+      "sha256": "cdb729656462969bbc4828c9695cbd73e24965f786cfe00b16bf61b28fb82354",
+      "lines": 329,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/anti-patterns/typescript.md",
+      "bytes": 2979,
+      "sha256": "61c117ebce2933662f1294ef3b2d3b7d43ed1341c2ee9b3bd3e85fd5a7170cb5",
+      "lines": 36,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/apple-patterns.md",
+      "bytes": 6162,
+      "sha256": "79b12c68d6f1512ff400539d4524829d7db645d282c4801c00e6c855241972d9",
+      "lines": 95,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/design-principles.md",
+      "bytes": 9159,
+      "sha256": "14bc9be975a8b2227fb93b7633a1f107efd57a7fe64a94c2333ba12daf7f087f",
+      "lines": 116,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/design-profiles.md",
+      "bytes": 8137,
+      "sha256": "24890af1c7129791dc6220480e6b6289b4369772cbceec864edcf417e5047c1c",
+      "lines": 93,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/media-reference-handoff.md",
+      "bytes": 19124,
+      "sha256": "a087ceb703d309c55fd073652598231e25ad526e318bf645fa1b03e6c67e0e0a",
+      "lines": 211,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/motion-engine.md",
+      "bytes": 5210,
+      "sha256": "3fbe88dbccfe0b5c4e7dcc72b296c8204149b9c66cce5a622ee76161c3142e9d",
+      "lines": 81,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/motion.md",
+      "bytes": 14232,
+      "sha256": "7cc3cf39a0e1d4ed8b4c1be6ef5e13f88f5a183fb92a46ed309a7781d6dcab15",
+      "lines": 196,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/rkn-compliance.md",
+      "bytes": 18662,
+      "sha256": "2e96127271f42e0966919c1d56495fe210612965a6ae9f8c23b95b9c23204ecc",
+      "lines": 255,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/rules/react.md",
+      "bytes": 4752,
+      "sha256": "ce5bad0f724db72912e56df95c592faf2ce9e7e12ef641a9ccc95fb2ba9ef01e",
+      "lines": 78,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/rules/typescript.md",
+      "bytes": 2688,
+      "sha256": "00cb3bb931aef0179c771734b6b73594d7bfcba4b803a1b897b6a09824f1359d",
+      "lines": 59,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/rules.md",
+      "bytes": 5561,
+      "sha256": "24d4f4831939f2cd9caf866d292ffd4f1fc148dc28de0fbde2fa5fdb838a5c21",
+      "lines": 147,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/security-runtime.md",
+      "bytes": 8043,
+      "sha256": "c5baa30b9b82f5d67ea03fe4b8e5f1394603630653a65dc0ae15f85c5b940581",
+      "lines": 117,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/stack.md",
+      "bytes": 2335,
+      "sha256": "e73fb50dbfa776b382115c87c33baddcdbc80ab59344e2e4d8dbad1a7d20a75f",
+      "lines": 64,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/templates/media-handoff.json",
+      "bytes": 3848,
+      "sha256": "2004fe80dc61882f07bd3df092acae3771f2e755186667e78139000d963828d4",
+      "lines": 25,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/templates/motion.ts",
+      "bytes": 5446,
+      "sha256": "a7572e26ccca3dbd84e0a1fa7b4160b82d63d2a82a0d39e1fa6d15804efb8ed4",
+      "lines": 122,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/typography-pairs.md",
+      "bytes": 3812,
+      "sha256": "d866d668a18cc3046d1621c3c63ace852bee9391c255588aa9e0e9becbb2ff90",
+      "lines": 62,
+      "review_status": "inventory-only"
+    },
+    {
+      "path": "docs/core/ux-guidelines.md",
+      "bytes": 15965,
+      "sha256": "b07971cc828573200da145b3c582bad50e0bb2e37e6d1925a3a633208cdb37a0",
+      "lines": 183,
+      "review_status": "inventory-only"
+    }
+  ],
+  "note": "Mechanical inventory, not semantic review. Excludes secrets, customer records and dependencies by positive path scope. No content copied."
+}

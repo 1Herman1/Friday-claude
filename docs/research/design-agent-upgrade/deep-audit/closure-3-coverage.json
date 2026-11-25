@@ -1,0 +1,788 @@
+{
+  "assignment": "closure-3",
+  "status": "complete_assigned_ranges",
+  "scope": "Assigned slices only; per-file status partial intentionally. Not runtime verification.",
+  "assigned_range_count": 32,
+  "assigned_lines": 17974,
+  "read_batch_count": 59,
+  "hashes_verified_against_inventory": true,
+  "line_counts_verified": true,
+  "ranges_verified_no_gaps_or_overlaps": true,
+  "runtime_verified": false,
+  "files": [
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/loop_connect.rs",
+      "sha256": "6e92438014a7d611c4ec5e4493fbce3c16ea8faa39cad3922663a0945c590e02",
+      "total_lines": 1900,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          545
+        ],
+        [
+          546,
+          1150
+        ],
+        [
+          1151,
+          1600
+        ]
+      ],
+      "substantive_note": " L1-545: Allowlist account→MCP production/staging; test override feature gated. Таблица пяти harness с разными root/env, MCP transport/registration, hooks timeout и version gates 0.1.4/0.2.0. Connect per-agent errors without rollback of successful other agents; two locks, helper prerequisite. Read-only status сверяет реальные resources и config root, instruction override и wake record; agent_connected требует MCP registered, hooks/instruction. L546-1150: MCP exact readback из JSON/TOML (TOML исключает own approval key), refusal different entry. MCP-only возможен без Loop и manual jsonc шаг всё же result connected. connect_one journal rollback восстанавливает prior record, не undo прежнюю working install; CLI MCP остаётся. Disconnect журнал→удаление instruction→stop waking→undo, конфликты сохраняются. Root env relative resolves cwd; executable absolute regular+execute, relative PATH ignored; CLI explicit env, cwd root; Codex trust last best effort. L1151-1600: Interactive add deadline kill/wait 300s; noninteractive output/post_add не имеют этого deadline. macOS quarantine read-only xattr, guard suppresses unapproved helper from 0.1.3. Spec approvals approve tools, plugin template; support dirs owner/0700/no symlink, locks O_NOFOLLOW+flock Unix, atomic staging 0600 rename. Accounts multi Claude, Codex single root/global others. Taste cleanup журнал baseline empty .mdc, deepest-first only empty created paths; human modified remains. offer_taste body outside assigned slice.",
+      "assigned_range": [
+        1,
+        1600
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Таблица пяти harness задаёт разные config-root/env, transport, registration и hook/version gates (0.1.4/0.2.0); account→MCP ограничен production/staging allowlist. `status` читает реальные JSON/TOML/config root, instruction override и wake record: наличие одного MCP не равно Loop-connected. Два lock и helper prerequisite предшествуют установке; ошибки отдельного агента не откатывают удачные подключения других. Journal `connect_one` восстанавливает прежнюю запись при ошибке, а не демонтирует прежнюю рабочую установку; disconnect убирает instructions/wake и применяет undo с сохранением конфликтующих человеческих правок. CLI-registration может остаться после rollback. Manual jsonc/MCP-only — отдельные допустимые состояния, не доказательство установки hooks.\nExecutable обязан быть absolute regular executable; относительные PATH entries игнорируются. Relative config root разрешается от cwd, дочерний CLI получает явные env и cwd=root. Interactive add kill/wait deadline 300s не распространяется автоматически на noninteractive output/post_add. Codex trust — best effort в конце. macOS quarantine проверяется read-only xattr; helper guard с 0.1.3 предотвращает неразрешённый helper. Owner/0700 support dirs, O_NOFOLLOW+flock и 0600 staging+rename — полезный установочный контракт. Cleanup Taste не удаляет изменённые человеком файлы, deepest-first удаляет только пустые созданные каталоги. Тело offer_taste и конец файла вне назначения."
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/walks/consent-rules.js",
+      "sha256": "9a0285969ab05d195388390bff9c66e3d3b28863a1a349c45e5ae1c769612d7a",
+      "total_lines": 3788,
+      "status": "partial",
+      "ranges": [
+        [
+          81,
+          655
+        ],
+        [
+          656,
+          1114
+        ],
+        [
+          1115,
+          1680
+        ]
+      ],
+      "substantive_note": " L81-655: Autoconsent bundled runtime: deferred eval messaging pending map resolution; CSS hide/opacity overrides pointer events/z; defaults optOut/prehide/generated/cosmetic on, heuristic off. CMP snippets реально меняют согласие (Didomi, __cmp, Cookiebot, Klaro, cookiereports API category 1 required), DOM input/click/scroll/history side effects; TEST часто только cookie presence, не legal proof. Многоязычные detect phrase regex EN FR DE NL ES PL CA EU GL RU; избегает общих cookie settings из-за FP. L656-1114: Reject словари 20 языковых групп: essential-only трактуется отказом, CCPA do-not-sell. Never-button excludes pay/subscribe+RU подписк/оплатит, concatenated accept/reject и >=300 символов. Detect excludes age/adult gates. Settings multilingual verb+noun guards исключают policy/save/accept; RU explicit Cyrillic, подробнее policy не settings. Accept начало с negative essential/reject guard. L1115-1680: Classifier actual priority reject→settings→accept→acknowledge, despite comment acknowledge catches save first: actual accept regex can capture save settings before ack. Popup rank reject; settings blocks fallback; ack tier1, exactly one accept tier2. Modes off/reject/tier1/tier2. Text cap 100k, snippets 200; button cleaning punctuation emoji. 100ms heuristic budget, hit-test grid x .1/.5/.9 y30/90/middle/bottom, open shadow composed traversal, avoid text-entry/login, climb max8/expand6, frame only one deep; visible/on-screen/dialog checks. TreeWalker continuation outside slice.",
+      "assigned_range": [
+        81,
+        1680
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Это исполняемый bundled autoconsent, не только словарь. Pending eval replies, CSS hide/opacity/pointer-events и CMP snippets могут менять Didomi, __cmp, Cookiebot, Klaro/cookiereports, input/click/scroll/history. Defaults включают optOut/prehide/generated/cosmetic, heuristic выключен. `TEST` часто проверяет наличие cookie, а не семантически или юридически корректный отказ.\nMultilingual detection/reject/settings учитывает русские варианты, essential-only и CCPA do-not-sell; payment/subscribe/age/adult gates исключены, тексты ≥300 символов не считаются кнопкой. Settings требует verb+noun, «подробнее» не достаточно. Реальный classifier reject→settings→accept→acknowledge расходится с комментарием о раннем acknowledge/save: accept-regex может раньше захватить save settings. Settings блокирует fallback accept; tier1 позволяет ack, tier2 — ровно одну accept. Есть off/reject/tier1/tier2, text cap 100k, snippets 200, budget heuristic 100ms. Hit-test нескольких точек, open-shadow traversal, exclusion login/text-entry, climb8/expand6 и iframe только один уровень ограничивают полноту. Продолжение TreeWalker вне диапазона. Для Friday переносить как opt-in state-changing capability, не как безусловный screenshot-preprocess."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/visual.rs",
+      "sha256": "6b74b1628e9b485e682047f39caeaa555bf16b5692b82771d3de82411c3aa155",
+      "total_lines": 7021,
+      "status": "partial",
+      "ranges": [
+        [
+          4801,
+          5282
+        ],
+        [
+          5283,
+          5764
+        ],
+        [
+          5765,
+          6265
+        ],
+        [
+          6266,
+          6400
+        ]
+      ],
+      "substantive_note": " L4801-5282: visual.rs slice тестовый: sampled contrast median unless two surfaces→low/unresolved; 4.49 fail4.5. Оpaque fill vs blur near opaque alpha>=.8 разрешает pixels, .79 blocks. Halo every layer distinct from ink; opacity text fold vs surface fade; display contents не paint barrier. Glyph core ignores AA edges, consistency median, thin fallback, unresolved few pixels/churn/repaint/moved/off-color/hidden still painted. Compositing proper stack; SVG unreadable. Running/near-zero reveal excludes candidate. L5283-5764: Gradient tests actual paint bottom-up including alpha ink, only fully opaque ground; worklet/url/untiled small layer unresolved. Candidate schema clip padding2 threshold4.5 imageOnly filter. Outline sharp multi shadow/stroke different colour vs soft halo. Detached gradients/photo/pseudo geometry+stacking order; badge away ignored, negative-z under card unless new stacking context, rotated uncertain. Sheared before+after seam union handles all-fail/all-pass; notch/mask/3D unmodelled. Dialog translucent panel must compose sibling black.8 scrim; absent/faint/masked/clipped scrim not ground. L5765-6265: Tests placement conservative across unknown skew origin; tint/scale0/rotate not solid. Wash judged whether changes fail→pass (not blanket suppression), overlapping alpha stacks and group opacity once; before/after order z and filter/mask uncertain. Scrim over text cover vs under text ground; flex z honored. Blended/translucent same-text echo routes pixels, opaque/transparent/different text not echo. Translate px/%; matrix3d unknown. Negative sibling hidden under ancestor unless isolation; SVG shape only local surrounding text. Separate maxRoutedCandidates opt-in budget preserves original candidate list. L6266-6400: Routed budget prioritizes unique design then copies; image underlay invalidates element verdict on page ground unless layer-scored or outline. Parked/zero/hairline gradient not surface; repeat-y stripe makes ground; background layer list size alignment important. Slice ends in test setup at6400 (no claim full function).",
+      "assigned_range": [
+        4801,
+        6400
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Назначенный фрагмент — визуальные регрессионные тесты, а не вся contrast implementation. Проверяются median/core glyph sampling без AA edges, строгий 4.5 (4.49 fail), alpha/compositing и отличие paint barrier от display:contents. Blur при alpha≥.8 допускает pixels, .79 блокирует; малое число pixels, repaint/churn/move, unreadable SVG, running reveal дают unresolved/исключение, не фиктивный PASS. Surface/text opacity и halo/stroke рассматриваются отдельно.\nGradient layers требуют opaque ground, worklet/url/незамощённые маленькие слои могут оставаться unknown. Pseudo/photo/badges, negative-z и stacking contexts, shear seam union, sibling scrim, group opacity, washes fail→pass и echoes — отдельные twins, предотвращающие blanket suppression. Не моделируются все mask/notch/3D/rotation случаи; matrix3d unknown. maxRoutedCandidates opt-in сохраняет исходный список и сначала предпочитает уникальные designs. Image underlay может отменить ошибочный verdict на page ground. Фрагмент заканчивается внутри setup на L6400: этот тест и весь visual.rs не объявляются полностью изученными."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/src/regex_matchers.rs",
+      "sha256": "6f6fe44a95c64814688bb1afd68691cae991f2d37197fcece128dd0f32ba77cb",
+      "total_lines": 3664,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          650
+        ],
+        [
+          651,
+          1282
+        ],
+        [
+          1283,
+          1600
+        ]
+      ],
+      "substantive_note": " L1-650: Rust port imports core css scan/rules/colors/fonts/JS UTF16 compatibility, no side effects. scan_js tracks quote/template interpolation/paren/brace (not full parser); markup scope and exclusive ternary arms prevent cross-tag/branch gray+bg pairing, ?./?? excluded. Side-tab >=2px or thin rounded requires declaration scope. Statements preserve source order, drop nested blocks, mixin/spread/interpolation makes corners unknown until literal reset; sx nonzero numbers unknown theme units, zero known. SourceText offsets once/file. L651-1282: Literal class helpers cn/clsx/cx/twMerge accepted only literal composition; spread/bound/dynamic unknown. Corners classes→styled props→inline, theme numbers unknown. Brace and indented Sass scopes inherit only same-element &/at-rule, descendant stops; interpolation unknown. Side tab suppresses table rows, caret zero size/transparent borders, equal frame borders; dominant side >=2 and >=2x others or hairlines, thin needs rounded unframed. CSS host index cross-rule rounding, !important own wins; inline per-corner overlays. Other sides parse CSS shorthands/logical borders/styles medium3. L1283-1600: Remaining helpers: Tailwind other-border variants; style index component style spans; lazy Scope.element_declares_radius same host not arbitrary nearby lines, Sass sheet largest corner with unknown dynamic declarations. Matcher find/test/fmt contract. rounded-none removed before rough rounded helper. Overused Google font lookup core constant. Neutral authored keywords and RGB/hex spread<30; other CSS color funcs core parser. Actual matcher table not inside assigned1-1600.",
+      "assigned_range": [
+        1,
+        1600
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Фрагмент реализует helpers статического Rust matcher: CSS scanner/colors/fonts/JS UTF16 совместимость, scan_js со строками/templates/braces, но не полный JS parser. Gray/background pairing ограничен markup host и exclusive ternary arms; optional chaining/nullish не принимаются за ternary. Literal cn/clsx/cx/twMerge поддерживаются; bound/dynamic/spread — unknown. Scope, inline и styled props, shorthand/logical border и source order используются вместо line-nearness.\nSide-tab учитывает dominant side ≥2px и ≥2× другие стороны либо thin rounded, исключает table rows/carets/equal frames. Радиусы наследуются только по same-element &/at-rule, не descendant; Sass mixin/spread/interpolation оставляет unknown до literal reset. Nonzero numeric sx нельзя считать CSS pixels: theme units неизвестны. Cross-rule CSS index, !important, per-corner overlays уменьшают false positives. `element_declares_radius` привязан к host, rounded-none удаляется до rough helper. Neutral authored RGB/hex spread<30 отличается от цветного, функции разбирает core parser. Главная matcher table за L1600 не прочитана; не выдавать все правила за изученные."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "sha256": "080b835e99353f63650f8966813d735f142293119cd371c554b66a1effc5e3da",
+      "total_lines": 11485,
+      "status": "partial",
+      "ranges": [
+        [
+          1296,
+          1529
+        ],
+        [
+          1530,
+          1790
+        ],
+        [
+          1791,
+          2130
+        ],
+        [
+          2131,
+          2476
+        ],
+        [
+          2477,
+          2802
+        ],
+        [
+          2803,
+          2895
+        ]
+      ],
+      "substantive_note": " L1296-1529: Taste bundled address module width phase all5 FAIL: street-number/postcode/coordinates/company-number/phone. Fiction contact safety not universal compliance: brief allowlist required real details. Matcher unicode street grammars multiple Europe/EN, structured field semantic, links tel/sms/WA/geo/maps query/decode incl reversed Google coords. Phone7-15 digits with stand-in/Ofcom/US555/AU exceptions, Nordic555 real, guards units/prices/SKU/dates/counts. Contact dedupe hidden→shown width; comments intent to scan attributes hidden/shadow/frames, body next. L1530-1790: Address actual probe TreeWalker hidden+shown, open shadows, same-origin frames, row short leaf joining, matching text Range crops/pinned top. Attributes clipboard/title/head/JSONLD/microdata; max300 hits. allow normalization substring + phone last7 broad; percheck8 and per-element grouped, cross-width dedupe hidden can reshow, safe eval60s errors handled host. Postcode town/stopword/mock/stat/context guards. Rhythm comments strict house SR1-8: one/two screen sections, fixed margins/air, no carousels/dividers, split text-left; own tab scroll/lazy/fonts/finite animation waits and expansion clicks side effects, desktop-first identity. L1791-2130: Rhythm actual checks/fixes+flags. Width/height exact abort avoids measuring980 mobile; no viewport FAIL rest not measured. Memo computed/rect/visible/sr-only/boxed, clip overflow contain along approximate CB chain; fixed escape. Header/nav+bottom actionbar determine visible region; main children + footers/wrapper fallback sections. Moving finite animation/sticky/big scene positional downgrade only; no sections each rule FAIL. Layer media direct section abs fullbleed z0, hero alt or hidden; domain-specific rules not Friday universal. L2131-2476: Rhythm actual rendered/text Range/control/media boxes; aria hidden media excluded, product frame unit. Container outer edges→modal common ±2, phone nearbleed<12/desktop40 excluded. Grid row/split heuristic excludes mocks, repeated table rows, control-only columns; mixed photo-text avoids stretching. Desktop node path status reused mobile. Headings H1/H2 or >=40/28 not row/card. SR1 exact fold ±1,next peek1, no spill, content nav..H-24-bar,docked strip96. SR2 H/2H ±2 PASS 8WARN, photo chapters up4H; grid, padb fit, place<3WARN >6.05WARN >7FAIL; all scroll snap FAIL. L2477-2802: SR3 gaps128..480/phone112..420, warn64..600/56..560; fill55/40WARN, g2 groups40/25; legitimate layer full; decorated filled frame<60% extends content; dividers hr/bare90% border, exempts cards/mock/hero/repeated/legal last. SR4 sample strides/tops/bottoms visible nav region; peek8PASS24WARN other heading/full two contents FAIL, repeated WARN escalation. SR5 actual at most1 h2 (does not require present), hero none, heading overlap share50px scroll3%/5%. SR6 equal margins/structure exact class shell/one wrap/hero-text/footer2; containment2px, centered/box-hero grid exemptions; strict style policy. L2803-2895: SR6 leftmost text line clusters4px only wrap.left or one k5/6/7 split; H1/H2 left2 (centered/box hero exempt), wide>half text must left. Horizontal page scroll any>0 FAIL, reports6 offenders. Media/boxed>half must span edges except row/split/product internals. SR7 row first/last2px/equal heights2, mixed photo/text groups separately/footer edges only; overflow-x auto/scroll >2FAIL except pre/code.wrap. Slice stops within SR7; SR8 body not read.",
+      "assigned_range": [
+        1296,
+        2895
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Одна назначенная часть consistency содержит окончание address phase и большую, но не полную rhythm phase. Address имеет пять FAIL-категорий: street number, postcode, coordinates, company number, phone. Unicode/европейская грамматика, tel/sms/WA/geo/maps и query decode, JSON-LD/microdata/title/clipboard/head дополняют текст. Probe обходит shown/hidden DOM, open shadows и same-origin frames, Range crops и joined short leaves; cap300 hits, 8 на check. Телефон 7–15 цифр с stand-in/Ofcom/US555/AU исключениями и guards от цен/units/dates/SKU. Это fictional-contact safety, не универсальная privacy/compliance. Allow substring и phone last7 достаточно широки и требуют осторожности.\nRhythm открывает свой tab, прокручивает lazy content, ждёт fonts/finite animation и может кликать expansion: это side effects. Точное несоответствие viewport останавливает измерение, no viewport FAIL; прочие значения нельзя трактовать как measured. House-style SR1 требует fold-fit/нет next peek; SR2 H/2H с ±2 PASS/8 WARN, photo chapters до4H, scroll-snap FAIL; SR3 большие gaps 128–480 desktop/112–420 phone и fill55%; SR4 различает peek8/24 и две полные секции; SR5 фактически НЕ БОЛЕЕ одного h2, а не обязательный h2. SR6 требует edges/wrap/split, H1/H2 left2px, horizontal page scroll>0 FAIL с exemptions для hero/product/boxed. SR7 проверяет row alignment/heights ±2px и overflow-x>2 кроме code.wrap. Геометрия содержит sticky/moving downgrades, approximate clipping/CB chain, product/media/modal/nav/footer heuristics. Назначение обрывается внутри SR7; SR8 не изучен. Эти численные запреты не превращать в универсальную политику Friday."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/extension-walks.test.mjs",
+      "sha256": "b594101256b52a8e4b737ee227519c39ff63fffdf6f4a4ff414b7b099c33ea6e",
+      "total_lines": 2918,
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          1985
+        ],
+        [
+          1986,
+          2424
+        ],
+        [
+          2425,
+          2871
+        ],
+        [
+          2872,
+          2918
+        ]
+      ],
+      "substantive_note": " L1601-1985: Extension tests mocks intent: pause invalidates stale shots/input; persona sight transforms colour-blind/older keeps plain beside, normal untouched. Screenshot native screen DPR0 resized/cropped OffscreenCanvas prevents flashing/double coords. Takeover sign-in hush, explicit takeover permits auth hosts but other writes block; callback URL emitted after handback test includes code=secret (potential URL telemetry sensitivity, static). Fetch hold all writes closed incl own409 and Document abort; SW bypass + DNR workers/newtabs/frames fallback retry fail-closed. free mode cross-origin writes except own service but nav still onsite; submit asks click/Enter/Space incl shadow/frame, GET/search exempt. Badge veil input/hit-test. L1986-2424: Tests pause rejects writes-open not queues; takeover own writes allowed handback closes. Page-fake sign-in cannot open write; trusted human pointer/key short input window only, DNR mirrors. Sensitive focus password/card/code/frame type+Enter denied Tab/ShiftTab/Escape escape only; invisible focus even Tab denied. Upload ignores arbitrary path/url/data/name/type, built-in192PNG CRC, only actual local drop accepting not document bubbling; pause race no upload. Stop rejects held ops and logs held/refused counts. Debugger detached by extension vs actual tab closed recovery, tab replacement rearm before resume; socket cancels pending, stop during create/attach closes late tab. Adopt own tab validates socket/site/allow; no resize/nav/reload/film. L2425-2871: Adopted journey asks deed120s timeout unanswered not no/connection; other-site navigation only recent actual click, remember yes/no normalized www/https, private IP blocked, limits constants. Pause void question and reask; goto/history pre-walk/timer redirects not allowed. Writes yes until server closes epoch late yes cannot reopen; other-site read-only. Adopted tab leave open/ungroup; explicit phone/tablet emulates UA/touch reload and persisted sizedTab; cleanup stop/fail/cancel/restart clears metrics/touch/UA before detach. Old socket replies never next. Glow no click capture; badge Yes anti-clickjack IOv2 stable visible/dwell/location/top/style; No/Stop always allowed. L2872-2918: Packaging test intent Firefox excludes walks/account/Chrome worker/permissions; store every walk module resolvable production-only no staging/local/key/account/outing fixture, switches account:false devHosts:false. Install warning delta debugger/downloads/tabGroups/tabs and unpacked nativeMessaging/notifications, unchanged all_urls host scope. Not executed.",
+      "assigned_range": [
+        1601,
+        2918
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "VM/Chrome mocks описывают security intent extension walks: pause обесценивает stale shot/input и не допускает queued writes-open; takeover/human sign-in/handback разделены. Fetch hold блокирует writes (own service 409, Document abort); SW bypass, DNR worker/newtabs/frames fail-closed; free разрешает cross-origin writes кроме own service, но не произвольную навигацию. Trusted pointer/key короткого окна, а не page fake sign-in, открывает авторизационный маршрут. После handback query URL может содержать чувствительный code: это основание проверять redaction, не runtime-доказательство утечки.\nPassword/card/code sensitive focus запрещает type+Enter, разрешает только Tab/ShiftTab/Escape; invisible focus блокирует даже Tab. Upload принимает только встроенный PNG и локальный drop target, отвергает arbitrary path/url/data/name/type и race с pause. Stop обрывает held operations. Есть late tab attach/socket/replacement races, old epoch replies, adopted-tab навигация только по actual click, deed timeout120s как unanswered, не no. Adopted tab сохраняется open, но UA/touch/metrics сбрасываются; Yes badge требует IOv2/dwell/anti-clickjack, No/Stop всегда доступны. Store/Firefox packaging assertions разделяют permissions, prod modules, account/devHosts и отсутствие fixture/key/staging. Это не выполненный security test и не обзор всей production implementation."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-agent-target.test.mjs",
+      "sha256": "40749fde6ea8b708dfd5b9daf31d01492b753496c1415a30a69bd0dc07520e3c",
+      "total_lines": 1176,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          586
+        ],
+        [
+          587,
+          1114
+        ],
+        [
+          1115,
+          1176
+        ]
+      ],
+      "substantive_note": " L1-586: Live binary integration tests skipped absent engine; spawn live-server temp writes/server.json token, copy agent off, reaper, SSE fake overlay. Protocol wrong token401 bad action/count1..8/selector400; noBrowser semantic200. Broadcast target8hex action/index/text/prompt/dryrun→claim one renewable lease→result strips token. Lease rescue expiry, stale holder denied; all-busy rollcall immediate but eligible/live lease wins, stale busy withdrawn; pending false stops retries. Late SSE replay target, identified disconnect releases lease immediately. Not run. L587-1114: Reconnect same client retains lease until last connection gone; no_match grace150ms permits late mount/new overlay extends; busy preferred mixed no_match. Generate event atomically resolves target and journal origin agent but strips envelope; duplicate/different session/expired/unknown target409 no session journal, own answered event allowed. hideLiveBar boolean globally broadcast/status/reconnect. Only lease holder result409 others/client required. Full visual action vocabulary parsed Rust and CLI matrix. Timeout400 late delivered:false; wait-for-browser invalid local/1500 budget/new connection distinguishes browser_timeout from no_browser. L1115-1176: CLI negative cases JSON stdout exit1: no-live-bar accepted then server_not_running, missing server with boot instruction, invalid_action validActions+bold→bolder hint, selector_required, invalid_count many. Temp cleanup finally. Full test file read, no binary launched.",
+      "assigned_range": [
+        1,
+        1176
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Интеграционные тесты живого binary условно пропускаются без engine; создают temporary server.json с credential, fake SSE overlay, reaper и cleanup. Проверяют 401 credential, 400 invalid action/count/selector, semantic200 noBrowser; target8hex, text/prompt/dryrun, count1..8. Один renewable lease, holder/client identity, expiry rescue, disconnect/reconnect last connection, busy/no_match grace150ms и late replay не должны смешивать разные клиенты. Result не раскрывает credential.\nGenerate атомарно связывает target и journal origin=agent; duplicate/wrong session/expired/unknown target409 не добавляют journal. hideLiveBar boolean сохраняется/broadcast/reconnect; result чужого holder409. wait-for-browser отличает browser_timeout от no_browser, invalid local input не должен запускать server. CLI negative paths дают JSON stdout/exit1 и конкретные hints (bold→bolder), finally чистит процессы. Статическое чтение тестов не подтверждает корректность lease реализации в работе."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/fullpage_screenshot.rs",
+      "sha256": "0127c7e8a10f4c0bb77477356c7ab9b003054e6686621144dc4b2f81d23fb48a",
+      "total_lines": 1053,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          646
+        ],
+        [
+          647,
+          1053
+        ]
+      ],
+      "substantive_note": " L1-646: Browser integration suite uses installed browser optional skip, Tcp fixtures threads and actual JPEG luma/pixels not merely file exists. Tests tall/wide/body/fixed-inner scroll/virtual rows, contrast origin SCAN vs VISUAL_CONTRAST and passing twins absent, below-cut element viewport fallback, fixed badge/anchored tooltip only first tile (4x4 blocks avoids AA). RTL origin_x negative image→document offsets. Mid-scroll band, margin shell16px, footer after inner3000 content. Test fixture server read-only local; tests would spawn browser/network, not executed. L647-1053: Evidence element shot hides only viewport fixed cover and records hidden_covers; retains fixed backdrop under text incl pointer-events none, transformed containing-block fixed content, open modal/wrapped modal; closed prefs not exempt. Shared tile cannot reused if covers second. Resize relayout settles then stitch, sticky bars once at natural locations incl later top64 vs tile edge; endless layout marquee/transform slide remains beyondViewport. Modal tests return if no target shot: conditional assertion not unconditional coverage. All full file static.",
+      "assigned_range": [
+        1,
+        1053
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Browser integration fixtures проверяют реальный JPEG/pixel/luma контракт при установленном браузере, но здесь не запускались. Tall/wide/body, fixed-inner scroll/virtual rows, RTL negative origin_x, mid-scroll shell/footer и coordinate mapping покрывают то, чего не доказывает обычный fullPage. Fixed badge/tooltip остаются только в первом tile; 4×4 sampling избегает AA.\nElement screenshot временно скрывает только viewport-fixed cover с hidden_covers, оставляя backdrop-under-text, pointer-events none, transformed-CB fixed и корректные open/wrapped modal случаи. Shared tile нельзя использовать для второго cover без повторной проверки. Sticky должен появляться один раз в естественной позиции, resize должен settle; endless marquee/transform slide может остаться beyondViewport. Некоторые modal tests выходят раньше при отсутствии target shot: conditional assertion не даёт безусловного покрытия."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/extension-popup.test.mjs",
+      "sha256": "de0a1ad8a47b9bdf5225b9759aa2d85b52cc521935324bbebddecd0362a37140",
+      "total_lines": 969,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          455
+        ],
+        [
+          456,
+          821
+        ],
+        [
+          822,
+          969
+        ]
+      ],
+      "substantive_note": " L1-455: Popup stub DOM/Chrome vm scripts real HTML: clean vs unscanned vs failed, copy URL stripped fragment/advisories count; pending visual pass blocks copy, active-tab/reload/navigation epochs stop stale initial query/clipboard completion; clipboard error retry findings retained. Popup Firefox detector no account. Sidepanel stub tests end only own tab+result issues count, active walk Stop all tabs; sign-in withheld hint/focus refusal, persona face data-only not remote, stable rows newest current; age-band Sees figures named only persona own age, not child. L456-821: Panel plan before walk, risky confirm/id device/sees; edit restores task, expired plan back home. Persona create max3 own with trimmed description/device/disability, confirmation required/refusal keeps text; intro inert controls with live reduced-motion optout and redraw clock. Faceless/profile bounded polling3/6/12/20s four failures, swaps nodes in place stops after leaving; grid balancing. App cast by origin excluding defaults, local127/.test not persist; app option only owns personas incl at cap. Mic recognition+wave separate stream cleanup Stop/Send/Create frames/audio context. Ending No vs held and friction mood truthful. Signed-out/unavailable/notPro routes Scan always; server Pro authority, polling5s stops on walk/signout/success. L822-969: Panel delayed status/personas loading dots no premature Send. Connected2s moment single session flag; settings inline no window, help GitHub version only not email, signout. Delete own persona confirm default focus No/Escape restores, Yes list/grid updates+focus. History loading vs empty vs error retry vs signedout, running outcome; Scan box retained across visits/current host follows tab navigation. First-run privacy→tabgroup→home once local flag; store no account messages terminal copy only.",
+      "assigned_range": [
+        1,
+        969
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "VM stubs читают real HTML, но не являются browser a11y verification. Popup различает clean/unscanned/failed, удаляет fragment из copy URL, блокирует copy до visual-pass, epoch-защищает navigation/reload/clipboard completion, сохраняет findings при clipboard failure. Sidepanel сохраняет own-tab/issue-count contract и Stop all tabs; plan→risky confirmation→walk, edit/expiry, server Pro authority и signedout fallback Scan.\nPersona max3 own, trimmed description/device/disability, data-only face; refusal сохраняет ввод. Faceless polling3/6/12/20s прекращается при уходе; Pro polling5s заканчивается на signout/success/walk. Origin-specific app cast, no persistence для loopback/.test, запрет чужих personas. Mic recognition и waveform stream имеют отдельный cleanup audio/RAF; loading dots не показывают преждевременный Send. Connected 2s once/session, inline settings, delete default No/Escape, focus/grid refresh после Yes. History имеет loading/empty/error/retry/running/signedout; Scan переживает visits и следует tab. First-run privacy→tabgroup→home once; store no-account terminal copy-only."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/text_geometry.rs",
+      "sha256": "8279ea62a3a160c0d6bd84bd7561aafe10db553b04b5e5cd0e88e6acfa627e55",
+      "total_lines": 752,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          601
+        ],
+        [
+          602,
+          752
+        ]
+      ],
+      "substantive_note": " L1-601: Text geometry pure Dom: direct Range unions inline phrasing stops blocks; None fallback box, weighted actual run fontsize/glyph advance Latin mono/proportional not paragraph inherited alone. Inline pitch block strut max. Real x scroll metrics>client1 vs overflow hidden layout bug; flat parent supports slots. Transformed row track content overflow recognized hidden/clip; endless animation paired name/count/state, unknown frames conservative moving, scale-only not moving/paused no. Clamp own deliberate ellipsis to padding not ancestor clipping. Line count1+round((height-1.2em)/pitch), br detector. Tests positive/negative twins. L602-752: Geometry tests line count zero/NaN1, nested inline br vs block, weighted 24px span/16+24 avg20 mono.6 vs proportional.5 mixed.55; row track identity matrix still track but no transform/stacked/no metric no exemption; longhand overflow wins; inline11 block14 strut14 own20 retained normal unresolved fallback. Full752 read.",
+      "assigned_range": [
+        1,
+        752
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Чистая DOM geometry логика: unions direct text Range/inline phrasing без смешивания block descendants; fallback box только при отсутствии данных. Weighted actual run fontsize/glyph advance (mono .6, proportional .5) отличает дочерний шрифт от paragraph inherited; strut и line-height учитываются отдельно. line count приближённый, zero/NaN→1. Фактический scrollWidth>client+1 отличается от CSS overflow declaration; slots/flat parent, track transform, clipping и paired animation names/count/state уточняют moving row. Infinite moving и scale-only/paused различаются. Намеренный ellipsis clamp ограничен собственным padding, не случайным ancestor clip. Встроенные positive/negative tests объясняют эти исключения; не запускались."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/src/entry_capture.rs",
+      "sha256": "1db962f01f8bec2453e61f688ac35c8392a96df5e2228c4bdedfe1222a45c682",
+      "total_lines": 574,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          559
+        ],
+        [
+          560,
+          574
+        ]
+      ],
+      "substantive_note": " L1-559: Entry capture frozen snapshot binds spec+comp never served, verifies spec agrees/reference dimensions; hero vs responsive1440/390 clock pinned Date source. Raster region plates cannot reference comp/copy, stableCapture+batchStability required, raster outside declared<15% strict; mobile excludes plate paths not desktop positions and captures only first region no mobile placement score. Text-only uses same assembled renderer font/deps/double-shot, hero manifest dependency closure if matching else static fallback (malformed manifest silently fallback); requested bytes/base64512 prefix >=64 detect reference embed, raster coverage catches reencoding large only. Native browser side effects render scripts but no execution audit. Static inventory excludes hidden/node_modules/symlinks rejects, depth12/entries8192. L560-574: Inventory canonical root, UTF8 path required slash normalize, max1024 static files. Entire entry_capture574 read.",
+      "assigned_range": [
+        1,
+        574
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Frozen entry capture связывает spec+comp hash/размеры, но не обслуживает reference как web asset. Hero/responsive1440/390, pinned Date и stableCapture/batchStability создают воспроизводимый artifact contract. Raster plates допускаются только по manifest, вне region строго <15%; reference bytes/base64 prefix ≥64 помогает ловить embed, но не доказывает выявление любого reencode. Mobile исключает plate paths и снимает первый region, не оценивает desktop placement.\nText-only использует тот же assembled renderer/fonts/dependency closure и double shot. Matching hero manifest задаёт closure, malformed manifest может молча уйти в static fallback — наблюдаемость слабее, чем hard validation. Static inventory rejects symlinks, depth12/entries8192/files1024, slash/UTF8 path requirements. Собственный renderer/browser выполнял бы page scripts; здесь его не запускали."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/page_checks.rs",
+      "sha256": "fe15b0381c5762bcb43f8da53e12060394bdbea0a5d810e34091ccf6ea1d0221",
+      "total_lines": 10136,
+      "status": "partial",
+      "ranges": [
+        [
+          9601,
+          10105
+        ],
+        [
+          10106,
+          10136
+        ]
+      ],
+      "substantive_note": " L9601-10105: Page_checks tail tests nested-card exemptions meaningful: chart/canvas with caption not illustration+CTA/body copy, monospace output/code rows vs labels/changelog/chips, code Copy/menu okay Upgrade not. Media play+seek/native visible controls vs loneplay/hidden audio/avatar video/show notes; dialog panel first nesting exemption not all descendants or role region. Cream palette actual visible fullwidth solid bands incl deep SPA overrides body, warm2 floor vs grey green>red; alpha/opacity/image/shift/unmeasured cannot hide cream. Hidden text excludes hidden fixed fullview overlay not opacity-only or app main/majority content; offscreen transitioned drawer exemption not static/3D/tiny shifted. L10106-10136: Hidden text fade test running forwards opacity0→1 treated shown; fill none/missing single-shot counts18 hidden, infinite visible phase shown, no observed running hidden, reverse forwards end0 hidden. Tail slice536 not full file.",
+      "assigned_range": [
+        9601,
+        10136
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Тестовый хвост page_checks содержит важные exclusions, а не blanket no-nested-card: chart/canvas+caption, code/output с Copy/menu и настоящий media player отличаются от illustration+CTA, Upgrade, lone play/hidden audio/avatar video. Dialog panel first nesting exempt, role=region сам по себе не освобождает всё subtree. Cream проверяется по visible fullwidth solid bands, включая SPA overrides; alpha/image/shift/unmeasured не считаются доказанным безопасным фоном.\nHidden text не принимает fixed overlay за весь app/main, distinguishes offscreen transitioned drawer от static/3D/tiny shifted. Running opacity0→1 forwards считается shown, fill-none/missing и reversed end0 — другие исходы; infinite phase/observed running различаются. Смысл assertions изучен, detector implementation вне хвоста не объявляется проверенной."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/backgrounds/backgrounds.css",
+      "sha256": "86fcfe354fc850ee7b9ace2937199d9180173448bfc63d286d48b26c4fca4b99",
+      "total_lines": 516,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          322
+        ],
+        [
+          323,
+          516
+        ]
+      ],
+      "substantive_note": " L1-322: Backgrounds CSS16 grounds depends system/ui/cards/backgrounds.js; tokens p→local bg/surface/ink/muted60% ink/fx/buttons, page paper/topglow no token override. Relative OKLCH hue262..338 remaps azure/pink anti-violet, tint headroom g-k calculated JS elsewhere; dark/inverse/away-lowchroma, noise SVG3 blend. Relative isolation overflow clip, soft masks fade120; inset dark pale band default; responsive padding/minheight, phone no min. Mist radial field/halo/grain/paper/dusk smoothstep edges/topglow/grid container72phone48 with heading hole/dots margin/arcs lower rings. Contrast7/4.5 comment promise not measured here. Повторная проверка L272: скобки gradient/color-mix/calc корректны; гипотеза syntax error снята, браузерный parse не запускался. L323-516: Band/field grain second tone and bg-tint light/dark; stage vivid no direct text card only, yellow lifts/amber avoids olive; photo img alt/lazy or URL scrim .88/.80/.76 dark, light variant, text-zone h66/phone86 JS measurement elsewhere, mobile object pos. Horizon dome min1200/170% flat not arch, deep spotlight/noise. Liquid two160% transform-only meshes26/34s alternate, off/held paused, container pause disc and reduced no animation print hidden. Modern relative colour/color-mix/round dependencies compatibility not verified.",
+      "assigned_range": [
+        1,
+        516
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "CSS grounds связывают p→local bg/surface/ink/muted/fx/buttons, при этом paper/topglow не переопределяют page tokens. Hue remap anti-violet, dark/inverse и tint headroom зависят от внешнего backgrounds.js; комментарии о contrast7/4.5 не являются measurement. Mist/halo/grain/paper/dusk, ruled grid с heading hole, dots/arcs, stage, photo scrim и horizon — реально разные recipes, не aliases. Photo scrim .88/.80/.76, text-zone66/86 и mobile object position демонстрируют content-ground coupling.\nLiquid использует два160% transform meshes26/34s; off/held pauses, reduced-motion no animation, print hidden. Зависимости: system/ui/cards, relative OKLCH/color-mix/round и SVG grain; browser support не проверен. Повторное чтение L272 сняло первоначальное подозрение syntax error: gradient скобки корректны, дефект не заявляется."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/effects/soft-light-bars/effect.js",
+      "sha256": "25fc5e759d229a875aec4be4c3b0691d387f7dffed1ca6a08663698aa9137757",
+      "total_lines": 403,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          403
+        ]
+      ],
+      "substantive_note": " L1-403: Shader effect imports fx shader/color/grain; schema12 controls default seed bars4..7 tilt<=22, calm protected gap0.12frame; uneven pack degrade bar count if fit<.7, pool opposite text. GLSL7 bars flatcore/blur/bloom10..16s breath, OKLab five ramp, fixed CSSpixel grain/stipple, calm mask and edge fade. Guard no violet dark272..338 pale262..345, pale blue→sky; samples seven interpolation points pairs, tries companion→same ground→white; light natural daylight tint/cool shadow, yellow amber. CSS fallback same seed scene static layered gradients; shader still5 fps30 maxDpr1.5. Actual lifecycle/reduced handling fx dependency outside file; no direct cleanup here returned shader handle.",
+      "assigned_range": [
+        1,
+        403
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Soft-light-bars — shader effect с schema controls и deterministic seed: 4..7 bars, tilt≤22, pack уменьшает число при fit<.7, protected calm gap .12 frame у текста. GLSL имеет flat core/blur/bloom, breath10..16s, five-color OKLab ramp, CSS-pixel grain/stipple и edge/calm masks. Hue guard с несколькими sampled interpolation points избегает purple, fallback companion→ground→white, light ground даёт natural tinted shadows. Это aesthetic policy, не универсальное требование.\nCSS fallback повторяет seeded layout статическими gradients. Shader handle still5/fps30/maxDpr1.5 возвращается из общего fx shader; cleanup/context loss/reduced-motion lifecycle определяет dependency, не этот файл. Перенос одного effect.js без shader/color/grain/fx не является работающим компонентом."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/oracle/cases/hooks.mjs",
+      "sha256": "190e91f38f288ae331149be1322bacd3f0ef3249ded208ef6c52b0ff147956a0",
+      "total_lines": 381,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          342
+        ],
+        [
+          343,
+          381
+        ]
+      ],
+      "substantive_note": " L1-342: Oracle declarative corpus not assertions standalone: hook postedit types, sensitive/generated/outside/missing skip cases, malformed input/depth/disabled/quiet; duplicate tool id scans once; Claude/Codex/Github/Cursor3.21/Grok/Hermes output envelopes, Stop active/reentry/suppression after6/session separation. Baseline new vs import-only; DESIGN purple waiver; image hook uses detect cache no decode. Ignore linked stylesheet respected. Umbrella Stop project index no root writes. Before-edit projection Write/StrReplace/heredoc vs no content/cp, downgrade deny after6/native skip. Admin on/off idempotence account override, rule/file/value allow scope/reason/wildcard validation; would write state/settings, not called. L343-381: Admin corpus tail case-insensitive value update reason; inert exact ignore for non-extracting rules refused, scoped wildcard allowed. Reset/full cycle; legacy config migration preserves other.keep; malformed config status/off; repairs own old hook preserves foreign permissions/hook; retired Cursor pregate→post preserving foreign Shell/stop, broken manifest backup .bak. Corpus intent only expected snapshots not inspected.",
+      "assigned_range": [
+        1,
+        381
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Declarative oracle cases описывают inputs/expected snapshots, не самостоятельное выполненное доказательство hooks. Corpus различает post-edit types, generated/sensitive/outside/missing paths, malformed/depth/disabled/quiet, duplicate tool ID, active Stop/reentry/suppression after6 и session isolation. Claude/Codex/Github/Cursor/Grok/Hermes имеют разные output envelopes; одинаковое имя hook не означает одинаковую интеграцию. Baseline позволяет new-vs-import-only, DESIGN purple waiver, ignored linked stylesheet и image-cache без decode.\nBefore-edit projection Write/StrReplace/heredoc не эквивалентен cp/неизвестному content; native skip и downgrade после6 ограничивают deny. Admin corpus проверяет idempotent on/off, account override, allow rule/file/value/reason/wildcard scope, reset/migration/foreign keep. Repair сохраняет чужие permissions/hooks, broken manifest backup .bak; retired Cursor pregate→post. Это потенциальные writes настройки; они здесь не выполнялись."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/shadow_trees.rs",
+      "sha256": "48d407650c162e000912387476722b585f828723ae6868deff724a6637e5fb73",
+      "total_lines": 336,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          336
+        ]
+      ],
+      "substantive_note": " L1-336: Shadow browser tests installed browser skip incl launch fail. maxElements100 keeps40 light P excludes entire100span shadow subtree, remaining tree animation opacity recorded; nested disabled/checked parity; live probe shadow_children open lists STYLE/DIV closed empty. Inner shadow frame12x400 screenshot stitched>=4800; fixed shadow host retained while widget fixed chrome once, longest blank band<800. Ancestor translate0 establishes fixed CB, box at1600 remains pixels not hidden viewportchrome. Evidence real browser intent not run.",
+      "assigned_range": [
+        1,
+        336
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Shadow tests задают parser maxElements100: light40 P сохраняются, oversized shadow subtree исключается целиком, но оставшееся tree animation state учитывается. Open shadow перечисляет STYLE/DIV, closed shadow empty; disabled/checked parity и nested tree проверяются отдельно. Inner shadow scroll frame12×400 должен дать stitched≥4800; fixed shadow host и widget chrome отличаются, blank band<800. translate(0) у ancestor создаёт fixed containing block: контент на1600 нельзя ошибочно скрывать как viewport chrome. Есть skip при отсутствии/launch failure браузера; статически прочитанные assertions не означают успешно снятый screenshot."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp/src/font_index.rs",
+      "sha256": "daaa1dfb8f4796fe1d0a2871bc64b9dc3e32f69cde9e6bea7e3d4fb59c2c729d",
+      "total_lines": 286,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          286
+        ]
+      ],
+      "substantive_note": " L1-286: Font index candidate generator read JSON only no font files/CLI; weighted+gross6 features, quantized *1000 clamp base36three ___null; sizes48/14/48c cap22 routing and rank min10 constant not applied here. Categories sans serif display handwriting mono; nontext regex filters barcode/dingbat/effect faces. Loader tolerant malformed entries/defaults, no schema enforcement; ranking distance finite sort top25 max2/family optional category. Potential robustness empty numeric sizes route indexes panics, UTF8 packed byte slicing arbitrary can panic; opts.n0 still one candidate because postpush check (caller validation unknown). No Cyrillic coverage measurement here.",
+      "assigned_range": [
+        1,
+        286
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "FontIndex читает JSON fingerprints, не реальные font files. Quantized vectors×1000/base36 triplets с ___ для null, feature-distance ranking, size buckets48/14/48c и cap22, finite distance, default25/max2 weights per family, optional categories и non-text-family filter дают candidate generation. Это геометрическое подобие, не проверка Cyrillic, лицензии, font load или фактического screenshot.\nMalformed index часто возвращает None/default, но schema не валидируется жёстко. Локальные static robustness findings: unpack_vector режет UTF8 по byte offsets L98–111 и может panic на произвольном non-ASCII; route_size L200–210 индексирует пустой numeric список; opts.n=0 проверяется после push L274–282 и может вернуть один результат. Достижимость через внешние callers не проверена; не утверждается production exploit."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/html_snapshot.rs",
+      "sha256": "53aedf1bfbdf604dbe11bab6d450c8ecf25d5bad780079b4f7b4b5cb6bb76a8d",
+      "total_lines": 266,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          266
+        ]
+      ],
+      "substantive_note": " L1-266: Snapshot tests immutable bytes and digest order invariant, verify each served/bound mutation and symlink replacement, strict explicit served paths query allowed but / alias/other/private/bound/traversal/encoded dot or slash/backslash/absolute rejected; nonHTML entry rejected. Server host check404, serves old frozen after disk edit cache private immutable; 3MiB exact payload; idle connection not block <1.5s, late2.5s request retained, Drop closes all <4s. Static tests no server launched.",
+      "assigned_range": [
+        1,
+        266
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Snapshot tests требуют immutable bytes и digest independent of order; mutation served/bound asset либо symlink replacement обнаруживаются verify. Strict path allowlist разрешает query у entry, но не alias /, private/bound/other, traversal, encoded dot/slash/backslash или absolute URL; entry обязан HTML. Host check404, old frozen content после disk edit и private immutable cache отделяют artifact от live filesystem.\nПроверяются exact3MiB response, idle connection не блокирует следующий <1.5s, late2.5s request ещё работает, Drop закрывает connections <4s. Это важный provenance/server lifecycle contract; сервер и тесты не запускались."
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/computed_forms.rs",
+      "sha256": "bf3db8919e9b1ff2ab6435f15da70937760ecb3d92b7c9b577ad110945cbdda1",
+      "total_lines": 189,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          189
+        ]
+      ],
+      "substantive_note": " L1-189: Computed forms browser twins: gray class computed white pass, tracking caps vs mixed, cyan/mint not cyan/blue, square/heading stripe pass rounded fails; tiny01/02 section headings vs capacity badges. Status row/cell exactly11 intended; all sidebar variants rounded incl neutral/logical/inset/pseudo/split/state/quote/input, hover/focus stylesheet; square/frame/transparent/caret/grid/focus ring pass. Note broad static side_tab>=2 any box helper vs runtime tests square pass—different engines/context not claim equivalence, surrounding rule driver uninspected.",
+      "assigned_range": [
+        1,
+        189
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Browser computed-rule twins показывают, почему source regex не равен rendered verdict: gray class при computed white pass, cyan/mint не равно cyan/blue, all-caps tracking не mixed-case; tiny section counters отличаются от badges. Side-bar variants включают logical/inset/pseudo/cross-rule/state CSS, hover/focus, square/equal frame/caret/grid/focus-ring negatives. Assertions требуют конкретного количества findings, не «любого совпадения». Окружение runtime rule driver за пределами файла; широкий static helper и более узкие browser tests не объявляются семантически эквивалентными."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/icons/icon.css",
+      "sha256": "a51a01a73eec24531bfff9234d2391c378cbcc74e631b9e893674b8866872d68",
+      "total_lines": 186,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          186
+        ]
+      ],
+      "substantive_note": " L1-186: Icon CSS grounded tokens system, fetched img vs inline currentColor SVG or HTTP mask; size16..56, wide optical. Logo ink/paper invert ground-specific light plates/color preserve ic-keep, landscape/portrait fit optical0.7/.68 and wordmark wide2.4 tile. Chips32/40 (not guaranteed44 interactive target), list truncation→wrap<479, connected dot+word, avatar stack, integration auto168/mosaic/logo64, file name overflow-wrap and phone tile row, feature icon list. No motion, no imports/network runtime CSS.",
+      "assigned_range": [
+        1,
+        186
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Icon CSS поддерживает fetched image, inline currentColor SVG и HTTP mask; sizes16..56 с optical wide logo correction. Ink/paper logo инвертируется по ground, цвет сохраняется ic-keep; landscape/portrait .7/.68 и wordmark2.4 отличают logo от произвольного square icon. Chips32/40, avatar stack, connected dot+word, integrations auto168/mosaic64, responsive list truncation→wrap и file labels overflow-wrap — реальные reusable layouts. Decorative chip не автоматически touch target44. JS/network loading/alt semantics потребителя этим CSS не доказываются."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/diagrams/demo.html",
+      "sha256": "972e8c77cf81e75da2a42acbc1ebe7c69dc0fc8ac94e3e17bdbc74e7aa751c23",
+      "total_lines": 168,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          168
+        ]
+      ],
+      "substantive_note": " L1-168: Diagram demo actual catalogue COPY27? count not asserted, graph hub/ring/tree/lanes/fanin/bowtie/sync/timeline/grid/free with software tech gaming examples, not production claims. Imports diagram.js presets/cards.css+diagram.css remoteGoogleGeist; icon-base local ../icons/demo. Query ids/theme/type/show/ground/labels controls, section/card sizes340/560 mobile300/420. DOM builds trusted local preset IDs innerHTML copy via textContent; auto await fonts+dg.ready then seek rest T-.05 or mid stillT + ready dataset RAF. No runtime visual review.",
+      "assigned_range": [
+        1,
+        168
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Diagram gallery содержит разные topology presets: hub/ring/tree/lanes/fanin/bowtie/sync/timeline/grid/free с software/tech/gaming copy. Импортирует diagram.js, presets, cards/diagram CSS и Google Geist; icon-base local ../icons/demo. Query ids/theme/type/show/ground/labels выбирают демонстрацию; размеры card340/560, mobile300/420. Trusted local preset IDs вставляются через innerHTML, copy textContent. После fonts+dg.ready seek выбирает restT−.05 либо mid stillT и выставляет ready после RAF. Ready marker не является осмотренной графикой, backend/реальные метрики не представлены."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/descend-through-weather/scene.js",
+      "sha256": "8accc2c32c55b68c2724a7e818d63dd4e97c5020b300349365aa449d06ba073a",
+      "total_lines": 150,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          150
+        ]
+      ],
+      "substantive_note": " L1-150: Weather scene import scene lifecycle/ease helpers, fallback missing required DOM sc is-rest no-op destroy. hold1=2screens phone rest, below-page-hero h2 one word4..10 intentional two h2 scene. Build once deterministic CPU value-noise5oct cloud top/foot560x220 and fill360x420x2, tinted bg35:white65 shade ink10, aria-hidden no WebGL/assets generated. Progress parallax clouds rise .04..94, above zoom1.1 hidden>.5, hero .28..4 note .4..64 below zoom1.12→1 statement .74..86 lines stagger. rest clears cssText (overwrites original inline styles), destroy ctrl+layers but custom wx variable remains; actual lifecycle restoration library outside scope.",
+      "assigned_range": [
+        1,
+        150
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Weather scene строит deterministic CPU value-noise 5-octave cloud layers560×220 и fill360×420×2, не WebGL/внешнюю картинку. Shared scene lifecycle/ease дают hold1≈2screens, phone rest; missing DOM возвращает no-op destroy со sc-is-rest. Progress stages поднимают clouds .04–.94, скрывают above>.5, по очереди hero/note/below/statement, zoom1.1/1.12 и stagger lines; aria-hidden для декора. rest очищает cssText, значит inline styles потребителя могут быть потеряны; destroy удаляет controller/layers, custom wx var остаётся. Полноту restoration/reduced guarantees определяет shared scene dependency. Два h2 внутри scene нельзя бездумно оценивать house rhythm one-heading."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/base.css",
+      "sha256": "e51ce64cef896cb0210f3a2f6a2b67c2ea36f8226d14bf0873b7f58ca7e3413f",
+      "total_lines": 142,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          142
+        ]
+      ],
+      "substantive_note": " L1-142: Component base cx derives palette cards/panel/raise/radii/type shadows/ease. Fill overlay sibling JS position, original selected text transparent, knock clone fixed no styles/media, screen/multiply blackwhite masks; forced colors removes overlay restores CanvasText. Ring content-box exclude mask and blurred glow decorative pointer-none. Pause solid32 pseudo hit40 (Friday44 conflict), inline28+8=36; focus2 action, aria behavior shared.js unseen, cx-paused CSS descendants animation paused. Reduced hides button only here, relies shared effect for actual stop; not infer pause guarantee from CSS.",
+      "assigned_range": [
+        1,
+        142
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Component base задаёт cx tokens/panel/radius/shadow/ease и selected-text fill overlays: JS positioned sibling, transparent source, knock clone без media/styles и screen/multiply masks. Forced-colors удаляет overlay и возвращает CanvasText. Ring/glow декоративны и pointer-none; pause CSS descendant animations и shared.js behavior разделены. Solid32 pseudo-hit40, inline28+8=36 не достигают Friday44; reduced CSS скрывает кнопку, но не доказывает прекращение каждого effect. Нужен общий lifecycle, не копирование CSS в изоляции."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/terminal-run/fragment.css",
+      "sha256": "6b1badd66c7f714cb2f2fe959c2738adb3d1caaab2651d0a1aafc27267170e1d",
+      "total_lines": 97,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          97
+        ]
+      ],
+      "substantive_note": " L1-97: Terminal mock CSS not executing tests:440pane mono13/20 rowgrid fixedheight streamed track transform120+fade whole rows, prompt ellipsis parent folder first trimmed, blinking caret solid typing/paused. Accent only progressbar scaleX180, perfile neutral ticks, one OK green palette mix. New rows140 rise/check200..240 pop; reduced controlled base.css external. Container379 hidescounts,299 branch/parent/timings widths, phone100%. Does not prove tests or actual terminal output.",
+      "assigned_range": [
+        1,
+        97
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Terminal-run — CSS mock, не протокол исполнения команды. Mono13/20, pane440, row grid, transform120/fade и whole-row stream, prompt parent trimming/ellipsis, caret typing/paused. Progress accent только на scaleX180 bar, нейтральные ticks, один OK green. Reveal140 и check200..240, container379/299 hide counts/branch/parent/timings; phone100%. No actual terminal, subprocess, test results или queue в этом файле. Reduced behavior зависит от общего base."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/_lab.html",
+      "sha256": "ea846b8a3537b98e952973611410a6256a23fe5801702b205213ff78439fc762",
+      "total_lines": 96,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          96
+        ]
+      ],
+      "substantive_note": " L1-96: Lab20 whitelisted component names/palettes5, remote fonts+system/base/fx. query chooses component/effect/object/fallback/width/studio, parallel fetch meta/html+import then CSS onload OR onerror, fonts then mount and fixed1200ms ready marker (not settled GPU guarantee). Top __tpGlMax16 but fx.config.maxLive4 for one part. Accent action contrast>=2.2 else ink (not text WCAG proof). Object removes stage aria-label, map removes data map for effect; preserves own mixed effects when no explicit fx. Controls labels selects reload query; network failures no catch except CSS load treated settled.",
+      "assigned_range": [
+        1,
+        96
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Lab query whitelist20 components/5 palettes, выбирает effect/object/fallback/width/studio. Параллельный fetch meta/html и dynamic import, CSS onload И onerror, fonts, mount, затем фиксированные1200ms и ready marker: ошибка CSS тоже «settled», GPU-stability этим не доказана. fx maxLive4 отличается от глобального __tpGlMax16. Accent fallback при contrast<2.2→ink не означает WCAG текст4.5. Explicit effect заменяет defaults, смешанные own effects сохраняются иначе. Network fetch/import без общего catch; нужен error artifact, а не молчаливый readiness. Remote fonts и system/base/fx — обязательные зависимости."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/_scenes/demo.css",
+      "sha256": "284a768767e0a9f18aec4db9a8c44f0426b4761df4d0c33d2bc4e2bc4a3bc826",
+      "total_lines": 72,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          72
+        ]
+      ],
+      "substantive_note": " L1-72: Object scenes demoCSS standalone palette/muted/accent, focus2; hero asymmetric .9/1.25 col gap56 title40..68 balanced9em, lede40ch, 44CTA, panel520..740/radius22, cards4:3/21:9, responsive900stack/520gut16. Toolbar segmented30 interactive below44; objchip28 glass pointer-none, not actual control. Overflow-x hidden may mask layout issues; demo not strict rhythm one/twoH. No animations.",
+      "assigned_range": [
+        1,
+        72
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Object scene demo CSS задаёт .9/1.25 asymmetric hero gap56, title40..68 и9em, lede40ch, CTA44, panel520..740/radius22, cards4:3/21:9, responsive900 stack/520 gutter16. Это демонстрационный layout, не универсальная rhythm formula. Segmented toolbar30 ниже44, chip28 pointer-none — декор, не interactive defect. overflow-x:hidden может маскировать overflow вместо устранения. Радиус22 конфликтует с unconditional Friday>16 rule, значит перенос требует brand/role exemptions."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/voice/fragment.css",
+      "sha256": "ce099dd37f7de7c54286be4dd18794eb2c10874760d50f3c73d2ec466a7f606b",
+      "total_lines": 67,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "substantive_note": " L1-67: Voice CSS mock264 orb76: light pearl gradientblur7 rotating18s despite comment still=noWebGL (not literally static), dark has-fx removes CSS layers blackground external orb-sphere JS. Talking ring expands11/captions opacity.72/timed fixed waveform heights .35..1.15 scale640/820/1040 phase, 32buttons below44, max300 hide19+ bars. No actual microphone/audio in CSS; no local reduced-motion block depends base integration, not standalone guarantee.",
+      "assigned_range": [
+        1,
+        67
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Voice mock264/orb76 использует light pearl blur7/18s CSS rotation; слово still в комментарии означает no-WebGL fallback, не отсутствие motion. has-fx на dark убирает CSS layers для внешнего orb-sphere. Talking ring/caption.72, deterministic waveform heights .35..1.15 с640/820/1040 phases, кнопки32, max300 скрывает19+ bars. Ни microphone, ни audio permission/stream не создаются этим CSS. Локального reduced-motion override нет: интеграция base/fx должна подтвердить остановку и доступный hit target."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/iris-opens/demo.html",
+      "sha256": "55c6280b6b7ce985eb598b9eca62a1f7e3f54f195b93746964b6b077de4b9ecc",
+      "total_lines": 64,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "substantive_note": " L1-64: Iris demo dark sage Nodeline invented pipeline SaaS content explicitly demo footer, hero split drawn dashboard statuses OnTime/Late/Idle, next flipped photo with explicit alt/dim, third ground-inverse data-moment iris-opens from base alerts state. Fonts Schibsted/Hanken external system/demo/momentCSS and moments/lib/moment modulepreload. Early mo-js fail-safe mo-safe2500ms avoids endless hidden init; moment implementation not this file. Links placeholder #, no actual data pipelines.",
+      "assigned_range": [
+        1,
+        64
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Iris-opens demo — fictional Nodeline pipeline dashboard, dark sage hero split OnTime/Late/Idle, flipped photo section и ground-inverse iris-opens from alerts. Модуль moments.js и preload moments/lib/moment, system/demo/momentCSS и remote Schibsted/Hanken обязательны. Ранний mo-js + mo-safe2500ms — fail-safe от навечно скрытого init, не доказательство smooth animation. Explicit photo alt/dim, footer credits/demo label; placeholder # links, реальных pipeline данных нет. Сам moment implementation не входит в файл."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/closing-lift/demo.html",
+      "sha256": "a09d91560b74f52408595249bca0810a8ce9cec7f6f070b836f8d69455a46565",
+      "total_lines": 59,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          59
+        ]
+      ],
+      "substantive_note": " L1-59: Closing-lift distinct demo white sky Northbound coast cycling, hero portrait road4:5 explicit alt dimensions; wrapper data-moment options settle1.18 focus50%60%, FAQ sheet then under beach photo+opaque band CTA, two sections wrapper conflicts rhythm directmain section if blindly applied; demo guide not runtime result. Concrete offer30..62km/day eight people45€/bike640€/person all fictional. Photo credits named Unsplash; same font/mo-safe deps. No backend booking/FAQ interactions implemented HTML.",
+      "assigned_range": [
+        1,
+        59
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Closing-lift demo — white/sky Northbound cycling. Portrait road4:5, FAQ sheet и under beach image+CTA находятся в data-moment wrapper с settle1.18/focus50%60%. Две секции под wrapper требуют contextual section parsing; direct-main heuristic может их потерять. Длины30..62km, bike45€/day, ride640€ и группа8 — пример content specificity, не реальные оферты. Unsplash attribution, alt/dim, mo-safe/font/module зависимости указаны. Booking/FAQ backend отсутствует; эффект изучен только как integration markup."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/liquid-hover/demo.html",
+      "sha256": "2e2ca94e910f46fa0ac548383f272e2ddd70ef78ee1bdb22c79910dcaee01eb4",
+      "total_lines": 47,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          47
+        ]
+      ],
+      "substantive_note": " L1-47: Liquid-hover distinct dark sky Northbound hero content-first photo figure data-moment strength.8 desktop16:8 mobile4:5, second split guesthouses photo, fixed alt/dim & named Unsplash credits. Same early fail-safe/modules remote fonts. Actual distortion/pointer/reduced logic moment.js unassigned not inferred. Price/content demo not evidence real travel service.",
+      "assigned_range": [
+        1,
+        47
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Liquid-hover — отдельный dark/sky Northbound demo, не byte alias closing-lift. Content-first hero photo figure strength.8, desktop16:8/mobile4:5, далее guesthouse split; alt/dim и отдельные Unsplash credits. Remote fonts, system/demo/momentCSS, mo-safe и moments runtime такие же по интерфейсу, но layout/options/copy различаются. Distortion/pointer/reduced behavior нельзя приписать HTML без moment.js; цены и жильё fictional demo, ссылки #."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/diff-review/fragment.html",
+      "sha256": "45c0c64f45b4c1610ff7b8911ff693603379ad94e9f7244fd791fb9d236b710f",
+      "total_lines": 40,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          40
+        ]
+      ],
+      "substantive_note": " L1-40: Diff fragment static mock harbor/api settle.ts, old/new line numbers+semantic del/add classes word marks, cfg.max/backoff/log+target timeout8000→cfg.timeout suggested thread and Apply spinner→Applied states hooks data-diff*. Button tabindex-1 not keyboard reachable standalone; intentionally mock needs integration. Embedded code text not executable, no ledger/API side effects. TypeScript icon local output-root assets/ui/icons.",
+      "assigned_range": [
+        1,
+        40
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Diff-review fragment — статический mock harbor/api settle.ts: old/new line numbers, del/add/word marks, cfg.max/backoff/log и suggestion8000→cfg.timeout. data-diff-target/sug/act/apply задают внешней animation state spinner→Applied, но не изменяют репозиторий. Apply button tabindex=-1 недоступна через обычный Tab standalone; для декоративного mock это осознанный интерфейс, для продуктового review tool потребовались бы семантика/focus и настоящая операция. Embedded code не исполняется, TypeScript icon ожидает assets/ui/icons output root."
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/calendar/fragment.html",
+      "sha256": "4487008e03fd01474a362cb915b4becd77f45d24c5ac4a760dfe084fe2c58aa8",
+      "total_lines": 31,
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          31
+        ]
+      ],
+      "substantive_note": " L1-31: Calendar static October2026 mock range12..16 today9 mark24 adjacent month days, events kickoff12/drafts16/launch24. data-cal-range/data-d/data-ev state hooks for external animation; span days/nav aria-hidden decorative no keyboard picker/grid semantics. No real calendar scheduling/network. All59 batches read without truncation.",
+      "assigned_range": [
+        1,
+        31
+      ],
+      "assigned_range_complete": true,
+      "substantive_summary_ru": "Calendar fragment — fixed October2026, range12..16, today9, marked24, adjacent month days, kickoff12/drafts16/launch24. data-cal-range/data-d/data-ev — hooks для внешней визуализации; days/nav spans, nav aria-hidden, нет интерактивного picker/grid/keyboard contract. Это не реальная запись в календарь, time zone, availability или deadline source. Подходит как иллюстрация состояния, не как готовый production calendar."
+    }
+  ],
+  "supplemental_friday_reads": [
+    {
+      "repo": "friday",
+      "path": ".codex/scripts/design-lint.mjs",
+      "ranges": [
+        [
+          1,
+          303
+        ]
+      ],
+      "status": "full",
+      "purpose": "Read-only comparison, excluded from upstream assignment totals"
+    },
+    {
+      "repo": "friday",
+      "path": ".codex/scripts/screenshot.mjs",
+      "ranges": [
+        [
+          1,
+          152
+        ]
+      ],
+      "status": "full",
+      "purpose": "Read-only comparison, excluded from upstream assignment totals"
+    }
+  ]
+}

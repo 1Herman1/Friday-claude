@@ -1,0 +1,18 @@
+{
+  "scope": "support-cli-a: exact substantive reading of docs/CLI-CONTRACT.md lines 1-1797",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "assigned_range_complete": true,
+  "runtime_executed": false,
+  "files": [
+    {
+      "repo": "impeccable",
+      "path": "docs/CLI-CONTRACT.md",
+      "sha256": "3b682454ca051019659f005a0253051eb5338d73b963ac2f7bac6654e2ee6afe",
+      "total_lines": 3594,
+      "status": "partial",
+      "ranges": [[1, 1797]],
+      "artifact_kind": "readable-contract-document",
+      "substantive_note": "All assigned lines 1-1797 substantively read with numbered bounded outputs; long-line and large-output omissions recovered in smaller batches. Line 1797 is an opening code fence; the startup stdout block beyond it was not read. No substantive reading of 1798-3594, no upstream execution/install/tests/network. Document-level contract evidence only; no full-file or runtime PASS claim. Detailed contract map and four scoped integration/documentation risks in support-cli-a.md."
+    }
+  ]
+}

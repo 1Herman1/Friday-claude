@@ -1,0 +1,981 @@
+{
+  "assignment": "closure-4",
+  "assigned_lines": 17974,
+  "entries": [
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/driver.rs",
+      "total_lines": 5952,
+      "range": [
+        1,
+        1600
+      ],
+      "sha256": "7aee453078b5cde4280622fae9be911eb009893923dbb7fb0c6e3b67568f9977",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "Прочитано 1–1600: scoped ignore ancestors; DESIGN fonts/colors/radii tolerances and de-dup; live/pseudo selector resolution, painted CSS filtering; brand hue/category exceptions; HTML script exclusion; computed/class duplicate and vanishing ink suppression. Хвост функции после 1600 вне assignment.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "extension/walks/consent-rules.js",
+      "total_lines": 3788,
+      "range": [
+        1681,
+        3280
+      ],
+      "sha256": "9a0285969ab05d195388390bff9c66e3d3b28863a1a349c45e5ae1c769612d7a",
+      "status": "partial",
+      "ranges": [
+        [
+          1681,
+          3280
+        ]
+      ],
+      "substantive_note": "1681–3280: popup/shadow controls; CMP DSL evaluate AND/any/optional/negated, main-world eval fallback false; TrustArc/Cookiebot/Sourcepoint/ConsentManager/Evidon/Onetrust/Klaro/Uniconsent/Conversant/Tiktok/Admiral opt-out/in routes and uneven selftests; DOM clicks/hide/css/cookie/mutation polling; compact decoding and initial lifecycle state. Active consent mutations, not passive audit.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/checks/text_context.rs",
+      "total_lines": 3121,
+      "range": [
+        1,
+        1600
+      ],
+      "sha256": "35a0e6b2e89d18a69d92e1fb1a320fbaecf526957b1103ae2c4fa87283305538",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "1–1600: shared ContextNode, transform matrices/scale/tilt thresholds, preview/sample captions, traffic-light/phone mock frames with control/code/carousel/page-shell exclusions; legal fineprint tiers and label safeguards; opening micro-label shape/stop sets, price exclusion/pill/eyebrow adjacency. Micro-label final classifier/tests outside assigned slice.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/detect/src/regex_matchers.rs",
+      "total_lines": 3664,
+      "range": [
+        1601,
+        3200
+      ],
+      "sha256": "6f6fe44a95c64814688bb1afd68691cae991f2d37197fcece128dd0f32ba77cb",
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          3200
+        ]
+      ],
+      "substantive_note": "1601–3200: actual side/border/font/gradient/gray/palette/bounce/broken-image matchers; byte-context lexer for markup/expressions/comments/raw script and bounded malformed recovery; source attribute binding exceptions; monotony/text buzzword/cadence/glow/halo/marquee analyzers and opening scoping tests. No code execution.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "total_lines": 11485,
+      "range": [
+        4865,
+        6464
+      ],
+      "sha256": "080b835e99353f63650f8966813d735f142293119cd371c554b66a1effc5e3da",
+      "status": "partial",
+      "ranges": [
+        [
+          4865,
+          6464
+        ]
+      ],
+      "substantive_note": "4865–6464 полностью, включая восстановленные 5181–5252 из spill: browser lib state/caches/visibility/hit tests/surfaces/line clipping; tilt, heading stagger, spill, cut, grid candidates, list/grid rows, buttons, contrast candidates, section seams/nav; image ink bounds; fold/overlap/mobile collide/tap/chrome/top-stagger/orphan/marquee/text-only cards/UI fit+centre/photo upscale and fake opening. Strong kit exemptions and bounded sampling; runtime not executed.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/skills/src/commands.rs",
+      "total_lines": 1290,
+      "range": [
+        1,
+        1290
+      ],
+      "sha256": "6430693037824f264d0abdff6660eaf017cc854b94e9223a9394a83761b87bf5",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1290
+        ]
+      ],
+      "substantive_note": "1–1290 installer/router/help/check/link/update: provider/scope selection, Muse user-only, copy-vs-symlink preservation, engine binary chmod/download, consent defaults nonTTY yes, no-hooks still repairs stale existing hooks, global/project duplicate cleanup, doctor report, offline existing download toleration but verification fatal; tests read not run.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp/src/font_fingerprint.rs",
+      "total_lines": 1195,
+      "range": [
+        1,
+        1195
+      ],
+      "sha256": "ccf777e162b364f0a0618c37bb86a6c3373885c51bc1351993e7b274b7e5c245",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1195
+        ]
+      ],
+      "substantive_note": "1–1195 pure Image fingerprint: Otsu ink polarity/coverage, text line filtering, cap/xheight/baseline/descender/glyph segmentation; profiles/run quantiles/stem contrast/serif/density; dominant size cluster mask; <=4x upsampling and min glyph gate; feature rounded outputs and weighted clipped standardized distance with gross log width/weight, infinity when no shared features. Not OCR/font identity proof.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/src/motion.rs",
+      "total_lines": 1075,
+      "range": [
+        1,
+        1075
+      ],
+      "sha256": "528ccf6af027109ae3c0766212c81468cb00cbe4c7f6cbca504462c86995d90d",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1075
+        ]
+      ],
+      "substantive_note": "1–1075: CDP fixed1000x760 motion capture options setup/action/region gates; rest wait, pause/seek animation, screenshots before/first/middle/last/settled; continuity/clip/content/paint/shadow/crossfade/orphan/replay heuristics; baseline reduced motion span+duration comparison; PNG filmstrip scrub HTML/report-last manifest invalidation. Unit test intent all read, not run. JS timers/closed shadow/canvas explicitly visual-review limits.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-svelte-adapter-deepseek.test.mjs",
+      "total_lines": 871,
+      "range": [
+        1,
+        871
+      ],
+      "sha256": "cfc2cc5fe00f1541e00f495a69694c9849731acfbe7283ee32235cfa69844dce",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          871
+        ]
+      ],
+      "substantive_note": "1–871 real DeepSeek gated Svelte live E2E: install/dev/playwright dependencies, state mount preservation while 3 variants cycle in node_modules manifest, reload recovery localStorage, discard/cancel/stash/apply/accept cleanup real source; hostile CSS shadow isolation, annotation uploads, insert recovery, exit flags; rich artifact writer and filtered console errors. Reading only; no key read/no paid call/test run.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/tests/account.rs",
+      "total_lines": 778,
+      "range": [
+        1,
+        778
+      ],
+      "sha256": "3edf089681b02d4a22dd11c0043091a4a9afea274e4d5b8a122440bb5ea0d897",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          778
+        ]
+      ],
+      "substantive_note": "1–778 fake-service CLI integration intent: login stdout link-only/already signed/force/new offered MCP scopes; plan catalog fallback; setup project key header; Loop offer; bidirectional personal switches with retry/lock/inheritance/canonical wording/no false all-off/new profile; Gemini/Copilot/existing OpenCode; Cursor untracked ignored one-way projection preserving team/symlink/exclude bytes. Fixtures only, not live proof.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/browser/dom.rs",
+      "total_lines": 695,
+      "range": [
+        1,
+        695
+      ],
+      "sha256": "4593731225f85d4dac067d2f0489c2034e9a29dec0bc85e135747694e81d6e0c",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          695
+        ]
+      ],
+      "substantive_note": "1–695 Dom trait measurement contract: Result invalid selectors vs empty match; None unknown vs measured false/empty for font/pretty/animation/reveal/image/video/shadow; direct/descendant text lines row+gap merge not invented unions; composed tree fallback and flat_contains512; content-visibility applicability, JS helper semantics. Tests default unknown/light tree, not run.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/tests/capture_snapshot.rs",
+      "total_lines": 519,
+      "range": [
+        1,
+        519
+      ],
+      "sha256": "f31af1d44dceada1af605cc0be4190bb54750a9ca6854689c494dfa372b68cf6",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          519
+        ]
+      ],
+      "substantive_note": "1–519 snapshot integration intent: frozen served+private bound bytes canonical hash, stale input pre/post renderer checks, explicit routes deny env/traversal/symlinks/Host; no saved receipt trust; document response hash/BOM capture batch one document/screenshot; large binary complete delivery; responsive viewport source stability; idle late sockets concurrent/drop cleanup. Native browser tests can early-return if unavailable; not run.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "total_lines": 11485,
+      "range": [
+        2896,
+        3358
+      ],
+      "sha256": "080b835e99353f63650f8966813d735f142293119cd371c554b66a1effc5e3da",
+      "status": "partial",
+      "ranges": [
+        [
+          2896,
+          3358
+        ]
+      ],
+      "substantive_note": "2896–3358 rhythm tail actual SR7/8 cut/right/split tests; hard text-left/top alignment shared 12col pair24px; SR1–8 fixes one/two-screen sections, open accordions no height changes, no snap/centering; findings quota8/check fair round-robin with omitted totals; notMeasured WARN, gap641–699 explicit; crop16shot40,width desktop status cache order; prepare scroll/style/expand click side effects. Conflicts with generic adaptive UI.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp/tests/parity.rs",
+      "total_lines": 416,
+      "range": [
+        1,
+        416
+      ],
+      "sha256": "aeaa8c27196d3cf97fed43358f624584b4d03974a4046b5301a87b9fdafa9653",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          416
+        ]
+      ],
+      "substantive_note": "1–416 parity intent PNG decode CRC/encode roundtrip/raster metrics f32 CRC/color+bands/fingerprint features+distance/index packing/ranking optional missing catalog skip/hero text ink clipping chrome SVG. Golden comparisons with numerical tolerances, not independent design validity and not executed.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/diagrams/diagram.css",
+      "total_lines": 377,
+      "range": [
+        1,
+        377
+      ],
+      "sha256": "cd8ba441f206e7c3a2cd33d55a7e9e9bc225c8f48364c68fa9b7fa490697a3a8",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          377
+        ]
+      ],
+      "substantive_note": "1–377 palette-driven diagram style: light/dark nodes/core route comet glow/ring/dots/grid, hover focus dimming, done/status/ripple, pills/cards/tiles/discs/system/group tiers, long core labels wrap; pause32px fallback, reduced motion and forced colors, broken spec names row. Requires diagram.js state/positions; CSS alone no working diagram proof.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/differential.rs",
+      "total_lines": 330,
+      "range": [
+        1,
+        330
+      ],
+      "sha256": "2a11bdd953d592f247c45af444ba6b6e3b96d36edd10fb22735e769d3aadbc2c",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          330
+        ]
+      ],
+      "substantive_note": "1–330 JS/Rust browser differential intent same discovered Chrome, fixture server shared/all and single subset6/file2/missing file; exact stdout/stderr/exit except pixel contrast ratio normalized; many prereq early-return skips incl retired JS engine. Comment mentions closed port but actual shown test only missing file. No run.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/recall_and_gates.rs",
+      "total_lines": 316,
+      "range": [
+        1,
+        316
+      ],
+      "sha256": "7a0185d466b005b53e5088694e350fe8edca9745717d3a4550fef06b1b43c42f",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          316
+        ]
+      ],
+      "substantive_note": "1–316 native-browser recall/gates intent prose div vs flex/code/link, label/kicker handoff, bold div icon title, small labels but ninepx contrast, painted effect and duplicate suppression, vendor attribution/advisory vs own errors, benign play race but aborted request remains error, visible bot challenge refusal and closed/faded acceptance. Browser absent returns; not run.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-e2e-agent-output.test.mjs",
+      "total_lines": 235,
+      "range": [
+        1,
+        235
+      ],
+      "sha256": "2a361bbceb5a84341d9becad7e7920e818cf3dd27b221df752682221bff4f841",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          235
+        ]
+      ],
+      "substantive_note": "1–235 agent normalization unit intent: cancellation epoch only not stale source; HTML JSX class/style/vendor/custom props with nested semicolon/quoted >; per-element scoped hoist isolation siblings/variant IDs; Astro global prefix; missing base ready declaration; no-inline identity return. Not model-generation/runtime proof.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/print-lamp/object.js",
+      "total_lines": 203,
+      "range": [
+        1,
+        203
+      ],
+      "sha256": "99bcbcc6f701b904b86544446df1faeaf42fe78b6e764b5a46772727e67cf84d",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          203
+        ]
+      ],
+      "substantive_note": "1–203 definePrint GLSL lamp: SDF geometry rods/coils/shade/bulb, texel-aware rods/spring simplification, enamel/graphite/chrome vs print surfaces and emissive toggle pool render-only; sway22s amp34, budget420000, toggle0.7, card/tile/hero narrow placements. Imported print3d core owns actual WebGL lifecycle/accessibility, not inspected here.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/round13_defects.rs",
+      "total_lines": 181,
+      "range": [
+        1,
+        181
+      ],
+      "sha256": "67db5a6aa5c9108f25340b9cc68e4257c291baae276155542b9e2eb798afb1ec",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          181
+        ]
+      ],
+      "substantive_note": "1–181 browser fixture intent: short >=20px lead/caps label leading exempt but prose/overlap not, shimmer running vs paused and sheen advisory, nested list scope, beacon vs faint raster, clamp straggler, divider/scroller cramped padding, covered/mask lowcontrast. Real browser prerequisite skip; not executed.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/painted_gate_coverage.rs",
+      "total_lines": 163,
+      "range": [
+        1,
+        163
+      ],
+      "sha256": "7e60a8d036577a4919a95b01f0ced2574f407c316092eeec1cc7007e7066e2ec",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          163
+        ]
+      ],
+      "substantive_note": "1–163 paired paint twins assertions: hidden/faded/inactive exemptions but blink off-phase reported; page selectors must paint; text occlusion closed details/blur/emoji ignored and covers distinguished opaque/SVG/border. No browser execution.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/picture-develops/moment.js",
+      "total_lines": 157,
+      "range": [
+        1,
+        157
+      ],
+      "sha256": "dbb1d080df3b2ed139850f863ae3b5ac25d5191f1c1fb7092591bb6a404910c4",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          157
+        ]
+      ],
+      "substantive_note": "1–157 picture-develops film1600ms CSS filter+scale vs print1800ms luminance halftone canvas6–14 cells; site-kind selection, reduced/phone(print)/CORS unreadable still fallback; near and seen one-shot observers, explicit destroy/cancel/canvas removal. Print async run has no done guard immediately after awaited load unlike film: teardown race static risk.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/layout/hero-photo.html",
+      "total_lines": 121,
+      "range": [
+        1,
+        121
+      ],
+      "sha256": "5f0d92270d192f12da651185186c6e9662b553f9f9ff13fea1036dbacb07badc",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          121
+        ]
+      ],
+      "substantive_note": "1–121 service photo hero: EB Garamond/Jost palette + inverse tokens, image object-position80% phone, real route/price/season/group copy, ordered numbered waypoints split photo, named nav/menu toggle, credits/lazy photo; system/layout CSS+JS imports; booking CTA self-anchor and .example mail are demo not functional booking.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/index.html",
+      "total_lines": 116,
+      "range": [
+        1,
+        116
+      ],
+      "sha256": "8a245df3c27f78ad09b99fc7aa4d1b5e73677a1edf1e67c075bbb65e64e9a1d0",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          116
+        ]
+      ],
+      "substantive_note": "1–116 gallery imports fx/ui and fetch index: nineteen placement map + static grain/landscape palettes, light/dark pressed buttons/URL mode/time, WebGL max16 gallery vs default4, snapshots grounds free contexts per comment, repaint on mode; dataset.ready only after Promise.all, no catch in module. Demo not universal production template.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "total_lines": 85,
+      "range": [
+        1,
+        85
+      ],
+      "sha256": "a9c53725968b05d75cb5da2371b4e90ea429d87447d9da7d46dff92600d26df7",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          85
+        ]
+      ],
+      "substantive_note": "1–85 pinned chapters demo 3 daily ride prose+photos each semantic li, empty visual host for module, 2screen moment section, mo-js/mo-safe2500 fallback marker, fonts+system+demo+moment styles and moments.js; placeholder anchors, credited Unsplash. Animation behavior owned by unassigned module.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/fixed-hero-object/demo.html",
+      "total_lines": 80,
+      "range": [
+        1,
+        80
+      ],
+      "sha256": "e0749d22d76d51ceed2ac457a8e420dd0b66f49a40ef5796b83244d3257e4736",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          80
+        ]
+      ],
+      "substantive_note": "1–80 fixed hero object demo: sc-js/sc-safe2500, print-cards render one turn/2screen stage+4 panels including dark, still image alt + empty host progressive enhancement, specifications/prices, external font and scenes.js/CSS. Static markup not proof scroll renderer.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/photo-chapters/moment.css",
+      "total_lines": 67,
+      "range": [
+        1,
+        67
+      ],
+      "sha256": "645b83991a49fdc2b7cdd6b73d07e1802607cd78afc4b66d3628cc2bf5152672",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "substantive_note": "1–67 photo chapters CSS default autoheight >=1svh fallback grid/phone stack; live (hold+1)svh sticky stage clip/zoom variables, max-longest panel grid avoids jump with opacity-hidden chapters still SR-readable; print expands all. Reduced/short-screen unmount claimed in comment must be provided by JS, no media reduced rule here.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/product-render/demo.html",
+      "total_lines": 64,
+      "range": [
+        1,
+        64
+      ],
+      "sha256": "f52f1e0e750a21f288b60df5bc2c00124cc79ab450031022fa9f617007411b5f",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "substantive_note": "1–64 product render demo bike legacy/lamp+arm stage specs; light/dark palettes responsive frames; URL only/turn/fallback controls imported auto.js, exposes __products; readiness polls controllers250ms until drawn/poster/fallback or dataset timeout120s not false ready. External Inter Tight font, no runtime test.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "total_lines": 58,
+      "range": [
+        1,
+        58
+      ],
+      "sha256": "adc107498053f15a0a57b915e32ae42ad7e9a958476b795013148c6fd5687f64",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          58
+        ]
+      ],
+      "substantive_note": "1–58 cursor spotlight demo centered invoice hero/fake app window, moment opts rest[.74,.26] radius460 and short-phone minheight200; flip split next section/photo credits, mo-safe2500 marker; imported moments/styles perform actual behavior, placeholder anchors.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/fly-into-the-shape/scene.css",
+      "total_lines": 48,
+      "range": [
+        1,
+        48
+      ],
+      "sha256": "f0a5aae91de33896ee3dbf0f84a2a738b4dbb5f8b58804315dffb8fe7a4555ef",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          48
+        ]
+      ],
+      "substantive_note": "1–48 fly shape CSS nonlive semantic composition ordered mark/photo/title/copy, responsive portrait+stack and final maxheight40svh; live absolute z layers world clip/transform, centered face, bottom opaque readable band opacity0; JS must animate/restore; no direct reduced-motion rule.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/pipeline-board/fragment.html",
+      "total_lines": 40,
+      "range": [
+        1,
+        40
+      ],
+      "sha256": "b7017f2c6542f7aa07985b7defa0711a7576303a4269f254af89108c48458168",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          40
+        ]
+      ],
+      "substantive_note": "1–40 pipeline board decorative UI markup running/passed data hooks, checkout/install/test/build/deploy + duration/log strings; tabindex-1 cancel/re-run and aria-hidden logs. Commands/pass counts are illustrative strings, no commands run/backend CI link established; icon paths host asset loader dependent.",
+      "hash_verified_against_inventory": true
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/slider/fragment.css",
+      "total_lines": 31,
+      "range": [
+        1,
+        31
+      ],
+      "sha256": "5e0e1ee6f67fac8b07929064c87d72b7ef5af4042d6a3427c8c9ae0f7b91aeb3",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          31
+        ]
+      ],
+      "substantive_note": "1–31 slider CSS:288px property panel/13px labels numeric22px output/16px track-thumb --v, accent drag state shadow, 3seg28px spans, compact248 hiding other rows/reset, <=320width100%; presentation only not keyboard/touch behavior proof.",
+      "hash_verified_against_inventory": true
+    }
+  ],
+  "runtime_executed": false,
+  "reference_checks": [
+    {
+      "source": "tests/live-svelte-adapter-deepseek.test.mjs",
+      "reference": "./live-e2e/agents/llm-agent.mjs",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "tests/live-svelte-adapter-deepseek.test.mjs",
+      "reference": "./lib/dev-keys.mjs",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "tests/live-svelte-adapter-deepseek.test.mjs",
+      "reference": "./live-e2e/session.mjs",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "tests/live-svelte-adapter-deepseek.test.mjs",
+      "reference": "./live-e2e/steer.mjs",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "tests/live-svelte-adapter-deepseek.test.mjs",
+      "reference": "./live-e2e/preactions.mjs",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "tests/live-svelte-adapter-deepseek.test.mjs",
+      "reference": "./live-e2e/ui.mjs",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "tests/live-e2e-agent-output.test.mjs",
+      "reference": "./live-e2e/agent.mjs",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/print-lamp/object.js",
+      "reference": "../_print-core/print3d.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/picture-develops/moment.js",
+      "reference": "…",
+      "exists_relative_to_file": false,
+      "classification": "comment documentation placeholder, not unresolved executable import"
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-photo.html",
+      "reference": "../system.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-photo.html",
+      "reference": "../ui/cards.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-photo.html",
+      "reference": "layout.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-photo.html",
+      "reference": "img/photo-465.jpg",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-photo.html",
+      "reference": "img/photo-c400.jpg",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-photo.html",
+      "reference": "../system.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-photo.html",
+      "reference": "layout.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/index.html",
+      "reference": "../effects/fx.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/index.html",
+      "reference": "./ui.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/index.html",
+      "reference": "base.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/index.html",
+      "reference": "cards.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/index.html",
+      "reference": "cards.html",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../moments.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../lib.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "moment.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../../system.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../_demo/demo.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "moment.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../_demo/photo-702.jpg",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../_demo/photo-702.jpg",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../_demo/photo-1049.jpg",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../_demo/photo-640.jpg",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/pinned-chapters/demo.html",
+      "reference": "../moments.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/fixed-hero-object/demo.html",
+      "reference": "../../system.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/fixed-hero-object/demo.html",
+      "reference": "../_demo/demo.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/fixed-hero-object/demo.html",
+      "reference": "../scenes.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/fixed-hero-object/demo.html",
+      "reference": "scene.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/fixed-hero-object/demo.html",
+      "reference": "../_demo/cards.png",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/fixed-hero-object/demo.html",
+      "reference": "../scenes.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/product-render/demo.html",
+      "reference": "./auto.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "reference": "../moments.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "reference": "../lib.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "reference": "moment.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "reference": "../../system.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "reference": "../_demo/demo.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "reference": "moment.css",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "reference": "../_demo/photo-855.jpg",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/cursor-spotlight/demo.html",
+      "reference": "../moments.js",
+      "exists_relative_to_file": true,
+      "classification": "resolved relative local reference (metadata only)"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/pipeline-board/fragment.html",
+      "reference": "assets/ui/icons/git.svg",
+      "exists_relative_to_file": false,
+      "exists_at_skill_root": true,
+      "classification": "ui.js:104–106 rewrites asset icon URL against module BASE; standalone fragment relative URL not valid"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/pipeline-board/fragment.html",
+      "reference": "assets/ui/icons/npm.svg",
+      "exists_relative_to_file": false,
+      "exists_at_skill_root": true,
+      "classification": "ui.js:104–106 rewrites asset icon URL against module BASE; standalone fragment relative URL not valid"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/pipeline-board/fragment.html",
+      "reference": "assets/ui/icons/nodejs.svg",
+      "exists_relative_to_file": false,
+      "exists_at_skill_root": true,
+      "classification": "ui.js:104–106 rewrites asset icon URL against module BASE; standalone fragment relative URL not valid"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/pipeline-board/fragment.html",
+      "reference": "assets/ui/icons/docker.svg",
+      "exists_relative_to_file": false,
+      "exists_at_skill_root": true,
+      "classification": "ui.js:104–106 rewrites asset icon URL against module BASE; standalone fragment relative URL not valid"
+    },
+    {
+      "source": "skills/taste-skill/assets/ui/pipeline-board/fragment.html",
+      "reference": "assets/ui/icons/kubernetes.svg",
+      "exists_relative_to_file": false,
+      "exists_at_skill_root": true,
+      "classification": "ui.js:104–106 rewrites asset icon URL against module BASE; standalone fragment relative URL not valid"
+    }
+  ],
+  "verification": {
+    "assigned_ranges": 32,
+    "unique_files": 31,
+    "assigned_lines": 17974,
+    "all_assigned_ranges_substantively_read": true,
+    "all_sha256_match_inventory": true,
+    "all_total_lines_match_inventory": true,
+    "coverage_status_policy": "partial even when assigned range spans full file; ranges exact, no unassigned tail claimed",
+    "tests": "not run; source-only audit",
+    "output_truncations": "one stdout truncation; missing middle5181–5252 recovered from stdout spill read offset315–399",
+    "final_validation": "32 exact ranges, no overlap,17974 inclusive lines,31 unique files, all32 hashes and file lengths rechecked against inventories; both artifacts present"
+  },
+  "additional_context_ranges": [
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/driver.rs",
+      "ranges": [
+        [
+          1601,
+          1627
+        ]
+      ],
+      "note": "end duplicate suppression and next signature"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "ranges": [
+        [
+          6465,
+          6475
+        ]
+      ],
+      "note": "end fake-button collector and next signature"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/ui.js",
+      "ranges": [
+        [
+          98,
+          110
+        ]
+      ],
+      "note": "полностью прочитан loader fragment/canonical icon URL rewrite; остальной ui.js не считается покрытым"
+    }
+  ]
+}

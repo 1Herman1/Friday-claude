@@ -1,0 +1,83 @@
+{
+  "repo": "impeccable",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "scope": "Substantive closure of exactly five authored helpers identified by independent R2 review",
+  "upstream_executed": false,
+  "files": [
+    {
+      "repo": "impeccable",
+      "path": "tests/live-e2e/agents/llm-agent.mjs",
+      "sha256": "5270786d12b32bbb93cc98d602994222ff5b1c30f75ae168bdb3548cfdc2d5c2",
+      "lines": 1674,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          1674
+        ]
+      ],
+      "artifact_kind": "authored-test-infrastructure",
+      "method": "Parent substantive reading all1674lines via three untruncated numbered blocks: provider/config/shim, generate/manual/steer contracts, response/planning/source validators, exact copy and typed data preservation, bounded retries and SDK/network/source-write side effects. NOT imported or executed."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/oracle/vectors/hooks-impl.mjs",
+      "sha256": "c044add08d40ff56202cba6407b71f6d935d8abccd3df902183ee1ab517e06a3",
+      "lines": 73,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          73
+        ]
+      ],
+      "artifact_kind": "authored-test-infrastructure",
+      "method": "Full authored loader-transform implementation read: five historical target suffixes, export/declaration regex, wrapper injection/import placement, re-export handling. NOT imported or executed."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/oracle/vectors/hooks.mjs",
+      "sha256": "df43be3d58b15c22362c87125e41385171441c5e738fbee5c33342105a4b3d40",
+      "lines": 13,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          13
+        ]
+      ],
+      "artifact_kind": "authored-test-infrastructure",
+      "method": "Full authored Node loader registration read. NOT imported or executed."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/oracle/vectors/record-calls.mjs",
+      "sha256": "f027847b273a759f0c84238d3bce43c67a5ad12e22f6308f174806d7bb6626f7",
+      "lines": 67,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          67
+        ]
+      ],
+      "artifact_kind": "authored-test-infrastructure",
+      "method": "Full authored recorder orchestrator read: destructive output reset, inherited-env spawnSync CLI/tests, missing exit-status gate, output aggregation. NOT executed or used to regenerate frozen vectors."
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/oracle/vectors/recorder.mjs",
+      "sha256": "637e1c60af71c7c9705675385a6a7e70446dbf8b1274d8f9a0cd5ab9d31b3333",
+      "lines": 106,
+      "status": "full",
+      "ranges": [
+        [
+          1,
+          106
+        ]
+      ],
+      "artifact_kind": "authored-test-infrastructure",
+      "method": "Full authored plain-value encoder/recorder read: type/depth rejection, sync-only recording, original-first calls, args dedupe/cap, append streams/skipped exit merge. NOT imported/executed."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "assignment": "support-cli-b",
+  "revision": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+  "verification": {
+    "mode": "static substantive document reading only; no upstream execution, imports, tests, browser, install or network calls",
+    "assigned_ranges": [[1798, 3594]],
+    "assigned_lines": 1797,
+    "covered_lines": 1797,
+    "assigned_range_complete": true,
+    "whole_file_read": false,
+    "source_unchanged_after_reading": true,
+    "sha256_measured_before_and_after": true,
+    "total_lines_measured": true,
+    "read_batches": [[1798, 2047], [2048, 2177], [2178, 2277], [2278, 2357], [2358, 2517], [2518, 2677], [2678, 2837], [2838, 3017], [3018, 3207], [3208, 3397], [3398, 3594]],
+    "truncated_lines_recovered_in_full": [2007, 2065, 2116, 2133],
+    "recovery_method": "stdlib Python text reading, long lines split into 1800-character segments; subsequent batches printed in full through terminal without per-line clipping",
+    "runtime_verdict": "NOT_RUN",
+    "independent_review": "not performed by this worker; parent coordinator owns integration and independent review",
+    "report_language": "ru"
+  },
+  "entries": [
+    {
+      "repo": "impeccable",
+      "path": "docs/CLI-CONTRACT.md",
+      "total_lines": 3594,
+      "sha256": "3b682454ca051019659f005a0253051eb5338d73b963ac2f7bac6654e2ee6afe",
+      "status": "partial",
+      "ranges": [[1798, 3594]],
+      "assigned_ranges": [[1798, 3594]],
+      "assigned_range_complete": true,
+      "covered_lines": 1797,
+      "substantive_note": "Live events/SSE/poll leases, durable journal and fenced generation recovery; scaffold/source isolation, Svelte component publication, accept receipts/locks/carbonize and opt-in bake; staged manual copy-edit transactions, schema validation, timeouts/rollback and subprocess bypass risk; component-review v3 plan/asset proofs, native provenance verification, closed first-viewport lifecycle and visual carry-forward; reference-copy/raster coverage capture guards, responsive displacement/escalation, shot/motion evidence limits; Loop install/update/connect hooks and rule writes, MCP relay/browser ownership and asset upload; setup/foundations/login/design/critique/prototype egress defaults, world seed and Taste cache/consent. Source/test relationships reported as document-declared links only, not independently read implementation coverage. Six Friday integration risks delivered to parent coordinator with OPEN status; no runtime PASS."
+    }
+  ]
+}

@@ -1,0 +1,981 @@
+{
+  "assignment": "closure-6",
+  "complete": true,
+  "method": "substantive static reading of every assigned line; no upstream code imported or executed; truncation spill gaps reread",
+  "assigned_ranges": 32,
+  "covered_ranges": 32,
+  "assigned_lines": 17975,
+  "covered_lines": 17975,
+  "unique_files": 31,
+  "hash_validation": "all full-file SHA256 match source inventories and initial read, line counts match; assigned range set equality checked",
+  "repo_revisions": {
+    "impeccable": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7",
+    "taste": "d1a2bb41d927083ac7118f60cfc9cdf711810ea0"
+  },
+  "entries": [
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/driver.rs",
+      "total_lines": 5952,
+      "sha256": "7aee453078b5cde4280622fae9be911eb009893923dbb7fb0c6e3b67568f9977",
+      "status": "partial",
+      "ranges": [
+        [
+          3201,
+          4800
+        ]
+      ],
+      "substantive_note": "Collector tail: mockup/pack before normalized extension-only value waivers; repeat collapse after waivers by detail/severity/pixel route/vendor; representative word>=3 excluding mathematical marks, nested by outer panel. FakeDom regressions painted vs inactive media/pseudo masks, branding/category hue roles, vendor attribution, DS fonts/colors/radii, skipScan, waivers. 3201-4800 only.",
+      "assigned_range": [
+        3201,
+        4800
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "8a50f1c553c52c43728ae1b6421f3e9a4a990cb7ae3247aef3e3ef0e945da1d4"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/quality.rs",
+      "total_lines": 8274,
+      "sha256": "0fc45b0e139db895c29687875d02f19c5fba3c3c24430f16b25fe7da9be289fe",
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          3200
+        ]
+      ],
+      "substantive_note": "Quality rules actual measured text: two long rendered lines >line_max+5; bounded text cramped min vertical max(4,.3em)/horizontal max(8,.5em), measured+declared; flush wrappers unwrapped<=3, margin collapse, same fill/overflow guards; gutter12 phone<=480 else16; leading1.3 with heading/lead/caps/code exemptions; raster opacity<.15 with icon/SVG/blur/crossfade exclusions; tiny12, UI floors external, caps/tracking/CJK, fineprint tiers/mock advisories. DOM read-only; no runtime validation.",
+      "assigned_range": [
+        1601,
+        3200
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "7ac146a46b40e731b7f659448ea281d5721d2dbb139f7c68aabe0afff05a68d5"
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-browser-source.test.mjs",
+      "total_lines": 1937,
+      "sha256": "da2ce52b8f82f3512dbc01312afab479a118ec5854a712f2f8db68446884b429",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "Node source-contract regex plus isolated VM functions, not browser E2E. Capture ACK/current-session fencing; staged copy/remove buffer and leaf-safe discard; loading/apply/verify/repair explicit decision; durable accept foreground release/HMR no structural mutation; per-session recovery revision/reload budgets; shader epoch/cancel/unique RAF; claim leases/page cache; compiled JSX/Vue/Svelte vs HTML fallback; font capture URL resolution.",
+      "assigned_range": [
+        1,
+        1600
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "45baee0bd0842d060fe14f1653cc833f99960ca424c7c69a2c5054b0c4dceb15"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/cli/tests/loop_connect.rs",
+      "total_lines": 1902,
+      "sha256": "519990d0d51590b3aa1063d57b51700ec1c98ebc40d764e56c8999db9873bbb5",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1600
+        ]
+      ],
+      "substantive_note": "macOS CLI integration intent with fake claude/codex/cursor and scratch HOME: connect journal idempotent scoped settings/hooks/MCP/instructions/tool approvals; disconnect retains MCP prints exact account removal, restores own bytes/modes, refuses corruption/symlink support, pending rollback; version gates context>=.1.1 guarded quarantine>=.1.3 Codex blocking Stop>=.1.4 Cursor>=.2; taste opt-in/removal/override/symlink/decline; no tests run.",
+      "assigned_range": [
+        1,
+        1600
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "a8069ea487b8aa6b772db76c311b7fb56599c866a02a24b24f548300048ea9fa"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/context/src/context.rs",
+      "total_lines": 1593,
+      "sha256": "46bacf978c61ea99a221d5e826810967b48ba20c340f83f2ece84be80eacff6c",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1593
+        ]
+      ],
+      "substantive_note": "Read-only context resolution: PRODUCT/DESIGN independent project->repo fallback; env only neither; explicit target git boundary; workspace patterns config/package/pnpm/lerna, negations/glob approximations, bare-name uniqueness; UI shallow signals incl native and fallback all when filter empty; source provenance statuses; visual heuristic250 files depth4 first64Ki UTF16; platform and world parse. Tests synthetic UI filtering no execution.",
+      "assigned_range": [
+        1,
+        1593
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "46bacf978c61ea99a221d5e826810967b48ba20c340f83f2ece84be80eacff6c"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/hook/tests/hook_tests.rs",
+      "total_lines": 4631,
+      "sha256": "fe27471b2a2431a76fbc0262129771e8837f15f9f3b60408ca7f3e98ee5b6f60",
+      "status": "partial",
+      "ranges": [
+        [
+          3201,
+          4631
+        ]
+      ],
+      "substantive_note": "Hook regression intent: Codex/Hermes Stop decision:block not Claude shape; live preview whole-event stand-down before edit cap; concurrent event+Stop claims fail-open private hash-key storage/no symlink or writable root, own-only expiry; session root index umbrella multi-project; local-consent repair only, malformed/disabled unchanged, Hermes enabled metadata no enable write; shell-write discovery session v7 or transcript birth no guessed start; DS changes invalidate Stop; plain scripts scoped opt-in. Side effects tests temp files, threads, modes/mkfifo, none run.",
+      "assigned_range": [
+        3201,
+        4631
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "5d5a96aeeeefb84c93bf0c9333430155c6f22171dcd3d5a917fa9b41d6ff70ff"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/skills/src/hook_manifest.rs",
+      "total_lines": 1124,
+      "sha256": "7126635be1d02e3f68e33e5cb24c0d7c8bd9f7e428f45b20321c077bd1bb84f9",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          1124
+        ]
+      ],
+      "substantive_note": "Provider-specific manifests/launcher quoting and scope; Cursor retired pre gate->post; existence guard preserves exit2; Codex Windows sibling/Gemini substitution/Grok cmd/Claude Git Bash/Copilot portability; JSONC .bak, malformed user settings never force replace; merge own entries only, prune only current home wiring incl launcher/full entries; atomic copy manifests, Hermes plugin copied globally even project installs presence!=enabled; stale repair regardless consent; consent local JSON + git exclude writes.",
+      "assigned_range": [
+        1,
+        1124
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "7126635be1d02e3f68e33e5cb24c0d7c8bd9f7e428f45b20321c077bd1bb84f9"
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/github-sheriff.test.mjs",
+      "total_lines": 992,
+      "sha256": "4335eb9fd4754b8a3b1c20e1417d145a4dece56f726d0af6aef250efa3715ffc",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          992
+        ]
+      ],
+      "substantive_note": "Sheriff policy tests not design skill: trusted explicit wait only, warning7/close14 window with current trusted receipt, contributor vs maintainer handoff, conflicts/reviews/drafts/policy labels/CI distinctions, REST full hydration fake gh >6MiB page projection preserves raw count, regular and never-close exemptions. CLI dry-run subprocess test intent no real GitHub writes here; do not port contributor policy to Friday.",
+      "assigned_range": [
+        1,
+        992
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "4335eb9fd4754b8a3b1c20e1417d145a4dece56f726d0af6aef250efa3715ffc"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/css/scan.rs",
+      "total_lines": 976,
+      "sha256": "63581dfb9910936d1f50d001a276e7012a0529c6b9427f69c36d39581c27912e",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          976
+        ]
+      ],
+      "substantive_note": "CSS text no DOM: custom props first-wins, decl last-wins !important stripped; token boundaries vendor prefixes avoid --property noise; selector attribution comments offset-preserved quotes/group at-rules not nesting; length em/rem fixed16; marquee >=20%; pulse excludes readable >=4px travel/height-only resize/single-axis scales, unknown matrix/transform stays unknown; infinite shorthand/longhand heuristics, strips reduce blocks; landmark ranges/last selector id-class approximate. Parser not cascade/runtime.",
+      "assigned_range": [
+        1,
+        976
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "63581dfb9910936d1f50d001a276e7012a0529c6b9427f69c36d39581c27912e"
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/lib/utils.test.js",
+      "total_lines": 705,
+      "sha256": "116eee02b8ce40ec46ffa3495dc6b0b18d7858fe80e8408eabf2bb06356f5be0",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          705
+        ]
+      ],
+      "substantive_note": "Bun build-utils tests: narrow frontmatter fields boolean user-invocable only/quoted scalar hazards/nested metadata; recursive md and portable nested scripts excluding JSON; curated six-category homepage not skill extraction; provider placeholder and Codex invocation adaptation avoids paths/URLs, explicit script marker only. Test fixtures write/remove cwd/test-tmp (not run).",
+      "assigned_range": [
+        1,
+        705
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "116eee02b8ce40ec46ffa3495dc6b0b18d7858fe80e8408eabf2bb06356f5be0"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/comp/src/hero.rs",
+      "total_lines": 616,
+      "sha256": "a1558ac4c1b2a78b88926d400718c73382ddf58dd20a122bfa33150718b6aa35",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          616
+        ]
+      ],
+      "substantive_note": "Pure raster+Region hero fidelity diagnostic JSON: fingerprint cap>=10 >=6glyphs, cap22%, wrap mismatch, pitch20%, gap max(.03,.5comp), density .75/1.25, ink deltaE22 filtered surround/polarity, control not first-line bounds; strip rule offsets max5/6%; invented ink10x10 contextual sparse grid; plate comp margin6 build<=1; SVG64px/8shapes/480path budget heuristics. Tests synthetic RGBA no OCR/browser proof.",
+      "assigned_range": [
+        1,
+        616
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "a1558ac4c1b2a78b88926d400718c73382ddf58dd20a122bfa33150718b6aa35"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/scripts/consistency.mjs",
+      "total_lines": 11485,
+      "sha256": "080b835e99353f63650f8966813d735f142293119cd371c554b66a1effc5e3da",
+      "status": "partial",
+      "ranges": [
+        [
+          9190,
+          9757
+        ]
+      ],
+      "substantive_note": "Actual finding/fix map and copy/audit/extras/more functions: strict house rules body16/contrast7, no scroll reveal/pinning/captions/progress, full-screen, product hero80% warn60%fail, repeat/ground/CTA/copy limits. English ASCII normalizer not Cyrillic-ready; title/category/type inference; modules override FIX. waitReady timeout swallowed; local page GET catch true; shader lexical ES version/macro/reserved-name lint same-origin source<=3MB+runtime shader collection. No execution; partial consistency file only.",
+      "assigned_range": [
+        9190,
+        9757
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "e97db718070af75599a9d79982ba8228cf3c89a1470c140e54532d465c249981"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/motion/demo.html",
+      "total_lines": 475,
+      "sha256": "8bcb548eb3f7fc3d091dcf4a6fa919411f10b9e5dff200dada3f9b0bb4d8e408",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          475
+        ]
+      ],
+      "substantive_note": "Motion gallery HTML complete static read not visual: system/cards/motion CSS+JS, Geist Google fonts/picsum remote; data-m-loop/still, 3.2/4s choreography state labels disjoint and pauses external, count/tab/switch/FAQ semantics; responsive board hides mover <=1023 and columns<=639; theme query/button aria toggles. Demo form onsubmit false no backend; progress bar/fictional facts illustrate demo vs strict checker conflicts; do not ship as real product.",
+      "assigned_range": [
+        1,
+        475
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "8bcb548eb3f7fc3d091dcf4a6fa919411f10b9e5dff200dada3f9b0bb4d8e408"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/cdp_attach.rs",
+      "total_lines": 427,
+      "sha256": "28109a0464acd79c4e39d8c931337df72cfd0347408b841f1d0a11b9a7f821b9",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          427
+        ]
+      ],
+      "substantive_note": "CDP attach tests raw second client checks no reload/navigation/scroll/globals/nodes/activation/dim changes, media paused restoration, isolated world hostile Map/Array+CSP, ambiguous pages exact id; hidden page pixel skipped note; cancel timed-out async waits before restore; port non-devtools error. Launch/HTTP/CDP tests skip if no browser, not run.",
+      "assigned_range": [
+        1,
+        427
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "28109a0464acd79c4e39d8c931337df72cfd0347408b841f1d0a11b9a7f821b9"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/index.html",
+      "total_lines": 365,
+      "sha256": "cf737c02c3e2d293a4c437581fd1ee2b39c9f3ad5c5cb2b165d0607efedb9eb3",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          365
+        ]
+      ],
+      "substantive_note": "Component gallery20 entries five palettes dynamically fetch meta/html/import js+CSS, load failures omitted, CSS error treated settled; localStorage palette; immediate markup + IntersectionObserver near10% start/destroy, fx unmount, one object live, WebGL prototype instrumentation live/peak debug global. Inconsistent initial max16 vs config4 requires dependency to decide; ready fixed1500ms not readiness proof; HTML not visual review.",
+      "assigned_range": [
+        1,
+        365
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "cf737c02c3e2d293a4c437581fd1ee2b39c9f3ad5c5cb2b165d0607efedb9eb3"
+    },
+    {
+      "repo": "impeccable",
+      "path": "tests/live-browser-source.test.mjs",
+      "total_lines": 1937,
+      "sha256": "da2ce52b8f82f3512dbc01312afab479a118ec5854a712f2f8db68446884b429",
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          1937
+        ]
+      ],
+      "substantive_note": "VM Tune listeners preserve 0/false/range/steps through reopen/progressive arrival/reload; scoped session+variant stash validates finite bounds/types/options and resets on switch. Pending dock sessionStorage TTL15min restores repair decision vs running spinner, rollback re-enables Apply/Discard; bar never widens on hover. Not real browser/server execution.",
+      "assigned_range": [
+        1601,
+        1937
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "7813c5f0c017fb80c89c15765ab68a9cf0ae323792f900fa57bdb3442f0dc319"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/brand_and_vendors.rs",
+      "total_lines": 303,
+      "sha256": "0e1b8cdb787200654e43350ae00fc45ff2219a460bcb194e157a3c760fda3c63",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          303
+        ]
+      ],
+      "substantive_note": "URL-browser fixture intent brand hue/category/declared DS exempt vs gradient, cyan band170..197 saturation not emerald/sky; footer entry heading skip but internal skip retained; ad-tech errors advisory separately capped preserves own error; widget vendor tag severity unchanged; flat hierarchy two weight steps advisory. Local HTTP/browser skips no browser; tests not run.",
+      "assigned_range": [
+        1,
+        303
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "0e1b8cdb787200654e43350ae00fc45ff2219a460bcb194e157a3c760fda3c63"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/foundation/src/browser/mod.rs",
+      "total_lines": 244,
+      "sha256": "a9042b404806525f1b24c8813816e21e28ab2ba6dde9f80d624760d73e53309a",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          244
+        ]
+      ],
+      "substantive_note": "Shared Dom/snapshot/selector/fake interfaces and serializable findings/config/result. Waiver parser drops invalid entries nonzero numbers stringified; extension-only disable/skip; line max default80 or JS numeric-string/NaN semantics; unreported affects substitution not filtering, Rust static rule pack excluded JSON; collapsed contrast ids handed pixel stage; unstarted slider hidden-text excluded metadata.",
+      "assigned_range": [
+        1,
+        244
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "a9042b404806525f1b24c8813816e21e28ab2ba6dde9f80d624760d73e53309a"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/layout/hero-centred.html",
+      "total_lines": 207,
+      "sha256": "4ccee121eb05f94d8a824f0a5924657c6fae572e2d10b82c6edd6162ffc12da6",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          207
+        ]
+      ],
+      "substantive_note": "Centred software hero dark Instrument Sans variable width92%, painterly-landscape CSS fallback, staged support inbox role img with aria hidden internals; responsive removes sidebar/tool/rows rather than overflow; stats3-up1024 split640 stack phone148px; broad demo anchors to numbers no real flow; system/layout scripts external.",
+      "assigned_range": [
+        1,
+        207
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "4ccee121eb05f94d8a824f0a5924657c6fae572e2d10b82c6edd6162ffc12da6"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/backgrounds/check.mjs",
+      "total_lines": 178,
+      "sha256": "930a1ddac06c18d044e2ffba2d529087cd70dedcce45ab7ff56937e6c1ea1fff",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          178
+        ]
+      ],
+      "substantive_note": "Contrast harness Node builtins+global WebSocket spawns Chrome SwiftShader and start.mjs token subprocess, local server5965..69, profile history, screenshots+JSON; palette x lit x grounds textZone samples4px blocks at .5 scale (8CSSpx), min7/4.5, custom RGB/RGBA PNG decoder; timeout25min kill owned PID. Static risks empty results/sampling can remain99 pass, Chrome spawn before port/server try-finally; not run.",
+      "assigned_range": [
+        1,
+        178
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "930a1ddac06c18d044e2ffba2d529087cd70dedcce45ab7ff56937e6c1ea1fff"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/text_forms.rs",
+      "total_lines": 165,
+      "sha256": "c18feb1e8dc042fe77fbf80b6075c32d4b00a13778c58775ee3ef4426cd0271c",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          165
+        ]
+      ],
+      "substantive_note": "Browser text-form fixture tests visible-character share>=5% and loaded font before overused-font; reported79% is element-based detail not visible-character11%; pseudo stripe once, image-only excluded; marquee requires content; pulse scale not bounce. No browser/test execution.",
+      "assigned_range": [
+        1,
+        165
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "c18feb1e8dc042fe77fbf80b6075c32d4b00a13778c58775ee3ef4426cd0271c"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/tests/own_box_surface_and_ink.rs",
+      "total_lines": 159,
+      "sha256": "8b57d81e0aff55b2fa026f839d27552372844d92dd28ae1a29a5f6fdf4d6516f",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          159
+        ]
+      ],
+      "substantive_note": "Browser contrast regression fixture intent own gradient over fill ordering, currentColor SVG only, filter/reveal no computed verdict, aria-hidden still visible pixel, fixed images/disagreeing samples route pixel; explicit should flag/pass and snippet provenance. Skip missing browser/fixture; not run.",
+      "assigned_range": [
+        1,
+        159
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "8b57d81e0aff55b2fa026f839d27552372844d92dd28ae1a29a5f6fdf4d6516f"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/layout/hero-film.html",
+      "total_lines": 120,
+      "sha256": "d6e37b577d74091ff01d4d5ee4b31f88b6ac51330e1e9c2a7c29f184fb131ff5",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          120
+        ]
+      ],
+      "substantive_note": "Service film hero Schibsted dark photo-overlay positioning responsive crops and 4:5 secondary; play-film is only #tours anchor no film, price rows/credits/mailto example. system/layout deps not standalone production.",
+      "assigned_range": [
+        1,
+        120
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "d6e37b577d74091ff01d4d5ee4b31f88b6ac51330e1e9c2a7c29f184fb131ff5"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "total_lines": 116,
+      "sha256": "e42e584f2ddc0cf1937657465e47b3ba71e1cc77d6af3d3709d91a158037ff69",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          116
+        ]
+      ],
+      "substantive_note": "Editorial service hero Mona variable width108%, inline decorative images aria hidden + heading accessible label, wdth letter hook; ordered duration rows and responsive photo4:3; dummy mailto/anchors; depends system/layout.",
+      "assigned_range": [
+        1,
+        116
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "e42e584f2ddc0cf1937657465e47b3ba71e1cc77d6af3d3709d91a158037ff69"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/src/fullpage.rs",
+      "total_lines": 1683,
+      "sha256": "a631cdcf72dcf2c292b071be73e1dec7714904d387eba7497dc1a25833dd596b",
+      "status": "partial",
+      "ranges": [
+        [
+          1601,
+          1683
+        ]
+      ],
+      "substantive_note": "Tail unit-test assertions only: paste clip negative offsets; supplemental element shots intersection visibility/invalid geometry/RTL origins, cap preserves viewport; geometry defaults1280x800; JPEG round-trip band tolerance. Not full fullpage implementation.",
+      "assigned_range": [
+        1601,
+        1683
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "99121de61abaaf4fd019b5f37cfe66494266097491bf4a5e2dbdcc7d064c3d20"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/photo-kit/demo.js",
+      "total_lines": 81,
+      "sha256": "c0bc29e835c03406280aafc34640abb99bdb5fc77e1ef22bcf021df3b6887f48",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          81
+        ]
+      ],
+      "substantive_note": "photo-kit demo fetch photos registry, escaped labels/credits, object.mount merge focus<global<per-photo<query JSON, clock/WebGL1, replaces body/debug controllers, palette history.replaceState+rAF setPalette/replay. Invalid solo bypasses key filter => undefined p.alt static defect; no cleanup or fetch rejection handling here.",
+      "assigned_range": [
+        1,
+        81
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "c0bc29e835c03406280aafc34640abb99bdb5fc77e1ef22bcf021df3b6887f48"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/objects/_print-core/blank-ground.html",
+      "total_lines": 70,
+      "sha256": "9e3ed42ad4c641233d6ca621322e97c92b508cc0084a6742b4155cd47a4268c8",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          70
+        ]
+      ],
+      "substantive_note": "Maintainer fixture blank grounds owns matching paper until third ground draws; await auto.mountAll then ui.grounds skip first2, poll100x200ms, global rows+ok/data-ready pass/fail. No real run; CSS stacked<=900.",
+      "assigned_range": [
+        1,
+        70
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "9e3ed42ad4c641233d6ca621322e97c92b508cc0084a6742b4155cd47a4268c8"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "total_lines": 62,
+      "sha256": "44ac0716d579efbe73c009c0ca281574e06b3a052bbabfec4d5591543246c9f9",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          62
+        ]
+      ],
+      "substantive_note": "Line carries colour moment demo inverse section from base, CSS/JS modulepreloads and mo-js safety2500ms class; printed machinery rows, local photos/Google fonts; dummy anchors, motion implementation external not inferred.",
+      "assigned_range": [
+        1,
+        62
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "44ac0716d579efbe73c009c0ca281574e06b3a052bbabfec4d5591543246c9f9"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "total_lines": 58,
+      "sha256": "ef7d099e2ebaa038f3b1c803fe7c187316f8b1c2a5b43cf4968f5fa9555d18d0",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          58
+        ]
+      ],
+      "substantive_note": "Weather big-scene demo --h:2 two-photo cloud to valley composition, labelled headline/weather facts, sc-js safe2500ms, scenes.css/scene.css/scenes.js; cannot infer scroll or reduced motion implementation from HTML.",
+      "assigned_range": [
+        1,
+        58
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "ef7d099e2ebaa038f3b1c803fe7c187316f8b1c2a5b43cf4968f5fa9555d18d0"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/components/fx-chart/component.css",
+      "total_lines": 47,
+      "sha256": "7ea72e24179d372ee551e37a9d69d81fe10727e0543e4bdf10c3064891e54ee3",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          47
+        ]
+      ],
+      "substantive_note": "Chart CSS own dashed grid/SVG line non-scaling stroke, accent area fallback before fx mounted, reading class cursor+tip opacity .15s, side-flip tooltip14px and mobile plot180 vs220. Needs JS for input/a11y, no proof CSS alone.",
+      "assigned_range": [
+        1,
+        47
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "7ea72e24179d372ee551e37a9d69d81fe10727e0543e4bdf10c3064891e54ee3"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/stat/fragment.css",
+      "total_lines": 45,
+      "sha256": "4fd01fd085a6f5449182f21a76a5b5c7d56ba52097ceb6976740362c00c7ca02",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "substantive_note": "Stat fragment420px tabular36px number quiet ink delta accent final bar; is-window inverse cutout shows effect data, is-fill intentionally bleeds bars/hides axis; phone range icon removed. CSS only tokens/JS required.",
+      "assigned_range": [
+        1,
+        45
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "4fd01fd085a6f5449182f21a76a5b5c7d56ba52097ceb6976740362c00c7ca02"
+    },
+    {
+      "repo": "taste",
+      "path": "skills/taste-skill/assets/ui/code/fragment.css",
+      "total_lines": 28,
+      "sha256": "afaa55bca2ff006ec3ddaae71be484052af6b1424aae885e40448ca31b1f0f11",
+      "status": "partial",
+      "ranges": [
+        [
+          1,
+          28
+        ]
+      ],
+      "substantive_note": "Code fragment440px phone100%, ink-tint syntax not rainbow, single marked line accent2px+9%wash, pre clipping13/20, hint240ms opacity and mark300ms transitions; no local reduced-motion override (could be inherited), no executable editor.",
+      "assigned_range": [
+        1,
+        28
+      ],
+      "assigned_range_complete": true,
+      "hash_matches_inventory": true,
+      "range_sha256": "afaa55bca2ff006ec3ddaae71be484052af6b1424aae885e40448ca31b1f0f11"
+    }
+  ],
+  "nearby_context": [
+    {
+      "repo": "impeccable",
+      "path": "crates/core/src/browser/quality.rs",
+      "ranges": [
+        [
+          3192,
+          3207
+        ]
+      ],
+      "status": "partial"
+    },
+    {
+      "repo": "impeccable",
+      "path": "crates/browser/src/fullpage.rs",
+      "ranges": [
+        [
+          1575,
+          1605
+        ]
+      ],
+      "status": "partial"
+    }
+  ],
+  "asset_reference_existence_checks": [
+    {
+      "source": "skills/taste-skill/assets/motion/demo.html",
+      "reference": "../system.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/motion/demo.html",
+      "reference": "../ui/cards.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/motion/demo.html",
+      "reference": "motion.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/motion/demo.html",
+      "reference": "../system.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/motion/demo.html",
+      "reference": "motion.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/components/index.html",
+      "reference": "../system.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/components/index.html",
+      "reference": "./base.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/components/index.html",
+      "reference": "../effects/gallery.html",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/components/index.html",
+      "reference": "../effects/fx.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-centred.html",
+      "reference": "../system.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-centred.html",
+      "reference": "../ui/cards.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-centred.html",
+      "reference": "layout.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-centred.html",
+      "reference": "demo.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-centred.html",
+      "reference": "../system.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-centred.html",
+      "reference": "layout.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-film.html",
+      "reference": "../system.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-film.html",
+      "reference": "../ui/cards.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-film.html",
+      "reference": "layout.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-film.html",
+      "reference": "img/photo-d540.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-film.html",
+      "reference": "img/photo-d534.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-film.html",
+      "reference": "../system.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-film.html",
+      "reference": "layout.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "reference": "../system.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "reference": "../ui/cards.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "reference": "layout.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "reference": "img/photo-1081.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "reference": "img/photo-949.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "reference": "img/photo-c823.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "reference": "../system.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/layout/hero-editorial.html",
+      "reference": "layout.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/photo-kit/demo.js",
+      "reference": "../../effects/fx.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/photo-kit/demo.js",
+      "reference": "./photo.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/_print-core/blank-ground.html",
+      "reference": "../../ui/base.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/_print-core/blank-ground.html",
+      "reference": "../../ui/cards.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/_print-core/blank-ground.html",
+      "reference": "../../effects/fx.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/_print-core/blank-ground.html",
+      "reference": "../../ui/ui.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/objects/_print-core/blank-ground.html",
+      "reference": "./auto.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "../moments.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "../lib.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "moment.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "../../system.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "../_demo/demo.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "moment.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "../_demo/photo-887.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "../_demo/photo-855.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/moments/line-carries-colour/demo.html",
+      "reference": "../moments.js",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "reference": "../../system.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "reference": "../_demo/demo.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "reference": "../scenes.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "reference": "scene.css",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "reference": "../_demo/photo-809.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "reference": "../_demo/photo-c393.jpg",
+      "exists": true
+    },
+    {
+      "source": "skills/taste-skill/assets/scenes/descend-through-weather/demo.html",
+      "reference": "../scenes.js",
+      "exists": true
+    }
+  ],
+  "runtime_verified": false
+}
