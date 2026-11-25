@@ -10,7 +10,7 @@ import {httpsOnce,boundedRequest,isPublicIPv4,validateDecodedMedia} from './seru
 export {isPublicIPv4};
 const ROOT=fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum-approved-to-16x9/',import.meta.url));
 export const MODEL='bytedance/seedance-2-mini';
-export const FREEZE_SHA='f8303111023ebe3c8d7979f9fff5032b8bc14d00c98d6cc38eb76050b8cb5bc0';
+export const FREEZE_SHA='eaa1d3047a2ca91b348e9d1cdda429fe29eaba9f8041b618c85e758572b5792d';
 const BUNDLE_SHA='1ce3d0b9784e5c8848a2aa48441b083af5768b91e013e702d626d6e6e2d8e282';
 export const TOKEN='confirm-serum-approved-16x9-new-80';
 export const PRICE='https://api.kie.ai/client/v1/model-pricing/page';
