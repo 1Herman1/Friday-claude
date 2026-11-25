@@ -15,7 +15,7 @@ spec.loader.exec_module(mod)
 class LifecycleTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         (self.root / '.codex').mkdir()
         (self.root / 'docs/projects').mkdir(parents=True)
         (self.root / 'docs/projects/README.md').write_text('**Рабочая ветка: `working`.**')
@@ -37,6 +37,13 @@ class LifecycleTests(unittest.TestCase):
             return 'a' * 40
         return 'projects/test/src/page.tsx'
 
+    def test_fixture_root_is_canonical_like_production(self):
+        self.assertEqual(self.root, self.root.resolve())
+        assert spec is not None and spec.loader is not None
+        fresh = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(fresh)
+        self.assertEqual(fresh.ROOT, Path(__file__).resolve().parents[2])
+
     def test_startup_loads_context_and_name(self):
         (self.root / '.codex/context.md').write_text('remember this decision')
         out = mod.startup({'session_id': 'test'})
@@ -44,6 +51,18 @@ class LifecycleTests(unittest.TestCase):
         self.assertIn('Гермес', text)
         self.assertIn('remember this decision', text)
         self.assertIn('working', text)
+
+    def test_startup_preserves_current_owner_policy(self):
+        text = mod.startup({})['hookSpecificOutput']['additionalContext']
+        for requirement in ['Пользователь — Гермес', 'Привет, Гермес!',
+                            'В обычной беседе обращаться «Гермес»',
+                            'при объяснении сложной задачи — «сэр»',
+                            'Держать тон собранным и уважительным',
+                            'говорить по делу и инициативно предлагать следующий шаг.',
+                            'Полностью прочитай .codex/CODEX.md перед работой.']:
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, text)
+        self.assertNotIn('после приветствия обращение «сэр»', text)
 
     def test_archive_never_copies_messages_or_secrets(self):
         mod.archive({'session_id': 'test', 'last_assistant_message': 'SECRET-DO-NOT-COPY',
@@ -89,7 +108,7 @@ class GitLifecycleTests(unittest.TestCase):
     """Real Git fixtures: avoid mocks that conceal committed/untracked/deleted files."""
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         (self.root / '.codex').mkdir()
         self.root_patch = patch.object(mod, 'ROOT', self.root)
         self.root_patch.start()
@@ -214,7 +233,7 @@ class GitLifecycleTests(unittest.TestCase):
 
     def test_first_commit_of_unborn_repository_survives(self):
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
+            root = Path(temp).resolve()
             subprocess.run(['git', '-C', temp, 'init', '-q'], check=True)
             (root / '.codex').mkdir()
             with patch.object(mod, 'ROOT', root):

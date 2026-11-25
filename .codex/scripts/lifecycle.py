@@ -99,7 +99,7 @@ def startup(payload):
     current = git('branch', '--show-current') or '(не определена)'
     active = read('docs/projects/.active', 100).strip()
     # The config instruction makes reading CODEX.md mandatory; the hook adds current context.
-    text = ('Friday / Codex. Пользователь — только Гермес.\n'
+    text = ('Friday / Codex. Пользователь — Гермес. Новый чат начинай с «Привет, Гермес!». В обычной беседе обращаться «Гермес», при объяснении сложной задачи — «сэр». Держать тон собранным и уважительным, говорить по делу и инициативно предлагать следующий шаг.\n'
             'Полностью прочитай .codex/CODEX.md перед работой.\n'
             'Специалисты: .codex/agents/*.toml; автоматически выбирай подходящих.\n'
             f'Рабочая ветка: {expected}; текущая: {current}; активный проект: {active or "не задан"}.\n')
