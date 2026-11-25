@@ -1,0 +1,80 @@
+{
+  "assets": [
+    {
+      "path": "assets/1-original.jpg",
+      "sha256": "ba4c4ec6eac98d73b5a843b4872a89f65938e64e49616aaa3ec978c15e2876f3",
+      "size": 48899,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/2-original.jpg",
+      "sha256": "cb222a0bd1698306d8590c3680640ec51b9e24f5a9cb31a3c1c7faf01bf69469",
+      "size": 29332,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/3-original.jpg",
+      "sha256": "98ecedf72cb72e3a08e6538b70cdd6abeea77ce981675272310f697bca3f22b1",
+      "size": 29271,
+      "mime": "image/jpeg"
+    },
+    {
+      "path": "assets/1-label-padded.png",
+      "sha256": "f815c4d4738f881df081463ea82de0232dacb27d5234a978cf404c979cc7481b",
+      "size": 66864,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/2-label-padded.png",
+      "sha256": "a7ffeaa0236cf57c7394487e30ce2e42810bd6ce5f46d224e3a45ee4a9af91a8",
+      "size": 27853,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/3-label-padded.png",
+      "sha256": "4c8afac499545c4c2e97fb68ea61c5dea48fef157c0434312afa290899b0d97d",
+      "size": 34454,
+      "mime": "image/png"
+    },
+    {
+      "path": "assets/native-01.png",
+      "sha256": "b255ff8be2cea0578bd861c7db9ed0fcc6adf65288cd2978a7c680cfd1ab65eb",
+      "size": 1171799,
+      "mime": "image/png"
+    }
+  ],
+  "prompt": "Create exactly one continuous 10-second SILENT 21:9 wide product video on a seamless white support plane with soft realistic contact shadows. Fixed orthographic nadir camera looking down along -Z onto XY: X is image-right, Y is image-up. Every bottle lies on its side throughout, longitudinal body axis parallel to Y, closure toward +Y. Cap-up in the image does NOT mean standing on its base. Roll left-to-right like a PIPE about the bottle's OWN longitudinal +Y axis only. Preserve the real photographed packaging, not a generic replacement cylinder. No camera movement, zoom, scene translation, group drift, in-plane screen rotation, axis turning, end-over-end flipping, tilting, deformation, morphing, duplication, opacity reveals, collisions, contacts, pushes, bouncing, recoil, reverse travel or reverse roll.\n\nREFERENCE ROLES: Images 1/2/3 identify the three original products A/B/C. Images 4/5/6 are their photographed label crops in matching order, for exact printing, not additional objects. Use the bottle only, never a packshot box. Image 7 is only the existing wide FINAL composition guide, not a first-frame instruction and not an instruction to hold labels facing the screen. Begin with an empty frame. Preserve shapes, relative proportions, materials, closures, colors and photographed lettering. Do not invent text or normalize printed product names. Do not copy any product twice.\n\nCOMMON RIGID KINEMATIC CONTRACT, applying independently to A, B and C: the only motion freedoms are continuous nondecreasing x_i(t) and its coupled axial angle theta_i(t) around the fixed +Y body axis. Each y_i, scale, geometry and axis direction stay fixed. Roll only in the single axial direction associated with travel to +X, theta_i(t)=theta_i0+(x_i(t)-x_i0)/R_i and omega_i=v_i/R_i, where R_i is the effective rolling radius of that particular real body, not one shared radius. These are qualitative rolling instructions, not measured numeric radii or a command to deform stepped/tapered packages into perfect cylinders. Translation and axial angular speed smoothly slow together to zero. No final independent label turn. Choose the initial angular phase to achieve the desired final side, without any reverse turn. Before entry the complete bottle is outside the OUTER LEFT frame boundary. Visibility increases only by geometric crossing of that edge, never fade-in. After its stop, both x_i and theta_i stay absolutely constant through 10.00s, even while other bottles move.\n\nEach bottle is one rigid assembly: body, cap, bulb/dropper, collar, dispenser, translucent cover and label have no relative movement, opening or unscrewing. Printing is immutable ink attached to material surface coordinates. The SAME character stays on the SAME physical body point; it rotates with the curved surface, narrows near the silhouette and naturally becomes invisible on the far side. It is NOT a screen-static front label. Do not demand that front printing is always visible. No relettering, mirroring, texture substitution, crossfade, sliding decals, or sudden front-label reveal after stopping. Hidden unphotographed sides are not an invitation to invent duplicate front labels.\n\n0.00-0.40s: empty white frame, zero visible objects.\n\nA — GLACÉE 4D HYAL CROSS: exactly ONE original narrow white bottle with silver collar and white dropper. Entirely outside left before 0.40s. During 0.40-3.40s enter progressively through the OUTER LEFT edge and travel right while rolling ONLY around its fixed longitudinal +Y axis, with omega_A=v_A/R_A, nondecreasing x_A, fixed y_A/shape/scale and rigidly assembled components. Ink remains fixed to the rotating surface, not fixed to the camera. No screen rotation, flip, morph, fade, reverse motion or separate label turn. Smoothly decelerate translation and axial roll together to a stop at the rightmost final position, leaving a safe right-edge gap. Composition center guide approximately x=506 in a 553x220 display tile, adjusted for actual bottle width and safe margin. From 3.40s through 10.00s A stays completely motionless and unchanged while B and C move.\n\nB — ISSEIMI BLOCKMELAN: exactly ONE original short amber bottle with black dropper, a distinct object, never a transformed copy of A. Entirely outside left before 3.50s. During 3.50-6.00s enter progressively through the OUTER LEFT edge and travel right while rolling ONLY around its fixed longitudinal +Y axis, with omega_B=v_B/R_B, nondecreasing x_B, fixed y_B/shape/scale and rigidly assembled components. Its unchanged ink rotates WITH its material surface and may disappear on the hidden side. No screen rotation, flip, morph, fade, reverse motion or independent label turn. A remains absolutely fixed. Smoothly stop immediately left of A with a small clear gap: NO contact, penetration, push, bounce or recoil. Center guide approximately x=455 in the 553x220 tile, adjusted to prevent overlap of real silhouettes. From 6.00s through 10.00s B stays completely motionless and unchanged.\n\nC — ISSEIMI FLUVIX: exactly ONE original amber spray bottle with white collar and translucent cap. Entirely outside left before 6.10s. During 6.10-8.70s enter progressively through the OUTER LEFT edge and travel right while rolling ONLY around its fixed longitudinal +Y axis, with omega_C=v_C/R_C, nondecreasing x_C, fixed y_C/shape/scale and all parts rigid. Its unchanged ink rotates WITH its material surface, never a screen-static sticker. No screen rotation, flip, morph, fade, reverse motion or final independent label turn. A and B remain absolutely fixed. Smoothly stop left of B with a small clear gap: NO contact, penetration, bounce, recoil, insertion between A/B, split or fourth product. Center guide approximately x=400 in the 553x220 tile, adjusted for real dimensions. From 8.70s through 10.00s C and the entire group stay completely motionless and unchanged.\n\nEXACT COUNT AND FINAL: only THREE unique objects exist in the whole video, A/B/C, with visible count monotonically 0 → 1 → 2 → 3. Partial edge entry belongs to the same instance. No box, extra bottle, duplicate, prop or transition object. At 8.70-10.00s the stationary group on the RIGHT reads C–B–A from left to right, with safe outer-edge clearance and no silhouette overlap. Keep the upper title area clear, y<54 in the 553x220 composition guide; do not render a title. Keep camera, scale and lighting constant. Do not replace the moving instances with a final photograph. No sound.",
+  "schema_sha256": "1d20ec92e049b6b2cbea3c80e81168b873c54d24d72b7a99ba93062355812dff",
+  "referenceDurationSeconds": 0,
+  "quotedCredits": 82,
+  "ownerMaximumCredits": 82,
+  "poseVerdict": "KNOWN_AMBIGUITY_OWNER_INFORMED_PROCEED_NOT_PASS",
+  "authorization": "Owner explicitly authorizes ONE NEW paid generation using reviewed strict pipe-like one-way rigid motion prompt; separate from consumed task542235a8f513f7367a181930182bebdc. Maximum82 quote-based credits, no paid retry, no website publication.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "720p",
+    "duration": 10,
+    "generate_audio": false
+  },
+  "requestId": "serum-rigid-oneway-20261125-new-attempt1",
+  "previousTaskId": "542235a8f513f7367a181930182bebdc",
+  "referenceDecision": "No video reference: existing contact/recoil clip conflicts with latest monotonic one-way motion; no unambiguous silhouette-measured forward-only segment established. Use seven existing images, no new image batch.",
+  "timeplan": {
+    "A": [
+      0.4,
+      3.4
+    ],
+    "B": [
+      3.5,
+      6.0
+    ],
+    "C": [
+      6.1,
+      8.7
+    ],
+    "hold": [
+      8.7,
+      10
+    ]
+  }
+}

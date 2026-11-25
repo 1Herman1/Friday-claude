@@ -5,7 +5,7 @@ name: Serum ACTUAL wide one paid job
     paths:
       - .github/workflows/serum-actual-generation.yml
       - tools/nullume/scripts/serum-actual-*.mjs
-      - docs/projects/perfect-skin/media-review/serum-actual-generation/**
+      - docs/projects/perfect-skin/media-review/serum-rigid-oneway-generation/**
   workflow_dispatch:
     inputs:
       mode:
@@ -18,8 +18,8 @@ name: Serum ACTUAL wide one paid job
         type: choice
         required: true
         default: none
-        options: [none, confirm-serum-actual-one-82]
-        description: Quoted 65 credits within owner maximum82, NOT a provider-enforced ceiling
+        options: [none, confirm-serum-rigid-oneway-new-82]
+        description: Quoted 82 credits within owner maximum82, NOT a provider-enforced ceiling
       task_id:
         type: string
         default: ''
@@ -46,14 +46,14 @@ jobs:
           node-version: '22'
       - name: Offline hostile-input and duplicate-create regression tests, no credentials
         run: node --test tools/nullume/scripts/serum-actual-generation.test.mjs
-      - name: Credential-free archived schema, 709-row quote, freeze and encrypted bundle validation
+      - name: Credential-free archived schema, 710-row quote, freeze and encrypted bundle validation
         run: node tools/nullume/scripts/serum-actual-generation.mjs dry-run
   paid:
     needs: preflight
     if: >-
       github.event_name == 'workflow_dispatch' && github.run_attempt == '1' &&
       github.ref == 'refs/heads/ci/serum-actual-one' &&
-      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum-actual-one-82') || inputs.mode == 'recover-existing-task')
+      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum-rigid-oneway-new-82') || inputs.mode == 'recover-existing-task')
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     # Reuse protected environment without changing any of its protection rules.
@@ -86,7 +86,7 @@ jobs:
           MODE: ${{ inputs.mode }}
         run: >-
           node --input-type=module -e "import {authorize} from './tools/nullume/scripts/serum-actual-generation.mjs'; authorize(process.env, process.env.MODE === 'recover-existing-task');"
-      - name: Verify and decode all eight frozen assets; upload and submit exactly once (no retry)
+      - name: Verify and decode all seven frozen assets; upload and submit exactly once (no retry)
         id: submit
         if: inputs.mode == 'generate-one'
         env:

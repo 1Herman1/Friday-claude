@@ -8,11 +8,11 @@ import {fileURLToPath} from 'node:url';
 import {setTimeout as delay} from 'node:timers/promises';
 import {httpsOnce,boundedRequest,isPublicIPv4,validateDecodedMedia} from './serum-motion-transport.mjs';
 export {isPublicIPv4};
-const ROOT=fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum-actual-generation/',import.meta.url));
+const ROOT=fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum-rigid-oneway-generation/',import.meta.url));
 export const MODEL='bytedance/seedance-2-mini';
-export const FREEZE_SHA='97370ab53b650c5fcfaa0c452aba32af4b9634a58711cbab62e795d152da244b';
+export const FREEZE_SHA='5de6b97b374db3ad1730d7be0f65b663901c08c657e8e16a49e3be3748f7eb45';
 const BUNDLE_SHA='1ce3d0b9784e5c8848a2aa48441b083af5768b91e013e702d626d6e6e2d8e282';
-export const TOKEN='confirm-serum-actual-one-82';
+export const TOKEN='confirm-serum-rigid-oneway-new-82';
 export const PRICE='https://api.kie.ai/client/v1/model-pricing/page';
 export const DOC='https://docs.kie.ai/market/bytedance/seedance-2-mini.md';
 export const UPLOAD='https://kieai.redpandaai.co/api/file-stream-upload';
@@ -32,9 +32,9 @@ export function mediaURL(v,ext,host='tempfile.redpandaai.co'){
  return v;
 }
 export function payload(urls){
- check(Array.isArray(urls)&&urls.length===8&&new Set(urls).size===8);
+ check(Array.isArray(urls)&&urls.length===7&&new Set(urls).size===7);
  urls.forEach((u,i)=>mediaURL(u,freeze.assets[i].path.split('.').at(-1)));
- return {model:MODEL,input:{prompt:freeze.prompt,reference_image_urls:urls.slice(0,7),reference_video_urls:urls.slice(7),generate_audio:false,resolution:'720p',aspect_ratio:'21:9',duration:10}};
+ return {model:MODEL,input:{prompt:freeze.prompt,reference_image_urls:urls,generate_audio:false,resolution:'720p',aspect_ratio:'21:9',duration:10}};
 }
 export function validateSchema(){
  const b=readFileSync(join(ROOT,'evidence/seedance-mini-request-schema.json'));check(sha(b)===freeze.schema_sha256);
@@ -47,7 +47,7 @@ export function validateSchema(){
  return p;
 }
 export function verifyAssets(pack){
- check(pack&&Object.keys(pack).length===8);
+ check(pack&&Object.keys(pack).length===7);
  return freeze.assets.map(a=>{check(Object.hasOwn(pack,a.path)&&typeof pack[a.path]==='string');const b=Buffer.from(pack[a.path],'base64');check(b.length===a.size&&sha(b)===a.sha256);return b;});
 }
 export function loadAssets(){return freeze.assets.map(a=>{const b=readFileSync(join(ROOT,a.path));check(b.length===a.size&&sha(b)===a.sha256);return b;});}
@@ -55,11 +55,11 @@ export function exactPrice(pages){
  let total,seen=0;const matches=[];
  for(const p of pages){const n=Number(p?.data?.total),r=p?.data?.records;total??=n;
   check(p?.code===200&&Number.isSafeInteger(n)&&n>0&&n<=2000&&n===total&&Array.isArray(r)&&r.length===Math.min(100,total-seen));seen+=r.length;
-  matches.push(...r.filter(r=>r.anchor==='https://kie.ai/seedance-2-0-mini'&&r.modelDescription==='bytedance/seedance-2-mini, 720P with video'));
+  matches.push(...r.filter(r=>r.anchor==='https://kie.ai/seedance-2-0-mini'&&r.modelDescription==='bytedance/seedance-2-mini, 720P no video'));
  }
  check(seen===total&&matches.length===1);const r=matches[0];
- check(r.provider==='ByteDance'&&r.interfaceType==='video'&&r.creditPrice==='5'&&r.creditUnit==='per second'&&r.usdPrice==='0.025'&&r.discountPrice===false);
- check(freeze.referenceDurationSeconds===3&&5*(3+10)===65&&freeze.quotedCredits===65);return {total,quotedCredits:65,providerBillingCap:false};
+ check(r.provider==='ByteDance'&&r.interfaceType==='video'&&r.creditPrice==='8.2'&&r.creditUnit==='per second'&&r.usdPrice==='0.041'&&r.discountPrice===false);
+ check(freeze.referenceDurationSeconds===0&&82===freeze.quotedCredits&&freeze.ownerMaximumCredits===82);return {total,quotedCredits:82,providerBillingCap:false};
 }
 async function json(request,url,init){const r=await boundedRequest(request,url,init);try{return JSON.parse(r.bytes.toString());}catch{fail();}}
 export async function publicMetadata(request=httpsOnce){
@@ -75,6 +75,9 @@ export async function publicMetadata(request=httpsOnce){
  return exactPrice(pages);
 }
 export function authorize(env,recovery=false){
+ check(!['45569301373','45493711451'].includes(env.GITHUB_RUN_ID)&&env.GITHUB_SHA!=='2ea1b2b12838d0f3cca264c88716544ab6f3e4b8');
+ check(freeze.requestId==='serum-rigid-oneway-20261125-new-attempt1');
+ if(recovery)check(env.SERUM_ACTUAL_TASK_ID!=='542235a8f513f7367a181930182bebdc');
  check(env.GITHUB_ACTIONS==='true'&&env.GITHUB_EVENT_NAME==='workflow_dispatch'&&env.GITHUB_RUN_ATTEMPT==='1'&&env.RUNNER_TEMP&&/^\d{1,20}$/.test(env.GITHUB_RUN_ID??'')&&env.SERUM_ACTUAL_APPROVED_RUN_ID===env.GITHUB_RUN_ID&&env.SERUM_ACTUAL_APPROVED_SHA===env.GITHUB_SHA&&/^[a-f0-9]{40}$/.test(env.GITHUB_SHA??''));
  check(env.GITHUB_REF==='refs/heads/ci/serum-actual-one');
  if(recovery){taskId(env.SERUM_ACTUAL_TASK_ID);check(env.SERUM_ACTUAL_TASK_ID===env.SERUM_ACTUAL_APPROVED_TASK_ID&&/^\d{1,20}$/.test(env.SERUM_ACTUAL_SOURCE_RUN_ID??'')&&env.SERUM_ACTUAL_SOURCE_RUN_ID===env.SERUM_ACTUAL_APPROVED_SOURCE_RUN_ID);}
@@ -101,15 +104,15 @@ export function fixedSession(request,key,existingTask){
 }
 export async function writeReceipt(dir,id,env){
  taskId(id);check(/^\d{1,20}$/.test(env.GITHUB_RUN_ID??'')&&/^[a-f0-9]{40}$/.test(env.GITHUB_SHA??''));
- const receipt={taskId:id,sourceRunId:env.GITHUB_RUN_ID,sourceSha:env.GITHUB_SHA,model:MODEL,duration:10,resolution:'720p',quotedCredits:65,providerBillingCap:false,assetsFreezeSha256:FREEZE_SHA,state:'submitted'};
+ const receipt={taskId:id,sourceRunId:env.GITHUB_RUN_ID,sourceSha:env.GITHUB_SHA,model:MODEL,duration:10,resolution:'720p',quotedCredits:82,providerBillingCap:false,assetsFreezeSha256:FREEZE_SHA,state:'submitted'};
  const h=await open(join(dir,'task-receipt.json'),'wx',0o600);try{await h.writeFile(JSON.stringify(receipt)+'\n');await h.sync();}finally{await h.close();}return receipt;
 }
 export async function submit({request=httpsOnce,key,assets,onSubmitted}){
- check(assets.length===8);assets.forEach((b,i)=>check(b.length===freeze.assets[i].size&&sha(b)===freeze.assets[i].sha256));
+ check(assets.length===7);assets.forEach((b,i)=>check(b.length===freeze.assets[i].size&&sha(b)===freeze.assets[i].sha256));
  await publicMetadata(request);const s=fixedSession(request,key);
- const credits=await s.call(CREDIT);check(typeof credits.data==='number'&&Number.isFinite(credits.data)&&credits.data>=65);console.log('Authenticated balance credits:',credits.data);
+ const credits=await s.call(CREDIT);check(typeof credits.data==='number'&&Number.isFinite(credits.data)&&credits.data>=82);console.log('Authenticated balance credits:',credits.data);
  const urls=[];
- for(let i=0;i<8;i++){
+ for(let i=0;i<7;i++){
   const a=freeze.assets[i],name=a.path.split('/').at(-1),body=new FormData();
   body.append('file',new Blob([assets[i]],{type:a.mime}),name);body.append('uploadPath','serum-actual/'+FREEZE_SHA);body.append('fileName',name);
   const r=await s.call(UPLOAD,{method:'POST',body});check(r.success===true);const u=mediaURL(r.data?.downloadUrl,name.split('.').at(-1));check(!u.includes(key));
@@ -117,7 +120,7 @@ export async function submit({request=httpsOnce,key,assets,onSubmitted}){
   const uploaded=await boundedRequest(request,u,{},a.size,60000);check(uploaded.bytes.length===a.size&&sha(uploaded.bytes)===a.sha256);urls.push(u);
  }
  const p=payload(urls);await publicMetadata(request);
- console.log('ONE_CREATE_START quote65 maximum82; no retry');
+ console.log('ONE_CREATE_START quote82 maximum82; no retry');
  const r=await s.call(CREATE,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(p)},p);
  const id=taskId(r.data.taskId);console.log('PROVIDER_TASK_RECEIPT',id);await onSubmitted(id);return id;
 }
@@ -132,7 +135,7 @@ export async function recover({request=httpsOnce,key,id,pause=delay}){
    const video=await boundedRequest(request,u,{},64*1024*1024,60000);
    check(video.headers.get('content-type')?.split(';')[0]==='video/mp4'&&video.bytes.length>=16&&video.bytes.toString('ascii',4,8)==='ftyp');
    const c=d.creditsConsumed;check(c===undefined||(Number.isFinite(c)&&c>=0));
-   return {video:video.bytes,summary:{providerOutputURL:u,taskId:id,model:MODEL,quotedCredits:65,providerBillingCap:false,...(c===undefined?{}:{creditsConsumed:c,billingViolation:c>82})}};
+   return {video:video.bytes,summary:{providerOutputURL:u,taskId:id,model:MODEL,quotedCredits:82,providerBillingCap:false,...(c===undefined?{}:{creditsConsumed:c,billingViolation:c>82})}};
   }
   check(['waiting','queuing','generating'].includes(d.state));if(i<64)await pause(10000);
  }
@@ -145,9 +148,9 @@ async function main(){
   loadAssets();
   if(process.env.SERUM_ACTUAL_LOCAL_DRY_ASSETS){
    check(process.env.GITHUB_ACTIONS!=='true');const pack={};for(const a of freeze.assets)pack[a.path]=readFileSync(join(process.env.SERUM_ACTUAL_LOCAL_DRY_ASSETS,a.path)).toString('base64');
-   const assets=verifyAssets(pack);for(let i=0;i<8;i++)await validateDecodedMedia(assets[i],i===7?'video':'image');
+   const assets=verifyAssets(pack);for(let i=0;i<7;i++)await validateDecodedMedia(assets[i],'image');
   }
-  console.log('PASS credential-free dry-run; quote 65 credits / USD0.325; providerBillingCap=false.');return;
+  console.log('PASS credential-free dry-run; quote 82 credits / USD0.41; providerBillingCap=false.');return;
  }
  check(['generate-one','recover-existing-task'].includes(mode));authorize(process.env,mode==='recover-existing-task');
  const dir=join(process.env.RUNNER_TEMP,'serum-actual-result');
@@ -155,14 +158,14 @@ async function main(){
   await mkdir(dir,{mode:0o700}); // Exclusive same-job duplicate-process guard, before reading either secret.
   const assets=loadAssets();
   const key=process.env.KIE_API_KEY;delete process.env.KIE_API_KEY;
-  for(let i=0;i<8;i++)await validateDecodedMedia(assets[i],i===7?'video':'image');
+  for(let i=0;i<7;i++)await validateDecodedMedia(assets[i],'image');
   await submit({key,assets,onSubmitted:async id=>{
    try{await writeReceipt(dir,id,process.env);}
    finally{
     // If local receipt persistence fails, retain the validated ID in Actions control-plane output/summary.
     // The workflow still refuses polling unless the independent receipt artifact upload succeeds.
     if(process.env.GITHUB_OUTPUT)await appendFile(process.env.GITHUB_OUTPUT,'task_id='+id+'\n');
-    if(process.env.GITHUB_STEP_SUMMARY)await appendFile(process.env.GITHUB_STEP_SUMMARY,'Task `'+id+'`; quoted65 credits / USD0.325, NOT a provider cap.\n');
+    if(process.env.GITHUB_STEP_SUMMARY)await appendFile(process.env.GITHUB_STEP_SUMMARY,'Task `'+id+'`; quoted82 credits / USD0.41, NOT a provider cap.\n');
    }
   }});return;
  }
