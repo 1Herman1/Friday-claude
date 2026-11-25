@@ -1,0 +1,853 @@
+{
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "versions": {
+    "animejs": "4.5.0",
+    "typescript": "5.9.3",
+    "esbuild": "0.28.2",
+    "playwright-core": "1.65.1"
+  },
+  "templateSha256": "a803bcfaf1d2e66eea7bddb9d56707e94e66b22d98b4a95145534b499b8b0bb3",
+  "lockSha256": "125f97d0c2e6c6eef0e4196b4c31781d8a16d80854fb5ba9e0a491169c2ad457",
+  "browserExecutable": "/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+  "bundles": {
+    "before": {
+      "bytes": 53304,
+      "gzip": 20541
+    },
+    "after": {
+      "bytes": 76780,
+      "gzip": 27077
+    }
+  },
+  "samples": {
+    "normal-before": {
+      "time": 32.5,
+      "x": 40,
+      "y": 180,
+      "engineX": 0,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 0,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-drag": {
+      "time": 593.1999999880791,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-release": {
+      "time": 598.6000000238419,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-mid": {
+      "time": 664.1000000238419,
+      "x": 167.8061981201172,
+      "y": 180,
+      "engineX": 127.8062,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-before": {
+      "time": 931.8999999761581,
+      "x": 204.3679962158203,
+      "y": 180,
+      "engineX": 164.368,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 10,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-after": {
+      "time": 1064.6000000238419,
+      "x": 212.97909545898438,
+      "y": 180,
+      "engineX": 172.9791,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-held-before": {
+      "time": 1066.8999999761581,
+      "x": 212.97909545898438,
+      "y": 180,
+      "engineX": 172.9791,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-held-after": {
+      "time": 1209.3999999761581,
+      "x": 212.97909545898438,
+      "y": 180,
+      "engineX": 172.9791,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-settled-before": {
+      "time": 2817,
+      "x": 212.97909545898438,
+      "y": 180,
+      "engineX": 172.9791,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-settled-after": {
+      "time": 3188.800000011921,
+      "x": 212.97909545898438,
+      "y": 180,
+      "engineX": 172.9791,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-before": {
+      "time": 3220,
+      "x": 212.97909545898438,
+      "y": 180,
+      "engineX": 172.9791,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-duplicate": {
+      "time": 3221.899999976158,
+      "x": 212.97909545898438,
+      "y": 180,
+      "engineX": 172.9791,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-next": {
+      "time": 3763.600000023842,
+      "x": 322.9790954589844,
+      "y": 180,
+      "engineX": 282.9791,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 3,
+      "updates": 16,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-settled-before": {
+      "time": 5368.5,
+      "x": 394.7181091308594,
+      "y": 180,
+      "engineX": 354.7181,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 28,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-settled-after": {
+      "time": 5725.800000011921,
+      "x": 394.7181091308594,
+      "y": 180,
+      "engineX": 354.7181,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 28,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-drag": {
+      "time": 557.3999999761581,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-release-before": {
+      "time": 561.8999999761581,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-release-after": {
+      "time": 1069.3999999761581,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-count": {
+      "time": 1154.699999988079,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-before": {
+      "time": 522.0999999642372,
+      "x": 167.468994140625,
+      "y": 180,
+      "engineX": 127.469,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-reduced-before": {
+      "time": 537.6999999880791,
+      "x": 167.468994140625,
+      "y": 180,
+      "engineX": 127.469,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-reduced-after": {
+      "time": 1087.8999999761581,
+      "x": 167.468994140625,
+      "y": 180,
+      "engineX": 127.469,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-restored-no-replay-before": {
+      "time": 1091.2999999523163,
+      "x": 167.468994140625,
+      "y": 180,
+      "engineX": 127.469,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-restored-no-replay-after": {
+      "time": 1464.3999999761581,
+      "x": 167.468994140625,
+      "y": 180,
+      "engineX": 127.469,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "restored-release": {
+      "time": 2071.099999964237,
+      "x": 277.468994140625,
+      "y": 180,
+      "engineX": 237.469,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "restored-mid": {
+      "time": 2149.099999964237,
+      "x": 286.461181640625,
+      "y": 180,
+      "engineX": 246.4612,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held": {
+      "time": 2289,
+      "x": 292.7673034667969,
+      "y": 180,
+      "engineX": 252.7673,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 12,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-moved": {
+      "time": 2332.2999999523163,
+      "x": 365.7673034667969,
+      "y": 180,
+      "engineX": 325.7673,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-release-before": {
+      "time": 2335.399999976158,
+      "x": 365.7673034667969,
+      "y": 180,
+      "engineX": 325.7673,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-release-after": {
+      "time": 2671.599999964237,
+      "x": 365.7673034667969,
+      "y": 180,
+      "engineX": 325.7673,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroy-live-grab": {
+      "time": 2709.199999988079,
+      "x": 365.7673034667969,
+      "y": 180,
+      "engineX": 325.7673,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroyed": {
+      "time": 2784.699999988079,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-cleanup-before": {
+      "time": 2808.199999988079,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-cleanup-after": {
+      "time": 3266.899999976158,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-before": {
+      "time": 676.5,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroy-inertia-disposed": {
+      "time": 678.5,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-cleanup-before": {
+      "time": 679.4000000357628,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-cleanup-after": {
+      "time": 1139.9000000357628,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    }
+  },
+  "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-kiRxwG",
+  "browserVersion": "159.0.8154.6",
+  "traces": {
+    "interrupt-held": [
+      {
+        "time": 1068.6000000238419,
+        "x": 212.97909545898438
+      },
+      {
+        "time": 1207.1000000238419,
+        "x": 212.97909545898438
+      }
+    ],
+    "normal-settled": [
+      {
+        "time": 2820.5,
+        "x": 212.97909545898438
+      },
+      {
+        "time": 2821,
+        "x": 212.97909545898438
+      },
+      {
+        "time": 2890.300000011921,
+        "x": 212.97909545898438
+      },
+      {
+        "time": 2935,
+        "x": 212.97909545898438
+      },
+      {
+        "time": 3026.399999976158,
+        "x": 212.97909545898438
+      },
+      {
+        "time": 3048.399999976158,
+        "x": 212.97909545898438
+      },
+      {
+        "time": 3170.199999988079,
+        "x": 212.97909545898438
+      }
+    ],
+    "repeat-settled": [
+      {
+        "time": 5370.199999988079,
+        "x": 394.7181091308594
+      },
+      {
+        "time": 5390.300000011921,
+        "x": 394.7181091308594
+      },
+      {
+        "time": 5433.699999988079,
+        "x": 394.7181091308594
+      },
+      {
+        "time": 5538.699999988079,
+        "x": 394.7181091308594
+      },
+      {
+        "time": 5598.199999988079,
+        "x": 394.7181091308594
+      },
+      {
+        "time": 5723.100000023842,
+        "x": 394.7181091308594
+      }
+    ],
+    "reduced-release": [
+      {
+        "time": 563.1999999880791,
+        "x": 150
+      },
+      {
+        "time": 600,
+        "x": 150
+      },
+      {
+        "time": 666.5,
+        "x": 150
+      },
+      {
+        "time": 733.0999999642372,
+        "x": 150
+      },
+      {
+        "time": 799.8999999761581,
+        "x": 150
+      },
+      {
+        "time": 866.5,
+        "x": 150
+      },
+      {
+        "time": 933.1999999880791,
+        "x": 150
+      },
+      {
+        "time": 999.8000000119209,
+        "x": 150
+      },
+      {
+        "time": 1066.5999999642372,
+        "x": 150
+      }
+    ],
+    "preference-reduced": [
+      {
+        "time": 539,
+        "x": 167.468994140625
+      },
+      {
+        "time": 539.0999999642372,
+        "x": 167.468994140625
+      },
+      {
+        "time": 679.7999999523163,
+        "x": 167.468994140625
+      },
+      {
+        "time": 754.3999999761581,
+        "x": 167.468994140625
+      },
+      {
+        "time": 760,
+        "x": 167.468994140625
+      },
+      {
+        "time": 863.3999999761581,
+        "x": 167.468994140625
+      },
+      {
+        "time": 939.0999999642372,
+        "x": 167.468994140625
+      },
+      {
+        "time": 1084.7999999523163,
+        "x": 167.468994140625
+      }
+    ],
+    "preference-restored-no-replay": [
+      {
+        "time": 1092.5999999642372,
+        "x": 167.468994140625
+      },
+      {
+        "time": 1118.0999999642372,
+        "x": 167.468994140625
+      },
+      {
+        "time": 1122.0999999642372,
+        "x": 167.468994140625
+      },
+      {
+        "time": 1268.199999988079,
+        "x": 167.468994140625
+      },
+      {
+        "time": 1297.699999988079,
+        "x": 167.468994140625
+      },
+      {
+        "time": 1360.2999999523163,
+        "x": 167.468994140625
+      },
+      {
+        "time": 1462.699999988079,
+        "x": 167.468994140625
+      }
+    ],
+    "preference-held-release": [
+      {
+        "time": 2336.5,
+        "x": 365.7673034667969
+      },
+      {
+        "time": 2427,
+        "x": 365.7673034667969
+      },
+      {
+        "time": 2530.199999988079,
+        "x": 365.7673034667969
+      },
+      {
+        "time": 2601.2999999523163,
+        "x": 365.7673034667969
+      },
+      {
+        "time": 2634.699999988079,
+        "x": 365.7673034667969
+      },
+      {
+        "time": 2667.899999976158,
+        "x": 365.7673034667969
+      }
+    ],
+    "destroy-cleanup": [
+      {
+        "time": 2809.399999976158,
+        "x": 40
+      },
+      {
+        "time": 2827.399999976158,
+        "x": 40
+      },
+      {
+        "time": 2926.399999976158,
+        "x": 40
+      },
+      {
+        "time": 3034.7999999523163,
+        "x": 40
+      },
+      {
+        "time": 3065.199999988079,
+        "x": 40
+      },
+      {
+        "time": 3122.5,
+        "x": 40
+      },
+      {
+        "time": 3264.2999999523163,
+        "x": 40
+      }
+    ],
+    "destroy-inertia-cleanup": [
+      {
+        "time": 680.4000000357628,
+        "x": 40
+      },
+      {
+        "time": 694.3000000119209,
+        "x": 40
+      },
+      {
+        "time": 789.5,
+        "x": 40
+      },
+      {
+        "time": 929.5,
+        "x": 40
+      },
+      {
+        "time": 1007.3000000119209,
+        "x": 40
+      },
+      {
+        "time": 1137.1000000238419,
+        "x": 40
+      }
+    ]
+  },
+  "touchPreventedAfterDestroy": false,
+  "result": "PASS",
+  "errors": []
+}

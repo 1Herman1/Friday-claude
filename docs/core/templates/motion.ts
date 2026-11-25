@@ -13,6 +13,7 @@
 import { animate as anime } from 'animejs/animation'
 import { spring as animeSpring } from 'animejs/easings'
 import { onScroll } from 'animejs/events'
+import { createDraggable as animeDraggable } from 'animejs/draggable'
 import { stagger as animeStagger, set as animeSet } from 'animejs/utils'
 
 type AnimeParams = Parameters<typeof anime>[1]
@@ -120,3 +121,56 @@ export function scrollReveal(
 }
 
 export { onScroll }
+
+/** Native engine options; drag-only, not a keyboard-accessible widget. */
+export type DraggableOptions = NonNullable<Parameters<typeof animeDraggable>[1]>
+export type MotionDraggable = {
+  readonly draggable: ReturnType<typeof animeDraggable>
+  /** Idempotent unmount cleanup, including the preference subscription. */
+  destroy(): void
+}
+
+/**
+ * Direct manipulation remains available in reduced motion, but release motion
+ * is stopped at the current position (including snap / boundary settling).
+ * Browser-only creation; SSR callers get null and must create after mount.
+ */
+export function createDraggable(
+  target: Parameters<typeof animeDraggable>[0],
+  options: DraggableOptions = {},
+): MotionDraggable | null {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return null
+  const draggable = animeDraggable(target, {
+    ...options,
+    onRelease(self) {
+      // Engine invokes onRelease AFTER scheduling inertia, so stop cancels it.
+      if (prefersReducedMotion()) self.stop()
+      options.onRelease?.(self)
+      // Consumer callbacks cannot accidentally restart reduced release motion.
+      if (prefersReducedMotion()) self.stop()
+    },
+  })
+  const unsubscribe = onReducedMotionChange(reduced => {
+    // Do not pause the pointer-following ticker during a live gesture.
+    if (reduced && !draggable.grabbed) draggable.stop()
+  })
+  let destroyed = false
+  return {
+    draggable,
+    destroy() {
+      if (destroyed) return
+      destroyed = true
+      unsubscribe()
+      // animejs 4.5 revert() alone leaves the live-drag touch preventers.
+      // Finish its event teardown first, without reporting a semantic release.
+      if (draggable.grabbed) {
+        draggable.onRelease = () => {}
+        draggable.onSnap = () => {}
+        draggable.onUpdate = () => {}
+        draggable.onSettle = () => {}
+        draggable.handleUp()
+      }
+      draggable.revert()
+    },
+  }
+}

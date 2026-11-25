@@ -1,0 +1,956 @@
+{
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "versions": {
+    "animejs": "4.5.0",
+    "typescript": "5.9.3",
+    "esbuild": "0.28.2",
+    "playwright-core": "1.65.1"
+  },
+  "templateSha256": "a803bcfaf1d2e66eea7bddb9d56707e94e66b22d98b4a95145534b499b8b0bb3",
+  "lockSha256": "125f97d0c2e6c6eef0e4196b4c31781d8a16d80854fb5ba9e0a491169c2ad457",
+  "browserExecutable": "/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+  "bundles": {
+    "before": {
+      "bytes": 53304,
+      "gzip": 20541
+    },
+    "after": {
+      "bytes": 76780,
+      "gzip": 27077
+    }
+  },
+  "samples": {
+    "normal-before": {
+      "time": 70.39999997615814,
+      "x": 40,
+      "y": 180,
+      "engineX": 0,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 0,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-drag": {
+      "time": 855.6999999880791,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-release": {
+      "time": 857.5,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-mid": {
+      "time": 961.6999999880791,
+      "x": 167.6259002685547,
+      "y": 180,
+      "engineX": 127.6259,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-before": {
+      "time": 1016.6999999880791,
+      "x": 174.28329467773438,
+      "y": 180,
+      "engineX": 134.2833,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 7,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-after": {
+      "time": 1157.8999999761581,
+      "x": 186.56849670410156,
+      "y": 180,
+      "engineX": 146.5685,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-held-before": {
+      "time": 1158.300000011921,
+      "x": 186.56849670410156,
+      "y": 180,
+      "engineX": 146.5685,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-held-after": {
+      "time": 1289.0999999642372,
+      "x": 186.56849670410156,
+      "y": 180,
+      "engineX": 146.5685,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-settled-before": {
+      "time": 2895.599999964237,
+      "x": 186.56849670410156,
+      "y": 180,
+      "engineX": 146.5685,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-settled-after": {
+      "time": 3224.399999976158,
+      "x": 186.56849670410156,
+      "y": 180,
+      "engineX": 146.5685,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-before": {
+      "time": 3339.800000011921,
+      "x": 186.56849670410156,
+      "y": 180,
+      "engineX": 146.5685,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-duplicate": {
+      "time": 3341.199999988079,
+      "x": 186.56849670410156,
+      "y": 180,
+      "engineX": 146.5685,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-next": {
+      "time": 3714.599999964237,
+      "x": 296.5685119628906,
+      "y": 180,
+      "engineX": 256.5685,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-settled-before": {
+      "time": 5317.899999976158,
+      "x": 423.4909973144531,
+      "y": 180,
+      "engineX": 383.491,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 27,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-settled-after": {
+      "time": 5682.099999964237,
+      "x": 423.4909973144531,
+      "y": 180,
+      "engineX": 383.491,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 27,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-drag": {
+      "time": 750.2000000476837,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-release-before": {
+      "time": 754.2000000476837,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-release-after": {
+      "time": 1280.7000000476837,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-count": {
+      "time": 1416.2000000476837,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-release": {
+      "time": 691,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-before": {
+      "time": 703.0999999642372,
+      "x": 151.7384033203125,
+      "y": 180,
+      "engineX": 111.7384,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-reduced-before": {
+      "time": 719.0999999642372,
+      "x": 151.7384033203125,
+      "y": 180,
+      "engineX": 111.7384,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-reduced-after": {
+      "time": 1219.8999999761581,
+      "x": 151.7384033203125,
+      "y": 180,
+      "engineX": 111.7384,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-restored-no-replay-before": {
+      "time": 1223,
+      "x": 151.7384033203125,
+      "y": 180,
+      "engineX": 111.7384,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-restored-no-replay-after": {
+      "time": 1553.199999988079,
+      "x": 151.7384033203125,
+      "y": 180,
+      "engineX": 111.7384,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "restored-release": {
+      "time": 1824.199999988079,
+      "x": 261.7384033203125,
+      "y": 180,
+      "engineX": 221.7384,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "restored-mid": {
+      "time": 1853,
+      "x": 270.2974853515625,
+      "y": 180,
+      "engineX": 230.2975,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held": {
+      "time": 1921.3999999761581,
+      "x": 273.26788330078125,
+      "y": 180,
+      "engineX": 233.2679,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 12,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-moved": {
+      "time": 1967.5999999642372,
+      "x": 343.2679138183594,
+      "y": 180,
+      "engineX": 303.2679,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-release-before": {
+      "time": 1968.5,
+      "x": 343.2679138183594,
+      "y": 180,
+      "engineX": 303.2679,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-release-after": {
+      "time": 2303.699999988079,
+      "x": 343.2679138183594,
+      "y": 180,
+      "engineX": 303.2679,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroy-live-grab": {
+      "time": 2335.2999999523163,
+      "x": 343.2679138183594,
+      "y": 180,
+      "engineX": 303.2679,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroyed": {
+      "time": 2451.199999988079,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-cleanup-before": {
+      "time": 2559.399999976158,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-cleanup-after": {
+      "time": 3019.5,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-before": {
+      "time": 630.6999999880791,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroy-inertia-disposed": {
+      "time": 632.6000000238419,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-cleanup-before": {
+      "time": 634.1000000238419,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-cleanup-after": {
+      "time": 1140.699999988079,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    }
+  },
+  "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-NPpO39",
+  "browserVersion": "159.0.8154.6",
+  "traces": {
+    "interrupt-held": [
+      {
+        "time": 1158.699999988079,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 1243.0999999642372,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 1288.5,
+        "x": 186.56849670410156
+      }
+    ],
+    "normal-settled": [
+      {
+        "time": 2896.300000011921,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 2896.399999976158,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 2909.699999988079,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 2955.300000011921,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 3043.199999988079,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 3088.300000011921,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 3176.699999988079,
+        "x": 186.56849670410156
+      },
+      {
+        "time": 3221.399999976158,
+        "x": 186.56849670410156
+      }
+    ],
+    "repeat-settled": [
+      {
+        "time": 5318.300000011921,
+        "x": 423.4909973144531
+      },
+      {
+        "time": 5321.899999976158,
+        "x": 423.4909973144531
+      },
+      {
+        "time": 5409.199999988079,
+        "x": 423.4909973144531
+      },
+      {
+        "time": 5459.699999988079,
+        "x": 423.4909973144531
+      },
+      {
+        "time": 5505.300000011921,
+        "x": 423.4909973144531
+      },
+      {
+        "time": 5588.199999988079,
+        "x": 423.4909973144531
+      },
+      {
+        "time": 5679.199999988079,
+        "x": 423.4909973144531
+      }
+    ],
+    "reduced-release": [
+      {
+        "time": 755.5,
+        "x": 150
+      },
+      {
+        "time": 845.4000000357628,
+        "x": 150
+      },
+      {
+        "time": 943,
+        "x": 150
+      },
+      {
+        "time": 1062,
+        "x": 150
+      },
+      {
+        "time": 1159.7000000476837,
+        "x": 150
+      },
+      {
+        "time": 1276.5,
+        "x": 150
+      }
+    ],
+    "preference-reduced": [
+      {
+        "time": 719.5,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 745.8999999761581,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 817,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 852.5999999642372,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 867.0999999642372,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 902.5999999642372,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 917.0999999642372,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 952.7999999523163,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 967.0999999642372,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1002.7999999523163,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1017.8999999761581,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1046,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1119.8999999761581,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1127.7999999523163,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1217.199999988079,
+        "x": 151.7384033203125
+      }
+    ],
+    "preference-restored-no-replay": [
+      {
+        "time": 1224.2999999523163,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1252.7999999523163,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1256,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1386.2999999523163,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1393.699999988079,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1483.699999988079,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1516.8999999761581,
+        "x": 151.7384033203125
+      },
+      {
+        "time": 1552.5,
+        "x": 151.7384033203125
+      }
+    ],
+    "preference-held-release": [
+      {
+        "time": 1968.7999999523163,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2002.5999999642372,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2017,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2052.699999988079,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2067,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2102.5,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2116.899999976158,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2152.599999964237,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2166.899999976158,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2202.5,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2216.899999976158,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2252,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2266.899999976158,
+        "x": 343.2679138183594
+      },
+      {
+        "time": 2301.099999964237,
+        "x": 343.2679138183594
+      }
+    ],
+    "destroy-cleanup": [
+      {
+        "time": 2561.199999988079,
+        "x": 40
+      },
+      {
+        "time": 2700.399999976158,
+        "x": 40
+      },
+      {
+        "time": 2733.699999988079,
+        "x": 40
+      },
+      {
+        "time": 2769.199999988079,
+        "x": 40
+      },
+      {
+        "time": 2783.7999999523163,
+        "x": 40
+      },
+      {
+        "time": 2817.399999976158,
+        "x": 40
+      },
+      {
+        "time": 2850.399999976158,
+        "x": 40
+      },
+      {
+        "time": 2883.7999999523163,
+        "x": 40
+      },
+      {
+        "time": 2917.099999964237,
+        "x": 40
+      },
+      {
+        "time": 2950.399999976158,
+        "x": 40
+      },
+      {
+        "time": 2983.699999988079,
+        "x": 40
+      },
+      {
+        "time": 3017.099999964237,
+        "x": 40
+      }
+    ],
+    "destroy-inertia-cleanup": [
+      {
+        "time": 636.1000000238419,
+        "x": 40
+      },
+      {
+        "time": 638.1000000238419,
+        "x": 40
+      },
+      {
+        "time": 664.8000000119209,
+        "x": 40
+      },
+      {
+        "time": 747.1999999880791,
+        "x": 40
+      },
+      {
+        "time": 840.8999999761581,
+        "x": 40
+      },
+      {
+        "time": 991,
+        "x": 40
+      },
+      {
+        "time": 1137,
+        "x": 40
+      }
+    ]
+  },
+  "touchPreventedAfterDestroy": false,
+  "result": "PASS",
+  "errors": []
+}

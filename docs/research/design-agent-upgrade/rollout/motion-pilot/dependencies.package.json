@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@types/node": "22.20.5",
+    "animejs": "^4.5.0",
+    "esbuild": "^0.28.2",
+    "playwright-core": "^1.65.1",
+    "typescript": "^5.9.3"
+  }
+}

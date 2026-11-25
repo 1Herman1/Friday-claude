@@ -1,0 +1,71 @@
+{
+  "integrationCommand": "MOTION_DEPS=/Users/germanbryzgalov/.hermes/cache/scratch/motion-stage04 MOTION_BROWSER=/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell node .codex/scripts/test-motion-template.mjs --integration",
+  "runs": [
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-al0M29",
+      "result": "PASS",
+      "templateSha256": "8933096678e1406d0a52da7b3fc517e242dfd6ab0ae9d5f583f4a949371b1acd"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-eSIMXt",
+      "result": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: reduced-release moved 89.03750610351562px",
+      "templateSha256": "54dcf5454134429ba352d08dd592aa1226686538bcb003a8d45f045085f99a0b"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-o4VVBq",
+      "result": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: normal release must exhibit real temporal inertia",
+      "templateSha256": "be98a1ded08e6861e688ffee91f85f8475bbdba351c4b67eb09accb8e5d7592b"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-2UQail",
+      "result": "FAIL",
+      "error": "TimeoutError: page.waitForFunction: Timeout 200ms exceeded.",
+      "templateSha256": "be98a1ded08e6861e688ffee91f85f8475bbdba351c4b67eb09accb8e5d7592b"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-yxpAYk",
+      "result": "PASS",
+      "templateSha256": "8933096678e1406d0a52da7b3fc517e242dfd6ab0ae9d5f583f4a949371b1acd"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-kgXKU0",
+      "result": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: normal inertia returns for new gestures",
+      "templateSha256": "8933096678e1406d0a52da7b3fc517e242dfd6ab0ae9d5f583f4a949371b1acd"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-3tkilA",
+      "result": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok((await sample('preference-held-moved')).x > held.x + 10)\n",
+      "templateSha256": "8933096678e1406d0a52da7b3fc517e242dfd6ab0ae9d5f583f4a949371b1acd"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-xTIMHu",
+      "result": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: destroy must remove engine touch-prevention listeners during a live drag\n\ntrue !== false\n",
+      "templateSha256": "8933096678e1406d0a52da7b3fc517e242dfd6ab0ae9d5f583f4a949371b1acd"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-tiZqby",
+      "result": "PASS",
+      "templateSha256": "a803bcfaf1d2e66eea7bddb9d56707e94e66b22d98b4a95145534b499b8b0bb3"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-kiRxwG",
+      "result": "PASS",
+      "templateSha256": "a803bcfaf1d2e66eea7bddb9d56707e94e66b22d98b4a95145534b499b8b0bb3"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-Xd77HA",
+      "result": "PASS",
+      "templateSha256": "a803bcfaf1d2e66eea7bddb9d56707e94e66b22d98b4a95145534b499b8b0bb3"
+    },
+    {
+      "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-umESKy",
+      "result": "PASS",
+      "templateSha256": "a803bcfaf1d2e66eea7bddb9d56707e94e66b22d98b4a95145534b499b8b0bb3"
+    }
+  ]
+}

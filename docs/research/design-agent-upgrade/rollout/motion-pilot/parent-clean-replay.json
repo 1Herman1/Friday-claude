@@ -1,0 +1,844 @@
+{
+  "node": "v24.21.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "versions": {
+    "animejs": "4.5.0",
+    "typescript": "5.9.3",
+    "esbuild": "0.28.2",
+    "playwright-core": "1.65.1"
+  },
+  "templateSha256": "a803bcfaf1d2e66eea7bddb9d56707e94e66b22d98b4a95145534b499b8b0bb3",
+  "lockSha256": "d5c07cd0ebc685c72ce408abd5d7e085661cbb42596656adaa17097351eb2be5",
+  "browserExecutable": "/Users/germanbryzgalov/Library/Caches/ms-playwright/chromium_headless_shell-1255/chrome-headless-shell-mac-arm64/chrome-headless-shell",
+  "bundles": {
+    "before": {
+      "bytes": 53304,
+      "gzip": 20541
+    },
+    "after": {
+      "bytes": 76780,
+      "gzip": 27077
+    }
+  },
+  "samples": {
+    "normal-before": {
+      "time": 63.39999997615814,
+      "x": 40,
+      "y": 180,
+      "engineX": 0,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 0,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-drag": {
+      "time": 604.6000000238419,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-release": {
+      "time": 612,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-mid": {
+      "time": 618.6999999880791,
+      "x": 155.2030029296875,
+      "y": 180,
+      "engineX": 115.203,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-before": {
+      "time": 733.1999999880791,
+      "x": 183.84759521484375,
+      "y": 180,
+      "engineX": 143.8476,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 7,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-after": {
+      "time": 833.8000000119209,
+      "x": 205.3636932373047,
+      "y": 180,
+      "engineX": 165.3637,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-held-before": {
+      "time": 834.8000000119209,
+      "x": 205.3636932373047,
+      "y": 180,
+      "engineX": 165.3637,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "interrupt-held-after": {
+      "time": 990.1000000238419,
+      "x": 205.3636932373047,
+      "y": 180,
+      "engineX": 165.3637,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-settled-before": {
+      "time": 2597.399999976158,
+      "x": 205.3636932373047,
+      "y": 180,
+      "engineX": 165.3637,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "normal-settled-after": {
+      "time": 2919.399999976158,
+      "x": 205.3636932373047,
+      "y": 180,
+      "engineX": 165.3637,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-before": {
+      "time": 3004.300000011921,
+      "x": 205.3636932373047,
+      "y": 180,
+      "engineX": 165.3637,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-duplicate": {
+      "time": 3005.800000011921,
+      "x": 205.3636932373047,
+      "y": 180,
+      "engineX": 165.3637,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 8,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-next": {
+      "time": 3652,
+      "x": 315.36370849609375,
+      "y": 180,
+      "engineX": 275.3637,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-settled-before": {
+      "time": 5256.699999988079,
+      "x": 366.92620849609375,
+      "y": 180,
+      "engineX": 326.9262,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 24,
+      "adds": 1,
+      "removes": 0
+    },
+    "repeat-settled-after": {
+      "time": 5616.100000023842,
+      "x": 366.92620849609375,
+      "y": 180,
+      "engineX": 326.9262,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 24,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-drag": {
+      "time": 814.7000000476837,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 0,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-release-before": {
+      "time": 819,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-release-after": {
+      "time": 1281.7000000476837,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "reduced-count": {
+      "time": 1416.300000011921,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-release": {
+      "time": 561.6999999880791,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-before": {
+      "time": 583.1000000238419,
+      "x": 154.61509704589844,
+      "y": 180,
+      "engineX": 114.6151,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-reduced-before": {
+      "time": 672.8999999761581,
+      "x": 154.61509704589844,
+      "y": 180,
+      "engineX": 114.6151,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-reduced-after": {
+      "time": 1172.300000011921,
+      "x": 154.61509704589844,
+      "y": 180,
+      "engineX": 114.6151,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-restored-no-replay-before": {
+      "time": 1177.6000000238419,
+      "x": 154.61509704589844,
+      "y": 180,
+      "engineX": 114.6151,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-restored-no-replay-after": {
+      "time": 1501,
+      "x": 154.61509704589844,
+      "y": 180,
+      "engineX": 114.6151,
+      "grabbed": false,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 6,
+      "adds": 1,
+      "removes": 0
+    },
+    "restored-release": {
+      "time": 2026.6000000238419,
+      "x": 264.6151123046875,
+      "y": 180,
+      "engineX": 224.6151,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "restored-mid": {
+      "time": 2063.899999976158,
+      "x": 272.52069091796875,
+      "y": 180,
+      "engineX": 232.5207,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 2,
+      "updates": 11,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held": {
+      "time": 2238.800000011921,
+      "x": 288.1271057128906,
+      "y": 180,
+      "engineX": 248.1271,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 12,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-moved": {
+      "time": 2305.399999976158,
+      "x": 371.1271057128906,
+      "y": 180,
+      "engineX": 331.1271,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": false,
+      "inertiaPaused": true,
+      "releases": 2,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-release-before": {
+      "time": 2310.600000023842,
+      "x": 371.1271057128906,
+      "y": 180,
+      "engineX": 331.1271,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "preference-held-release-after": {
+      "time": 2635,
+      "x": 371.1271057128906,
+      "y": 180,
+      "engineX": 331.1271,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroy-live-grab": {
+      "time": 2701.899999976158,
+      "x": 371.1271057128906,
+      "y": 180,
+      "engineX": 331.1271,
+      "grabbed": true,
+      "released": false,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 13,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroyed": {
+      "time": 2848.600000023842,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-cleanup-before": {
+      "time": 2865,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-cleanup-after": {
+      "time": 3368.399999976158,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 3,
+      "updates": 14,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-before": {
+      "time": 550.5999999642372,
+      "x": 150,
+      "y": 180,
+      "engineX": 110,
+      "grabbed": false,
+      "released": true,
+      "enabled": true,
+      "tickerPaused": true,
+      "inertiaPaused": false,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 0
+    },
+    "destroy-inertia-disposed": {
+      "time": 552.5999999642372,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-cleanup-before": {
+      "time": 554,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    },
+    "destroy-inertia-cleanup-after": {
+      "time": 1050.199999988079,
+      "x": 40,
+      "y": 180,
+      "engineX": null,
+      "grabbed": false,
+      "released": false,
+      "enabled": false,
+      "tickerPaused": true,
+      "inertiaPaused": true,
+      "releases": 1,
+      "updates": 5,
+      "adds": 1,
+      "removes": 1
+    }
+  },
+  "work": "/Users/germanbryzgalov/.hermes/cache/scratch/motion-run-jY8iTG",
+  "browserVersion": "159.0.8154.6",
+  "traces": {
+    "interrupt-held": [
+      {
+        "time": 836,
+        "x": 205.3636932373047
+      },
+      {
+        "time": 887.6999999880791,
+        "x": 205.3636932373047
+      },
+      {
+        "time": 987.5,
+        "x": 205.3636932373047
+      }
+    ],
+    "normal-settled": [
+      {
+        "time": 2600.600000023842,
+        "x": 205.3636932373047
+      },
+      {
+        "time": 2600.800000011921,
+        "x": 205.3636932373047
+      },
+      {
+        "time": 2728.600000023842,
+        "x": 205.3636932373047
+      },
+      {
+        "time": 2759.5,
+        "x": 205.3636932373047
+      },
+      {
+        "time": 2812,
+        "x": 205.3636932373047
+      },
+      {
+        "time": 2840,
+        "x": 205.3636932373047
+      },
+      {
+        "time": 2916.399999976158,
+        "x": 205.3636932373047
+      }
+    ],
+    "repeat-settled": [
+      {
+        "time": 5258.300000011921,
+        "x": 366.92620849609375
+      },
+      {
+        "time": 5270.699999988079,
+        "x": 366.92620849609375
+      },
+      {
+        "time": 5371.5,
+        "x": 366.92620849609375
+      },
+      {
+        "time": 5465.699999988079,
+        "x": 366.92620849609375
+      },
+      {
+        "time": 5611.899999976158,
+        "x": 366.92620849609375
+      }
+    ],
+    "reduced-release": [
+      {
+        "time": 820.1000000238419,
+        "x": 150
+      },
+      {
+        "time": 938.4000000357628,
+        "x": 150
+      },
+      {
+        "time": 964.6000000238419,
+        "x": 150
+      },
+      {
+        "time": 1051.800000011921,
+        "x": 150
+      },
+      {
+        "time": 1103.300000011921,
+        "x": 150
+      },
+      {
+        "time": 1142.9000000357628,
+        "x": 150
+      },
+      {
+        "time": 1278.800000011921,
+        "x": 150
+      }
+    ],
+    "preference-reduced": [
+      {
+        "time": 675.3999999761581,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 816.1999999880791,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 880.5,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 960,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 1080,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 1168.8999999761581,
+        "x": 154.61509704589844
+      }
+    ],
+    "preference-restored-no-replay": [
+      {
+        "time": 1179.699999988079,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 1207.3999999761581,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 1349.300000011921,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 1413.3999999761581,
+        "x": 154.61509704589844
+      },
+      {
+        "time": 1499.199999988079,
+        "x": 154.61509704589844
+      }
+    ],
+    "preference-held-release": [
+      {
+        "time": 2312.399999976158,
+        "x": 371.1271057128906
+      },
+      {
+        "time": 2363,
+        "x": 371.1271057128906
+      },
+      {
+        "time": 2451.800000011921,
+        "x": 371.1271057128906
+      },
+      {
+        "time": 2490.5,
+        "x": 371.1271057128906
+      },
+      {
+        "time": 2632.600000023842,
+        "x": 371.1271057128906
+      }
+    ],
+    "destroy-cleanup": [
+      {
+        "time": 2866.199999988079,
+        "x": 40
+      },
+      {
+        "time": 2980.800000011921,
+        "x": 40
+      },
+      {
+        "time": 3061,
+        "x": 40
+      },
+      {
+        "time": 3169.899999976158,
+        "x": 40
+      },
+      {
+        "time": 3199.300000011921,
+        "x": 40
+      },
+      {
+        "time": 3261.399999976158,
+        "x": 40
+      },
+      {
+        "time": 3366,
+        "x": 40
+      }
+    ],
+    "destroy-inertia-cleanup": [
+      {
+        "time": 555.8999999761581,
+        "x": 40
+      },
+      {
+        "time": 655.8000000119209,
+        "x": 40
+      },
+      {
+        "time": 657.0999999642372,
+        "x": 40
+      },
+      {
+        "time": 797.5999999642372,
+        "x": 40
+      },
+      {
+        "time": 880.8999999761581,
+        "x": 40
+      },
+      {
+        "time": 964.0999999642372,
+        "x": 40
+      },
+      {
+        "time": 1047.5,
+        "x": 40
+      }
+    ]
+  },
+  "touchPreventedAfterDestroy": false,
+  "result": "PASS",
+  "errors": []
+}
