@@ -1,0 +1,55 @@
+TAP version 13
+# Subtest: summary reports all pinned family counts
+ok 1 - summary reports all pinned family counts
+  ---
+  duration_ms: 21.41325
+  type: 'test'
+  ...
+# Subtest: manifest pins every raw byte, source path, ID and full MIT notice
+ok 2 - manifest pins every raw byte, source path, ID and full MIT notice
+  ---
+  duration_ms: 1.220708
+  type: 'test'
+  ...
+# Subtest: get retrieves every complete record without adding or dropping source fields
+not ok 3 - get retrieves every complete record without adding or dropping source fields
+  ---
+  duration_ms: 22.134333
+  type: 'test'
+  location: '/Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:222:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + undefined
+    - 'palettes'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'palettes'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:230:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: list exposes the exact pinned IDs with useful record descriptors
+ok 4 - list exposes the exact pinned IDs with useful record descriptors
+  ---
+  duration_ms: 80.176417
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 157.376959

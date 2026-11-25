@@ -1,0 +1,32 @@
+{
+  "verification": "git show <pinned-commit>:<source-path> bytes equal imported raw bytes",
+  "commit": "d1a2bb41d927083ac7118f60cfc9cdf711810ea0",
+  "families": [
+    {
+      "family": "palettes",
+      "count": 64,
+      "sha256": "96d594648249b2dff17addcd0e2965b0eee0cf2815ae68542add82a87d856d6d",
+      "committedBytesMatch": true
+    },
+    {
+      "family": "typography",
+      "count": 39,
+      "sha256": "144be2adc366028ec2d380782e9150436f6bf5f1e4177159674c84435250d830",
+      "committedBytesMatch": true
+    },
+    {
+      "family": "heroes",
+      "count": 11,
+      "sha256": "ec31203b4857901641dc2c8229ab52bb3dcebd7cadeb9619939a49e76061523e",
+      "committedBytesMatch": true
+    },
+    {
+      "family": "diagrams",
+      "count": 27,
+      "sha256": "76ef630a24fd63143d6e70329ab1698606357c0999446b1868bff08e929a30aa",
+      "committedBytesMatch": true
+    }
+  ],
+  "total": 141,
+  "licenseCommittedBytesMatch": true
+}

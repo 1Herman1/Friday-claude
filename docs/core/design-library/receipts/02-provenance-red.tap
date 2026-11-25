@@ -1,0 +1,35 @@
+TAP version 13
+# Subtest: summary reports all pinned family counts
+ok 1 - summary reports all pinned family counts
+  ---
+  duration_ms: 21.511208
+  type: 'test'
+  ...
+# Subtest: manifest pins every raw byte, source path, ID and full MIT notice
+not ok 2 - manifest pins every raw byte, source path, ID and full MIT notice
+  ---
+  duration_ms: 0.15875
+  type: 'test'
+  location: '/Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:190:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/Users/germanbryzgalov/Friday-claude/docs/core/design-library/manifest.json'"
+  code: 'ENOENT'
+  stack: |-
+    Object.readFileSync (node:fs:483:20)
+    TestContext.<anonymous> (file:///Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:191:34)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 54.862

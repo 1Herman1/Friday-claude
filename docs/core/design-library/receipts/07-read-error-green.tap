@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: summary reports all pinned family counts
+ok 1 - summary reports all pinned family counts
+  ---
+  duration_ms: 27.13125
+  type: 'test'
+  ...
+# Subtest: manifest pins every raw byte, source path, ID and full MIT notice
+ok 2 - manifest pins every raw byte, source path, ID and full MIT notice
+  ---
+  duration_ms: 1.82025
+  type: 'test'
+  ...
+# Subtest: get retrieves every complete record without adding or dropping source fields
+ok 3 - get retrieves every complete record without adding or dropping source fields
+  ---
+  duration_ms: 3286.607166
+  type: 'test'
+  ...
+# Subtest: unknown and traversal families and IDs fail with JSON diagnostics
+ok 4 - unknown and traversal families and IDs fail with JSON diagnostics
+  ---
+  duration_ms: 451.660708
+  type: 'test'
+  ...
+# Subtest: arguments require explicit summary/list/get with exact arity; no random fallback
+ok 5 - arguments require explicit summary/list/get with exact arity; no random fallback
+  ---
+  duration_ms: 203.390125
+  type: 'test'
+  ...
+# Subtest: missing and unreadable-as-file data produce JSON READ_ERROR
+ok 6 - missing and unreadable-as-file data produce JSON READ_ERROR
+  ---
+  duration_ms: 48.862334
+  type: 'test'
+  ...
+# Subtest: list exposes the exact pinned IDs with useful record descriptors
+ok 7 - list exposes the exact pinned IDs with useful record descriptors
+  ---
+  duration_ms: 94.187375
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4151.794375

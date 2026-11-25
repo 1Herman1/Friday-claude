@@ -1,0 +1,63 @@
+TAP version 13
+# Subtest: summary reports all pinned family counts
+ok 1 - summary reports all pinned family counts
+  ---
+  duration_ms: 27.22
+  type: 'test'
+  ...
+# Subtest: manifest pins every raw byte, source path, ID and full MIT notice
+ok 2 - manifest pins every raw byte, source path, ID and full MIT notice
+  ---
+  duration_ms: 1.64475
+  type: 'test'
+  ...
+# Subtest: get retrieves every complete record without adding or dropping source fields
+ok 3 - get retrieves every complete record without adding or dropping source fields
+  ---
+  duration_ms: 3326.875458
+  type: 'test'
+  ...
+# Subtest: unknown and traversal families and IDs fail with JSON diagnostics
+ok 4 - unknown and traversal families and IDs fail with JSON diagnostics
+  ---
+  duration_ms: 461.111875
+  type: 'test'
+  ...
+# Subtest: arguments require explicit summary/list/get with exact arity; no random fallback
+not ok 5 - arguments require explicit summary/list/get with exact arity; no random fallback
+  ---
+  duration_ms: 25.267625
+  type: 'test'
+  location: '/Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:258:1'
+  failureType: 'testCodeFailure'
+  error: 'Expected "actual" to be strictly unequal to: 0'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 0
+  operator: 'notStrictEqual'
+  stack: |-
+    diagnostic (file:///Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:239:10)
+    TestContext.<anonymous> (file:///Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:260:5)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: list exposes the exact pinned IDs with useful record descriptors
+ok 6 - list exposes the exact pinned IDs with useful record descriptors
+  ---
+  duration_ms: 93.0285
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 5
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3972.444625

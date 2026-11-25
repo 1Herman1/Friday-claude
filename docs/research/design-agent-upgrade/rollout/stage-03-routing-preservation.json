@@ -1,0 +1,27 @@
+{
+  "mode": "local routing implementation; data library and independent review pending",
+  "checks": {
+    ".codex/CODEX.md": {
+      "preservation": "entire pre-rollout file preserved byte-for-byte outside one inserted section",
+      "added_lines": 21
+    },
+    ".codex/agents/design/taste-curator.md": {
+      "preservation": "all original role text preserved as exact prefix",
+      "added_lines": 16
+    },
+    ".codex/commands/design-system.md": {
+      "preservation": "entire HEAD text preserved outside one inserted section",
+      "added_lines": 12
+    },
+    ".codex/skills/design-system/SKILL.md": {
+      "preservation": "entire HEAD text preserved outside one inserted section",
+      "added_lines": 12
+    },
+    ".codex/agents/taste-curator.toml": {
+      "preservation": "only appended developer instruction body; identity/description and prior body preserved",
+      "parity": "MATCH"
+    }
+  },
+  "tdd": "main route RED -> section -> GREEN; command/SKILL RED -> section -> GREEN; taste MD/TOML RED -> scoped append/sync -> GREEN; 4/4 routing tests pass",
+  "live_codex_reload_verified": false
+}

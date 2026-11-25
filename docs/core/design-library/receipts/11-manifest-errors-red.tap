@@ -1,0 +1,91 @@
+TAP version 13
+# Subtest: summary reports all pinned family counts
+ok 1 - summary reports all pinned family counts
+  ---
+  duration_ms: 27.392333
+  type: 'test'
+  ...
+# Subtest: manifest pins every raw byte, source path, ID and full MIT notice
+ok 2 - manifest pins every raw byte, source path, ID and full MIT notice
+  ---
+  duration_ms: 1.436333
+  type: 'test'
+  ...
+# Subtest: get retrieves every complete record without adding or dropping source fields
+ok 3 - get retrieves every complete record without adding or dropping source fields
+  ---
+  duration_ms: 3612.356417
+  type: 'test'
+  ...
+# Subtest: unknown and traversal families and IDs fail with JSON diagnostics
+ok 4 - unknown and traversal families and IDs fail with JSON diagnostics
+  ---
+  duration_ms: 498.345417
+  type: 'test'
+  ...
+# Subtest: arguments require explicit summary/list/get with exact arity; no random fallback
+ok 5 - arguments require explicit summary/list/get with exact arity; no random fallback
+  ---
+  duration_ms: 216.909625
+  type: 'test'
+  ...
+# Subtest: missing and unreadable-as-file data produce JSON READ_ERROR
+ok 6 - missing and unreadable-as-file data produce JSON READ_ERROR
+  ---
+  duration_ms: 55.354542
+  type: 'test'
+  ...
+# Subtest: malformed JSON produces a machine-readable PARSE_ERROR
+ok 7 - malformed JSON produces a machine-readable PARSE_ERROR
+  ---
+  duration_ms: 28.983
+  type: 'test'
+  ...
+# Subtest: wrong roots, collections, record fields and duplicate IDs produce SCHEMA_ERROR
+ok 8 - wrong roots, collections, record fields and duplicate IDs produce SCHEMA_ERROR
+  ---
+  duration_ms: 525.4565
+  type: 'test'
+  ...
+# Subtest: lookup rejects changed complete records or bytes against provenance hashes
+ok 9 - lookup rejects changed complete records or bytes against provenance hashes
+  ---
+  duration_ms: 102.697416
+  type: 'test'
+  ...
+# Subtest: manifest errors fail closed without accepting path traversal or unpinned sources
+not ok 10 - manifest errors fail closed without accepting path traversal or unpinned sources
+  ---
+  duration_ms: 83.709708
+  type: 'test'
+  location: '/Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:327:1'
+  failureType: 'testCodeFailure'
+  error: `Unexpected token 'i', "file:///pri"... is not valid JSON`
+  code: 'ERR_TEST_FAILURE'
+  name: 'SyntaxError'
+  stack: |-
+    JSON.parse (<anonymous>)
+    diagnostic (file:///Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:241:21)
+    TestContext.<anonymous> (file:///Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:337:5)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: list exposes the exact pinned IDs with useful record descriptors
+ok 11 - list exposes the exact pinned IDs with useful record descriptors
+  ---
+  duration_ms: 102.689208
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 10
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5293.173792

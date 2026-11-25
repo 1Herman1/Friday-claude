@@ -1,0 +1,95 @@
+TAP version 13
+# Subtest: summary reports all pinned family counts
+ok 1 - summary reports all pinned family counts
+  ---
+  duration_ms: 30.523125
+  type: 'test'
+  ...
+# Subtest: manifest pins every raw byte, source path, ID and full MIT notice
+ok 2 - manifest pins every raw byte, source path, ID and full MIT notice
+  ---
+  duration_ms: 1.738334
+  type: 'test'
+  ...
+# Subtest: get retrieves every complete record without adding or dropping source fields
+ok 3 - get retrieves every complete record without adding or dropping source fields
+  ---
+  duration_ms: 3643.99375
+  type: 'test'
+  ...
+# Subtest: unknown and traversal families and IDs fail with JSON diagnostics
+ok 4 - unknown and traversal families and IDs fail with JSON diagnostics
+  ---
+  duration_ms: 493.093375
+  type: 'test'
+  ...
+# Subtest: arguments require explicit summary/list/get with exact arity; no random fallback
+ok 5 - arguments require explicit summary/list/get with exact arity; no random fallback
+  ---
+  duration_ms: 213.708459
+  type: 'test'
+  ...
+# Subtest: missing and unreadable-as-file data produce JSON READ_ERROR
+ok 6 - missing and unreadable-as-file data produce JSON READ_ERROR
+  ---
+  duration_ms: 53.4915
+  type: 'test'
+  ...
+# Subtest: malformed JSON produces a machine-readable PARSE_ERROR
+ok 7 - malformed JSON produces a machine-readable PARSE_ERROR
+  ---
+  duration_ms: 26.681667
+  type: 'test'
+  ...
+# Subtest: wrong roots, collections, record fields and duplicate IDs produce SCHEMA_ERROR
+ok 8 - wrong roots, collections, record fields and duplicate IDs produce SCHEMA_ERROR
+  ---
+  duration_ms: 524.971791
+  type: 'test'
+  ...
+# Subtest: lookup rejects changed complete records or bytes against provenance hashes
+ok 9 - lookup rejects changed complete records or bytes against provenance hashes
+  ---
+  duration_ms: 98.024417
+  type: 'test'
+  ...
+# Subtest: manifest errors fail closed without accepting path traversal or unpinned sources
+ok 10 - manifest errors fail closed without accepting path traversal or unpinned sources
+  ---
+  duration_ms: 329.113584
+  type: 'test'
+  ...
+# Subtest: INDEX enumerates every ID and links to an exact complete record in four counted sections
+not ok 11 - INDEX enumerates every ID and links to an exact complete record in four counted sections
+  ---
+  duration_ms: 0.240375
+  type: 'test'
+  location: '/Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:355:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/Users/germanbryzgalov/Friday-claude/docs/core/design-library/INDEX.md'"
+  code: 'ENOENT'
+  stack: |-
+    Object.readFileSync (node:fs:483:20)
+    TestContext.<anonymous> (file:///Users/germanbryzgalov/Friday-claude/.codex/scripts/test-design-library.mjs:356:20)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: list exposes the exact pinned IDs with useful record descriptors
+ok 12 - list exposes the exact pinned IDs with useful record descriptors
+  ---
+  duration_ms: 101.785459
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 11
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5556.47325
