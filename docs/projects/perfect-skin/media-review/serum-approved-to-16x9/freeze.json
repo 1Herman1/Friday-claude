@@ -1,0 +1,26 @@
+{
+  "requestId": "serum-approved-to-16x9-20261125-attempt1",
+  "ownerMaximumCredits": 82,
+  "quotedCredits": 80,
+  "referenceDurationSeconds": 6,
+  "sourceSha256": "3ddb8f0f9b3680b0e44ba51ee9af60532b9cccd553ffd7cfcce5be063e28491e",
+  "sourceOriginal": "/Users/germanbryzgalov/Downloads/approved-candidate-60fps.mp4",
+  "referenceProvenance": "Whole 10s source retimed to 6s, uniformly downscaled960->720,60fps360 sampled frames retaining full temporal range/all three entrances; reference velocity is 5/3 original. Not longer travel by itself.",
+  "poseVerdict": "OWNER_APPROVED_SOURCE_AUTHORITATIVE",
+  "prompt": "Create a new genuine landscape 16:9 ten-second silent product video BASED ON reference_video_1, not a new choreography. This is the owner-approved actual source scene, camera, orientation, materials, three products and rolling motion. reference_image_1 is its actual final frame for identity/label detail only, not a mandatory centred endpoint. The reference is the WHOLE original 10-second video proportionally compressed to 6 seconds (all three entrances in original chronological order), so restore approximately the original slower ten-second timing in the output; do not copy the speedup. Only intended change: widen the real scene to 16:9 and extend EACH product's individual left-to-right rolling travel to settle near the RIGHT boundary. Do not just pad an unchanged square or move the whole group/camera. Locked stationary camera, same neutral seamless studio surface and source shadows; extend its continuous background naturally across the wide frame. Keep original product size/proportions relative to height, no anisotropic stretching or crop. All three products, caps and shadows fully inside frame at rest, rightmost product ending with about 3 percent frame-width clearance from the right edge. Wide open negative space on the left. Preserve the approved source order: first the tall white GLACEE 4D HYAL CROSS silver-collar white-dropper bottle, then the short golden ISSEIMI BLOCKMELAN black-dropper bottle, then the amber Fluvix white-pump bottle. Final left-to-right order Fluvix, golden ISSEIMI, tall white GLACEE, packed naturally at far right without overlap or clipping. Each travels independently from offscreen LEFT to its far-right resting slot with the same source rolling behavior and long-axis orientation, no screen-plane swiveling, no standing/lying reinterpretation, no collisions/recoil added, no bounce, no direction reversal, no teleport. The next entrance may begin while its predecessor finishes but preserve the source choreography rather than inventing a different scene. Smooth continuous additional translation while rolling, not merely a longer hold or slower movement. Finish all three in a stable readable front-label hold by 8.5 seconds. Preserve the exact three continuous identities, bottle silhouettes, proportions, original cap shapes, normal unmirrored logos, label layouts/lettering, white/silver/amber/gold materials; do not invent new text, objects or products. No fourth bottle, no extra packaging, no hands, no overlays, no captions, no camera motion, no music or audio. The approved source appearance is authoritative; do not replace it with earlier generated references.",
+  "assets": [
+    {
+      "path": "assets/source-final.png",
+      "mime": "image/png",
+      "size": 485995,
+      "sha256": "9057d0737ca4284123358059978cc64ffa35ba51bf49d91a60e084323d45e2f4"
+    },
+    {
+      "path": "assets/approved-fullmotion-6s-reference.mp4",
+      "mime": "video/mp4",
+      "size": 1641817,
+      "sha256": "61c742814ea6ba833155a7c43d59ba2a2897d0e105d8b8777869633d610c48c6"
+    }
+  ],
+  "schema_sha256": "1d20ec92e049b6b2cbea3c80e81168b873c54d24d72b7a99ba93062355812dff"
+}
