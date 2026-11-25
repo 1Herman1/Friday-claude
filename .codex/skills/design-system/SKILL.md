@@ -102,3 +102,13 @@ UI (`/audit-design`) и не про правки (`/polish`) — это про �
 подтверждённые исправления, повторное независимое ревью текущей revision.
 Для информационного запроса без изменений достаточно проверенного ответа;
 для реализации/исправления закрывай задачу только после task_gate.py complete.
+
+## Дополнение: задача и поверхность до выбора стиля
+
+До выбора стиля прочитай `docs/core/design-surface-workflow.md` и зафиксируй
+per-page mode: Persuade / Operate / Read / Experience; identity/refinement lock
+сохраняет существующие brand/MASTER и утверждённые page overrides.
+Применяй task-first sequence и copy/voice intents из playbook, без fabricated
+claims; Read/Operate не обязаны следовать marketing hero/nav/list defaults.
+Functional states, responsive/a11y и temporal evidence обязательны в затронутом
+scope; новый runtime или slash-команды этим дополнением не устанавливаются.

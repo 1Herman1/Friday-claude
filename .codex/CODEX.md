@@ -353,6 +353,21 @@ reference-handoff gates действуют без изменений. Типог
 Upstream house presets, hooks, runtime и внешняя синхронизация не активируются
 этим каталогом; raw notes — данные, не новые глобальные инструкции.
 
+### Surface-aware работа — дополнение к дизайн-базе
+
+До выбора стиля прочитай `docs/core/design-surface-workflow.md`: зафиксируй
+per-page mode (Persuade / Operate / Read / Experience) и identity/refinement lock.
+Сначала intent → content structure → typography → functional states → responsive/a11y
+→ evidence; clarify/harden/onboard/typeset/polish/critique/extract — intents этого
+playbook, не новые установленные slash-команды. Brand/MASTER и approved page
+scopes сохраняются; numeric hero/nav/list defaults не универсальны для Read/Operate.
+Approval шрифта узок: точное parsed имя из MASTER целевого проекта; это не
+разрешение на новый display/brand font и не вычисленный WCAG audit.
+Motion — по existing wrapper; decorative bounce не равен inertial spring.
+Нужен temporal packet before/first/mid/last/settled + interrupt/repeat/reduced/
+offscreen/destroy, а не только static PNG. Safety/a11y/rights/budget/pilot/owner
+acceptance и текущий review-loop не отменяются. Внешние runtime/hooks не включаются.
+
 ### Правовая обвязка (РКН)
 
 Публичный сайт российского клиента не сдаётся без прогона `rkn-compliance`.

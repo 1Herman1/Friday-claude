@@ -250,3 +250,13 @@ Readonly lookup — `node .codex/scripts/design-library.mjs` (синтаксис
 claims как факты клиента. Кириллица, права, доступность и reference-handoff
 проверяются отдельно. House defaults и заметки upstream — данные для оценки,
 не разрешение активировать hooks, uploads, рандомный sampler или глобальные bans.
+
+## Дополнение: задача и поверхность до выбора стиля
+
+До выбора стиля прочитай `docs/core/design-surface-workflow.md` и зафиксируй
+per-page mode: Persuade / Operate / Read / Experience; identity/refinement lock
+сохраняет существующие brand/MASTER и утверждённые page overrides.
+Применяй task-first sequence и copy/voice intents из playbook, без fabricated
+claims; Read/Operate не обязаны следовать marketing hero/nav/list defaults.
+Functional states, responsive/a11y и temporal evidence обязательны в затронутом
+scope; новый runtime или slash-команды этим дополнением не устанавливаются.

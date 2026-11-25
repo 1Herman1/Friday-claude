@@ -43,6 +43,65 @@ for (const [rule, seed, level] of RULE_SEEDS) {
   });
 }
 
+test("target MASTER approved body font and fallback do not trigger forbidden-font", (t) => {
+  const f = fixture(t);
+  f.write("docs/projects/.active", "other");
+  f.write("docs/projects/target/design-system/MASTER.md", "fontFamily: { heading: ['Brand'], body: ['Inter', 'Arial', 'sans-serif'] }");
+  f.write("docs/projects/other/design-system/MASTER.md", "fontFamily: { body: ['Other'] }");
+  f.write("projects/target/body.css", "body { font-family: Inter, Arial, sans-serif; }");
+  const result = f.run("--json", "projects/target/body.css");
+  assert.equal(result.status, 0);
+  assert.deepEqual(JSON.parse(result.stdout).findings, []);
+});
+
+test("unapproved brand fonts stay ERROR without borrowing another MASTER", (t) => {
+  const f = fixture(t);
+  f.write("docs/projects/.active", "approved");
+  f.write("docs/projects/approved/design-system/MASTER.md", "fontFamily: { body: ['Inter', 'Arial'] }");
+  f.write("docs/projects/unapproved/design-system/MASTER.md", "fontFamily: { body: ['Brand'] }");
+  for (const prefix of ["projects", "tools"]) {
+    f.write(`${prefix}/unapproved/brand.css`, "h1 { font-family: Inter, Arial; }");
+    const result = f.run("--json", `${prefix}/unapproved/brand.css`);
+    assert.equal(result.status, 2);
+    assert.equal(JSON.parse(result.stdout).findings[0].rule, "forbidden-font");
+  }
+});
+
+test("font approval is exact and does not excuse a second unapproved font", (t) => {
+  const f = fixture(t);
+  for (const [fonts, sample, status] of [
+    ["['Inter Tight']", "Inter", 2],
+    ["['inter']", "Inter", 2],
+    ["['Inter']", "Inter, Arial", 2],
+    ["['Arial']", "Arial", 0],
+    ["['Brand']", "Inter", 2],
+  ]) {
+    f.write("docs/projects/brand/design-system/MASTER.md", `fontFamily: { body: ${fonts} }`);
+    f.write("projects/brand/font.css", `body { font-family: ${sample}; }`);
+    const result = f.run("--json", "projects/brand/font.css");
+    assert.equal(result.status, status, `${fonts}: ${sample}`);
+  }
+});
+
+test("font names outside parsed fontFamily do not grant approval", (t) => {
+  const f = fixture(t);
+  f.write("docs/projects/brand/design-system/MASTER.md", "# Discuss Inter and Arial\nfontFamily: { body: ['Brand'] }");
+  f.write("projects/brand/brand.tsx", "<h1 className=\"font-['Inter']\">Brand</h1>");
+  const result = f.run("--json", "projects/brand/brand.tsx");
+  assert.equal(result.status, 2);
+  assert.ok(JSON.parse(result.stdout).findings.some((f) => f.rule === "forbidden-font" && f.level === "ERROR"));
+});
+
+test("target without MASTER cannot borrow active project's approved font", (t) => {
+  const f = fixture(t);
+  f.write("docs/projects/.active", "approved");
+  f.write("docs/projects/approved/design-system/MASTER.md", "fontFamily: { body: ['Inter'] }");
+  f.write("projects/no-master/brand.css", "h1 { font-family: Inter; }");
+  const result = f.run("--json", "projects/no-master/brand.css");
+  assert.equal(result.status, 2);
+  assert.equal(JSON.parse(result.stdout).findings[0].rule, "forbidden-font");
+});
+
 test("warning human output stays successful without claiming no findings", (t) => {
   const f = fixture(t);
   f.write("warning.tsx", "{price}");

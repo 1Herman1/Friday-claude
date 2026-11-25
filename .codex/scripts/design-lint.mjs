@@ -7,7 +7,13 @@ import { codeRoots } from "./lib/projects.mjs";
 const RULES = [
   {
     name: "forbidden-font",
-    test: /\b(Inter|Arial)\b/,
+    // Exact fonts parsed from the target MASTER only; no global font whitelist.
+    // This line-based signal cannot distinguish body, fallback and display roles.
+    test: (line, ds, filePath) => {
+      const targetProject = projectFromPath(filePath);
+      const scoped = ds && (!targetProject || targetProject === projectFromPath(ds.masterPath));
+      return [...line.matchAll(/\b(Inter|Arial)\b/g)].some((m) => !scoped || !ds.fonts.has(m[1]));
+    },
     hint: "запрещённый шрифт (AI-slop), см docs/core/design-principles.md",
     level: "ERROR",
   },
@@ -225,7 +231,7 @@ function lintFile(filePath, diagnostics) {
   lines.forEach((line, idx) => {
     for (const rule of [...RULES, ...MASTER_RULES]) {
       const matched =
-        typeof rule.test === "function" ? rule.test(line, ds) : rule.test.test(line);
+        typeof rule.test === "function" ? rule.test(line, ds, filePath) : rule.test.test(line);
       if (matched) {
         findings.push({
           file: filePath,
