@@ -129,7 +129,7 @@ function projectFromPath(filePath) {
   return m ? m[1] : null;
 }
 
-function resolveActiveProject(filePath) {
+function resolveActiveProject(filePath, diagnostics) {
   const projects = knownProjects();
   if (projects.length === 0) return null;
 
@@ -146,16 +146,14 @@ function resolveActiveProject(filePath) {
 
   if (explicit) {
     if (!projects.includes(explicit)) {
-      console.error(`design-lint: активный проект "${explicit}" не найден или без MASTER.md`);
+      diagnostics.push({ code: "master-scope", path: filePath, level: "WARNING", message: `design-lint: активный проект "${explicit}" не найден или без MASTER.md` });
       return null;
     }
     return path.join(PROJECTS_ROOT, explicit, "design-system", "MASTER.md");
   }
 
   if (projects.length > 1) {
-    console.error(
-      `design-lint: найдено несколько проектов (${projects.join(", ")}) — укажи активный в docs/projects/.active или ACTIVE_PROJECT. Сверка с MASTER.md пропущена.`,
-    );
+    diagnostics.push({ code: "master-scope", path: filePath, level: "WARNING", message: `design-lint: найдено несколько проектов (${projects.join(", ")}) — укажи активный в docs/projects/.active или ACTIVE_PROJECT. Сверка с MASTER.md пропущена.` });
     return null;
   }
   return path.join(PROJECTS_ROOT, projects[0], "design-system", "MASTER.md");
@@ -163,8 +161,8 @@ function resolveActiveProject(filePath) {
 
 const dsCache = new Map();
 
-function loadDesignSystem(filePath) {
-  const masterPath = resolveActiveProject(filePath);
+function loadDesignSystem(filePath, diagnostics) {
+  const masterPath = resolveActiveProject(filePath, diagnostics);
   if (!masterPath) return null;
   if (dsCache.has(masterPath)) return dsCache.get(masterPath);
 
@@ -218,11 +216,11 @@ const MASTER_RULES = [
   },
 ];
 
-function lintFile(filePath) {
+function lintFile(filePath, diagnostics) {
   const content = fs.readFileSync(filePath, "utf8");
   const lines = content.split("\n");
   const findings = [];
-  const ds = loadDesignSystem(filePath);
+  const ds = loadDesignSystem(filePath, diagnostics);
 
   lines.forEach((line, idx) => {
     for (const rule of [...RULES, ...MASTER_RULES]) {
@@ -243,61 +241,120 @@ function lintFile(filePath) {
   return findings;
 }
 
-function walkDir(dir, exts) {
+function walkDir(dir, exts, diagnostics) {
   const results = [];
   if (!fs.existsSync(dir)) return results;
 
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch (error) {
+    diagnostics.push({ code: "read-error", path: dir, level: "ERROR", message: `design-lint: не удалось прочитать ${dir}: ${error.message}` });
+    return results;
+  }
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       if (entry.name === "node_modules" || entry.name === "dist") continue;
-      results.push(...walkDir(fullPath, exts));
-    } else if (exts.some((ext) => entry.name.endsWith(ext))) {
+      results.push(...walkDir(fullPath, exts, diagnostics));
+    } else if (entry.isFile() && exts.some((ext) => entry.name.endsWith(ext))) {
       results.push(fullPath);
     }
   }
   return results;
 }
 
-function collectFiles(args) {
-  if (args.length > 0) return args;
+const UI_EXTENSIONS = [".tsx", ".jsx", ".html", ".css"];
+
+function collectFiles(args, diagnostics, targets) {
+  if (args.length > 0) {
+    const files = [];
+    for (const target of args) {
+      if (!target.trim() || target.startsWith("-")) {
+        diagnostics.push({ code: "invalid-target", path: target, level: "ERROR", message: `design-lint: некорректный target: ${target}` });
+        continue;
+      }
+      if (!fs.existsSync(target)) {
+        diagnostics.push({ code: "missing-target", path: target, level: "ERROR", message: `design-lint: target не найден: ${target}` });
+        continue;
+      }
+      if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
+        const before = diagnostics.length;
+        const found = walkDir(target, UI_EXTENSIONS, diagnostics);
+        if (!found.length && diagnostics.length === before) diagnostics.push({ code: "empty-target", path: target, level: "ERROR", message: `design-lint: нет UI-файлов: ${target}` });
+        files.push(...found);
+      } else files.push(target);
+    }
+    return [...new Map(files.map((file) => [path.resolve(file), file])).values()].sort();
+  }
 
   // Корни кода берутся из реестра проектов, а не из списка в этом файле:
   // иначе новый проект молча остаётся непроверенным.
   const files = [];
-  for (const root of codeRoots()) {
-    const ui = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
-    files.push(...walkDir(ui, [".tsx"]));
+  let roots;
+  try {
+    roots = codeRoots();
+  } catch (error) {
+    diagnostics.push({ code: "read-error", path: "docs/projects/README.md", level: "ERROR", message: `design-lint: ${error.message}` });
+    return files;
   }
-  return files;
+  for (const root of roots) {
+    targets.push(root);
+    const ui = fs.existsSync(path.join(root, "src")) ? path.join(root, "src") : root;
+    files.push(...walkDir(ui, [".tsx"], diagnostics));
+  }
+  return [...new Map(files.map((file) => [path.resolve(file), file])).values()].sort();
 }
 
 function main() {
-  const args = process.argv.slice(2);
-  const files = collectFiles(args);
-
-  let total = 0;
-  const filesWithFindings = new Set();
+  const json = process.argv.slice(2).includes("--json");
+  const args = process.argv.slice(2).filter((arg) => arg !== "--json");
+  const diagnostics = [];
+  const targets = [...args];
+  const files = collectFiles(args, diagnostics, targets);
+  if (!files.length && !diagnostics.length) diagnostics.push({ code: "zero-targets", path: null, level: "ERROR", message: "design-lint: нет файлов для проверки" });
+  const findings = [];
+  const scannedFiles = [];
 
   for (const file of files) {
-    if (!fs.existsSync(file)) continue;
-    const findings = lintFile(file);
-    for (const f of findings) {
-      console.log(`${f.file}:${f.line} — ${f.hint} [${f.level}]`);
-      total += 1;
-      filesWithFindings.add(f.file);
+    if (!fs.existsSync(file)) {
+      diagnostics.push({ code: "missing-target", path: file, level: "ERROR", message: `design-lint: target не найден: ${file}` });
+      continue;
+    }
+    try {
+      findings.push(...lintFile(file, diagnostics));
+      scannedFiles.push(file);
+    } catch (error) {
+      diagnostics.push({ code: "read-error", path: file, level: "ERROR", message: `design-lint: не удалось прочитать ${file}: ${error.message}` });
     }
   }
 
-  console.log("");
-  if (total === 0) {
-    console.log("Проблем не обнаружено.");
+  const summary = {
+    errors: findings.filter((f) => f.level === "ERROR").length,
+    warnings: findings.filter((f) => f.level === "WARNING").length,
+    operationalErrors: diagnostics.filter((d) => d.level === "ERROR").length,
+  };
+  const exitCode = summary.operationalErrors ? 1 : summary.errors ? 2 : 0;
+  if (json) {
+    console.log(JSON.stringify({
+      schemaVersion: 1, findings, diagnostics,
+      coverage: {
+        mode: args.length ? "explicit" : "registry", targets, files, scannedFiles,
+        targetCount: targets.length, discoveredCount: files.length, scannedCount: scannedFiles.length,
+      },
+      summary, exitCode,
+    }));
   } else {
-    console.log(`${total} проблем в ${filesWithFindings.size} файлах`);
+    for (const f of findings) console.log(`${f.file}:${f.line} — ${f.hint} [${f.level}]`);
+    for (const d of diagnostics) console.error(d.message);
+    console.log("");
+    if (findings.length === 0 && summary.operationalErrors === 0) {
+      console.log("Проблем не обнаружено.");
+    } else if (findings.length) {
+      console.log(`${findings.length} проблем в ${new Set(findings.map((f) => f.file)).size} файлах`);
+    }
   }
-
-  process.exit(0);
+  process.exitCode = exitCode;
 }
 
 main();
