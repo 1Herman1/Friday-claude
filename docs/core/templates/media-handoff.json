@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "fixture": true,
+  "fixture_notice": "SYNTHETIC TEST FIXTURE — NOT REAL RESEARCH, RIGHTS, VISION OR GENERATION EVIDENCE. Replace every fixture value for real work.",
+  "stage": "native-verified",
+  "project": "fixture-project",
+  "master_path": "/fixture/MASTER.md",
+  "ui_kit_path": "/fixture/ui-kit.png",
+  "cover_id": "fixture-cover-01",
+  "scene": {"concept": "Synthetic fixture still life", "distinct_from_other_covers": "Fixture only: no other covers", "immutable_details": ["Fixture SKU shape and label spelling"]},
+  "palette": {"background": "#F4EFE8", "text": "#302D29", "accent": "#B49B80", "master_comparison": "Fixture only, not approved project tokens"},
+  "layout": {
+    "desktop": {"size": [1600, 900], "crop": "fixture landscape", "subject": "right", "text_safe_area": "left third"},
+    "mobile": {"size": [900, 1200], "crop": "fixture portrait", "subject": "lower half", "text_safe_area": "top third"}
+  },
+  "comparison": {"rubric_type": "implementation rubric", "criteria": ["palette vs MASTER", "scene vs UI-kit", "SKU geometry and label", "desktop/mobile crop"], "selected_reason": "Synthetic only", "rejections": [{"candidate": "fixture-alternative", "reason": "Synthetic example: insufficient mobile text space"}]},
+  "refs": [
+    {"id": "scene-01", "role": "scene", "sku": null, "source": "synthetic-fixture", "page_url": "fixture://scene", "original_url": "fixture://scene/original", "original_path": "/fixture/scene.png", "preview_path": "/fixture/scene-preview.png", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "rights": {"classification": "permitted-AI-input", "ai_permission": true, "ai_evidence": "fixture://not-real-permission", "publication_permission": false, "basis": "SYNTHETIC TEST ONLY", "checked_at": "2026-11-15"}, "vision": {"loaded": true, "evidence": "fixture://not-real-vision"}},
+    {"id": "product-01", "role": "product", "sku": "fixture-SKU", "product_id": null, "slug": null, "identity_verified": false, "identity_evidence": null, "source": "synthetic-fixture", "page_url": "fixture://product", "original_url": "fixture://product/original", "original_path": "/fixture/product.png", "preview_path": "/fixture/product-preview.png", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "rights": {"classification": "permitted-AI-input", "ai_permission": true, "ai_evidence": "fixture://not-real-permission", "publication_permission": false, "basis": "SYNTHETIC TEST ONLY", "checked_at": "2026-11-15"}, "vision": {"loaded": true, "evidence": "fixture://not-real-vision"}},
+    {"id": "label-01", "role": "label", "sku": "fixture-SKU", "product_id": null, "slug": null, "identity_verified": false, "identity_evidence": null, "source": "synthetic-fixture", "page_url": "fixture://label", "original_url": "fixture://label/original", "original_path": "/fixture/label.png", "preview_path": "/fixture/label-preview.png", "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "rights": {"classification": "permitted-AI-input", "ai_permission": true, "ai_evidence": "fixture://not-real-permission", "publication_permission": false, "basis": "SYNTHETIC TEST ONLY", "checked_at": "2026-11-15"}, "vision": {"loaded": true, "evidence": "fixture://not-real-vision"}}
+  ],
+  "transfer": {"method": "agent-vision-load", "ref_ids": ["scene-01", "product-01", "label-01"], "evidence": "fixture://not-real-transfer"},
+  "generation": {"route": "codex-native-image", "pilot_only": true, "owner_approval": "fixture://not-real-approval", "budget_approval": "fixture://not-real-budget", "native_call": {"evidence_path": "/fixture/native-call.json", "referenced_image_paths": ["/fixture/scene.png", "/fixture/product.png", "/fixture/label.png"]}},
+  "publication": {"approved": false, "owner_approval": null}
+}
