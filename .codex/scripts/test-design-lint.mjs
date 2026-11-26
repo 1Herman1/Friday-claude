@@ -102,6 +102,121 @@ test("target without MASTER cannot borrow active project's approved font", (t) =
   assert.equal(JSON.parse(result.stdout).findings[0].rule, "forbidden-font");
 });
 
+test("named target without MASTER never borrows active palette or font", (t) => {
+  const f = fixture(t);
+  f.write("docs/projects/.active", "other");
+  f.write("docs/projects/other/design-system/MASTER.md", "#445566\nfontFamily: { body: ['Other'] }");
+  const target = "projects/target/sample.tsx";
+  f.write(target, "#112233 font-['Target']");
+  const result = f.run("--json", target);
+  const data = JSON.parse(result.stdout);
+  assert.deepEqual(data.findings, []);
+  assert.equal(result.status, 0);
+  assert.equal(data.diagnostics.length, 1);
+  assert.equal(data.diagnostics[0].code, "master-scope");
+  assert.equal(data.diagnostics[0].level, "WARNING");
+  assert.equal(data.diagnostics[0].path, target);
+  assert.match(data.diagnostics[0].message, /docs\/projects\/target\/design-system\/MASTER\.md/);
+  assert.match(data.diagnostics[0].message, /Сверка с MASTER.md пропущена/);
+  assert.deepEqual(data.summary, { errors: 0, warnings: 0, operationalErrors: 0 });
+  assert.deepEqual(data.coverage.scannedFiles, [target]);
+  assert.equal(data.coverage.scannedCount, 1);
+});
+
+test("missing target MASTER is explicit across project prefixes and fallback modes", (t) => {
+  for (const prefix of ["projects", "tools"]) {
+    for (const mode of ["active", "sole", "none", "invalid-active"]) {
+      const f = fixture(t);
+      if (mode !== "none") f.write("docs/projects/other/design-system/MASTER.md", "#445566\nfontFamily: { body: ['Other'] }");
+      if (mode === "active") f.write("docs/projects/.active", "other");
+      if (mode === "invalid-active") f.write("docs/projects/.active", "absent");
+      const target = `${prefix}/target/sample.tsx`;
+      f.write(target, "#112233 font-['Target']");
+      const result = f.run("--json", target);
+      const data = JSON.parse(result.stdout);
+      assert.equal(result.status, 0, `${prefix}/${mode}`);
+      assert.deepEqual(data.findings, [], `${prefix}/${mode}`);
+      assert.equal(data.diagnostics.length, 1);
+      assert.equal(data.diagnostics[0].code, "master-scope");
+      assert.equal(data.diagnostics[0].level, "WARNING");
+      assert.equal(data.diagnostics[0].path, target);
+      assert.match(data.diagnostics[0].message, /docs\/projects\/target\/design-system\/MASTER\.md/);
+      assert.equal(data.summary.operationalErrors, 0);
+      assert.deepEqual(data.coverage.scannedFiles, [target]);
+    }
+  }
+});
+
+test("explicit ACTIVE_PROJECT cannot supply a named target missing MASTER", (t) => {
+  const f = fixture(t);
+  f.write("docs/projects/other/design-system/MASTER.md", "#445566\nfontFamily: { body: ['Other'] }");
+  f.write("tools/target/sample.tsx", "#112233 font-['Target']");
+  const result = spawnSync(process.execPath, [cli, "--json", "tools/target/sample.tsx"], {
+    cwd: f.root, env: { ...process.env, ACTIVE_PROJECT: "other" }, encoding: "utf8", timeout: 10000,
+  });
+  assert.equal(result.error, undefined);
+  assert.equal(result.status, 0);
+  const data = JSON.parse(result.stdout);
+  assert.deepEqual(data.findings, []);
+  assert.equal(data.diagnostics[0].code, "master-scope");
+});
+
+test("target own MASTER wins for palette and font across project prefixes", (t) => {
+  for (const prefix of ["projects", "tools"]) {
+    const f = fixture(t);
+    f.write("docs/projects/.active", "other");
+    f.write("docs/projects/other/design-system/MASTER.md", "#445566\nfontFamily: { body: ['Other'] }");
+    f.write("docs/projects/target/design-system/MASTER.md", "#112233\nfontFamily: { body: ['Target'] }");
+    const target = `${prefix}/target/sample.tsx`;
+    f.write(target, "#112233 font-['Target']");
+    const result = f.run("--json", target);
+    assert.equal(result.status, 0);
+    assert.deepEqual(JSON.parse(result.stdout).findings, []);
+    assert.deepEqual(JSON.parse(result.stdout).diagnostics, []);
+  }
+});
+
+test("generic paths retain active and sole-project MASTER fallback", (t) => {
+  for (const active of [false, true]) {
+    const f = fixture(t);
+    f.write("docs/projects/other/design-system/MASTER.md", "#445566\nfontFamily: { body: ['Other'] }");
+    if (active) f.write("docs/projects/.active", "other");
+    f.write("plain.tsx", "#112233 font-['Target']");
+    const result = f.run("--json", "plain.tsx");
+    assert.equal(result.status, 0);
+    assert.deepEqual(JSON.parse(result.stdout).findings.map(x => x.rule), ["offbrand-hex", "offbrand-font"]);
+  }
+});
+
+test("missing target MASTER never excuses global forbidden font", (t) => {
+  for (const prefix of ["projects", "tools"]) {
+    const f = fixture(t);
+    f.write("docs/projects/.active", "other");
+    f.write("docs/projects/other/design-system/MASTER.md", "fontFamily: { body: ['Inter'] }");
+    const target = `${prefix}/target/sample.tsx`;
+    f.write(target, "Inter");
+    const result = f.run("--json", target);
+    const data = JSON.parse(result.stdout);
+    assert.equal(result.status, 2);
+    assert.deepEqual(data.findings.map(x => x.rule), ["forbidden-font"]);
+    assert.equal(data.diagnostics[0].code, "master-scope");
+    assert.equal(data.summary.errors, 1);
+  }
+});
+
+test("unrelated MASTER edits cannot change named target results", (t) => {
+  const f = fixture(t);
+  f.write("docs/projects/.active", "other");
+  f.write("docs/projects/other/design-system/MASTER.md", "#445566\nfontFamily: { body: ['Other'] }");
+  f.write("projects/target/sample.tsx", "#112233 font-['Target']");
+  const before = f.run("--json", "projects/target/sample.tsx");
+  f.write("docs/projects/other/design-system/MASTER.md", "#112233\nfontFamily: { body: ['Target'] }");
+  const after = f.run("--json", "projects/target/sample.tsx");
+  assert.equal(before.status, 0);
+  assert.equal(after.status, 0);
+  assert.deepEqual(JSON.parse(before.stdout), JSON.parse(after.stdout));
+});
+
 test("warning human output stays successful without claiming no findings", (t) => {
   const f = fixture(t);
   f.write("warning.tsx", "{price}");

@@ -8,7 +8,7 @@
 
 | № | Пункт | Критерий завершения | Статус |
 |---|---|---|---|
-|1|F1 → F2 → source-freshness|Каждый tracer bullet RED→GREEN, working/clean regression, independent review, собственная проверенная публикация и remote read-back|IN_PROGRESS: F1|
+|1|F1 → F2 → source-freshness|Каждый tracer bullet RED→GREEN, working/clean regression, independent review, собственная проверенная публикация и remote read-back|IN_PROGRESS: F1 принят и опубликован `fc673e38cb742a9d4ed2767186d594850406f9c8`; F2 выполняется|
 |2|Design-regression CI|Самодостаточный workflow, настоящий run на exact SHA, успешные design tests; unrelated Perfect Skin jobs не засчитываются|PENDING|
 |3|Реальный before/after design pilot|Brief/brand, baseline, две композиции, RU/long text/mobile, фактический визуальный review; owner acceptance отдельно|PENDING|
 |4|Native Codex activation|Новая настоящая IDE session, наблюдаемое чтение действующих payloads/роутов, bounded real task; static parity не заменяет проверку|PENDING|

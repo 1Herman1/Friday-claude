@@ -137,12 +137,14 @@ function projectFromPath(filePath) {
 
 function resolveActiveProject(filePath, diagnostics) {
   const projects = knownProjects();
-  if (projects.length === 0) return null;
-
   const fromPath = filePath ? projectFromPath(filePath) : null;
-  if (fromPath && projects.includes(fromPath)) {
-    return path.join(PROJECTS_ROOT, fromPath, "design-system", "MASTER.md");
+  if (fromPath) {
+    const masterPath = path.join(PROJECTS_ROOT, fromPath, "design-system", "MASTER.md");
+    if (projects.includes(fromPath)) return masterPath;
+    diagnostics.push({ code: "master-scope", path: filePath, level: "WARNING", message: `design-lint: у целевого проекта нет ${masterPath}. Сверка с MASTER.md пропущена.` });
+    return null;
   }
+  if (projects.length === 0) return null;
 
   const explicit =
     process.env.ACTIVE_PROJECT ||
