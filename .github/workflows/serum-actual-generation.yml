@@ -1,11 +1,11 @@
-name: Serum ACTUAL wide one paid job
+name: Serum Kling3 Omni transformation ONE 227
 "on":
   push:
     branches: [ci/serum-actual-one]
     paths:
       - .github/workflows/serum-actual-generation.yml
-      - tools/nullume/scripts/serum-actual-*.mjs
-      - docs/projects/perfect-skin/media-review/serum-rigid-oneway-generation/**
+      - tools/nullume/scripts/serum-omni-*.mjs
+      - docs/projects/perfect-skin/media-review/serum-kling-omni-transform-right/**
   workflow_dispatch:
     inputs:
       mode:
@@ -18,8 +18,8 @@ name: Serum ACTUAL wide one paid job
         type: choice
         required: true
         default: none
-        options: [none, confirm-serum-rigid-oneway-new-82]
-        description: Quoted 82 credits within owner maximum82, NOT a provider-enforced ceiling
+        options: [none, confirm-serum-kling-omni-transform-right-227]
+        description: Quoted 227 credits within owner maximum227, NOT a provider-enforced ceiling
       task_id:
         type: string
         default: ''
@@ -30,6 +30,7 @@ name: Serum ACTUAL wide one paid job
         description: Original receipt run ID, recovery only
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: serum-actual-generation-one
   cancel-in-progress: false
@@ -45,29 +46,29 @@ jobs:
         with:
           node-version: '22'
       - name: Offline hostile-input and duplicate-create regression tests, no credentials
-        run: node --test tools/nullume/scripts/serum-actual-generation.test.mjs
-      - name: Credential-free archived schema, 710-row quote, freeze and encrypted bundle validation
-        run: node tools/nullume/scripts/serum-actual-generation.mjs dry-run
+        run: node --test tools/nullume/scripts/serum-omni-transform.test.mjs
+      - name: Credential-free archived schema, live model quote, freeze and encrypted bundle validation
+        run: node tools/nullume/scripts/serum-omni-transform.mjs dry-run
   paid:
     needs: preflight
     if: >-
       github.event_name == 'workflow_dispatch' && github.run_attempt == '1' &&
       github.ref == 'refs/heads/ci/serum-actual-one' &&
-      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum-rigid-oneway-new-82') || inputs.mode == 'recover-existing-task')
+      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum-kling-omni-transform-right-227') || inputs.mode == 'recover-existing-task')
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     # Reuse protected environment without changing any of its protection rules.
-    # SERUM_ACTUAL_* variables are independent of the old Kling adapter's arming.
+    # SERUM_OMNI_* variables are independent of the old Kling adapter's arming.
     environment: serum3-pilot
     env:
-      SERUM_ACTUAL_APPROVED_RUN_ID: ${{ vars.SERUM_ACTUAL_APPROVED_RUN_ID }}
-      SERUM_ACTUAL_APPROVED_SHA: ${{ vars.SERUM_ACTUAL_APPROVED_SHA }}
-      SERUM_ACTUAL_ARMED: ${{ vars.SERUM_ACTUAL_ARMED }}
-      SERUM_ACTUAL_CONFIRMATION: ${{ inputs.confirmation }}
-      SERUM_ACTUAL_TASK_ID: ${{ inputs.task_id }}
-      SERUM_ACTUAL_APPROVED_TASK_ID: ${{ vars.SERUM_ACTUAL_RECOVERY_TASK_ID }}
-      SERUM_ACTUAL_SOURCE_RUN_ID: ${{ inputs.source_run_id }}
-      SERUM_ACTUAL_APPROVED_SOURCE_RUN_ID: ${{ vars.SERUM_ACTUAL_RECOVERY_SOURCE_RUN_ID }}
+      SERUM_OMNI_APPROVED_RUN_ID: ${{ vars.SERUM_OMNI_APPROVED_RUN_ID }}
+      SERUM_OMNI_APPROVED_SHA: ${{ vars.SERUM_OMNI_APPROVED_SHA }}
+      SERUM_OMNI_ARMED: ${{ vars.SERUM_OMNI_ARMED }}
+      SERUM_OMNI_CONFIRMATION: ${{ inputs.confirmation }}
+      SERUM_OMNI_TASK_ID: ${{ inputs.task_id }}
+      SERUM_OMNI_APPROVED_TASK_ID: ${{ vars.SERUM_OMNI_RECOVERY_TASK_ID }}
+      SERUM_OMNI_SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+      SERUM_OMNI_APPROVED_SOURCE_RUN_ID: ${{ vars.SERUM_OMNI_RECOVERY_SOURCE_RUN_ID }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -79,48 +80,60 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends ffmpeg
-          node --test tools/nullume/scripts/serum-actual-generation.test.mjs
+          node --test tools/nullume/scripts/serum-omni-transform.test.mjs
       - name: Require independent exact-run and exact-SHA environment arming before secrets
         id: gate
         env:
           MODE: ${{ inputs.mode }}
         run: >-
-          node --input-type=module -e "import {authorize} from './tools/nullume/scripts/serum-actual-generation.mjs'; authorize(process.env, process.env.MODE === 'recover-existing-task');"
-      - name: Verify and decode all seven frozen assets; upload and submit exactly once (no retry)
+          node --input-type=module -e "import {authorize} from './tools/nullume/scripts/serum-omni-transform.mjs'; authorize(process.env, process.env.MODE === 'recover-existing-task');"
+      - name: Verify and decode one unchanged owner video; upload and submit exactly once (no retry)
         id: submit
         if: inputs.mode == 'generate-one'
         env:
           KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
-        run: node tools/nullume/scripts/serum-actual-generation.mjs generate-one
+        run: node tools/nullume/scripts/serum-omni-transform.mjs generate-one
       - name: Durably publish sanitized receipt BEFORE any polling
         id: receipt
         if: always() && steps.submit.outputs.task_id != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: serum-actual-task-receipt-${{ github.run_id }}
-          path: ${{ runner.temp }}/serum-actual-result/task-receipt.json
+          name: serum-omni-task-receipt-${{ github.run_id }}
+          path: ${{ runner.temp }}/serum-omni-result/task-receipt.json
           if-no-files-found: error
           retention-days: 90
+      - name: Load exact original receipt for GET-only recovery
+        id: recovery_receipt
+        if: inputs.mode == 'recover-existing-task'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN: ${{ inputs.source_run_id }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/serum-omni-result"
+          gh run download "$SOURCE_RUN" --repo "$GITHUB_REPOSITORY" --name "serum-omni-task-receipt-$SOURCE_RUN" --dir "$RUNNER_TEMP/serum-omni-result"
       - name: Bounded GET-only retrieval; no upload, credit check or create in this process
         id: retrieve
         if: >-
           always() && steps.gate.outcome == 'success' &&
-          ((steps.receipt.outcome == 'success' && steps.submit.outputs.task_id != '') || inputs.mode == 'recover-existing-task')
+          ((steps.receipt.outcome == 'success' && steps.submit.outputs.task_id != '') || (inputs.mode == 'recover-existing-task' && steps.recovery_receipt.outcome == 'success'))
         env:
           KIE_API_KEY: ${{ secrets.KIE_API_KEY }}
-          SERUM_ACTUAL_TASK_ID: ${{ steps.submit.outputs.task_id || inputs.task_id }}
-          SERUM_ACTUAL_APPROVED_TASK_ID: ${{ steps.submit.outputs.task_id || vars.SERUM_ACTUAL_RECOVERY_TASK_ID }}
-          SERUM_ACTUAL_SOURCE_RUN_ID: ${{ steps.submit.outputs.task_id && github.run_id || inputs.source_run_id }}
-          SERUM_ACTUAL_APPROVED_SOURCE_RUN_ID: ${{ steps.submit.outputs.task_id && github.run_id || vars.SERUM_ACTUAL_RECOVERY_SOURCE_RUN_ID }}
-        run: node tools/nullume/scripts/serum-actual-generation.mjs recover-existing-task
+          SERUM_OMNI_TASK_ID: ${{ steps.submit.outputs.task_id || inputs.task_id }}
+          SERUM_OMNI_APPROVED_TASK_ID: ${{ steps.submit.outputs.task_id || vars.SERUM_OMNI_RECOVERY_TASK_ID }}
+          SERUM_OMNI_SOURCE_SHA: ${{ steps.submit.outputs.task_id && github.sha || vars.SERUM_OMNI_RECOVERY_SOURCE_SHA }}
+          SERUM_OMNI_SOURCE_RUN_ID: ${{ steps.submit.outputs.task_id && github.run_id || inputs.source_run_id }}
+          SERUM_OMNI_APPROVED_SOURCE_RUN_ID: ${{ steps.submit.outputs.task_id && github.run_id || vars.SERUM_OMNI_RECOVERY_SOURCE_RUN_ID }}
+        run: node tools/nullume/scripts/serum-omni-transform.mjs recover-existing-task
       - name: Preserve original output and sanitized metadata (not design accepted)
-        if: always() && steps.retrieve.outcome != '' && steps.retrieve.outcome != 'skipped'
+        if: always() && ((steps.submit.outcome != '' && steps.submit.outcome != 'skipped') || (steps.retrieve.outcome != '' && steps.retrieve.outcome != 'skipped'))
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: serum-actual-output-${{ github.run_id }}
+          name: serum-omni-output-${{ github.run_id }}
           path: |
-            ${{ runner.temp }}/serum-actual-result/unverified.mp4
-            ${{ runner.temp }}/serum-actual-result/result.json
+            ${{ runner.temp }}/serum-omni-result/unverified.mp4
+            ${{ runner.temp }}/serum-omni-result/result.json
+            ${{ runner.temp }}/serum-omni-result/provider-state.json
+            ${{ runner.temp }}/serum-omni-result/precreate-quote-and-payload.json
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
