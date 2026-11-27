@@ -67,28 +67,64 @@ def context(cur, tid):
     return job, job['ctx'] + extra + task
 
 
-def review(tid, chart_dir, force=False):
+def select_positions(cur, trade_id=None):
+    sql = """WITH o AS (SELECT id,row_number() over(order by opened_at) n FROM trades WHERE deleted_at IS NULL)
+          SELECT t.id,o.n,i.base_asset,t.status FROM trades t JOIN o ON o.id=t.id
+          JOIN accounts a ON a.id=t.account_id JOIN instruments i ON i.id=t.instrument_id
+          WHERE a.name='BingX Futures' AND t.deleted_at IS NULL"""
+    params = (trade_id,) if trade_id else ()
+    if trade_id:
+        sql += " AND t.id=%s"
+    cur.execute(sql + " ORDER BY t.opened_at", params)
+    return cur.fetchall()
+
+
+def store_review(cur, tid, status, body, findings, running_review_id=None):
+    payload = json.dumps(findings, ensure_ascii=False)
+    if running_review_id:
+        cur.execute("""UPDATE ai_reviews SET status=%s,content_md=%s,findings=%s
+                       WHERE id=%s AND trade_id=%s AND status='running' RETURNING id""",
+                    (status, body, payload, running_review_id, tid))
+    else:
+        cur.execute(f"""INSERT INTO ai_reviews (id,organization_id,user_id,trade_id,kind,status,content_md,findings)
+                    VALUES (gen_random_uuid(),{ar.ORG},(SELECT id FROM users WHERE telegram_user_id=7098788894),
+                            %s,'trade',%s,%s,%s) RETURNING id""", (tid, status, body, payload))
+    row = cur.fetchone()
+    if not row:
+        raise ValueError('Invalid, unrelated or already completed running review ID')
+    return row[0]
+
+
+def chart_source_label(image):
+    meta_path = Path(str(image) + '.json')
+    if not meta_path.exists():
+        return 'Метаданные отсутствуют: источник определять только по подписи самого изображения.'
+    meta = json.loads(meta_path.read_text())
+    if meta.get('sha256') != hashlib.sha256(image.read_bytes()).hexdigest():
+        raise ValueError('Chart metadata hash mismatch')
+    return meta['source_label']
+
+
+def review(tid, chart_dir, force=False, running_review_id=None):
     with psycopg.connect(os.environ['DATABASE_URL']) as conn, conn.cursor() as cur:
         job, prompt = context(cur, tid)
         image = chart_dir / f'{tid}.png'
         if not image.exists():
             return {'id':str(tid),'ok':False,'error':'chart screenshot missing'}
+        prompt += ('\n\n## Проверенная подпись приложенного скриншота\n' + chart_source_label(image) +
+                   '\nИсточник свечей бери из этой подписи; не подменяй его биржей из похожих исторических сделок.\n')
         digest = hashlib.sha256((prompt + hashlib.sha256(image.read_bytes()).hexdigest()).encode()).hexdigest()
         cur.execute("""SELECT id FROM ai_reviews WHERE trade_id=%s AND status='done'
                        AND findings->>'agent'=%s AND findings->>'input_hash'=%s""", (tid,VERSION,digest))
         prev=cur.fetchone()
-        if prev and not force:
+        if prev and not force and not running_review_id:
             return {'id':str(tid),'ok':True,'skipped':True,'review_id':str(prev[0])}
         ap.save_chart(cur, tid, image)
         started = datetime.now(timezone.utc)
         result = ar.call_codex(prompt, ar.SYSTEM, images=[image])
         body, findings = ar.split_json(result.get('text','')) if result['ok'] else (None,{})
         findings = {**(findings or {}),'agent':VERSION,'input_hash':digest,'chart_sha256':hashlib.sha256(image.read_bytes()).hexdigest()}
-        cur.execute(f"""INSERT INTO ai_reviews (id,organization_id,user_id,trade_id,kind,status,content_md,findings)
-                    VALUES (gen_random_uuid(),{ar.ORG},(SELECT id FROM users WHERE telegram_user_id=7098788894),
-                            %s,'trade',%s,%s,%s) RETURNING id""",
-                    (tid,'done' if result['ok'] else 'failed',body,json.dumps(findings,ensure_ascii=False)))
-        rid=cur.fetchone()[0]
+        rid = store_review(cur, tid, 'done' if result['ok'] else 'failed', body, findings, running_review_id)
         cur.execute(f"""INSERT INTO llm_calls (id,organization_id,ai_review_id,role,provider,model,billing,
                           prompt_version,prompt_hash,prompt,response,input_tokens,output_tokens,cache_tokens,
                           cost_usd,latency_ms,status,error,started_at)
@@ -109,14 +145,19 @@ def main():
     p.add_argument('--workers',type=int,default=3)
     p.add_argument('--limit',type=int,default=0)
     p.add_argument('--force',action='store_true')
-    p.add_argument('--out',type=Path,default=ROOT/'journal/data/reports/bingx-20261124')
+    p.add_argument('--trade',help='UUID одной позиции BingX, включая открытую')
+    p.add_argument('--running-review-id',help='UUID строки running из веб-карточки')
+    p.add_argument('--out',type=Path)
     args=p.parse_args();ar.env()
+    if args.running_review_id and not args.trade:
+        p.error('--running-review-id requires --trade')
+    if args.out is None:
+        suffix = args.running_review_id or datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+        args.out = ROOT / 'journal/data/reports' / ('bingx-' + suffix)
     with psycopg.connect(os.environ['DATABASE_URL']) as conn,conn.cursor() as cur:
-        cur.execute("""WITH o AS (SELECT id,row_number() over(order by opened_at) n FROM trades WHERE deleted_at IS NULL)
-          SELECT t.id,o.n,i.base_asset,t.status FROM trades t JOIN o ON o.id=t.id
-          JOIN accounts a ON a.id=t.account_id JOIN instruments i ON i.id=t.instrument_id
-          WHERE a.name='BingX Futures' AND t.deleted_at IS NULL ORDER BY t.opened_at""")
-        rows=cur.fetchall()
+        rows = select_positions(cur, args.trade)
+        if args.trade and len(rows) != 1:
+            p.error('BingX position not found')
         if args.limit:rows=rows[:args.limit]
         if args.dry_run:
             print(json.dumps({'positions':len(rows),'open':sum(r[3]=='OPEN' for r in rows),
@@ -129,7 +170,7 @@ def main():
     if missing:sys.exit('Missing screenshots: '+json.dumps(missing))
     results=[]
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        jobs={pool.submit(review,t,charts,args.force):t for t,_,_,_ in rows}
+        jobs={pool.submit(review,t,charts,args.force,args.running_review_id):t for t,_,_,_ in rows}
         for f in as_completed(jobs):
             try:r=f.result()
             except Exception as e:r={'id':str(jobs[f]),'ok':False,'error':str(e)}

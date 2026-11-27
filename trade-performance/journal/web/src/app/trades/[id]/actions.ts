@@ -61,14 +61,38 @@ export async function removeNote(tradeId: string, noteId: string) {
 }
 
 export async function runReview(tradeId: string) {
-  // ИИ-разбор агентом (Opus): в фоне, ~1–2 мин; результат появится в блоке «ИИ-разбор» после обновления страницы
-  const { spawn } = await import("node:child_process");
-  const path = await import("node:path");
+  // BingX OPEN/CLOSED share the same visual Codex worker and exact job status row.
+  const [{ spawn }, path, fs, { reviewLaunchArgs }] = await Promise.all([
+    import("node:child_process"), import("node:path"), import("node:fs"), import("@/server/review-launch"),
+  ]);
+  const [trade] = await q<{ venue: string }>(`SELECT v.slug AS venue FROM trades t
+    JOIN accounts a ON a.id=t.account_id JOIN venues v ON v.id=a.venue_id
+    WHERE t.id=$1 AND t.deleted_at IS NULL`, [tradeId]);
+  if (!trade) throw new Error("Сделка не найдена");
+  const [existing] = await q<{ id: string }>(`SELECT id FROM ai_reviews WHERE trade_id=$1
+    AND status='running' AND created_at > now() - interval '10 minutes' LIMIT 1`, [tradeId]);
+  if (existing) return;
+  const [job] = await q<{ id: string }>(`INSERT INTO ai_reviews
+    (id,organization_id,user_id,trade_id,kind,status)
+    VALUES (gen_random_uuid(),${ORG},${USER},$1,'trade','running') RETURNING id`, [tradeId]);
   const root = path.resolve(process.cwd(), "../..");
-  const p = spawn(path.join(root, "prop-agents/.venv/bin/python"), [path.join(root, "journal/review/agent_pass.py"), "--trade", tradeId, "--force"],
-    { cwd: root, detached: true, stdio: "ignore" });
-  p.unref();
-  await q(`INSERT INTO ai_reviews (id, organization_id, user_id, trade_id, kind, status) VALUES (gen_random_uuid(), ${ORG}, ${USER}, $1, 'trade', 'running')`, [tradeId]).catch(() => null);
+  const failPending = () => q(`UPDATE ai_reviews SET status='failed' WHERE id=$1 AND status='running'`, [job.id]).catch(() => null);
+  let fd: number | undefined;
+  try {
+    fs.mkdirSync(path.join(root, "journal/data/logs"), { recursive: true });
+    fd = fs.openSync(path.join(root, "journal/data/logs", `review_${job.id}.log`), "a");
+    const worker = spawn(path.join(root, "prop-agents/.venv/bin/python"), reviewLaunchArgs(root, trade.venue, tradeId, job.id),
+      { cwd: root, detached: true, stdio: ["ignore", fd, fd] });
+    worker.once("error", failPending);
+    // A worker that exits without completing its row is a failure, even with exit code 0.
+    worker.once("exit", failPending);
+    worker.unref();
+  } catch (error) {
+    await failPending();
+    throw error;
+  } finally {
+    if (fd !== undefined) fs.closeSync(fd);
+  }
   revalidatePath(`/trades/${tradeId}`);
 }
 
