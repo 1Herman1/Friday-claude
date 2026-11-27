@@ -128,7 +128,9 @@ class ClientPilotTests(unittest.TestCase):
 
 class ArchiveIsolationTests(unittest.TestCase):
     def test_gitless_archive_and_poisoned_disposable_canary(self):
-        with tempfile.TemporaryDirectory() as temp:
+        private = Path.home() / '.hermes/cache/scratch'
+        private.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=private) as temp:
             temp = Path(temp).resolve()
             archive = temp / 'archive'
             pilot = RECIPE.relative_to(ROOT).parent
@@ -157,6 +159,26 @@ class ArchiveIsolationTests(unittest.TestCase):
                 tests = subprocess.run([sys.executable, str(archive / '.codex/scripts/test_client_design_pilot.py'), 'ClientPilotTests', '-v'], env=child, cwd=archive, capture_output=True, text=True)
                 self.assertEqual(tests.returncode, 0, tests.stderr)
             self.assertEqual(before, {str(p.relative_to(canary)): p.read_bytes() for p in canary.rglob('*') if p.is_file()})
+
+
+class ArchiveFixturePortabilityTests(unittest.TestCase):
+    def test_archive_isolation_with_tmpdir_outside_private_home_scratch(self):
+        private = Path.home() / '.hermes/cache/scratch'
+        private.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=private) as temp:
+            temp = Path(temp).resolve()
+            home = temp / 'isolated-home'
+            external = temp / 'external-temp'
+            home.mkdir()
+            external.mkdir()
+            self.assertFalse(external.is_relative_to(home / '.hermes/cache/scratch'))
+            child = {k:v for k,v in os.environ.items() if not k.startswith('GIT_') and k not in ('PYTHONPATH', 'NODE_PATH')}
+            child.update(HOME=str(home), TMPDIR=str(external))
+            result = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve()),
+                 'ArchiveIsolationTests.test_gitless_archive_and_poisoned_disposable_canary', '-v'],
+                env=child, cwd=ROOT, capture_output=True, text=True, timeout=120)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 if __name__ == '__main__':
