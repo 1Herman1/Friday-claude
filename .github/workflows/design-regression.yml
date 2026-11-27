@@ -1,0 +1,71 @@
+name: Design regression
+
+on:
+  push:
+    branches: ['claude/greeting-nnz368']
+    paths:
+      - '.github/workflows/design-regression.yml'
+      - '.codex/**'
+      - '.claude/**'
+      - 'docs/core/**'
+      - 'docs/research/design-agent-upgrade/**'
+      - 'docs/projects/**/project.md'
+      - 'docs/projects/README.md'
+      - 'docs/projects/.active'
+      - 'CLAUDE.md'
+      - '.mcp.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      TMPDIR: ${{ runner.temp }}/design-ci-owned
+      MOTION_DEPS: ${{ runner.temp }}/design-ci-owned/motion-deps
+      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/design-ci-owned/browsers
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Node 24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Python 3.12
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Owned temporary directory
+        run: mkdir -p "$TMPDIR" "$HOME/.hermes/cache/scratch"
+      - name: Selftest and readonly role sync
+        run: |
+          python .codex/scripts/selftest.py
+          python .codex/scripts/sync-roles.py
+      - name: Full Python regression suite
+        run: python -m unittest discover -s .codex/scripts -p 'test_*.py' -v
+      - name: Install isolated locked technical fixture dependencies
+        run: |
+          mkdir -p "$MOTION_DEPS"
+          cp docs/research/design-agent-upgrade/rollout/motion-pilot/dependencies.package.json "$MOTION_DEPS/package.json"
+          cp docs/research/design-agent-upgrade/rollout/motion-pilot/dependencies.lock.json "$MOTION_DEPS/package-lock.json"
+          npm ci --prefix "$MOTION_DEPS" --ignore-scripts --no-audit --no-fund
+      - name: Install runner-only headless Chromium
+        run: |
+          node "$MOTION_DEPS/node_modules/playwright-core/cli.js" install --with-deps chromium
+          MOTION_BROWSER="$(node -e 'const {createRequire}=require("node:module"); const req=createRequire(process.env.MOTION_DEPS+"/package.json"); process.stdout.write(req("playwright-core").chromium.executablePath())')"
+          test -x "$MOTION_BROWSER"
+          printf 'MOTION_BROWSER=%s\n' "$MOTION_BROWSER" >> "$GITHUB_ENV"
+      - name: Explicit Node regression suites including real observation regressions
+        run: node --test .codex/scripts/test-design-lint.mjs .codex/scripts/test-design-library.mjs .codex/scripts/test-motion-dependency-isolation.mjs .codex/scripts/test-motion-observation.mjs
+      - name: Strict TypeScript, SSR and real headless motion replay
+        run: node .codex/scripts/test-motion-template.mjs --integration

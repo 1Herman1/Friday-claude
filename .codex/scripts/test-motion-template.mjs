@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
 import os from 'node:os';
+import { installGrabObservation, assertGrabObservation } from './lib/motion-observation.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const source = readFileSync(join(root, 'docs/core/templates/motion.ts'), 'utf8');
@@ -91,18 +92,29 @@ try {
     await page.emulateMedia({ reducedMotion });
     await page.goto(url);
     await page.waitForFunction(() => window.pilot);
+    await page.evaluate(installGrabObservation);
   };
+  const latency = Number(process.argv.find(arg => arg.startsWith('--observation-latency='))?.split('=')[1] ?? 0);
+  assert.ok(latency === 0 || latency === 80, 'observation latency must be 0 or controlled 80ms');
   const grab = async () => {
-    const box = await page.locator('#tile').boundingBox();
-    await page.mouse.move(box.x + 23, box.y + 31);
     const before = await page.evaluate(() => window.pilot.snapshot());
-    await page.mouse.down();
-    const after = await page.evaluate(() => window.pilot.snapshot());
-    assert.ok(Math.abs(after.x - before.x) < 1, 'grab must not jump to pointer center');
-    return box;
+    const id = await page.evaluate(() => window.motionObservation.arm());
+    if (latency && !before.inertiaPaused) await page.waitForTimeout(latency);
+    // All observation round trips precede the final aim, in both input modes.
+    // No snapshot or arming call may age the coordinates before the real press.
+    const box = await page.locator('#tile').boundingBox();
+    await Promise.all([
+      page.mouse.move(box.x + 23, box.y + 31),
+      page.mouse.down(),
+    ]);
+    const observation = await page.evaluate(() => window.motionObservation.read());
+    (receipt.grabs ??= []).push({ legacyBefore: before, observation, latency });
+    assert.equal(observation?.id, id, 'receipt must belong to this actual mouse press');
+    assertGrabObservation(observation);
+    return { box, observation };
   };
   const drag = async () => {
-    const box = await grab();
+    const { box } = await grab();
     for (let i = 1; i <= 5; i++) {
       await page.mouse.move(box.x + 23 + i * 22, box.y + 31);
       await page.waitForTimeout(18);
@@ -137,9 +149,9 @@ try {
   const mid = await sample('normal-mid'); await shot('mid');
   assert.ok(mid.x > release.x + 1, 'normal release must exhibit real temporal inertia');
   const positionBeforeGrab = await sample('interrupt-before');
-  await grab();
+  const interrupted = await grab();
   const positionAfterGrab = await sample('interrupt-after');
-  assert.ok(Math.abs(positionAfterGrab.x - positionBeforeGrab.x) < 30, 'interrupt must start near current visual position');
+  assert.ok(Math.abs(interrupted.observation.after.x - interrupted.observation.before.x) < 30, 'interrupt must start near current visual position');
   await stable('interrupt-held', 100);
   await page.mouse.up();
   await page.waitForTimeout(1600);
@@ -214,6 +226,12 @@ try {
   assert.equal(afterInertia.updates, disposed.updates);
   assert.equal(afterInertia.inertiaPaused, true);
   assert.deepEqual(errors, []);
+  if (latency) {
+    const advanced = receipt.grabs.filter(({ legacyBefore, observation }) => !legacyBefore.inertiaPaused && observation.before.x > legacyBefore.x + 1);
+    assert.ok(advanced.length > 0, 'controlled latency must exercise actual pre-event inertia, not settled motion');
+    receipt.controlledPreEventAdvances = advanced.map(({ legacyBefore, observation }) => ({ id: observation.id, delta: observation.before.x - legacyBefore.x }));
+    console.log('PASS controlled pre-event inertia observation', receipt.controlledPreEventAdvances);
+  }
   receipt.result = 'PASS';
   console.log('PASS real headless temporal pilot; normal/reduced/dynamic/interrupt/repeat/destroy', { work, bundles });
 } catch (error) {
