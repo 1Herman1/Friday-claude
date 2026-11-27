@@ -1,0 +1,58 @@
+{
+  "requestId": "serum-reference-matched-20261127-attempt1",
+  "ownerMaximumCredits": 82,
+  "quotedCredits": 80,
+  "referenceDurationSeconds": 6,
+  "sourceSha256": "c4751b55fa9596191696fa43ad56298919d72e2454ad20ecd5eb5c9022f0e327",
+  "sourceOriginal": "/Users/germanbryzgalov/Downloads/LOCAL-cap-entry-corrected-60fps.mp4",
+  "referenceProvenance": "Whole 10s temporal span retimed proportionally to6s at60fps360sampled frames; 600source frames are not all retained. No crop/downscale;1280x720=921600within927408pixelcap. Not additional travel.",
+  "poseVerdict": "OWNER_APPROVED_SOURCE_AUTHORITATIVE",
+  "prompt": "Create one continuous silent ten-second landscape16:9 product shot. The attached owner-selected video is the PRIMARY MOTION AUTHORITY. Match its observed motion, object orientation, entry order, pauses, surface rotation, deceleration and settling character. Do not substitute a theoretical wheel demonstration or a new choreography. Do not change the products from their reference support pose into a different standing/lying arrangement. Do not reinterpret axial surface rotation as a somersault or whole-silhouette spin in the image plane.\n\nThere are exactly three continuous rigid identities: A, white GLACEE4D HYAL CROSS with silver collar/white dropper; B, short amber ISSEIMI BLOCKMELAN with black dropper; C, taller amber FLUVIX with translucent cap. Photographed originals determine geometry and authentic labels. Label detail images are NOT extra bottles. Never duplicate an object or replace the entering object with a newly created final instance.\n\nMOTION A: after the reference's brief empty start, the white bottle progressively crosses the OUTER LEFT image boundary and travels right. It is already rotating about its own longitudinal body axis when visible. Its long silhouette stays oriented predominantly cap-up as in the video; the front, side and rear printing turn naturally into and out of view around the body. Preserve the reference's amount and character of rotation; no rocking left/right, flat-card spin, tipping over or cap detachment. Translation and axial rotation happen together. Near the rightmost resting position both slow smoothly together and stop; no separate final label turn. A stays there through B/C entrances, apart from actual tiny material motion already inherent in the reference; no new group drift.\n\nMOTION B: follow the reference's second entrance and timing. The short amber bottle crosses OUTER LEFT already translating and rotating in the SAME left-to-right rolling direction as the reference. Every part, including black dropper and printed label, is rigidly attached to this one bottle. Its surface printing wraps with the rotating body, not screen-fixed. It approaches A from the left, smoothly loses translational and rotational speed, and settles immediately to A's left. Do not add a new collision, bounce, backward roll, penetration or exaggerated neighbor reaction. Preserve the reference's visible gap/contact appearance rather than inventing impact physics. Then retain the reference's noticeable two-bottle pause.\n\nMOTION C: at the reference's later third entrance, the taller amber spray crosses OUTER LEFT and travels right with the same observed axial surface rotation, cap-up long-axis orientation and smooth settling. The translucent cap remains one intact attached part, no ghosts or doubled edges. C approaches B from its left and stops to B's left. A and B do not slide as a group. Never create a second spray. The final objects are the SAME A/B/C that entered, not a new end-card.\n\nSequence timing must follow the supplied full-motion reference: brief empty start; A moves and settles; B enters soon after and settles; a longer pause with A/B; C enters later and settles; final hold. Do not redistribute all three entrances into arbitrary equal intervals. If the whole reference was proportionally compressed for upload, undo ONLY that disclosed uniform time factor to restore the original ten-second chronology. Do not copy the speedup. No cuts, slow-motion inserts or time jumps.\n\nPOSITION DELTA ONLY: compared with the reference, extend each moving product's horizontal travel enough that the FINAL three-product group is at the RIGHT side, with5% of total frame width clear between the rightmost full product silhouette and the right image boundary. Preserve real product scale and proportions. This instruction requires matching additional rotation to any extra travel rather than simply sliding the same rotation farther. Do not shift the whole scene after stopping, move the camera, stretch bottles, crop closures or introduce an inner square entry boundary. Keep the final left-to-right order C / B / A. Leave broad empty area left and unobstructed catalogue title space above. All fully entered bottles, caps and shadows remain inside the frame.\n\nAPPEARANCE DELTAS: completely uniform pure neutral-white#FFFFFF background/support outside soft contact shadows; no paper pattern, gray panel, grain, vignette or horizon. Very soft, short, low-contrast shadows, not dark base pools. Large diffuse studio illumination and fixed exposure; retain original materials but suppress harsh chrome hotspots and blown highlights across labels. Sharp full silhouettes and stable attached caps, no bloom, glare, motion blur or artificial shallow focus. Literal authentic printing remains unchanged in body coordinates and sharp WHEN VISIBLE. It foreshortens and becomes hidden on the far side naturally; do not force the front label to face the camera throughout a full rotation. No invented back-label text, changing letters, mirror printing or screen-fixed overlays.\n\nStatic camera, one shot, exactly three products, no boxes/props/hands/captions/music/audio. Preserve the attached video's visual movement; change only the requested final placement and presentation quality. Exact geometry, letter fidelity, white background and right margin are output acceptance criteria, not guarantees supplied by this text. Retain actual nativefps master; deliver60fps only with verified non-destructive processing if native60 is unsupported, with no split pipettes or lettering ghosts.\n",
+  "assets": [
+    {
+      "path": "assets/1-original.jpg",
+      "mime": "image/jpeg",
+      "size": 48899,
+      "sha256": "ba4c4ec6eac98d73b5a843b4872a89f65938e64e49616aaa3ec978c15e2876f3"
+    },
+    {
+      "path": "assets/2-original.jpg",
+      "mime": "image/jpeg",
+      "size": 29332,
+      "sha256": "cb222a0bd1698306d8590c3680640ec51b9e24f5a9cb31a3c1c7faf01bf69469"
+    },
+    {
+      "path": "assets/3-original.jpg",
+      "mime": "image/jpeg",
+      "size": 29271,
+      "sha256": "98ecedf72cb72e3a08e6538b70cdd6abeea77ce981675272310f697bca3f22b1"
+    },
+    {
+      "path": "assets/1-label-padded.png",
+      "mime": "image/png",
+      "size": 66864,
+      "sha256": "f815c4d4738f881df081463ea82de0232dacb27d5234a978cf404c979cc7481b"
+    },
+    {
+      "path": "assets/2-label-padded.png",
+      "mime": "image/png",
+      "size": 27853,
+      "sha256": "a7ffeaa0236cf57c7394487e30ce2e42810bd6ce5f46d224e3a45ee4a9af91a8"
+    },
+    {
+      "path": "assets/3-label-padded.png",
+      "mime": "image/png",
+      "size": 34454,
+      "sha256": "4c8afac499545c4c2e97fb68ea61c5dea48fef157c0434312afa290899b0d97d"
+    },
+    {
+      "path": "assets/owner-fullmotion-6s.mp4",
+      "mime": "video/mp4",
+      "size": 2912666,
+      "sha256": "6cebcbe42de9518a8c98597b4d266c4b307aaccef0a76131afb7c9c73b36fd66"
+    }
+  ],
+  "schema_sha256": "1d20ec92e049b6b2cbea3c80e81168b873c54d24d72b7a99ba93062355812dff",
+  "promptSha256": "5329c9c769336546e25c3f8178fa8dfac6381a6cc2f133ace336ba1b3805884e",
+  "approvedPromptMarkdownSha256": "132e4fa22f2e34444c83b0a90de78d4aaeba8ade1f87ba4a0fe088ad6c4d2858"
+}

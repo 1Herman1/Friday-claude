@@ -8,11 +8,11 @@ import {fileURLToPath} from 'node:url';
 import {setTimeout as delay} from 'node:timers/promises';
 import {httpsOnce,boundedRequest,isPublicIPv4,validateDecodedMedia} from './serum-motion-transport.mjs';
 export {isPublicIPv4};
-const ROOT=fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum-owner-capbase-regeneration/',import.meta.url));
+const ROOT=fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum-reference-matched-new-generation/',import.meta.url));
 export const MODEL='bytedance/seedance-2-mini';
-export const FREEZE_SHA='10a0733093ff6dae3fb98947257f0568dff9e042495ea1e92611ffcd6d71105e';
+export const FREEZE_SHA='1fc4f58c0bbabc0c0965493e28bb84fbac977ab68a65d593b8f2e2321a7c861e';
 const BUNDLE_SHA='1ce3d0b9784e5c8848a2aa48441b083af5768b91e013e702d626d6e6e2d8e282';
-export const TOKEN='confirm-serum-owner-capbase-new-80';
+export const TOKEN='confirm-serum-reference-matched-new-80';
 export const PRICE='https://api.kie.ai/client/v1/model-pricing/page';
 export const DOC='https://docs.kie.ai/market/bytedance/seedance-2-mini.md';
 export const UPLOAD='https://kieai.redpandaai.co/api/file-stream-upload';
@@ -79,9 +79,9 @@ export async function publicMetadata(request=httpsOnce){
  return exactPrice(pages);
 }
 export function authorize(env,recovery=false){
- check(!['45652032122','45633570452','45619944053','45569301373','45493711451'].includes(env.GITHUB_RUN_ID)&&!['e0f5f7888b79cceb882445dbca98b0b8a1e43b0b','2ea1b2b12838d0f3cca264c88716544ab6f3e4b8','3b8086c4297fdb9e0fb5cf4b6aa360ea2f0c6898'].includes(env.GITHUB_SHA));
- check(freeze.requestId==='serum-owner-capbase-20261127-attempt1');
- if(recovery)check(!['e264570bf33288a4286b3a339502ce12','542235a8f513f7367a181930182bebdc'].includes(env.SERUM_ACTUAL_TASK_ID));
+ check(!['46022482918','46022462559','45652032122','45633570452','45619944053','45569301373','45493711451'].includes(env.GITHUB_RUN_ID)&&!['4c8ead7e634bfcc80004369076c2e9e67cccebc7','e0f5f7888b79cceb882445dbca98b0b8a1e43b0b','2ea1b2b12838d0f3cca264c88716544ab6f3e4b8','3b8086c4297fdb9e0fb5cf4b6aa360ea2f0c6898'].includes(env.GITHUB_SHA));
+ check(freeze.requestId==='serum-reference-matched-20261127-attempt1');
+ if(recovery)check(!['45d44c00eaa6c25b47d81d41d37aa409','e264570bf33288a4286b3a339502ce12','542235a8f513f7367a181930182bebdc'].includes(env.SERUM_ACTUAL_TASK_ID));
  check(env.GITHUB_ACTIONS==='true'&&env.GITHUB_EVENT_NAME==='workflow_dispatch'&&env.GITHUB_RUN_ATTEMPT==='1'&&env.RUNNER_TEMP&&/^\d{1,20}$/.test(env.GITHUB_RUN_ID??'')&&env.SERUM_ACTUAL_APPROVED_RUN_ID===env.GITHUB_RUN_ID&&env.SERUM_ACTUAL_APPROVED_SHA===env.GITHUB_SHA&&/^[a-f0-9]{40}$/.test(env.GITHUB_SHA??''));
  check(env.GITHUB_REF==='refs/heads/ci/serum-actual-one');
  if(recovery){taskId(env.SERUM_ACTUAL_TASK_ID);check(env.SERUM_ACTUAL_TASK_ID===env.SERUM_ACTUAL_APPROVED_TASK_ID&&/^\d{1,20}$/.test(env.SERUM_ACTUAL_SOURCE_RUN_ID??'')&&env.SERUM_ACTUAL_SOURCE_RUN_ID===env.SERUM_ACTUAL_APPROVED_SOURCE_RUN_ID);}

@@ -1,0 +1,56 @@
+{
+  "requestId": "serum-reference-matched-20261127-attempt1",
+  "sourceSha256": "c4751b55fa9596191696fa43ad56298919d72e2454ad20ecd5eb5c9022f0e327",
+  "referenceProvenance": "Whole 10s temporal span retimed proportionally to6s at60fps360sampled frames; 600source frames are not all retained. No crop/downscale;1280x720=921600within927408pixelcap. Not additional travel.",
+  "promptSha256": "5329c9c769336546e25c3f8178fa8dfac6381a6cc2f133ace336ba1b3805884e",
+  "approvedPromptMarkdownSha256": "132e4fa22f2e34444c83b0a90de78d4aaeba8ade1f87ba4a0fe088ad6c4d2858",
+  "assets": [
+    {
+      "path": "assets/1-original.jpg",
+      "mime": "image/jpeg",
+      "size": 48899,
+      "sha256": "ba4c4ec6eac98d73b5a843b4872a89f65938e64e49616aaa3ec978c15e2876f3"
+    },
+    {
+      "path": "assets/2-original.jpg",
+      "mime": "image/jpeg",
+      "size": 29332,
+      "sha256": "cb222a0bd1698306d8590c3680640ec51b9e24f5a9cb31a3c1c7faf01bf69469"
+    },
+    {
+      "path": "assets/3-original.jpg",
+      "mime": "image/jpeg",
+      "size": 29271,
+      "sha256": "98ecedf72cb72e3a08e6538b70cdd6abeea77ce981675272310f697bca3f22b1"
+    },
+    {
+      "path": "assets/1-label-padded.png",
+      "mime": "image/png",
+      "size": 66864,
+      "sha256": "f815c4d4738f881df081463ea82de0232dacb27d5234a978cf404c979cc7481b"
+    },
+    {
+      "path": "assets/2-label-padded.png",
+      "mime": "image/png",
+      "size": 27853,
+      "sha256": "a7ffeaa0236cf57c7394487e30ce2e42810bd6ce5f46d224e3a45ee4a9af91a8"
+    },
+    {
+      "path": "assets/3-label-padded.png",
+      "mime": "image/png",
+      "size": 34454,
+      "sha256": "4c8afac499545c4c2e97fb68ea61c5dea48fef157c0434312afa290899b0d97d"
+    },
+    {
+      "path": "assets/owner-fullmotion-6s.mp4",
+      "mime": "video/mp4",
+      "size": 2912666,
+      "sha256": "6cebcbe42de9518a8c98597b4d266c4b307aaccef0a76131afb7c9c73b36fd66"
+    }
+  ],
+  "quotedCredits": 80,
+  "ownerMaximumCredits": 82,
+  "authorization": "Owner direct ONE new attempt with current reviewed prompt and exact selected source; no retry, no publication",
+  "unchangedDirtyWorktree": "Build prepared from HEAD archive, not modifying or staging unrelated dirty/deleted paths",
+  "endpointReference": "No first/last-frame field required by multimodal reference mode; video includes actual source endpoint. No native pose generation."
+}

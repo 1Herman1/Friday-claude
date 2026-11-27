@@ -1,0 +1,222 @@
+{
+  "type": "object",
+  "required": [
+    "model",
+    "input"
+  ],
+  "properties": {
+    "model": {
+      "type": "string",
+      "description": "The model name to use for generation. Required field.\n\n- Must be `bytedance/seedance-2-mini` for this endpoint",
+      "enum": [
+        "bytedance/seedance-2-mini"
+      ],
+      "default": "bytedance/seedance-2-mini",
+      "x-apidog-enum": [
+        {
+          "value": "bytedance/seedance-2-mini",
+          "name": "",
+          "description": ""
+        }
+      ],
+      "examples": [
+        "bytedance/seedance-2-mini"
+      ]
+    },
+    "callBackUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "The URL to receive generation task completion updates. Optional but recommended for production use.\n\n- System will POST task status and results to this URL when generation completes\n- Callback includes generated content URLs and task information\n- Your callback endpoint should accept POST requests with JSON payload containing results\n- Alternatively, use the Get Task Details endpoint to poll task status\n- To ensure callback security, see [Webhook Verification Guide](/common-api/webhook-verification) for signature verification implementation",
+      "examples": [
+        "https://your-domain.com/api/callback"
+      ]
+    },
+    "input": {
+      "type": "object",
+      "description": "Input parameters for the generation task",
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "The text prompt used to generate the video. Required field. (Min length: 3, Max length: 20000 characters)",
+          "minLength": 3,
+          "maxLength": 20000,
+          "examples": [
+            "A serene beach at sunset with waves gently crashing on the shore, palm trees swaying in the breeze, and seagulls flying across the orange sky"
+          ]
+        },
+        "first_frame_url": {
+          "type": "string",
+          "description": "First frame image url or asset://{assetId} \n(for example: asset://asset-20260404242101-76djj)"
+        },
+        "last_frame_url": {
+          "type": "string",
+          "description": "End frame image url or asset://{assetId} \n(for example: asset://asset-20260404242101-76djj)"
+        },
+        "reference_image_urls": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "description": "Enter a list of image URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj).\nSingle image requirements:\nFormat: jpeg, png, webp, gif.\nAspect ratio (width/height): (0.4, 2.5)\nWidth and height (px): (300, 6000)\nSize: Single image less than 30 MB.\nUp to 9 images.",
+          "maxItems": 9,
+          "examples": [
+            [
+              "https://example.com/your-image.png"
+            ]
+          ]
+        },
+        "reference_video_urls": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "description": "Enter a list of video URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj).\nSingle video requirements:\nVideo format: mp4, mov.\nResolution: 480p, 720p\nDuration: Single video duration [2, 15] s, maximum 3 reference videos, total duration of all videos not exceeding 15 seconds.\nDimensions:\nAspect ratio (width/height): [0.4, 2.5]\nWidth/height (px): [300, 6000]\nTotal pixels: [640×640=409600, 834×1112=927408], i.e., the product of width and height must meet the range requirement of [409600, 927408].\nSize: Single video not exceeding 50 MB.\nFrame rate (FPS): [24, 60]",
+          "maxItems": 3
+        },
+        "reference_audio_urls": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "description": "Enter a list of audio URLs or asset://{assetId} (for example: asset://asset-20260404242101-76djj).\nSingle audio requirements:\nFormat: wav, mp3\nDuration: Single audio duration [2, 15] s, maximum 3 reference audios, total duration of all audios not exceeding 15 s.\nSize: Single audio file size not exceeding 15 MB.",
+          "maxItems": 3
+        },
+        "generate_audio": {
+          "description": "Whether to generate audio for the video.\n\n- **true**: Generate with audio \n- **false**: Generate without audio",
+          "type": "boolean",
+          "default": true,
+          "examples": [
+            false
+          ]
+        },
+        "resolution": {
+          "description": "Video resolution - 480p for faster generation, 720p for balance",
+          "type": "string",
+          "enum": [
+            "480p",
+            "720p"
+          ],
+          "default": "720p",
+          "examples": [
+            "720p"
+          ],
+          "x-apidog-enum": [
+            {
+              "value": "480p",
+              "name": "",
+              "description": ""
+            },
+            {
+              "value": "720p",
+              "name": "",
+              "description": ""
+            }
+          ]
+        },
+        "aspect_ratio": {
+          "type": "string",
+          "description": "Video aspect ratio configuration. Required field.",
+          "enum": [
+            "1:1",
+            "4:3",
+            "3:4",
+            "16:9",
+            "9:16",
+            "21:9",
+            "adaptive"
+          ],
+          "default": "16:9",
+          "x-apidog-enum": [
+            {
+              "value": "1:1",
+              "name": "",
+              "description": ""
+            },
+            {
+              "value": "4:3",
+              "name": "",
+              "description": ""
+            },
+            {
+              "value": "3:4",
+              "name": "",
+              "description": ""
+            },
+            {
+              "value": "16:9",
+              "name": "",
+              "description": ""
+            },
+            {
+              "value": "9:16",
+              "name": "",
+              "description": ""
+            },
+            {
+              "value": "21:9",
+              "name": "",
+              "description": ""
+            },
+            {
+              "value": "adaptive",
+              "name": "",
+              "description": ""
+            }
+          ],
+          "examples": [
+            "16:9"
+          ]
+        },
+        "duration": {
+          "type": "integer",
+          "description": "Video duration in 4-15 seconds or -1.",
+          "default": 5,
+          "examples": [
+            5
+          ]
+        },
+        "web_search": {
+          "type": "boolean",
+          "description": "Use online search. Text-to-video only."
+        },
+        "nsfw_checker": {
+          "type": "boolean",
+          "description": "Defaults to false. When false, no additional content filtering is applied and results are returned directly by the model."
+        }
+      },
+      "x-apidog-orders": [
+        "prompt",
+        "first_frame_url",
+        "last_frame_url",
+        "reference_image_urls",
+        "reference_video_urls",
+        "reference_audio_urls",
+        "generate_audio",
+        "resolution",
+        "aspect_ratio",
+        "duration",
+        "web_search",
+        "01KWKMPYXNXCV78KK4C7EX32V1"
+      ],
+      "x-apidog-refs": {
+        "01KWKMPYXNXCV78KK4C7EX32V1": {
+          "$ref": "#/components/schemas/nsfw_checker"
+        }
+      },
+      "x-apidog-ignore-properties": [
+        "nsfw_checker"
+      ]
+    }
+  },
+  "x-apidog-orders": [
+    "model",
+    "callBackUrl",
+    "input"
+  ],
+  "x-apidog-ignore-properties": [
+
+  ]
+}

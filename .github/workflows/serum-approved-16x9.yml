@@ -1,11 +1,11 @@
-name: Serum owner capbase ONE corrected job
+name: Serum reference matched ONE new job
 "on":
   push:
     branches: [ci/serum-actual-one]
     paths:
       - .github/workflows/serum-approved-16x9.yml
       - tools/nullume/scripts/serum-approved-16x9*.mjs
-      - docs/projects/perfect-skin/media-review/serum-owner-capbase-regeneration/**
+      - docs/projects/perfect-skin/media-review/serum-reference-matched-new-generation/**
   workflow_dispatch:
     inputs:
       mode:
@@ -18,7 +18,7 @@ name: Serum owner capbase ONE corrected job
         type: choice
         required: true
         default: none
-        options: [none, confirm-serum-owner-capbase-new-80]
+        options: [none, confirm-serum-reference-matched-new-80]
         description: Quoted 80 credits within owner maximum82, NOT a provider-enforced ceiling
       task_id:
         type: string
@@ -53,7 +53,7 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' && github.run_attempt == '1' &&
       github.ref == 'refs/heads/ci/serum-actual-one' &&
-      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum-owner-capbase-new-80') || inputs.mode == 'recover-existing-task')
+      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum-reference-matched-new-80') || inputs.mode == 'recover-existing-task')
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     # Reuse protected environment without changing any of its protection rules.
