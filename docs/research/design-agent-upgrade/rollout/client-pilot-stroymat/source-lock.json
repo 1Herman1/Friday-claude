@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "original_commit": "77d9e09390835250b39a684d245a32f2338fff32",
+  "source": "projects/stroymat/obnovlenie-assortimenta.html",
+  "files": {
+    "projects/stroymat/assets/csp-bzs.jpg": {
+      "sha256": "f807d863f6431dee731d59bff4f9c79990c4382cef5b74e9620d2ea15eb5abfe",
+      "size": 110060,
+      "mode": "100644"
+    },
+    "projects/stroymat/assets/csp-large.jpg": {
+      "sha256": "3ea9845a473671bf622609480a63f23f09842abaf2ddb45fa5370e0a478655c5",
+      "size": 104124,
+      "mode": "100644"
+    },
+    "projects/stroymat/assets/drywall.jpg": {
+      "sha256": "10e4c9d5cbe47e96833eeadbbc28596549bbb28ccdd24136a61eea8a6fe8c3e7",
+      "size": 82109,
+      "mode": "100644"
+    },
+    "projects/stroymat/assets/dvp.jpg": {
+      "sha256": "9ceb47fce773ac529eba4995b5ecd01765201e6a5cd698e6225fe4c394780793",
+      "size": 92057,
+      "mode": "100644"
+    },
+    "projects/stroymat/assets/hero.jpg": {
+      "sha256": "84ab9508eb30df9182a69edbb827823daddbee7015c08b0008a8b5be29e9382b",
+      "size": 144865,
+      "mode": "100644"
+    },
+    "projects/stroymat/assets/insulation.jpg": {
+      "sha256": "4f6b681e27a5f08ae5beebcfa6b52ab1b07507b897ab33e0b384792221dec395",
+      "size": 146356,
+      "mode": "100644"
+    },
+    "projects/stroymat/assets/membrane.jpg": {
+      "sha256": "9c09b1de4d2b2a6e246e9c6c3b831d56e0183866cc2f5163eb03ba73f1c798f2",
+      "size": 117984,
+      "mode": "100644"
+    },
+    "projects/stroymat/assets/osb.jpg": {
+      "sha256": "a74bb82e4e77d87917869c26ac0f940e34483faa2bfad844fe81e0eea3be6d87",
+      "size": 119573,
+      "mode": "100644"
+    },
+    "projects/stroymat/assets/plywood.jpg": {
+      "sha256": "bef2dfa697d8d1271dd5277ca84e555b7333df8110bf506bc38acb4a1bbf5cf2",
+      "size": 121827,
+      "mode": "100644"
+    },
+    "projects/stroymat/build.py": {
+      "sha256": "f98cfc361ca090a1767630057c4a82cdc502cc513a65ad057eae389e0e81f3f1",
+      "size": 1923,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/GolosText-400-cyrillic.woff2": {
+      "sha256": "17d048ca05cb1218af3c0d6dcdf882989e6d1cc5dcb598ea50eaf54850ff7229",
+      "size": 22032,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/GolosText-400-latin.woff2": {
+      "sha256": "9a69d0aa4734c4022224c002a3d944a702e0204972a49d892789f5668b922c2a",
+      "size": 37916,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/GolosText-500-cyrillic.woff2": {
+      "sha256": "17d048ca05cb1218af3c0d6dcdf882989e6d1cc5dcb598ea50eaf54850ff7229",
+      "size": 22032,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/GolosText-500-latin.woff2": {
+      "sha256": "9a69d0aa4734c4022224c002a3d944a702e0204972a49d892789f5668b922c2a",
+      "size": 37916,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/GolosText-600-cyrillic.woff2": {
+      "sha256": "17d048ca05cb1218af3c0d6dcdf882989e6d1cc5dcb598ea50eaf54850ff7229",
+      "size": 22032,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/GolosText-600-latin.woff2": {
+      "sha256": "9a69d0aa4734c4022224c002a3d944a702e0204972a49d892789f5668b922c2a",
+      "size": 37916,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/Manrope-600-cyrillic.woff2": {
+      "sha256": "c268b459a9329e59fecf39a17618efd44c71735532048d60b12aab76a8c14914",
+      "size": 14500,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/Manrope-600-latin.woff2": {
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972",
+      "size": 24836,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/Manrope-700-cyrillic.woff2": {
+      "sha256": "c268b459a9329e59fecf39a17618efd44c71735532048d60b12aab76a8c14914",
+      "size": 14500,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/Manrope-700-latin.woff2": {
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972",
+      "size": 24836,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/Manrope-800-cyrillic.woff2": {
+      "sha256": "c268b459a9329e59fecf39a17618efd44c71735532048d60b12aab76a8c14914",
+      "size": 14500,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/Manrope-800-latin.woff2": {
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972",
+      "size": 24836,
+      "mode": "100644"
+    },
+    "projects/stroymat/fonts/faces.json": {
+      "sha256": "a1965ea94ca79a87b83e793d961a22c124266147bffc2831abf1a8fe91b9b7ce",
+      "size": 2588,
+      "mode": "100644"
+    },
+    "projects/stroymat/index.html": {
+      "sha256": "19f98acd06e961ecb3319de33a549467f01e2b3764d506868e1e451fd34e3e1f",
+      "size": 20287,
+      "mode": "100644"
+    },
+    "projects/stroymat/obnovlenie-assortimenta.html": {
+      "sha256": "528aaed361aadd44585b53a9db1e517a3231105989f3c8bf3fd6568d8ff34dca",
+      "size": 1805667,
+      "mode": "100644"
+    }
+  }
+}
