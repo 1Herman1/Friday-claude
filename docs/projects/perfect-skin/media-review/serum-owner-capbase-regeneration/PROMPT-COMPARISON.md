@@ -1,0 +1,20 @@
+# Prompt and input comparison — verified original, not reconstructed
+
+## Actual attached lineage
+- Owner attachment and immutable copy SHA256: c4751b55fa9596191696fa43ad56298919d72e2454ad20ecd5eb5c9022f0e327. Actual attachment1280x720,60fps,600frames,10seconds,noaudio; it ALREADY is60fps.
+- Underlying generation: run45652032122, attempt1, exact commit e0f5f7888b79cceb882445dbca98b0b8a1e43b0b, task e264570bf33288a4286b3a339502ce12, charged80credits. Native SHA ce114dacaed0c9a233c6a69421d114144dab5b89f3ebae5d405ab4efc7c4ecc4,24fps241frames10.041667s. Generative success; workflow strict duration check failed. Its60fps preview then underwent LOCAL cap-only pixel compositing; the capfix had NO separate generative prompt. See ../serum-16x9-local-edit-v2/HANDOFF.md for exact support/bridge repair and known nativef15 defect.
+- Exact freeze independently recovered with git show of that immutable commit: ORIGINAL-FROZEN-REQUEST.json SHA eaa1d3047a2ca91b348e9d1cdda429fe29eaba9f8041b618c85e758572b5792d. EXACT-ORIGINAL-GENERATIVE-PROMPT.txt is its exact decoded prompt string, no newline addition, SHA 51cf9248125bef13e7177e83fe013e081c723edef2329a933ea8cd74164198c2.
+- Original conditioning: one actual960square source final-frame image + WHOLE10s square motion source retimed6s720square360frames. Not authentic product photographs or label crops. Thus “preserve exact lettering/source appearance” could inherit existing malformed letters. Original explicitly preserved neutral source surface/shadows, NOT pure white. It requested3%right clearance but actual endpoint remained centre-right. Prose did not deterministically lock trajectories.
+
+## Unsubmitted latest brief
+NEW-GENERATION-BRIEF-REVIEW.md was never submitted. Its stated pending questions are now resolved by owner: preserve ATTACHED actual rolling, right margin5%. Pure-white, softer shadows, faithful photo lettering and broad soft light remain intended deltas. Drop redundant axis/pose or front-readable-at-all-times demands; natural front/back occlusion is necessary during axial motion.
+
+## Failed rigid one-way attempt
+Frozen FAILED-RIGID-FROZEN-REQUEST.json / FAILED-RIGID-PROMPT.txt: original7image-only21:9 request, referenceDuration0, quote82, no video. Strong coordinate axes/nadir side-lying/PIPE theta=x/R/fixedY and tightly authored timeplan redefined choreography instead of carrying the successful attached motion. Seven images included ambiguous final guide; that input/prose conflict is not cured by more rigid prose. This is NOT the attached video's original prompt. Rigid prompt SHA e7b503d4003a9a9defc16e655f7b81fc24eca49c60de37aaf693d648775fbca7.
+
+## New minimal-delta case
+Keep the source-based motion paragraph and actual identities/order. Preserve existing16:9 rather than re-widen square or impose21:9. Extend individual horizontal travel to5%right clearance. Override gray texture/print defects explicitly using6authentic photo/label references. Omit old centred final-frame conditioning rather than mix “far right” with a central endpoint guide. No new pose, axis math or arbitrary timeplan; no impossible always-front print lock. Generative instructions are guidance, not AI magic or pixel guarantees.
+- ACTUAL-NEW-PROMPT.txt SHA f03c71e1c329129004fc9e9dffe779590105f8fc6f5d200136d41450039ab9db; new freeze SHA 10a0733093ff6dae3fb98947257f0568dff9e042495ea1e92611ffcd6d71105e.
+- Whole attached10s chronology retimed6s,1280x720=921600pixels<=927408,60fps360sampled frames. All3entrances and terminal hold retained; not all600source frames retained and this speedup itself adds no travel. No crop or discarded third product.
+- Fresh715price records/8pages, all4model price rows saved fresh-live-prices.json.720P with-video5credits per second*(6reference+10output)=80credits, owner maximum82. Quote is not provider-enforced billing ceiling. Fresh authenticated balance is checked in protected Actions immediately before only create; no local provider secret.
+- No unsupported fps field. Native output rate will be probed; true60fpsdelivery requires separately verified motion-compensated interpolation if native24/30, inspecting cap and label artifacts before release.

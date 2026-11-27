@@ -8,11 +8,11 @@ import {fileURLToPath} from 'node:url';
 import {setTimeout as delay} from 'node:timers/promises';
 import {httpsOnce,boundedRequest,isPublicIPv4,validateDecodedMedia} from './serum-motion-transport.mjs';
 export {isPublicIPv4};
-const ROOT=fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum-approved-to-16x9/',import.meta.url));
+const ROOT=fileURLToPath(new URL('../../../docs/projects/perfect-skin/media-review/serum-owner-capbase-regeneration/',import.meta.url));
 export const MODEL='bytedance/seedance-2-mini';
-export const FREEZE_SHA='eaa1d3047a2ca91b348e9d1cdda429fe29eaba9f8041b618c85e758572b5792d';
+export const FREEZE_SHA='10a0733093ff6dae3fb98947257f0568dff9e042495ea1e92611ffcd6d71105e';
 const BUNDLE_SHA='1ce3d0b9784e5c8848a2aa48441b083af5768b91e013e702d626d6e6e2d8e282';
-export const TOKEN='confirm-serum-approved-16x9-new-80';
+export const TOKEN='confirm-serum-owner-capbase-new-80';
 export const PRICE='https://api.kie.ai/client/v1/model-pricing/page';
 export const DOC='https://docs.kie.ai/market/bytedance/seedance-2-mini.md';
 export const UPLOAD='https://kieai.redpandaai.co/api/file-stream-upload';
@@ -22,7 +22,7 @@ export const STATUS='https://api.kie.ai/api/v1/jobs/recordInfo?taskId=';
 import {spawnSync} from 'node:child_process';
 import {mkdtempSync,writeFileSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
-async function validateAsset(b,i){if(i===0)return validateDecodedMedia(b,'image'); const d=mkdtempSync(join(tmpdir(),'approved-ref-'));try{const p=join(d,'ref.mp4');writeFileSync(p,b);const q=spawnSync('ffprobe',['-v','error','-count_frames','-show_streams','-show_format','-of','json',p],{encoding:'utf8'});check(q.status===0);const f=JSON.parse(q.stdout),v=f.streams.find(x=>x.codec_type==='video');check(f.streams.length===1&&v.width===720&&v.height===720&&v.avg_frame_rate==='60/1'&&v.nb_read_frames==='360'&&Number(f.format.duration)===6);check(spawnSync('ffmpeg',['-v','error','-i',p,'-f','null','-']).status===0);}finally{rmSync(d,{recursive:true});}}
+async function validateAsset(b,i){if(i<6)return validateDecodedMedia(b,'image'); const d=mkdtempSync(join(tmpdir(),'approved-ref-'));try{const p=join(d,'ref.mp4');writeFileSync(p,b);const q=spawnSync('ffprobe',['-v','error','-count_frames','-show_streams','-show_format','-of','json',p],{encoding:'utf8'});check(q.status===0);const f=JSON.parse(q.stdout),v=f.streams.find(x=>x.codec_type==='video');check(f.streams.length===1&&v.width===1280&&v.height===720&&v.avg_frame_rate==='60/1'&&v.nb_read_frames==='360'&&Number(f.format.duration)===6);check(spawnSync('ffmpeg',['-v','error','-i',p,'-f','null','-']).status===0);}finally{rmSync(d,{recursive:true});}}
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const raw=readFileSync(join(ROOT,'freeze.json'));assert.equal(sha(raw),FREEZE_SHA);
 export const freeze=JSON.parse(raw);
@@ -36,9 +36,9 @@ export function mediaURL(v,ext,host='tempfile.redpandaai.co'){
  return v;
 }
 export function payload(urls){
- check(Array.isArray(urls)&&urls.length===2&&new Set(urls).size===2);
+ check(Array.isArray(urls)&&urls.length===7&&new Set(urls).size===7);
  urls.forEach((u,i)=>mediaURL(u,freeze.assets[i].path.split('.').at(-1)));
- return {model:MODEL,input:{prompt:freeze.prompt,reference_image_urls:[urls[0]],reference_video_urls:[urls[1]],generate_audio:false,resolution:'720p',aspect_ratio:'16:9',duration:10}};
+ return {model:MODEL,input:{prompt:freeze.prompt,reference_image_urls:urls.slice(0,6),reference_video_urls:[urls[6]],generate_audio:false,resolution:'720p',aspect_ratio:'16:9',duration:10}};
 }
 export function validateSchema(){
  const b=readFileSync(join(ROOT,'evidence/seedance-mini-request-schema.json'));check(sha(b)===freeze.schema_sha256);
@@ -51,7 +51,7 @@ export function validateSchema(){
  return p;
 }
 export function verifyAssets(pack){
- check(pack&&Object.keys(pack).length===2);
+ check(pack&&Object.keys(pack).length===7);
  return freeze.assets.map(a=>{check(Object.hasOwn(pack,a.path)&&typeof pack[a.path]==='string');const b=Buffer.from(pack[a.path],'base64');check(b.length===a.size&&sha(b)===a.sha256);return b;});
 }
 export function loadAssets(){return freeze.assets.map(a=>{const b=readFileSync(join(ROOT,a.path));check(b.length===a.size&&sha(b)===a.sha256);return b;});}
@@ -79,9 +79,9 @@ export async function publicMetadata(request=httpsOnce){
  return exactPrice(pages);
 }
 export function authorize(env,recovery=false){
- check(!['45633570452','45619944053','45569301373','45493711451'].includes(env.GITHUB_RUN_ID)&&!['2ea1b2b12838d0f3cca264c88716544ab6f3e4b8','3b8086c4297fdb9e0fb5cf4b6aa360ea2f0c6898'].includes(env.GITHUB_SHA));
- check(freeze.requestId==='serum-approved-to-16x9-20261125-attempt1');
- if(recovery)check(env.SERUM_ACTUAL_TASK_ID!=='542235a8f513f7367a181930182bebdc');
+ check(!['45652032122','45633570452','45619944053','45569301373','45493711451'].includes(env.GITHUB_RUN_ID)&&!['e0f5f7888b79cceb882445dbca98b0b8a1e43b0b','2ea1b2b12838d0f3cca264c88716544ab6f3e4b8','3b8086c4297fdb9e0fb5cf4b6aa360ea2f0c6898'].includes(env.GITHUB_SHA));
+ check(freeze.requestId==='serum-owner-capbase-20261127-attempt1');
+ if(recovery)check(!['e264570bf33288a4286b3a339502ce12','542235a8f513f7367a181930182bebdc'].includes(env.SERUM_ACTUAL_TASK_ID));
  check(env.GITHUB_ACTIONS==='true'&&env.GITHUB_EVENT_NAME==='workflow_dispatch'&&env.GITHUB_RUN_ATTEMPT==='1'&&env.RUNNER_TEMP&&/^\d{1,20}$/.test(env.GITHUB_RUN_ID??'')&&env.SERUM_ACTUAL_APPROVED_RUN_ID===env.GITHUB_RUN_ID&&env.SERUM_ACTUAL_APPROVED_SHA===env.GITHUB_SHA&&/^[a-f0-9]{40}$/.test(env.GITHUB_SHA??''));
  check(env.GITHUB_REF==='refs/heads/ci/serum-actual-one');
  if(recovery){taskId(env.SERUM_ACTUAL_TASK_ID);check(env.SERUM_ACTUAL_TASK_ID===env.SERUM_ACTUAL_APPROVED_TASK_ID&&/^\d{1,20}$/.test(env.SERUM_ACTUAL_SOURCE_RUN_ID??'')&&env.SERUM_ACTUAL_SOURCE_RUN_ID===env.SERUM_ACTUAL_APPROVED_SOURCE_RUN_ID);}
@@ -112,11 +112,11 @@ export async function writeReceipt(dir,id,env){
  const h=await open(join(dir,'task-receipt.json'),'wx',0o600);try{await h.writeFile(JSON.stringify(receipt)+'\n');await h.sync();}finally{await h.close();}return receipt;
 }
 export async function submit({request=httpsOnce,key,assets,onSubmitted}){
- check(assets.length===2);assets.forEach((b,i)=>check(b.length===freeze.assets[i].size&&sha(b)===freeze.assets[i].sha256));
+ check(assets.length===7);assets.forEach((b,i)=>check(b.length===freeze.assets[i].size&&sha(b)===freeze.assets[i].sha256));
  await publicMetadata(request);const s=fixedSession(request,key);
  const credits=await s.call(CREDIT);check(typeof credits.data==='number'&&Number.isFinite(credits.data)&&credits.data>=80);console.log('Authenticated balance credits:',credits.data);
  const urls=[];
- for(let i=0;i<2;i++){
+ for(let i=0;i<7;i++){
   const a=freeze.assets[i],name=a.path.split('/').at(-1),body=new FormData();
   body.append('file',new Blob([assets[i]],{type:a.mime}),name);body.append('uploadPath','serum-actual/'+FREEZE_SHA);body.append('fileName',name);
   const r=await s.call(UPLOAD,{method:'POST',body});check(r.success===true);const u=mediaURL(r.data?.downloadUrl,name.split('.').at(-1));check(!u.includes(key));
@@ -152,7 +152,7 @@ async function main(){
   loadAssets();
   if(process.env.SERUM_ACTUAL_LOCAL_DRY_ASSETS){
    check(process.env.GITHUB_ACTIONS!=='true');const pack={};for(const a of freeze.assets)pack[a.path]=readFileSync(join(process.env.SERUM_ACTUAL_LOCAL_DRY_ASSETS,a.path)).toString('base64');
-   const assets=verifyAssets(pack);for(let i=0;i<2;i++)await validateAsset(assets[i],i);
+   const assets=verifyAssets(pack);for(let i=0;i<7;i++)await validateAsset(assets[i],i);
   }
   console.log('PASS credential-free dry-run; quote 80 credits / USD0.40; providerBillingCap=false.');return;
  }
@@ -162,7 +162,7 @@ async function main(){
   await mkdir(dir,{mode:0o700}); // Exclusive same-job duplicate-process guard, before reading either secret.
   const assets=loadAssets();
   const key=process.env.KIE_API_KEY;delete process.env.KIE_API_KEY;
-  for(let i=0;i<2;i++)await validateAsset(assets[i],i);
+  for(let i=0;i<7;i++)await validateAsset(assets[i],i);
   await submit({key,assets,onSubmitted:async id=>{
    try{await writeReceipt(dir,id,process.env);}
    finally{

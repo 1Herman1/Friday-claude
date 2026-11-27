@@ -1,11 +1,11 @@
-name: Serum approved source 16x9 ONE new job
+name: Serum owner capbase ONE corrected job
 "on":
   push:
     branches: [ci/serum-actual-one]
     paths:
       - .github/workflows/serum-approved-16x9.yml
       - tools/nullume/scripts/serum-approved-16x9*.mjs
-      - docs/projects/perfect-skin/media-review/serum-approved-to-16x9/**
+      - docs/projects/perfect-skin/media-review/serum-owner-capbase-regeneration/**
   workflow_dispatch:
     inputs:
       mode:
@@ -18,7 +18,7 @@ name: Serum approved source 16x9 ONE new job
         type: choice
         required: true
         default: none
-        options: [none, confirm-serum-approved-16x9-new-80]
+        options: [none, confirm-serum-owner-capbase-new-80]
         description: Quoted 80 credits within owner maximum82, NOT a provider-enforced ceiling
       task_id:
         type: string
@@ -46,14 +46,14 @@ jobs:
           node-version: '22'
       - name: Offline hostile-input and duplicate-create regression tests, no credentials
         run: node --test tools/nullume/scripts/serum-approved-16x9.test.mjs
-      - name: Credential-free archived schema, 710-row quote, freeze and encrypted bundle validation
+      - name: Credential-free archived schema, 715-row quote, freeze and encrypted bundle validation
         run: node tools/nullume/scripts/serum-approved-16x9.mjs dry-run
   paid:
     needs: preflight
     if: >-
       github.event_name == 'workflow_dispatch' && github.run_attempt == '1' &&
       github.ref == 'refs/heads/ci/serum-actual-one' &&
-      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum-approved-16x9-new-80') || inputs.mode == 'recover-existing-task')
+      ((inputs.mode == 'generate-one' && inputs.confirmation == 'confirm-serum-owner-capbase-new-80') || inputs.mode == 'recover-existing-task')
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     # Reuse protected environment without changing any of its protection rules.
@@ -86,7 +86,7 @@ jobs:
           MODE: ${{ inputs.mode }}
         run: >-
           node --input-type=module -e "import {authorize} from './tools/nullume/scripts/serum-approved-16x9.mjs'; authorize(process.env, process.env.MODE === 'recover-existing-task');"
-      - name: Verify and decode both actual-source frozen assets; upload and submit exactly once (no retry)
+      - name: Verify and decode seven authentic-photo and actual-source frozen assets; upload and submit exactly once (no retry)
         id: submit
         if: inputs.mode == 'generate-one'
         env:

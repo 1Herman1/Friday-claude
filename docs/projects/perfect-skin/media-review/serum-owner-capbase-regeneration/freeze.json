@@ -1,0 +1,56 @@
+{
+  "requestId": "serum-owner-capbase-20261127-attempt1",
+  "ownerMaximumCredits": 82,
+  "quotedCredits": 80,
+  "referenceDurationSeconds": 6,
+  "sourceSha256": "c4751b55fa9596191696fa43ad56298919d72e2454ad20ecd5eb5c9022f0e327",
+  "sourceOriginal": "/Users/germanbryzgalov/Downloads/LOCAL-cap-entry-corrected-60fps.mp4",
+  "referenceProvenance": "Whole 10s temporal span retimed proportionally to6s at60fps360sampled frames; 600source frames are not all retained. No crop/downscale;1280x720=921600within927408pixelcap. Not additional travel.",
+  "poseVerdict": "OWNER_APPROVED_SOURCE_AUTHORITATIVE",
+  "prompt": "Create one continuous silent ten-second landscape 16:9 product video BASED ON reference_video_1, not a new choreography. Preserve this owner-approved video's three product identities, entry order, individual rolling behavior, actual long-axis orientation and relative motion/settling timing. The WHOLE original ten-second sequence is compressed to six seconds in the video reference; restore its original ten-second timing, not that speedup. Do not reinterpret the products as a different standing/lying pose, invent a rotation plane or replace their motion with front-facing sliding.\n\nOnly change the following: extend EACH product's individual horizontal left-to-right travel while it is moving, so the trio settles at the FAR RIGHT with approximately 5 percent frame-width clear margin beyond the rightmost complete silhouette. Do not copy the reference's central stopping position. No whole-group drift after stopping, camera movement, zoom, crop, stretching or changed product scale. Keep full silhouettes, closures, pipettes and soft contact shadows in frame after each entrance. Preserve the source's empty start and original entry sequence: tall white GLACEE 4D HYAL CROSS first, gold ISSEIMI BLOCKMELAN second, amber Fluvix white-pump third. Final left-to-right order Fluvix, gold ISSEIMI, white GLACEE; generous empty space on the left. Preserve the source motion sequence without new collisions, recoil, bounce or swivels.\n\nReference images 1/2/3 are the authentic product photographs in that same identity order; images 4/5/6 are their corresponding authentic label details, NOT six extra objects. Use those photographs for faithful bottle proportions, cap/pipette geometry, materials, logos and literal printed lettering. The video governs motion, NOT its malformed small print or gray textured background. Correct those defects using the authentic photographs. Printing remains attached to the rotating surface, naturally foreshortening and disappearing when turned away; do not force physically impossible always-front readability or a floating screen sticker. When the front is visible, reproduce its photographed lettering without substitutions, translation, invented characters or frame-to-frame morphing. Keep all three continuous rigid identities, stable fine details and intact closures; no duplicates, cartons or extra products.\n\nReplace the reference background and support surface with seamless pure neutral white #FFFFFF, without texture, gray plate, gradient, horizon or vignette. Use very short soft low-contrast contact shadows, continuously attached to the products, not dark pools. Broad cross-soft studio lighting, stable exposure, minimal narrow hotspots on chrome and labels; preserve real materials without bloom, glare, flare or blown-out printing. Static camera throughout, sharp complete silhouettes and stable pipettes, no overlays, captions, hands, music or audio. These are the only appearance and positioning changes; retain the attached video's actual choreography.",
+  "assets": [
+    {
+      "path": "assets/1-original.jpg",
+      "mime": "image/jpeg",
+      "size": 48899,
+      "sha256": "ba4c4ec6eac98d73b5a843b4872a89f65938e64e49616aaa3ec978c15e2876f3"
+    },
+    {
+      "path": "assets/2-original.jpg",
+      "mime": "image/jpeg",
+      "size": 29332,
+      "sha256": "cb222a0bd1698306d8590c3680640ec51b9e24f5a9cb31a3c1c7faf01bf69469"
+    },
+    {
+      "path": "assets/3-original.jpg",
+      "mime": "image/jpeg",
+      "size": 29271,
+      "sha256": "98ecedf72cb72e3a08e6538b70cdd6abeea77ce981675272310f697bca3f22b1"
+    },
+    {
+      "path": "assets/1-label-padded.png",
+      "mime": "image/png",
+      "size": 66864,
+      "sha256": "f815c4d4738f881df081463ea82de0232dacb27d5234a978cf404c979cc7481b"
+    },
+    {
+      "path": "assets/2-label-padded.png",
+      "mime": "image/png",
+      "size": 27853,
+      "sha256": "a7ffeaa0236cf57c7394487e30ce2e42810bd6ce5f46d224e3a45ee4a9af91a8"
+    },
+    {
+      "path": "assets/3-label-padded.png",
+      "mime": "image/png",
+      "size": 34454,
+      "sha256": "4c8afac499545c4c2e97fb68ea61c5dea48fef157c0434312afa290899b0d97d"
+    },
+    {
+      "path": "assets/owner-fullmotion-6s.mp4",
+      "mime": "video/mp4",
+      "size": 2912666,
+      "sha256": "6cebcbe42de9518a8c98597b4d266c4b307aaccef0a76131afb7c9c73b36fd66"
+    }
+  ],
+  "schema_sha256": "1d20ec92e049b6b2cbea3c80e81168b873c54d24d72b7a99ba93062355812dff"
+}
