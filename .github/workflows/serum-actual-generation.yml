@@ -47,6 +47,10 @@ jobs:
           node-version: '22'
       - name: Offline hostile-input and duplicate-create regression tests, no credentials
         run: node --test tools/nullume/scripts/serum-omni-transform.test.mjs
+      - name: Install decoder before real source decode
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
       - name: Credential-free archived schema, live model quote, freeze and encrypted bundle validation
         run: node tools/nullume/scripts/serum-omni-transform.mjs dry-run
   paid:
