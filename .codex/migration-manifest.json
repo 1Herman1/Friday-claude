@@ -362,7 +362,7 @@
       "source": ".claude/commands/feature.md",
       "target": "skills/feature/SKILL.md",
       "kind": "command-as-skill",
-      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      "source_sha256": "1b52ca3e9caf7208008f3bea0a5416db6d5476483623067a9ba659c9f2a39132"
     },
     {
       "source": ".claude/commands/polish.md",
