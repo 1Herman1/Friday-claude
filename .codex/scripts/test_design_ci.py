@@ -10,8 +10,20 @@ ACTIONS = (
     'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1',
     'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0',
 )
+OWNED_EXPORT = 'printf \'TMPDIR=%s\\nMOTION_DEPS=%s\\nPLAYWRIGHT_BROWSERS_PATH=%s\\n\' "$TMPDIR" "$MOTION_DEPS" "$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"'
+OWNED_STEP = (
+    '      - name: Owned temporary directory\n'
+    '        env:\n'
+    '          TMPDIR: ${{ runner.temp }}/design-ci-owned\n'
+    '          MOTION_DEPS: ${{ runner.temp }}/design-ci-owned/motion-deps\n'
+    '          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/design-ci-owned/browsers\n'
+    '        run: |\n'
+    '          mkdir -p "$TMPDIR" "$HOME/.hermes/cache/scratch"\n'
+    f'          {OWNED_EXPORT}\n'
+)
 COMMANDS = (
     'mkdir -p "$TMPDIR" "$HOME/.hermes/cache/scratch"',
+    OWNED_EXPORT,
     'python .codex/scripts/selftest.py',
     'python .codex/scripts/sync-roles.py',
     "python -m unittest discover -s .codex/scripts -p 'test_*.py' -v",
@@ -30,6 +42,9 @@ COMMANDS = (
 def contract_errors(text):
     """Text guards only, not YAML or Actions expression/runtime validation."""
     errors = []
+    job_env = re.search(r'(?m)^    env:\n((?:      [^\n]*\n)+)', text)
+    if job_env and re.search(r'\$\{\{\s*runner\s*[.\[]', job_env.group(1)):
+        errors.append('runner context is unavailable in jobs.<job_id>.env')
     for forbidden in (
         r'(?i)secrets\s*[.\[]', r'continue-on-error\s*:', r'(?m)^\s*if\s*:',
         r'\|\|', r'pull_request', r'(?m)^\s*(?:environment|inputs|token)\s*:',
@@ -54,9 +69,8 @@ def contract_errors(text):
         '    runs-on: ubuntu-latest\n', '    timeout-minutes: 20\n',
         '          persist-credentials: false\n', "          node-version: '24'\n",
         '          package-manager-cache: false\n', "          python-version: '3.12'\n",
-        '      TMPDIR: ${{ runner.temp }}/design-ci-owned\n',
-        '      MOTION_DEPS: ${{ runner.temp }}/design-ci-owned/motion-deps\n',
-        '      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/design-ci-owned/browsers\n',
+        "    env:\n      PYTHONDONTWRITEBYTECODE: '1'\n    steps:\n",
+        OWNED_STEP + '      - name: Selftest and readonly role sync\n',
         'process.stdout.write(req("playwright-core").chromium.executablePath())',
     ):
         if fragment not in text:
@@ -93,6 +107,29 @@ class DesignCIContractTests(unittest.TestCase):
         self.assertLess(text.index('npm ci --prefix'), text.index('run: node --test'))
         self.assertLess(text.index('install --with-deps chromium'), text.index('run: node --test'))
         self.assertIn('mkdir -p "$TMPDIR" "$HOME/.hermes/cache/scratch"', text)
+
+    def test_runner_context_is_not_used_in_job_env(self):
+        text = WORKFLOW.read_text()
+        job_env = re.search(r'(?m)^    env:\n((?:      [^\n]*\n)+)', text)
+        self.assertIsNotNone(job_env)
+        assert job_env is not None
+        self.assertNotRegex(job_env.group(1), r'\$\{\{\s*runner\s*[.\[]',
+                            'runner context is unavailable in jobs.<job_id>.env')
+
+    def test_rejects_runner_context_in_job_env(self):
+        text = WORKFLOW.read_text()
+        mutant = text.replace("      PYTHONDONTWRITEBYTECODE: '1'\n",
+                              "      PYTHONDONTWRITEBYTECODE: '1'\n      BAD: ${{ runner.temp }}\n")
+        self.assertNotEqual(mutant, text)
+        self.assertIn('runner context is unavailable in jobs.<job_id>.env',
+                      contract_errors(mutant))
+
+    def test_rejects_missing_owned_path_export(self):
+        text = WORKFLOW.read_text()
+        self.assertIn(OWNED_EXPORT, text)
+        mutant = text.replace(OWNED_EXPORT, ':')
+        self.assertIn('required executable command: ' + OWNED_EXPORT,
+                      contract_errors(mutant))
 
     def test_workflow_contract(self):
         self.assertEqual(contract_errors(WORKFLOW.read_text()), [])

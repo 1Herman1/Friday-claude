@@ -28,9 +28,6 @@ jobs:
         shell: bash
     env:
       PYTHONDONTWRITEBYTECODE: '1'
-      TMPDIR: ${{ runner.temp }}/design-ci-owned
-      MOTION_DEPS: ${{ runner.temp }}/design-ci-owned/motion-deps
-      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/design-ci-owned/browsers
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -46,7 +43,13 @@ jobs:
         with:
           python-version: '3.12'
       - name: Owned temporary directory
-        run: mkdir -p "$TMPDIR" "$HOME/.hermes/cache/scratch"
+        env:
+          TMPDIR: ${{ runner.temp }}/design-ci-owned
+          MOTION_DEPS: ${{ runner.temp }}/design-ci-owned/motion-deps
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/design-ci-owned/browsers
+        run: |
+          mkdir -p "$TMPDIR" "$HOME/.hermes/cache/scratch"
+          printf 'TMPDIR=%s\nMOTION_DEPS=%s\nPLAYWRIGHT_BROWSERS_PATH=%s\n' "$TMPDIR" "$MOTION_DEPS" "$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
       - name: Selftest and readonly role sync
         run: |
           python .codex/scripts/selftest.py
